@@ -15,8 +15,6 @@ class Calendar extends React.Component {
       'X-Okapi-Token': context.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
     });
-
-    this.onClickCheckin = this.onClickCheckin.bind(this);
   }
 
   render() {
