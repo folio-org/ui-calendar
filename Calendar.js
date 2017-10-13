@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
+import '!style-loader!css-loader!react-big-calendar/lib/css/react-big-calendar.css';
 
 class Calendar extends React.Component {
   static contextTypes = {
