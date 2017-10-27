@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import Calendar from './Calendar';
@@ -6,7 +7,7 @@ import Calendar from './Calendar';
 class CalendarRouting extends React.Component {
 
   static childContextTypes = {
-    history: React.PropTypes.object,
+    history:PropTypes.object,
   };
 
   static propTypes = {
