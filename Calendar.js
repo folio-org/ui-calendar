@@ -1,6 +1,9 @@
 /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
+import Pane from '@folio/stripes-components/lib/Pane';
+import Paneset from '@folio/stripes-components/lib/Paneset';
+
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css';
@@ -15,7 +18,6 @@ class Calendar extends React.Component {
 
   constructor(props, context) {
     super(props);
-      this.connectedApp = props.stripes.connect(Calendar);
     this.okapiUrl = context.stripes.okapi.url;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': context.stripes.okapi.tenant,
@@ -30,17 +32,18 @@ class Calendar extends React.Component {
      BigCalendar.momentLocalizer(moment);
 
      return (
-      <div>
-        <br/>
-        <BigCalendar
-          {...this.props.stripes}
-          events={events}
-          startAccessor="startDate"
-          endAccessor="endDate"
-          defaultDate={new Date(2015, 3, 1)}
-          views={allViews}
-        />
-      </div>
+      <Paneset>
+        <Pane id="pane-calendar" defaultWidth="fill" fluidContentWidth paneTitle='Institutional calendar'>
+          <BigCalendar
+            {...this.props.stripes}
+            events={events}
+            startAccessor="startDate"
+            endAccessor="endDate"
+            defaultDate={new Date(2015, 3, 1)}
+            views={allViews}
+          />
+        </Pane>
+      </Paneset>
     );
   }
 }
