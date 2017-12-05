@@ -7,32 +7,69 @@ import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
 
+
+function validate(values) {
+  const errors = {};
+
+  if (!values.startDate) {
+    errors.startDate = 'Please select start date for opening!';
+  }
+
+  if (!values.endDate) {
+    errors.endDate = 'Please select end date for opening!';
+  }
+
+  // TODO: check included days
+
+  if (!values.startHour) {
+    errors.startHour = 'Please select start hour for opening!';
+  }
+
+  if (!values.startMinute) {
+    errors.startMinute = 'Please select start minute for opening!';
+  }
+
+  if (!values.endHour) {
+    errors.endHour = 'Please select end hour for opening!';
+  }
+
+  if (!values.endMinute) {
+    errors.endMinute = 'Please select end minute for opening!';
+  }
+
+  return errors;
+}
+
+
 class AddOpeningDayForm extends React.Component {
   static propTypes = {
-    data: PropTypes.object,
-    mutator: PropTypes.shape({
-      calendarEventId: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-      calendarEvent: PropTypes.shape({
-        POST: PropTypes.func,
-        PUT: PropTypes.func,
-      }),
-    }).isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    reset: PropTypes.func,
+    pristine: PropTypes.bool,
+    submitting: PropTypes.bool,
+    initialValues: PropTypes.object.isRequired, // eslint-disable-line react/no-unused-prop-types  
   };
 
   render() {
+    const {
+      handleSubmit,
+      reset,  // eslint-disable-line no-unused-vars
+      pristine,
+      submitting,
+    } = this.props;
+
     return (
       <form id="form-add-event">
         <Row>
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label="Opening start date"
+              label="Opening start date *"
               dateFormat="YYYY-MM-DD"
-              name="openingStart"
-              id="addevent_openingStart"
+              name="startDate"
+              id="addevent_startDate"
               backendDateStandard="YYYY-MM-DD"
+              required
             />
           </Col>
           <Col xs={6}>
@@ -40,8 +77,8 @@ class AddOpeningDayForm extends React.Component {
               component={Datepicker}
               label="Opening end date"
               dateFormat="YYYY-MM-DD"
-              name="openingEnd"
-              id="addevent_openingEnd"
+              name="endDate"
+              id="addevent_endDate"
               backendDateStandard="YYYY-MM-DD"
             />
           </Col>
@@ -51,7 +88,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Monday"
-              name="monday"
+              name="daysIncluded.monday"
               id="addevent_monday"
             />
           </Col>
@@ -59,7 +96,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Tuesday"
-              name="tuesday"
+              name="daysIncluded.tuesday"
               id="addevent_tuesday"
             />
           </Col>
@@ -67,7 +104,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Wednesday"
-              name="wednesday"
+              name="daysIncluded.wednesday"
               id="addevent_wednesday"
             />
           </Col>
@@ -75,7 +112,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Thursday"
-              name="thursday"
+              name="daysIncluded.thursday"
               id="addevent_thursday"
             />
           </Col>
@@ -83,7 +120,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Friday"
-              name="friday"
+              name="daysIncluded.friday"
               id="addevent_friday"
             />
           </Col>
@@ -91,7 +128,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Saturday"
-              name="saturday"
+              name="daysIncluded.saturday"
               id="addevent_saturday"
             />
           </Col>
@@ -99,7 +136,7 @@ class AddOpeningDayForm extends React.Component {
             <Field
               component={Checkbox}
               label="Sunday"
-              name="sunday"
+              name="daysIncluded.sunday"
               id="addevent_sunday"
             />
           </Col>
@@ -142,7 +179,7 @@ class AddOpeningDayForm extends React.Component {
         </Row>
         <Row>
           <Col>
-            <Button id="save_opening_day" title="Save" type="submit"> Save </Button>
+            <Button id="save_opening_day" title="Save" type="submit" disabled={pristine || submitting} onClick={handleSubmit}> Save </Button>
           </Col>
         </Row>
       </form>
@@ -152,6 +189,7 @@ class AddOpeningDayForm extends React.Component {
 
 export default stripesForm({
   form: 'addOpeningDayForm',
+  validate,
   navigationCheck: true,
   enableReinitialize: true,
 })(AddOpeningDayForm);

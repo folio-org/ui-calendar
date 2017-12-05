@@ -5,7 +5,7 @@ import AddOpeningDayForm from './AddOpeningDayForm';
 
 class CalendarSettings extends React.Component {
   static propTypes = {
-    data: PropTypes.object.isRequired,
+    label: PropTypes.string.isRequired,
     mutator: PropTypes.shape({
       calendarEventId: PropTypes.shape({
         replace: PropTypes.func,
@@ -22,46 +22,42 @@ class CalendarSettings extends React.Component {
     calendarEvent: {
       type: 'okapi',
       records: 'events',
-      path: 'calendar/events',
+      path: 'calendar/eventdescriptions',
       POST: {
-        path: 'calendar/event',
-      },
-      PUT: {
-        path: 'calendar/event/${calendarEventId}',
+        path: 'calendar/eventdescriptions',
       },
     },
   });
 
   constructor(props) {
     super(props);
-    this.onChangeEvent = this.onChangeEvent.bind(this);
+    this.saveRecord = this.saveRecord.bind(this);
+    this.initialValues = {};
   }
 
-  onChangeEvent(e) {
-    const record = this.props.data.calendarEvent[0];
-    if (record) {
-      // preference has been set previously, can proceed with update here
-      this.props.mutator.calendarEventId.replace(record.id);
-      record.value = e.target.value;
-      this.props.mutator.calendarEvent.PUT(record);
-    } else {
-      // no preference exists, so create a new one
-      this.props.mutator.calendarEvent.POST(
-        {
-          module: 'SCAN',
-          configName: 'pref_patron_identifier',
-          value: e.target.value,
-        },
-      );
-    }
+  saveRecord(record) {
+    const recordToSave = record;
+    console.log('Before post: ', recordToSave);
+
+    recordToSave.daysIncluded = '';
+    Object.keys(record.daysIncluded).forEach((key) => {
+      if (record.daysIncluded[key]) {
+        recordToSave.daysIncluded += ` ${key}`;
+      }
+    });
+
+    this.props.mutator.calendarEvent.POST(recordToSave);
   }
 
   render() {
     return (
-      <Pane defaultWidth="fill" fluidContentWidth paneTitle="Manage events">
+      <Pane defaultWidth="fill" fluidContentWidth paneTitle={this.props.label}>
         <Row>
           <Col xs={12}>
-            <AddOpeningDayForm />
+            <AddOpeningDayForm
+              initialValues={this.initialValues}
+              onSubmit={(record) => { this.saveRecord(record); }}
+            />
           </Col>
         </Row>
       </Pane>
