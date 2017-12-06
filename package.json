@@ -17,7 +17,21 @@
     "route": "/calendar",
     "hasSettings": true,
     "okapiInterfaces": {},
-    "permissionSets": []
+    "permissionSets": [],
+    "translations": {
+      "en": {
+        "search": "Search",
+        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
+      },
+      "de": {
+        "search": "Suche",
+        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
+      },
+      "hu": {
+        "search": "Keresés",
+        "resultCount": "{count, number} {count, plural, one {találat} other {találat}}"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js",
@@ -41,6 +55,7 @@
   "dependencies": {
     "@folio/stripes-components": "^1.9.0",
     "@folio/stripes-form": "^0.8.0",
+    "@folio/stripes-smart-components": "^1.3.0",
     "css-loader": "^0.28.7",
     "dateformat": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",

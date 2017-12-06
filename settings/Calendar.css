@@ -1,0 +1,10 @@
+
+.itemControl{
+  text-align: left;
+  width: 100%;
+  background: transparent;
+  border-width: 0;
+  &:hover{
+    background-color: #efefef;
+  }
+}
