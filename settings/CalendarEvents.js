@@ -1,12 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Pane from '@folio/stripes-components/lib/Pane';
-import List from '@folio/stripes-components/lib/List';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 import moment from 'moment';
-import css from './Calendar.css';
 import packageInfo from '../package';
 import AddOpeningDayForm from './AddOpeningDayForm';
 
@@ -72,21 +68,18 @@ class CalendarEvents extends React.Component {
   }
 
   render() {
-    const { resources } = this.props;
+    const { resources, mutator, onSelectRow, disableRecordCreation } = this.props;
     const calendarFormatter = {
-      startDate: item => `${moment(item.startDate).format(this.dateFormat)}`,
-      endDate: item => `${moment(item.endDate).format(this.dateFormat)}`,
-      startHour: item => `${padNumber(item.startHour)}:${padNumber(item.startMinute)}`,
-      endHour: item => `${padNumber(item.endHour)}:${padNumber(item.endMinute)}`,
+      'Start date': item => `${moment(item.startDate).format(this.dateFormat)}`,
+      'End date': item => `${moment(item.endDate).format(this.dateFormat)}`,
+      'Start hour': item => `${padNumber(item.startHour)}:${padNumber(item.startMinute)}`,
+      'End hour': item => `${padNumber(item.endHour)}:${padNumber(item.endMinute)}`,
     };
-
-    const props = this.props;
-    const { onSelectRow, disableRecordCreation } = this.props;
 
     const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
                          _.get(packageInfo, ['stripes', 'route']));
 
-    return ( 
+    return (
       <SearchAndSort
         moduleName={packageInfo.name.replace(/.*\//, '')}
         moduleTitle={packageInfo.stripes.displayName}
@@ -99,7 +92,7 @@ class CalendarEvents extends React.Component {
         viewRecordComponent={AddOpeningDayForm}
         editRecordComponent={AddOpeningDayForm}
         newRecordInitialValues={{ }}
-        visibleColumns={['startDate', 'endDate', 'startHour', 'endHour']}
+        visibleColumns={['Start date', 'End date', 'Start hour', 'End hour']}
         resultsFormatter={calendarFormatter}
         onSelectRow={onSelectRow}
         onCreate={this.create}
@@ -108,8 +101,8 @@ class CalendarEvents extends React.Component {
         viewRecordPerms="calendar.collection.get"
         newRecordPerms="calendar.collection.post"
         disableRecordCreation={disableRecordCreation}
-        parentResources={props.resources}
-        parentMutator={props.mutator}
+        parentResources={resources}
+        parentMutator={mutator}
       />
     );
   }

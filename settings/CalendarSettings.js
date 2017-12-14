@@ -32,21 +32,11 @@ class CalendarSettings extends React.Component {
   constructor(props) {
     super(props);
     this.saveRecord = this.saveRecord.bind(this);
-    this.initialValues = {};
+    this.initialValues = { daysIncluded: {} };
   }
 
   saveRecord(record) {
-    const recordToSave = record;
-    console.log('Before post: ', recordToSave);
-
-    recordToSave.daysIncluded = '';
-    Object.keys(record.daysIncluded).forEach((key) => {
-      if (record.daysIncluded[key]) {
-        recordToSave.daysIncluded += ` ${key}`;
-      }
-    });
-
-    this.props.mutator.calendarEvent.POST(recordToSave);
+    this.props.mutator.calendarEvent.POST(record);
   }
 
   render() {

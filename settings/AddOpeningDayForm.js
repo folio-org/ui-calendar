@@ -140,6 +140,14 @@ class AddOpeningDayForm extends React.Component {
               id="addevent_sunday"
             />
           </Col>
+          <Col>
+            <Field
+              component={Checkbox}
+              label="All days"
+              name="daysIncluded.allDays"
+              id="addevent_alldays"
+            />
+          </Col>
         </Row>
         <Row>
           <Col xs={6}>

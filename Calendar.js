@@ -12,12 +12,8 @@ import '!style-loader!css-loader!./css/folio-calendar.css';
 class Calendar extends React.Component {
 
   static propTypes = {
-    label: PropTypes.string.isRequired,
     resources: PropTypes.shape({
       calendarEvent: PropTypes.object,
-    }).isRequired,
-    mutator: PropTypes.shape({
-      calendarEvent: PropTypes.shape,
     }).isRequired,
   };
 
@@ -30,11 +26,16 @@ class Calendar extends React.Component {
   });
 
   render() {
-     let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
+     let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
      BigCalendar.momentLocalizer(moment);
 
      const { resources } = this.props;
-     const calendarEvents = (resources.calendarEvent || {}).records || [];
+     const calendarEvents = ((resources.calendarEvent || {}).records || [])
+      .map((event) => {
+        event.startDate = new Date(event.startDate);
+        event.endDate = new Date(event.endDate);
+        return event;
+      });
 
      return (
       <Paneset>
