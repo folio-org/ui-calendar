@@ -1,31 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
+import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import moment from 'moment';
-import packageInfo from '../package';
 import AddOpeningDayForm from './AddOpeningDayForm';
-
-const INITIAL_RESULT_COUNT = 30;
-const RESULT_COUNT_INCREMENT = 30;
-
-const filterConfig = [
-  /* {
-    label: 'Status',
-    name: 'active',
-    cql: 'active',
-    values: [
-      { name: 'Active', cql: 'true' },
-      { name: 'Inactive', cql: 'false' },
-    ],
-  },
-  {
-    label: 'Patron group',
-    name: 'pg',
-    cql: 'patronGroup',
-    values: [], // will be filled in by componentWillUpdate
-  },*/
-];
+import ViewOpeningDay from './ViewOpeningDay';
 
 function padNumber(param) {
   return (param > 9) ? param : `0${param}`;
@@ -34,31 +13,23 @@ function padNumber(param) {
 class CalendarEvents extends React.Component {
   static propTypes = {
     dateFormat: PropTypes.string,
-    resources: PropTypes.shape({
-      calendarEventDescription: PropTypes.object,
-    }).isRequired,
+    resources: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
-      calendarEventDescription: PropTypes.shape({
-        POST: PropTypes.func.isRequired,
+      entries: PropTypes.shape({
+        POST: PropTypes.func,
+        GET: PropTypes.func,
       }),
     }).isRequired,
-    onSelectRow: PropTypes.func,
-    disableRecordCreation: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
-    query: {
-      initialValue: {
-        query: '',
-        filters: '',
-        sort: 'startDate',
-      },
-    },
-    resultCount: { initialValue: INITIAL_RESULT_COUNT },
-    records: {
+    entries: {
       type: 'okapi',
       records: 'descriptions',
       path: 'calendar/eventdescriptions',
+      POST: {
+        path: 'calendar/eventdescriptions',
+      },
     },
   });
 
@@ -68,7 +39,6 @@ class CalendarEvents extends React.Component {
   }
 
   render() {
-    const { resources, mutator, onSelectRow, disableRecordCreation } = this.props;
     const calendarFormatter = {
       'Start date': item => `${moment(item.startDate).format(this.dateFormat)}`,
       'End date': item => `${moment(item.endDate).format(this.dateFormat)}`,
@@ -76,33 +46,22 @@ class CalendarEvents extends React.Component {
       'End hour': item => `${padNumber(item.endHour)}:${padNumber(item.endMinute)}`,
     };
 
-    const initialPath = (_.get(packageInfo, ['stripes', 'home']) ||
-                         _.get(packageInfo, ['stripes', 'route']));
-
     return (
-      <SearchAndSort
-        moduleName={packageInfo.name.replace(/.*\//, '')}
-        moduleTitle={packageInfo.stripes.displayName}
-        objectName="calendarEvent"
-        baseRoute={packageInfo.stripes.route}
-        initialPath={initialPath}
-        filterConfig={filterConfig}
-        initialResultCount={INITIAL_RESULT_COUNT}
-        resultCountIncrement={RESULT_COUNT_INCREMENT}
-        viewRecordComponent={AddOpeningDayForm}
-        editRecordComponent={AddOpeningDayForm}
-        newRecordInitialValues={{ }}
-        visibleColumns={['Start date', 'End date', 'Start hour', 'End hour']}
-        resultsFormatter={calendarFormatter}
-        onSelectRow={onSelectRow}
-        onCreate={this.create}
-        massageNewRecord={this.massageNewRecord}
-        finishedResourceName="perms"
-        viewRecordPerms="calendar.collection.get"
-        newRecordPerms="calendar.collection.post"
-        disableRecordCreation={disableRecordCreation}
-        parentResources={resources}
-        parentMutator={mutator}
+      <EntryManager
+        {...this.props}
+        parentMutator={this.props.mutator}
+        entryList={_.sortBy((this.props.resources.entries || {}).records || [], ['startDate'])}
+        detailComponent={ViewOpeningDay}
+        formComponent={AddOpeningDayForm}
+        paneTitle="Opening days"
+        entryLabel="Opening day"
+        nameKey="startDate"
+        permissions={{
+          post: '',
+          put: '',
+          delete: '',
+        }}
+        defaultEntry={{ daysIncluded: {} }}
       />
     );
   }

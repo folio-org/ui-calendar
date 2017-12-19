@@ -185,11 +185,6 @@ class AddOpeningDayForm extends React.Component {
             />
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Button id="save_opening_day" title="Save" type="submit" disabled={pristine || submitting} onClick={handleSubmit}> Save </Button>
-          </Col>
-        </Row>
       </form>
     );
   }

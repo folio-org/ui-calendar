@@ -74,6 +74,7 @@
     "@folio/stripes-core": "^2.1.0",
     "react": "^15.4.2",
     "react-bootstrap": "^0.31.1",
+    "react-intl": "^2.3.0",
     "react-router-dom": "^4.0.0",
     "react-dom": "^0.14.9 || >=15.3.0"
   }

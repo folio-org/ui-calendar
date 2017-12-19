@@ -10,11 +10,6 @@ const pages = [
     label: 'Events',
     component: CalendarEvents,
   },
-  {
-    route: 'add-event',
-    label: 'Add event',
-    component: CalendarSettings,
-  },
 ];
 
 export default props => <Settings {...props} pages={pages} paneTitle="Calendar" />;
