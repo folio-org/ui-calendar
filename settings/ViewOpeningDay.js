@@ -26,13 +26,17 @@ function ViewOpeningDay(props) {
           <Col xs={4}><FormattedDate value={openingDays.endDate} /></Col>
         </Row>
         <Row>
+          <Col xs={4}><h4>Opening day</h4></Col>
           <Col xs={4}><h4>Opening start</h4></Col>
           <Col xs={4}><h4>Opening end</h4></Col>
         </Row>
-        <Row>
-          <Col xs={4}><h5>{`${openingDays.startHour}:${padNumber(openingDays.startMinute)}`} </h5></Col>
-          <Col xs={4}><h5>{`${openingDays.endHour}:${padNumber(openingDays.endMinute)}`} </h5></Col>
-        </Row>
+        {openingDays.openingDays.map((openingDay, index) =>
+          (<Row key={index}>
+            <Col xs={4}>{openingDay.day}</Col>
+            <Col xs={4}>{`${padNumber(openingDay.startHour)}:${padNumber(openingDay.startMinute)}`}</Col>
+            <Col xs={4}>{`${padNumber(openingDay.endHour)}:${padNumber(openingDay.endMinute)}`}</Col>
+          </Row>),
+        )}
       </section>
     </div>
   );
