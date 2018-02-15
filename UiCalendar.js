@@ -54,7 +54,7 @@ class UiCalendar extends React.Component {
               endAccessor="endDate"
               titleAccessor="eventType"
               views={allViews}
-              resources={[]}
+              resources={[null]}
             />
           </ErrorBoundary>
         </Pane>
