@@ -14,25 +14,34 @@ import Agenda from '../react-big-calendar/src/Agenda.js';
 
 class UiCalendar extends React.Component {
 
-  /*static propTypes = {
-    
+  static propTypes = {
+    resources: PropTypes.shape({
+      calendarEvent: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
   };
 
   static manifest = Object.freeze({
-    
-  });*/
+    calendarEvent: {
+      type: 'okapi',
+      path: 'calendar/events',
+      records: 'events',
+    },
+  });
 
   render() {
      let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
      BigCalendar.momentLocalizer(moment);
 
-     /*const { resources } = this.props;
-     const calendarEvents = ((resources.calendarEvent || {}).records || [])
+     const calResources = this.props.resources;
+     console.log('resources ', calResources);
+     const calendarEvents = ((calResources.calendarEvent || {}).records || [])
       .map((event) => {
         event.startDate = new Date(event.startDate);
         event.endDate = new Date(event.endDate);
         return event;
-      });*/
+      });
 
      return (
       <Paneset>
@@ -45,6 +54,7 @@ class UiCalendar extends React.Component {
               endAccessor="endDate"
               titleAccessor="eventType"
               views={allViews}
+              resources={[]}
             />
           </ErrorBoundary>
         </Pane>
@@ -52,22 +62,5 @@ class UiCalendar extends React.Component {
     );
   }
 }
-
-/*
-          <Agenda
-            {...this.props}
-            titleAccessor="eventType"
-            tooltipAccessor="eventType"
-            startAccessor="startDate"
-            endAccessor="endDate"
-            components={{
-              event: '',
-              date: now(),
-              time: ''
-            }}
-            allDayAccessor="allDay"
-            events={calendarEvents}
-          ></Agenda>
-*/
 
 export default UiCalendar;
