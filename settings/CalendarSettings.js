@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style,no-undef */
 import React, { PropTypes } from 'react';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Pane from '@folio/stripes-components/lib/Pane';

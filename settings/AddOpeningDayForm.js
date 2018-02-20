@@ -1,12 +1,13 @@
-import React, { PropTypes } from 'react';
+/* eslint-disable linebreak-style */
+import React from 'react';
 import { Field, FieldArray } from 'redux-form';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
-import Button from '@folio/stripes-components/lib/Button'; 
 import OpeningDayComponent from './OpeningDayComponent';
+import PropTypes from 'prop-types';
 
 const openingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
@@ -16,13 +17,16 @@ const openingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SA
  * "name" key correspond to the properties of the object being rendered.
  */
 class AddOpeningDayForm extends React.Component {
+  static propTypes = {
+    modifiedProps: PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
-    this.addNewOpeningDay = this.addNewOpeningDay.bind(this);
+    this.modifiedProps = this.modifiedProps.bind(this);
   }
 
-  addNewOpeningDay() {
+  modifiedProps() {
     console.log('this: ', this);
   }
 
@@ -63,8 +67,6 @@ class AddOpeningDayForm extends React.Component {
             />
           </Col>
         </Row>
-
-        <Button buttonStyle="link" fullWidth name="add" onClick={() => this.addNewOpeningDay(null)}>Add</Button>
 
         <FieldArray name="openingDays" component={OpeningDayComponent} />
 
