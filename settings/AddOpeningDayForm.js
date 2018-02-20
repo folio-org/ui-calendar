@@ -1,5 +1,5 @@
-/* eslint-disable linebreak-style */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
@@ -7,9 +7,6 @@ import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
 import OpeningDayComponent from './OpeningDayComponent';
-import PropTypes from 'prop-types';
-
-const openingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
 /**
  * This component will be rendered inside a form in a component
@@ -17,18 +14,6 @@ const openingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SA
  * "name" key correspond to the properties of the object being rendered.
  */
 class AddOpeningDayForm extends React.Component {
-  static propTypes = {
-    modifiedProps: PropTypes.func,
-  };
-
-  constructor(props) {
-    super(props);
-    this.modifiedProps = this.modifiedProps.bind(this);
-  }
-
-  modifiedProps() {
-    console.log('this: ', this);
-  }
 
   render() {
     return (
@@ -67,31 +52,30 @@ class AddOpeningDayForm extends React.Component {
             />
           </Col>
         </Row>
-
+        <Row>
+          <Col xs={12} sm={1}>
+            Day
+          </Col>
+          <Col xs={12} sm={2}>
+          </Col>
+          <Col xs={12} sm={3}>
+            Open
+          </Col>
+          <Col xs={12} sm={3}>
+            Close
+          </Col>
+          <Col xs={12} sm={3}>
+          </Col>
+        </Row>
         <FieldArray name="openingDays" component={OpeningDayComponent} />
-
       </section>
     );
   }
 }
 
-// TODO: async validate for interval of opening!!!!
-
-/*
-
-          <Col xs={2}>
-            <Field
-              label="12 hour clock"
-              name="twelveHour"
-              type="checkbox"
-              id="twelveHour"
-              component={Checkbox}
-            />
-          </Col>
-*/
-
 export default stripesForm({
   form: 'addOpeningDayForm',
   navigationCheck: true,
   enableReinitialize: false,
+  asyncBlurFields: [],
 })(AddOpeningDayForm);

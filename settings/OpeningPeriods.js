@@ -39,34 +39,43 @@ function validate(values) {
     values.openingDays.forEach((openingDay, index) => {
       const openingDayErrors = {};
       if (openingDay && openingDay.open && !openingDay.allDay) {
-        if (invalidHour(openingDay.startHour, values.twelveHour)) {
-          openingDayErrors.startHour = 'Must be a valid hour!';
-          openingDayArrayErrors[index] = openingDayErrors;
-        }
-        if (invalidMinute(openingDay.startMinute)) {
-          openingDayErrors.startMinute = 'Must be a valid minute!';
-          openingDayArrayErrors[index] = openingDayErrors;
-        }
-        if (invalidHour(openingDay.endHour, values.twelveHour)) {
-          openingDayErrors.endHour = 'Must be a valid hour!';
-          openingDayArrayErrors[index] = openingDayErrors;
-        }
-        if (invalidMinute(openingDay.endMinute)) {
-          openingDayErrors.endMinute = 'Must be a valid minute!';
-          openingDayArrayErrors[index] = openingDayErrors;
-        }
-        if (!invalidHour(openingDay.startHour /* , values.twelveHour*/) && !invalidHour(openingDay.endHour /* , values.twelveHour*/)) {
-          if (parseInt(openingDay.startHour, 10) > parseInt(openingDay.endHour, 10)) {
-            openingDayErrors.endHour = 'Closing hour must be after opening hour!';
-            openingDayArrayErrors[index] = openingDayErrors;
-          } else if (parseInt(openingDay.startHour, 10) === parseInt(openingDay.endHour, 10)
-            && !invalidMinute(openingDay.startMinute)
-            && !invalidMinute(openingDay.endMinute)
-            && parseInt(openingDay.startMinute, 10) >= parseInt(openingDay.endMinute, 10)) {
-            openingDayErrors.endMinute = 'Closing minute must be after opening minute!';
+        
+        const openingHourArrayErrors = [];
+        openingDay.openingHour.forEach((openingHour, hourIndex) => {
+          const openingHourErrors = {};
+          if (invalidHour(openingHour.startHour, values.twelveHour)) {
+            openingHourErrors.startHour = 'Must be a valid hour!';
+            openingHourArrayErrors[hourIndex] = openingHourErrors;
+          }
+          if (invalidMinute(openingHour.startMinute)) {
+            openingHourErrors.startMinute = 'Must be a valid minute!';
+            openingHourArrayErrors[hourIndex] = openingHourErrors;
+          }
+          if (invalidHour(openingHour.endHour, values.twelveHour)) {
+            openingHourErrors.endHour = 'Must be a valid hour!';
+            openingHourArrayErrors[hourIndex] = openingHourErrors;
+          }
+          if (invalidMinute(openingHour.endMinute)) {
+            openingHourErrors.endMinute = 'Must be a valid minute!';
+            openingHourArrayErrors[hourIndex] = openingHourErrors;
+          }
+          if (!invalidHour(openingHour.startHour /* , values.twelveHour*/) && !invalidHour(openingHour.endHour /* , values.twelveHour*/)) {
+            if (parseInt(openingHour.startHour, 10) > parseInt(openingHour.endHour, 10)) {
+              openingHourErrors.endHour = 'Closing hour must be after opening hour!';
+              openingHourArrayErrors[hourIndex] = openingHourErrors;
+            } else if (parseInt(openingHour.startHour, 10) === parseInt(openingHour.endHour, 10)
+              && !invalidMinute(openingHour.startMinute)
+              && !invalidMinute(openingHour.endMinute)
+              && parseInt(openingHour.startMinute, 10) >= parseInt(openingHour.endMinute, 10)) {
+              openingHourErrors.endMinute = 'Closing minute must be after opening minute!';
+              openingHourArrayErrors[hourIndex] = openingHourErrors;
+            }
+          }
+          if (openingHourArrayErrors.length) {
+            openingDayErrors.openingHour = openingHourArrayErrors;
             openingDayArrayErrors[index] = openingDayErrors;
           }
-        }
+        });
       }
     });
     if (openingDayArrayErrors.length) {
@@ -135,13 +144,13 @@ class OpeningPeriods extends React.Component {
         defaultEntry={{ description: '',
           twelveHour: false,
           openingDays: [
-            { day: 'MONDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false },
-            { day: 'TUESDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false },
-            { day: 'WEDNESDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false },
-            { day: 'THURSDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false },
-            { day: 'FRIDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false },
-            { day: 'SATURDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false },
-            { day: 'SUNDAY', startHour: '0', startMinute: '0', endHour: '0', endMinute: '0', allDay: false, open: false }] }}
+            { day: 'MONDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false },
+            { day: 'TUESDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false },
+            { day: 'WEDNESDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false },
+            { day: 'THURSDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false },
+            { day: 'FRIDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false },
+            { day: 'SATURDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false },
+            { day: 'SUNDAY', openingHour: [{ startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' }], allDay: false, open: false }] }}
       />
     );
   }

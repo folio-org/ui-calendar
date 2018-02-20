@@ -8,13 +8,13 @@ function padNumber(param) {
   return (param > 9) ? param : `0${param}`;
 }
 
-function calculateTime(hour, minute, open, allDay, twelveHour, start) {
+function calculateTime(startHour, startMinute, endHour, endMinute, open, allDay) {
   if (!open) {
     return 'Closed';
   } else if (open && allDay) {
-    return start ? '00:00' : '24:00';
+    return '00:00-24:00';
   } else {
-    return `${padNumber(hour)}:${padNumber(minute)}`;
+    return `${padNumber(startHour)}:${padNumber(startMinute)}-${padNumber(endHour)}:${padNumber(endMinute)}`;
   }
 }
 
@@ -37,14 +37,18 @@ function ViewOpeningDay(props) {
         </Row>
         <Row>
           <Col xs={4}><h4>Day</h4></Col>
-          <Col xs={4}><h4>Opening time</h4></Col>
-          <Col xs={4}><h4>Closing time</h4></Col>
+          <Col xs={8}><h4>Opening time</h4></Col>
         </Row>
         {openingDays.openingDays.map((openingDay, index) =>
-          (<Row key={index}>
+          (<Row key={`day-${index}`}>
             <Col xs={4}>{openingDay.day}</Col>
-            <Col xs={4}>{calculateTime(openingDay.startHour, openingDay.startMinute, openingDay.open, openingDay.allDay, openingDay.twelveHour, true)}</Col>
-            <Col xs={4}>{calculateTime(openingDay.endHour, openingDay.endMinute, openingDay.open, openingDay.allDay, openingDay.twelveHour, false)}</Col>
+            <Row key={`opening-times-${index}`}>
+              {openingDay.openingHour.map((openingHour, hourIndex) => (
+                <Col xs={12} key={`day-${index}-hour-${hourIndex}`}>
+                  {calculateTime(openingHour.startHour, openingHour.startMinute, openingHour.endHour, openingHour.endMinute, openingDay.open, openingDay.allDay)}
+                </Col>
+              ))}
+            </Row>
           </Row>),
         )}
       </section>

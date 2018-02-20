@@ -35,7 +35,6 @@ class UiCalendar extends React.Component {
      BigCalendar.momentLocalizer(moment);
 
      const calResources = this.props.resources;
-     console.log('resources ', calResources);
      const calendarEvents = ((calResources.calendarEvent || {}).records || [])
       .map((event) => {
         event.startDate = new Date(event.startDate);
