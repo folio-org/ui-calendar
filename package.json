@@ -17,7 +17,60 @@
     "route": "/calendar",
     "hasSettings": true,
     "okapiInterfaces": {},
-    "permissionSets": [],
+    "permissionSets": [
+      {
+        "permissionName": "calendar.enabled",
+        "displayName": "UI: Calendar module is enabled"
+      },
+      {
+        "permissionName": "calendar.all",
+        "displayName": "Calendar: All permissions",
+        "description": "Entire set of permissions needed to use the calendar module",
+        "subPermissions": [
+          "calendar.collection.all"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "calendar.view",
+        "displayName": "Calendar: View calendar events",
+        "description": "Can view calendar events",
+        "subPermissions": [
+          "calendar.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "calendar.edit",
+        "displayName": "Calendar: Edit calendar events",
+        "description": "Can edit calendar events",
+        "subPermissions": [
+          "calendar.view",
+          "calendar.collection.update"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "calendar.create",
+        "displayName": "Calendar: Create calendar events",
+        "description": "Can create calendar events",
+        "subPermissions": [
+          "calendar.view",
+          "calendar.collection.add"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "calendar.delete",
+        "displayName": "Calendar: Delete calendar events",
+        "description": "Can remove calendar events",
+        "subPermissions": [
+          "calendar.view",
+          "calendar.collection.delete"
+        ],
+        "visible": true
+      }
+    ],
     "translations": {
       "en": {
         "search": "Search",
