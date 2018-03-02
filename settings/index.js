@@ -12,4 +12,4 @@ const pages = [
   },
 ];
 
-export default props => <Settings {...props} pages={pages} paneTitle="Calendar" />;
+export default props => <Settings {...props} pages={pages} paneTitle={props.stripes.intl.formatMessage({id: "ui-calendar.settings.calendar"})} />;

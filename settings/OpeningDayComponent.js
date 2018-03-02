@@ -9,23 +9,24 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import Select from '@folio/stripes-components/lib/Select';
 import Button from '@folio/stripes-components/lib/Button';
 import OpeningHourComponent from './OpeningHourComponent';
+import FormattedMessage from 'react-intl'
 
-const OpeningDayComponent = ({ fields }) =>
+const OpeningDayComponent = ({ fields, intl }) =>
   (<div>
     {(fields || []).map((openingDay, index) => (
       <div key={index}>
         <Row>
-          <Col xs={12} sm={1}>
+          <Col xs={12} sm={1}>            
             <Field
               label=""
               name={`${openingDay}.day`}
               component={TextField}
-              disabled="true"
+              disabled="true"              
             />
           </Col>
           <Col xs={12} sm={1}>
             <Field
-              label="Open"
+              label={intl.formatMessage({id: "ui-calendar.settings.opening"})}
               name={`${openingDay}.open`}
               type="checkbox"
               id={`open-${index}`}
@@ -34,7 +35,7 @@ const OpeningDayComponent = ({ fields }) =>
           </Col>
           <Col xs={12} sm={1}>
             <Field
-              label="All day"
+              label={intl.formatMessage({id: "ui-calendar.settings.allDay"})}
               name={`${openingDay}.allDay`}
               type="checkbox"
               id={`allDay-${index}`}
@@ -42,7 +43,7 @@ const OpeningDayComponent = ({ fields }) =>
             />
           </Col>
           <Col xs={12} sm={9}>
-            <FieldArray name={`${openingDay}.openingHour`} component={OpeningHourComponent} />
+            <FieldArray name={`${openingDay}.openingHour`} component={OpeningHourComponent} intl={intl}/>
           </Col>
         </Row>
         <hr />

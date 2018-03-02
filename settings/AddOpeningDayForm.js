@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import FormattedMessage from 'react-intl'
 import { Field, FieldArray } from 'redux-form';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
@@ -15,6 +16,10 @@ import OpeningDayComponent from './OpeningDayComponent';
  */
 class AddOpeningDayForm extends React.Component {
 
+  constructor(props) {
+    super(props);
+  }
+  
   render() {
     return (
       <section>
@@ -22,7 +27,8 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label="Opening period start date *"
+              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodStart"})}
+              required={true}
               dateFormat="YYYY-MM-DD"
               name="startDate"
               id="addevent_startDate"
@@ -33,7 +39,8 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label="Opening period end date *"
+              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodEnd"})}
+              required={true}
               dateFormat="YYYY-MM-DD"
               name="endDate"
               id="addevent_endDate"
@@ -45,7 +52,8 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={12}>
             <Field
               component={TextField}
-              label="Description *"
+              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.description"})}
+              required={true}
               name="description"
               id="addevent_description"
               required
@@ -54,20 +62,20 @@ class AddOpeningDayForm extends React.Component {
         </Row>
         <Row>
           <Col xs={12} sm={1}>
-            Day
+            {this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.day"})}
           </Col>
           <Col xs={12} sm={2}>
           </Col>
           <Col xs={12} sm={3}>
-            Open
+          {this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.open"})}
           </Col>
           <Col xs={12} sm={3}>
-            Close
+          {this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.close"})}
           </Col>
           <Col xs={12} sm={3}>
           </Col>
         </Row>
-        <FieldArray name="openingDays" component={OpeningDayComponent} />
+        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl}/>
       </section>
     );
   }
