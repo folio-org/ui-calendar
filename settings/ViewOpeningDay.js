@@ -25,19 +25,19 @@ function ViewOpeningDay(props) {
     <div>
       <section>
         <Row>
-          <Col xs={12}><h2 style={{ marginTop: '0' }}>Opening period</h2></Col>
+          <Col xs={12}><h2 style={{ marginTop: '0' }}>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriod"})}</h2></Col>
         </Row>
         <Row>
-          <Col xs={4}><h4>Opening period start date</h4></Col>
-          <Col xs={4}><h4>Opening period end date</h4></Col>
+          <Col xs={4}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodStart"})}</h4></Col>
+          <Col xs={4}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodEnd"})}</h4></Col>
         </Row>
         <Row>
           <Col xs={4}><FormattedDate value={openingDays.startDate} /></Col>
           <Col xs={4}><FormattedDate value={openingDays.endDate} /></Col>
         </Row>
         <Row>
-          <Col xs={4}><h4>Day</h4></Col>
-          <Col xs={8}><h4>Opening time</h4></Col>
+          <Col xs={4}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.day"})}</h4></Col>
+          <Col xs={8}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingTime"})}</h4></Col>
         </Row>
         {openingDays.openingDays.map((openingDay, index) =>
           (<Row key={`day-${index}`}>

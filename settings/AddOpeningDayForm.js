@@ -27,7 +27,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodStart"})}
+              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodStart"}) + "*"}
               required={true}
               dateFormat="YYYY-MM-DD"
               name="startDate"
@@ -39,7 +39,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodEnd"})}
+              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodEnd"}) + "*"}
               required={true}
               dateFormat="YYYY-MM-DD"
               name="endDate"
@@ -52,7 +52,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={12}>
             <Field
               component={TextField}
-              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.description"})}
+              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.description"}) + "*"}
               required={true}
               name="description"
               id="addevent_description"
