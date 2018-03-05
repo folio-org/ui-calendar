@@ -10,7 +10,7 @@ function padNumber(param) {
 
 function calculateTime(startHour, startMinute, endHour, endMinute, open, allDay) {
   if (!open) {
-    return 'Closed';
+    return <FormattedMessage id={'ui-calendar.settings.closed'} />;
   } else if (open && allDay) {
     return '00:00-24:00';
   } else {

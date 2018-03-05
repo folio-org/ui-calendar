@@ -14,6 +14,7 @@
   "settings.day": "Day",
   "settings.open": "Open",
   "settings.close": "Close",
+  "settings.closed": "Closed",
   "settings.openingPeriods": "Opening periods",
   "settings.openingPeriod": "Opening period",
   "settings.openingTime": "Opening time",
