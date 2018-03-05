@@ -64,7 +64,7 @@ class UiCalendar extends React.Component {
 
     return (
       <Paneset>
-        <Pane id="pane-calendar" defaultWidth="fill" height="100%" fluidContentWidth paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.calendar' })}>
+        <Pane id="pane-calendar" defaultWidth="fill" height="100%" fluidContentWidth paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.main.institutionalCalendar' })}>
           <ErrorBoundary>
             <BigCalendar
               {...this.props}
