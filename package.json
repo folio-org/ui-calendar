@@ -16,6 +16,13 @@
     "displayName": "Calendar",
     "route": "/calendar",
     "hasSettings": true,
+    "icons": [
+      {
+        "name": "app",
+        "alt": "Institutional calendar",
+        "title": "Calendar"
+      }
+    ],
     "okapiInterfaces": {},
     "permissionSets": [
       {
