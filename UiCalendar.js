@@ -1,16 +1,12 @@
-/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-
 import BigCalendar from '@folio/react-big-calendar';
 import moment, { now } from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css';
 import '!style-loader!css-loader!./css/folio-calendar.css';
-import calendarEvents from './events.js';
-import ErrorBoundary from './ErrorBoundary.js';
-import Agenda from '../react-big-calendar/src/Agenda.js';
+import ErrorBoundary from './ErrorBoundary';
 
 class UiCalendar extends React.Component {
 
@@ -31,18 +27,19 @@ class UiCalendar extends React.Component {
   });
 
   render() {
-     let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
-     BigCalendar.momentLocalizer(moment);
+    const allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
+    BigCalendar.momentLocalizer(moment);
 
-     const calResources = this.props.resources;
-     const calendarEvents = ((calResources.calendarEvent || {}).records || [])
+    const calResources = this.props.resources;
+    const calendarEvents = ((calResources.calendarEvent || {}).records || [])
       .map((event) => {
-        event.startDate = new Date(event.startDate);
-        event.endDate = new Date(event.endDate);
-        return event;
+        const mappedEvent = event;
+        mappedEvent.startDate = new Date(event.startDate);
+        mappedEvent.endDate = new Date(event.endDate);
+        return mappedEvent;
       });
 
-     return (
+    return (
       <Paneset>
         <Pane id="pane-calendar" defaultWidth="fill" height="100%" fluidContentWidth paneTitle={this.props.stripes.intl.formatMessage({id: "ui-calendar.main.institutionalCalendar"})}>
           <ErrorBoundary>

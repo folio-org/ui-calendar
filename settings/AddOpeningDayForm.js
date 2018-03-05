@@ -1,12 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import FormattedMessage from 'react-intl'
 import { Field, FieldArray } from 'redux-form';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
+import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import OpeningDayComponent from './OpeningDayComponent';
 
 /**
@@ -16,10 +14,10 @@ import OpeningDayComponent from './OpeningDayComponent';
  */
 class AddOpeningDayForm extends React.Component {
 
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    stripes: stripesShape.isRequired,
   }
-  
+
   render() {
     return (
       <section>
@@ -27,8 +25,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodStart"}) + "*"}
-              required={true}
+              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodStart' })} *`}
               dateFormat="YYYY-MM-DD"
               name="startDate"
               id="addevent_startDate"
@@ -39,8 +36,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={6}>
             <Field
               component={Datepicker}
-              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodEnd"}) + "*"}
-              required={true}
+              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })} *`}
               dateFormat="YYYY-MM-DD"
               name="endDate"
               id="addevent_endDate"
@@ -52,8 +48,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={12}>
             <Field
               component={TextField}
-              label={this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.description"}) + "*"}
-              required={true}
+              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description' })} *`}
               name="description"
               id="addevent_description"
               required
@@ -62,20 +57,18 @@ class AddOpeningDayForm extends React.Component {
         </Row>
         <Row>
           <Col xs={12} sm={1}>
-            {this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.day"})}
+            {this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.day' })}
           </Col>
-          <Col xs={12} sm={2}>
+          <Col xs={12} sm={2} />
+          <Col xs={12} sm={3}>
+            {this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.open' })}
           </Col>
           <Col xs={12} sm={3}>
-          {this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.open"})}
+            {this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.close' })}
           </Col>
-          <Col xs={12} sm={3}>
-          {this.props.stripes.intl.formatMessage({id: "ui-calendar.settings.close"})}
-          </Col>
-          <Col xs={12} sm={3}>
-          </Col>
+          <Col xs={12} sm={3} />
         </Row>
-        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl}/>
+        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl} />
       </section>
     );
   }
