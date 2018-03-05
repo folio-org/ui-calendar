@@ -4,6 +4,7 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import BigCalendar from '@folio/react-big-calendar';
 import moment, { now } from 'moment';
+import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import '!style-loader!css-loader!./css/react-big-calendar.css';
 import '!style-loader!css-loader!./css/folio-calendar.css';
 import ErrorBoundary from './ErrorBoundary';
@@ -16,6 +17,7 @@ class UiCalendar extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    stripes: stripesShape.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -39,9 +41,30 @@ class UiCalendar extends React.Component {
         return mappedEvent;
       });
 
+      console.log('stripes: ', this.props.stripes);
+
+    const messages = {
+      date: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.date' }),
+      time: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.time' }),
+      event: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.event' }),
+      allDay: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.allDay' }),
+      week: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.week' }),
+      work_week: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.work_week' }),
+      day: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.day' }),
+      month: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.month' }),
+      previous: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.previous' }),
+      next: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.next' }),
+      yesterday: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.yesterday' }),
+      tomorrow: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.tomorrow' }),
+      today: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.today' }),
+      agenda: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.agenda' }),
+
+      showMore: total => this.props.stripes.intl.formatMessage({ id: 'ui-calendar.showMore' }, { total: total }),
+    };
+
     return (
       <Paneset>
-        <Pane id="pane-calendar" defaultWidth="fill" height="100%" fluidContentWidth paneTitle="Institutional calendar">
+        <Pane id="pane-calendar" defaultWidth="fill" height="100%" fluidContentWidth paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.calendar' })}>
           <ErrorBoundary>
             <BigCalendar
               {...this.props}
@@ -51,6 +74,8 @@ class UiCalendar extends React.Component {
               titleAccessor="eventType"
               views={allViews}
               resources={[null]}
+              culture={this.props.stripes.locale}
+              messages={messages}
             />
           </ErrorBoundary>
         </Pane>

@@ -27,5 +27,22 @@
     "settings.error.invalidMinute": "Must be a valid minute!",
     "settings.error.invalidDateRange": "The end date can not be before the start date!",
     "settings.error.invalidHourRange": "Closing hour must be after opening hour!",
-    "settings.error.invalidMinuteRange": "Closing minute must be after opening minute!"
+    "settings.error.invalidMinuteRange": "Closing minute must be after opening minute!",
+    "calendar": "Institutional calendar",
+    "date": "Date",
+    "time": "Time",
+    "event": "Event",
+    "allDay": "all day",
+    "week": "week",
+    "work_week": "work week",
+    "day": "day",
+    "month": "month",
+    "previous": "back",
+    "next": "next",
+    "yesterday": "yesterday",
+    "tomorrow": "tomorrow",
+    "today": "today",
+    "agenda": "agenda",
+  
+    "showMore": "+{total} more"
 }
