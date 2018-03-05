@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
@@ -10,7 +10,7 @@ function padNumber(param) {
 
 function calculateTime(startHour, startMinute, endHour, endMinute, open, allDay) {
   if (!open) {
-    return 'Closed';
+    return <FormattedMessage id={'ui-calendar.settings.closed'} />;
   } else if (open && allDay) {
     return '00:00-24:00';
   } else {
@@ -41,7 +41,7 @@ function ViewOpeningDay(props) {
         </Row>
         {openingDays.openingDays.map((openingDay, index) =>
           (<Row key={`day-${index}`}>
-            <Col xs={4}>{openingDay.day}</Col>
+            <Col xs={4}><FormattedMessage id={`ui-calendar.${openingDay.day}`} /></Col>
             <Row key={`opening-times-${index}`}>
               {openingDay.openingHour.map((openingHour, hourIndex) => (
                 <Col xs={12} key={`day-${index}-hour-${hourIndex}`}>
