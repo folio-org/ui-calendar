@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { FormattedDate } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
 function padNumber(param) {
   return (param > 9) ? param : `0${param}`;
@@ -25,19 +25,19 @@ function ViewOpeningDay(props) {
     <div>
       <section>
         <Row>
-          <Col xs={12}><h2 style={{ marginTop: '0' }}>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriod"})}</h2></Col>
+          <Col xs={12}><h2 style={{ marginTop: '0' }}>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriod' })}</h2></Col>
         </Row>
         <Row>
-          <Col xs={4}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodStart"})}</h4></Col>
-          <Col xs={4}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingPeriodEnd"})}</h4></Col>
+          <Col xs={4}><h4>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodStart' })}</h4></Col>
+          <Col xs={4}><h4>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}</h4></Col>
         </Row>
         <Row>
           <Col xs={4}><FormattedDate value={openingDays.startDate} /></Col>
           <Col xs={4}><FormattedDate value={openingDays.endDate} /></Col>
         </Row>
         <Row>
-          <Col xs={4}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.day"})}</h4></Col>
-          <Col xs={8}><h4>{props.stripes.intl.formatMessage({id: "ui-calendar.settings.openingTime"})}</h4></Col>
+          <Col xs={4}><h4>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.day' })}</h4></Col>
+          <Col xs={8}><h4>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingTime' })}</h4></Col>
         </Row>
         {openingDays.openingDays.map((openingDay, index) =>
           (<Row key={`day-${index}`}>
@@ -58,6 +58,7 @@ function ViewOpeningDay(props) {
 
 ViewOpeningDay.propTypes = {
   initialValues: PropTypes.object,
+  stripes: stripesShape.isRequired,
 };
 
 export default ViewOpeningDay;
