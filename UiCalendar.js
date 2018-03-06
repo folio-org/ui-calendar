@@ -29,7 +29,11 @@ class UiCalendar extends React.Component {
   });
 
   render() {
-    const allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
+    const views = [
+      BigCalendar.Views.MONTH,
+      BigCalendar.Views.WEEK,
+    ];
+
     BigCalendar.momentLocalizer(moment);
 
     const calResources = this.props.resources;
@@ -40,8 +44,6 @@ class UiCalendar extends React.Component {
         mappedEvent.endDate = new Date(event.endDate);
         return mappedEvent;
       });
-
-      console.log('stripes: ', this.props.stripes);
 
     const messages = {
       date: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.date' }),
@@ -72,7 +74,7 @@ class UiCalendar extends React.Component {
               startAccessor="startDate"
               endAccessor="endDate"
               titleAccessor="eventType"
-              views={allViews}
+              views={views}
               resources={[null]}
               culture={this.props.stripes.locale}
               messages={messages}
