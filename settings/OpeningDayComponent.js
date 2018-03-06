@@ -1,21 +1,24 @@
 import React from 'react';
 import { Field, FieldArray } from 'redux-form';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import TextField from '@folio/stripes-components/lib/TextField';
 import OpeningHourComponent from './OpeningHourComponent';
 
-const OpeningDayComponent = ({ fields, intl }) =>
+const OpeningDayComponent = ({ fields, intl, days }) =>
   (<div>
     {(fields || []).map((openingDay, index) => (
       <div key={index}>
         <Row>
           <Col xs={12} sm={1}>
+            <FormattedMessage id={`ui-calendar.${days[index]}`} />
             <Field
               label=""
               name={`${openingDay}.day`}
               component={TextField}
               disabled="true"
+              hidden
             />
           </Col>
           <Col xs={12} sm={1}>
