@@ -1,5 +1,6 @@
 import React from 'react';
 import { Field, FieldArray } from 'redux-form';
+import PropTypes from 'prop-types';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import TextField from '@folio/stripes-components/lib/TextField';
@@ -16,6 +17,7 @@ class AddOpeningDayForm extends React.Component {
 
   static propTypes = {
     stripes: stripesShape.isRequired,
+    days: PropTypes.arrayOf(PropTypes.string),
   }
 
   render() {
@@ -68,7 +70,7 @@ class AddOpeningDayForm extends React.Component {
           </Col>
           <Col xs={12} sm={3} />
         </Row>
-        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl} />
+        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl} days={this.props.days} />
       </section>
     );
   }

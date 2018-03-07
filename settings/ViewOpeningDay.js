@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedMessage, FormattedTime } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
@@ -12,9 +12,15 @@ function calculateTime(startHour, startMinute, endHour, endMinute, open, allDay)
   if (!open) {
     return <FormattedMessage id={'ui-calendar.settings.closed'} />;
   } else if (open && allDay) {
-    return '00:00-24:00';
+    return <FormattedMessage id={'ui-calendar.settings.allDay'} />;
   } else {
-    return `${padNumber(startHour)}:${padNumber(startMinute)}-${padNumber(endHour)}:${padNumber(endMinute)}`;
+    const startTime = new Date();
+    startTime.setHours(startHour);
+    startTime.setMinutes(startMinute);
+    const endTime = new Date();
+    endTime.setHours(endHour);
+    endTime.setMinutes(endMinute);
+    return <div><FormattedTime value={startTime} />-<FormattedTime value={endTime} /></div>;
   }
 }
 

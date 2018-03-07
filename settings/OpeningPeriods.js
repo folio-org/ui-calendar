@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
@@ -133,6 +134,14 @@ class OpeningPeriods extends React.Component {
   }
 
   render() {
+
+    const dayList = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
+    const openingDayList = [];
+    dayList.forEach((day) => {
+      openingDayList.push(getOpeningDay(day));
+    });
+
     return (
       <ErrorBoundary>
         <EntryManager
@@ -152,14 +161,9 @@ class OpeningPeriods extends React.Component {
           validate={this.validate}
           defaultEntry={{ description: '',
             twelveHour: false,
-            openingDays: [
-              getOpeningDay('MONDAY'),
-              getOpeningDay('TUESDAY'),
-              getOpeningDay('WEDNESDAY'),
-              getOpeningDay('THURSDAY'),
-              getOpeningDay('FRIDAY'),
-              getOpeningDay('SATURDAY'),
-              getOpeningDay('SUNDAY')] }}
+            openingDays: openingDayList,
+          }}
+          days={dayList}
         />
       </ErrorBoundary>
     );
