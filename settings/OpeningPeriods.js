@@ -9,15 +9,27 @@ import AddOpeningDayForm from './AddOpeningDayForm';
 import ViewOpeningDay from './ViewOpeningDay';
 import ErrorBoundary from '../ErrorBoundary';
 
-function invalidHour(hour /* , twelveHour*/) {
-  return isNaN(hour) || parseInt(hour, 10) < 0 || parseInt(hour, 10) > 23;
+function invalidHour(hour, minute) {
+  const currentDate = new Date();
+  const currentTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), hour, minute]);
+  return currentTime.invalidAt() === 3;
 }
 
-function invalidMinute(minute) {
-  return isNaN(minute) || parseInt(minute, 10) < 0 || parseInt(minute, 10) > 59;
+function invalidMinute(hour, minute) {
+  const currentDate = new Date();
+  const currentTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), hour, minute]);
+  const checkTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), 0, minute]);
+  return checkTime.invalidAt() === 4 && (currentTime.invalidAt() === 3 || currentTime.invalidAt() === 4);
 }
 
-const defaultOpeningHour = { startHour: '0', startMinute: '0', endHour: '0', endMinute: '0' };
+function invalidInterval(startHour, startMinute, endHour, endMinute) {
+  const currentDate = new Date();
+  const startTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), startHour, startMinute]);
+  const endTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), endHour, endMinute]);
+  return startTime.isSameOrAfter(endTime);
+}
+
+const defaultOpeningHour = { startHour: 0, startMinute: 0, endHour: 0, endMinute: 0 };
 function getOpeningDay(currentDay) {
   return { day: currentDay, openingHour: [defaultOpeningHour], allDay: false, open: false };
 }
@@ -75,7 +87,7 @@ class OpeningPeriods extends React.Component {
       errors.endDate = intl.formatMessage({ id: 'ui-calendar.settings.error.endDateRequired' });
     }
 
-    if (values.startDate && values.endDate && new Date(values.startDate).getTime() > (new Date(values.endDate)).getTime()) {
+    if (moment(values.startDate).isSameOrAfter(moment(values.endDate))) {
       errors.endDate = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidDateRange' });
     }
 
@@ -89,33 +101,40 @@ class OpeningPeriods extends React.Component {
         const openingDayErrors = {};
         if (openingDay && openingDay.open && !openingDay.allDay) {
           const openingHourArrayErrors = [];
-          openingDay.openingHour.forEach((openingHour, hourIndex) => {
+          for (let hourIndex = 0; hourIndex < openingDay.openingHour.length; hourIndex++) {
+            const openingHour = openingDay.openingHour[hourIndex];
             const openingHourErrors = {};
-            if (invalidHour(openingHour.startHour, values.twelveHour)) {
+            if (invalidHour(openingHour.startHour, openingHour.startMinute)) {
               openingHourErrors.startHour = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidHour' });
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             }
-            if (invalidMinute(openingHour.startMinute)) {
+            if (invalidMinute(openingHour.startHour, openingHour.startMinute)) {
               openingHourErrors.startMinute = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidMinute' });
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             }
-            if (invalidHour(openingHour.endHour, values.twelveHour)) {
+            if (invalidHour(openingHour.endHour, openingHour.endMinute)) {
               openingHourErrors.endHour = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidHour' });
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             }
-            if (invalidMinute(openingHour.endMinute)) {
+            if (invalidMinute(openingHour.endHour, openingHour.endMinute)) {
               openingHourErrors.endMinute = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidMinute' });
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             }
-            if (!invalidHour(openingHour.startHour /* , values.twelveHour*/) && !invalidHour(openingHour.endHour /* , values.twelveHour*/)) {
-              if (parseInt(openingHour.startHour, 10) > parseInt(openingHour.endHour, 10)) {
-                openingHourErrors.endHour = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidHourRange' });
-                openingHourArrayErrors[hourIndex] = openingHourErrors;
-              } else if (parseInt(openingHour.startHour, 10) === parseInt(openingHour.endHour, 10)
-                && !invalidMinute(openingHour.startMinute)
-                && !invalidMinute(openingHour.endMinute)
-                && parseInt(openingHour.startMinute, 10) >= parseInt(openingHour.endMinute, 10)) {
-                openingHourErrors.endMinute = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidMinuteRange' });
+            if (invalidInterval(openingHour.startHour, openingHour.endHour, openingHour.endHour, openingHour.endMinute)) {
+              openingHourErrors.endHour = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidTimeRange' });
+              openingHourArrayErrors[hourIndex] = openingHourErrors;
+            }
+            const currentDate = new Date();
+            const currStartTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), openingHour.startHour, openingHour.startMinute]);
+            const currEndTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), openingHour.endHour, openingHour.endMinute]);
+            for (let previousIndex = 0; previousIndex < hourIndex; previousIndex++) {
+              const prevOpeningHour = openingDay.openingHour[previousIndex];
+              const prevStartTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), prevOpeningHour.startHour, prevOpeningHour.startMinute]);
+              const prevEndTime = moment([currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDay(), prevOpeningHour.endHour, prevOpeningHour.endMinute]);
+              if ((currStartTime.isSameOrAfter(prevStartTime) && currStartTime.isBefore(prevEndTime))
+                || (currStartTime.isSameOrBefore(prevStartTime) && currEndTime.isAfter(prevStartTime))
+              ) {
+                openingHourErrors.startHour = intl.formatMessage({ id: 'ui-calendar.settings.error.overlappingInterval' });
                 openingHourArrayErrors[hourIndex] = openingHourErrors;
               }
             }
@@ -123,7 +142,7 @@ class OpeningPeriods extends React.Component {
               openingDayErrors.openingHour = openingHourArrayErrors;
               openingDayArrayErrors[index] = openingDayErrors;
             }
-          });
+          }
         }
       });
       if (openingDayArrayErrors.length) {
@@ -134,7 +153,6 @@ class OpeningPeriods extends React.Component {
   }
 
   render() {
-
     const dayList = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
     const openingDayList = [];
@@ -160,7 +178,6 @@ class OpeningPeriods extends React.Component {
           }}
           validate={this.validate}
           defaultEntry={{ description: '',
-            twelveHour: false,
             openingDays: openingDayList,
           }}
           days={dayList}
