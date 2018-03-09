@@ -44,7 +44,8 @@
   "yesterday": "yesterday",
   "tomorrow": "tomorrow",
   "today": "today",
-  "agenda": "agenda changed",
+  "agenda": "agenda changed2",
   "showMore": "+{total} more",
-  "newTestLabel": "POEdit test"
+  "newTestLabel": "POEdit test",
+  "newTestLabel2": "POEdit test2"
 }
