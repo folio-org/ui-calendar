@@ -6,7 +6,7 @@
   "THURSDAY": "Thursday",
   "FRIDAY": "Friday",
   "SATURDAY": "Saturday",
-  "SUNDAY": "Sunday",    
+  "SUNDAY": "Sunday",
   "settings.remove": "Remove",
   "settings.add": "Add",
   "settings.opening": "Open",
@@ -44,7 +44,7 @@
   "yesterday": "yesterday",
   "tomorrow": "tomorrow",
   "today": "today",
-  "agenda": "agenda",
-
-  "showMore": "+{total} more"
+  "agenda": "agenda changed",
+  "showMore": "+{total} more",
+  "newTestLabel": "POEdit test"
 }
