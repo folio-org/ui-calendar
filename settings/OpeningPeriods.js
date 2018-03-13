@@ -180,7 +180,6 @@ class OpeningPeriods extends React.Component {
           defaultEntry={{ description: '',
             openingDays: openingDayList,
           }}
-          days={dayList}
         />
       </ErrorBoundary>
     );

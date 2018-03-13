@@ -4,10 +4,6 @@ import { FormattedDate, FormattedMessage, FormattedTime } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
-function padNumber(param) {
-  return (param > 9) ? param : `0${param}`;
-}
-
 function calculateTime(startHour, startMinute, endHour, endMinute, open, allDay) {
   if (!open) {
     return <FormattedMessage id={'ui-calendar.settings.closed'} />;

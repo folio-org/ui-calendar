@@ -17,7 +17,6 @@ class AddOpeningDayForm extends React.Component {
 
   static propTypes = {
     stripes: stripesShape.isRequired,
-    days: PropTypes.arrayOf(PropTypes.string),
   }
 
   render() {
@@ -70,7 +69,7 @@ class AddOpeningDayForm extends React.Component {
           </Col>
           <Col xs={12} sm={3} />
         </Row>
-        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl} days={this.props.days} />
+        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl} />
       </section>
     );
   }
