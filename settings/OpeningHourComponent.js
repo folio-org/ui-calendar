@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import TextField from '@folio/stripes-components/lib/TextField';
 import Button from '@folio/stripes-components/lib/Button';
+import Timepicker from '@folio/stripes-components/lib/Timepicker';
 
 class OpeningHourComponent extends React.Component {
   static propTypes = {
@@ -14,49 +15,38 @@ class OpeningHourComponent extends React.Component {
     dayField: PropTypes.shape({
       open: PropTypes.bool,
       allDay: PropTypes.bool,
+      day: PropTypes.string,
     }),
   }
 
   render() {
-    const newOpeningHour = { startHour: 0, startMinute: 0, endHour: 0, endMinute: 0 };
+    const newOpeningHour = { startHour: new Date(), startMinute: 0, endHour: 0, endMinute: 0 };
     const { fields, intl, dayField } = this.props;
     const disableFields = !dayField.open || dayField.allDay;
-
+    // ${dateFormat(checkinDate, "yyyy-mm-dd")}T${checkinTime}Z
     return (
       <div>
         {(fields || []).map((openingHour, index) => (
           <div key={index}>
             <Row>
-              <Col xs={12} sm={2}>
+              <Col xs={12} sm={4}>
                 <Field
-                  label=""
-                  name={`${openingHour}.startHour`}
-                  component={TextField}
+                  name={`${openingHour}.startTime`}
+                  id={`${dayField.day}-startHour-${index}`}
+                  placeholder={intl.formatMessage({ id: 'ui-calendar.settings.select_time' })}
+                  component={Timepicker}
                   disabled={disableFields}
+                  passThroughValue="now"
                 />
               </Col>
-              <Col xs={12} sm={2}>
+              <Col xs={12} sm={4}>
                 <Field
-                  label=""
-                  name={`${openingHour}.startMinute`}
-                  component={TextField}
+                  name={`${openingHour}.endTime`}
+                  id={`${dayField.day}-endHour-${index}`}
+                  placeholder={intl.formatMessage({ id: 'ui-calendar.settings.select_time' })}
+                  component={Timepicker}
                   disabled={disableFields}
-                />
-              </Col>
-              <Col xs={12} sm={2}>
-                <Field
-                  label=""
-                  name={`${openingHour}.endHour`}
-                  component={TextField}
-                  disabled={disableFields}
-                />
-              </Col>
-              <Col xs={12} sm={2}>
-                <Field
-                  label=""
-                  name={`${openingHour}.endMinute`}
-                  component={TextField}
-                  disabled={disableFields}
+                  passThroughValue="now"
                 />
               </Col>
               <Col xs={12} sm={2}>
