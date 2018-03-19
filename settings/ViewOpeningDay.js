@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import dateFormat from 'dateformat';
 import { FormattedDate, FormattedMessage, FormattedTime } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 
-function calculateTime(startHour, startMinute, endHour, endMinute, open, allDay) {
+function calculateTime(startTime, endTime, open, allDay) {
   if (!open) {
     return <FormattedMessage id={'ui-calendar.settings.closed'} />;
   } else if (open && allDay) {
     return <FormattedMessage id={'ui-calendar.settings.allDay'} />;
   } else {
-    const startTime = new Date();
-    startTime.setHours(startHour);
-    startTime.setMinutes(startMinute);
-    const endTime = new Date();
-    endTime.setHours(endHour);
-    endTime.setMinutes(endMinute);
-    return <div><FormattedTime value={startTime} />-<FormattedTime value={endTime} /></div>;
+    const currentDate = new Date();
+    const start = moment(`${dateFormat(currentDate, 'yyyy-mm-dd')}T${startTime}`);
+    const end = moment(`${dateFormat(currentDate, 'yyyy-mm-dd')}T${endTime}`);
+    return <div><FormattedTime value={start} />-<FormattedTime value={end} /></div>;
   }
 }
 
@@ -47,7 +46,7 @@ function ViewOpeningDay(props) {
             <Row key={`opening-times-${index}`}>
               {openingDay.openingHour.map((openingHour, hourIndex) => (
                 <Col xs={12} key={`day-${index}-hour-${hourIndex}`}>
-                  {calculateTime(openingHour.startHour, openingHour.startMinute, openingHour.endHour, openingHour.endMinute, openingDay.open, openingDay.allDay)}
+                  {calculateTime(openingHour.startTime, openingHour.endTime, openingDay.open, openingDay.allDay)}
                 </Col>
               ))}
             </Row>

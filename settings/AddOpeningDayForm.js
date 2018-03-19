@@ -1,6 +1,5 @@
 import React from 'react';
 import { Field, FieldArray } from 'redux-form';
-import PropTypes from 'prop-types';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import TextField from '@folio/stripes-components/lib/TextField';
