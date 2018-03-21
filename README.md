@@ -26,6 +26,6 @@ Run yarn install, yarn build in the module's directory. This is necessary becaus
 
 For setting up the UI, follow the instructions provided [on this page](https://github.com/folio-org/stripes-core/blob/master/doc/new-development-setup.md).
 
-The react-big-calendar module has to be added in the .stripesclirc file. E.g. "@folio/react-big-calendar": "../react-big-calendar"
+The react-big-calendar module has to be added in the .stripesclirc file, e.g. "@folio/react-big-calendar": "../react-big-calendar"
 
 To use the calendar your user needs to have the permission for the calendar functions. You can add the permission (Calendar permissions [calendar.collection.all]) in the Users app.
