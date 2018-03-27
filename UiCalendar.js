@@ -4,7 +4,6 @@ import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import BigCalendar from '@folio/react-big-calendar';
 import moment, { now } from 'moment';
-import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import '!style-loader!css-loader!./css/react-big-calendar.css';
 import '!style-loader!css-loader!./css/folio-calendar.css';
 import ErrorBoundary from './ErrorBoundary';
@@ -17,7 +16,12 @@ class UiCalendar extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    stripes: stripesShape.isRequired,
+    stripes: PropTypes.shape({
+      intl: PropTypes.shape({
+        formatMessage: PropTypes.func,
+      }),
+      locale: PropTypes.string,
+    }).isRequired,
   };
 
   static manifest = Object.freeze({
