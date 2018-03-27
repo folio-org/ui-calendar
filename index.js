@@ -13,7 +13,7 @@ class CalendarRouting extends React.Component {
       locale: PropTypes.string.isRequired,
       intl: PropTypes.shape({
         formatMessage: PropTypes.func.isRequired,
-      })
+      }),
     }).isRequired,
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
