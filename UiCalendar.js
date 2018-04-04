@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import BigCalendar from '@folio/react-big-calendar';
-import moment, { now } from 'moment';
-import '!style-loader!css-loader!./css/react-big-calendar.css';
-import '!style-loader!css-loader!./css/folio-calendar.css';
+import moment from 'moment';
+import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
+import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
 import ErrorBoundary from './ErrorBoundary';
 
 class UiCalendar extends React.Component {
