@@ -21,11 +21,8 @@ Other FOLIO Developer documentation is at [dev.folio.org](https://dev.folio.org/
 
 ## Set up development environment
 
-Check out [Qulto's react-big-calendar fork](https://github.com/qultoltd/react-big-calendar). 
-Run yarn install, yarn build in the module's directory. This is necessary because some files are used from the generated /lib directory (e.g. CSS files).
-
 For setting up the UI, follow the instructions provided [on this page](https://github.com/folio-org/stripes-core/blob/master/doc/new-development-setup.md).
 
-The react-big-calendar module has to be added in the .stripesclirc file, e.g. "@folio/react-big-calendar": "../react-big-calendar"
+If you want to work in the react-big-calendar module (which is the library responsible for rendering the calendar view), it has to be added in the .stripesclirc file, e.g. "@folio/react-big-calendar": "../react-big-calendar"
 
 To use the calendar your user needs to have the permission for the calendar functions. You can add the permission (Calendar permissions [calendar.collection.all]) in the Users app.
