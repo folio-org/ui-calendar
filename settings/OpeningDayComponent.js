@@ -47,6 +47,7 @@ class OpeningDayComponent extends React.Component {
                   type="checkbox"
                   id={`allDay-${index}`}
                   component={Checkbox}
+                  disabled={!fields.get(index).day.open}
                 />
               </Col>
               <Col xs={12} sm={9}>
