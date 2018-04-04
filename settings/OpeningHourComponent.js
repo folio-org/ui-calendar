@@ -20,7 +20,7 @@ class OpeningHourComponent extends React.Component {
   }
 
   render() {
-    const newOpeningHour = { startHour: new Date(), startMinute: 0, endHour: 0, endMinute: 0 };
+    const newOpeningHour = { startTime: undefined, endTime: undefined };
     const { fields, intl, dayField } = this.props;
     const disableFields = !dayField.open || dayField.allDay;
     // ${dateFormat(checkinDate, "yyyy-mm-dd")}T${checkinTime}Z
@@ -32,7 +32,7 @@ class OpeningHourComponent extends React.Component {
               <Col xs={12} sm={4}>
                 <Field
                   name={`${openingHour}.startTime`}
-                  id={`${dayField.day}-startHour-${index}`}
+                  id={`${dayField.day}-startTime-${index}`}
                   placeholder={intl.formatMessage({ id: 'ui-calendar.settings.select_time' })}
                   component={Timepicker}
                   disabled={disableFields}

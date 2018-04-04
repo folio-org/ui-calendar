@@ -1,6 +1,12 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class ErrorBoundary extends React.Component {
+
+  static propTypes = {
+    children: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = { hasError: false };
