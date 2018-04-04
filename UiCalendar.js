@@ -65,7 +65,7 @@ class UiCalendar extends React.Component {
       today: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.today' }),
       agenda: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.agenda' }),
 
-      showMore: total => this.props.stripes.intl.formatMessage({ id: 'ui-calendar.showMore' }, { total: total }),
+      showMore: (total) => this.props.stripes.intl.formatMessage({ id: 'ui-calendar.showMore' }, { total: total }),
     };
 
     return (
