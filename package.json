@@ -28,72 +28,70 @@
     },
     "permissionSets": [
       {
-        "permissionName": "calendar.enabled",
+        "permissionName": "module.calendar.enabled",
         "displayName": "UI: Calendar module is enabled"
       },
       {
-        "permissionName": "calendar.all",
+        "permissionName": "ui-calendar.all",
         "displayName": "Calendar: All permissions",
         "description": "Entire set of permissions needed to use the calendar module",
         "subPermissions": [
-          "calendar.collection.all"
+          "calendar.collection.all",
+          "ui-calendar.edit",
+          "ui-calendar.create",
+          "ui-calendar.delete"
         ],
         "visible": true
       },
       {
-        "permissionName": "calendar.view",
+        "permissionName": "ui-calendar.view",
         "displayName": "Calendar: View calendar events",
         "description": "Can view calendar events",
         "subPermissions": [
-          "calendar.collection.get"
+          "calendar.collection.get",
+          "module.calendar.enabled"
         ],
         "visible": true
       },
       {
-        "permissionName": "calendar.edit",
+        "permissionName": "ui-calendar.edit",
         "displayName": "Calendar: Edit calendar events",
         "description": "Can edit calendar events",
         "subPermissions": [
-          "calendar.view",
+          "ui-calendar.view",
           "calendar.collection.update"
         ],
         "visible": true
       },
       {
-        "permissionName": "calendar.create",
+        "permissionName": "ui-calendar.create",
         "displayName": "Calendar: Create calendar events",
         "description": "Can create calendar events",
         "subPermissions": [
-          "calendar.view",
+          "ui-calendar.view",
           "calendar.collection.add"
         ],
         "visible": true
       },
       {
-        "permissionName": "calendar.delete",
+        "permissionName": "ui-calendar.delete",
         "displayName": "Calendar: Delete calendar events",
         "description": "Can remove calendar events",
         "subPermissions": [
-          "calendar.view",
+          "ui-calendar.view",
           "calendar.collection.delete"
         ],
         "visible": true
-      }
-    ],
-    "translations": {
-      "en": {
-        "search": "Search",
-        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
       },
-      "de": {
-        "search": "Suche",
-        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
-      },
-      "hu": {
-        "search": "Keresés",
-        "resultCount": "{count, number} {count, plural, one {találat} other {találat}}"
+      {
+        "permissionName": "settings.calendar.enabled",
+        "displayName": "Settings (Calendar): display calendar settings",
+        "subPermissions": [
+          "settings.enabled"
+        ],
+        "visible": true
       }
-    }
+    ]
   },
   "scripts": {
     "lint": "eslint *.js",
