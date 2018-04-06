@@ -23,7 +23,9 @@
         "title": "Calendar"
       }
     ],
-    "okapiInterfaces": {},
+    "okapiInterfaces": {
+      "calendar": "1.0"
+    },
     "permissionSets": [
       {
         "permissionName": "calendar.enabled",
