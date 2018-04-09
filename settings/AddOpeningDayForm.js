@@ -2,6 +2,7 @@ import React from 'react';
 import { Field, FieldArray } from 'redux-form';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
+import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
@@ -19,10 +20,14 @@ class AddOpeningDayForm extends React.Component {
   }
 
   render() {
+    const eventTypeOptions = [
+      { value: 'OPENING_DAY', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }) },
+      { value: 'EXCEPTION', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }) },
+    ];
     return (
       <section>
         <Row>
-          <Col xs={6}>
+          <Col xs={5}>
             <Field
               component={Datepicker}
               label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodStart' })} *`}
@@ -33,7 +38,7 @@ class AddOpeningDayForm extends React.Component {
               required
             />
           </Col>
-          <Col xs={6}>
+          <Col xs={5}>
             <Field
               component={Datepicker}
               label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })} *`}
@@ -41,6 +46,16 @@ class AddOpeningDayForm extends React.Component {
               name="endDate"
               id="addevent_endDate"
               backendDateStandard="YYYY-MM-DD"
+            />
+          </Col>
+          <Col xs={2}>
+            <Field
+              component={Select}
+              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description_type' })} *`}
+              name="descriptionType"
+              id="addevent_description_type"
+              dataOptions={eventTypeOptions}
+              required
             />
           </Col>
         </Row>

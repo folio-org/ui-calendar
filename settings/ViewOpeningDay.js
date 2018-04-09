@@ -22,11 +22,18 @@ function calculateTime(startTime, endTime, open, allDay) {
 function ViewOpeningDay(props) {
   const openingDays = props.initialValues;
 
+  const eventTypeOptions = { 
+    'OPENING_DAY': props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }),
+    'EXCEPTION': props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }),
+  };
+
   return (
     <div>
       <section>
         <Row>
-          <Col xs={12}><h2 style={{ marginTop: '0' }}>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriod' })}</h2></Col>
+          <Col xs={12}>
+            <h2 style={{ marginTop: '0' }}>{props.stripes.intl.formatMessage({ id: `${eventTypeOptions[openingDays.descriptionType]}` })}</h2>
+          </Col>
         </Row>
         <Row>
           <Col xs={4}><h4>{props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodStart' })}</h4></Col>

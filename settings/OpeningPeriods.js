@@ -159,7 +159,8 @@ class OpeningPeriods extends React.Component {
             delete: 'calendar.collection.remove',
           }}
           validate={this.validate}
-          defaultEntry={{ description: '',
+          defaultEntry={{
+            descriptionType: 'OPENING_DAY',
             openingDays: openingDayList,
           }}
         />
