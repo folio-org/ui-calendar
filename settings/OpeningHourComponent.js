@@ -5,13 +5,11 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import TextField from '@folio/stripes-components/lib/TextField';
 import Button from '@folio/stripes-components/lib/Button';
 import Timepicker from '@folio/stripes-components/lib/Timepicker';
+import SafeHTMLMessage from '../../react-intl-safe-html';
 
 class OpeningHourComponent extends React.Component {
   static propTypes = {
     fields: PropTypes.object,
-    intl: PropTypes.shape({
-      formatMessage: PropTypes.func,
-    }),
     dayField: PropTypes.shape({
       open: PropTypes.bool,
       allDay: PropTypes.bool,
@@ -21,7 +19,7 @@ class OpeningHourComponent extends React.Component {
 
   render() {
     const newOpeningHour = { startTime: undefined, endTime: undefined };
-    const { fields, intl, dayField } = this.props;
+    const { fields, dayField } = this.props;
     const disableFields = !dayField.open || dayField.allDay;
     // ${dateFormat(checkinDate, "yyyy-mm-dd")}T${checkinTime}Z
     return (
@@ -33,7 +31,7 @@ class OpeningHourComponent extends React.Component {
                 <Field
                   name={`${openingHour}.startTime`}
                   id={`${dayField.day}-startTime-${index}`}
-                  placeholder={intl.formatMessage({ id: 'ui-calendar.settings.select_time' })}
+                  placeholder={(<SafeHTMLMessage id='ui-calendar.settings.select_time' />)}
                   component={Timepicker}
                   disabled={disableFields}
                   passThroughValue="now"
@@ -43,7 +41,7 @@ class OpeningHourComponent extends React.Component {
                 <Field
                   name={`${openingHour}.endTime`}
                   id={`${dayField.day}-endHour-${index}`}
-                  placeholder={intl.formatMessage({ id: 'ui-calendar.settings.select_time' })}
+                  placeholder={(<SafeHTMLMessage id='ui-calendar.settings.select_time' />)}
                   component={Timepicker}
                   disabled={disableFields}
                   passThroughValue="now"
@@ -51,12 +49,12 @@ class OpeningHourComponent extends React.Component {
               </Col>
               <Col xs={12} sm={2}>
                 <Button fullWidth name="add" onClick={() => fields.insert(index + 1, newOpeningHour)} disabled={disableFields}>
-                  {intl.formatMessage({ id: 'ui-calendar.settings.add' })}
+                  <SafeHTMLMessage id='ui-calendar.settings.add' />
                 </Button>
               </Col>
               <Col xs={12} sm={2}>
                 <Button fullWidth name="remove" buttonStyle="danger" disabled={fields.length === 1} onClick={() => fields.remove(index)}>
-                  {intl.formatMessage({ id: 'ui-calendar.settings.remove' })}
+                  <SafeHTMLMessage id='ui-calendar.settings.remove' />
                 </Button>
               </Col>
             </Row>
