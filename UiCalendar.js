@@ -17,7 +17,13 @@ class UiCalendar extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    stripes: PropTypes.shape({      
+    mutator: PropTypes.shape({
+      calendarEvent: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
+      }),
+    }),
+    stripes: PropTypes.shape({
       locale: PropTypes.string,
     }).isRequired,
   };
@@ -27,8 +33,43 @@ class UiCalendar extends React.Component {
       type: 'okapi',
       path: 'calendar/events',
       records: 'events',
+      accumulate: 'true',
+      fetch: true,
     },
   });
+
+  constructor(props) {
+    super(props);
+    this.navigate = this.navigate.bind(this);
+    this.updateEvents = this.updateEvents.bind(this);
+    this.changeView = this.changeView.bind(this);
+    this.selectEvent = this.selectEvent.bind(this);
+  }
+
+  navigate(date, view, action) {
+    if (view === BigCalendar.Views.WEEK) {
+      this.updateEvents(date, 7);
+    } else if(view === BigCalendar.Views.MONTH) {
+      this.updateEvents(date, 35);
+    }
+  }
+
+  changeView(view) {
+    this.props.mutator.calendarEvent.reset();
+    this.props.mutator.calendarEvent.GET();
+  }
+
+  updateEvents(date, days) {
+    this.props.mutator.calendarEvent.reset();
+    const params = {
+      from: moment(date).subtract(days, 'days').format("YYYY-MM-DD"),
+      to: moment(date).add(days, 'days').format("YYYY-MM-DD"),
+    };
+    this.props.mutator.calendarEvent.GET({ params });
+  }
+
+  selectEvent(calendarEvent,event) {
+  }
 
   render() {
     const views = [
@@ -91,6 +132,9 @@ class UiCalendar extends React.Component {
               resources={[null]}
               culture={this.props.stripes.locale}
               messages={messages}
+              onNavigate={this.navigate}
+              onView={this.changeView}
+              onSelectEvent={this.selectEvent}
             />
           </ErrorBoundary>
         </Pane>
