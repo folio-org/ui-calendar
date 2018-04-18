@@ -166,7 +166,7 @@ class UiCalendar extends React.Component {
               <section>
                 <Row>
                   <Col xs={12}>
-                    <h2 style={{ marginTop: '0' }}>{this.props.stripes.intl.formatMessage({ id: `ui-calendar.settings.event_type.${this.state.selectedEvent.eventType}` })}</h2>
+                    <h2 style={{ marginTop: '0' }}>{this.props.stripes.intl.formatMessage({ id: `ui-calendar.settings.event_type.${this.state.selectedEvent.eventType.toLowerCase()}` })}</h2>
                   </Col>
                 </Row>
                 <Row>
