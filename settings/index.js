@@ -12,28 +12,16 @@ const pages = [
   },
 ];
 
-const label = (
-  <SafeHTMLMessage
-    id={pages[0].labelKey}
-  />
-);
-
-const paneTitle = (
-  <SafeHTMLMessage
-    id='ui-calendar.settings.calendar'
-  />
-);
-
 function getPages(pageDefinitions, props) {
   const routes = [];
   pageDefinitions.forEach((page) => {
     routes.push({
       route: page.route,
-      label: (<SafeHTMLMessage id={pages[0].labelKey} />),
+      label: props.stripes.intl.formatMessage({ id: page.labelKey }), 
       component: page.component,
     });
   });
   return routes;
 }
 
-export default props => <Settings {...props} pages={getPages(pages, props)} paneTitle={(<SafeHTMLMessage id='ui-calendar.settings.calendar' />)} />;
+export default props => <Settings {...props} pages={getPages(pages, props)} paneTitle={props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.calendar' })} />; 

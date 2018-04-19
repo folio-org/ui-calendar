@@ -69,8 +69,7 @@ class OpeningPeriods extends React.Component {
 
   validate(values) {
     const errors = { openingDays: {} };
-    const intl = this.props.stripes.intl;
-
+    
     if (!values.startDate) {
       errors.startDate = (<SafeHTMLMessage id="ui-calendar.settings.error.startDateRequired" />);
     }
@@ -151,8 +150,8 @@ class OpeningPeriods extends React.Component {
           entryList={_.sortBy((this.props.resources.entries || {}).records || [], ['startDate'])}
           detailComponent={ViewOpeningDay}
           formComponent={AddOpeningDayForm}
-          paneTitle={(<SafeHTMLMessage id="ui-calendar.settings.openingPeriods" />)}
-          entryLabel={(<SafeHTMLMessage id="ui-calendar.settings.openingPeriod" />)}
+          paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriods' })} 
+          entryLabel={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriod' })} 
           nameKey="description"
           permissions={{
             post: 'calendar.collection.add',

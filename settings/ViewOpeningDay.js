@@ -24,19 +24,16 @@ function ViewOpeningDay(props) {
   const openingDays = props.initialValues;  
 
   const eventTypeOptions = { 
-    'OPENING_DAY': (<SafeHTMLMessage id="ui-calendar.settings.event_type.opening_day"/>),
-    'EXCEPTION': (<SafeHTMLMessage id="ui-calendar.settings.event_type.exception"/>),
+    'OPENING_DAY': props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }), 
+    'EXCEPTION': props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }), 
   };
-
-  console.log(openingDays.descriptionType);
-  console.log(eventTypeOptions[openingDays.descriptionType]);
 
   return (    
     <div>
       <section>
         <Row>
           <Col xs={12}>
-            <h2 style={{ marginTop: '0' }}><SafeHTMLMessage id={`${eventTypeOptions[openingDays.descriptionType]}`}/></h2>
+            <h2 style={{ marginTop: '0' }}>{eventTypeOptions[openingDays.descriptionType]}</h2>
           </Col>
         </Row>
         <Row>

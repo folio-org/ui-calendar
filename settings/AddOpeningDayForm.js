@@ -22,16 +22,17 @@ class AddOpeningDayForm extends React.Component {
 
   render() {
     const eventTypeOptions = [
-      { value: 'OPENING_DAY', label: (<SafeHTMLMessage id='ui-calendar.settings.event_type.opening_day' />) },
-      { value: 'EXCEPTION', label: (<SafeHTMLMessage id='ui-calendar.settings.event_type.exception' />) },
+      { value: 'OPENING_DAY', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }) }, 
+      { value: 'EXCEPTION', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }) }, 
     ];
+
     return (
       <section>
         <Row>
           <Col xs={5}>
             <Field
               component={Datepicker}
-              label={<SafeHTMLMessage id='ui-calendar.settings.openingPeriodStart' />}
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}
               dateFormat="YYYY-MM-DD"
               name="startDate"
               id="addevent_startDate"
@@ -42,7 +43,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={5}>
             <Field
               component={Datepicker}
-              label={<SafeHTMLMessage id='ui-calendar.settings.openingPeriodEnd' />}
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}
               dateFormat="YYYY-MM-DD"
               name="endDate"
               id="addevent_endDate"
@@ -52,7 +53,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={2}>
             <Field
               component={Select}
-              label={<SafeHTMLMessage id='ui-calendar.settings.description_type' />}              
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description_type' })}
               name="descriptionType"
               id="addevent_description_type"
               dataOptions={eventTypeOptions}
@@ -64,7 +65,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={12}>
             <Field
               component={TextField}
-              label={<SafeHTMLMessage id='ui-calendar.settings.description' />}              
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description' })}
               name="description"
               id="addevent_description"
               required

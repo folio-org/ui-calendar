@@ -118,7 +118,7 @@ class UiCalendar extends React.Component {
       today: (<SafeHTMLMessage id="ui-calendar.today" />),
       agenda: (<SafeHTMLMessage id="ui-calendar.agenda" />),
 
-      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" />, { total: total }),
+      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total: total }} />),
     };
 
     const paneTitle = (
