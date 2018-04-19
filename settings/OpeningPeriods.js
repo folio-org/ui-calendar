@@ -5,6 +5,7 @@ import moment from 'moment';
 import dateFormat from 'dateformat';
 import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
+import SafeHTMLMessage from '../../react-intl-safe-html';
 
 import AddOpeningDayForm from './AddOpeningDayForm';
 import ViewOpeningDay from './ViewOpeningDay';
@@ -68,22 +69,21 @@ class OpeningPeriods extends React.Component {
 
   validate(values) {
     const errors = { openingDays: {} };
-    const intl = this.props.stripes.intl;
-
+    
     if (!values.startDate) {
-      errors.startDate = intl.formatMessage({ id: 'ui-calendar.settings.error.startDateRequired' });
+      errors.startDate = (<SafeHTMLMessage id="ui-calendar.settings.error.startDateRequired" />);
     }
 
     if (!values.endDate) {
-      errors.endDate = intl.formatMessage({ id: 'ui-calendar.settings.error.endDateRequired' });
+      errors.endDate = (<SafeHTMLMessage id="ui-calendar.settings.error.endDateRequired" />);
     }
 
     if (moment(values.startDate).isAfter(moment(values.endDate))) {
-      errors.endDate = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidDateRange' });
+      errors.endDate = (<SafeHTMLMessage id="ui-calendar.settings.error.invalidDateRange" />);
     }
 
     if (!values.description) {
-      errors.description = intl.formatMessage({ id: 'ui-calendar.settings.error.descriptionRequired' });
+      errors.description = (<SafeHTMLMessage id="ui-calendar.settings.error.descriptionRequired" />);
     }
 
     if (values.openingDays && values.openingDays.length) {
@@ -96,14 +96,14 @@ class OpeningPeriods extends React.Component {
             const openingHour = openingDay.openingHour[hourIndex];
             const openingHourErrors = {};
             if (openingHour.startTime === undefined) {
-              openingHourErrors.startTime = intl.formatMessage({ id: 'ui-calendar.settings.error.startTimeRequired' });
+              openingHourErrors.startTime = (<SafeHTMLMessage id="ui-calendar.settings.error.startTimeRequired" />);
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             }
             if (openingHour.endTime === undefined) {
-              openingHourErrors.endTime = intl.formatMessage({ id: 'ui-calendar.settings.error.endTimeRequired' });
+              openingHourErrors.endTime = (<SafeHTMLMessage id="ui-calendar.settings.error.endTimeRequired" />);
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             } else if (invalidInterval(openingHour.startTime, openingHour.endTime)) {
-              openingHourErrors.endTime = intl.formatMessage({ id: 'ui-calendar.settings.error.invalidTimeRange' });
+              openingHourErrors.endTime = (<SafeHTMLMessage id="ui-calendar.settings.error.invalidTimeRange" />);
               openingHourArrayErrors[hourIndex] = openingHourErrors;
             }
             const currentDate = new Date();
@@ -116,7 +116,7 @@ class OpeningPeriods extends React.Component {
               if ((currStartTime.isSameOrAfter(prevStartTime) && currStartTime.isBefore(prevEndTime))
                 || (currStartTime.isSameOrBefore(prevStartTime) && currEndTime.isAfter(prevStartTime))
               ) {
-                openingHourErrors.startTime = intl.formatMessage({ id: 'ui-calendar.settings.error.overlappingInterval' });
+                openingHourErrors.startTime = (<SafeHTMLMessage id="ui-calendar.settings.error.overlappingInterval" />);
                 openingHourArrayErrors[hourIndex] = openingHourErrors;
               }
             }
@@ -150,8 +150,8 @@ class OpeningPeriods extends React.Component {
           entryList={_.sortBy((this.props.resources.entries || {}).records || [], ['startDate'])}
           detailComponent={ViewOpeningDay}
           formComponent={AddOpeningDayForm}
-          paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriods' })}
-          entryLabel={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriod' })}
+          paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriods' })} 
+          entryLabel={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriod' })} 
           nameKey="description"
           permissions={{
             post: 'calendar.collection.add',

@@ -7,6 +7,7 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import OpeningDayComponent from './OpeningDayComponent';
+import SafeHTMLMessage from '../../react-intl-safe-html';
 
 /**
  * This component will be rendered inside a form in a component
@@ -17,20 +18,21 @@ class AddOpeningDayForm extends React.Component {
 
   static propTypes = {
     stripes: stripesShape.isRequired,
-  }
+  }  
 
   render() {
     const eventTypeOptions = [
-      { value: 'OPENING_DAY', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }) },
-      { value: 'EXCEPTION', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }) },
+      { value: 'OPENING_DAY', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }) }, 
+      { value: 'EXCEPTION', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }) }, 
     ];
+
     return (
       <section>
         <Row>
           <Col xs={5}>
             <Field
               component={Datepicker}
-              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodStart' })} *`}
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}
               dateFormat="YYYY-MM-DD"
               name="startDate"
               id="addevent_startDate"
@@ -41,7 +43,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={5}>
             <Field
               component={Datepicker}
-              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })} *`}
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}
               dateFormat="YYYY-MM-DD"
               name="endDate"
               id="addevent_endDate"
@@ -51,7 +53,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={2}>
             <Field
               component={Select}
-              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description_type' })} *`}
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description_type' })}
               name="descriptionType"
               id="addevent_description_type"
               dataOptions={eventTypeOptions}
@@ -63,7 +65,7 @@ class AddOpeningDayForm extends React.Component {
           <Col xs={12}>
             <Field
               component={TextField}
-              label={`${this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description' })} *`}
+              label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description' })}
               name="description"
               id="addevent_description"
               required
@@ -72,18 +74,24 @@ class AddOpeningDayForm extends React.Component {
         </Row>
         <Row>
           <Col xs={12} sm={1}>
-            {this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.day' })}
+          <SafeHTMLMessage
+            id='ui-calendar.settings.day'
+          />
           </Col>
           <Col xs={12} sm={2} />
           <Col xs={12} sm={3}>
-            {this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.open' })}
+          <SafeHTMLMessage
+            id='ui-calendar.settings.open'
+          />
           </Col>
           <Col xs={12} sm={3}>
-            {this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.close' })}
+          <SafeHTMLMessage
+            id='ui-calendar.settings.close'
+          />
           </Col>
           <Col xs={12} sm={3} />
         </Row>
-        <FieldArray name="openingDays" component={OpeningDayComponent} intl={this.props.stripes.intl} />
+        <FieldArray name="openingDays" component={OpeningDayComponent} />
       </section>
     );
   }

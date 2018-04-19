@@ -9,6 +9,7 @@ import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
 import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
 import ErrorBoundary from './ErrorBoundary';
+import SafeHTMLMessage from '../react-intl-safe-html';
 
 class UiCalendar extends React.Component {
 
@@ -25,9 +26,6 @@ class UiCalendar extends React.Component {
       }),
     }),
     stripes: PropTypes.shape({
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func,
-      }),
       locale: PropTypes.string,
     }).isRequired,
   };
@@ -105,23 +103,27 @@ class UiCalendar extends React.Component {
       });
 
     const messages = {
-      date: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.date' }),
-      time: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.time' }),
-      event: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.event' }),
-      allDay: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.allDay' }),
-      week: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.week' }),
-      work_week: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.work_week' }),
-      day: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.day' }),
-      month: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.month' }),
-      previous: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.previous' }),
-      next: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.next' }),
-      yesterday: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.yesterday' }),
-      tomorrow: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.tomorrow' }),
-      today: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.today' }),
-      agenda: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.agenda' }),
+      date: (<SafeHTMLMessage id="ui-calendar.date" />),
+      time: (<SafeHTMLMessage id="ui-calendar.time" />),
+      event: (<SafeHTMLMessage id="ui-calendar.event" />),
+      allDay: (<SafeHTMLMessage id="ui-calendar.allDay" />),
+      week: (<SafeHTMLMessage id="ui-calendar.week" />),
+      work_week: (<SafeHTMLMessage id="ui-calendar.work_week" />),
+      day: (<SafeHTMLMessage id="ui-calendar.day" />),
+      month: (<SafeHTMLMessage id="ui-calendar.month" />),
+      previous: (<SafeHTMLMessage id="ui-calendar.previous" />),
+      next: (<SafeHTMLMessage id="ui-calendar.next" />),
+      yesterday: (<SafeHTMLMessage id="ui-calendar.yesterday" />),
+      tomorrow: (<SafeHTMLMessage id="ui-calendar.tomorrow" />),
+      today: (<SafeHTMLMessage id="ui-calendar.today" />),
+      agenda: (<SafeHTMLMessage id="ui-calendar.agenda" />),
 
-      showMore: total => this.props.stripes.intl.formatMessage({ id: 'ui-calendar.showMore' }, { total: total }),
+      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total: total }} />),
     };
+
+    const paneTitle = (
+      <SafeHTMLMessage id="ui-calendar.main.institutionalCalendar" />
+    )
 
     return (
       <Paneset>
@@ -131,7 +133,7 @@ class UiCalendar extends React.Component {
           defaultWidth="fill"
           height="100%"
           fluidContentWidth
-          paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.main.institutionalCalendar' })}
+          paneTitle={paneTitle}
         >
           <ErrorBoundary>
             <BigCalendar
