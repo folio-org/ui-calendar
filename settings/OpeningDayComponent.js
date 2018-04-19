@@ -5,7 +5,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import TextField from '@folio/stripes-components/lib/TextField';
 import OpeningHourComponent from './OpeningHourComponent';
-import SafeHTMLMessage from '../../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class OpeningDayComponent extends React.Component {
   static propTypes = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
-import SafeHTMLMessage from '../../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import OpeningPeriods from './OpeningPeriods';
 

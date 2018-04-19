@@ -5,7 +5,7 @@ import moment from 'moment';
 import dateFormat from 'dateformat';
 import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import SafeHTMLMessage from '../../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import AddOpeningDayForm from './AddOpeningDayForm';
 import ViewOpeningDay from './ViewOpeningDay';
