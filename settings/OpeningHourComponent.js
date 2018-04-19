@@ -5,7 +5,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import TextField from '@folio/stripes-components/lib/TextField';
 import Button from '@folio/stripes-components/lib/Button';
 import Timepicker from '@folio/stripes-components/lib/Timepicker';
-import SafeHTMLMessage from '../../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class OpeningHourComponent extends React.Component {
   static propTypes = {

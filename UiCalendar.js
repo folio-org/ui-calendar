@@ -9,7 +9,7 @@ import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
 import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
 import ErrorBoundary from './ErrorBoundary';
-import SafeHTMLMessage from '../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class UiCalendar extends React.Component {
 
@@ -175,7 +175,7 @@ class UiCalendar extends React.Component {
               <section>
                 <Row>
                   <Col xs={12}>
-                    <h2 style={{ marginTop: '0' }}>{this.props.stripes.intl.formatMessage({ id: `ui-calendar.settings.event_type.${this.state.selectedEvent.eventType.toLowerCase()}` })}</h2>
+                    <h2 style={{ marginTop: '0' }}>{this.state.selectedEvent.eventType}</h2>
                   </Col>
                 </Row>
                 <Row>

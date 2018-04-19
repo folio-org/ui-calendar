@@ -127,6 +127,7 @@
     "prop-types": "^15.6.0",
     "proptypes": "^1.1.0",
     "query-string": "^5.0.0",
+    "@folio/react-intl-safe-html": "^1.0.0",
     "redux-form": "^7.2.0",
     "style-loader": "^0.19.0",
     "uuid": "^3.0.1"

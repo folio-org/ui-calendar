@@ -5,7 +5,7 @@ import dateFormat from 'dateformat';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
-import SafeHTMLMessage from '../../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 function calculateTime(startTime, endTime, open, allDay) {
   if (!open) {

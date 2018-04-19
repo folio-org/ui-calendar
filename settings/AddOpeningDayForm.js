@@ -7,7 +7,7 @@ import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import OpeningDayComponent from './OpeningDayComponent';
-import SafeHTMLMessage from '../../react-intl-safe-html';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 /**
  * This component will be rendered inside a form in a component
