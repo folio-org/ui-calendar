@@ -99,6 +99,13 @@ class UiCalendar extends React.Component {
         const mappedEvent = event;
         mappedEvent.startDate = new Date(event.startDate);
         mappedEvent.endDate = new Date(event.endDate);
+
+        const eventTitleTranslationKey = `ui-calendar.settings.event_type.${event.eventType.toLowerCase()}`;
+        const eventTitleTranslation = this.props.stripes.intl.formatMessage({ id: eventTitleTranslationKey });
+
+        if (eventTitleTranslationKey !== eventTitleTranslation) {
+          mappedEvent.eventType = eventTitleTranslation;
+        }
         return mappedEvent;
       });
 
