@@ -11,6 +11,8 @@ import BigCalendar from "../../react-big-calendar/src";
 import List from "../../stripes-components/lib/List/List";
 import Button from "../../stripes-components/lib/Button/Button";
 import Icon from "../../stripes-components/lib/Icon/Icon";
+import CloneSettings from "./CloneSettings";
+import Checkbox from "../../stripes-components/lib/Checkbox";
 
 class ServicePointDetails extends React.Component {
     static propTypes = {
@@ -18,19 +20,15 @@ class ServicePointDetails extends React.Component {
             connect: PropTypes.func.isRequired,
             intl: PropTypes.object.isRequired,
         }).isRequired,
-        // mutator: PropTypes.shape({
-        //     periods: PropTypes.shape({
-        //         GET: PropTypes.func,
-        //     }),
-        // }).isRequired,
         initialValues: PropTypes.object,
     };
 
     constructor(props) {
         super();
-        this.lofasz = this.lofasz.bind(this);
-        this.lofaszkukuCurrent = this.lofaszkukuCurrent.bind(this);
-        this.lofaszkukunext = this.lofaszkukunext.bind(this);
+        this.getWeekdayOpeningHours = this.getWeekdayOpeningHours.bind(this);
+        this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
+        this.displayNextPeriod = this.displayNextPeriod.bind(this);
+        this.checkPeriods=this.checkPeriods(this);
         this.state = {
             sections: {
                 generalInformation: true,
@@ -220,16 +218,18 @@ class ServicePointDetails extends React.Component {
                             allDay: false
                         }]
                 }
-            ]
+            ],
+            selectedPeriods: [],
+            selectedServicePoints: [],
         };
     }
 
     static manifest = Object.freeze({
-        periods: {
+        entries: {
             type: 'okapi',
-            records: 'periods',
+            records: 'servicepoints',
             path: 'service-points',
-        },
+        }
     });
 
     translateOrganization(id) {
@@ -238,7 +238,7 @@ class ServicePointDetails extends React.Component {
         });
     }
 
-    lofasz(weekday) {
+    getWeekdayOpeningHours(weekday) {
         for (let index = 0; index < this.state.openingPeriods.length; index++) {
             let openingPeriod = this.state.openingPeriods[index];
             let start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
@@ -269,8 +269,7 @@ class ServicePointDetails extends React.Component {
         }
     }
 
-    lofaszkukuCurrent() {
-        let displayCurrentPeriod;
+    displayCurrentPeriod() {
         for (let index = 0; index < this.state.openingPeriods.length; index++) {
             let openingPeriod = this.state.openingPeriods[index];
             let start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
@@ -285,7 +284,7 @@ class ServicePointDetails extends React.Component {
         }
     }
 
-    lofaszkukunext() {
+    displayNextPeriod() {
         let displayPeriods = [];
         for (let index = 0; index < this.state.openingPeriods.length; index++) {
             let openingPeriod = this.state.openingPeriods[index];
@@ -302,36 +301,37 @@ class ServicePointDetails extends React.Component {
         return displayPeriods;
     }
 
+    //
+    // renderCloneSettings; function( ){
+    //     console.log("lofaszkabát");
+    //     return (
+    //         <div>
+    //               <CloneSettings />
+    //          </div>
+    //      );
+    // }
+
+    checkPeriods() {
+        console.log("");
+        return;
+    }
+
+
     render() {
+        console.log(this.props);
 
-
+        console.log((this.props.parentResources.entries || {}).records || []);
         BigCalendar.momentLocalizer(moment);
-
         const servicePoint = this.props.initialValues;
         const openingPeriod = this.state.openingPeriod;
-
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        // return(
-        //     <Paneset >
-        //         <Pane
-        // padContent={false}
-        //           id="pane-calendar"
-        //           defaultWidth="fill"
-        //           height="100%"
-        //           fluidContentWidth
-        //           paneTitle={"lofasz"}>
-        //             lofasz
-        //         </Pane>
-        //     </Paneset>
-        // )
         console.log(this.state.displayCurrentPeriod);
         console.log(this.state.displayPeriods);
-        const lofasz = this.lofaszkukuCurrent();
-        const nextlofasz = this.lofaszkukunext();
+        const lofasz = this.displayCurrentPeriod();
+        const nextlofasz = this.displayNextPeriod();
 
-        const items = ['Apples', 'Bananas', 'Strawberries', 'Oranges'];
         const itemFormatter = (item) => (<li>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-
+        let cloneItemsFormatter = (item) => (<li><Checkbox onChange={this.checkPeriods()} label={item.name}/></li>);
 
         return (
             <div>
@@ -350,25 +350,26 @@ class ServicePointDetails extends React.Component {
                     <Col xs>
                         <div className={"seven-cols"}>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Sun" value={this.lofasz(weekdays[0])}/>
+                                <KeyValue label="Sun" value={this.getWeekdayOpeningHours(weekdays[0])}/>
                             </div>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Mon" value={this.lofasz(weekdays[1])}/>
+                                <KeyValue label="Mon" value={this.getWeekdayOpeningHours(weekdays[1])}/>
                             </div>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Tue" value={this.lofasz(weekdays[2])}/>
+                                <KeyValue label="Tue" value={this.getWeekdayOpeningHours(weekdays[2])}/>
                             </div>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Wed" value={this.lofasz(weekdays[3])}/>
+                                <KeyValue label="Wed" value={this.getWeekdayOpeningHours(weekdays[3])}/>
                             </div>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Thu" value={this.lofasz(weekdays[4])}/>
+
+                                <KeyValue label="Thu" value={this.getWeekdayOpeningHours(weekdays[4])}/>
                             </div>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Fri" value={this.lofasz(weekdays[5])}/>
+                                <KeyValue label="Fri" value={this.getWeekdayOpeningHours(weekdays[5])}/>
                             </div>
                             <div className={"col-sm-1"}>
-                                <KeyValue label="Sat" value={this.lofasz(weekdays[6])}/>
+                                <KeyValue label="Sat" value={this.getWeekdayOpeningHours(weekdays[6])}/>
                             </div>
                         </div>
                     </Col>
@@ -389,7 +390,8 @@ class ServicePointDetails extends React.Component {
                         </Button>
                     </Col>
                     <Col xs={6}>
-                        <Button>
+                        <Button >
+                            {/*<Button onClick={this.renderCloneSettings}>*/}
                             Clone Settings
                         </Button>
                     </Col>
@@ -403,10 +405,49 @@ class ServicePointDetails extends React.Component {
                             iconClassName="calendar"
                         /> Open calendar to add exceptions </p>
                 </Row>
+                <Paneset>
+                    <Pane
+                        padContent={false}
+                        id="pane-calendar"
+                        defaultWidth="fill"
+                        height="100%"
+                        fluidContentWidth
+                        paneTitle={"lofasz"}>
+                        <Headline size="small" margin="large">Select Period(s) to be copied</Headline>
+                        <List
+                            items={this.state.openingPeriods}
+                            itemFormatter={cloneItemsFormatter}
+                        />
+                        {/*<Row>*/}
+                            {/*<Col xs={6}>*/}
+                                {/*<RadioButton label={"Select All"} onChange={this.selectAllPeriod()}/>*/}
+                            {/*</Col>*/}
+                            {/*<Col xs={6}>*/}
+                                {/*<RadioButton label={"Clear"} onChange={this.unSelectAllPeriod()}/>*/}
+                            {/*</Col>*/}
+                        {/*</Row>*/}
+                        <Headline size="small" margin="large">Select Service Point(s) to copy to</Headline>
+                        <List
+                            items={(this.props.parentResources.entries || {}).records || []}
+                            itemFormatter={cloneItemsFormatter}
+                        />
+                        {/*<Row>*/}
+                            {/*<Col xs={6}>*/}
+                                {/*<RadioButton label={"Select All"} onChange={this.selectAllServicePoint()}/>*/}
+                            {/*</Col>*/}
+                            {/*<Col xs={6}>*/}
+                                {/*<RadioButton label={"Clear"} onChange={this.unSelectAllServicePoint()}/>*/}
+                            {/*</Col>*/}
+                        {/*</Row>*/}
+
+
+                    </Pane>
+                </Paneset>
             </div>
         );
 
     }
+
 }
 
 export default ServicePointDetails;
