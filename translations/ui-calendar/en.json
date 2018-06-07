@@ -20,6 +20,7 @@
   "settings.openingPeriod": "Opening period",
   "settings.openingTime": "Opening time",
   "settings.calendar": "Calendar",
+  "settings.library_hours": "Library Hours",
   "settings.openingPeriodStart" : "Opening period start date",
   "settings.openingPeriodEnd" : "Opening period end date",
   "settings.description_type" : "Type",

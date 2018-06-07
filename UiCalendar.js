@@ -165,7 +165,6 @@ class UiCalendar extends React.Component {
             id="pane-calendar"
             defaultWidth="fill"
             height="100%"
-            defaultWidth="30%"
             fluidContentWidth
             paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.main.eventDetails' })}
             dismissible
