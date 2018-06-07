@@ -38,18 +38,14 @@ class CloneSettings extends React.Component {
     render() {
 
         return(
-            <Paneset >
-                <Pane
-                  padContent={false}
-                  id="pane-calendar"
-                  defaultWidth="fill"
-                  height="100%"
-                  fluidContentWidth
-                  paneTitle={"lofasz"}>
-                    lofasz123
-                        <Field label="Available" name={`${elem}.available`} id={`${elem}.available`} component={Checkbox} />
-                </Pane>
-            </Paneset>
+           <div>
+               lofaszs
+               lofaszs
+               lofaszs
+               lofaszs
+               lofaszs
+           </div>
+
         )
 
     }
