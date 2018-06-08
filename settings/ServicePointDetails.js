@@ -14,6 +14,8 @@ import Icon from "../../stripes-components/lib/Icon/Icon";
 import CloneSettings from "./CloneSettings";
 import Checkbox from "../../stripes-components/lib/Checkbox";
 import EntryManager from "../../stripes-smart-components/lib/EntryManager/EntryManager";
+import {Layer} from "../../stripes-components";
+import Route from "react-router-dom/es/Route";
 
 class ServicePointDetails extends React.Component {
     static propTypes = {
@@ -316,6 +318,7 @@ class ServicePointDetails extends React.Component {
         const nextPeriod = this.displayNextPeriod();
         let selectedPeriods = [];
         let selectedServicePoints = [];
+
         const itemFormatter = (item) => (<li>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
         let clonePeriodsFormatter = (item) => (<li><Checkbox id={item.id}
                                                              onChange={
@@ -414,59 +417,24 @@ class ServicePointDetails extends React.Component {
                         /> Open calendar to add exceptions </p>
                 </Row>
 
-                {/*<EntryManager*/}
-                    {/*{...this.props}*/}
-                    {/*parentMutator={this.props.mutator}*/}
-                    {/*entryList={["lofasz1", "lofasz2"]}*/}
-                    {/*detailComponent={CloneSettings}*/}
-                    {/*entryFormComponent={() => ({})}*/}
-                    {/*paneTitle={"kukulele1323"}*/}
-                    {/*entryLabel={"kukulele"}*/}
-                    {/*nameKey="name"*/}
-                    {/*permissions={{*/}
-                        {/*put: 'settings.calendar.disabled',*/}
-                        {/*post: 'settings.calendar.disabled',*/}
-                        {/*delete: 'settings.calendar.disabled',*/}
-                    {/*}}*/}
-                {/*/>*/}
-
-                {/*<Paneset>*/}
-                    {/*<Pane*/}
-                        {/*padContent={false}*/}
-                        {/*id="pane-calendar"*/}
-                        {/*defaultWidth="fill"*/}
-                        {/*height="100%"*/}
-                        {/*fluidContentWidth*/}
-                        {/*paneTitle={"lofasz"}>*/}
-                        {/*<Headline size="small" margin="large">Select Period(s) to be copied</Headline>*/}
-                        {/*<List*/}
-                            {/*items={this.state.openingPeriods}*/}
-                            {/*itemFormatter={clonePeriodsFormatter}*/}
-                        {/*/>*/}
-                        {/*/!*<Row>*!/*/}
-                        {/*/!*<Col xs={6}>*!/*/}
-                        {/*/!*<RadioButton label={"Select All"} onChange={this.selectAllPeriod()}/>*!/*/}
-                        {/*/!*</Col>*!/*/}
-                        {/*/!*<Col xs={6}>*!/*/}
-                        {/*/!*<RadioButton label={"Clear"} onChange={this.unSelectAllPeriod()}/>*!/*/}
-                        {/*/!*</Col>*!/*/}
-                        {/*/!*</Row>*!/*/}
-                        {/*<Headline size="small" margin="large">Select Service Point(s) to copy to</Headline>*/}
-                        {/*<List*/}
-                            {/*items={(this.props.parentResources.entries || {}).records || []}*/}
-                            {/*itemFormatter={cloneServicePointsFormatter}*/}
-                        {/*/>*/}
-                        {/*/!*<Row>*!/*/}
-                        {/*/!*<Col xs={6}>*!/*/}
-                        {/*/!*<RadioButton label={"Select All"} onChange={this.selectAllServicePoint()}/>*!/*/}
-                        {/*/!*</Col>*!/*/}
-                        {/*/!*<Col xs={6}>*!/*/}
-                        {/*/!*<RadioButton label={"Clear"} onChange={this.unSelectAllServicePoint()}/>*!/*/}
-                        {/*/!*</Col>*!/*/}
-                        {/*/!*</Row>*!/*/}
-
-                    {/*</Pane>*/}
-                {/*</Paneset>*/}
+                <Pane
+                    padContent={false}
+                    id="pane-calendar"
+                    defaultWidth="fill"
+                    height="100%"
+                    fluidContentWidth
+                    paneTitle={"Clone settings"}>
+                    <Headline size="small" margin="large">Select Period(s) to be copied</Headline>
+                    <List
+                        items={this.state.openingPeriods}
+                        itemFormatter={clonePeriodsFormatter}
+                    />
+                    <Headline size="small" margin="large">Select Service Point(s) to copy to</Headline>
+                    <List
+                        items={(this.props.parentResources.entries || {}).records || []}
+                        itemFormatter={cloneServicePointsFormatter}
+                    />
+                </Pane>
             </div>
         );
 
