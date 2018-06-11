@@ -16,6 +16,9 @@ import Checkbox from "../../stripes-components/lib/Checkbox";
 import EntryManager from "../../stripes-smart-components/lib/EntryManager/EntryManager";
 import {Layer} from "../../stripes-components";
 import Route from "react-router-dom/es/Route";
+import OpeningPeriodForm from  "./OpeningPeriodForm"
+import Switch from "react-router-dom/es/Switch";
+import Instances from "../../ui-inventory/Instances";
 
 class ServicePointDetails extends React.Component {
     static propTypes = {
@@ -24,6 +27,7 @@ class ServicePointDetails extends React.Component {
             intl: PropTypes.object.isRequired,
         }).isRequired,
         initialValues: PropTypes.object,
+        onToggle: PropTypes.func,
     };
 
     constructor(props) {
@@ -31,7 +35,7 @@ class ServicePointDetails extends React.Component {
         this.getWeekdayOpeningHours = this.getWeekdayOpeningHours.bind(this);
         this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
         this.displayNextPeriod = this.displayNextPeriod.bind(this);
-        this.checkPeriods = this.checkPeriods(this);
+        this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
         this.state = {
             sections: {
                 generalInformation: true,
@@ -247,7 +251,7 @@ class ServicePointDetails extends React.Component {
             let start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
             if (moment() > start && moment() < end) {
-                let lofasz = "";
+                let periodTime = "";
                 for (let i = 0; i < openingPeriod.openingDays.length; i++) {
                     let day = openingPeriod.openingDays[i];
                     if (day.day === weekday) {
@@ -259,9 +263,9 @@ class ServicePointDetails extends React.Component {
                                     let hour = day.openingHour[k];
                                     let t1 = moment(hour.startTime, 'HH:mm');
                                     let t2 = moment(hour.endTime, 'HH:mm');
-                                    lofasz += t1.format('HH:mm') + " - " + t2.format('HH:mm') + " \n";
+                                    periodTime += t1.format('HH:mm') + " - " + t2.format('HH:mm') + " \n";
                                 }
-                                return lofasz;
+                                return periodTime;
                             }
                         } else {
                             return "Closed";
@@ -304,48 +308,21 @@ class ServicePointDetails extends React.Component {
         return displayPeriods;
     }
 
-    checkPeriods() {
-        console.log("d");
+    onOpenCloneSettings() {
+        this.props.onToggle(true);
     }
-
-
     render() {
-        console.log(this.props);
         BigCalendar.momentLocalizer(moment);
         const servicePoint = this.props.initialValues;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const currentPeriod = this.displayCurrentPeriod();
         const nextPeriod = this.displayNextPeriod();
-        let selectedPeriods = [];
-        let selectedServicePoints = [];
+
 
         const itemFormatter = (item) => (<li>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-        let clonePeriodsFormatter = (item) => (<li><Checkbox id={item.id}
-                                                             onChange={
-                                                                 () => {
-                                                                     let index = selectedPeriods.indexOf(item.id);
-                                                                     if (index > -1) {
-                                                                         selectedPeriods.splice(index, 1);
-                                                                     } else {
-                                                                         selectedPeriods.push(item.id);
-                                                                     }
-                                                                 }
-                                                             }
-                                                             label={item.name}/></li>);
-        let cloneServicePointsFormatter = (item) => (<li><Checkbox id={item.id}
-                                                                   onChange={
-                                                                       () => {
-                                                                           let index = selectedServicePoints.indexOf(item.id);
-                                                                           if (index > -1) {
-                                                                               selectedServicePoints.splice(index, 1);
-                                                                           } else {
-                                                                               selectedServicePoints.push(item.id);
-                                                                           }
-                                                                       }
-                                                                   } label={item.name}/></li>);
 
         return (
-            <div>
+            <div id={"servicePointDetails"}>
                 <Row>
                     <Col xs>
                         <KeyValue label={this.translateOrganization('name')} value={servicePoint.name}/>
@@ -402,7 +379,7 @@ class ServicePointDetails extends React.Component {
                     </Col>
                     <Col xs={6}>
                         <Button>
-                            {/*<Button onClick={this.renderCloneSettings}>*/}
+                            {/*<Button onClick={this.onButtonClickOpenCloneSettings()}>*/}
                             Clone Settings
                         </Button>
                     </Col>
@@ -416,25 +393,6 @@ class ServicePointDetails extends React.Component {
                             iconClassName="calendar"
                         /> Open calendar to add exceptions </p>
                 </Row>
-
-                <Pane
-                    padContent={false}
-                    id="pane-calendar"
-                    defaultWidth="fill"
-                    height="100%"
-                    fluidContentWidth
-                    paneTitle={"Clone settings"}>
-                    <Headline size="small" margin="large">Select Period(s) to be copied</Headline>
-                    <List
-                        items={this.state.openingPeriods}
-                        itemFormatter={clonePeriodsFormatter}
-                    />
-                    <Headline size="small" margin="large">Select Service Point(s) to copy to</Headline>
-                    <List
-                        items={(this.props.parentResources.entries || {}).records || []}
-                        itemFormatter={cloneServicePointsFormatter}
-                    />
-                </Pane>
             </div>
         );
 

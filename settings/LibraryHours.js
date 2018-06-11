@@ -6,6 +6,8 @@ import {FormattedMessage} from 'react-intl';
 import ServicePointDetails from './ServicePointDetails';
 import List from "../../stripes-components/lib/List/List";
 import ServicePointForm from "../../ui-organization/settings/ServicePoints/ServicePointForm";
+import ErrorBoundary from "../ErrorBoundary";
+import CloneSettings from "./CloneSettings";
 
 class LibraryHours extends React.Component {
 
@@ -36,6 +38,10 @@ class LibraryHours extends React.Component {
 
     constructor() {
         super();
+        this.onChildToggle = this.onChildToggle.bind(this);
+        this.state = {
+            toggleCloneSettings: true,
+        }
     }
 
     translate(id) {
@@ -44,24 +50,35 @@ class LibraryHours extends React.Component {
         });
     }
 
-    render() {
 
+    onChildToggle(isOpen) {
+        this.setState({toggleCloneSettings: isOpen});
+    }
+
+
+    render() {
         return (
-            <EntryManager
-                {...this.props}
-                parentMutator={this.props.mutator}
-                entryList={sortBy((this.props.resources.entries || {}).records || [], ['name'])}
-                detailComponent={ServicePointDetails}
-                entryFormComponent={() => ({})}
-                paneTitle={this.props.label}
-                entryLabel={this.props.label}
-                nameKey="name"
-                permissions={{
-                    put: 'settings.calendar.disabled',
-                    post: 'settings.calendar.disabled',
-                    delete: 'settings.calendar.disabled',
-                }}
-            />
+            <ErrorBoundary>
+                <EntryManager
+                    {...this.props}
+                    parentMutator={this.props.mutator}
+                    entryList={sortBy((this.props.resources.entries || {}).records || [], ['name'])}
+                    detailComponent={ServicePointDetails}
+                    entryFormComponent={() => ({})}
+                    paneTitle={this.props.label}
+                    entryLabel={this.props.label}
+                    nameKey="name"
+                    permissions={{
+                        put: 'settings.calendar.disabled',
+                        post: 'settings.calendar.disabled',
+                        delete: 'settings.calendar.disabled',
+                    }}
+                />
+                {this.state.toggleCloneSettings &&
+                <CloneSettings {...this.props}
+                               onToggle={this.onChildToggle}/>
+                }
+            </ErrorBoundary>
         );
     }
 }
