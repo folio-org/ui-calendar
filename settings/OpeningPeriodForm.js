@@ -1,38 +1,49 @@
 import React from 'react';
-import { Field, FieldArray } from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {Field, FieldArray} from 'redux-form';
+import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
-import { stripesShape } from '@folio/stripes-core/src/Stripes';
+import {stripesShape} from '@folio/stripes-core/src/Stripes';
 import OpeningDayComponent from './OpeningDayComponent';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import {Pane} from "../../stripes-components";
+import {getFullName} from "../../ui-users/util";
+import PropTypes from "prop-types";
 
-/**
- * This component will be rendered inside a form in a component
- * that has passed through reduxForm(). As such, values for each field's
- * "name" key correspond to the properties of the object being rendered.
- */
 class OpeningPeriodForm extends React.Component {
 
     static propTypes = {
         stripes: stripesShape.isRequired,
-    }
+        onCancel: PropTypes.func,
+    };
+
 
     render() {
         const eventTypeOptions = [
-            { value: 'OPENING_DAY', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }) },
-            { value: 'EXCEPTION', label: this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }) },
+            {
+                value: 'OPENING_DAY',
+                label: this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.event_type.opening_day'})
+            },
+            {
+                value: 'EXCEPTION',
+                label: this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.event_type.exception'})
+            },
         ];
 
         return (
             <section>
+                <Pane id="new-period" defaultWidth={"fill"} paneTitle={"New opening period"}
+                      dismissible
+                      onClose={this.props.onCancel}
+                >
+
                 <Row>
                     <Col xs={5}>
                         <Field
                             component={Datepicker}
-                            label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}
+                            label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}
                             dateFormat="YYYY-MM-DD"
                             name="startDate"
                             id="addevent_startDate"
@@ -43,7 +54,7 @@ class OpeningPeriodForm extends React.Component {
                     <Col xs={5}>
                         <Field
                             component={Datepicker}
-                            label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.openingPeriodEnd' })}
+                            label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}
                             dateFormat="YYYY-MM-DD"
                             name="endDate"
                             backendDateStandard="YYYY-MM-DD"
@@ -52,7 +63,7 @@ class OpeningPeriodForm extends React.Component {
                     <Col xs={2}>
                         <Field
                             component={Select}
-                            label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description_type' })}
+                            label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.description_type'})}
                             name="descriptionType"
                             dataOptions={eventTypeOptions}
                             required
@@ -63,7 +74,7 @@ class OpeningPeriodForm extends React.Component {
                     <Col xs={12}>
                         <Field
                             component={TextField}
-                            label={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.description' })}
+                            label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.description'})}
                             name="description"
                             required
                         />
@@ -75,7 +86,7 @@ class OpeningPeriodForm extends React.Component {
                             id='ui-calendar.settings.day'
                         />
                     </Col>
-                    <Col xs={12} sm={2} />
+                    <Col xs={12} sm={2}/>
                     <Col xs={12} sm={3}>
                         <SafeHTMLMessage
                             id='ui-calendar.settings.open'
@@ -86,9 +97,10 @@ class OpeningPeriodForm extends React.Component {
                             id='ui-calendar.settings.close'
                         />
                     </Col>
-                    <Col xs={12} sm={3} />
+                    <Col xs={12} sm={3}/>
                 </Row>
-                <FieldArray name="openingDays" component={OpeningDayComponent} />
+                <FieldArray name="openingDays" component={OpeningDayComponent}/>
+                </Pane>
             </section>
         );
     }

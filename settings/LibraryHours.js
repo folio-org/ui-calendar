@@ -8,6 +8,7 @@ import List from "../../stripes-components/lib/List/List";
 import ServicePointForm from "../../ui-organization/settings/ServicePoints/ServicePointForm";
 import ErrorBoundary from "../ErrorBoundary";
 import CloneSettings from "./CloneSettings";
+import SeriesFields from "../../ui-inventory/edit/seriesFields";
 
 class LibraryHours extends React.Component {
 
@@ -59,13 +60,17 @@ class LibraryHours extends React.Component {
     render() {
         return (
             <ErrorBoundary>
+                {/*<ServicePointDetails {...this.props}*/}
+                {/*entryList={sortBy((this.props.resources.entries || {}).records || [], ['name'])}*/}
+                {/*/>*/}
+
                 <EntryManager
                     {...this.props}
+                    paneTitle={this.props.label}
                     parentMutator={this.props.mutator}
                     entryList={sortBy((this.props.resources.entries || {}).records || [], ['name'])}
                     detailComponent={ServicePointDetails}
                     entryFormComponent={() => ({})}
-                    paneTitle={this.props.label}
                     entryLabel={this.props.label}
                     nameKey="name"
                     permissions={{
