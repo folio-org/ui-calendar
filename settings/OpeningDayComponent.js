@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Field, FieldArray} from 'redux-form';
-import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import TextField from '@folio/stripes-components/lib/TextField';
 import OpeningHourComponent from './OpeningHourComponent';
@@ -13,18 +13,18 @@ class OpeningDayComponent extends React.Component {
     };
 
     render() {
-        const {fields, intl} = this.props;
-
+        const fields = this.props.fields.name;
+        console.log(this.props);
         return (
             <div>
-                {(fields || []).map((openingDay, index) => (
+                {fields.map((openingDay, index) => (
                     <div key={index}>
                         <Row>
                             <Col xs={12} sm={1}>
-                                <SafeHTMLMessage id={`ui-calendar.${fields.get(index).day}`}/>
+                                <SafeHTMLMessage id={`ui-calendar.${openingDay.day}`}/>
                                 <Field
                                     label=""
-                                    name={`${openingDay}.day`}
+                                    name={`${openingDay}`}
                                     component={TextField}
                                     disabled="true"
                                     hidden
@@ -33,7 +33,7 @@ class OpeningDayComponent extends React.Component {
                             <Col xs={12} sm={1}>
                                 <Field
                                     label={(<SafeHTMLMessage id='ui-calendar.settings.opening'/>)}
-                                    name={`${openingDay}.open`}
+                                    name={`${openingDay}`}
                                     type="checkbox"
                                     id={`open-${index}`}
                                     component={Checkbox}
@@ -42,16 +42,16 @@ class OpeningDayComponent extends React.Component {
                             <Col xs={12} sm={1}>
                                 <Field
                                     label={(<SafeHTMLMessage id='ui-calendar.settings.allDay'/>)}
-                                    name={`${openingDay}.allDay`}
+                                    name={`${openingDay}`}
                                     type="checkbox"
                                     id={`allDay-${index}`}
                                     component={Checkbox}
-                                    disabled={!fields.get(index).open}
+                                    disabled={!openingDay.open}
                                 />
                             </Col>
                             <Col xs={12} sm={9}>
                                 <FieldArray name={`${openingDay}.openingHour`} component={OpeningHourComponent}
-                                            dayField={fields.get(index)}/>
+                                            dayField={openingDay}/>
                             </Col>
                         </Row>
                         <hr/>

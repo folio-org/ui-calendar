@@ -327,57 +327,56 @@ class ServicePointDetails extends React.Component {
     clickNewPeriod() {
         this.setState({newPeriodLayer: {isOpen: true}});
     }
-    onCancel(e) {
-        e.preventDefault();
-        this.setState({newPeriodLayer: {isOpen: false}});
-        // this.hideLayer();
-    }
-
-    onEdit(entry) {
-        this.setState({selectedId: entry.id});
-        this.showLayer('edit');
-    }
-
-    onRemove(entry) {
-        const rk = this.props.resourceKey ? this.props.resourceKey : 'entries';
-        return this.props.parentMutator[rk].DELETE(entry).then(() => {
-            this.showCallOutMessage(entry[this.props.nameKey]);
-            this.hideLayer();
-        });
-    }
-
-    onSave(entry) {
-        const action = (entry.id) ? 'PUT' : 'POST';
-        const rk = this.props.resourceKey ? this.props.resourceKey : 'entries';
-        return this.props.parentMutator[rk][action](entry)
-            .then(() => this.hideLayer());
-    }
-
-    onSelect(entry) {
-        this.setState({selectedId: entry.id});
-    }
-
-    hideLayer() {
-        this.props.history.push(`${this.props.location.pathname}`);
-    }
-
-    showCallOutMessage(name) {
-        const message = (
-            <SafeHTMLMessage
-                id="stripes-core.successfullyDeleted"
-                values={{
-                    entry: this.props.entryLabel,
-                    name: name || '',
-                }}
-            />
-        );
-
-        this.callout.sendCallout({message});
-    }
-
-    showLayer(name) {
-        this.props.history.push(`${this.props.location.pathname}?layer=${name}`);
-    }
+    // onCancel(e) {
+    //     e.preventDefault();
+    //     this.setState({newPeriodLayer: {isOpen: false}});
+    // }
+    //
+    // onEdit(entry) {
+    //     this.setState({selectedId: entry.id});
+    //     this.showLayer('edit');
+    // }
+    //
+    // onRemove(entry) {
+    //     const rk = this.props.resourceKey ? this.props.resourceKey : 'entries';
+    //     return this.props.parentMutator[rk].DELETE(entry).then(() => {
+    //         this.showCallOutMessage(entry[this.props.nameKey]);
+    //         this.hideLayer();
+    //     });
+    // }
+    //
+    // onSave(entry) {
+    //     const action = (entry.id) ? 'PUT' : 'POST';
+    //     const rk = this.props.resourceKey ? this.props.resourceKey : 'entries';
+    //     return this.props.parentMutator[rk][action](entry)
+    //         .then(() => this.hideLayer());
+    // }
+    //
+    // onSelect(entry) {
+    //     this.setState({selectedId: entry.id});
+    // }
+    //
+    // hideLayer() {
+    //     this.props.history.push(`${this.props.location.pathname}`);
+    // }
+    //
+    // showCallOutMessage(name) {
+    //     const message = (
+    //         <SafeHTMLMessage
+    //             id="stripes-core.successfullyDeleted"
+    //             values={{
+    //                 entry: this.props.entryLabel,
+    //                 name: name || '',
+    //             }}
+    //         />
+    //     );
+    //
+    //     this.callout.sendCallout({message});
+    // }
+    //
+    // showLayer(name) {
+    //     this.props.history.push(`${this.props.location.pathname}?layer=${name}`);
+    // }
 
 
     render() {
@@ -469,15 +468,15 @@ class ServicePointDetails extends React.Component {
                 >
                     <OpeningPeriodForm
                         {...this.props}
-                        onCancel={this.onCancel}
+                        // onCancel={this.onCancel}
                         initialValues={{}}
-                        onSave={this.onSave}
-                        onRemove={this.onRemove}
-                        onSubmit={this.onSave}
-                        validate={this.props.validate ? this.props.validate : () => ({})}
-                        asyncValidate={this.props.asyncValidate}
-                        deleteDisabled={this.props.deleteDisabled ? this.props.deleteDisabled : () => (false)}
-                        deleteDisabledMessage={this.props.deleteDisabledMessage || ''}
+                        // onSave={this.onSave}
+                        // onRemove={this.onRemove}
+                        // onSubmit={this.onSave}
+                        // validate={this.props.validate ? this.props.validate : () => ({})}
+                        // asyncValidate={this.props.asyncValidate}
+                        // deleteDisabled={this.props.deleteDisabled ? this.props.deleteDisabled : () => (false)}
+                        // deleteDisabledMessage={this.props.deleteDisabledMessage || ''}
                     />
 
                 </Layer>
