@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Field, FieldArray} from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import TextField from '@folio/stripes-components/lib/TextField';
+import { Row, Col } from 'stripes-components/lib/LayoutGrid/index';
+import Checkbox from 'stripes-components/lib/Checkbox/index';
+import TextField from 'stripes-components/lib/TextField/index';
 import OpeningHourComponent from './OpeningHourComponent';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 

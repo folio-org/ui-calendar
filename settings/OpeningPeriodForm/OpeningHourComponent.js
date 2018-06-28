@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Field} from 'redux-form';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import TextField from '@folio/stripes-components/lib/TextField';
-import Button from '@folio/stripes-components/lib/Button';
-import Timepicker from '@folio/stripes-components/lib/Timepicker';
+import { Row, Col } from 'stripes-components/lib/LayoutGrid/index';
+import TextField from 'stripes-components/lib/TextField/index';
+import Button from 'stripes-components/lib/Button/index';
+import Timepicker from 'stripes-components/lib/Timepicker/index';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class OpeningHourComponent extends React.Component {

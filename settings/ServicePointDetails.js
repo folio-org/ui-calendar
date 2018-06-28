@@ -4,24 +4,14 @@ import PropTypes from 'prop-types';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
 import Headline from "../../stripes-components/lib/Headline/Headline";
-import Paneset from "../../stripes-components/lib/Paneset/Paneset";
-import Pane from "../../stripes-components/lib/Pane/Pane";
 import moment from 'moment';
 import BigCalendar from "../../react-big-calendar/src";
 import List from "../../stripes-components/lib/List/List";
 import Button from "../../stripes-components/lib/Button/Button";
 import Icon from "../../stripes-components/lib/Icon/Icon";
-import CloneSettings from "./CloneSettings";
-import Checkbox from "../../stripes-components/lib/Checkbox";
-import EntryManager from "../../stripes-smart-components/lib/EntryManager/EntryManager";
 import {Layer} from "../../stripes-components";
-import OpeningPeriodForm from "./OpeningPeriodForm"
-import Switch from "react-router-dom/es/Switch";
-import Instances from "../../ui-inventory/Instances";
-import EntryForm from "../../stripes-smart-components/lib/EntryManager/EntryForm";
-import Callout from "@folio/stripes-components/lib/Callout/Callout";
+import OpeningPeriodFormWrapper from "./OpeningPeriodForm/OpeningPeriodFormWrapper"
 import ErrorBoundary from "../ErrorBoundary";
-import {Route, Router, IndexRoute, hashHistory} from 'react-router';
 
 class ServicePointDetails extends React.Component {
     static propTypes = {
@@ -426,9 +416,7 @@ class ServicePointDetails extends React.Component {
                 label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
                 container={document.getElementById('ModuleContainer')}
                 >
-                <OpeningPeriodForm
-                {...this.props}
-                // onCancel={this.onCancel}
+                <OpeningPeriodFormWrapper
                 />
 
                 </Layer>

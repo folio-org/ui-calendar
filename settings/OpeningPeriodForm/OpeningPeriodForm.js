@@ -1,20 +1,20 @@
 import React from 'react';
-import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import Select from '@folio/stripes-components/lib/Select';
-import TextField from '@folio/stripes-components/lib/TextField';
+import Datepicker from 'stripes-components/lib/Datepicker/index';
+import Select from 'stripes-components/lib/Select/index';
+import TextField from 'stripes-components/lib/TextField/index';
 import stripesForm from '@folio/stripes-form';
-import {stripesShape} from '@folio/stripes-core/src/Stripes';
+import {stripesShape} from 'stripes-core/src/Stripes';
 import OpeningDayComponent from './OpeningDayComponent';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import PropTypes from "prop-types";
 import FieldArray from "redux-form/es/FieldArray";
 import Field from "redux-form/es/Field";
-import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
-import Pane from "@folio/stripes-components/lib/Pane/Pane";
-import Paneset from "../../stripes-components/lib/Paneset/Paneset";
-import {Button} from "../../stripes-components";
+import {Row, Col} from 'stripes-components/lib/LayoutGrid/index';
+import Pane from "stripes-components/lib/Pane/Pane";
+import Paneset from "../../../stripes-components/lib/Paneset/Paneset";
+import {Button} from "../../../stripes-components/index";
 import moment from "moment";
-import Label from "../../ui-users/lib/Label/Label";
+import Label from "../../../ui-users/lib/Label/Label";
 
 class OpeningPeriodForm extends React.Component {
 
@@ -23,7 +23,7 @@ class OpeningPeriodForm extends React.Component {
         onCancel: PropTypes.func,
     };
 
-    constructor() {
+    constructor()       {
         super();
         this.state = {
             start_date: '',
@@ -151,7 +151,7 @@ class OpeningPeriodForm extends React.Component {
                     {/*component={Datepicker}*/}
                     {/*label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}*/}
                     {/*dateFormat="YYYY-MM-DD"*/}
-                    {/*name="endDate"*/}
+                    {/*name="endDate"*  /}
                     {/*backendDateStandard="YYYY-MM-DD"*/}
                     {/*onChange={handleChangeStartDate}*/}
                     {/*/>*/}
