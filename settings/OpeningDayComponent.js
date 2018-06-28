@@ -14,7 +14,6 @@ class OpeningDayComponent extends React.Component {
 
     render() {
         const fields = this.props.fields.name;
-        console.log(this.props);
         return (
             <div>
                 {fields.map((openingDay, index) => (

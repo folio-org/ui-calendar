@@ -9,9 +9,12 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import PropTypes from "prop-types";
 import FieldArray from "redux-form/es/FieldArray";
 import Field from "redux-form/es/Field";
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
 import Pane from "@folio/stripes-components/lib/Pane/Pane";
 import Paneset from "../../stripes-components/lib/Paneset/Paneset";
+import {Button} from "../../stripes-components";
+import moment from "moment";
+import Label from "../../ui-users/lib/Label/Label";
 
 class OpeningPeriodForm extends React.Component {
 
@@ -93,93 +96,101 @@ class OpeningPeriodForm extends React.Component {
             ],
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
+    }
+
+    handleCancel() {
+        // console.log("Cancel");
     }
 
     handleSubmit(event) {
         alert(JSON.stringify(this.state));
         event.preventDefault();
+
     }
 
     handleChange(event) {
-        this.setState({name: event.target.value});
+        console.log(event);
     }
-
-    handleChangeEndDate(event) {
-        this.setState({end_date: event.target.value});
+    handleChangeStartDate(fasz){
+        this.setState({start_date: fasz});
     }
 
     render() {
+        let input = {
+            onChange: function () {
+                
+            },
+            value: "",
+        };
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <Pane id="new-period" defaultWidth={"fill"} paneTitle={"New opening period"}
                       dismissible
-                      onClose={this.props.onCancel}
+                      onClose={this.handleCancel()}
                 >
-
                     <Row>
                         <Col xs={6}>
-                            <Field
-                                component={Datepicker}
-                                value={this.state.end_date}
-                                label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}
+                            <Label>
+                                {this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodStart'})}
+                            </Label>
+                            <Datepicker
+                                {...input}
+                                placeholder="YYYY-MM-DD"
                                 dateFormat="YYYY-MM-DD"
-                                name="startDate"
-                                id="addevent_startDate"
-                                backendDateStandard="YYYY-MM-DD"
-                                required
-                                onChange={this.handleChangeEndDate}
-                            />
-                        </Col>
-                        <Col xs={6}>
-                            <Field
-                                value={this.state.start_date}
-                                component={Datepicker}
-                                label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}
-                                dateFormat="YYYY-MM-DD"
-                                name="endDate"
-                                backendDateStandard="YYYY-MM-DD"
-                                onChange={this.handleChangeEndDate}
+                                selected={input.value ? moment(input.value, 'YYYY-MM-DD') : null}
+                                onChange={this.handleChangeStartDate}
                             />
                         </Col>
                     </Row>
-                    <Row>
-                        <Col xs={12}>
-                            <Field
-                                component={TextField}
-                                value={this.state.name}
-                                onChange={this.handleChange}
-                                label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.description'})}
-                                name="description"
-                                required
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={1} sm={1}>
-                            <SafeHTMLMessage
-                                id='ui-calendar.settings.day'
-                            />
-                        </Col>
-                        <Col xs={2} sm={2}>
-                            &nbsp;
-                        </Col>
-                        <Col xs={3} sm={3}>
-                            <SafeHTMLMessage
-                                id='ui-calendar.settings.open'
-                            />
-                        </Col>
-                        <Col xs={3} sm={3}>
-                            <SafeHTMLMessage
-                                id='ui-calendar.settings.close'
-                            />
-                        </Col>
-                        <Col xs={3} sm={3}>
-                            &nbsp;
-                        </Col>
-                    </Row>
-                    <FieldArray name={this.state.openingDays} component={OpeningDayComponent}/>
+                    {/*<Col xs={6}>*/}
+                    {/*<Field*/}
+                    {/*value={this.state.start_date}*/}
+                    {/*component={Datepicker}*/}
+                    {/*label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}*/}
+                    {/*dateFormat="YYYY-MM-DD"*/}
+                    {/*name="endDate"*/}
+                    {/*backendDateStandard="YYYY-MM-DD"*/}
+                    {/*onChange={handleChangeStartDate}*/}
+                    {/*/>*/}
+                    {/*</Col>*/}
+                    {/*</Row>*/}
+                    {/*<Row>*/}
+                    {/*<Col xs={12}>*/}
+                    {/*<Field*/}
+                    {/*component={TextField}*/}
+                    {/*value={this.state.name}*/}
+                    {/*onChange={this.handleChange}*/}
+                    {/*label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.description'})}*/}
+                    {/*name="description"*/}
+                    {/*required*/}
+                    {/*/>*/}
+                    {/*</Col>*/}
+                    {/*</Row>*/}
+                    {/*<Row>*/}
+                    {/*<Col xs={1} sm={1}>*/}
+                    {/*<SafeHTMLMessage*/}
+                    {/*id='ui-calendar.settings.day'*/}
+                    {/*/>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={2} sm={2}>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={3} sm={3}>*/}
+                    {/*<SafeHTMLMessage*/}
+                    {/*id='ui-calendar.settings.open'*/}
+                    {/*/>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={3} sm={3}>*/}
+                    {/*<SafeHTMLMessage*/}
+                    {/*id='ui-calendar.settings.close'*/}
+                    {/*/>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={3} sm={3}>*/}
+                    {/*</Col>*/}
+                    {/*</Row>*/}
+                    {/*<FieldArray name={this.state.openingDays} component={OpeningDayComponent}/>*/}
                     <input type="submit" value="Submit"/>
                 </Pane>
             </form>

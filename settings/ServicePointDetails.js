@@ -15,13 +15,13 @@ import CloneSettings from "./CloneSettings";
 import Checkbox from "../../stripes-components/lib/Checkbox";
 import EntryManager from "../../stripes-smart-components/lib/EntryManager/EntryManager";
 import {Layer} from "../../stripes-components";
-import Route from "react-router-dom/es/Route";
 import OpeningPeriodForm from "./OpeningPeriodForm"
 import Switch from "react-router-dom/es/Switch";
 import Instances from "../../ui-inventory/Instances";
 import EntryForm from "../../stripes-smart-components/lib/EntryManager/EntryForm";
 import Callout from "@folio/stripes-components/lib/Callout/Callout";
 import ErrorBoundary from "../ErrorBoundary";
+import {Route, Router, IndexRoute, hashHistory} from 'react-router';
 
 class ServicePointDetails extends React.Component {
     static propTypes = {
@@ -38,7 +38,9 @@ class ServicePointDetails extends React.Component {
         this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
         this.displayNextPeriod = this.displayNextPeriod.bind(this);
         this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
-        // this.clickNewPeriod = this.clickNewPeriod.bind(this);
+        this.onCancel= this.onCancel.bind(this);
+        this.clickNewPeriod= this.clickNewPeriod.bind(this);
+        this.onAdd= this.onAdd.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -305,6 +307,7 @@ class ServicePointDetails extends React.Component {
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
             if (!(moment() > start && moment() < end)) {
                 displayPeriods.push({
+                    id: openingPeriod.id,
                     startDate: start.format("YYYY/MM/DD"),
                     endDate: end.format("YYYY/MM/DD"),
                     name: openingPeriod.name
@@ -326,66 +329,24 @@ class ServicePointDetails extends React.Component {
 
     clickNewPeriod() {
         this.setState({newPeriodLayer: {isOpen: true}});
+        console.log("setperiodlayer true");
     }
-    // onCancel(e) {
-    //     e.preventDefault();
-    //     this.setState({newPeriodLayer: {isOpen: false}});
-    // }
-    //
-    // onEdit(entry) {
-    //     this.setState({selectedId: entry.id});
-    //     this.showLayer('edit');
-    // }
-    //
-    // onRemove(entry) {
-    //     const rk = this.props.resourceKey ? this.props.resourceKey : 'entries';
-    //     return this.props.parentMutator[rk].DELETE(entry).then(() => {
-    //         this.showCallOutMessage(entry[this.props.nameKey]);
-    //         this.hideLayer();
-    //     });
-    // }
-    //
-    // onSave(entry) {
-    //     const action = (entry.id) ? 'PUT' : 'POST';
-    //     const rk = this.props.resourceKey ? this.props.resourceKey : 'entries';
-    //     return this.props.parentMutator[rk][action](entry)
-    //         .then(() => this.hideLayer());
-    // }
-    //
-    // onSelect(entry) {
-    //     this.setState({selectedId: entry.id});
-    // }
-    //
-    // hideLayer() {
-    //     this.props.history.push(`${this.props.location.pathname}`);
-    // }
-    //
-    // showCallOutMessage(name) {
-    //     const message = (
-    //         <SafeHTMLMessage
-    //             id="stripes-core.successfullyDeleted"
-    //             values={{
-    //                 entry: this.props.entryLabel,
-    //                 name: name || '',
-    //             }}
-    //         />
-    //     );
-    //
-    //     this.callout.sendCallout({message});
-    // }
-    //
-    // showLayer(name) {
-    //     this.props.history.push(`${this.props.location.pathname}?layer=${name}`);
-    // }
+
+    onCancel() {
+        this.setState({newPeriodLayer: {isOpen: false}});
+        console.log("setperiodlayer false");
+    }
 
 
     render() {
         BigCalendar.momentLocalizer(moment);
+
         const servicePoint = this.props.initialValues;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const currentPeriod = this.displayCurrentPeriod();
         const nextPeriod = this.displayNextPeriod();
-        const itemFormatter = (item) => (<li>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
+        const itemFormatter = (item) => (
+            <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
 
         return (
             <ErrorBoundary>
@@ -440,14 +401,12 @@ class ServicePointDetails extends React.Component {
                     </Row>
                     <Row>
                         <Col xs={4}>
-                            {/*<Button>*/}
                             <Button onClick={() => this.clickNewPeriod()}>
                                 New
                             </Button>
                         </Col>
                         <Col xs={6}>
                             <Button>
-                                {/*<Button onClick={this.onButtonClickOpenCloneSettings()}>*/}
                                 Clone Settings
                             </Button>
                         </Col>
@@ -462,27 +421,17 @@ class ServicePointDetails extends React.Component {
                             /> Open calendar to add exceptions </p>
                     </Row>
                 </div>
+
                 <Layer isOpen={this.state.newPeriodLayer.isOpen}
-                       label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
-                       container={document.getElementById('ModuleContainer')}
+                label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
+                container={document.getElementById('ModuleContainer')}
                 >
-                    <OpeningPeriodForm
-                        {...this.props}
-                        // onCancel={this.onCancel}
-                        initialValues={{}}
-                        // onSave={this.onSave}
-                        // onRemove={this.onRemove}
-                        // onSubmit={this.onSave}
-                        // validate={this.props.validate ? this.props.validate : () => ({})}
-                        // asyncValidate={this.props.asyncValidate}
-                        // deleteDisabled={this.props.deleteDisabled ? this.props.deleteDisabled : () => (false)}
-                        // deleteDisabledMessage={this.props.deleteDisabledMessage || ''}
-                    />
+                <OpeningPeriodForm
+                {...this.props}
+                // onCancel={this.onCancel}
+                />
 
                 </Layer>
-                {/*<Callout ref={(ref) => {*/}
-                    {/*this.callout = ref;*/}
-                {/*}}/>*/}
             </ErrorBoundary>
         );
 

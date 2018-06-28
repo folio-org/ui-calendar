@@ -41,7 +41,7 @@ class LibraryHours extends React.Component {
         super();
         this.onChildToggle = this.onChildToggle.bind(this);
         this.state = {
-            toggleCloneSettings: true,
+            toggleCloneSettings: false,
         }
     }
 
@@ -58,11 +58,18 @@ class LibraryHours extends React.Component {
 
 
     render() {
+
+        let {toggleCloneSettings} = this.state;
+        let that= this;
+
+        function renderCloneSettings() {
+            if (toggleCloneSettings) {
+                return <CloneSettings {...this.props} onToggle={that.onChildToggle()}/>
+            }
+        }
+
         return (
             <ErrorBoundary>
-                {/*<ServicePointDetails {...this.props}*/}
-                {/*entryList={sortBy((this.props.resources.entries || {}).records || [], ['name'])}*/}
-                {/*/>*/}
 
                 <EntryManager
                     {...this.props}
@@ -79,10 +86,8 @@ class LibraryHours extends React.Component {
                         delete: 'settings.calendar.disabled',
                     }}
                 />
-                {this.state.toggleCloneSettings &&
-                <CloneSettings {...this.props}
-                               onToggle={this.onChildToggle}/>
-                }
+                {renderCloneSettings()}
+
             </ErrorBoundary>
         );
     }

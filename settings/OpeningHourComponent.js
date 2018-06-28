@@ -19,14 +19,12 @@ class OpeningHourComponent extends React.Component {
 
     render() {
         const newOpeningHour = {startTime: undefined, endTime: undefined};
-        const {dayField} = this.props;
+        const dayField = this.props.dayField;
         const disableFields = !dayField.open || dayField.allDay;
         // ${dateFormat(checkinDate, "yyyy-mm-dd")}T${checkinTime}Z
 
         const field = this.props.dayField;
         const fields = this.props.dayField.openingHour;
-        console.log(field);
-        console.log(fields);
 
         return (
             <div>
