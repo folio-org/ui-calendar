@@ -19,7 +19,7 @@ class BigCalendarWrapper extends React.Component {
                 localizer.format(date, 'ddd dddd', culture)
         };
         return (
-            <div style={{height: "1000px"}}>
+            <div style={{height: "600px"}}>
                 <BigCalendar  fromats={formats}    events={[]} defaultView="week"  selectable={true} toolbar={false}   />
             </div>);
     }

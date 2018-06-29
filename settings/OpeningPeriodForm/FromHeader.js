@@ -32,6 +32,7 @@ class FromHeader extends React.Component {
                         <Button buttonStyle="primary">Saves as Template</Button>
                     </Col>
                 </Row>
+                <hr/>
             </div>
         );
 
