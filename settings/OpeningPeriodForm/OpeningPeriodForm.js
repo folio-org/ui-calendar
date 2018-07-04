@@ -151,7 +151,7 @@ class OpeningPeriodForm extends React.Component {
                     {/*component={Datepicker}*/}
                     {/*label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.settings.openingPeriodEnd'})}*/}
                     {/*dateFormat="YYYY-MM-DD"*/}
-                    {/*name="endDate"*  /}
+                    {/*name="endDate"*/}
                     {/*backendDateStandard="YYYY-MM-DD"*/}
                     {/*onChange={handleChangeStartDate}*/}
                     {/*/>*/}

@@ -1,7 +1,9 @@
 import React from 'react';
-import BigCalendar from '@folio/react-big-calendar';
+import Calendar from '@folio/react-big-calendar';
 import moment from "moment";
 import PropTypes from 'prop-types';
+
+Calendar.setLocalizer(Calendar.momentLocalizer(moment));
 
 class BigCalendarWrapper extends React.Component {
 
@@ -11,29 +13,41 @@ class BigCalendarWrapper extends React.Component {
 
     constructor() {
         super();
-        this.onSlotSelect=this.onSlotSelect.bind(this);
-        this.state={events:[]};
+        this.onSlotSelect = this.onSlotSelect.bind(this);
+        this.state = {
+            events: []
+        };
     }
 
-    componentWillMount() {
-        BigCalendar.momentLocalizer(moment);
-    }
+    onEventResize = (type, {event, start, end, allDay}) => {
+        this.setState(state => {
+            state.events[0].start = start;
+            state.events[0].end = end;
+            return {events: state.events};
+        });
+    };
+    onEventDrop = ({event, start, end, allDay}) => {
+    };
 
     onSlotSelect(lofasz) {
-        console.log(lofasz);
-        let that = this;
-        this.setState(that.state.events.push(lofasz));
-        console.log(this.state.events);
+
+        if (lofasz.start instanceof Date && !isNaN(lofasz.start)) {
+            this.setState(state => {
+                state.events.push({start: lofasz.start, end: lofasz.end});
+                return {events: state.events};
+            });
+        }
+        this.props.onCalendarChange(this.state.events);
     }
 
     render() {
-        const formats={
+        const formats = {
             dayHeaderFormat: (date, culture, localizer) =>
                 localizer.format(date, 'ddd dddd', culture)
         };
         return (
             <div style={{height: "600px"}}>
-                <BigCalendar
+                <Calendar
                     fromats={formats}
                     events={this.state.events}
                     defaultView="week"
@@ -41,6 +55,10 @@ class BigCalendarWrapper extends React.Component {
                     toolbar={false}
                     onSelectSlot={this.onSlotSelect}
                     onCalendarChange={event => alert(event)}
+                    onEventDrop={this.onEventDrop}
+                    onEventResize={this.onEventResize}
+                    resizable
+                    style={{height: "100vh"}}
                 />
             </div>);
     }

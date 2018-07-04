@@ -330,7 +330,10 @@ class ServicePointDetails extends React.Component {
 
     render() {
         BigCalendar.momentLocalizer(moment);
-
+        console.log("STATE");
+        console.log(this.state);
+        console.log("PROPS");
+        console.log(this.props);
         const servicePoint = this.props.initialValues;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const currentPeriod = this.displayCurrentPeriod();
@@ -416,7 +419,7 @@ class ServicePointDetails extends React.Component {
                 label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
                 container={document.getElementById('ModuleContainer')}
                 >
-                <OpeningPeriodFormWrapper
+                <OpeningPeriodFormWrapper servicePointId={servicePoint.id}
                 />
 
                 </Layer>
