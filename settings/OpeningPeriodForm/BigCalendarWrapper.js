@@ -1,16 +1,29 @@
 import React from 'react';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from "moment";
+import PropTypes from 'prop-types';
 
 class BigCalendarWrapper extends React.Component {
 
+    static propTypes = {
+        onCalendarChange: PropTypes.func.isRequired
+    };
+
     constructor() {
         super();
-
+        this.onSlotSelect=this.onSlotSelect.bind(this);
+        this.state={events:[]};
     }
 
     componentWillMount() {
         BigCalendar.momentLocalizer(moment);
+    }
+
+    onSlotSelect(lofasz) {
+        console.log(lofasz);
+        let that = this;
+        this.setState(that.state.events.push(lofasz));
+        console.log(this.state.events);
     }
 
     render() {
@@ -20,7 +33,15 @@ class BigCalendarWrapper extends React.Component {
         };
         return (
             <div style={{height: "600px"}}>
-                <BigCalendar  fromats={formats}    events={[]} defaultView="week"  selectable={true} toolbar={false}   />
+                <BigCalendar
+                    fromats={formats}
+                    events={this.state.events}
+                    defaultView="week"
+                    selectable={true}
+                    toolbar={false}
+                    onSelectSlot={this.onSlotSelect}
+                    onCalendarChange={event => alert(event)}
+                />
             </div>);
     }
 

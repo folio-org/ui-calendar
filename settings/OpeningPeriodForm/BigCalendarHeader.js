@@ -1,6 +1,7 @@
 import React from 'react';
 import {Headline} from "../../../stripes-components";
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import Button from "@folio/stripes-components/lib/Button/Button";
 
 
 class BigCalendarHeader extends React.Component {
@@ -18,17 +19,15 @@ class BigCalendarHeader extends React.Component {
                             Regular Library Hours:
                         </Headline>
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={7}>
                     </Col>
-                    <Col xs={3}>
-                        <Headline>
+                    <Col xs={2}>
+                        <Button>
                             Select Template
-                        </Headline>
-                    </Col>
-                    <Col xs={3}>
-                        <Headline>
+                        </Button>
+                        <Button>
                             Copy Previous
-                        </Headline>
+                        </Button>
                     </Col>
                 </Row>
             </div>
