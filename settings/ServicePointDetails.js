@@ -419,7 +419,9 @@ class ServicePointDetails extends React.Component {
                 label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
                 container={document.getElementById('ModuleContainer')}
                 >
-                <OpeningPeriodFormWrapper servicePointId={servicePoint.id}
+                <OpeningPeriodFormWrapper
+                    {...this.props}
+                    servicePointId={servicePoint.id}
                 />
 
                 </Layer>

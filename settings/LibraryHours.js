@@ -23,6 +23,12 @@ class LibraryHours extends React.Component {
             entries: PropTypes.shape({
                 GET: PropTypes.func,
             }),
+            periods: PropTypes.shape({
+                POST: PropTypes.func
+            }),
+            query: PropTypes.shape({
+                replace: PropTypes.func,
+            }),
         }).isRequired,
         stripes: PropTypes.shape({
             intl: PropTypes.object.isRequired,
@@ -30,11 +36,20 @@ class LibraryHours extends React.Component {
     };
 
     static manifest = Object.freeze({
+        query: {},
         entries: {
             type: 'okapi',
             records: 'servicepoints',
             path: 'service-points',
         },
+        period: {
+            type: 'okapi',
+            records: 'period',
+            fetch: false,
+            POST: {
+                path: 'calendar/periods/%{query}/period',
+            },
+        }
     });
 
     constructor() {

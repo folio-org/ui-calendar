@@ -10,26 +10,35 @@ import PropTypes from 'prop-types';
 class OpeningPeriodFormWrapper extends React.Component {
 
     static propTypes = {
-        spId:{},
-        servicePointId: PropTypes.object.isRequired,
+        servicePointId: PropTypes.string.isRequired,
+        resources: PropTypes.shape({
+            period: PropTypes.shape({
+                records: PropTypes.object
+            }),
+        }),
         mutator: PropTypes.shape({
-            spId: PropTypes.shape({
+            servicePointId: PropTypes.shape({
                 replace: PropTypes.func,
             }),
             period: PropTypes.shape({
-                POST: PropTypes.func,
+                POST: PropTypes.func.isRequired,
             }),
         }).isRequired,
+        stripes: PropTypes.shape({
+            intl: PropTypes.object.isRequired,
+        }),
     };
 
-    static manifest = Object.freeze({
-        period: {
-            type: 'okapi',
-            POST: {
-                path: 'calendar/periods/%spId/period',
-            },
-        }
-    });
+    // static manifest = Object.freeze({
+    //     period: {
+    //         type: 'okapi',
+    //         records: 'period',
+    //         fetch: false,
+    //         POST: {
+    //             path: 'calendar/periods/%{servicePointId}/period',
+    //         },
+    //     }
+    // });
 
     constructor() {
         super();
@@ -59,13 +68,18 @@ class OpeningPeriodFormWrapper extends React.Component {
     onFormSubmit(event) {
         event.preventDefault();
         console.log(this.state);
+        console.log(this.props);
+        const { parentMutator, servicePointId } = this.props;
+        console.log(parentMutator);
+
         let period = {
             name: this.state.name,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
             openingDays: [],
-            servicePointId: this.props.servicePointId
+            servicePointId: servicePointId
         };
+
         let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         let sortedEvents = this.state.event.sort(function (a, b) {
             return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
@@ -95,9 +109,10 @@ class OpeningPeriodFormWrapper extends React.Component {
             });
 
         }
-        console.log(period);
-        console.log(this.props.mutator);
-        return this.props.mutator.period['POST'](period).then((e) => {
+        if(servicePointId) parentMutator.query.replace(servicePointId);
+        console.log("parentmutator");
+        console.log(parentMutator);
+        return parentMutator.period['POST'](period).then((e) => {
             console.log(e);
         });
     }
