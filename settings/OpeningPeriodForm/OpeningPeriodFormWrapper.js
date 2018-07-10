@@ -69,7 +69,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         event.preventDefault();
         console.log(this.state);
         console.log(this.props);
-        const { parentMutator, servicePointId } = this.props;
+        const {parentMutator, servicePointId} = this.props;
         console.log(parentMutator);
 
         let period = {
@@ -90,26 +90,39 @@ class OpeningPeriodFormWrapper extends React.Component {
 
             let dayOpening = sortedEvents[i];
             if (weekDay !== dayOpening.start.getDay()) {
-                period.openingDays.push({
-                    weekDays: {
-                        day: weekDays[weekDay],
-                    },
-                    openingDay: {
-                        openingHour: openingHour,
-                        allDay: (openingHour.length === 1 && sortedEvents[i - 1].start.getTime() === sortedEvents[i - 1].end.getTime()),
-                        open: (openingHour.length !== 0)
-                    }
-                });
+
+                if (openingHour.length > 0) {
+                    period.openingDays.push({
+                        weekdays: {
+                            day: weekDays[weekDay],
+                        },
+                        openingDay: {
+                            openingHour: openingHour,
+                            allDay: (openingHour.length === 1 && sortedEvents[i - 1].start.getTime() === sortedEvents[i - 1].end.getTime()),
+                            open: (openingHour.length !== 0)
+                        }
+                    });
+                } else {
+                    period.openingDays.push({
+                        weekdays: {
+                            day: weekDays[weekDay],
+                        },
+                        openingDay: {
+                            allDay: (openingHour.length === 1 && sortedEvents[i - 1].start.getTime() === sortedEvents[i - 1].end.getTime()),
+                            open: (openingHour.length !== 0)
+                        }
+                    });
+                }
                 openingHour = [];
                 weekDay = dayOpening.start.getDay();
             }
             openingHour.push({
-                start: dayOpening.start.getHours() + ":" + dayOpening.start.getMinutes(),
-                end: dayOpening.end.getHours() + ":" + dayOpening.end.getMinutes()
+                startTime: dayOpening.start.getHours() + ":" + dayOpening.start.getMinutes(),
+                endTime: dayOpening.end.getHours() + ":" + dayOpening.end.getMinutes()
             });
 
         }
-        if(servicePointId) parentMutator.query.replace(servicePointId);
+        if (servicePointId) parentMutator.query.replace(servicePointId);
         console.log("parentmutator");
         console.log(parentMutator);
         return parentMutator.period['POST'](period).then((e) => {
