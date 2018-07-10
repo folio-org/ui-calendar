@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 class OpeningPeriodFormWrapper extends React.Component {
 
     static propTypes = {
+        onClose: PropTypes.func.isRequired,
         servicePointId: PropTypes.string.isRequired,
         resources: PropTypes.shape({
             period: PropTypes.shape({
@@ -28,17 +29,6 @@ class OpeningPeriodFormWrapper extends React.Component {
             intl: PropTypes.object.isRequired,
         }),
     };
-
-    // static manifest = Object.freeze({
-    //     period: {
-    //         type: 'okapi',
-    //         records: 'period',
-    //         fetch: false,
-    //         POST: {
-    //             path: 'calendar/periods/%{servicePointId}/period',
-    //         },
-    //     }
-    // });
 
     constructor() {
         super();
@@ -125,8 +115,13 @@ class OpeningPeriodFormWrapper extends React.Component {
         if (servicePointId) parentMutator.query.replace(servicePointId);
         console.log("parentmutator");
         console.log(parentMutator);
+        let that=this;
         return parentMutator.period['POST'](period).then((e) => {
             console.log(e);
+            console.log( that.props.onClose);
+            that.props.onClose();
+        }, (error)=>{
+            console.log(error);
         });
     }
 
@@ -135,7 +130,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         return (
             <div>
                 <form onSubmit={this.onFormSubmit}>
-                    <FromHeader/>
+                    <FromHeader onClose={this.props.onClose}/>
                     <InputFields onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>
 
                     <BigCalendarHeader/>

@@ -28,9 +28,9 @@ class ServicePointDetails extends React.Component {
         this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
         this.displayNextPeriod = this.displayNextPeriod.bind(this);
         this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
-        this.onCancel= this.onCancel.bind(this);
-        this.clickNewPeriod= this.clickNewPeriod.bind(this);
-        this.onAdd= this.onAdd.bind(this);
+        this.onCancel = this.onCancel.bind(this);
+        this.clickNewPeriod = this.clickNewPeriod.bind(this);
+        this.onAdd = this.onAdd.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -229,13 +229,14 @@ class ServicePointDetails extends React.Component {
         };
     }
 
-    static manifest = Object.freeze({
-        entries: {
-            type: 'okapi',
-            records: 'servicepoints',
-            path: 'service-points',
-        }
-    });
+    componentDidMount() {
+        this.props.parentMutator.query.replace(this.props.initialValues.id);
+        console.log(this.props);
+        this.props.parentMutator.period.GET().then((e)=> {
+            console.log(e);
+        }, (error) => {console.log(error);});
+
+    }
 
     translateOrganization(id) {
         return this.props.stripes.intl.formatMessage({
@@ -327,7 +328,6 @@ class ServicePointDetails extends React.Component {
         console.log("setperiodlayer false");
     }
 
-
     render() {
         BigCalendar.momentLocalizer(moment);
         console.log("STATE");
@@ -416,13 +416,14 @@ class ServicePointDetails extends React.Component {
                 </div>
 
                 <Layer isOpen={this.state.newPeriodLayer.isOpen}
-                label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
-                container={document.getElementById('ModuleContainer')}
+                       label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
+                       container={document.getElementById('ModuleContainer')}
                 >
-                <OpeningPeriodFormWrapper
-                    {...this.props}
-                    servicePointId={servicePoint.id}
-                />
+                    <OpeningPeriodFormWrapper
+                        {...this.props}
+                        onClose={this.onCancel}
+                        servicePointId={servicePoint.id}
+                    />
 
                 </Layer>
             </ErrorBoundary>

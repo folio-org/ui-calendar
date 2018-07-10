@@ -18,13 +18,18 @@ class LibraryHours extends React.Component {
             entries: PropTypes.shape({
                 records: PropTypes.arrayOf(PropTypes.object),
             }),
+            period: PropTypes.shape({
+                records: PropTypes.arrayOf(PropTypes.object),
+            }),
         }).isRequired,
         mutator: PropTypes.shape({
             entries: PropTypes.shape({
                 GET: PropTypes.func,
             }),
-            periods: PropTypes.shape({
-                POST: PropTypes.func
+            period: PropTypes.shape({
+                GET: PropTypes.func,
+                POST: PropTypes.func,
+                reset: PropTypes.func,
             }),
             query: PropTypes.shape({
                 replace: PropTypes.func,
@@ -45,7 +50,9 @@ class LibraryHours extends React.Component {
         period: {
             type: 'okapi',
             records: 'period',
+            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&exceptional=false',
             fetch: false,
+            accumulate: 'true',
             POST: {
                 path: 'calendar/periods/%{query}/period',
             },
