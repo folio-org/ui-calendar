@@ -1,9 +1,16 @@
 import React from 'react';
-import Calendar from '@folio/react-big-calendar';
+import BigCalendar from 'react-big-calendar';
+// import BigCalendar from '@folio/react-big-calendar';
 import moment from "moment";
 import PropTypes from 'prop-types';
+import HTML5Backend from 'react-dnd-html5-backend'
+import {DragDropContext} from 'react-dnd'
+import withDragAndDrop from '@folio/react-big-calendar/lib/addons/dragAndDrop'
 
-Calendar.setLocalizer(Calendar.momentLocalizer(moment));
+
+const DragAndDropCalendar = withDragAndDrop(BigCalendar);
+
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 class BigCalendarWrapper extends React.Component {
 
@@ -14,55 +21,81 @@ class BigCalendarWrapper extends React.Component {
     constructor() {
         super();
         this.onSlotSelect = this.onSlotSelect.bind(this);
+        this.onEventDrop = this.onEventDrop.bind(this);
+        this.onEventResize = this.onEventResize.bind(this);
+        this.onCalendarChange= this.onCalendarChange.bind(this);
         this.state = {
+            eventIdCounter: 0,
             events: []
         };
     }
 
+    onEventDrop = ({event, start, end}) => {
+        console.log("moveEvent");
+        const {events} = this.state;
+
+        const idx = events.indexOf(event);
+        const updatedEvent = {...event, start, end};
+
+        const nextEvents = [...events];
+        nextEvents.splice(idx, 1, updatedEvent);
+
+      this.onCalendarChange(nextEvents);
+        console.log(this.state);
+    };
+
     onEventResize = (type, {event, start, end, allDay}) => {
-        this.setState(state => {
-            state.events[0].start = start;
-            state.events[0].end = end;
-            return {events: state.events};
+        console.log("resizeEvent", type, event, start, end, allDay);
+        const {events} = this.state;
+
+        const nextEvents = events.map(existingEvent => {
+            return existingEvent.id === event.id
+                ? {...existingEvent, start, end}
+                : existingEvent
         });
-    };
-    onEventDrop = ({event, start, end, allDay}) => {
+
+       this.onCalendarChange(nextEvents)
+        console.log(`Event was resized to ${start}-${end}`);
     };
 
-    onSlotSelect(lofasz) {
-
-        if (lofasz.start instanceof Date && !isNaN(lofasz.start)) {
+    onSlotSelect(event) {
+        console.log("onSlotSelect");
+        console.log(event);
+        let id = this.state.eventIdCounter;
+        id++;
+        if (event.start instanceof Date && !isNaN(event.start)) {
             this.setState(state => {
-                state.events.push({start: lofasz.start, end: lofasz.end});
-                return {events: state.events};
+                state.events.push({start: event.start, end: event.end, id: id});
+                return {events: state.events, eventIdCounter: id};
             });
         }
-        this.props.onCalendarChange(this.state.events);
+        this.onCalendarChange(this.state.events);
+    }
+
+    onCalendarChange(events){
+
+        this.setState(events);
+        console.log(this.props);
+        this.props.onCalendarChange(events);
     }
 
     render() {
-        const formats = {
-            dayHeaderFormat: (date, culture, localizer) =>
-                localizer.format(date, 'ddd dddd', culture)
-        };
         return (
-            <div style={{height: "600px"}}>
-                <Calendar
-                    fromats={formats}
+            <div style={{height: "400px"}}>
+                <DragAndDropCalendar
                     events={this.state.events}
-                    defaultView="week"
-                    selectable={true}
+                    defaultView={BigCalendar.Views.WEEK}
+                    defaultDate={new Date(2015, 3, 12)}
                     toolbar={false}
-                    onSelectSlot={this.onSlotSelect}
-                    onCalendarChange={event => alert(event)}
+                    selectable={true}
+                    resizable={true}
                     onEventDrop={this.onEventDrop}
                     onEventResize={this.onEventResize}
-                    resizable
-                    style={{height: "100vh"}}
+                    onSelectSlot={this.onSlotSelect}
                 />
             </div>);
     }
 
 }
 
-export default BigCalendarWrapper;
+export default DragDropContext(HTML5Backend)(BigCalendarWrapper)

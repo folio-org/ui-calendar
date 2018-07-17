@@ -52,15 +52,18 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 
     onCalendarChange(event) {
+        console.log("changeing calendar");
+        console.log(this.state);
         this.setState({event: event})
+        console.log(this.state);
     }
 
     onFormSubmit(event) {
         event.preventDefault();
-        console.log(this.state);
-        console.log(this.props);
+        // console.log(this.state);
+        // console.log(this.props);
         const {parentMutator, servicePointId} = this.props;
-        console.log(parentMutator);
+        // console.log(parentMutator);
 
         let period = {
             name: this.state.name,
@@ -69,7 +72,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             openingDays: [],
             servicePointId: servicePointId
         };
-
+        console.log(this.state.event);
         let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         let sortedEvents = this.state.event.sort(function (a, b) {
             return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);

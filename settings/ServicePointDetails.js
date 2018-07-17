@@ -230,11 +230,11 @@ class ServicePointDetails extends React.Component {
     }
 
     componentDidMount() {
-        this.props.parentMutator.query.replace(this.props.initialValues.id);
-        console.log(this.props);
-        this.props.parentMutator.period.GET().then((e)=> {
-            console.log(e);
-        }, (error) => {console.log(error);});
+        // this.props.parentMutator.query.replace(this.props.initialValues.id);
+        // console.log(this.props);
+        // this.props.parentMutator.period.GET().then((e)=> {
+        //     console.log(e);
+        // }, (error) => {console.log(error);});
 
     }
 
@@ -320,20 +320,18 @@ class ServicePointDetails extends React.Component {
 
     clickNewPeriod() {
         this.setState({newPeriodLayer: {isOpen: true}});
-        console.log("setperiodlayer true");
     }
 
     onCancel() {
         this.setState({newPeriodLayer: {isOpen: false}});
-        console.log("setperiodlayer false");
     }
 
     render() {
         BigCalendar.momentLocalizer(moment);
-        console.log("STATE");
-        console.log(this.state);
-        console.log("PROPS");
-        console.log(this.props);
+        // console.log("STATE");
+        // console.log(this.state);
+        // console.log("PROPS");
+        // console.log(this.props);
         const servicePoint = this.props.initialValues;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const currentPeriod = this.displayCurrentPeriod();
