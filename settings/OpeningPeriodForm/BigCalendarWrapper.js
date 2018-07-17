@@ -21,17 +21,17 @@ class BigCalendarWrapper extends React.Component {
     constructor() {
         super();
         this.onSlotSelect = this.onSlotSelect.bind(this);
-        this.onEventDrop = this.onEventDrop.bind(this);
+        this.onEventDnD = this.onEventDnD.bind(this);
         this.onEventResize = this.onEventResize.bind(this);
-        this.onCalendarChange= this.onCalendarChange.bind(this);
+        this.onCalendarChange = this.onCalendarChange.bind(this);
         this.state = {
             eventIdCounter: 0,
             events: []
         };
     }
 
-    onEventDrop = ({event, start, end}) => {
-        console.log("moveEvent");
+    onEventDnD = ({event, start, end}) => {
+        console.log("onEventDrag&Drop");
         const {events} = this.state;
 
         const idx = events.indexOf(event);
@@ -39,13 +39,11 @@ class BigCalendarWrapper extends React.Component {
 
         const nextEvents = [...events];
         nextEvents.splice(idx, 1, updatedEvent);
-
-      this.onCalendarChange(nextEvents);
-        console.log(this.state);
+        this.onCalendarChange(nextEvents);
     };
 
     onEventResize = (type, {event, start, end, allDay}) => {
-        console.log("resizeEvent", type, event, start, end, allDay);
+        console.log("onEventResize");
         const {events} = this.state;
 
         const nextEvents = events.map(existingEvent => {
@@ -53,14 +51,11 @@ class BigCalendarWrapper extends React.Component {
                 ? {...existingEvent, start, end}
                 : existingEvent
         });
-
-       this.onCalendarChange(nextEvents)
-        console.log(`Event was resized to ${start}-${end}`);
+        this.onCalendarChange(nextEvents)
     };
 
     onSlotSelect(event) {
         console.log("onSlotSelect");
-        console.log(event);
         let id = this.state.eventIdCounter;
         id++;
         if (event.start instanceof Date && !isNaN(event.start)) {
@@ -72,10 +67,8 @@ class BigCalendarWrapper extends React.Component {
         this.onCalendarChange(this.state.events);
     }
 
-    onCalendarChange(events){
-
-        this.setState(events);
-        console.log(this.props);
+    onCalendarChange(events) {
+        this.setState({events: events});
         this.props.onCalendarChange(events);
     }
 
@@ -89,7 +82,7 @@ class BigCalendarWrapper extends React.Component {
                     toolbar={false}
                     selectable={true}
                     resizable={true}
-                    onEventDrop={this.onEventDrop}
+                    onEventDrop={this.onEventDnD}
                     onEventResize={this.onEventResize}
                     onSelectSlot={this.onSlotSelect}
                 />

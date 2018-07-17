@@ -50,7 +50,7 @@ class LibraryHours extends React.Component {
         period: {
             type: 'okapi',
             records: 'period',
-            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&exceptional=false',
+            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
             fetch: false,
             accumulate: 'true',
             POST: {

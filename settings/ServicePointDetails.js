@@ -230,8 +230,11 @@ class ServicePointDetails extends React.Component {
     }
 
     componentDidMount() {
-        // this.props.parentMutator.query.replace(this.props.initialValues.id);
-        // console.log(this.props);
+        this.props.parentMutator.query.replace(this.props.initialValues.id);
+        console.log(this.props);
+        const lofasz= (this.props.parentResources.period || {}).records || [];
+        console.log(lofasz);
+        // this.setState({lofasz: (this.props.parentResources.period || {}).records || []});
         // this.props.parentMutator.period.GET().then((e)=> {
         //     console.log(e);
         // }, (error) => {console.log(error);});
@@ -328,10 +331,6 @@ class ServicePointDetails extends React.Component {
 
     render() {
         BigCalendar.momentLocalizer(moment);
-        // console.log("STATE");
-        // console.log(this.state);
-        // console.log("PROPS");
-        // console.log(this.props);
         const servicePoint = this.props.initialValues;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         const currentPeriod = this.displayCurrentPeriod();
