@@ -35,7 +35,6 @@ class CalendarRouting extends React.Component {
     if (this.props.showSettings) {
       return <Settings {...this.props} />;
     }
-
     return (
       <Switch>
         <Route
