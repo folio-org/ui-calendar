@@ -4,11 +4,8 @@ import PropTypes from 'prop-types';
 import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
 import {FormattedMessage} from 'react-intl';
 import ServicePointDetails from './ServicePointDetails';
-import List from "../../stripes-components/lib/List/List";
-import ServicePointForm from "../../ui-organization/settings/ServicePoints/ServicePointForm";
 import ErrorBoundary from "../ErrorBoundary";
 import CloneSettings from "./CloneSettings";
-import SeriesFields from "../../ui-inventory/edit/seriesFields";
 
 class LibraryHours extends React.Component {
 

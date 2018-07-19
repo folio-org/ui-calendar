@@ -1,12 +1,9 @@
 import React from 'react';
-import Icon from "@folio/stripes-components/lib/Icon/Icon";
 import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
 import Datepicker from "../../../stripes-components/lib/Datepicker/Datepicker";
 import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
-import Label from "../../../ui-users/lib/Label/Label";
 import Textfield from "../../../stripes-components/lib/TextField";
-import TextArea from "../../../stripes-components/lib/TextArea";
 
 class InputFields extends React.Component {
 
