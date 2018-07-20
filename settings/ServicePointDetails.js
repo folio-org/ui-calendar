@@ -14,15 +14,40 @@ import OpeningPeriodFormWrapper from "./OpeningPeriodForm/OpeningPeriodFormWrapp
 import ErrorBoundary from "../ErrorBoundary";
 
 class ServicePointDetails extends React.Component {
-    static propTypes = {
-        stripes: PropTypes.shape({
-            connect: PropTypes.func.isRequired,
-            intl: PropTypes.object.isRequired,
-        }).isRequired,
-        initialValues: PropTypes.object,
-    };
 
-    constructor(props) {
+    static propTypes = {
+        initialValues: PropTypes.object,
+        onCloseViewItem: PropTypes.func.isRequired,
+        stripes: PropTypes.shape({
+            intl: PropTypes.object.isRequired,
+            connect: PropTypes.func.isRequired,
+        }).isRequired,
+        resources: PropTypes.shape({
+            periods: PropTypes.shape({
+                records: PropTypes.arrayOf(PropTypes.object),
+            }),
+            query: PropTypes.object,
+        }).isRequired,
+        mutator: PropTypes.shape({
+            period: PropTypes.shape({
+                GET: PropTypes.func,
+                reset: PropTypes.func,
+            }),
+            query: PropTypes.shape({
+                replace: PropTypes.func,
+            }),
+        }),
+    };
+    static manifest = Object.freeze({
+        query: {},
+        periods: {
+            type: 'okapi',
+            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
+            records: 'periods',
+        },
+    });
+
+    constructor() {
         super();
         this.getWeekdayOpeningHours = this.getWeekdayOpeningHours.bind(this);
         this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
@@ -230,16 +255,51 @@ class ServicePointDetails extends React.Component {
     }
 
     componentDidMount() {
-        this.props.parentMutator.query.replace(this.props.initialValues.id);
-        console.log(this.props);
-        const lofasz= (this.props.parentResources.period || {}).records || [];
-        console.log(lofasz);
+        // this.props.parentMutator.query.replace(this.props.initialValues.id);
+        // console.log(this.props);
+        // const lofasz= (this.props.parentResources.period || {}).records || [];
+        // console.log(lofasz);
         // this.setState({lofasz: (this.props.parentResources.period || {}).records || []});
         // this.props.parentMutator.period.GET().then((e)=> {
         //     console.log(e);
         // }, (error) => {console.log(error);});
-
     }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        nextProps.parentMutator.query.replace(nextProps.initialValues.id);
+        const periods = (nextProps.parentResources.periods || {}).records || [];
+        console.log(nextProps);
+        console.log(periods);
+        // if (periods.length > 0) {
+            // const loan = periods[0];
+            // if (nextProps.itemId === loan.itemId) {
+            //     const nextState = {
+            //         loanStatusDate: _.get(loan, ['metadata', 'updatedDate']),
+            //     };
+            //     if (loan.item.status.name !== 'Available') {
+            //         nextProps.mutator.borrowerId.replace({query: loan.userId});
+            //         nextState.loan = loan;
+            //     }
+            //
+            //     return nextState;
+            // }
+
+            // console.warn(`retrieved a loan.itemId ${loan.itemId} that did not match the item.itemid ${nextProps.itemid}`)
+        // }
+
+        // const borrowerRecords = (nextProps.resources.borrower || {}).records || [];
+        // if (prevState.loan && (!prevState.borrower) && borrowerRecords.length === 1) {
+        //     const borrower = borrowerRecords[0];
+        //     if (prevState.loan.userId === borrower.id) {
+        //         return {borrower};
+        //     }
+
+            // console.warn('retrieved a borrower.id ${borrower.id} that did not match the loan.userId ${prevState.loan.userId}')
+        // }
+
+        return null;
+    }
+
 
     translateOrganization(id) {
         return this.props.stripes.intl.formatMessage({
