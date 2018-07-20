@@ -1,10 +1,10 @@
 import React from 'react';
-import BigCalendar from 'react-big-calendar';
+import BigCalendar from '@folio/react-big-calendar';
 import moment from "moment";
 import PropTypes from 'prop-types';
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragDropContext} from 'react-dnd'
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
+import withDragAndDrop from '@folio/react-big-calendar/lib/addons/dragAndDrop'
 
 
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
