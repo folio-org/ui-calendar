@@ -24,7 +24,8 @@
       }
     ],
     "okapiInterfaces": {
-      "calendar": "1.0"
+      "calendar": "1.0",
+      "service-points": "2.0"
     },
     "permissionSets": [
       {
@@ -94,52 +95,47 @@
     ]
   },
   "scripts": {
-    "lint": "eslint *.js",
+    "lint": "eslint *.js settings ",
     "test": "echo 'placeholder. no tests implemented'"
   },
   "devDependencies": {
-    "@folio/eslint-config-stripes": "^1.1.0",
+    "@folio/eslint-config-stripes": "^2.0.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^8.2.2",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.18.0",
     "eslint": "^4.8.0",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-import-resolver-webpack": "^0.8.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1",
-    "react-big-calendar": "^0.19.2"
+    "webpack": "1.11.0"
+
   },
   "dependencies": {
     "@folio/react-big-calendar": "^0.19.0",
-    "@folio/react-intl-safe-html": "^1.0.0",
-    "@folio/stripes-components": "^2.0.0",
+    "@folio/react-intl-safe-html": "^1.0.1",
+    "@folio/stripes-components": "3.0.1000442",
     "@folio/stripes-form": "^0.8.2",
-    "@folio/stripes-smart-components": "^1.4.0",
+    "@folio/stripes-smart-components": "^1.4.19",
     "css-loader": "^0.28.11",
     "dateformat": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
-    "lodash": "^4.17.4",
-    "moment": "^2.19.1",
-    "postcss-loader": "^2.0.7",
-    "prop-types": "^15.6.0",
+    "lodash": "^4.17.5",
+    "moment": "^2.22.2",
+    "postcss-loader": "^2.1.6",
+    "prop-types": "^15.6.1",
     "proptypes": "^1.1.0",
-    "query-string": "^5.0.0",
-    "redux-form": "^7.2.0",
-    "style-loader": "^0.19.1",
-    "uuid": "^3.0.1"
+    "query-string": "^6.1.0",
+    "redux-form": "^7.0.3",
+    "style-loader": "^0.21.0",
+    "uuid": "^3.1.0"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^3.1.0",
-    "@folio/stripes-core": "^2.9.0",
+    "@folio/stripes-connect": "^3.1.3",
+    "@folio/stripes-core": "^2.10.2",
     "react": "*",
-    "react-bootstrap": "^0.31.1",
-    "react-dom": "^16.2.0",
-    "react-intl": "^2.3.0",
+    "react-bootstrap": "^0.32.0",
+    "react-dom": "^16.3.0",
+    "react-intl": "^2.4.0",
     "react-router-dom": "^4.0.0"
   }
 }
