@@ -24,7 +24,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             period: PropTypes.shape({
                 POST: PropTypes.func.isRequired,
             }),
-        }).isRequired,
+        }),
         stripes: PropTypes.shape({
             intl: PropTypes.object.isRequired,
         }),
