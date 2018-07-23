@@ -9,50 +9,11 @@ import CloneSettings from "./CloneSettings";
 
 class LibraryHours extends React.Component {
 
-    static propTypes = {
-        label: PropTypes.string.isRequired,
-        resources: PropTypes.shape({
-            entries: PropTypes.shape({
-                records: PropTypes.arrayOf(PropTypes.object),
-            }),
-            period: PropTypes.shape({
-                records: PropTypes.arrayOf(PropTypes.object),
-            }),
-        }).isRequired,
-        mutator: PropTypes.shape({
-            entries: PropTypes.shape({
-                GET: PropTypes.func,
-            }),
-            period: PropTypes.shape({
-                GET: PropTypes.func,
-                POST: PropTypes.func,
-                reset: PropTypes.func,
-            }),
-            query: PropTypes.shape({
-                replace: PropTypes.func,
-            }),
-        }).isRequired,
-        stripes: PropTypes.shape({
-            intl: PropTypes.object.isRequired,
-        }),
-    };
-
     static manifest = Object.freeze({
-        query: {},
         entries: {
             type: 'okapi',
             records: 'servicepoints',
             path: 'service-points',
-        },
-        period: {
-            type: 'okapi',
-            records: 'period',
-            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
-            fetch: false,
-            accumulate: 'true',
-            POST: {
-                path: 'calendar/periods/%{query}/period',
-            },
         }
     });
 
@@ -77,7 +38,6 @@ class LibraryHours extends React.Component {
 
 
     render() {
-
         let {toggleCloneSettings} = this.state;
         let that= this;
 
@@ -111,5 +71,20 @@ class LibraryHours extends React.Component {
         );
     }
 }
-
+LibraryHours.propTypes = {
+    label: PropTypes.string.isRequired,
+    resources: PropTypes.shape({
+        entries: PropTypes.shape({
+            records: PropTypes.arrayOf(PropTypes.object),
+        })
+    }).isRequired,
+    mutator: PropTypes.shape({
+        entries: PropTypes.shape({
+            GET: PropTypes.func,
+        }),
+    }).isRequired,
+    stripes: PropTypes.shape({
+        intl: PropTypes.object.isRequired,
+    }),
+};
 export default LibraryHours;

@@ -15,9 +15,21 @@ import ErrorBoundary from "../ErrorBoundary";
 
 class ServicePointDetails extends React.Component {
 
-    static propTypes = {
+    static manifest = Object.freeze({
+        query: {},
+        periods: {
+            type: 'okapi',
+            records: 'periods',
+            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
+            fetch: false,
+            accumulate: 'true',
+            POST: {
+                path: 'calendar/periods/%{query}/period',
+            },
+        }
+    });
+    static  propTypes = {
         initialValues: PropTypes.object,
-        onCloseViewItem: PropTypes.func.isRequired,
         stripes: PropTypes.shape({
             intl: PropTypes.object.isRequired,
             connect: PropTypes.func.isRequired,
@@ -25,27 +37,19 @@ class ServicePointDetails extends React.Component {
         resources: PropTypes.shape({
             periods: PropTypes.shape({
                 records: PropTypes.arrayOf(PropTypes.object),
-            }),
-            query: PropTypes.object,
+            })
         }).isRequired,
         mutator: PropTypes.shape({
-            period: PropTypes.shape({
-                GET: PropTypes.func,
+            periods: PropTypes.shape({
                 reset: PropTypes.func,
+                POST: PropTypes.func,
+                GET: PropTypes.func,
             }),
             query: PropTypes.shape({
                 replace: PropTypes.func,
             }),
-        }),
+        }).isRequired,
     };
-    static manifest = Object.freeze({
-        query: {},
-        periods: {
-            type: 'okapi',
-            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
-            records: 'periods',
-        },
-    });
 
     constructor() {
         super();
@@ -255,21 +259,29 @@ class ServicePointDetails extends React.Component {
     }
 
     componentDidMount() {
-        // this.props.parentMutator.query.replace(this.props.initialValues.id);
+        console.log(this.props.resources);
+
+        // this.props.mutator.query.replace(this.props.initialValues.id);
         // console.log(this.props);
         // const lofasz= (this.props.parentResources.period || {}).records || [];
         // console.log(lofasz);
         // this.setState({lofasz: (this.props.parentResources.period || {}).records || []});
         // this.props.parentMutator.period.GET().then((e)=> {
+        //     console.log("Siker");
+        //     console.log( this.props)
         //     console.log(e);
-        // }, (error) => {console.log(error);});
+        // }, (error) => {
+        //     console.log("nemnSiuker");
+        //     console.log( this.props);
+        //     console.log(error);
+        // });
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        nextProps.parentMutator.query.replace(nextProps.initialValues.id);
-        const periods = (nextProps.parentResources.periods || {}).records || [];
-        console.log(nextProps);
-        console.log(periods);
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //     nextProps.parentMutator.query.replace(nextProps.initialValues.id);
+    //     const periods = (nextProps.parentResources.periods || {}).records || [];
+    //     console.log(nextProps);
+    //     console.log(periods);
         // if (periods.length > 0) {
             // const loan = periods[0];
             // if (nextProps.itemId === loan.itemId) {
@@ -297,9 +309,9 @@ class ServicePointDetails extends React.Component {
             // console.warn('retrieved a borrower.id ${borrower.id} that did not match the loan.userId ${prevState.loan.userId}')
         // }
 
-        return null;
-    }
-
+        // return null;
+    // }
+    //
 
     translateOrganization(id) {
         return this.props.stripes.intl.formatMessage({
@@ -390,6 +402,9 @@ class ServicePointDetails extends React.Component {
     }
 
     render() {
+        console.log(this.props);
+        console.log(this.props.resources);
+
         BigCalendar.momentLocalizer(moment);
         const servicePoint = this.props.initialValues;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
@@ -465,7 +480,7 @@ class ServicePointDetails extends React.Component {
                         <Headline size="small" margin="large">Actual Library Hours</Headline>
                         <p> Regular opening hours with exceptions
                             <Icon
-                                icon="bookmark"
+                                icon="calendar"
                                 size="medium"
                                 iconClassName="calendar"
                             /> Open calendar to add exceptions </p>
@@ -489,5 +504,26 @@ class ServicePointDetails extends React.Component {
     }
 
 }
+
+// ServicePointDetails.propTypes = {
+//     initialValues: PropTypes.object,
+//     stripes: PropTypes.shape({
+//         intl: PropTypes.object.isRequired,
+//         connect: PropTypes.func.isRequired,
+//     }).isRequired,
+//     resources: PropTypes.shape({
+//         periods: PropTypes.shape({
+//             records: PropTypes.arrayOf(PropTypes.object),
+//         })
+//     }).isRequired,
+//     mutator: PropTypes.shape({
+//         periods: PropTypes.shape({
+//             reset: PropTypes.func,
+//         }),
+//         query: PropTypes.shape({
+//             replace: PropTypes.func,
+//         }),
+//     }).isRequired,
+// };
 
 export default ServicePointDetails;
