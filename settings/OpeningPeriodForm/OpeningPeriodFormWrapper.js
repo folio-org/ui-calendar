@@ -11,7 +11,8 @@ class OpeningPeriodFormWrapper extends React.Component {
 
     static propTypes = {
         onSuccessfulCreatePeriod: PropTypes.func.isRequired,
-        onClose: PropTypes.func,
+        successfulSave: PropTypes.func.isRequired,
+        onClose: PropTypes.func.isRequired,
         servicePointId: PropTypes.string.isRequired,
         resources: PropTypes.shape({
             period: PropTypes.shape({
@@ -113,7 +114,8 @@ class OpeningPeriodFormWrapper extends React.Component {
         if (servicePointId) parentMutator.query.replace(servicePointId);
         let that = this;
         return parentMutator.periods['POST'](period).then((e) => {
-            that.props.onClose();
+            console.log(e);
+            that.props.successfulSave(e);
         }, (error) => {
             console.log(error);
         });

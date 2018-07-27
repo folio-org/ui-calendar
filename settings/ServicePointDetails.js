@@ -25,6 +25,8 @@ class ServicePointDetails extends React.Component {
         this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
         this.clickNewPeriod = this.clickNewPeriod.bind(this);
         this.onAdd = this.onAdd.bind(this);
+        this.onClose= this.onClose.bind(this);
+        this.onSuccessfulCreatePeriod=this.onSuccessfulCreatePeriod.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -137,12 +139,14 @@ class ServicePointDetails extends React.Component {
         this.setState({newPeriodLayer: {isOpen: true}});
     }
 
-    onSuccessfulCreatePeriod() {
+    onSuccessfulCreatePeriod(period ) {
         this.setState({newPeriodLayer: {isOpen: false}});
         this.setState({currentPeriod: this.displayCurrentPeriod()});
         this.setState({nextPeriods: this.displayNextPeriod()});
     }
+
     onClose() {
+        console.log(this.state);
         this.setState({newPeriodLayer: {isOpen: false}});
     }
 
@@ -244,7 +248,8 @@ class ServicePointDetails extends React.Component {
                     >
                         <OpeningPeriodFormWrapper
                             {...this.props}
-                            onSuccessfullCreatePeriod={this.onSuccessfulCreatePeriod}
+                            successfulSave={this.onSuccessfulCreatePeriod}
+                            onClose={this.onClose}
                             servicePointId={servicePoint.id}
                         />
 
