@@ -35,10 +35,10 @@ class ServicePointDetails extends React.Component {
             displayCurrentPeriod: {},
             displayPeriods: [],
             openingPeriods: [],
-            currentPeriod: {},
             nextPeriods: [],
             selectedPeriods: [],
             selectedServicePoints: [],
+            isPeriodsPending: true
         };
     }
 
@@ -49,7 +49,8 @@ class ServicePointDetails extends React.Component {
                 this.setState({openingPeriods: openingPeriods});
                 this.setState({currentPeriod: this.displayCurrentPeriod()});
                 this.setState({nextPeriods: this.displayNextPeriod()});
-            }, (error) => {
+                this.setState({isPeriodsPending: false});
+                }, (error) => {
                 console.log(error);
             });
     }
@@ -146,13 +147,59 @@ class ServicePointDetails extends React.Component {
     }
 
     render() {
+        let currentP;
+        let currentPTimes;
+        const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+        if(this.state.currentPeriod){
+            currentP= <KeyValue label="Current:"
+                                value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>;
+            currentPTimes=<Row>
+                <Col xs>
+                    <div className={"seven-cols"}>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Sun" value={this.getWeekdayOpeningHours(weekdays[0])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Mon" value={this.getWeekdayOpeningHours(weekdays[1])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Tue" value={this.getWeekdayOpeningHours(weekdays[2])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Wed" value={this.getWeekdayOpeningHours(weekdays[3])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+
+                            <KeyValue label="Thu" value={this.getWeekdayOpeningHours(weekdays[4])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Fri" value={this.getWeekdayOpeningHours(weekdays[5])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Sat" value={this.getWeekdayOpeningHours(weekdays[6])}/>
+                        </div>
+                    </div>
+                </Col>
+            </Row>;
+        }
+        let nextPeriodDetails;
+        const itemFormatter = (item) => (
+            <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
+        if(this.state.nextPeriods){
+            nextPeriodDetails=<Row>
+                <Col xs>
+                    <Headline size="small" margin="large">Next:</Headline>
+                    <List
+                        items={this.state.nextPeriods}
+                        itemFormatter={itemFormatter}
+                    />
+                </Col>
+            </Row>;
+        }
         console.log(this.props);
         BigCalendar.momentLocalizer(moment);
         const servicePoint = this.props.initialValues;
-        const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        const itemFormatter = (item) => (
-            <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-        if (this.state.nextPeriods.length !== 0 && this.state.currentPeriod) {
+        if (!this.state.isPeriodsPending) {
             return (
                 <ErrorBoundary>
                     <div>
@@ -163,47 +210,11 @@ class ServicePointDetails extends React.Component {
                                 <KeyValue label={this.translateOrganization('discoveryDisplayName')}
                                           value={servicePoint.discoveryDisplayName}/>
                                 <Headline size="small" margin="large">Regular Library Hours</Headline>
-                                <KeyValue label="Current:"
-                                          value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>
+                                {currentP}
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs>
-                                <div className={"seven-cols"}>
-                                    <div className={"col-sm-1"}>
-                                        <KeyValue label="Sun" value={this.getWeekdayOpeningHours(weekdays[0])}/>
-                                    </div>
-                                    <div className={"col-sm-1"}>
-                                        <KeyValue label="Mon" value={this.getWeekdayOpeningHours(weekdays[1])}/>
-                                    </div>
-                                    <div className={"col-sm-1"}>
-                                        <KeyValue label="Tue" value={this.getWeekdayOpeningHours(weekdays[2])}/>
-                                    </div>
-                                    <div className={"col-sm-1"}>
-                                        <KeyValue label="Wed" value={this.getWeekdayOpeningHours(weekdays[3])}/>
-                                    </div>
-                                    <div className={"col-sm-1"}>
-
-                                        <KeyValue label="Thu" value={this.getWeekdayOpeningHours(weekdays[4])}/>
-                                    </div>
-                                    <div className={"col-sm-1"}>
-                                        <KeyValue label="Fri" value={this.getWeekdayOpeningHours(weekdays[5])}/>
-                                    </div>
-                                    <div className={"col-sm-1"}>
-                                        <KeyValue label="Sat" value={this.getWeekdayOpeningHours(weekdays[6])}/>
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs>
-                                <Headline size="small" margin="large">Next:</Headline>
-                                <List
-                                    items={this.state.nextPeriods}
-                                    itemFormatter={itemFormatter}
-                                />
-                            </Col>
-                        </Row>
+                        {currentPTimes}
+                        {nextPeriodDetails}
                         <Row>
                             <Col xs={4}>
                                 <Button onClick={() => this.clickNewPeriod()}>
@@ -243,10 +254,9 @@ class ServicePointDetails extends React.Component {
         } else {
             return (
                 <div>
-
                     <Icon
                         icon="spinner-ellipsis"
-                        size="large"
+                        size="medium"
                         iconClassName="spinner-ellipsis"
                     />
                 </div>
@@ -271,25 +281,5 @@ ServicePointDetails.propTypes = {
     }),
 };
 
-// ServicePointDetails.propTypes = {
-//     initialValues: PropTypes.object,
-//     stripes: PropTypes.shape({
-//         intl: PropTypes.object.isRequired,
-//         connect: PropTypes.func.isRequired,
-//     }).isRequired,
-//     resources: PropTypes.shape({
-//         periods: PropTypes.shape({
-//             records: PropTypes.arrayOf(PropTypes.object),
-//         })
-//     }).isRequired,
-// mutator: PropTypes.shape({/
-//     periods: PropTypes.shape({
-//         reset: PropTypes.func,
-//     }),
-//     query: PropTypes.shape({
-//         replace: PropTypes.func,
-//     }),
-// }).isRequired,
-// };
 
 export default ServicePointDetails;
