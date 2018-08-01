@@ -141,12 +141,12 @@ class ServicePointDetails extends React.Component {
 
     onSuccessfulCreatePeriod(period ) {
         this.setState({newPeriodLayer: {isOpen: false}});
+        this.setState({openingPeriods: this.state.openingPeriods.push(period)})
         this.setState({currentPeriod: this.displayCurrentPeriod()});
         this.setState({nextPeriods: this.displayNextPeriod()});
     }
 
     onClose() {
-        console.log(this.state);
         this.setState({newPeriodLayer: {isOpen: false}});
     }
 
@@ -200,7 +200,6 @@ class ServicePointDetails extends React.Component {
                 </Col>
             </Row>;
         }
-        console.log(this.props);
         BigCalendar.momentLocalizer(moment);
         const servicePoint = this.props.initialValues;
         if (!this.state.isPeriodsPending) {
@@ -248,7 +247,7 @@ class ServicePointDetails extends React.Component {
                     >
                         <OpeningPeriodFormWrapper
                             {...this.props}
-                            successfulSave={this.onSuccessfulCreatePeriod}
+                            onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
                             onClose={this.onClose}
                             servicePointId={servicePoint.id}
                         />

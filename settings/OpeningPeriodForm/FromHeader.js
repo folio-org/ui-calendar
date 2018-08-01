@@ -23,7 +23,7 @@ class FromHeader extends React.Component {
                         <IconButton
                             onClick={this.props.onClose}
                             icon="closeX"
-                            size="large"
+                            size="medium"
                             iconClassName="closeIcon"
                         />
                     </Col>
