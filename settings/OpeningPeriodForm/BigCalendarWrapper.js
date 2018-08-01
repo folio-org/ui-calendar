@@ -23,7 +23,6 @@ class BigCalendarWrapper extends React.Component {
         this.onEventDnD = this.onEventDnD.bind(this);
         this.onEventResize = this.onEventResize.bind(this);
         this.onCalendarChange = this.onCalendarChange.bind(this);
-        // this.moveEvent = this.moveEvent.bind(this);
         // this.onDeleteEvent = this.onDeleteEvent.bind(this);
         this.state = {
             eventIdCounter: 0,
@@ -31,21 +30,24 @@ class BigCalendarWrapper extends React.Component {
         };
     }
 
-    onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
-        const { events } = this.state
+    onEventDnD = (event) => {
+        console.log("onEventDND");
+        const {events} = this.state;
+        console.log(event);
 
-        const idx = events.indexOf(event)
-        let allDay = event.allDay
+        const updatedEvent = {
+            allDay: event.allDay,
+            start: event.start,
+            end: event.end,
+            id: event.event.id
+        };
+        const nextEvents = [...events];
 
-        // if (!event.allDay && droppedOnAllDaySlot) {
-        //     allDay = true
-        // } else if (event.allDay && !droppedOnAllDaySlot) {
-        //     allDay = false
-        // }
-
-        const updatedEvent = { ...event, start, end, allDay }
-        const nextEvents = [...events]
-        nextEvents.splice(idx, 1, updatedEvent)
+        for (let i = 0; i < nextEvents.length; i++) {
+            if (nextEvents[i].id === event.event.id) {
+                nextEvents.splice(i, 1, updatedEvent)
+            }
+        }
 
         this.onCalendarChange(nextEvents);
     };
@@ -88,8 +90,9 @@ class BigCalendarWrapper extends React.Component {
     // }
 
     render() {
+        console.log(this.state.events);
         return (
-            <div style={{height: "100%", width:"90%", margin:"auto"}}>
+            <div style={{height: "100%", width: "90%", margin: "auto"}}>
                 <DragAndDropCalendar
                     events={this.state.events}
                     defaultView={BigCalendar.Views.WEEK}
