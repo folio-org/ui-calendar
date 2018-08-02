@@ -12,16 +12,14 @@ class BigCalendarHeader extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="big-calendar-header">
                 <Row>
-                    <Col xs={3}>
+                    <Col xs={6}>
                         <Headline>
                             Regular Library Hours:
                         </Headline>
                     </Col>
-                    <Col xs={7}>
-                    </Col>
-                    <Col xs={2}>
+                    <Col xs={6} className="new-period-buttons">
                         <Button>
                             Select Template
                         </Button>

@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 class OpeningPeriodFormWrapper extends React.Component {
 
     static propTypes = {
+        onSuccessfulCreatePeriod: PropTypes.func.isRequired,
         onClose: PropTypes.func.isRequired,
         servicePointId: PropTypes.string.isRequired,
         resources: PropTypes.shape({
@@ -57,6 +58,7 @@ class OpeningPeriodFormWrapper extends React.Component {
 
     onFormSubmit(event) {
         event.preventDefault();
+
         const {parentMutator, servicePointId} = this.props;
 
         let period = {
@@ -110,8 +112,8 @@ class OpeningPeriodFormWrapper extends React.Component {
         }
         if (servicePointId) parentMutator.query.replace(servicePointId);
         let that = this;
-        return parentMutator.period['POST'](period).then((e) => {
-            that.props.onClose();
+        return parentMutator.periods['POST'](period).then((e) => {
+            that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
             console.log(error);
         });
@@ -120,7 +122,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     render() {
 
         return (
-            <div>
+            <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
                     <FromHeader onClose={this.props.onClose}/>
                     <InputFields onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>

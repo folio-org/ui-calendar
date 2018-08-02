@@ -15,37 +15,6 @@ import ErrorBoundary from "../ErrorBoundary";
 
 class ServicePointDetails extends React.Component {
 
-    static propTypes = {
-        initialValues: PropTypes.object,
-        onCloseViewItem: PropTypes.func.isRequired,
-        stripes: PropTypes.shape({
-            intl: PropTypes.object.isRequired,
-            connect: PropTypes.func.isRequired,
-        }).isRequired,
-        resources: PropTypes.shape({
-            periods: PropTypes.shape({
-                records: PropTypes.arrayOf(PropTypes.object),
-            }),
-            query: PropTypes.object,
-        }).isRequired,
-        mutator: PropTypes.shape({
-            period: PropTypes.shape({
-                GET: PropTypes.func,
-                reset: PropTypes.func,
-            }),
-            query: PropTypes.shape({
-                replace: PropTypes.func,
-            }),
-        }),
-    };
-    static manifest = Object.freeze({
-        query: {},
-        periods: {
-            type: 'okapi',
-            path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
-            records: 'periods',
-        },
-    });
 
     constructor() {
         super();
@@ -53,9 +22,12 @@ class ServicePointDetails extends React.Component {
         this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
         this.displayNextPeriod = this.displayNextPeriod.bind(this);
         this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
-        this.onCancel = this.onCancel.bind(this);
+        this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
         this.clickNewPeriod = this.clickNewPeriod.bind(this);
         this.onAdd = this.onAdd.bind(this);
+        this.onClose= this.onClose.bind(this);
+        this.onSuccessfulCreatePeriod=this.onSuccessfulCreatePeriod.bind(this);
+        this.getServicePoints= this.getServicePoints.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -65,241 +37,31 @@ class ServicePointDetails extends React.Component {
             },
             displayCurrentPeriod: {},
             displayPeriods: [],
-            openingPeriod: {
-                id: '1',
-                servicePointId: '2',
-                name: 'Tets period',
-                startDate: '2018-06-01',
-                endDate: '2018-06-30',
-                openingDays: [
-                    {
-                        day: "MONDAY",
-                        open: false, allDay: false
-                    }, {
-                        day: "TUESDAY",
-                        open: true,
-                        allDay: true
-                    }, {
-                        day: "WEDNESDAY",
-                        open: true,
-                        allDay: false,
-                        openingHour: [{
-                            endTime: "19:45:18.000Z",
-                            startTime: "19:16:18.000Z"
-                        }, {
-                            endTime: "19:14:25.000Z",
-                            startTime: "19:00:25.000Z"
-                        }, {
-                            endTime: "10:02:31.000Z",
-                            startTime: "9:02:31.000Z"
-                        }]
-                    }, {day: "THURSDAY", open: false, allDay: false}, {
-                        day: "FRIDAY",
-                        open: true,
-                        allDay: false,
-                        openingHour: [{
-                            endTime: "16:19:20.000Z",
-                            startTime: "12:00:20.000Z"
-                        }]
-                    }, {
-                        day: "SATURDAY",
-                        open: false,
-                        allDay: false
-                    }, {
-                        day: "SUNDAY",
-                        open: false,
-                        allDay: false
-                    }]
-            },
-            openingPeriods: [
-                {
-                    id: '1',
-                    servicePointId: '2',
-                    name: 'Tets period',
-                    startDate: '2018-06-01',
-                    endDate: '2018-06-30',
-                    openingDays: [
-                        {
-                            day: "MONDAY",
-                            open: false, allDay: false
-                        }, {
-                            day: "TUESDAY",
-                            open: true,
-                            allDay: true
-                        }, {
-                            day: "WEDNESDAY",
-                            open: true,
-                            allDay: false,
-                            openingHour: [{
-                                endTime: "19:45:18.000Z",
-                                startTime: "19:16:18.000Z"
-                            }, {
-                                endTime: "19:14:25.000Z",
-                                startTime: "19:00:25.000Z"
-                            }, {
-                                endTime: "10:02:31.000Z",
-                                startTime: "9:02:31.000Z"
-                            }]
-                        }, {day: "THURSDAY", open: false, allDay: false}, {
-                            day: "FRIDAY",
-                            open: true,
-                            allDay: false,
-                            openingHour: [{
-                                endTime: "16:19:20.000Z",
-                                startTime: "12:00:20.000Z"
-                            }]
-                        }, {
-                            day: "SATURDAY",
-                            open: false,
-                            allDay: false
-                        }, {
-                            day: "SUNDAY",
-                            open: false,
-                            allDay: false
-                        }]
-                }, {
-                    id: '2',
-                    servicePointId: '2',
-                    name: 'Test period 2',
-                    startDate: '2018-07-01',
-                    endDate: '2018-07-30',
-                    openingDays: [
-                        {
-                            day: "MONDAY",
-                            open: false, allDay: false
-                        }, {
-                            day: "TUESDAY",
-                            open: true,
-                            allDay: true
-                        }, {
-                            day: "WEDNESDAY",
-                            open: true,
-                            allDay: false,
-                            openingHour: [{
-                                endTime: "19:45:18.000Z",
-                                startTime: "19:16:18.000Z"
-                            }, {
-                                endTime: "19:14:25.000Z",
-                                startTime: "19:00:25.000Z"
-                            }, {
-                                endTime: "10:02:31.000Z",
-                                startTime: "9:02:31.000Z"
-                            }]
-                        }, {day: "THURSDAY", open: false, allDay: false}, {
-                            day: "FRIDAY",
-                            open: true,
-                            allDay: false,
-                            openingHour: [{
-                                endTime: "16:19:20.000Z",
-                                startTime: "12:00:20.000Z"
-                            }]
-                        }, {
-                            day: "SATURDAY",
-                            open: false,
-                            allDay: false
-                        }, {
-                            day: "SUNDAY",
-                            open: false,
-                            allDay: false
-                        }]
-                }, {
-                    id: '3',
-                    servicePointId: '2',
-                    name: 'Tets period 3',
-                    startDate: '2018-08-01',
-                    endDate: '2018-08-30',
-                    openingDays: [
-                        {
-                            day: "MONDAY",
-                            open: false, allDay: false
-                        }, {
-                            day: "TUESDAY",
-                            open: true,
-                            allDay: true
-                        }, {
-                            day: "WEDNESDAY",
-                            open: true,
-                            allDay: false,
-                            openingHour: [{
-                                endTime: "19:45:18.000Z",
-                                startTime: "19:16:18.000Z"
-                            }, {
-                                endTime: "19:14:25.000Z",
-                                startTime: "19:00:25.000Z"
-                            }, {
-                                endTime: "10:02:31.000Z",
-                                startTime: "9:02:31.000Z"
-                            }]
-                        }, {day: "THURSDAY", open: false, allDay: false}, {
-                            day: "FRIDAY",
-                            open: true,
-                            allDay: false,
-                            openingHour: [{
-                                endTime: "16:19:20.000Z",
-                                startTime: "12:00:20.000Z"
-                            }]
-                        }, {
-                            day: "SATURDAY",
-                            open: false,
-                            allDay: false
-                        }, {
-                            day: "SUNDAY",
-                            open: false,
-                            allDay: false
-                        }]
-                }
-            ],
+            openingPeriods: [],
+            nextPeriods: [],
             selectedPeriods: [],
             selectedServicePoints: [],
+            isPeriodsPending: true
         };
     }
 
     componentDidMount() {
-        // this.props.parentMutator.query.replace(this.props.initialValues.id);
-        // console.log(this.props);
-        // const lofasz= (this.props.parentResources.period || {}).records || [];
-        // console.log(lofasz);
-        // this.setState({lofasz: (this.props.parentResources.period || {}).records || []});
-        // this.props.parentMutator.period.GET().then((e)=> {
-        //     console.log(e);
-        // }, (error) => {console.log(error);});
+    this.getServicePoints();
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        nextProps.parentMutator.query.replace(nextProps.initialValues.id);
-        const periods = (nextProps.parentResources.periods || {}).records || [];
-        console.log(nextProps);
-        console.log(periods);
-        // if (periods.length > 0) {
-            // const loan = periods[0];
-            // if (nextProps.itemId === loan.itemId) {
-            //     const nextState = {
-            //         loanStatusDate: _.get(loan, ['metadata', 'updatedDate']),
-            //     };
-            //     if (loan.item.status.name !== 'Available') {
-            //         nextProps.mutator.borrowerId.replace({query: loan.userId});
-            //         nextState.loan = loan;
-            //     }
-            //
-            //     return nextState;
-            // }
+    getServicePoints(){
+        this.props.parentMutator.query.replace(this.props.initialValues.id);
+        this.props.parentMutator.periods.GET()
+            .then((openingPeriods) => {
+                this.setState({openingPeriods: openingPeriods});
+                this.setState({currentPeriod: this.displayCurrentPeriod()});
+                this.setState({nextPeriods: this.displayNextPeriod()});
+                this.setState({isPeriodsPending: false});
+                }, (error) => {
+                console.log(error);
+            });
 
-            // console.warn(`retrieved a loan.itemId ${loan.itemId} that did not match the item.itemid ${nextProps.itemid}`)
-        // }
-
-        // const borrowerRecords = (nextProps.resources.borrower || {}).records || [];
-        // if (prevState.loan && (!prevState.borrower) && borrowerRecords.length === 1) {
-        //     const borrower = borrowerRecords[0];
-        //     if (prevState.loan.userId === borrower.id) {
-        //         return {borrower};
-        //     }
-
-            // console.warn('retrieved a borrower.id ${borrower.id} that did not match the loan.userId ${prevState.loan.userId}')
-        // }
-
-        return null;
     }
-
 
     translateOrganization(id) {
         return this.props.stripes.intl.formatMessage({
@@ -308,34 +70,31 @@ class ServicePointDetails extends React.Component {
     }
 
     getWeekdayOpeningHours(weekday) {
-        for (let index = 0; index < this.state.openingPeriods.length; index++) {
-            let openingPeriod = this.state.openingPeriods[index];
-            let start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
-            let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
-            if (moment() > start && moment() < end) {
-                let periodTime = "";
-                for (let i = 0; i < openingPeriod.openingDays.length; i++) {
-                    let day = openingPeriod.openingDays[i];
-                    if (day.day === weekday) {
-                        if (day.open) {
-                            if (day.allDay) {
-                                return "All day";
-                            } else {
-                                for (let k = 0; k < day.openingHour.length; k++) {
-                                    let hour = day.openingHour[k];
-                                    let t1 = moment(hour.startTime, 'HH:mm');
-                                    let t2 = moment(hour.endTime, 'HH:mm');
-                                    periodTime += t1.format('HH:mm') + " - " + t2.format('HH:mm') + " \n";
-                                }
-                                return periodTime;
-                            }
-                        } else {
-                            return "Closed";
+        let openingPeriod = this.state.currentPeriod;
+        let periodTime = "";
+        for (let i = 0; i < openingPeriod.openingDays.length; i++) {
+            let days = openingPeriod.openingDays[i];
+            let weekdays = days.weekdays.day;
+            let day = days.openingDay;
+            if (weekdays === weekday) {
+                if (day.open) {
+                    if (day.allDay) {
+                        return "All day";
+                    } else {
+                        for (let k = 0; k < day.openingHour.length; k++) {
+                            let hour = day.openingHour[k];
+                            let t1 = moment(hour.startTime, 'HH:mm');
+                            let t2 = moment(hour.endTime, 'HH:mm');
+                            periodTime += t1.format('HH:mm') + " - " + t2.format('HH:mm') + " \n";
                         }
+                        return periodTime;
                     }
+                } else {
+                    return "Closed";
                 }
             }
         }
+        return "Closed";
     }
 
     displayCurrentPeriod() {
@@ -347,7 +106,8 @@ class ServicePointDetails extends React.Component {
                 return {
                     startDate: start.format("YYYY/MM/DD"),
                     endDate: end.format("YYYY/MM/DD"),
-                    name: openingPeriod.name
+                    name: openingPeriod.name,
+                    openingDays: openingPeriod.openingDays
                 };
             }
         }
@@ -385,109 +145,149 @@ class ServicePointDetails extends React.Component {
         this.setState({newPeriodLayer: {isOpen: true}});
     }
 
-    onCancel() {
+    onSuccessfulCreatePeriod() {
+        this.setState({newPeriodLayer: {isOpen: false}});
+        this.getServicePoints();
+    }
+
+    onClose() {
         this.setState({newPeriodLayer: {isOpen: false}});
     }
 
     render() {
-        BigCalendar.momentLocalizer(moment);
-        const servicePoint = this.props.initialValues;
+        let currentP;
+        let currentPTimes;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        const currentPeriod = this.displayCurrentPeriod();
-        const nextPeriod = this.displayNextPeriod();
+        if(this.state.currentPeriod){
+            currentP= <KeyValue label="Current:"
+                                value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>;
+            currentPTimes=<Row>
+                <Col xs>
+                    <div className={"seven-cols"}>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Sun" value={this.getWeekdayOpeningHours(weekdays[0])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Mon" value={this.getWeekdayOpeningHours(weekdays[1])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Tue" value={this.getWeekdayOpeningHours(weekdays[2])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Wed" value={this.getWeekdayOpeningHours(weekdays[3])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+
+                            <KeyValue label="Thu" value={this.getWeekdayOpeningHours(weekdays[4])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Fri" value={this.getWeekdayOpeningHours(weekdays[5])}/>
+                        </div>
+                        <div className={"col-sm-1"}>
+                            <KeyValue label="Sat" value={this.getWeekdayOpeningHours(weekdays[6])}/>
+                        </div>
+                    </div>
+                </Col>
+            </Row>;
+        }
+        let nextPeriodDetails;
         const itemFormatter = (item) => (
             <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-
-        return (
-            <ErrorBoundary>
-                <div>
-                    <Row>
-                        <Col xs>
-                            <KeyValue label={this.translateOrganization('name')} value={servicePoint.name}/>
-                            <KeyValue label={this.translateOrganization('code')} value={servicePoint.code}/>
-                            <KeyValue label={this.translateOrganization('discoveryDisplayName')}
-                                      value={servicePoint.discoveryDisplayName}/>
-                            <Headline size="small" margin="large">Regular Library Hours</Headline>
-                            <KeyValue label="Current:"
-                                      value={currentPeriod.startDate + " - " + currentPeriod.endDate + " (" + currentPeriod.name + ")"}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs>
-                            <div className={"seven-cols"}>
-                                <div className={"col-sm-1"}>
-                                    <KeyValue label="Sun" value={this.getWeekdayOpeningHours(weekdays[0])}/>
-                                </div>
-                                <div className={"col-sm-1"}>
-                                    <KeyValue label="Mon" value={this.getWeekdayOpeningHours(weekdays[1])}/>
-                                </div>
-                                <div className={"col-sm-1"}>
-                                    <KeyValue label="Tue" value={this.getWeekdayOpeningHours(weekdays[2])}/>
-                                </div>
-                                <div className={"col-sm-1"}>
-                                    <KeyValue label="Wed" value={this.getWeekdayOpeningHours(weekdays[3])}/>
-                                </div>
-                                <div className={"col-sm-1"}>
-
-                                    <KeyValue label="Thu" value={this.getWeekdayOpeningHours(weekdays[4])}/>
-                                </div>
-                                <div className={"col-sm-1"}>
-                                    <KeyValue label="Fri" value={this.getWeekdayOpeningHours(weekdays[5])}/>
-                                </div>
-                                <div className={"col-sm-1"}>
-                                    <KeyValue label="Sat" value={this.getWeekdayOpeningHours(weekdays[6])}/>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs>
-                            <Headline size="small" margin="large">Next:</Headline>
-                            <List
-                                items={nextPeriod}
-                                itemFormatter={itemFormatter}
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={4}>
-                            <Button onClick={() => this.clickNewPeriod()}>
-                                New
-                            </Button>
-                        </Col>
-                        <Col xs={6}>
-                            <Button>
-                                Clone Settings
-                            </Button>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Headline size="small" margin="large">Actual Library Hours</Headline>
-                        <p> Regular opening hours with exceptions
-                            <Icon
-                                icon="bookmark"
-                                size="medium"
-                                iconClassName="calendar"
-                            /> Open calendar to add exceptions </p>
-                    </Row>
-                </div>
-
-                <Layer isOpen={this.state.newPeriodLayer.isOpen}
-                       label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
-                       container={document.getElementById('ModuleContainer')}
-                >
-                    <OpeningPeriodFormWrapper
-                        {...this.props}
-                        onClose={this.onCancel}
-                        servicePointId={servicePoint.id}
+        if(this.state.nextPeriods){
+            nextPeriodDetails=<Row>
+                <Col xs>
+                    <Headline size="small" margin="large">Next:</Headline>
+                    <List
+                        items={this.state.nextPeriods}
+                        itemFormatter={itemFormatter}
                     />
+                </Col>
+            </Row>;
+        }
+        BigCalendar.momentLocalizer(moment);
+        const servicePoint = this.props.initialValues;
+        if (!this.state.isPeriodsPending) {
+            return (
+                <ErrorBoundary>
+                    <div>
+                        <Row>
+                            <Col xs>
+                                <KeyValue label={this.translateOrganization('name')} value={servicePoint.name}/>
+                                <KeyValue label={this.translateOrganization('code')} value={servicePoint.code}/>
+                                <KeyValue label={this.translateOrganization('discoveryDisplayName')}
+                                          value={servicePoint.discoveryDisplayName}/>
+                                <Headline size="small" margin="large">Regular Library Hours</Headline>
+                                {currentP}
+                            </Col>
+                        </Row>
+                        {currentPTimes}
+                        {nextPeriodDetails}
+                        <Row>
+                            <Col xs={4}>
+                                <Button onClick={() => this.clickNewPeriod()}>
+                                    New
+                                </Button>
+                            </Col>
+                            <Col xs={6}>
+                                <Button>
+                                    Clone Settings
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Headline size="small" margin="large">Actual Library Hours</Headline>
+                            <p> Regular opening hours with exceptions
+                                <Icon
+                                    icon="calendar"
+                                    size="medium"
+                                    iconClassName="calendar"
+                                /> Open calendar to add exceptions </p>
+                        </Row>
+                    </div>
 
-                </Layer>
-            </ErrorBoundary>
-        );
+                    <Layer isOpen={this.state.newPeriodLayer.isOpen}
+                           label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
+                           container={document.getElementById('ModuleContainer')}
+                    >
+                        <OpeningPeriodFormWrapper
+                            {...this.props}
+                            onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
+                            onClose={this.onClose}
+                            servicePointId={servicePoint.id}
+                        />
+
+                    </Layer>
+                </ErrorBoundary>
+            );
+        } else {
+            return (
+                <div>
+                    <Icon
+                        icon="spinner-ellipsis"
+                        size="medium"
+                        iconClassName="spinner-ellipsis"
+                    />
+                </div>
+            )
+        }
+
 
     }
 
 }
+
+ServicePointDetails.propTypes = {
+    initialValues: PropTypes.object,
+    stripes: PropTypes.shape({
+        intl: PropTypes.object.isRequired,
+        connect: PropTypes.func.isRequired,
+    }).isRequired,
+    resources: PropTypes.shape({
+        periods: PropTypes.shape({
+            records: PropTypes.arrayOf(PropTypes.object),
+        })
+    }),
+};
+
 
 export default ServicePointDetails;
