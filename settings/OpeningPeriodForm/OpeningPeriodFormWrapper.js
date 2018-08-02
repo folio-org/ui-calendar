@@ -122,7 +122,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     render() {
 
         return (
-            <div>
+            <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
                     <FromHeader onClose={this.props.onClose}/>
                     <InputFields onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>

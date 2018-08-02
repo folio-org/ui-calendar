@@ -32,7 +32,7 @@ class FromHeader extends React.Component {
                             New: Regular Library Hours Validity Period
                         </Headline>
                     </Col>
-                    <Col sm={3}>
+                    <Col sm={3} className="new-period-buttons">
                         <Button buttonStyle="danger">Delete</Button>
                         <Button buttonStyle="default">Save</Button>
                         <Button buttonStyle="primary">Saves as Template</Button>

@@ -83,7 +83,7 @@ class BigCalendarWrapper extends React.Component {
 
     render() {
         return (
-            <div style={{height: "100%", width: "90%", margin: "auto"}}>
+            <div style={{height: "100%", marginBottom: "1rem"}}>
                 <DragAndDropCalendar
                     events={this.state.events}
                     defaultView={BigCalendar.Views.WEEK}
