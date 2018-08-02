@@ -113,7 +113,6 @@ class OpeningPeriodFormWrapper extends React.Component {
         if (servicePointId) parentMutator.query.replace(servicePointId);
         let that = this;
         return parentMutator.periods['POST'](period).then((e) => {
-            console.log(e);
             that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
             console.log(error);

@@ -145,9 +145,9 @@ class ServicePointDetails extends React.Component {
         this.setState({newPeriodLayer: {isOpen: true}});
     }
 
-    onSuccessfulCreatePeriod(period ) {
+    onSuccessfulCreatePeriod() {
         this.setState({newPeriodLayer: {isOpen: false}});
-        this.setState({openingPeriods: this.state.openingPeriods.push(period)})
+        this.getServicePoints();
     }
 
     onClose() {
@@ -155,7 +155,6 @@ class ServicePointDetails extends React.Component {
     }
 
     render() {
-        console.log(this.state);
         let currentP;
         let currentPTimes;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
