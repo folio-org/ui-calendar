@@ -27,6 +27,7 @@ class ServicePointDetails extends React.Component {
         this.onAdd = this.onAdd.bind(this);
         this.onClose= this.onClose.bind(this);
         this.onSuccessfulCreatePeriod=this.onSuccessfulCreatePeriod.bind(this);
+        this.getServicePoints= this.getServicePoints.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -45,6 +46,10 @@ class ServicePointDetails extends React.Component {
     }
 
     componentDidMount() {
+    this.getServicePoints();
+    }
+
+    getServicePoints(){
         this.props.parentMutator.query.replace(this.props.initialValues.id);
         this.props.parentMutator.periods.GET()
             .then((openingPeriods) => {
@@ -55,6 +60,7 @@ class ServicePointDetails extends React.Component {
                 }, (error) => {
                 console.log(error);
             });
+
     }
 
     translateOrganization(id) {
@@ -142,8 +148,6 @@ class ServicePointDetails extends React.Component {
     onSuccessfulCreatePeriod(period ) {
         this.setState({newPeriodLayer: {isOpen: false}});
         this.setState({openingPeriods: this.state.openingPeriods.push(period)})
-        this.setState({currentPeriod: this.displayCurrentPeriod()});
-        this.setState({nextPeriods: this.displayNextPeriod()});
     }
 
     onClose() {
@@ -151,6 +155,7 @@ class ServicePointDetails extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         let currentP;
         let currentPTimes;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];

@@ -42,13 +42,11 @@ class BigCalendarWrapper extends React.Component {
             id: event.event.id
         };
         const nextEvents = [...events];
-
         for (let i = 0; i < nextEvents.length; i++) {
             if (nextEvents[i].id === event.event.id) {
                 nextEvents.splice(i, 1, updatedEvent)
             }
         }
-
         this.onCalendarChange(nextEvents);
     };
 
@@ -90,7 +88,6 @@ class BigCalendarWrapper extends React.Component {
     // }
 
     render() {
-        console.log(this.state.events);
         return (
             <div style={{height: "100%", width: "90%", margin: "auto"}}>
                 <DragAndDropCalendar
