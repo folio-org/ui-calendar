@@ -119,7 +119,7 @@ class ServicePointDetails extends React.Component {
             let openingPeriod = this.state.openingPeriods[index];
             let start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
-            if (!(moment() > start && moment() < end)) {
+            if (!(moment() > start && moment() < end) && start > new Date()) {
                 displayPeriods.push({
                     id: openingPeriod.id,
                     startDate: start.format("YYYY/MM/DD"),
@@ -193,7 +193,7 @@ class ServicePointDetails extends React.Component {
         let nextPeriodDetails;
         const itemFormatter = (item) => (
             <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-        if (this.state.nextPeriods) {
+        if (this.state.nextPeriods && this.state.nextPeriods.length>0) {
             nextPeriodDetails = <Row>
                 <Col xs>
                     <Headline size="small" margin="large">Next:</Headline>

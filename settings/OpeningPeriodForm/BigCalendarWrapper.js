@@ -32,13 +32,25 @@ class BigCalendarWrapper extends React.Component {
 
     onEventDnD = (event) => {
         const {events} = this.state;
-
-        const updatedEvent = {
-            allDay: event.allDay,
-            start: event.start,
-            end: event.end,
-            id: event.event.id
-        };
+        let updatedEvent = {};
+        if (event.allDay) {
+            event.start.setHours(0, 0, 0, 0);
+            event.end.setHours(0, 0, 0, 0);
+            updatedEvent = {
+                title: "All day",
+                allDay: event.allDay,
+                start: event.start,
+                end: event.end,
+                id: event.event.id
+            };
+        } else {
+            updatedEvent = {
+                allDay: event.allDay,
+                start: event.start,
+                end: event.end,
+                id: event.event.id
+            };
+        }
         const nextEvents = [...events];
         for (let i = 0; i < nextEvents.length; i++) {
             if (nextEvents[i].id === event.event.id) {
@@ -50,7 +62,6 @@ class BigCalendarWrapper extends React.Component {
 
     onEventResize = (type, {event, start, end, allDay}) => {
         const {events} = this.state;
-
         const nextEvents = events.map(existingEvent => {
             return existingEvent.id === event.id
                 ? {...existingEvent, start, end}
@@ -60,13 +71,22 @@ class BigCalendarWrapper extends React.Component {
     };
 
     onSlotSelect(event) {
+        console.log(event);
+        console.log(this.state.events);
         let id = this.state.eventIdCounter;
         id++;
         if (event.start instanceof Date && !isNaN(event.start)) {
-            this.setState(state => {
-                state.events.push({start: event.start, end: event.end, id: id, allDay: event.slots.length === 1});
-                return {events: state.events, eventIdCounter: id};
-            });
+            if (event.slots.length === 1) {
+                this.setState(state => {
+                    state.events.push({start: event.start, end: event.end, id: id, allDay: true, title: "All day"});
+                    return {events: state.events, eventIdCounter: id};
+                });
+            } else {
+                this.setState(state => {
+                    state.events.push({start: event.start, end: event.end, id: id, allDay: false});
+                    return {events: state.events, eventIdCounter: id};
+                });
+            }
         }
         this.onCalendarChange(this.state.events);
     }
@@ -92,7 +112,7 @@ class BigCalendarWrapper extends React.Component {
                 <DragAndDropCalendar
                     events={this.state.events}
                     defaultView={BigCalendar.Views.WEEK}
-                    defaultDate={new Date(2015, 3, 12)}
+                    defaultDate={new Date(1995, 11, 10)}
                     toolbar={false}
                     formats={formats}
                     selectable={true}

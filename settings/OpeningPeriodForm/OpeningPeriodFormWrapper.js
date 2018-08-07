@@ -69,10 +69,12 @@ class OpeningPeriodFormWrapper extends React.Component {
             servicePointId: servicePointId
         };
         let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        let sortedEvents = this.state.event.sort(function (a, b) {
-            return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
-        });
-
+        let sortedEvents= [];
+        if (this.state.event) {
+            sortedEvents = this.state.event.sort(function (a, b) {
+                return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
+            });
+        }
         let weekDay = 8;
         let openingHour = [];
 
@@ -81,17 +83,17 @@ class OpeningPeriodFormWrapper extends React.Component {
             if (weekDay !== dayOpening.start.getDay()) {
                 weekDay = dayOpening.start.getDay();
                 openingHour = [];
-                if(dayOpening.allDay){
-                period.openingDays.push({
-                    weekdays: {
-                        day: weekDays[weekDay],
-                    },
-                    openingDay: {
-                        allDay: dayOpening.allDay,
-                        open: true
-                    }
-                });
-                }else {
+                if (dayOpening.allDay) {
+                    period.openingDays.push({
+                        weekdays: {
+                            day: weekDays[weekDay],
+                        },
+                        openingDay: {
+                            allDay: dayOpening.allDay,
+                            open: true
+                        }
+                    });
+                } else {
                     period.openingDays.push({
                         weekdays: {
                             day: weekDays[weekDay],
