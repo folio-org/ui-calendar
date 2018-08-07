@@ -134,7 +134,6 @@ class OpeningPeriodFormWrapper extends React.Component {
                     <BigCalendarHeader/>
 
                     <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
-                    {/*<Button type="submit" buttonStyle="primary">Submit</Button>*/}
                 </form>
             </div>
         );

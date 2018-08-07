@@ -7,9 +7,9 @@ import {DragDropContext} from 'react-dnd'
 import withDragAndDrop from '@folio/react-big-calendar/src/addons/dragAndDrop'
 
 
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 class BigCalendarWrapper extends React.Component {
 
@@ -82,18 +82,25 @@ class BigCalendarWrapper extends React.Component {
     // }
 
     render() {
+        let formats = {
+            dayFormat: (date, culture, localizer) =>
+                localizer.format(date, 'dddd', culture),
+        };
+
         return (
-            <div style={{height: "100%", marginBottom: "1rem"}}>
+            <div className="period-big-calendar" style={{height: "100%", marginBottom: "1rem"}}>
                 <DragAndDropCalendar
                     events={this.state.events}
                     defaultView={BigCalendar.Views.WEEK}
                     defaultDate={new Date(2015, 3, 12)}
                     toolbar={false}
+                    formats={formats}
                     selectable={true}
                     resizable={true}
                     onEventDrop={this.onEventDnD}
                     onEventResize={this.onEventResize}
                     onSelectSlot={this.onSlotSelect}
+                    views={['week']}
                     // onDeleteEvent={this.onDeleteEvent}
                 />
             </div>);

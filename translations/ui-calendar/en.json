@@ -21,6 +21,7 @@
   "settings.openingTime": "Opening time",
   "settings.calendar": "Calendar",
   "settings.library_hours": "Library Hours",
+  "settings.service_points": "Service Points",
   "settings.openingPeriodStart" : "Valid From",
   "settings.openingPeriodEnd" : "Valid To",
   "settings.description_type" : "Type",
