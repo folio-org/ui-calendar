@@ -33,9 +33,9 @@ class FromHeader extends React.Component {
                         </Headline>
                     </Col>
                     <Col sm={3} className="new-period-buttons">
-                        <Button buttonStyle="danger">Delete</Button>
-                        <Button buttonStyle="default">Save</Button>
-                        <Button buttonStyle="primary">Saves as Template</Button>
+                        <Button disabled buttonStyle="danger">Delete</Button>
+                        <Button type="submit" buttonStyle="default">Save</Button>
+                        <Button disabled buttonStyle="primary">Saves as Template</Button>
                     </Col>
                 </Row>
                 <hr/>
