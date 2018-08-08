@@ -55,7 +55,9 @@ class InputFields extends React.Component {
                 </Row>
                 <Row>
                     <Col sm={4}>
-                        <Field label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}  ref="name" name="name" id="input-period-name" component={Textfield} onChange={this.setName}/>
+
+                        <Field label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}  ref="periodName" name="periodName" id="input-period-name" component={Textfield} onChange={this.setName}/>
+
                     </Col>
                 </Row>
             </div>

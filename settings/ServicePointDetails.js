@@ -25,9 +25,9 @@ class ServicePointDetails extends React.Component {
         this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
         this.clickNewPeriod = this.clickNewPeriod.bind(this);
         this.onAdd = this.onAdd.bind(this);
-        this.onClose= this.onClose.bind(this);
-        this.onSuccessfulCreatePeriod=this.onSuccessfulCreatePeriod.bind(this);
-        this.getServicePoints= this.getServicePoints.bind(this);
+        this.onClose = this.onClose.bind(this);
+        this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
+        this.getServicePoints = this.getServicePoints.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -46,10 +46,10 @@ class ServicePointDetails extends React.Component {
     }
 
     componentDidMount() {
-    this.getServicePoints();
+        this.getServicePoints();
     }
 
-    getServicePoints(){
+    getServicePoints() {
         this.props.parentMutator.query.replace(this.props.initialValues.id);
         this.props.parentMutator.periods.GET()
             .then((openingPeriods) => {
@@ -57,7 +57,7 @@ class ServicePointDetails extends React.Component {
                 this.setState({currentPeriod: this.displayCurrentPeriod()});
                 this.setState({nextPeriods: this.displayNextPeriod()});
                 this.setState({isPeriodsPending: false});
-                }, (error) => {
+            }, (error) => {
                 console.log(error);
             });
 
@@ -85,7 +85,7 @@ class ServicePointDetails extends React.Component {
                             let hour = day.openingHour[k];
                             let t1 = moment(hour.startTime, 'HH:mm');
                             let t2 = moment(hour.endTime, 'HH:mm');
-                            periodTime += t1.format('HH:mm') + " - " + t2.format('HH:mm') + " \n";
+                            periodTime += t1.format('HH:    mm') + " - " + t2.format('HH:mm') + " \n";
                         }
                         return periodTime;
                     }
@@ -119,7 +119,7 @@ class ServicePointDetails extends React.Component {
             let openingPeriod = this.state.openingPeriods[index];
             let start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
-            if (!(moment() > start && moment() < end)) {
+            if (!(moment() > start && moment() < end) && start > new Date()) {
                 displayPeriods.push({
                     id: openingPeriod.id,
                     startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
@@ -158,10 +158,10 @@ class ServicePointDetails extends React.Component {
         let currentP;
         let currentPTimes;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        if(this.state.currentPeriod){
-            currentP= <KeyValue label="Current:"
-                                value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>;
-            currentPTimes=<Row>
+        if (this.state.currentPeriod) {
+            currentP = <KeyValue label="Current:"
+                                 value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>;
+            currentPTimes = <Row>
                 <Col xs>
                     <div className={"seven-cols"}>
                         <div className={"col-sm-1"}>
@@ -193,8 +193,8 @@ class ServicePointDetails extends React.Component {
         let nextPeriodDetails;
         const itemFormatter = (item) => (
             <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-        if(this.state.nextPeriods){
-            nextPeriodDetails=<Row>
+        if (this.state.nextPeriods && this.state.nextPeriods.length>0) {
+            nextPeriodDetails = <Row>
                 <Col xs>
                     <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.nextPeriod'})}</Headline>
                     <List
@@ -229,23 +229,35 @@ class ServicePointDetails extends React.Component {
                         <Row>
                             <Col xs={4}>
                                 <Button onClick={() => this.clickNewPeriod()}>
+
                                     {this.props.stripes.intl.formatMessage({id: 'ui-calendar.newButton'})}
                                 </Button>
                             </Col>
                             <Col xs={6}>
-                                <Button>
+                                <Button disabled>
                                     {this.props.stripes.intl.formatMessage({id: 'ui-calendar.cloneSettings'})}
                                 </Button>
                             </Col>
                         </Row>
                         <Row>
-                            <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.actualLibraryHours'})}</Headline>
-                            <p>{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularOpeningHoursWithExceptions'})}
-                                <Icon
-                                    icon="calendar"
-                                    size="medium"
-                                    iconClassName="calendar"
-                                />{this.props.stripes.intl.formatMessage({id: 'ui-calendar.openCalendar'})} </p>
+
+                            <Col xs>
+                                <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.actualLibraryHours'})}</Headline>
+
+                                <p>{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularOpeningHoursWithExceptions'})}</p>
+                                <div className="add-exceptions-icon-wrapper">
+                                    <div className="icon-button">
+                                        <Icon
+                                            icon="calendar"
+                                            size="large"
+                                            iconClassName="calendar-icon"
+                                        />
+                                        <div className="icon-text"> Open calendar </div>
+                                    </div>
+                                    <div className="text"> to add exceptions</div>
+                                </div>
+                            </Col>
+
                         </Row>
                     </div>
 

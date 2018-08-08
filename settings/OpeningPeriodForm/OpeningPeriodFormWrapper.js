@@ -61,7 +61,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         event.preventDefault();
 
         const {parentMutator, servicePointId} = this.props;
-
+        console.log(this.state);
         let period = {
             name: this.state.name,
             startDate: this.state.startDate,
@@ -70,25 +70,28 @@ class OpeningPeriodFormWrapper extends React.Component {
             servicePointId: servicePointId
         };
         let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        let sortedEvents = this.state.event.sort(function (a, b) {
-            return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
-        });
-        let weekDay = 0;
+        let sortedEvents= [];
+        if (this.state.event) {
+            sortedEvents = this.state.event.sort(function (a, b) {
+                return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
+            });
+        }
+        let weekDay = 8;
         let openingHour = [];
-        for (let i = 0; i < sortedEvents.length; i++) {
 
+        for (let i = 0; i < sortedEvents.length; i++) {
             let dayOpening = sortedEvents[i];
             if (weekDay !== dayOpening.start.getDay()) {
-
-                if (openingHour.length > 0) {
+                weekDay = dayOpening.start.getDay();
+                openingHour = [];
+                if (dayOpening.allDay) {
                     period.openingDays.push({
                         weekdays: {
                             day: weekDays[weekDay],
                         },
                         openingDay: {
-                            openingHour: openingHour,
-                            allDay: (openingHour.length === 1 && sortedEvents[i - 1].start.getTime() === sortedEvents[i - 1].end.getTime()),
-                            open: (openingHour.length !== 0)
+                            allDay: dayOpening.allDay,
+                            open: true
                         }
                     });
                 } else {
@@ -97,23 +100,26 @@ class OpeningPeriodFormWrapper extends React.Component {
                             day: weekDays[weekDay],
                         },
                         openingDay: {
-                            allDay: (openingHour.length === 1 && sortedEvents[i - 1].start.getTime() === sortedEvents[i - 1].end.getTime()),
-                            open: (openingHour.length !== 0)
+                            openingHour: openingHour,
+                            allDay: dayOpening.allDay,
+                            open: true
                         }
                     });
                 }
-                openingHour = [];
-                weekDay = dayOpening.start.getDay();
             }
             openingHour.push({
                 startTime: dayOpening.start.getHours() + ":" + dayOpening.start.getMinutes(),
                 endTime: dayOpening.end.getHours() + ":" + dayOpening.end.getMinutes()
             });
-
         }
+
         if (servicePointId) parentMutator.query.replace(servicePointId);
         let that = this;
         return parentMutator.periods['POST'](period).then((e) => {
+            console.log("after post");
+            console.log(period);
+            console.log(e);
+
             that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
             console.log(error);
@@ -131,7 +137,6 @@ class OpeningPeriodFormWrapper extends React.Component {
                     <BigCalendarHeader {...this.props} />
 
                     <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
-                    <Button type="submit" buttonStyle="primary">Submit</Button>
                 </form>
             </div>
         );

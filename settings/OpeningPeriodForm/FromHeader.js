@@ -36,9 +36,11 @@ class FromHeader extends React.Component {
                         </Headline>
                     </Col>
                     <Col sm={3} className="new-period-buttons">
-                        <Button buttonStyle="danger" >{this.props.stripes.intl.formatMessage({id: 'ui-calendar.deleteButton'})}</Button>
+
+                        <Button disabled buttonStyle="danger" >{this.props.stripes.intl.formatMessage({id: 'ui-calendar.deleteButton'})}</Button>
                         <Button buttonStyle="default">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.saveButton'})}</Button>
-                        <Button buttonStyle="primary">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.savesAsTemplate'})}</Button>
+                        <Button disabled buttonStyle="primary">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.savesAsTemplate'})}</Button>
+
                     </Col>
                 </Row>
                 <hr/>

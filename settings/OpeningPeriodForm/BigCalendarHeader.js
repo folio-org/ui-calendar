@@ -20,10 +20,11 @@ class BigCalendarHeader extends React.Component {
                         </Headline>
                     </Col>
                     <Col xs={6} className="new-period-buttons">
-                        <Button>
+
+                        <Button disabled>
                             {this.props.stripes.intl.formatMessage({id: 'ui-calendar.selectTemplate'})}
                         </Button>
-                        <Button>
+                        <Button disabled>
                             {this.props.stripes.intl.formatMessage({id: 'ui-calendar.copy'})}
                         </Button>
                     </Col>

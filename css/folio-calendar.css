@@ -1,3 +1,16 @@
+.add-exceptions-icon-wrapper{
+    display: flex;
+}
+.add-exceptions-icon-wrapper .icon-button{
+    display: flex;
+}
+.add-exceptions-icon-wrapper .icon-text{
+    margin: auto 0;
+}
+.add-exceptions-icon-wrapper .text{
+    margin: auto 0.6rem;
+}
+
 #newPeriodForm {
     width: 96%;
     margin: 1rem auto;
