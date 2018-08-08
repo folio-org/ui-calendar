@@ -43,5 +43,13 @@
     "tomorrow": "Morgen",
     "today": "heute",
     "agenda": "Agenda",
-    "showMore": "+ {total} mehr"
+    "showMore": "+ {total} mehr",
+    "dateFormat":"MM/DD/YYYY",
+    "sunDayShort":"Sonntag",
+    "monDayShort":"Montag",
+    "tueDayShort":"Dienstag",
+    "wedDayShort":"Mittwoch",
+    "thuDayShort":"Donnerstag",
+    "friDayShort":"Freitag",
+    "satDayShort":"Samstag"
 }

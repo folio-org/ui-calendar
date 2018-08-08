@@ -6,6 +6,7 @@ import {Button} from "../../../stripes-components";
 import BigCalendarWrapper from "./BigCalendarWrapper";
 import BigCalendarHeader from "./BigCalendarHeader";
 import PropTypes from 'prop-types';
+import {FormattedMessage} from 'react-intl';
 
 class OpeningPeriodFormWrapper extends React.Component {
 
@@ -124,10 +125,10 @@ class OpeningPeriodFormWrapper extends React.Component {
         return (
             <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
-                    <FromHeader onClose={this.props.onClose}/>
-                    <InputFields onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>
+                    <FromHeader  {...this.props} onClose={this.props.onClose}/>
+                    <InputFields  {...this.props}  onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>
 
-                    <BigCalendarHeader/>
+                    <BigCalendarHeader {...this.props} />
 
                     <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
                     <Button type="submit" buttonStyle="primary">Submit</Button>

@@ -45,17 +45,17 @@ class InputFields extends React.Component {
             <div>
                 <Row>
                     <Col sm={4}>
-                        <Field name="startDate" type="text" ref="startdate" component={Datepicker} label="Valid From:" onChange={this.setStartDate} />
+                        <Field name="startDate" type="text" ref="startdate" component={Datepicker} label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})} dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})} onChange={this.setStartDate} />
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={4}>
-                        <Field name="endDate" type="text" ref="enddate" component={Datepicker} label="Valid To:" onChange={this.setEndDate} />
+                        <Field name="endDate" type="text" ref="enddate" component={Datepicker} label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})} dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})} onChange={this.setEndDate} />
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={4}>
-                        <Field  label="Name:"  ref="name" name="name" id="input-period-name" component={Textfield} onChange={this.setName}/>
+                        <Field label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}  ref="name" name="name" id="input-period-name" component={Textfield} onChange={this.setName}/>
                     </Col>
                 </Row>
             </div>
