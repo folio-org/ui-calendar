@@ -104,8 +104,8 @@ class ServicePointDetails extends React.Component {
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
             if (moment() > start && moment() < end) {
                 return {
-                    startDate: start.format("YYYY/MM/DD"),
-                    endDate: end.format("YYYY/MM/DD"),
+                    startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
+                    endDate: end.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
                     name: openingPeriod.name,
                     openingDays: openingPeriod.openingDays
                 };
@@ -122,8 +122,8 @@ class ServicePointDetails extends React.Component {
             if (!(moment() > start && moment() < end) && start > new Date()) {
                 displayPeriods.push({
                     id: openingPeriod.id,
-                    startDate: start.format("YYYY/MM/DD"),
-                    endDate: end.format("YYYY/MM/DD"),
+                    startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
+                    endDate: end.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
                     name: openingPeriod.name
                 })
             }
@@ -165,26 +165,26 @@ class ServicePointDetails extends React.Component {
                 <Col xs>
                     <div className={"seven-cols"}>
                         <div className={"col-sm-1"}>
-                            <KeyValue label="Sun" value={this.getWeekdayOpeningHours(weekdays[0])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.sunDayShort'})} value={this.getWeekdayOpeningHours(weekdays[0])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label="Mon" value={this.getWeekdayOpeningHours(weekdays[1])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.monDayShort'})} value={this.getWeekdayOpeningHours(weekdays[1])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label="Tue" value={this.getWeekdayOpeningHours(weekdays[2])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.tueDayShort'})} value={this.getWeekdayOpeningHours(weekdays[2])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label="Wed" value={this.getWeekdayOpeningHours(weekdays[3])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.wedDayShort'})} value={this.getWeekdayOpeningHours(weekdays[3])}/>
                         </div>
                         <div className={"col-sm-1"}>
 
-                            <KeyValue label="Thu" value={this.getWeekdayOpeningHours(weekdays[4])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.thuDayShort'})} value={this.getWeekdayOpeningHours(weekdays[4])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label="Fri" value={this.getWeekdayOpeningHours(weekdays[5])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.friDayShort'})} value={this.getWeekdayOpeningHours(weekdays[5])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label="Sat" value={this.getWeekdayOpeningHours(weekdays[6])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.satDayShort'})} value={this.getWeekdayOpeningHours(weekdays[6])}/>
                         </div>
                     </div>
                 </Col>
@@ -196,7 +196,7 @@ class ServicePointDetails extends React.Component {
         if (this.state.nextPeriods && this.state.nextPeriods.length>0) {
             nextPeriodDetails = <Row>
                 <Col xs>
-                    <Headline size="small" margin="large">Next:</Headline>
+                    <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.nextPeriod'})}</Headline>
                     <List
                         items={this.state.nextPeriods}
                         itemFormatter={itemFormatter}
@@ -206,8 +206,11 @@ class ServicePointDetails extends React.Component {
         }
         BigCalendar.momentLocalizer(moment);
         const servicePoint = this.props.initialValues;
+
+
         if (!this.state.isPeriodsPending) {
             return (
+
                 <ErrorBoundary>
                     <div>
                         <Row>
@@ -216,8 +219,9 @@ class ServicePointDetails extends React.Component {
                                 <KeyValue label={this.translateOrganization('code')} value={servicePoint.code}/>
                                 <KeyValue label={this.translateOrganization('discoveryDisplayName')}
                                           value={servicePoint.discoveryDisplayName}/>
-                                <Headline size="small" margin="large">Regular Library Hours</Headline>
+                                <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularLibraryHours'})}</Headline>
                                 {currentP}
+
                             </Col>
                         </Row>
                         {currentPTimes}
@@ -225,20 +229,22 @@ class ServicePointDetails extends React.Component {
                         <Row>
                             <Col xs={4}>
                                 <Button onClick={() => this.clickNewPeriod()}>
-                                    New Period
+
+                                    {this.props.stripes.intl.formatMessage({id: 'ui-calendar.newButton'})}
                                 </Button>
                             </Col>
                             <Col xs={6}>
                                 <Button disabled>
-                                    Clone Settings
+                                    {this.props.stripes.intl.formatMessage({id: 'ui-calendar.cloneSettings'})}
                                 </Button>
                             </Col>
                         </Row>
                         <Row>
-                            <Col xs>
-                                <Headline size="small" margin="large">Actual Library Hours</Headline>
 
-                                <p> Regular opening hours with exceptions</p>
+                            <Col xs>
+                                <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.actualLibraryHours'})}</Headline>
+
+                                <p>{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularOpeningHoursWithExceptions'})}</p>
                                 <div className="add-exceptions-icon-wrapper">
                                     <div className="icon-button">
                                         <Icon
@@ -251,6 +257,7 @@ class ServicePointDetails extends React.Component {
                                     <div className="text"> to add exceptions</div>
                                 </div>
                             </Col>
+
                         </Row>
                     </div>
 

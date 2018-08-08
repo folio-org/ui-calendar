@@ -13,7 +13,7 @@
   "main": "index.js",
   "stripes": {
     "type": "app",
-    "displayName": "Calendar",
+    "displayName": "ui-calendar.meta.title",
     "route": "/calendar",
     "hasSettings": true,
     "icons": [

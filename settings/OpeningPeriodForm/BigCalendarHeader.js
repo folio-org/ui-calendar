@@ -16,15 +16,16 @@ class BigCalendarHeader extends React.Component {
                 <Row>
                     <Col xs={6}>
                         <Headline>
-                            Regular Library Hours:
+                            {this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularLibraryHoursCalendar'})}
                         </Headline>
                     </Col>
                     <Col xs={6} className="new-period-buttons">
-                        <Button disabled >
-                            Select Template
+
+                        <Button disabled>
+                            {this.props.stripes.intl.formatMessage({id: 'ui-calendar.selectTemplate'})}
                         </Button>
-                        <Button disabled >
-                            Copy Previous
+                        <Button disabled>
+                            {this.props.stripes.intl.formatMessage({id: 'ui-calendar.copy'})}
                         </Button>
                     </Col>
                 </Row>

@@ -4,6 +4,7 @@ import Headline from "@folio/stripes-components/lib/Headline/Headline";
 import Button from "@folio/stripes-components/lib/Button/Button";
 import PropTypes from 'prop-types';
 import IconButton from "@folio/stripes-components/lib/IconButton/IconButton";
+import { FormattedMessage } from 'react-intl';
 
 class FromHeader extends React.Component {
 
@@ -16,6 +17,8 @@ class FromHeader extends React.Component {
     }
 
     render() {
+
+
         return (
             <div>
                 <Row>
@@ -29,13 +32,15 @@ class FromHeader extends React.Component {
                     </Col>
                     <Col sm={6}>
                         <Headline size="large" margin="medium" tag="h3">
-                            New: Regular Library Hours Validity Period
+                            <FormattedMessage id="ui-calendar.regularLibraryValidityPeriod" />
                         </Headline>
                     </Col>
                     <Col sm={3} className="new-period-buttons">
-                        <Button disabled buttonStyle="danger">Delete</Button>
-                        <Button type="submit" buttonStyle="default">Save</Button>
-                        <Button disabled buttonStyle="primary">Saves as Template</Button>
+
+                        <Button disabled buttonStyle="danger" >{this.props.stripes.intl.formatMessage({id: 'ui-calendar.deleteButton'})}</Button>
+                        <Button buttonStyle="default">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.saveButton'})}</Button>
+                        <Button disabled buttonStyle="primary">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.savesAsTemplate'})}</Button>
+
                     </Col>
                 </Row>
                 <hr/>
