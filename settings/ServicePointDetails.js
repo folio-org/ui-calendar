@@ -225,11 +225,11 @@ class ServicePointDetails extends React.Component {
                         <Row>
                             <Col xs={4}>
                                 <Button onClick={() => this.clickNewPeriod()}>
-                                    New
+                                    New Period
                                 </Button>
                             </Col>
                             <Col xs={6}>
-                                <Button>
+                                <Button disabled>
                                     Clone Settings
                                 </Button>
                             </Col>
