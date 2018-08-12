@@ -16,6 +16,7 @@ class LibraryHours extends React.Component {
             path: 'service-points',
         },
         query: {},
+        periodId: {},
         periods: {
             type: 'okapi',
             records: 'openingPeriods',
@@ -25,6 +26,9 @@ class LibraryHours extends React.Component {
             POST: {
                 path: 'calendar/periods/%{query}/period',
             },
+            DELETE: {
+                path: 'calendar/periods/%{query}/period/%{periodId}',
+            }
         }
     });
 
@@ -100,8 +104,12 @@ LibraryHours.propTypes = {
             reset: PropTypes.func,
             GET: PropTypes.func,
             POST: PropTypes.func,
+            DELETE: PropTypes.func,
         }),
         query: PropTypes.shape({
+            replace: PropTypes.func,
+        }),
+        periodId: PropTypes.shape({
             replace: PropTypes.func,
         }),
     }).isRequired,

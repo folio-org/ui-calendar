@@ -10,6 +10,7 @@ class FromHeader extends React.Component {
 
     static propTypes = {
         onClose: PropTypes.func.isRequired,
+        handleDelete: PropTypes.func
     };
 
     constructor() {
@@ -37,8 +38,8 @@ class FromHeader extends React.Component {
                     </Col>
                     <Col sm={3} className="new-period-buttons">
 
-                        <Button disabled buttonStyle="danger" >{this.props.stripes.intl.formatMessage({id: 'ui-calendar.deleteButton'})}</Button>
-                        <Button buttonStyle="default">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.saveButton'})}</Button>
+                        <Button onClick={()=>{this.props.handleDelete();}} buttonStyle="danger" >{this.props.stripes.intl.formatMessage({id: 'ui-calendar.deleteButton'})}</Button>
+                        <Button type="submit" buttonStyle="default">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.saveButton'})}</Button>
                         <Button disabled buttonStyle="primary">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.savesAsTemplate'})}</Button>
 
                     </Col>

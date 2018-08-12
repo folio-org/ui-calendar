@@ -11,7 +11,9 @@ import {FormattedMessage} from 'react-intl';
 class OpeningPeriodFormWrapper extends React.Component {
 
     static propTypes = {
-        onSuccessfulCreatePeriod: PropTypes.func.isRequired,
+        modifyPeriod: PropTypes.object,
+        onSuccessfulCreatePeriod: PropTypes.func,
+        onSuccessfulModifyPeriod: PropTypes.func,
         onClose: PropTypes.func.isRequired,
         servicePointId: PropTypes.string.isRequired,
         resources: PropTypes.shape({
@@ -38,7 +40,15 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.handleNameChange = this.handleNameChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.onCalendarChange = this.onCalendarChange.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.state = {};
+    }
+
+    componentDidMount() {
+        console.log(this.props);
+        this.setState({...this.props.modifyPeriod});
+        console.log("OpeningPeriod");
+        console.log(this.state);
     }
 
     handleDateChange(isStart, date) {
@@ -57,11 +67,27 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.setState({event: event})
     }
 
+    handleDelete() {
+        let that = this;
+        let parentMutator = this.props.parentMutator;
+        let periodId = this.props.modifyPeriod.id;
+        let servicePointId = this.props.modifyPeriod.servicePointId;
+        if (servicePointId) parentMutator.query.replace(servicePointId);
+        if (periodId) parentMutator.periodId.replace(periodId);
+        return this.props.parentMutator.periods['DELETE'](periodId).then((e) => {
+            console.log("after delete");
+            console.log(e);
+
+            that.props.onSuccessfulModifyPeriod(e);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
     onFormSubmit(event) {
         event.preventDefault();
 
         const {parentMutator, servicePointId} = this.props;
-        console.log(this.state);
         let period = {
             name: this.state.name,
             startDate: this.state.startDate,
@@ -70,7 +96,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             servicePointId: servicePointId
         };
         let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        let sortedEvents= [];
+        let sortedEvents = [];
         if (this.state.event) {
             sortedEvents = this.state.event.sort(function (a, b) {
                 return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
@@ -127,12 +153,13 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 
     render() {
-
+        console.log(this.state)
         return (
             <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
-                    <FromHeader  {...this.props} onClose={this.props.onClose}/>
-                    <InputFields  {...this.props}  onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>
+                    <FromHeader  {...this.props} handleDelete={this.handleDelete} onClose={this.props.onClose}/>
+                    <InputFields  {...this.props} onNameChange={this.handleNameChange}
+                                  onDateChange={this.handleDateChange}/>
 
                     <BigCalendarHeader {...this.props} />
 
