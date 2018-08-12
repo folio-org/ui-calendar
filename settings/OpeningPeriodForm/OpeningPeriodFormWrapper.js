@@ -44,11 +44,10 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.state = {};
     }
 
+    //TODO: try to set the initial values for form :) after that we have to make it modifiable <3
+
     componentDidMount() {
-        console.log(this.props);
         this.setState({...this.props.modifyPeriod});
-        console.log("OpeningPeriod");
-        console.log(this.state);
     }
 
     handleDateChange(isStart, date) {
@@ -86,7 +85,6 @@ class OpeningPeriodFormWrapper extends React.Component {
 
     onFormSubmit(event) {
         event.preventDefault();
-
         const {parentMutator, servicePointId} = this.props;
         let period = {
             name: this.state.name,
@@ -153,7 +151,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 
     render() {
-        console.log(this.state)
+        console.log(this.state);
         return (
             <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
@@ -163,7 +161,7 @@ class OpeningPeriodFormWrapper extends React.Component {
 
                     <BigCalendarHeader {...this.props} />
 
-                    <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
+                    <BigCalendarWrapper periodEvents={this.props.modifyPeriod.events} onCalendarChange={this.onCalendarChange}/>
                 </form>
             </div>
         );

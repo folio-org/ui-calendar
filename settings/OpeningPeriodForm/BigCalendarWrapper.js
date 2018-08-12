@@ -14,7 +14,8 @@ const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 class BigCalendarWrapper extends React.Component {
 
     static propTypes = {
-        onCalendarChange: PropTypes.func.isRequired
+        onCalendarChange: PropTypes.func.isRequired,
+        periodEvents: PropTypes.object,
     };
 
     constructor() {
@@ -30,6 +31,9 @@ class BigCalendarWrapper extends React.Component {
         };
     }
 
+    componentDidMount(){
+            this.setState({...this.props.periodEvents});
+    }
     onEventDnD = (event) => {
         const {events} = this.state;
         let updatedEvent = {};

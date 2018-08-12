@@ -41,7 +41,6 @@ class InputFields extends React.Component {
         this.props.onNameChange(e.target.value);
     }
     render() {
-        console.log(this.propscs)
         return (
             <div>
                 <Row>
