@@ -31,9 +31,18 @@ class BigCalendarWrapper extends React.Component {
         };
     }
 
+
+    // id: 1,
+    // title: 'MS training',
+    // allDay: true,
+    // start: new Date(2018, 0, 29, 14, 0, 0),
+    // end: new Date(2018, 0, 29, 16, 30, 0),
+    // resourceId: 2,
+
     componentDidMount(){
             this.setState({...this.props.periodEvents});
     }
+
     onEventDnD = (event) => {
         const {events} = this.state;
         let updatedEvent = {};
@@ -116,7 +125,7 @@ class BigCalendarWrapper extends React.Component {
                 <DragAndDropCalendar
                     events={this.state.events}
                     defaultView={BigCalendar.Views.WEEK}
-                    defaultDate={new Date(1995, 11, 10)}
+                    defaultDate={new Date()}
                     toolbar={false}
                     formats={formats}
                     selectable={true}

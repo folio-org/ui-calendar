@@ -161,6 +161,7 @@ class ServicePointDetails extends React.Component {
 
     onClose() {
         this.setState({newPeriodLayer: {isOpen: false}});
+        this.setState({modifyPeriodLayer: {isOpen: false}});
     }
 
     handleSelectPeriod(id) {

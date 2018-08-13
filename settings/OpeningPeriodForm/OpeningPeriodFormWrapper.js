@@ -151,7 +151,12 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 
     render() {
-        console.log(this.state);
+        let modifyPeriod;
+        if(this.props.modifyPeriod){
+                   modifyPeriod= <BigCalendarWrapper periodEvents={this.props.modifyPeriod.openingDays} onCalendarChange={this.onCalendarChange}/>
+        }else {
+                   modifyPeriod= <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
+        }
         return (
             <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
@@ -160,8 +165,7 @@ class OpeningPeriodFormWrapper extends React.Component {
                                   onDateChange={this.handleDateChange}/>
 
                     <BigCalendarHeader {...this.props} />
-
-                    <BigCalendarWrapper periodEvents={this.props.modifyPeriod.events} onCalendarChange={this.onCalendarChange}/>
+                    {modifyPeriod}
                 </form>
             </div>
         );
