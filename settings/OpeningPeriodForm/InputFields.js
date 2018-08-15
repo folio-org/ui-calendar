@@ -34,6 +34,9 @@ class InputFields extends React.Component {
         return str;
     }
 
+    componentDidMount() {
+        console.log(this.props);
+    }
 
     parseDates(date) {
         return moment(new Date(date)).format("MM/DD/YYYY");
@@ -53,40 +56,49 @@ class InputFields extends React.Component {
 
     render() {
 
-        let modifyName;
         let modifyStart;
         let modifyEnd;
+        let modifyName;
         if (this.props.modifyPeriod) {
+
+            modifyStart = <Field value={this.parseDates(this.props.modifyPeriod.startDate) || ''}
+                                 name="startDate"
+                                 component={Datepicker}
+                                 label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
+                                 dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                                 onChange={this.setStartDate}
+            />;
+
+            modifyEnd = <Field value={this.parseDates(this.props.modifyPeriod.endDate) || ''}
+                               name="endDate"
+                               component={Datepicker}
+                               label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
+                               dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                               onChange={this.setEndDate}/>;
+
             modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
                                     value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
                                     id="input-period-name" component={Textfield} onChange={this.setName}/>;
 
-            modifyStart = <TextField value={this.parseDates(this.props.modifyPeriod.startDate) || ''} name="startDate"
-                                     type="text" ref="startdate" component={Datepicker}
-                                     label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
-                                     dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                                     onChange={this.setStartDate}/>;
-            modifyEnd= <TextField value={this.parseDates(this.props.modifyPeriod.endDate) || ''} name="endDate"
-                                  type="text" ref="enddate" component={Datepicker}
-                                  label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
-                                  dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                                  onChange={this.setEndDate}/>;
 
         } else {
+
+            modifyStart = <Field name="startDate"
+                                 component={Datepicker}
+                                 label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
+                                 dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                                 onChange={this.setStartDate}/>;
+
+            modifyEnd = <Field name="endDate"
+                               component={Datepicker}
+                               label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
+                               dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                               onChange={this.setEndDate}/>;
+
             modifyName =
                 <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})} ref="periodName"
                            name="periodName" id="input-period-name" component={Textfield} onChange={this.setName}/>
 
-            modifyStart = <TextField name="startDate"
-                                     type="text" ref="startdate" component={Datepicker}
-                                     label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
-                                     dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                                     onChange={this.setStartDate}/>;
-            modifyEnd= <TextField name="endDate"
-                                  type="text" ref="enddate" component={Datepicker}
-                                  label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
-                                  dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                                  onChange={this.setEndDate}/>;
         }
 
         return (

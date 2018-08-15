@@ -165,12 +165,9 @@ class ServicePointDetails extends React.Component {
     }
 
     handleSelectPeriod(id) {
-        // console.log(id);
         for (let i = 0; i < this.state.openingPeriods.length; i++) {
             let period = this.state.openingPeriods[i];
-            console.log(period.id);
             if (period.id === id) {
-                console.log("talalt");
                 this.setState({modifyPeriod: {period}});
                 break;
             }
