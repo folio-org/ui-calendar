@@ -172,7 +172,6 @@ class ServicePointDetails extends React.Component {
                 break;
             }
         }
-        console.log(this.state);
         this.setState({modifyPeriodLayer: {isOpen: true}});
     }
 

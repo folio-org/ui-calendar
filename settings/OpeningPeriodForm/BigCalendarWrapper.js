@@ -42,7 +42,6 @@ class BigCalendarWrapper extends React.Component {
     componentDidMount() {
         if(this.props.periodEvents) {
 
-            console.log(this.props);
             let weekdays = new Array(7);
             weekdays[0] = "SUNDAY";
             weekdays[1] = "MONDAY";
@@ -134,8 +133,6 @@ class BigCalendarWrapper extends React.Component {
     };
 
     onSlotSelect(event) {
-        console.log(event);
-        console.log(this.state.events);
         let id = this.state.eventIdCounter;
         id++;
         if (event.start instanceof Date && !isNaN(event.start)) {

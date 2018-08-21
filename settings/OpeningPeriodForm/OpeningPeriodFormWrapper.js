@@ -74,8 +74,8 @@ class OpeningPeriodFormWrapper extends React.Component {
         if (servicePointId) parentMutator.query.replace(servicePointId);
         if (periodId) parentMutator.periodId.replace(periodId);
         return this.props.parentMutator.periods['DELETE'](periodId).then((e) => {
-            console.log("after delete");
-            console.log(e);
+            // console.log("after delete");
+            // console.log(e);
 
             that.props.onSuccessfulModifyPeriod(e);
         }, (error) => {
@@ -140,9 +140,9 @@ class OpeningPeriodFormWrapper extends React.Component {
         if (servicePointId) parentMutator.query.replace(servicePointId);
         let that = this;
         return parentMutator.periods['POST'](period).then((e) => {
-            console.log("after post");
-            console.log(period);
-            console.log(e);
+            // console.log("after post");
+            // console.log(period);
+            // console.log(e);
 
             that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
