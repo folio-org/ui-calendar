@@ -16,6 +16,7 @@ class BigCalendarWrapper extends React.Component {
     static propTypes = {
         onCalendarChange: PropTypes.func.isRequired,
         periodEvents: PropTypes.arrayOf(PropTypes.object),
+        eventsChange: PropTypes.func
     };
 
     constructor() {
@@ -31,13 +32,6 @@ class BigCalendarWrapper extends React.Component {
         };
     }
 
-
-    // id: 1,
-    // title: 'MS training',
-    // allDay: true,
-    // start: new Date(2018, 0, 29, 14, 0, 0),
-    // end: new Date(2018, 0, 29, 16, 30, 0),
-    // resourceId: 2,
 
     componentDidMount() {
         if(this.props.periodEvents) {
@@ -85,6 +79,7 @@ class BigCalendarWrapper extends React.Component {
                     eventId++;
                 }
             }
+            this.props.eventsChange(events);
             this.setState({
                 events: events,
                 eventIdCounter: eventId
@@ -162,6 +157,10 @@ class BigCalendarWrapper extends React.Component {
     // }
 
     render() {
+        console.log(this.state);
+
+        // this.props.eventsChange? this.props.eventsChange(this.state.events): "";
+
         let formats = {
             dayFormat: (date, culture, localizer) =>
                 localizer.format(date, 'dddd', culture),

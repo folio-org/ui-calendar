@@ -28,6 +28,9 @@ class LibraryHours extends React.Component {
             },
             DELETE: {
                 path: 'calendar/periods/%{query}/period/%{periodId}',
+            },
+            PUT: {
+                path: 'calendar/periods/%{query}/period/%{periodId}',
             }
         }
     });

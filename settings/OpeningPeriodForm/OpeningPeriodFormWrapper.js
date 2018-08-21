@@ -41,6 +41,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.onCalendarChange = this.onCalendarChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.onEventChange = this.onEventChange.bind(this);
         this.state = {};
     }
 
@@ -136,9 +137,26 @@ class OpeningPeriodFormWrapper extends React.Component {
                 endTime: dayOpening.end.getHours() + ":" + dayOpening.end.getMinutes()
             });
         }
+        let that = this;
+        if(this.props.modifyPeriod){
+            if (servicePointId) parentMutator.query.replace(servicePointId);
+            if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
+            period.id=this.props.modifyPeriod.id;
+            delete period.events;
+            return parentMutator.periods.PUT(period).then((e) => {
+                // console.log("after post");
+                // console.log(period);
+                // console.log(e);
+
+                that.props.onSuccessfulModifyPeriod(e);
+            }, (error) => {
+                console.log(error);
+            });
+
+        }
 
         if (servicePointId) parentMutator.query.replace(servicePointId);
-        let that = this;
+
         return parentMutator.periods['POST'](period).then((e) => {
             // console.log("after post");
             // console.log(period);
@@ -150,10 +168,15 @@ class OpeningPeriodFormWrapper extends React.Component {
         });
     }
 
+    onEventChange(e){
+        this.setState({event:e});
+    }
+
     render() {
+        console.log(this.state);
         let modifyPeriod;
         if(this.props.modifyPeriod){
-                   modifyPeriod= <BigCalendarWrapper periodEvents={this.props.modifyPeriod.openingDays} onCalendarChange={this.onCalendarChange}/>
+                   modifyPeriod= <BigCalendarWrapper eventsChange={this.onEventChange} periodEvents={this.props.modifyPeriod.openingDays} onCalendarChange={this.onCalendarChange}/>
         }else {
                    modifyPeriod= <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
         }
