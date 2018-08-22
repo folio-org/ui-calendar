@@ -2,11 +2,11 @@ import React from 'react';
 import stripesForm from "@folio/stripes-form/index";
 import FromHeader from "./FromHeader";
 import InputFields from "./InputFields";
-import {Button} from "../../../stripes-components";
 import BigCalendarWrapper from "./BigCalendarWrapper";
 import BigCalendarHeader from "./BigCalendarHeader";
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
+import moment from "moment";
 
 class OpeningPeriodFormWrapper extends React.Component {
 
@@ -45,7 +45,6 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.state = {};
     }
 
-    //TODO: try to set the initial values for form :) after that we have to make it modifiable <3
 
     componentDidMount() {
         this.setState({...this.props.modifyPeriod});
@@ -75,9 +74,6 @@ class OpeningPeriodFormWrapper extends React.Component {
         if (servicePointId) parentMutator.query.replace(servicePointId);
         if (periodId) parentMutator.periodId.replace(periodId);
         return this.props.parentMutator.periods['DELETE'](periodId).then((e) => {
-            // console.log("after delete");
-            // console.log(e);
-
             that.props.onSuccessfulModifyPeriod(e);
         }, (error) => {
             console.log(error);
@@ -106,6 +102,10 @@ class OpeningPeriodFormWrapper extends React.Component {
 
         for (let i = 0; i < sortedEvents.length; i++) {
             let dayOpening = sortedEvents[i];
+            if(dayOpening.start instanceof moment){
+                dayOpening.start= moment(dayOpening.start).toDate();
+                dayOpening.end= moment(dayOpening.end).toDate();
+            }
             if (weekDay !== dayOpening.start.getDay()) {
                 weekDay = dayOpening.start.getDay();
                 openingHour = [];

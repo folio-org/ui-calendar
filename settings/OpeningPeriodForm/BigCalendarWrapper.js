@@ -34,7 +34,7 @@ class BigCalendarWrapper extends React.Component {
 
 
     componentDidMount() {
-        if(this.props.periodEvents) {
+        if (this.props.periodEvents) {
 
             let weekdays = new Array(7);
             weekdays[0] = "SUNDAY";
@@ -53,12 +53,12 @@ class BigCalendarWrapper extends React.Component {
                 let eventDay = moment().startOf('week').toDate();
                 let weekday = this.props.periodEvents[i].weekdays.day;
                 eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
-                event.start = eventDay;
+                event.start = moment(eventDay);
                 event.end = eventDay;
                 event.allDay = openingDay.allDay;
-                event.id = eventId;
                 if (!event.allDay) {
                     for (let j = 0; j < openingDay.openingHour.length; j++) {
+                        event.id = eventId;
                         let start = openingDay.openingHour[j].startTime;
                         let end = openingDay.openingHour[j].endTime;
                         let minutes = start.split(':')[1];
@@ -71,10 +71,11 @@ class BigCalendarWrapper extends React.Component {
                         event.end = moment(event.end).add(minutes, 'minutes');
                         event.start = moment(event.start).toDate();
                         event.end = moment(event.end).toDate();
-                        events.push(event);
+                        events.push({...event});
                         eventId++;
                     }
                 } else {
+                    event.id = eventId;
                     events.push(event);
                     eventId++;
                 }
