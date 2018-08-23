@@ -50,6 +50,8 @@
     "settings.error.endTimeRequired": "Kérem, adja meg a záró időpontot",
     "settings.error.invalidTimeRange": "A zárási időnek a nyitásinál későbbinek kell lennie",
     "settings.error.overlappingInterval": "Az intervallumok nem lehetnek átfedőek",
+    "settings.error.invalidHourRange": "Invalid Minute",
+    "settings.error.invalidMinuteRange": "Invalid Hour",
     "dateFormat": "YYYY/MM/DD",
     "sunDayShort": "Vasárnap",
     "monDayShort": "Hétfő",
@@ -59,6 +61,7 @@
     "friDayShort": "Péntek",
     "satDayShort": "Szombat",
     "settings.library_hours": "Könyvtári órák",
+    "settings.service_points": "Service Points",
     "regularLibraryHours": "Szokásos könyvtári órák",
     "newButton": "Új",
     "cloneSettings": "Beállítások másolása",
@@ -75,5 +78,6 @@
     "name": "Név:",
     "regularLibraryHoursCalendar": "Szokásos könyvtári órák:",
     "selectTemplate": "Sablon kiválasztása",
-    "copy": "Előző másolása"
+    "copy": "Előző másolása",
+    "meta.title": "Calendar"
 }
