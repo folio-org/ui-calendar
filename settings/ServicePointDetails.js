@@ -23,19 +23,24 @@ class ServicePointDetails extends React.Component {
         this.displayNextPeriod = this.displayNextPeriod.bind(this);
         this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
         this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
+        this.onSuccessfulModifyPeriod = this.onSuccessfulModifyPeriod.bind(this);
         this.clickNewPeriod = this.clickNewPeriod.bind(this);
         this.onAdd = this.onAdd.bind(this);
         this.onClose = this.onClose.bind(this);
-        this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
         this.getServicePoints = this.getServicePoints.bind(this);
+        this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
         this.state = {
             newPeriodLayer: {
+                isOpen: false,
+            },
+            modifyPeriodLayer: {
                 isOpen: false,
             },
             sections: {
                 generalInformation: true,
             },
             displayCurrentPeriod: {},
+            modifyPeriod: {},
             displayPeriods: [],
             openingPeriods: [],
             nextPeriods: [],
@@ -107,7 +112,8 @@ class ServicePointDetails extends React.Component {
                     startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
                     endDate: end.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
                     name: openingPeriod.name,
-                    openingDays: openingPeriod.openingDays
+                    openingDays: openingPeriod.openingDays,
+                    id: openingPeriod.id
                 };
             }
         }
@@ -150,8 +156,25 @@ class ServicePointDetails extends React.Component {
         this.getServicePoints();
     }
 
+    onSuccessfulModifyPeriod() {
+        this.setState({modifyPeriodLayer: {isOpen: false}});
+        this.getServicePoints();
+    }
+
     onClose() {
         this.setState({newPeriodLayer: {isOpen: false}});
+        this.setState({modifyPeriodLayer: {isOpen: false}});
+    }
+
+    handleSelectPeriod(id) {
+        for (let i = 0; i < this.state.openingPeriods.length; i++) {
+            let period = this.state.openingPeriods[i];
+            if (period.id === id) {
+                this.setState({modifyPeriod: {period}});
+                break;
+            }
+        }
+        this.setState({modifyPeriodLayer: {isOpen: true}});
     }
 
     render() {
@@ -159,32 +182,42 @@ class ServicePointDetails extends React.Component {
         let currentPTimes;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         if (this.state.currentPeriod) {
-            currentP = <KeyValue label="Current:"
-                                 value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>;
+            currentP =
+                <KeyValue label="Current:"
+                          value={<div className={"periods"}
+                          onClick={() => this.handleSelectPeriod(this.state.currentPeriod.id)}>{this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}</div>}/>
+
             currentPTimes = <Row>
                 <Col xs>
                     <div className={"seven-cols"}>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.sunDayShort'})} value={this.getWeekdayOpeningHours(weekdays[0])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.sunDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[0])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.monDayShort'})} value={this.getWeekdayOpeningHours(weekdays[1])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.monDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[1])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.tueDayShort'})} value={this.getWeekdayOpeningHours(weekdays[2])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.tueDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[2])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.wedDayShort'})} value={this.getWeekdayOpeningHours(weekdays[3])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.wedDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[3])}/>
                         </div>
                         <div className={"col-sm-1"}>
 
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.thuDayShort'})} value={this.getWeekdayOpeningHours(weekdays[4])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.thuDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[4])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.friDayShort'})} value={this.getWeekdayOpeningHours(weekdays[5])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.friDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[5])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.satDayShort'})} value={this.getWeekdayOpeningHours(weekdays[6])}/>
+                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.satDayShort'})}
+                                      value={this.getWeekdayOpeningHours(weekdays[6])}/>
                         </div>
                     </div>
                 </Col>
@@ -192,11 +225,14 @@ class ServicePointDetails extends React.Component {
         }
         let nextPeriodDetails;
         const itemFormatter = (item) => (
-            <li key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
-        if (this.state.nextPeriods && this.state.nextPeriods.length>0) {
+            <li className={"periods"}
+                onClick={() => this.handleSelectPeriod(item.id)}
+                key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
+        if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {
             nextPeriodDetails = <Row>
                 <Col xs>
-                    <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.nextPeriod'})}</Headline>
+                    <Headline size="small"
+                              margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.nextPeriod'})}</Headline>
                     <List
                         items={this.state.nextPeriods}
                         itemFormatter={itemFormatter}
@@ -219,7 +255,8 @@ class ServicePointDetails extends React.Component {
                                 <KeyValue label={this.translateOrganization('code')} value={servicePoint.code}/>
                                 <KeyValue label={this.translateOrganization('discoveryDisplayName')}
                                           value={servicePoint.discoveryDisplayName}/>
-                                <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularLibraryHours'})}</Headline>
+                                <Headline size="small"
+                                          margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularLibraryHours'})}</Headline>
                                 {currentP}
 
                             </Col>
@@ -242,7 +279,8 @@ class ServicePointDetails extends React.Component {
                         <Row>
 
                             <Col xs>
-                                <Headline size="small" margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.actualLibraryHours'})}</Headline>
+                                <Headline size="small"
+                                          margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.actualLibraryHours'})}</Headline>
 
                                 <p>{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularOpeningHoursWithExceptions'})}</p>
                                 <div className="add-exceptions-icon-wrapper">
@@ -252,7 +290,7 @@ class ServicePointDetails extends React.Component {
                                             size="large"
                                             iconClassName="calendar-icon"
                                         />
-                                        <div className="icon-text"> Open calendar </div>
+                                        <div className="icon-text"> Open calendar</div>
                                     </div>
                                     <div className="text"> to add exceptions</div>
                                 </div>
@@ -273,6 +311,21 @@ class ServicePointDetails extends React.Component {
                         />
 
                     </Layer>
+
+                    <Layer isOpen={this.state.modifyPeriodLayer.isOpen}
+                           label={this.props.stripes.intl.formatMessage({id: 'stripes-core.label.editEntry'}, {entry: this.props.entryLabel})}
+                           container={document.getElementById('ModuleContainer')}
+                    >
+                        <OpeningPeriodFormWrapper
+                            {...this.props}
+                            modifyPeriod={this.state.modifyPeriod.period}
+                            onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
+                            onClose={this.onClose}
+                            servicePointId={servicePoint.id}
+                        />
+
+                    </Layer>
+
                 </ErrorBoundary>
             );
         } else {

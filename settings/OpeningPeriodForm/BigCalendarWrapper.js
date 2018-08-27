@@ -14,7 +14,9 @@ const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 class BigCalendarWrapper extends React.Component {
 
     static propTypes = {
-        onCalendarChange: PropTypes.func.isRequired
+        onCalendarChange: PropTypes.func.isRequired,
+        periodEvents: PropTypes.arrayOf(PropTypes.object),
+        eventsChange: PropTypes.func
     };
 
     constructor() {
@@ -28,6 +30,64 @@ class BigCalendarWrapper extends React.Component {
             eventIdCounter: 0,
             events: []
         };
+    }
+
+
+    componentDidMount() {
+        if (this.props.periodEvents) {
+
+            let weekdays = new Array(7);
+            weekdays[0] = "SUNDAY";
+            weekdays[1] = "MONDAY";
+            weekdays[2] = "TUESDAY";
+            weekdays[3] = "WEDNESDAY";
+            weekdays[4] = "THURSDAY";
+            weekdays[5] = "FRIDAY";
+            weekdays[6] = "SATURDAY";
+
+            let events = [];
+            let eventId = 0;
+            for (let i = 0; i < this.props.periodEvents.length; i++) {
+                let openingDay = this.props.periodEvents[i].openingDay;
+                let event = {};
+                let eventDay = moment().startOf('week').toDate();
+                let weekday = this.props.periodEvents[i].weekdays.day;
+                eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
+                event.start = moment(eventDay);
+                event.end = moment(eventDay);
+                event.allDay = openingDay.allDay;
+                if (!event.allDay) {
+                    for (let j = 0; j < openingDay.openingHour.length; j++) {
+                        event.id = eventId;
+                        let start = openingDay.openingHour[j].startTime;
+                        let end = openingDay.openingHour[j].endTime;
+                        let minutes = start.split(':')[1];
+                        let hours = start.split(':')[0];
+                        event.start = moment(event.start).add(hours, 'hours');
+                        event.start = moment(event.start).add(minutes, 'minutes');
+                        minutes = end.split(':')[1];
+                        hours = end.split(':')[0];
+                        event.end = moment(event.end).add(hours, 'hours');
+                        event.end = moment(event.end).add(minutes, 'minutes');
+                        event.start = moment(event.start).toDate();
+                        event.end = moment(event.end).toDate();
+                        events.push({...event});
+                        eventId++;
+                        event.start = moment(eventDay);
+                        event.end = moment(eventDay);
+                    }
+                } else {
+                    event.id = eventId;
+                    events.push({...event});
+                    eventId++;
+                }
+            }
+            this.props.eventsChange(events);
+            this.setState({
+                events: events,
+                eventIdCounter: eventId
+            });
+        }
     }
 
     onEventDnD = (event) => {
@@ -71,8 +131,6 @@ class BigCalendarWrapper extends React.Component {
     };
 
     onSlotSelect(event) {
-        console.log(event);
-        console.log(this.state.events);
         let id = this.state.eventIdCounter;
         id++;
         if (event.start instanceof Date && !isNaN(event.start)) {
@@ -102,6 +160,10 @@ class BigCalendarWrapper extends React.Component {
     // }
 
     render() {
+        console.log(this.state);
+
+        // this.props.eventsChange? this.props.eventsChange(this.state.events): "";
+
         let formats = {
             dayFormat: (date, culture, localizer) =>
                 localizer.format(date, 'dddd', culture),
@@ -112,7 +174,7 @@ class BigCalendarWrapper extends React.Component {
                 <DragAndDropCalendar
                     events={this.state.events}
                     defaultView={BigCalendar.Views.WEEK}
-                    defaultDate={new Date(1995, 11, 10)}
+                    defaultDate={new Date()}
                     toolbar={false}
                     formats={formats}
                     selectable={true}

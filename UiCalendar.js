@@ -76,7 +76,6 @@ class UiCalendar extends React.Component {
   }
 
   selectEvent(calendarEvent, event) {
-    console.log('event: ', calendarEvent);
     this.setState({selectedEvent: calendarEvent});
     this.setState({showPane: true});
   }

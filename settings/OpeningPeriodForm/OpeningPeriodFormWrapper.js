@@ -2,16 +2,19 @@ import React from 'react';
 import stripesForm from "@folio/stripes-form/index";
 import FromHeader from "./FromHeader";
 import InputFields from "./InputFields";
-import {Button} from "../../../stripes-components";
 import BigCalendarWrapper from "./BigCalendarWrapper";
 import BigCalendarHeader from "./BigCalendarHeader";
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
+import moment from "moment";
+import CalendarUtils from '../../CalendarUtils'
 
 class OpeningPeriodFormWrapper extends React.Component {
 
     static propTypes = {
-        onSuccessfulCreatePeriod: PropTypes.func.isRequired,
+        modifyPeriod: PropTypes.object,
+        onSuccessfulCreatePeriod: PropTypes.func,
+        onSuccessfulModifyPeriod: PropTypes.func,
         onClose: PropTypes.func.isRequired,
         servicePointId: PropTypes.string.isRequired,
         resources: PropTypes.shape({
@@ -38,7 +41,14 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.handleNameChange = this.handleNameChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.onCalendarChange = this.onCalendarChange.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.onEventChange = this.onEventChange.bind(this);
         this.state = {};
+    }
+
+
+    componentDidMount() {
+        this.setState({...this.props.modifyPeriod});
     }
 
     handleDateChange(isStart, date) {
@@ -57,11 +67,23 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.setState({event: event})
     }
 
+    handleDelete() {
+        let that = this;
+        let parentMutator = this.props.parentMutator;
+        let periodId = this.props.modifyPeriod.id;
+        let servicePointId = this.props.modifyPeriod.servicePointId;
+        if (servicePointId) parentMutator.query.replace(servicePointId);
+        if (periodId) parentMutator.periodId.replace(periodId);
+        return this.props.parentMutator.periods['DELETE'](periodId).then((e) => {
+            that.props.onSuccessfulModifyPeriod(e);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
     onFormSubmit(event) {
         event.preventDefault();
-
         const {parentMutator, servicePointId} = this.props;
-        console.log(this.state);
         let period = {
             name: this.state.name,
             startDate: this.state.startDate,
@@ -69,74 +91,48 @@ class OpeningPeriodFormWrapper extends React.Component {
             openingDays: [],
             servicePointId: servicePointId
         };
-        let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        let sortedEvents= [];
-        if (this.state.event) {
-            sortedEvents = this.state.event.sort(function (a, b) {
-                return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
-            });
-        }
-        let weekDay = 8;
-        let openingHour = [];
-
-        for (let i = 0; i < sortedEvents.length; i++) {
-            let dayOpening = sortedEvents[i];
-            if (weekDay !== dayOpening.start.getDay()) {
-                weekDay = dayOpening.start.getDay();
-                openingHour = [];
-                if (dayOpening.allDay) {
-                    period.openingDays.push({
-                        weekdays: {
-                            day: weekDays[weekDay],
-                        },
-                        openingDay: {
-                            allDay: dayOpening.allDay,
-                            open: true
-                        }
-                    });
-                } else {
-                    period.openingDays.push({
-                        weekdays: {
-                            day: weekDays[weekDay],
-                        },
-                        openingDay: {
-                            openingHour: openingHour,
-                            allDay: dayOpening.allDay,
-                            open: true
-                        }
-                    });
-                }
-            }
-            openingHour.push({
-                startTime: dayOpening.start.getHours() + ":" + dayOpening.start.getMinutes(),
-                endTime: dayOpening.end.getHours() + ":" + dayOpening.end.getMinutes()
-            });
-        }
-
-        if (servicePointId) parentMutator.query.replace(servicePointId);
+        period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
         let that = this;
+        if(this.props.modifyPeriod){
+            if (servicePointId) parentMutator.query.replace(servicePointId);
+            if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
+            period.id=this.props.modifyPeriod.id;
+            delete period.events;
+            return parentMutator.periods.PUT(period).then((e) => {
+                that.props.onSuccessfulModifyPeriod(e);
+            }, (error) => {
+                console.log(error);
+            });
+        }
+        if (servicePointId) parentMutator.query.replace(servicePointId);
         return parentMutator.periods['POST'](period).then((e) => {
-            console.log("after post");
-            console.log(period);
-            console.log(e);
-
             that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
             console.log(error);
         });
     }
 
-    render() {
+    onEventChange(e){
+        this.setState({event:e});
+    }
 
+    render() {
+        console.log(this.state);
+        let modifyPeriod;
+        if(this.props.modifyPeriod){
+                   modifyPeriod= <BigCalendarWrapper eventsChange={this.onEventChange} periodEvents={this.props.modifyPeriod.openingDays} onCalendarChange={this.onCalendarChange}/>
+        }else {
+                   modifyPeriod= <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
+        }
         return (
             <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
-                    <FromHeader  {...this.props} onClose={this.props.onClose}/>
-                    <InputFields  {...this.props}  onNameChange={this.handleNameChange} onDateChange={this.handleDateChange}/>
+                    <FromHeader  {...this.props} handleDelete={this.handleDelete} onClose={this.props.onClose}/>
+                    <InputFields  {...this.props} onNameChange={this.handleNameChange}
+                                  onDateChange={this.handleDateChange}/>
 
                     <BigCalendarHeader {...this.props} />
-
-                    <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>
+                    {modifyPeriod}
                 </form>
             </div>
         );
