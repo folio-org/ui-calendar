@@ -91,7 +91,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             openingDays: [],
             servicePointId: servicePointId
         };
-        period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.events);
+        period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
         let that = this;
         if(this.props.modifyPeriod){
             if (servicePointId) parentMutator.query.replace(servicePointId);
@@ -104,9 +104,7 @@ class OpeningPeriodFormWrapper extends React.Component {
                 console.log(error);
             });
         }
-
         if (servicePointId) parentMutator.query.replace(servicePointId);
-
         return parentMutator.periods['POST'](period).then((e) => {
             that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
