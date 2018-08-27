@@ -23,7 +23,7 @@ class ServicePointDetails extends React.Component {
         this.displayNextPeriod = this.displayNextPeriod.bind(this);
         this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
         this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
-        this.onSuccessfulModifyPeriod= this.onSuccessfulModifyPeriod.bind(this);
+        this.onSuccessfulModifyPeriod = this.onSuccessfulModifyPeriod.bind(this);
         this.clickNewPeriod = this.clickNewPeriod.bind(this);
         this.onAdd = this.onAdd.bind(this);
         this.onClose = this.onClose.bind(this);
@@ -112,7 +112,8 @@ class ServicePointDetails extends React.Component {
                     startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
                     endDate: end.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
                     name: openingPeriod.name,
-                    openingDays: openingPeriod.openingDays
+                    openingDays: openingPeriod.openingDays,
+                    id: openingPeriod.id
                 };
             }
         }
@@ -154,6 +155,7 @@ class ServicePointDetails extends React.Component {
         this.setState({newPeriodLayer: {isOpen: false}});
         this.getServicePoints();
     }
+
     onSuccessfulModifyPeriod() {
         this.setState({modifyPeriodLayer: {isOpen: false}});
         this.getServicePoints();
@@ -176,14 +178,15 @@ class ServicePointDetails extends React.Component {
     }
 
     render() {
-        // console.log("servicepoint Details");
-        // console.log(this.state);
         let currentP;
         let currentPTimes;
         const weekdays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
         if (this.state.currentPeriod) {
-            currentP = <KeyValue label="Current:"
-                                 value={this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}/>;
+            currentP =
+                <KeyValue label="Current:"
+                          value={<div className={"periods"}
+                          onClick={() => this.handleSelectPeriod(this.state.currentPeriod.id)}>{this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}</div>}/>
+
             currentPTimes = <Row>
                 <Col xs>
                     <div className={"seven-cols"}>
@@ -222,7 +225,8 @@ class ServicePointDetails extends React.Component {
         }
         let nextPeriodDetails;
         const itemFormatter = (item) => (
-            <li onClick={() => this.handleSelectPeriod(item.id)}
+            <li className={"periods"}
+                onClick={() => this.handleSelectPeriod(item.id)}
                 key={item.id}>{item.startDate + " - " + item.endDate + " (" + item.name + ")"}</li>);
         if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {
             nextPeriodDetails = <Row>

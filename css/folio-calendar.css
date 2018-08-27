@@ -1,3 +1,7 @@
+.periods{
+    cursor: pointer;
+}
+
 .add-exceptions-icon-wrapper{
     display: flex;
 }
