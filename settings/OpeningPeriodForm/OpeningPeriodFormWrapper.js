@@ -7,6 +7,7 @@ import BigCalendarHeader from "./BigCalendarHeader";
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
 import moment from "moment";
+import CalendarUtils from '../../CalendarUtils'
 
 class OpeningPeriodFormWrapper extends React.Component {
 
@@ -90,53 +91,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             openingDays: [],
             servicePointId: servicePointId
         };
-        let weekDays = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-        let sortedEvents = [];
-        if (this.state.event) {
-            sortedEvents = this.state.event.sort(function (a, b) {
-                return (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0);
-            });
-        }
-        let weekDay = 8;
-        let openingHour = [];
-
-        for (let i = 0; i < sortedEvents.length; i++) {
-            let dayOpening = sortedEvents[i];
-            if(dayOpening.start instanceof moment){
-                dayOpening.start= moment(dayOpening.start).toDate();
-                dayOpening.end= moment(dayOpening.end).toDate();
-            }
-            if (weekDay !== dayOpening.start.getDay()) {
-                weekDay = dayOpening.start.getDay();
-                openingHour = [];
-                if (dayOpening.allDay) {
-                    period.openingDays.push({
-                        weekdays: {
-                            day: weekDays[weekDay],
-                        },
-                        openingDay: {
-                            allDay: dayOpening.allDay,
-                            open: true
-                        }
-                    });
-                } else {
-                    period.openingDays.push({
-                        weekdays: {
-                            day: weekDays[weekDay],
-                        },
-                        openingDay: {
-                            openingHour: openingHour,
-                            allDay: dayOpening.allDay,
-                            open: true
-                        }
-                    });
-                }
-            }
-            openingHour.push({
-                startTime: dayOpening.start.getHours() + ":" + dayOpening.start.getMinutes(),
-                endTime: dayOpening.end.getHours() + ":" + dayOpening.end.getMinutes()
-            });
-        }
+        period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.events);
         let that = this;
         if(this.props.modifyPeriod){
             if (servicePointId) parentMutator.query.replace(servicePointId);
@@ -144,24 +99,15 @@ class OpeningPeriodFormWrapper extends React.Component {
             period.id=this.props.modifyPeriod.id;
             delete period.events;
             return parentMutator.periods.PUT(period).then((e) => {
-                // console.log("after post");
-                // console.log(period);
-                // console.log(e);
-
                 that.props.onSuccessfulModifyPeriod(e);
             }, (error) => {
                 console.log(error);
             });
-
         }
 
         if (servicePointId) parentMutator.query.replace(servicePointId);
 
         return parentMutator.periods['POST'](period).then((e) => {
-            // console.log("after post");
-            // console.log(period);
-            // console.log(e);
-
             that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
             console.log(error);
