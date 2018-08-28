@@ -6,6 +6,7 @@ import { FormattedDate, FormattedTime } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import CalendarUtils from '../CalendarUtils';
 
 function calculateTime(startTime, endTime, open, allDay) {
   if (!open) {
@@ -24,8 +25,8 @@ function ViewOpeningDay(props) {
   const openingDays = props.initialValues;  
 
   const eventTypeOptions = { 
-    'OPENING_DAY': props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.opening_day' }), 
-    'EXCEPTION': props.stripes.intl.formatMessage({ id: 'ui-calendar.settings.event_type.exception' }), 
+    'OPENING_DAY': CalendarUtils.translate('ui-calendar.settings.event_type.opening_day'),
+    'EXCEPTION': CalendarUtils.translate('ui-calendar.settings.event_type.exception'),
   };
 
   return (    

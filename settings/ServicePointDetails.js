@@ -12,6 +12,7 @@ import Icon from "../../stripes-components/lib/Icon/Icon";
 import {Layer} from "../../stripes-components";
 import OpeningPeriodFormWrapper from "./OpeningPeriodForm/OpeningPeriodFormWrapper"
 import ErrorBoundary from "../ErrorBoundary";
+import CalendarUtils from "../CalendarUtils";
 
 class ServicePointDetails extends React.Component {
 
@@ -72,6 +73,7 @@ class ServicePointDetails extends React.Component {
         return this.props.stripes.intl.formatMessage({
             id: `ui-organization.settings.servicePoints.${id}`
         });
+
     }
 
     getWeekdayOpeningHours(weekday) {
@@ -109,8 +111,8 @@ class ServicePointDetails extends React.Component {
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
             if (moment() > start && moment() < end) {
                 return {
-                    startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
-                    endDate: end.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
+                    startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
+                    endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
                     name: openingPeriod.name,
                     openingDays: openingPeriod.openingDays
                 };
@@ -127,8 +129,8 @@ class ServicePointDetails extends React.Component {
             if (!(moment() > start && moment() < end) && start > new Date()) {
                 displayPeriods.push({
                     id: openingPeriod.id,
-                    startDate: start.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
-                    endDate: end.format(this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})),
+                    startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
+                    endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
                     name: openingPeriod.name
                 })
             }
@@ -188,32 +190,32 @@ class ServicePointDetails extends React.Component {
                 <Col xs>
                     <div className={"seven-cols"}>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.sunDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.sunDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[0])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.monDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.monDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[1])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.tueDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.tueDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[2])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.wedDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.wedDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[3])}/>
                         </div>
                         <div className={"col-sm-1"}>
 
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.thuDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.thuDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[4])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.friDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.friDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[5])}/>
                         </div>
                         <div className={"col-sm-1"}>
-                            <KeyValue label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.satDayShort'})}
+                            <KeyValue label={CalendarUtils.translate('ui-calendar.satDayShort')}
                                       value={this.getWeekdayOpeningHours(weekdays[6])}/>
                         </div>
                     </div>
@@ -228,7 +230,7 @@ class ServicePointDetails extends React.Component {
             nextPeriodDetails = <Row>
                 <Col xs>
                     <Headline size="small"
-                              margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.nextPeriod'})}</Headline>
+                              margin="large">{CalendarUtils.translate('ui-calendar.nextPeriod')}</Headline>
                     <List
                         items={this.state.nextPeriods}
                         itemFormatter={itemFormatter}
@@ -252,7 +254,7 @@ class ServicePointDetails extends React.Component {
                                 <KeyValue label={this.translateOrganization('discoveryDisplayName')}
                                           value={servicePoint.discoveryDisplayName}/>
                                 <Headline size="small"
-                                          margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularLibraryHours'})}</Headline>
+                                          margin="large">{CalendarUtils.translate('ui-calendar.regularLibraryHours')}</Headline>
                                 {currentP}
 
                             </Col>
@@ -262,13 +264,12 @@ class ServicePointDetails extends React.Component {
                         <Row>
                             <Col xs={4}>
                                 <Button onClick={() => this.clickNewPeriod()}>
-
-                                    {this.props.stripes.intl.formatMessage({id: 'ui-calendar.newButton'})}
+                                    {CalendarUtils.translate('ui-calendar.newButton')}
                                 </Button>
                             </Col>
                             <Col xs={6}>
                                 <Button disabled>
-                                    {this.props.stripes.intl.formatMessage({id: 'ui-calendar.cloneSettings'})}
+                                    {CalendarUtils.translate('ui-calendar.cloneSettings')}
                                 </Button>
                             </Col>
                         </Row>
@@ -276,9 +277,9 @@ class ServicePointDetails extends React.Component {
 
                             <Col xs>
                                 <Headline size="small"
-                                          margin="large">{this.props.stripes.intl.formatMessage({id: 'ui-calendar.actualLibraryHours'})}</Headline>
+                                          margin="large">{CalendarUtils.translate('ui-calendar.actualLibraryHours')}</Headline>
 
-                                <p>{this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularOpeningHoursWithExceptions'})}</p>
+                                <p>{CalendarUtils.translate('ui-calendar.regularOpeningHoursWithExceptions')}</p>
                                 <div className="add-exceptions-icon-wrapper">
                                     <div className="icon-button">
                                         <Icon

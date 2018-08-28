@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Textfield from "../../../stripes-components/lib/TextField";
 import TextField from "@folio/stripes-components/lib/TextField/TextField";
 import moment from "moment";
+import CalendarUtils from "../../CalendarUtils";
 
 class InputFields extends React.Component {
 
@@ -66,19 +67,19 @@ class InputFields extends React.Component {
             modifyStart = <Field value={this.parseDate(this.props.modifyPeriod.endDate) || ''}
                                  name="endDate"
                                  component={Datepicker}
-                                 label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
-                                 dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                                 label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
+                                 dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                  onChange={this.setStartDate}
             />;
 
             modifyEnd = <Field value={this.parseDate(this.props.modifyPeriod.endDate) || ''}
                                name="endDate"
                                component={Datepicker}
-                               label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
-                               dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                               label={CalendarUtils.translateToString('ui-calendar.validTo',this.props.stripes.intl)}
+                               dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
                                onChange={this.setEndDate}/>;
 
-            modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+            modifyName = <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
                                     value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
                                     id="input-period-name" component={Textfield} onChange={this.setName}/>;
 
@@ -87,18 +88,18 @@ class InputFields extends React.Component {
 
             modifyStart = <Field name="startDate"
                                  component={Datepicker}
-                                 label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
-                                 dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                                 label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
+                                 dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                  onChange={this.setStartDate}/>;
 
             modifyEnd = <Field name="endDate"
                                component={Datepicker}
-                               label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
-                               dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
+                               label={CalendarUtils.translateToString('ui-calendar.validTo',this.props.stripes.intl)}
+                               dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                onChange={this.setEndDate}/>;
 
             modifyName =
-                <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})} ref="periodName"
+                <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)} ref="periodName"
                            name="periodName" id="input-period-name" component={Textfield} onChange={this.setName}/>
 
         }
