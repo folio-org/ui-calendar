@@ -2,7 +2,7 @@ import React from 'react';
 import {Headline} from "../../../stripes-components";
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Button from "@folio/stripes-components/lib/Button/Button";
-
+import CalendarUtils from '../../CalendarUtils';
 
 class BigCalendarHeader extends React.Component {
 
@@ -16,16 +16,16 @@ class BigCalendarHeader extends React.Component {
                 <Row>
                     <Col xs={6}>
                         <Headline>
-                            {this.props.stripes.intl.formatMessage({id: 'ui-calendar.regularLibraryHoursCalendar'})}
+                            {CalendarUtils.translate('ui-calendar.regularLibraryHoursCalendar')}
                         </Headline>
                     </Col>
                     <Col xs={6} className="new-period-buttons">
 
                         <Button disabled>
-                            {this.props.stripes.intl.formatMessage({id: 'ui-calendar.selectTemplate'})}
+                            {CalendarUtils.translate('ui-calendar.selectTemplate')}
                         </Button>
                         <Button disabled>
-                            {this.props.stripes.intl.formatMessage({id: 'ui-calendar.copy'})}
+                            {CalendarUtils.translate('ui-calendar.copy')}
                         </Button>
                     </Col>
                 </Row>
