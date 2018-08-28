@@ -65,10 +65,6 @@ class CalendarUtils extends React.Component {
         return period;
     }
 
-    static convertBackendPeriodToFrontend(){
-
-    }
-
 
 }
 

@@ -8,6 +8,7 @@
 * Fix save error when adding multiple times within a day (UICAL-6)
 * Filter events by date (UICAL-11)
 * Show event details on click (UICAL-12)
+* Lock react-bootstrap to v0.32.1 to avoid buggy babel-runtime 7.0.0-beta.42 dep. Refs FOLIO-1425.
 
 ## [1.0.1] (2018.08.02)
 * Rethink calendar ui
