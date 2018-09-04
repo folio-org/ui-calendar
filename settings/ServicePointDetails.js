@@ -254,8 +254,8 @@ class ServicePointDetails extends React.Component {
                         <Row>
                             <Col xs>
                                 <KeyValue label={this.translateOrganization('name')} value={servicePoint.name}/>
-                                <KeyValue label={this.translateOrganization('code')} value={servicePoint.code}/>
-                                <KeyValue label={this.translateOrganization('discoveryDisplayName')}
+                                <KeyValue label={CalendarUtils.translate('ui-calendar.code')} value={servicePoint.code}/>
+                                <KeyValue label={CalendarUtils.translate('ui-calendar.settings.locations.discoveryDisplayName')}
                                           value={servicePoint.discoveryDisplayName}/>
                                 <Headline size="small"
                                           margin="large">{CalendarUtils.translate('ui-calendar.regularLibraryHours')}</Headline>

@@ -6,7 +6,6 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import {DragDropContext} from 'react-dnd'
 import withDragAndDrop from '@folio/react-big-calendar/src/addons/dragAndDrop'
 
-
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
@@ -25,7 +24,8 @@ class BigCalendarWrapper extends React.Component {
         this.onEventDnD = this.onEventDnD.bind(this);
         this.onEventResize = this.onEventResize.bind(this);
         this.onCalendarChange = this.onCalendarChange.bind(this);
-        // this.onDeleteEvent = this.onDeleteEvent.bind(this);
+        this.onDeleteEvent = this.onDeleteEvent.bind(this);
+        this.onDeleteAlldayEvent = this.onDeleteAlldayEvent.bind(this);
         this.state = {
             eventIdCounter: 0,
             events: []
@@ -154,10 +154,27 @@ class BigCalendarWrapper extends React.Component {
         this.props.onCalendarChange(events);
     }
 
-    // onDeleteEvent(event){
-    //     console.log("deleteEvent Baszki");
-    //     console.log(event);
-    // }
+    onDeleteEvent(events, eventTodelete) {
+
+        let filteredEvent = this.state.events.filter((event) => event.id !== eventTodelete.id);
+
+        this.setState({
+            events: filteredEvent
+        });
+
+        this.onCalendarChange(filteredEvent);
+    }
+
+    onDeleteAlldayEvent(eventToDelete) {
+
+        let filteredEvent = this.state.events.filter((event) => event.id !== eventToDelete.id)
+
+        this.setState({
+            events: filteredEvent,
+        });
+
+        this.onCalendarChange(filteredEvent);
+    }
 
     render() {
         console.log(this.state);
@@ -170,22 +187,27 @@ class BigCalendarWrapper extends React.Component {
         };
 
         return (
-            <div className="period-big-calendar" style={{height: "100%", marginBottom: "1rem"}}>
-                <DragAndDropCalendar
-                    events={this.state.events}
-                    defaultView={BigCalendar.Views.WEEK}
-                    defaultDate={new Date()}
-                    toolbar={false}
-                    formats={formats}
-                    selectable={true}
-                    resizable={true}
-                    onEventDrop={this.onEventDnD}
-                    onEventResize={this.onEventResize}
-                    onSelectSlot={this.onSlotSelect}
-                    views={['week']}
-                    // onDeleteEvent={this.onDeleteEvent}
-                />
-            </div>);
+
+            <div>
+                <div className="period-big-calendar" style={{height: "100%", marginBottom: "1rem"}}>
+                    <DragAndDropCalendar
+                        events={this.state.events}
+                        defaultView={BigCalendar.Views.WEEK}
+                        defaultDate={new Date()}
+                        toolbar={false}
+                        formats={formats}
+                        selectable={true}
+                        resizable={true}
+                        onEventDrop={this.onEventDnD}
+                        onEventResize={this.onEventResize}
+                        onSelectSlot={this.onSlotSelect}
+                        views={['week']}
+                        onDeleteEvent={this.onDeleteEvent}
+                        onDeleteAlldayEvent={this.onDeleteAlldayEvent}
+                    />
+                </div>
+            </div>
+        );
     }
 
 }
