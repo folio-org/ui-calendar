@@ -8,7 +8,7 @@ import LibraryHours from './LibraryHours';
 const pages = [
     {
         route: 'library-hours',
-        labelKey: 'ui-calendar.settings.service_points',
+        labelKey: 'ui-calendar.settings.library_hours',
         component: LibraryHours,
     }
 ];
