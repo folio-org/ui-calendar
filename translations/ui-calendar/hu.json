@@ -81,5 +81,7 @@
     "selectTemplate": "Sablon kiválasztása",
     "copy": "Előző másolása",
     "meta.title": "Naptár",
-    "code":"Kód"
+    "code":"Kód",
+    "allDayOpening": "Egész napos nyitvatartás",
+    "modifyRegularLibraryValidityPeriod":"Módosítás: Regular Library Hours Validity Period"
 }

@@ -18,8 +18,6 @@ class InputFields extends React.Component {
 
     constructor() {
         super();
-        this.parseDate = this.parseDate.bind(this);
-        // this.parseDates = this.parseDates.bind(this);
         this.setName = this.setName.bind(this);
         this.setEndDate = this.setEndDate.bind(this);
         this.setStartDate = this.setStartDate.bind(this);
@@ -39,12 +37,6 @@ class InputFields extends React.Component {
         console.log(this.props);
     }
 
-    parseDate(date) {
-        // console.log(date);
-        // console.log(new Date(date));
-        return new Date(date);
-    }
-
     setStartDate(e) {
         this.props.onDateChange(true, this.parseDateToString(e));
     }
@@ -62,17 +54,25 @@ class InputFields extends React.Component {
         let modifyStart;
         let modifyEnd;
         let modifyName;
+
+
+
         if (this.props.modifyPeriod) {
 
-            modifyStart = <Field value={this.parseDate(this.props.modifyPeriod.endDate) || ''}
-                                 name="endDate"
+
+
+            modifyStart = <Field initialValues={moment(this.props.modifyPeriod.startDate).format('L')}
+                                 name="startDate"
                                  component={Datepicker}
                                  label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
                                  dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                  onChange={this.setStartDate}
+
+
             />;
 
-            modifyEnd = <Field value={this.parseDate(this.props.modifyPeriod.endDate) || ''}
+
+            modifyEnd = <Field initialValues={moment(this.props.modifyPeriod.endDate).format('L')}
                                name="endDate"
                                component={Datepicker}
                                label={CalendarUtils.translateToString('ui-calendar.validTo',this.props.stripes.intl)}
@@ -86,7 +86,8 @@ class InputFields extends React.Component {
 
         } else {
 
-            modifyStart = <Field name="startDate"
+            modifyStart = <Field initialValues={moment(moment(this.props.latestEvent).add(1, 'days').format('L'))._i}
+                                 name="startDate"
                                  component={Datepicker}
                                  label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
                                  dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}

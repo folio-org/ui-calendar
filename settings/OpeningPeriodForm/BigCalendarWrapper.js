@@ -162,6 +162,7 @@ class BigCalendarWrapper extends React.Component {
             events: filteredEvent
         });
 
+        this.state.eventIdCounter--;
         this.onCalendarChange(filteredEvent);
     }
 
@@ -172,7 +173,7 @@ class BigCalendarWrapper extends React.Component {
         this.setState({
             events: filteredEvent,
         });
-
+        this.state.eventIdCounter--;
         this.onCalendarChange(filteredEvent);
     }
 
