@@ -76,5 +76,9 @@
   "wedDayShort":"Wed",
   "thuDayShort":"Thu",
   "friDayShort":"Fri",
-  "satDayShort":"Sat"
+  "satDayShort":"Sat",
+  "allDayOpening": "All day opening",
+  "code":"Code",
+  "settings.locations.discoveryDisplayName": "Discovery display name",
+  "modifyRegularLibraryValidityPeriod":"Modify: Regular Library Hours Validity Period"
 }

@@ -18,10 +18,30 @@ class FromHeader extends React.Component {
         super();
     }
 
+
+
     render() {
 
+        let disabled;
+           if (this.props.modifyPeriod) {
+              disabled = <Button onClick={()=>{this.props.handleDelete();}} buttonStyle="danger"  >{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
+           } else {
+              disabled = <Button disabled onClick={()=>{this.props.handleDelete();}} buttonStyle="danger"  >{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
+           }
+           let title;
+           if (this.props.modifyPeriod) {
+               title =  <Headline size="large" margin="medium" tag="h3">
+                   {CalendarUtils.translate("ui-calendar.modifyRegularLibraryValidityPeriod")}
+               </Headline>;
+           } else {
+               title = <Headline size="large" margin="medium" tag="h3">
+                   {CalendarUtils.translate("ui-calendar.regularLibraryValidityPeriod")}
+               </Headline>
+           }
 
         return (
+
+
             <div>
                 <Row>
                     <Col sm={3}>
@@ -33,13 +53,11 @@ class FromHeader extends React.Component {
                         />
                     </Col>
                     <Col sm={6}>
-                        <Headline size="large" margin="medium" tag="h3">
-                            {CalendarUtils.translate("ui-calendar.regularLibraryValidityPeriod")}
-                        </Headline>
+                        {title}
                     </Col>
                     <Col sm={3} className="new-period-buttons">
 
-                        <Button onClick={()=>{this.props.handleDelete();}} buttonStyle="danger" >{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>
+                        {disabled}
                         <Button type="submit" buttonStyle="default">{CalendarUtils.translate('ui-calendar.saveButton')}</Button>
                         <Button disabled buttonStyle="primary">{CalendarUtils.translate('ui-calendar.savesAsTemplate')}</Button>
 

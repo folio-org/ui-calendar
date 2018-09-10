@@ -622,3 +622,11 @@ position: absolute;
   left:50%;
   transform: translate(-50%,-50%);
 }
+
+.rbc-allday-label{
+  cursor: pointer;
+  position: relative;
+  top: 50%;
+  text-align: center;
+  transform: translateY(-50%);
+}
