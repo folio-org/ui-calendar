@@ -30,6 +30,7 @@ class ServicePointDetails extends React.Component {
         this.onClose = this.onClose.bind(this);
         this.getServicePoints = this.getServicePoints.bind(this);
         this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
+        this.getLatestPeriod = this.getLatestPeriod.bind(this);
         this.state = {
             newPeriodLayer: {
                 isOpen: false,
@@ -69,13 +70,6 @@ class ServicePointDetails extends React.Component {
 
     }
 
-    translateOrganization(id) {
-        return this.props.stripes.intl.formatMessage({
-            id: `ui-organization.settings.servicePoints.${id}`
-        });
-
-    }
-
     getWeekdayOpeningHours(weekday) {
         let openingPeriod = this.state.currentPeriod;
         let periodTime = "";
@@ -111,8 +105,8 @@ class ServicePointDetails extends React.Component {
             let end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
             if (moment() > start && moment() < end) {
                 return {
-                    startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
-                    endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
+                    startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
+                    endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
                     name: openingPeriod.name,
                     openingDays: openingPeriod.openingDays,
                     id: openingPeriod.id
@@ -130,8 +124,8 @@ class ServicePointDetails extends React.Component {
             if (!(moment() > start && moment() < end) && start > new Date()) {
                 displayPeriods.push({
                     id: openingPeriod.id,
-                    startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
-                    endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)),
+                    startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
+                    endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
                     name: openingPeriod.name
                 })
             }
@@ -139,6 +133,23 @@ class ServicePointDetails extends React.Component {
         return displayPeriods;
     }
 
+    getLatestPeriod() {
+        let latestEvent = moment().format('L');
+
+        if (this.state.nextPeriods.length !== 0) {
+            for (let i = 0; i < this.state.nextPeriods.length; i++) {
+                if (this.state.nextPeriods[i].endDate > latestEvent) {
+                    latestEvent = this.state.nextPeriods[i].endDate;
+
+                }
+            }
+
+        }else if(this.state.currentPeriod!==undefined){
+             latestEvent=this.state.currentPeriod.endDate;
+        }
+
+        return latestEvent;
+    }
 
     onOpenCloneSettings() {
         this.props.onToggle(true);
@@ -187,7 +198,7 @@ class ServicePointDetails extends React.Component {
             currentP =
                 <KeyValue label="Current:"
                           value={<div className={"periods"}
-                          onClick={() => this.handleSelectPeriod(this.state.currentPeriod.id)}>{this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}</div>}/>
+                                      onClick={() => this.handleSelectPeriod(this.state.currentPeriod.id)}>{this.state.currentPeriod.startDate + " - " + this.state.currentPeriod.endDate + " (" + this.state.currentPeriod.name + ")"}</div>}/>
 
             currentPTimes = <Row>
                 <Col xs>
@@ -245,7 +256,6 @@ class ServicePointDetails extends React.Component {
         BigCalendar.momentLocalizer(moment);
         const servicePoint = this.props.initialValues;
 
-
         if (!this.state.isPeriodsPending) {
             return (
 
@@ -253,10 +263,13 @@ class ServicePointDetails extends React.Component {
                     <div>
                         <Row>
                             <Col xs>
-                                <KeyValue label={this.translateOrganization('name')} value={servicePoint.name}/>
-                                <KeyValue label={CalendarUtils.translate('ui-calendar.code')} value={servicePoint.code}/>
-                                <KeyValue label={CalendarUtils.translate('ui-calendar.settings.locations.discoveryDisplayName')}
-                                          value={servicePoint.discoveryDisplayName}/>
+                                <KeyValue label={CalendarUtils.translate('ui-calendar.name')}
+                                          value={servicePoint.name}/>
+                                <KeyValue label={CalendarUtils.translate('ui-calendar.code')}
+                                          value={servicePoint.code}/>
+                                <KeyValue
+                                    label={CalendarUtils.translate('ui-calendar.settings.locations.discoveryDisplayName')}
+                                    value={servicePoint.discoveryDisplayName}/>
                                 <Headline size="small"
                                           margin="large">{CalendarUtils.translate('ui-calendar.regularLibraryHours')}</Headline>
                                 {currentP}
@@ -309,6 +322,8 @@ class ServicePointDetails extends React.Component {
                             onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
                             onClose={this.onClose}
                             servicePointId={servicePoint.id}
+                            latestEvent={this.getLatestPeriod()}
+
                         />
 
                     </Layer>

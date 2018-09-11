@@ -49,6 +49,11 @@ class OpeningPeriodFormWrapper extends React.Component {
 
     componentDidMount() {
         this.setState({...this.props.modifyPeriod});
+
+        if(this.props.latestEvent !== undefined && this.props.latestEvent !== null ){
+            this.setState({startDate: moment(this.props.latestEvent).format()})
+        }
+
     }
 
     handleDateChange(isStart, date) {
@@ -84,6 +89,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     onFormSubmit(event) {
         event.preventDefault();
         const {parentMutator, servicePointId} = this.props;
+
         let period = {
             name: this.state.name,
             startDate: this.state.startDate,
@@ -116,7 +122,9 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.setState({event:e});
     }
 
+
     render() {
+
         console.log(this.state);
         let modifyPeriod;
         if(this.props.modifyPeriod){
@@ -127,9 +135,12 @@ class OpeningPeriodFormWrapper extends React.Component {
         return (
             <div id="newPeriodForm">
                 <form onSubmit={this.onFormSubmit}>
-                    <FromHeader  {...this.props} handleDelete={this.handleDelete} onClose={this.props.onClose}/>
-                    <InputFields  {...this.props} onNameChange={this.handleNameChange}
-                                  onDateChange={this.handleDateChange}/>
+                    <FromHeader  {...this.props} handleDelete={this.handleDelete} onClose={this.props.onClose} />
+                    <InputFields  {...this.props}
+                                  onNameChange={this.handleNameChange}
+                                  onDateChange={this.handleDateChange}
+
+                    />
 
                     <BigCalendarHeader {...this.props} />
                     {modifyPeriod}
