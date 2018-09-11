@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragDropContext} from 'react-dnd'
 import withDragAndDrop from '@folio/react-big-calendar/src/addons/dragAndDrop'
+import CalendarUtils from "../../CalendarUtils";
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
@@ -205,6 +206,7 @@ class BigCalendarWrapper extends React.Component {
                         views={['week']}
                         onDeleteEvent={this.onDeleteEvent}
                         onDeleteAlldayEvent={this.onDeleteAlldayEvent}
+                        labelTranslate = {CalendarUtils.translate}
                     />
                 </div>
             </div>
