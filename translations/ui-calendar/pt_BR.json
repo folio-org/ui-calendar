@@ -79,5 +79,9 @@
     "regularLibraryHoursCalendar": "Horário de funcionamento regular da biblioteca:",
     "selectTemplate": "Selecione o modelo",
     "copy": "Copiar anterior",
-    "meta.title": "Calendário"
+    "meta.title": "Calendário",
+    "allDayOpening": "Abertura de dia todo",
+    "code": "Código",
+    "settings.locations.discoveryDisplayName": "Nome de exibição no sistema de descoberta",
+    "modifyRegularLibraryValidityPeriod": "Modificar: Período regular de abertura da Biblioteca"
 }

@@ -79,5 +79,9 @@
     "regularLibraryHoursCalendar": "Regular Library Hours:",
     "selectTemplate": "Select Template",
     "copy": "Copy Previous",
-    "meta.title": "Calendar"
+    "meta.title": "Calendar",
+    "allDayOpening": "All day opening",
+    "code": "Code",
+    "settings.locations.discoveryDisplayName": "Discovery display name",
+    "modifyRegularLibraryValidityPeriod": "Modify: Regular Library Hours Validity Period"
 }
