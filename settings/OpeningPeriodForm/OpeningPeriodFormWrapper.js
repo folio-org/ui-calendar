@@ -50,6 +50,11 @@ class OpeningPeriodFormWrapper extends React.Component {
 
     componentDidMount() {
         this.setState({...this.props.modifyPeriod});
+
+        if(this.props.latestEvent !== undefined && this.props.latestEvent !== null ){
+            this.setState({startDate: moment(this.props.latestEvent).format()})
+        }
+
     }
 
     handleDateChange(isStart, date) {
@@ -112,16 +117,26 @@ class OpeningPeriodFormWrapper extends React.Component {
           this.render();
           return null;
       }
-      let period = {
-        name: this.state.name,
-        startDate: this.state.startDate,
-        endDate: this.state.endDate,
-        openingDays: [],
-        servicePointId
-      };
-      period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
-      const that = this;
-      if (this.props.modifyPeriod) {
+        let period = {
+            name: this.state.name,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+            openingDays: [],
+            servicePointId: servicePointId
+        };
+        period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
+        let that = this;
+        if(this.props.modifyPeriod){
+            if (servicePointId) parentMutator.query.replace(servicePointId);
+            if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
+            period.id=this.props.modifyPeriod.id;
+            delete period.events;
+            return parentMutator.periods.PUT(period).then((e) => {
+                that.props.onSuccessfulModifyPeriod(e);
+            }, (error) => {
+                console.log(error);
+            });
+        }
         if (servicePointId) parentMutator.query.replace(servicePointId);
         if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
         period.id = this.props.modifyPeriod.id;
@@ -144,6 +159,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     onEventChange(e) {
       this.setState({ event: e });
     }
+
 
     render() {
       let modifyPeriod;
@@ -178,6 +194,8 @@ class OpeningPeriodFormWrapper extends React.Component {
                         nameValue={this.state.name}
                         onNameChange={this.handleNameChange}
                         onDateChange={this.handleDateChange}
+                    />
+
                     />
 
                     <BigCalendarHeader {...this.props} />

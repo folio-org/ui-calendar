@@ -9,6 +9,7 @@ import CloneSettings from "./CloneSettings";
 
 class LibraryHours extends React.Component {
 
+
     static manifest = Object.freeze({
         entries: {
             type: 'okapi',
@@ -43,11 +44,7 @@ class LibraryHours extends React.Component {
         }
     }
 
-    translate(id) {
-        return this.props.stripes.intl.formatMessage({
-            id: `ui-organization.settings.servicePoints.${id}`
-        });
-    }
+
 
 
     onChildToggle(isOpen) {
@@ -120,4 +117,6 @@ LibraryHours.propTypes = {
         intl: PropTypes.object.isRequired,
     }),
 };
+
+
 export default LibraryHours;

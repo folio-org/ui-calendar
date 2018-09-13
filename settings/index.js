@@ -1,16 +1,18 @@
 import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import CalendarUtils from '../CalendarUtils';
 
 import LibraryHours from './LibraryHours';
 
 const pages = [
     {
         route: 'library-hours',
-        labelKey: 'ui-calendar.settings.service_points',
+        labelKey: 'ui-calendar.settings.library_hours',
         component: LibraryHours,
     }
 ];
+
 
 function getPages(pageDefinitions, props) {
     const routes = [];
@@ -25,4 +27,4 @@ function getPages(pageDefinitions, props) {
 }
 
 export default props => <Settings {...props} pages={getPages(pages, props)}
-                                  paneTitle={props.stripes.intl.formatMessage({id: 'ui-calendar.settings.calendar'})}/>;
+                                  paneTitle={CalendarUtils.translateToString('ui-calendar.settings.calendar',props.stripes.intl) }/>;

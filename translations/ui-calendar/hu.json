@@ -26,6 +26,7 @@
     "settings.error.endDateRequired": "Kérem, adja meg a nyitvatartási idő végét",
     "settings.error.descriptionRequired": "Kérem, adja meg a nyitvatartási idő leírását",
     "settings.error.invalidDateRange": "A nyitvatartási idő vége nem lehet korábbi, mint a kezdete",
+    "settings.locations.discoveryDisplayName": "Discovery megjelenítési név",
     "calendar": "Intézményi naptár",
     "date": "Dátum",
     "time": "Idő",
@@ -52,7 +53,7 @@
     "settings.error.overlappingInterval": "Az intervallumok nem lehetnek átfedőek",
     "settings.error.invalidHourRange": "Invalid Minute",
     "settings.error.invalidMinuteRange": "Invalid Hour",
-    "dateFormat": "YYYY/MM/DD",
+    "dateFormat": "YYYY.MM.DD",
     "sunDayShort": "Vasárnap",
     "monDayShort": "Hétfő",
     "tueDayShort": "Kedd",
@@ -79,5 +80,8 @@
     "regularLibraryHoursCalendar": "Szokásos könyvtári órák:",
     "selectTemplate": "Sablon kiválasztása",
     "copy": "Előző másolása",
-    "meta.title": "Calendar"
+    "meta.title": "Naptár",
+    "code":"Kód",
+    "allDayOpening": "Egész napos nyitvatartás",
+    "modifyRegularLibraryValidityPeriod":"Módosítás: Regular Library Hours Validity Period"
 }
