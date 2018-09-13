@@ -12,6 +12,7 @@ class InputFields extends React.Component {
     static propTypes = {
         onDateChange: PropTypes.func.isRequired,
         onNameChange: PropTypes.func.isRequired,
+        nameValue: PropTypes.string.isRequired,
     };
 
 
@@ -22,6 +23,19 @@ class InputFields extends React.Component {
         this.setName = this.setName.bind(this);
         this.setEndDate = this.setEndDate.bind(this);
         this.setStartDate = this.setStartDate.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+    }
+
+    onBlur() {
+        if(this.props.nameValue !== undefined && this.props.nameValue !== null&& this.props.nameValue.length > 0) {
+            this.setState({
+                errorBoolean: false,
+            })
+        }else{
+            this.setState({
+                errorBoolean: true,
+            })
+        }
     }
 
     parseDateToString(e) {
@@ -61,6 +75,7 @@ class InputFields extends React.Component {
         let modifyStart;
         let modifyEnd;
         let modifyName;
+        let errorMessage = null;
         if (this.props.modifyPeriod) {
 
             modifyStart = <Field value={this.parseDate(this.props.modifyPeriod.endDate) || ''}
@@ -69,6 +84,7 @@ class InputFields extends React.Component {
                                  label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
                                  dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
                                  onChange={this.setStartDate}
+                                 required
             />;
 
             modifyEnd = <Field value={this.parseDate(this.props.modifyPeriod.endDate) || ''}
@@ -76,11 +92,24 @@ class InputFields extends React.Component {
                                component={Datepicker}
                                label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
                                dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                               onChange={this.setEndDate}/>;
+                               onChange={this.setEndDate}
+                               required/>;
 
-            modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
-                                    value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
-                                    id="input-period-name" component={Textfield} onChange={this.setName}/>;
+            if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
+
+
+                modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                                        value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
+                                        id="input-period-name" component={Textfield} onChange={this.setName} error={"TODO ERROR TRANSLATE"}
+                                        required/>;
+
+            }else {
+
+                modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                                        value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
+                                        id="input-period-name" component={Textfield} onChange={this.setName}
+                                        required/>;
+            }
 
 
         } else {
@@ -89,17 +118,46 @@ class InputFields extends React.Component {
                                  component={Datepicker}
                                  label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validFrom'})}
                                  dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                                 onChange={this.setStartDate}/>;
+                                 onChange={this.setStartDate}
+                                 required/>;
 
             modifyEnd = <Field name="endDate"
                                component={Datepicker}
                                label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.validTo'})}
                                dateFormat={this.props.stripes.intl.formatMessage({id: 'ui-calendar.dateFormat'})}
-                               onChange={this.setEndDate}/>;
+                               onChange={this.setEndDate}
+                               required/>;
 
+/*
             modifyName =
                 <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})} ref="periodName"
-                           name="periodName" id="input-period-name" component={Textfield} onChange={this.setName}/>
+                           name="periodName" id="input-period-name" component={Textfield} onChange={this.setName} error={errorMessage}/>
+*/
+            if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
+
+                modifyName =
+                    <Field name="periodName"
+                           component={Textfield}
+                           label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                           ref="periodName"
+                           id="input-period-name"
+                           onBlur={this.onBlur}
+                           onChange={this.setName}
+                           required
+                           error={"TODO ERROR TRANSLATE"}/>
+
+            }else {
+
+                modifyName =
+                    <Field name="periodName"
+                           component={Textfield}
+                           label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                           ref="periodName"
+                           id="input-period-name"
+                           onBlur={this.onBlur}
+                           onChange={this.setName}
+                           required/>
+            }
 
         }
 
