@@ -70,9 +70,6 @@ class InputFields extends React.Component {
         let modifyName;
         let errorMessage = null;
         if (this.props.modifyPeriod) {
-
-
-
             modifyStart = <Field initialValues={moment(this.props.modifyPeriod.startDate).format('L')}
                                  name="startDate"
                                  component={Datepicker}
@@ -81,7 +78,6 @@ class InputFields extends React.Component {
                                  onChange={this.setStartDate}
                                  required
             />;
-
 
             modifyEnd = <Field initialValues={moment(this.props.modifyPeriod.endDate).format('L')}
                                name="endDate"
@@ -93,14 +89,14 @@ class InputFields extends React.Component {
             if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
 
 
-                modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                modifyName = <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
                                         value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
-                                        id="input-period-name" component={Textfield} onChange={this.setName} error={"TODO ERROR TRANSLATE"}
+                                        id="input-period-name" component={Textfield} onChange={this.setName} error={CalendarUtils.translateToString('ui-calendar.fillIn',this.props.stripes.intl)}
                                         required/>;
 
             }else {
 
-                modifyName = <TextField label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                modifyName = <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
                                         value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
                                         id="input-period-name" component={Textfield} onChange={this.setName}
                                         required/>;
@@ -122,29 +118,26 @@ class InputFields extends React.Component {
                                dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                onChange={this.setEndDate}/>;
 
-/*
-            modifyName =
-                <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)} ref="periodName"
-                           name="periodName" id="input-period-name" component={Textfield} onChange={this.setName}/>
+
             if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
 
                 modifyName =
                     <Field name="periodName"
                            component={Textfield}
-                           label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                           llabel={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
                            ref="periodName"
                            id="input-period-name"
                            onBlur={this.onBlur}
                            onChange={this.setName}
                            required
-                           error={"TODO ERROR TRANSLATE"}/>
+                           error={CalendarUtils.translateToString('ui-calendar.fillIn',this.props.stripes.intl)}/>
 
             }else {
 
                 modifyName =
                     <Field name="periodName"
                            component={Textfield}
-                           label={this.props.stripes.intl.formatMessage({id: 'ui-calendar.name'})}
+                           label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
                            ref="periodName"
                            id="input-period-name"
                            onBlur={this.onBlur}

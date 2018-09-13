@@ -189,8 +189,6 @@ class BigCalendarWrapper extends React.Component {
         };
 
         return (
-
-            <div>
                 <div className="period-big-calendar" style={{height: "100%", marginBottom: "1rem"}}>
                     <DragAndDropCalendar
                         events={this.state.events}
@@ -209,7 +207,6 @@ class BigCalendarWrapper extends React.Component {
                         labelTranslate = {CalendarUtils.translate}
                     />
                 </div>
-            </div>
         );
     }
 

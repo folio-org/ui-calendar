@@ -83,5 +83,10 @@
     "meta.title": "Naptár",
     "code":"Kód",
     "allDayOpening": "Egész napos nyitvatartás",
-    "modifyRegularLibraryValidityPeriod":"Módosítás: Regular Library Hours Validity Period"
+    "modifyRegularLibraryValidityPeriod":"Módosítás: Regular Library Hours Validity Period",
+    "fillIn": "Kérem, töltse ki ezt a folytatáshoz",
+    "invalidData":"Érvénytelen adat",
+    "close": "Bezár",
+    "noEvents": "Nincs esemény! Kérem adjon meg legalább egy eseményt!",
+    "wrongStartEndDate": "A kezdő dátum a befejezés időpontja után van!"
 }

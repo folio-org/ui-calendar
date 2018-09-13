@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import stripesForm from '@folio/stripes-form/index';
 import FromHeader from './FromHeader';
 import InputFields from './InputFields';
@@ -9,6 +9,8 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import CalendarUtils from '../../CalendarUtils';
 import Modal from "../../../stripes-components/lib/Modal/Modal";
+import Button from '@folio/stripes-components/lib/Button';
+
 
 class OpeningPeriodFormWrapper extends React.Component {
     static propTypes = {
@@ -89,7 +91,6 @@ class OpeningPeriodFormWrapper extends React.Component {
 
     closeErrorModal(){
         this.setState({
-            open: false,
             errorModalText: null
         });
     }
@@ -97,26 +98,22 @@ class OpeningPeriodFormWrapper extends React.Component {
 
 
     onFormSubmit(event) {
-      event.preventDefault();
-      const { parentMutator, servicePointId } = this.props;
-      if (moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) {
-          console.log('TODO ROSSZ DATE VAN MEGADVA');
-          this.setState({
-              errorModalText: "TODO ROSSZ DATE VAN MEGADVA",
-              open: true
-          });
-          this.render();
-          return null;
-      }
-      if (this.state.event === null || this.state.event === undefined || this.state.event.length === 0) {
-          console.log('TODO NINCSEN ENVENT');
-          this.setState({
-              errorModalText: "TODO NINCSEN ENVENT",
-              open: true
-          });
-          this.render();
-          return null;
-      }
+        event.preventDefault();
+        const {parentMutator, servicePointId} = this.props;
+        if (moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) {
+            this.setState({
+                errorModalText: CalendarUtils.translateToString('ui-calendar.wrongStartEndDate',this.props.stripes.intl),
+            });
+            this.render();
+            return null;
+        }
+        if (this.state.event === null || this.state.event === undefined || this.state.event.length === 0) {
+            this.setState({
+                errorModalText: CalendarUtils.translateToString('ui-calendar.noEvents',this.props.stripes.intl),
+            });
+            this.render();
+            return null;
+        }
         let period = {
             name: this.state.name,
             startDate: this.state.startDate,
@@ -126,10 +123,10 @@ class OpeningPeriodFormWrapper extends React.Component {
         };
         period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
         let that = this;
-        if(this.props.modifyPeriod){
+        if (this.props.modifyPeriod) {
             if (servicePointId) parentMutator.query.replace(servicePointId);
             if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
-            period.id=this.props.modifyPeriod.id;
+            period.id = this.props.modifyPeriod.id;
             delete period.events;
             return parentMutator.periods.PUT(period).then((e) => {
                 that.props.onSuccessfulModifyPeriod(e);
@@ -138,22 +135,11 @@ class OpeningPeriodFormWrapper extends React.Component {
             });
         }
         if (servicePointId) parentMutator.query.replace(servicePointId);
-        if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
-        period.id = this.props.modifyPeriod.id;
-        delete period.events;
-        return parentMutator.periods.PUT(period).then((e) => {
-          that.props.onSuccessfulModifyPeriod(e);
+        return parentMutator.periods['POST'](period).then((e) => {
+            that.props.onSuccessfulCreatePeriod(e);
         }, (error) => {
-          console.log(error);
+            console.log(error);
         });
-      }
-
-      if (servicePointId) parentMutator.query.replace(servicePointId);
-      return parentMutator.periods.POST(period).then((e) => {
-        that.props.onSuccessfulCreatePeriod(e);
-      }, (error) => {
-        console.log(error);
-      });
     }
 
     onEventChange(e) {
@@ -164,11 +150,16 @@ class OpeningPeriodFormWrapper extends React.Component {
     render() {
       let modifyPeriod;
       let errorModal;
-      let open = false;
       if(this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
+          const footer = (
+              <Fragment>
+                  <Button onClick={this.closeErrorModal} ButtonStyle="primary">{CalendarUtils.translateToString('ui-calendar.close',this.props.stripes.intl)}</Button>
+              </Fragment>
+          );
+
           errorModal =
-              <Modal onClose={this.closeErrorModal} open label={this.state.errorModalText}>
-                  <button onClick={this.closeErrorModal}>Close modal</button>
+              <Modal dismissible onClose={this.closeErrorModal} open label={CalendarUtils.translateToString('ui-calendar.invalidData',this.props.stripes.intl)} footer={footer}>
+                  <p>{this.state.errorModalText}</p>
               </Modal>
       }
       if (this.props.modifyPeriod) {
@@ -195,9 +186,6 @@ class OpeningPeriodFormWrapper extends React.Component {
                         onNameChange={this.handleNameChange}
                         onDateChange={this.handleDateChange}
                     />
-
-                    />
-
                     <BigCalendarHeader {...this.props} />
                     {modifyPeriod}
                 </form>
