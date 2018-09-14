@@ -13,6 +13,7 @@ class InputFields extends React.Component {
     static propTypes = {
         onDateChange: PropTypes.func.isRequired,
         onNameChange: PropTypes.func.isRequired,
+        nameValue: PropTypes.string.isRequired,
     };
 
 
@@ -21,6 +22,19 @@ class InputFields extends React.Component {
         this.setName = this.setName.bind(this);
         this.setEndDate = this.setEndDate.bind(this);
         this.setStartDate = this.setStartDate.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+    }
+
+    onBlur() {
+        if(this.props.nameValue !== undefined && this.props.nameValue !== null&& this.props.nameValue.length > 0) {
+            this.setState({
+                errorBoolean: false,
+            })
+        }else{
+            this.setState({
+                errorBoolean: true,
+            })
+        }
     }
 
     parseDateToString(e) {
@@ -54,23 +68,16 @@ class InputFields extends React.Component {
         let modifyStart;
         let modifyEnd;
         let modifyName;
-
-
-
+        let errorMessage = null;
         if (this.props.modifyPeriod) {
-
-
-
             modifyStart = <Field initialValues={moment(this.props.modifyPeriod.startDate).format('L')}
                                  name="startDate"
                                  component={Datepicker}
                                  label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
                                  dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                  onChange={this.setStartDate}
-
-
+                                 required
             />;
-
 
             modifyEnd = <Field initialValues={moment(this.props.modifyPeriod.endDate).format('L')}
                                name="endDate"
@@ -79,9 +86,21 @@ class InputFields extends React.Component {
                                dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
                                onChange={this.setEndDate}/>;
 
-            modifyName = <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
-                                    value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
-                                    id="input-period-name" component={Textfield} onChange={this.setName}/>;
+            if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
+
+
+                modifyName = <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
+                                        value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
+                                        id="input-period-name" component={Textfield} onChange={this.setName} error={CalendarUtils.translateToString('ui-calendar.fillIn',this.props.stripes.intl)}
+                                        required/>;
+
+            }else {
+
+                modifyName = <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
+                                        value={this.props.modifyPeriod.name || ''} ref="periodName" name="periodName"
+                                        id="input-period-name" component={Textfield} onChange={this.setName}
+                                        required/>;
+            }
 
 
         } else {
@@ -99,9 +118,32 @@ class InputFields extends React.Component {
                                dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                onChange={this.setEndDate}/>;
 
-            modifyName =
-                <TextField label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)} ref="periodName"
-                           name="periodName" id="input-period-name" component={Textfield} onChange={this.setName}/>
+
+            if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
+
+                modifyName =
+                    <Field name="periodName"
+                           component={Textfield}
+                           llabel={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
+                           ref="periodName"
+                           id="input-period-name"
+                           onBlur={this.onBlur}
+                           onChange={this.setName}
+                           required
+                           error={CalendarUtils.translateToString('ui-calendar.fillIn',this.props.stripes.intl)}/>
+
+            }else {
+
+                modifyName =
+                    <Field name="periodName"
+                           component={Textfield}
+                           label={CalendarUtils.translateToString('ui-calendar.name',this.props.stripes.intl)}
+                           ref="periodName"
+                           id="input-period-name"
+                           onBlur={this.onBlur}
+                           onChange={this.setName}
+                           required/>
+            }
 
         }
 

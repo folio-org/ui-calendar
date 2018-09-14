@@ -79,9 +79,15 @@
     "regularLibraryHoursCalendar": "Szokásos könyvtári órák:",
     "selectTemplate": "Sablon kiválasztása",
     "copy": "Előző másolása",
-    "meta.title": "Calendar",
-    "allDayOpening": "All day opening",
-    "code": "Code",
+    "meta.title": "Naptár",
+    "allDayOpening": "Egész napos nyitvatartás",
+    "code":"Kód",
+    "allDayOpening": "Egész napos nyitvatartás",
     "settings.locations.discoveryDisplayName": "Discovery display name",
     "modifyRegularLibraryValidityPeriod": "Modify: Regular Library Hours Validity Period"
+    "fillIn": "Kérem, töltse ki ezt a folytatáshoz",
+    "invalidData":"Érvénytelen adat",
+    "close": "Bezár",
+    "noEvents": "Nincs esemény! Kérem adjon meg legalább egy eseményt!",
+    "wrongStartEndDate": "A kezdő dátum a befejezés időpontja után van!"
 }
