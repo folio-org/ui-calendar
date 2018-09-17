@@ -79,6 +79,7 @@ class LibraryHours extends React.Component {
                         post: 'settings.calendar.disabled',
                         delete: 'settings.calendar.disabled',
                     }}
+                    editable={false}
                 />
                 {renderCloneSettings()}
             </ErrorBoundary>
