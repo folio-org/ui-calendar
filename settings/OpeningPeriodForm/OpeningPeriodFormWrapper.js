@@ -1,57 +1,84 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import stripesForm from '@folio/stripes-form/index';
 import FromHeader from './FromHeader';
 import InputFields from './InputFields';
 import BigCalendarWrapper from './BigCalendarWrapper';
 import BigCalendarHeader from './BigCalendarHeader';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import moment from 'moment';
 import CalendarUtils from '../../CalendarUtils';
 import Modal from "../../../stripes-components/lib/Modal/Modal";
 import Button from '@folio/stripes-components/lib/Button';
+import ConfirmationModal from "../../../stripes-components/lib/ConfirmationModal";
+import Pane from "../../../stripes-components/lib/Pane";
+import SafeHTMLMessage from "@folio/react-intl-safe-html";
 
 
 class OpeningPeriodFormWrapper extends React.Component {
     static propTypes = {
-      modifyPeriod: PropTypes.object,
-      onSuccessfulCreatePeriod: PropTypes.func,
-      onSuccessfulModifyPeriod: PropTypes.func,
-      onClose: PropTypes.func.isRequired,
-      servicePointId: PropTypes.string.isRequired,
-      resources: PropTypes.shape({
-        period: PropTypes.shape({
-          records: PropTypes.object
+        modifyPeriod: PropTypes.object,
+        onSuccessfulCreatePeriod: PropTypes.func,
+        onSuccessfulModifyPeriod: PropTypes.func,
+        onClose: PropTypes.func.isRequired,
+        servicePointId: PropTypes.string.isRequired,
+        resources: PropTypes.shape({
+            period: PropTypes.shape({
+                records: PropTypes.object
+            }),
         }),
-      }),
-      mutator: PropTypes.shape({
-        servicePointId: PropTypes.shape({
-          replace: PropTypes.func,
+        mutator: PropTypes.shape({
+            servicePointId: PropTypes.shape({
+                replace: PropTypes.func,
+            }),
+            period: PropTypes.shape({
+                POST: PropTypes.func.isRequired,
+            }),
         }),
-        period: PropTypes.shape({
-          POST: PropTypes.func.isRequired,
+        stripes: PropTypes.shape({
+            intl: PropTypes.object.isRequired,
         }),
-      }),
-      stripes: PropTypes.shape({
-        intl: PropTypes.object.isRequired,
-      }),
     };
 
     constructor() {
-      super();
-      this.handleDateChange = this.handleDateChange.bind(this);
-      this.handleNameChange = this.handleNameChange.bind(this);
-      this.onFormSubmit = this.onFormSubmit.bind(this);
-      this.onCalendarChange = this.onCalendarChange.bind(this);
-      this.handleDelete = this.handleDelete.bind(this);
-      this.onEventChange = this.onEventChange.bind(this);
-      this.closeErrorModal = this.closeErrorModal.bind(this);
-      this.state = {};
+        super();
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
+        this.onCalendarChange = this.onCalendarChange.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.onEventChange = this.onEventChange.bind(this);
+        this.closeErrorModal = this.closeErrorModal.bind(this);
+        this.confirmExit = this.confirmExit.bind(this);
+        this.confirmDelete = this.confirmDelete.bind(this);
+        this.state = {
+            confirmDelete: false,
+            confirmExit: false,
+            dirty: false,
+        };
     }
 
+    confirmDelete() {
+        this.setState({
+            confirmDelete: true
+        })
+    }
+
+    confirmExit() {
+        if (this.state.dirty === undefined || this.state.dirty === null || this.state.dirty === false) {
+            return this.props.onClose();
+        }else if(this.state.dirty === true){
+            this.setState({
+                confirmExit: true
+            })
+        }
+    }
 
     componentDidMount() {
-        this.setState({...this.props.modifyPeriod});
+        this.setState({
+            ...this.props.modifyPeriod,
+            dirty: false
+        });
 
         if(this.props.latestEvent !== undefined && this.props.latestEvent !== null ){
             this.setState({startDate: moment(this.props.latestEvent).add(1, 'days').format()})
@@ -60,41 +87,47 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 
     handleDateChange(isStart, date) {
-      if (isStart) {
-        this.setState({ startDate: date });
-      } else {
-        this.setState({ endDate: date });
-      }
+        if (isStart) {
+            this.setState({startDate: date});
+        } else {
+            this.setState({endDate: date});
+        }
+        this.setState({dirty: true});
     }
 
     handleNameChange(name) {
-      this.setState({ name });
+        this.setState({
+            name,
+            dirty: true,
+        });
     }
 
     onCalendarChange(event) {
-      this.setState({ event });
+        this.setState({
+            event,
+            dirty: true,
+        });
     }
 
     handleDelete() {
-      const that = this;
-      const parentMutator = this.props.parentMutator;
-      const periodId = this.props.modifyPeriod.id;
-      const servicePointId = this.props.modifyPeriod.servicePointId;
-      if (servicePointId) parentMutator.query.replace(servicePointId);
-      if (periodId) parentMutator.periodId.replace(periodId);
-      return this.props.parentMutator.periods.DELETE(periodId).then((e) => {
-        that.props.onSuccessfulModifyPeriod(e);
-      }, (error) => {
-        console.log(error);
-      });
+        const that = this;
+        const parentMutator = this.props.parentMutator;
+        const periodId = this.props.modifyPeriod.id;
+        const servicePointId = this.props.modifyPeriod.servicePointId;
+        if (servicePointId) parentMutator.query.replace(servicePointId);
+        if (periodId) parentMutator.periodId.replace(periodId);
+        return this.props.parentMutator.periods.DELETE(periodId).then((e) => {
+            that.props.onSuccessfulModifyPeriod(e);
+        }, (error) => {
+            console.log(error);
+        });
     }
 
-    closeErrorModal(){
+    closeErrorModal() {
         this.setState({
             errorModalText: null
         });
     }
-
 
 
     onFormSubmit(event) {
@@ -102,14 +135,14 @@ class OpeningPeriodFormWrapper extends React.Component {
         const {parentMutator, servicePointId} = this.props;
         if (moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) {
             this.setState({
-                errorModalText: CalendarUtils.translateToString('ui-calendar.wrongStartEndDate',this.props.stripes.intl),
+                errorModalText: CalendarUtils.translateToString('ui-calendar.wrongStartEndDate', this.props.stripes.intl),
             });
             this.render();
             return null;
         }
         if (this.state.event === null || this.state.event === undefined || this.state.event.length === 0) {
             this.setState({
-                errorModalText: CalendarUtils.translateToString('ui-calendar.noEvents',this.props.stripes.intl),
+                errorModalText: CalendarUtils.translateToString('ui-calendar.noEvents', this.props.stripes.intl),
             });
             this.render();
             return null;
@@ -143,15 +176,33 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 
     onEventChange(e) {
-      this.setState({ event: e });
+        this.setState({
+            event: e,
+            dirty: true,
+        });
     }
 
 
     render() {
-      let modifyPeriod;
-      let errorModal;
+        let modifyPeriod;
+        let errorModal;
+        let errorDelete;
+        let errorExit;
         let start='';
         let end='';
+        const name = this.state.name;
+        const {confirmDelete, confirmExit} = this.state;
+        const confirmationMessageDelete = (
+            <SafeHTMLMessage
+                id="ui-calendar.deleteQuestionMessage"
+                values={{name}}
+            />
+        );
+        const confirmationMessageExit = (
+            <SafeHTMLMessage
+                id="ui-calendar.exitQuestionMessage"
+            />
+        );
 
         if(this.props.modifyPeriod){
             start=moment(this.props.modifyPeriod.startDate).format('L');
@@ -160,36 +211,70 @@ class OpeningPeriodFormWrapper extends React.Component {
             start=moment(this.props.latestEvent).add(1, 'days').format('L');
         }
 
-      if(this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
-          const footer = (
-              <Fragment>
-                  <Button onClick={this.closeErrorModal} ButtonStyle="primary">{CalendarUtils.translateToString('ui-calendar.close',this.props.stripes.intl)}</Button>
-              </Fragment>
-          );
+        errorDelete =
+            <ConfirmationModal
+                id="delete-confirmation"
+                open={confirmDelete}
+                heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionTitle', this.props.stripes.intl)}
+                message={confirmationMessageDelete}
+                onConfirm={() => {
+                    this.handleDelete();
+                }}
+                onCancel={() => {
+                    this.setState({confirmDelete: false});
+                }}
+                confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
+            />
 
-          errorModal =
-              <Modal dismissible onClose={this.closeErrorModal} open label={CalendarUtils.translateToString('ui-calendar.invalidData',this.props.stripes.intl)} footer={footer}>
-                  <p>{this.state.errorModalText}</p>
-              </Modal>
-      }
-      if (this.props.modifyPeriod) {
-        modifyPeriod =
-          <BigCalendarWrapper
-            eventsChange={this.onEventChange}
-            periodEvents={this.props.modifyPeriod.openingDays}
-            onCalendarChange={this.onCalendarChange}
-          />;
-      } else {
-        modifyPeriod = <BigCalendarWrapper onCalendarChange={this.onCalendarChange} />;
-      }
+        errorExit =
+            <ConfirmationModal
+                id="exite-confirmation"
+                open={confirmExit}
+                heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
+                message={confirmationMessageExit}
+                onConfirm={() => {
+                    return this.props.onClose();
+                }}
+                onCancel={() => {
+                    this.setState({confirmExit: false});
+                }}
+                confirmLabel={CalendarUtils.translateToString('ui-calendar.exitWithoutSaving', this.props.stripes.intl)}
+            />
+        if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
+            const footer = (
+                <Fragment>
+                    <Button onClick={this.closeErrorModal}
+                            ButtonStyle="primary">{CalendarUtils.translateToString('ui-calendar.close', this.props.stripes.intl)}</Button>
+                </Fragment>
+            );
+
+            errorModal =
+                <Modal dismissible onClose={this.closeErrorModal} open
+                       label={CalendarUtils.translateToString('ui-calendar.invalidData', this.props.stripes.intl)}
+                       footer={footer}>
+                    <p>{this.state.errorModalText}</p>
+                </Modal>
+        }
+        if (this.props.modifyPeriod) {
+            modifyPeriod =
+                <BigCalendarWrapper
+                    eventsChange={this.onEventChange}
+                    periodEvents={this.props.modifyPeriod.openingDays}
+                    onCalendarChange={this.onCalendarChange}
+                />;
+        } else {
+            modifyPeriod = <BigCalendarWrapper onCalendarChange={this.onCalendarChange}/>;
+        }
         return (
             <div id="newPeriodForm">
+                {errorDelete}
+                {errorExit}
                 {errorModal}
                 <form onSubmit={this.onFormSubmit}>
                     <FromHeader
                         {...this.props}
-                        handleDelete={this.handleDelete}
-                        onClose={this.props.onClose}/>
+                        handleDelete={this.confirmDelete}
+                        onClose={this.confirmExit}/>
                     <InputFields
                         {...this.props}
                         nameValue={this.state.name}
