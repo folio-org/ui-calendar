@@ -54,7 +54,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         this.setState({...this.props.modifyPeriod});
 
         if(this.props.latestEvent !== undefined && this.props.latestEvent !== null ){
-            this.setState({startDate: moment(this.props.latestEvent).format()})
+            this.setState({startDate: moment(this.props.latestEvent).add(1, 'days').format()})
         }
 
     }
@@ -150,6 +150,16 @@ class OpeningPeriodFormWrapper extends React.Component {
     render() {
       let modifyPeriod;
       let errorModal;
+        let start='';
+        let end='';
+
+        if(this.props.modifyPeriod){
+            start=moment(this.props.modifyPeriod.startDate).add(1, 'days').format('L');
+            end=moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
+        }else {
+            start=moment(this.props.latestEvent).add(1, 'days').format('L');
+        }
+
       if(this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
           const footer = (
               <Fragment>
@@ -185,6 +195,13 @@ class OpeningPeriodFormWrapper extends React.Component {
                         nameValue={this.state.name}
                         onNameChange={this.handleNameChange}
                         onDateChange={this.handleDateChange}
+                        initialValues={
+                            { item:
+                                    {
+                                        startDate:start,
+                                        endDate:end,
+                                    } }
+                        }
                     />
                     <BigCalendarHeader {...this.props} />
                     {modifyPeriod}
@@ -194,7 +211,4 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 }
 
-export default stripesForm({
-  form: 'OpeningPeriodFormWrapper',
-})(OpeningPeriodFormWrapper);
-
+export default OpeningPeriodFormWrapper;
