@@ -1,7 +1,7 @@
 import React from 'react';
 import {Row, Col} from '@folio/stripes-components/lib/LayoutGrid';
 import Datepicker from "../../../stripes-components/lib/Datepicker/Datepicker";
-import {Field} from 'redux-form';
+import {Field,reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 import Textfield from "../../../stripes-components/lib/TextField";
 import TextField from "@folio/stripes-components/lib/TextField/TextField";
@@ -70,8 +70,7 @@ class InputFields extends React.Component {
         let modifyName;
         let errorMessage = null;
         if (this.props.modifyPeriod) {
-            modifyStart = <Field initialValues={moment(this.props.modifyPeriod.startDate).format('L')}
-                                 name="startDate"
+            modifyStart = <Field name="item.startDate"
                                  component={Datepicker}
                                  label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
                                  dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
@@ -79,8 +78,7 @@ class InputFields extends React.Component {
                                  required
             />;
 
-            modifyEnd = <Field initialValues={moment(this.props.modifyPeriod.endDate).format('L')}
-                               name="endDate"
+            modifyEnd = <Field name="item.endDate"
                                component={Datepicker}
                                label={CalendarUtils.translateToString('ui-calendar.validTo',this.props.stripes.intl)}
                                dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
@@ -105,14 +103,13 @@ class InputFields extends React.Component {
 
         } else {
 
-            modifyStart = <Field initialValues={moment(moment(this.props.latestEvent).add(1, 'days').format('L'))._i}
-                                 name="startDate"
+            modifyStart = <Field name="item.startDate"
                                  component={Datepicker}
                                  label={CalendarUtils.translateToString('ui-calendar.validFrom',this.props.stripes.intl)}
                                  dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
                                  onChange={this.setStartDate}/>;
 
-            modifyEnd = <Field name="endDate"
+            modifyEnd = <Field name="item.endDate"
                                component={Datepicker}
                                label={CalendarUtils.translateToString('ui-calendar.validTo',this.props.stripes.intl)}
                                dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat',this.props.stripes.intl)}
@@ -170,4 +167,6 @@ class InputFields extends React.Component {
     }
 }
 
-export default InputFields;
+export default reduxForm({
+    form: 'InputFields',
+})(InputFields);
