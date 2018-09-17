@@ -80,8 +80,8 @@ class OpeningPeriodFormWrapper extends React.Component {
             dirty: false
         });
 
-        if (this.props.latestEvent !== undefined && this.props.latestEvent !== null) {
-            this.setState({startDate: moment(this.props.latestEvent).format()})
+        if(this.props.latestEvent !== undefined && this.props.latestEvent !== null ){
+            this.setState({startDate: moment(this.props.latestEvent).add(1, 'days').format()})
         }
 
     }
@@ -188,6 +188,8 @@ class OpeningPeriodFormWrapper extends React.Component {
         let errorModal;
         let errorDelete;
         let errorExit;
+        let start='';
+        let end='';
         const name = this.state.name;
         const {confirmDelete, confirmExit} = this.state;
         const confirmationMessageDelete = (
@@ -202,6 +204,12 @@ class OpeningPeriodFormWrapper extends React.Component {
             />
         );
 
+        if(this.props.modifyPeriod){
+            start=moment(this.props.modifyPeriod.startDate).format('L');
+            end=moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
+        }else {
+            start=moment(this.props.latestEvent).add(1, 'days').format('L');
+        }
 
         errorDelete =
             <ConfirmationModal
@@ -272,6 +280,13 @@ class OpeningPeriodFormWrapper extends React.Component {
                         nameValue={this.state.name}
                         onNameChange={this.handleNameChange}
                         onDateChange={this.handleDateChange}
+                        initialValues={
+                            { item:
+                                    {
+                                        startDate:start,
+                                        endDate:end,
+                                    } }
+                        }
                     />
                     <BigCalendarHeader {...this.props} />
                     {modifyPeriod}
@@ -281,7 +296,4 @@ class OpeningPeriodFormWrapper extends React.Component {
     }
 }
 
-export default stripesForm({
-    form: 'OpeningPeriodFormWrapper',
-})(OpeningPeriodFormWrapper);
-
+export default OpeningPeriodFormWrapper;
