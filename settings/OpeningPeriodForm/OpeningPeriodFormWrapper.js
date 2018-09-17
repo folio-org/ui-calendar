@@ -154,7 +154,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         let end='';
 
         if(this.props.modifyPeriod){
-            start=moment(this.props.modifyPeriod.startDate).add(1, 'days').format('L');
+            start=moment(this.props.modifyPeriod.startDate).format('L');
             end=moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
         }else {
             start=moment(this.props.latestEvent).add(1, 'days').format('L');
