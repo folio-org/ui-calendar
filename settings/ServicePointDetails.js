@@ -23,7 +23,6 @@ class ServicePointDetails extends React.Component {
     this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
     this.onSuccessfulModifyPeriod = this.onSuccessfulModifyPeriod.bind(this);
     this.clickNewPeriod = this.clickNewPeriod.bind(this);
-    this.onAdd = this.onAdd.bind(this);
     this.onClose = this.onClose.bind(this);
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
@@ -35,16 +34,9 @@ class ServicePointDetails extends React.Component {
       modifyPeriodLayer: {
         isOpen: false,
       },
-      sections: {
-        generalInformation: true,
-      },
-      displayCurrentPeriod: {},
       modifyPeriod: {},
-      displayPeriods: [],
       openingPeriods: [],
       nextPeriods: [],
-      selectedPeriods: [],
-      selectedServicePoints: [],
       isPeriodsPending: true
     };
   }
@@ -151,11 +143,6 @@ class ServicePointDetails extends React.Component {
     this.props.onToggle(true);
   }
 
-  onAdd() {
-    this.setState({ selectedId: null });
-    this.showLayer('add');
-  }
-
   clickNewPeriod() {
     this.setState({ newPeriodLayer: { isOpen: true } });
   }
@@ -198,6 +185,7 @@ class ServicePointDetails extends React.Component {
             <div
               className="periods"
               onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
+              onKeyDown={() => {}}
               role="button"
               tabIndex={0}
             >
@@ -257,12 +245,17 @@ class ServicePointDetails extends React.Component {
     }
     let nextPeriodDetails;
     const itemFormatter = (item) => (
-      <li
-        className="periods"
-        onClick={() => this.handleSelectPeriod(item.id)}
-        key={item.id}
-      >
-        {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
+      <li>
+        <div
+          className="periods"
+          onClick={() => { this.handleSelectPeriod(item.id); }}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex={0}
+          key={item.id}
+        >
+          {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
+        </div>
       </li>);
     if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {
       nextPeriodDetails =
