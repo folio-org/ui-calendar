@@ -234,35 +234,37 @@ class CloneSettings extends React.Component {
       const selectedPeriods = [];
       const selectedServicePoints = [];
       const clonePeriodsFormatter = (item) => (
-        <li><Checkbox
-          id={item.id}
-          onChange={
+        <li>
+          <Checkbox
+            id={item.id}
+            onChange={
                     () => {
-                        const index = selectedPeriods.indexOf(item.id);
-                        if (index > -1) {
-                            selectedPeriods.splice(index, 1);
-                        } else {
-                            selectedPeriods.push(item.id);
-                        }
+                      const index = selectedPeriods.indexOf(item.id);
+                      if (index > -1) {
+                        selectedPeriods.splice(index, 1);
+                      } else {
+                        selectedPeriods.push(item.id);
+                      }
                     }
                 }
-          label={item.name}
-        />
+            label={item.name}
+          />
         </li>);
       const cloneServicePointsFormatter = (item) => (
-        <li><Checkbox
-          id={item.id}
-          onChange={() => {
-                    const index = selectedServicePoints.indexOf(item.id);
-                    if (index > -1) {
-                        selectedServicePoints.splice(index, 1);
-                    } else {
-                        selectedServicePoints.push(item.id);
-                    }
+        <li>
+          <Checkbox
+            id={item.id}
+            onChange={() => {
+              const index = selectedServicePoints.indexOf(item.id);
+              if (index > -1) {
+                selectedServicePoints.splice(index, 1);
+              } else {
+                selectedServicePoints.push(item.id);
+              }
+            }
                 }
-                }
-          label={item.name}
-        />
+            label={item.name}
+          />
         </li>);
       return (
         <Pane

@@ -176,8 +176,7 @@ class BigCalendarWrapper extends React.Component {
 
     render() {
       const formats = {
-        dayFormat: (date, culture, localizer) =>
-          localizer.format(date, 'dddd', culture),
+        dayFormat: (date, culture, localizer) => localizer.format(date, 'dddd', culture),
       };
 
       return (

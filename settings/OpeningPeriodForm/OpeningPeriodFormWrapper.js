@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react';
 import stripesForm from '@folio/stripes-form/index';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+import Button from '@folio/stripes-components/lib/Button';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import FromHeader from './FromHeader';
 import InputFields from './InputFields';
 import BigCalendarWrapper from './BigCalendarWrapper';
 import BigCalendarHeader from './BigCalendarHeader';
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import moment from 'moment';
 import CalendarUtils from '../../CalendarUtils';
 import Modal from '../../../stripes-components/lib/Modal/Modal';
-import Button from '@folio/stripes-components/lib/Button';
 import ConfirmationModal from '../../../stripes-components/lib/ConfirmationModal';
 import Pane from '../../../stripes-components/lib/Pane';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 
 class OpeningPeriodFormWrapper extends React.Component {
@@ -217,11 +217,11 @@ class OpeningPeriodFormWrapper extends React.Component {
           heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionTitle', this.props.stripes.intl)}
           message={confirmationMessageDelete}
           onConfirm={() => {
-                    this.handleDelete();
-                }}
+            this.handleDelete();
+          }}
           onCancel={() => {
-                    this.setState({ confirmDelete: false });
-                }}
+            this.setState({ confirmDelete: false });
+          }}
           confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
         />;
 
@@ -232,11 +232,11 @@ class OpeningPeriodFormWrapper extends React.Component {
           heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
           message={confirmationMessageExit}
           onConfirm={() => {
-                    return this.props.onClose();
-                }}
+            return this.props.onClose();
+          }}
           onCancel={() => {
-                    this.setState({ confirmExit: false });
-                }}
+            this.setState({ confirmExit: false });
+          }}
           confirmLabel={CalendarUtils.translateToString('ui-calendar.exitWithoutSaving', this.props.stripes.intl)}
         />;
       if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
@@ -245,7 +245,8 @@ class OpeningPeriodFormWrapper extends React.Component {
             <Button
               onClick={this.closeErrorModal}
               ButtonStyle="primary"
-            >{CalendarUtils.translateToString('ui-calendar.close', this.props.stripes.intl)}
+            >
+              {CalendarUtils.translateToString('ui-calendar.close', this.props.stripes.intl)}
             </Button>
           </Fragment>
         );
@@ -288,11 +289,13 @@ class OpeningPeriodFormWrapper extends React.Component {
               onNameChange={this.handleNameChange}
               onDateChange={this.handleDateChange}
               initialValues={
-                            { item:
+                            {
+                              item:
                                     {
-                                        startDate: start,
-                                        endDate: end,
-                                    } }
+                                      startDate: start,
+                                      endDate: end,
+                                    }
+                            }
                         }
             />
             <BigCalendarHeader {...this.props} />

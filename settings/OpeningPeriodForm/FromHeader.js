@@ -16,9 +16,9 @@ class FromHeader extends React.Component {
     render() {
       let disabled;
       if (this.props.modifyPeriod) {
-        disabled = <Button onClick={() => { this.props.handleDelete(); }} buttonStyle="danger" >{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
+        disabled = <Button onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
       } else {
-        disabled = <Button disabled onClick={() => { this.props.handleDelete(); }} buttonStyle="danger" >{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
+        disabled = <Button disabled onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
       }
       let title;
       if (this.props.modifyPeriod) {

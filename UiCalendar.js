@@ -176,8 +176,16 @@ class UiCalendar extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={4}><FormattedDate value={this.state.selectedEvent.startDate} /> <FormattedTime value={this.state.selectedEvent.startDate} /></Col>
-                  <Col xs={4}><FormattedDate value={this.state.selectedEvent.endDate} /> <FormattedTime value={this.state.selectedEvent.endDate} /></Col>
+                  <Col xs={4}>
+                    <FormattedDate value={this.state.selectedEvent.startDate} />
+                    {' '}
+                    <FormattedTime value={this.state.selectedEvent.startDate} />
+                  </Col>
+                  <Col xs={4}>
+                    <FormattedDate value={this.state.selectedEvent.endDate} />
+                    {' '}
+                    <FormattedTime value={this.state.selectedEvent.endDate} />
+                  </Col>
                 </Row>
               </section>
             </div>

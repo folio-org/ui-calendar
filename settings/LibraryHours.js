@@ -67,10 +67,10 @@ class LibraryHours extends React.Component {
             nameKey="name"
             parentMutator={this.props.mutator}
             permissions={{
-                        put: 'settings.calendar.disabled',
-                        post: 'settings.calendar.disabled',
-                        delete: 'settings.calendar.disabled',
-                    }}
+              put: 'settings.calendar.disabled',
+              post: 'settings.calendar.disabled',
+              delete: 'settings.calendar.disabled',
+            }}
             editable={false}
           />
           {renderedCloneSettings}

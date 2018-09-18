@@ -200,7 +200,8 @@ class ServicePointDetails extends React.Component {
               onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
               role="button"
               tabIndex={0}
-            >{this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
+            >
+              {this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
             </div>}
         />;
 
@@ -260,7 +261,8 @@ class ServicePointDetails extends React.Component {
         className="periods"
         onClick={() => this.handleSelectPeriod(item.id)}
         key={item.id}
-      >{item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
+      >
+        {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
       </li>);
     if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {
       nextPeriodDetails =
@@ -269,7 +271,8 @@ class ServicePointDetails extends React.Component {
             <Headline
               size="small"
               margin="large"
-            >{CalendarUtils.translate('ui-calendar.nextPeriod')}
+            >
+              {CalendarUtils.translate('ui-calendar.nextPeriod')}
             </Headline>
             <List
               items={this.state.nextPeriods}
@@ -303,7 +306,8 @@ class ServicePointDetails extends React.Component {
                 <Headline
                   size="small"
                   margin="large"
-                >{CalendarUtils.translate('ui-calendar.regularLibraryHours')}
+                >
+                  {CalendarUtils.translate('ui-calendar.regularLibraryHours')}
                 </Headline>
                 {currentP}
 
@@ -329,7 +333,8 @@ class ServicePointDetails extends React.Component {
                 <Headline
                   size="small"
                   margin="large"
-                >{CalendarUtils.translate('ui-calendar.actualLibraryHours')}
+                >
+                  {CalendarUtils.translate('ui-calendar.actualLibraryHours')}
                 </Headline>
 
                 <p>{CalendarUtils.translate('ui-calendar.regularOpeningHoursWithExceptions')}</p>
