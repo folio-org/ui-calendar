@@ -1,3 +1,4 @@
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -9,7 +10,6 @@ import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
 import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
 import ErrorBoundary from './ErrorBoundary';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class UiCalendar extends React.Component {
   static propTypes = {
@@ -52,7 +52,7 @@ class UiCalendar extends React.Component {
     };
   }
 
-  navigate(date, view, action) {
+  navigate(date, view) {
     if (view === BigCalendar.Views.WEEK) {
       this.updateEvents(date, 7);
     } else if (view === BigCalendar.Views.MONTH) {
@@ -60,7 +60,7 @@ class UiCalendar extends React.Component {
     }
   }
 
-  changeView(view) {
+  changeView() {
     this.props.mutator.calendarEvent.reset();
     this.props.mutator.calendarEvent.GET();
   }
@@ -74,7 +74,7 @@ class UiCalendar extends React.Component {
     this.props.mutator.calendarEvent.GET({ params });
   }
 
-  selectEvent(calendarEvent, event) {
+  selectEvent(calendarEvent) {
     this.setState({ selectedEvent: calendarEvent });
     this.setState({ showPane: true });
   }

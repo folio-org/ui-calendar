@@ -1,6 +1,5 @@
 import React from 'react';
 import Settings from '@folio/stripes-components/lib/Settings';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import CalendarUtils from '../CalendarUtils';
 
 import LibraryHours from './LibraryHours';

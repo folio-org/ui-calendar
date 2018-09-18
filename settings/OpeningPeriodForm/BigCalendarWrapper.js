@@ -119,7 +119,7 @@ class BigCalendarWrapper extends React.Component {
       this.onCalendarChange(nextEvents);
     };
 
-    onEventResize = (type, { event, start, end, allDay }) => {
+    onEventResize = (type, { event, start, end }) => {
       const { events } = this.state;
       const nextEvents = events.map(existingEvent => {
         return existingEvent.id === event.id
@@ -132,7 +132,7 @@ class BigCalendarWrapper extends React.Component {
     onSlotSelect(event) {
       let id = this.state.eventIdCounter;
       id++;
-      if (event.start instanceof Date && !isNaN(event.start)) {
+      if (event.start instanceof Date && !Number.isNaN(event.start)) {
         if (event.slots.length === 1) {
           this.setState(state => {
             state.events.push({ start: event.start, end: event.end, id, allDay: true, title: 'All day' });
@@ -175,10 +175,6 @@ class BigCalendarWrapper extends React.Component {
     }
 
     render() {
-      console.log(this.state);
-
-      // this.props.eventsChange? this.props.eventsChange(this.state.events): "";
-
       const formats = {
         dayFormat: (date, culture, localizer) =>
           localizer.format(date, 'dddd', culture),

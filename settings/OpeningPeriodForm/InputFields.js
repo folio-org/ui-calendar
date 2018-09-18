@@ -1,18 +1,20 @@
-import React from 'react';
+import TextField from '@folio/stripes-components/lib/TextField/TextField';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
+import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
-import Textfield from '../../../stripes-components/lib/TextField';
-import TextField from '@folio/stripes-components/lib/TextField/TextField';
-import moment from 'moment';
 import CalendarUtils from '../../CalendarUtils';
+import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
+import Textfield from '../../../stripes-components/lib/TextField';
 
 class InputFields extends React.Component {
     static propTypes = {
       onDateChange: PropTypes.func.isRequired,
       onNameChange: PropTypes.func.isRequired,
-      nameValue: PropTypes.string.isRequired,
+      nameValue: PropTypes.func,
+      modifyPeriod: PropTypes.object,
+      stripes: PropTypes.object,
+      intl: PropTypes.object
     };
 
 
@@ -22,6 +24,19 @@ class InputFields extends React.Component {
       this.setEndDate = this.setEndDate.bind(this);
       this.setStartDate = this.setStartDate.bind(this);
       this.onBlur = this.onBlur.bind(this);
+    }
+
+    componentDidMount() {
+    }
+
+    parseDateToString(e) {
+      let str = '';
+      for (const p in e) {
+        if (e.hasOwnProperty(p) && p !== 'preventDefault') {
+          str += e[p];
+        }
+      }
+      return str;
     }
 
     onBlur() {
@@ -34,20 +49,6 @@ class InputFields extends React.Component {
           errorBoolean: true,
         });
       }
-    }
-
-    parseDateToString(e) {
-      let str = '';
-      for (const p in e) {
-        if (e.hasOwnProperty(p) && p != 'preventDefault') {
-          str += e[p];
-        }
-      }
-      return str;
-    }
-
-    componentDidMount() {
-      console.log(this.props);
     }
 
     setStartDate(e) {
@@ -66,7 +67,6 @@ class InputFields extends React.Component {
       let modifyStart;
       let modifyEnd;
       let modifyName;
-      const errorMessage = null;
       if (this.props.modifyPeriod) {
         modifyStart = <Field
           name="item.startDate"
@@ -89,7 +89,6 @@ class InputFields extends React.Component {
           modifyName = <TextField
             label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
             value={this.props.modifyPeriod.name || ''}
-            ref="periodName"
             name="periodName"
             id="input-period-name"
             component={Textfield}
@@ -101,7 +100,6 @@ class InputFields extends React.Component {
           modifyName = <TextField
             label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
             value={this.props.modifyPeriod.name || ''}
-            ref="periodName"
             name="periodName"
             id="input-period-name"
             component={Textfield}
@@ -129,11 +127,9 @@ class InputFields extends React.Component {
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
           modifyName =
-            <Field
+            <TextField
               name="periodName"
-              component={Textfield}
               llabel={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
-              ref="periodName"
               id="input-period-name"
               onBlur={this.onBlur}
               onChange={this.setName}
@@ -142,11 +138,9 @@ class InputFields extends React.Component {
             />;
         } else {
           modifyName =
-            <Field
+            <TextField
               name="periodName"
-              component={Textfield}
               label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
-              ref="periodName"
               id="input-period-name"
               onBlur={this.onBlur}
               onChange={this.setName}

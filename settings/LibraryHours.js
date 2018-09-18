@@ -2,7 +2,6 @@ import { sortBy } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
-import { FormattedMessage } from 'react-intl';
 import ServicePointDetails from './ServicePointDetails';
 import ErrorBoundary from '../ErrorBoundary';
 import CloneSettings from './CloneSettings';
@@ -51,11 +50,9 @@ class LibraryHours extends React.Component {
     render() {
       const { toggleCloneSettings } = this.state;
       const that = this;
-
-      function renderCloneSettings() {
-        if (toggleCloneSettings) {
-          return <CloneSettings {...this.props} onToggle={that.onChildToggle()} />;
-        }
+      let renderedCloneSettings = null;
+      if (toggleCloneSettings) {
+        renderedCloneSettings = <CloneSettings {...this.props} onToggle={that.onChildToggle()} />;
       }
 
       return (
@@ -76,7 +73,7 @@ class LibraryHours extends React.Component {
                     }}
             editable={false}
           />
-          {renderCloneSettings()}
+          {renderedCloneSettings}
         </ErrorBoundary>
       );
     }

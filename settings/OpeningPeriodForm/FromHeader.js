@@ -4,19 +4,14 @@ import Headline from '@folio/stripes-components/lib/Headline/Headline';
 import Button from '@folio/stripes-components/lib/Button/Button';
 import PropTypes from 'prop-types';
 import IconButton from '@folio/stripes-components/lib/IconButton/IconButton';
-import { FormattedMessage } from 'react-intl';
 import CalendarUtils from '../../CalendarUtils';
 
 class FromHeader extends React.Component {
     static propTypes = {
       onClose: PropTypes.func.isRequired,
-      handleDelete: PropTypes.func
+      handleDelete: PropTypes.func,
+      modifyPeriod: PropTypes.object
     };
-
-    constructor() {
-      super();
-    }
-
 
     render() {
       let disabled;
@@ -27,13 +22,15 @@ class FromHeader extends React.Component {
       }
       let title;
       if (this.props.modifyPeriod) {
-        title = <Headline size="large" margin="medium" tag="h3">
-          {CalendarUtils.translate('ui-calendar.modifyRegularLibraryValidityPeriod')}
-                </Headline>;
+        title =
+          <Headline size="large" margin="medium" tag="h3">
+            {CalendarUtils.translate('ui-calendar.modifyRegularLibraryValidityPeriod')}
+          </Headline>;
       } else {
-        title = <Headline size="large" margin="medium" tag="h3">
-          {CalendarUtils.translate('ui-calendar.regularLibraryValidityPeriod')}
-        </Headline>;
+        title =
+          <Headline size="large" margin="medium" tag="h3">
+            {CalendarUtils.translate('ui-calendar.regularLibraryValidityPeriod')}
+          </Headline>;
       }
 
       return (
