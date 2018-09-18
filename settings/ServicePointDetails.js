@@ -95,12 +95,13 @@ class ServicePointDetails extends React.Component {
   }
 
   displayCurrentPeriod() {
+    let res;
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
       const start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
       const end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
       if (moment() > start && moment() < end) {
-        return {
+        res = {
           startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
           endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
           name: openingPeriod.name,
@@ -109,6 +110,7 @@ class ServicePointDetails extends React.Component {
         };
       }
     }
+    return res;
   }
 
   displayNextPeriod() {
@@ -192,62 +194,65 @@ class ServicePointDetails extends React.Component {
       currentP =
         <KeyValue
           label="Current:"
-          value={<div
-            className="periods"
-            onClick={() => this.handleSelectPeriod(this.state.currentPeriod.id)}
-          >{this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
-          </div>}
+          value={
+            <div
+              className="periods"
+              onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
+              role="button"
+              tabIndex={0}
+            >{this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
+            </div>}
         />;
 
-      currentPTimes = <Row>
-        <Col xs>
-          <div className="seven-cols">
-            <div className="col-sm-1">
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.sunDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[0])}
-              />
+      currentPTimes =
+        <Row>
+          <Col xs>
+            <div className="seven-cols">
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.sunDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[0])}
+                />
+              </div>
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.monDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[1])}
+                />
+              </div>
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.tueDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[2])}
+                />
+              </div>
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.wedDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[3])}
+                />
+              </div>
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.thuDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[4])}
+                />
+              </div>
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.friDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[5])}
+                />
+              </div>
+              <div className="col-sm-1">
+                <KeyValue
+                  label={CalendarUtils.translate('ui-calendar.satDayShort')}
+                  value={this.getWeekdayOpeningHours(weekdays[6])}
+                />
+              </div>
             </div>
-            <div className="col-sm-1">
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.monDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[1])}
-              />
-            </div>
-            <div className="col-sm-1">
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.tueDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[2])}
-              />
-            </div>
-            <div className="col-sm-1">
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.wedDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[3])}
-              />
-            </div>
-            <div className="col-sm-1">
-
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.thuDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[4])}
-              />
-            </div>
-            <div className="col-sm-1">
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.friDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[5])}
-              />
-            </div>
-            <div className="col-sm-1">
-              <KeyValue
-                label={CalendarUtils.translate('ui-calendar.satDayShort')}
-                value={this.getWeekdayOpeningHours(weekdays[6])}
-              />
-            </div>
-          </div>
-        </Col>
-                      </Row>;
+          </Col>
+        </Row>;
     }
     let nextPeriodDetails;
     const itemFormatter = (item) => (
@@ -258,19 +263,20 @@ class ServicePointDetails extends React.Component {
       >{item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
       </li>);
     if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {
-      nextPeriodDetails = <Row>
-        <Col xs>
-          <Headline
-            size="small"
-            margin="large"
-          >{CalendarUtils.translate('ui-calendar.nextPeriod')}
-          </Headline>
-          <List
-            items={this.state.nextPeriods}
-            itemFormatter={itemFormatter}
-          />
-        </Col>
-                          </Row>;
+      nextPeriodDetails =
+        <Row>
+          <Col xs>
+            <Headline
+              size="small"
+              margin="large"
+            >{CalendarUtils.translate('ui-calendar.nextPeriod')}
+            </Headline>
+            <List
+              items={this.state.nextPeriods}
+              itemFormatter={itemFormatter}
+            />
+          </Col>
+        </Row>;
     }
     BigCalendar.momentLocalizer(moment);
     const servicePoint = this.props.initialValues;
@@ -339,7 +345,6 @@ class ServicePointDetails extends React.Component {
                   <div className="text"> to add exceptions</div>
                 </div>
               </Col>
-
             </Row>
           </div>
 
