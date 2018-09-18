@@ -6,11 +6,10 @@ import UiCalendar from './UiCalendar';
 import Settings from './settings';
 
 class CalendarRouting extends React.Component {
-
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      locale: PropTypes.string.isRequired,      
+      locale: PropTypes.string.isRequired,
     }).isRequired,
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
@@ -26,7 +25,11 @@ class CalendarRouting extends React.Component {
     return (
       <div>
         <h2>Uh-oh!</h2>
-        <p>How did you get to <tt>{this.props.location.pathname}</tt>?</p>
+        <p>
+How did you get to
+          <tt>{this.props.location.pathname}</tt>
+?
+        </p>
       </div>
     );
   }
