@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
@@ -63,7 +62,7 @@ class ServicePointDetails extends React.Component {
         this.setState({ nextPeriods: this.displayNextPeriod() });
         this.setState({ isPeriodsPending: false });
       }, (error) => {
-        console.log(error);
+        return error;
       });
   }
 
