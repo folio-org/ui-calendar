@@ -85,5 +85,11 @@
   "invalidData":"Invalid data",
   "close": "Close",
   "noEvents": "No event found! Please make at least one event!",
-  "wrongStartEndDate": "The start date is after the end date!"
+  "wrongStartEndDate": "The start date is after the end date!",
+  "deleteQuestionMessage": "The regular library hours <strong>{name}</strong> will be <strong>deleted</strong>.",
+  "deleteQuestionTitle": "Delete regular library hours",
+  "exitQuestionTitle": "Are you sure?",
+  "exitWithoutSaving": "Exit without saving",
+  "exitQuestionMessage": "There are unsaved changes"
+
 }

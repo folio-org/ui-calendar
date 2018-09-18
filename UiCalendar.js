@@ -1,3 +1,4 @@
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -9,10 +10,8 @@ import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
 import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
 import ErrorBoundary from './ErrorBoundary';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class UiCalendar extends React.Component {
-
   static propTypes = {
     resources: PropTypes.shape({
       calendarEvent: PropTypes.shape({
@@ -50,18 +49,18 @@ class UiCalendar extends React.Component {
     this.state = {
       showPane: false,
       selectedEvent: undefined,
-    }
+    };
   }
 
-  navigate(date, view, action) {
+  navigate(date, view) {
     if (view === BigCalendar.Views.WEEK) {
       this.updateEvents(date, 7);
-    } else if(view === BigCalendar.Views.MONTH) {
+    } else if (view === BigCalendar.Views.MONTH) {
       this.updateEvents(date, 42);
     }
   }
 
-  changeView(view) {
+  changeView() {
     this.props.mutator.calendarEvent.reset();
     this.props.mutator.calendarEvent.GET();
   }
@@ -69,19 +68,19 @@ class UiCalendar extends React.Component {
   updateEvents(date, days) {
     this.props.mutator.calendarEvent.reset();
     const params = {
-      from: moment(date).subtract(days, 'days').format("YYYY-MM-DD"),
-      to: moment(date).add(days, 'days').format("YYYY-MM-DD"),
+      from: moment(date).subtract(days, 'days').format('YYYY-MM-DD'),
+      to: moment(date).add(days, 'days').format('YYYY-MM-DD'),
     };
     this.props.mutator.calendarEvent.GET({ params });
   }
 
-  selectEvent(calendarEvent, event) {
-    this.setState({selectedEvent: calendarEvent});
-    this.setState({showPane: true});
+  selectEvent(calendarEvent) {
+    this.setState({ selectedEvent: calendarEvent });
+    this.setState({ showPane: true });
   }
 
   handleClose() {
-    this.setState({showPane: false});
+    this.setState({ showPane: false });
   }
 
   render() {
@@ -124,12 +123,12 @@ class UiCalendar extends React.Component {
       today: (<SafeHTMLMessage id="ui-calendar.today" />),
       agenda: (<SafeHTMLMessage id="ui-calendar.agenda" />),
 
-      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total: total }} />),
+      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total }} />),
     };
 
     const paneTitle = (
       <SafeHTMLMessage id="ui-calendar.main.institutionalCalendar" />
-    )
+    );
 
     return (
       <Paneset>
@@ -177,8 +176,16 @@ class UiCalendar extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={4}><FormattedDate value={this.state.selectedEvent.startDate} /> <FormattedTime value={this.state.selectedEvent.startDate} /></Col>
-                  <Col xs={4}><FormattedDate value={this.state.selectedEvent.endDate} /> <FormattedTime value={this.state.selectedEvent.endDate} /></Col>
+                  <Col xs={4}>
+                    <FormattedDate value={this.state.selectedEvent.startDate} />
+                    {' '}
+                    <FormattedTime value={this.state.selectedEvent.startDate} />
+                  </Col>
+                  <Col xs={4}>
+                    <FormattedDate value={this.state.selectedEvent.endDate} />
+                    {' '}
+                    <FormattedTime value={this.state.selectedEvent.endDate} />
+                  </Col>
                 </Row>
               </section>
             </div>
