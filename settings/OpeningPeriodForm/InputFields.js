@@ -11,7 +11,7 @@ class InputFields extends React.Component {
     static propTypes = {
       onDateChange: PropTypes.func.isRequired,
       onNameChange: PropTypes.func.isRequired,
-      nameValue: PropTypes.func,
+      nameValue: PropTypes.string.isRequired,
       modifyPeriod: PropTypes.object,
       stripes: PropTypes.object,
       intl: PropTypes.object
