@@ -12,7 +12,6 @@ import ErrorBoundary from './ErrorBoundary';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class UiCalendar extends React.Component {
-
   static propTypes = {
     resources: PropTypes.shape({
       calendarEvent: PropTypes.shape({
@@ -50,13 +49,13 @@ class UiCalendar extends React.Component {
     this.state = {
       showPane: false,
       selectedEvent: undefined,
-    }
+    };
   }
 
   navigate(date, view, action) {
     if (view === BigCalendar.Views.WEEK) {
       this.updateEvents(date, 7);
-    } else if(view === BigCalendar.Views.MONTH) {
+    } else if (view === BigCalendar.Views.MONTH) {
       this.updateEvents(date, 42);
     }
   }
@@ -69,19 +68,19 @@ class UiCalendar extends React.Component {
   updateEvents(date, days) {
     this.props.mutator.calendarEvent.reset();
     const params = {
-      from: moment(date).subtract(days, 'days').format("YYYY-MM-DD"),
-      to: moment(date).add(days, 'days').format("YYYY-MM-DD"),
+      from: moment(date).subtract(days, 'days').format('YYYY-MM-DD'),
+      to: moment(date).add(days, 'days').format('YYYY-MM-DD'),
     };
     this.props.mutator.calendarEvent.GET({ params });
   }
 
   selectEvent(calendarEvent, event) {
-    this.setState({selectedEvent: calendarEvent});
-    this.setState({showPane: true});
+    this.setState({ selectedEvent: calendarEvent });
+    this.setState({ showPane: true });
   }
 
   handleClose() {
-    this.setState({showPane: false});
+    this.setState({ showPane: false });
   }
 
   render() {
@@ -124,12 +123,12 @@ class UiCalendar extends React.Component {
       today: (<SafeHTMLMessage id="ui-calendar.today" />),
       agenda: (<SafeHTMLMessage id="ui-calendar.agenda" />),
 
-      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total: total }} />),
+      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total }} />),
     };
 
     const paneTitle = (
       <SafeHTMLMessage id="ui-calendar.main.institutionalCalendar" />
-    )
+    );
 
     return (
       <Paneset>

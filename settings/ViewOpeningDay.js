@@ -22,14 +22,14 @@ function calculateTime(startTime, endTime, open, allDay) {
 }
 
 function ViewOpeningDay(props) {
-  const openingDays = props.initialValues;  
+  const openingDays = props.initialValues;
 
-  const eventTypeOptions = { 
+  const eventTypeOptions = {
     'OPENING_DAY': CalendarUtils.translate('ui-calendar.settings.event_type.opening_day'),
     'EXCEPTION': CalendarUtils.translate('ui-calendar.settings.event_type.exception'),
   };
 
-  return (    
+  return (
     <div>
       <section>
         <Row>
@@ -38,16 +38,16 @@ function ViewOpeningDay(props) {
           </Col>
         </Row>
         <Row>
-          <Col xs={4}><h4><SafeHTMLMessage id='ui-calendar.settings.openingPeriodStart'/></h4></Col>
-          <Col xs={4}><h4><SafeHTMLMessage id='ui-calendar.settings.openingPeriodEnd'/></h4></Col>
+          <Col xs={4}><h4><SafeHTMLMessage id="ui-calendar.settings.openingPeriodStart" /></h4></Col>
+          <Col xs={4}><h4><SafeHTMLMessage id="ui-calendar.settings.openingPeriodEnd" /></h4></Col>
         </Row>
         <Row>
           <Col xs={4}><FormattedDate value={openingDays.startDate} /></Col>
           <Col xs={4}><FormattedDate value={openingDays.endDate} /></Col>
         </Row>
         <Row>
-          <Col xs={4}><h4><SafeHTMLMessage id='ui-calendar.settings.day'/></h4></Col>
-          <Col xs={8}><h4><SafeHTMLMessage id='ui-calendar.settings.openingTime'/></h4></Col>
+          <Col xs={4}><h4><SafeHTMLMessage id="ui-calendar.settings.day" /></h4></Col>
+          <Col xs={8}><h4><SafeHTMLMessage id="ui-calendar.settings.openingTime" /></h4></Col>
         </Row>
         {openingDays.openingDays.map((openingDay, index) =>
           (<Row key={`day-${index}`}>
@@ -59,8 +59,7 @@ function ViewOpeningDay(props) {
                 </Col>
               ))}
             </Row>
-          </Row>),
-        )}
+          </Row>))}
       </section>
     </div>
   );
