@@ -33,9 +33,7 @@ class InputFields extends React.Component {
       let str = '';
       for (const p in e) {
         if (p !== undefined) {
-          const hasProperty = Object.prototype.hasOwnProperty.call(p);
-
-          if (hasProperty && p !== 'preventDefault') {
+          if (Object.prototype.hasOwnProperty.call(e, p) && p !== 'preventDefault') {
             str += e[p];
           }
         }
@@ -87,6 +85,7 @@ class InputFields extends React.Component {
           label={CalendarUtils.translateToString('ui-calendar.validTo', this.props.stripes.intl)}
           dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
           onChange={this.setEndDate}
+          required
         />;
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
@@ -118,6 +117,7 @@ class InputFields extends React.Component {
           label={CalendarUtils.translateToString('ui-calendar.validFrom', this.props.stripes.intl)}
           dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
           onChange={this.setStartDate}
+          required
         />;
 
         modifyEnd = <Field
@@ -126,6 +126,7 @@ class InputFields extends React.Component {
           label={CalendarUtils.translateToString('ui-calendar.validTo', this.props.stripes.intl)}
           dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
           onChange={this.setEndDate}
+          required
         />;
 
 
