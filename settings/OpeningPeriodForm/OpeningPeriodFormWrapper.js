@@ -274,7 +274,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             />
             <InputFields
               {...this.props}
-              nameValue={this.state.name || ' '}
+              nameValue={this.state.name || ''}
               onNameChange={this.handleNameChange}
               onDateChange={this.handleDateChange}
               initialValues={

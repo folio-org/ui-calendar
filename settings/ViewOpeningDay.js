@@ -4,7 +4,6 @@ import moment from 'moment';
 import dateFormat from 'dateformat';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { stripesShape } from '@folio/stripes-core/src/Stripes';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import CalendarUtils from '../CalendarUtils';
 
@@ -75,7 +74,6 @@ function ViewOpeningDay(props) {
 
 ViewOpeningDay.propTypes = {
   initialValues: PropTypes.object,
-  stripes: stripesShape.isRequired,
 };
 
 export default ViewOpeningDay;

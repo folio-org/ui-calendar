@@ -154,7 +154,7 @@ class BigCalendarWrapper extends React.Component {
     }
 
     onDeleteEvent(events, eventTodelete) {
-      const filteredEvent = this.state.events.filter((event) => event.id !== eventTodelete.id);
+      const { filteredEvent } = this.state.events.filter((event) => event.id !== eventTodelete.id);
 
       this.setState({
         events: filteredEvent
@@ -165,7 +165,7 @@ class BigCalendarWrapper extends React.Component {
     }
 
     onDeleteAlldayEvent(eventToDelete) {
-      const filteredEvent = this.state.events.filter((event) => event.id !== eventToDelete.id);
+      const { filteredEvent } = this.state.events.filter((event) => event.id !== eventToDelete.id);
 
       this.setState({
         events: filteredEvent,
