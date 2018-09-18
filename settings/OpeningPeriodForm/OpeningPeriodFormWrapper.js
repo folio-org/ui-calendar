@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
-import stripesForm from '@folio/stripes-form/index';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import Button from '@folio/stripes-components/lib/Button';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -12,7 +10,6 @@ import BigCalendarHeader from './BigCalendarHeader';
 import CalendarUtils from '../../CalendarUtils';
 import Modal from '../../../stripes-components/lib/Modal/Modal';
 import ConfirmationModal from '../../../stripes-components/lib/ConfirmationModal';
-import Pane from '../../../stripes-components/lib/Pane';
 
 
 class OpeningPeriodFormWrapper extends React.Component {
@@ -58,22 +55,6 @@ class OpeningPeriodFormWrapper extends React.Component {
       };
     }
 
-    confirmDelete() {
-      this.setState({
-        confirmDelete: true
-      });
-    }
-
-    confirmExit() {
-      if (this.state.dirty === undefined || this.state.dirty === null || this.state.dirty === false) {
-        return this.props.onClose();
-      } else if (this.state.dirty === true) {
-        this.setState({
-          confirmExit: true
-        });
-      }
-    }
-
     componentDidMount() {
       this.setState({
         ...this.props.modifyPeriod,
@@ -83,6 +64,22 @@ class OpeningPeriodFormWrapper extends React.Component {
       if (this.props.latestEvent !== undefined && this.props.latestEvent !== null) {
         this.setState({ startDate: moment(this.props.latestEvent).add(1, 'days').format() });
       }
+    }
+
+    confirmExit() {
+      if (this.state.dirty === undefined || this.state.dirty === null || this.state.dirty === false) {
+        this.props.onClose();
+      } else if (this.state.dirty === true) {
+        this.setState({
+          confirmExit: true
+        });
+      }
+    }
+
+    confirmDelete() {
+      this.setState({
+        confirmDelete: true
+      });
     }
 
     handleDateChange(isStart, date) {
@@ -117,8 +114,6 @@ class OpeningPeriodFormWrapper extends React.Component {
       if (periodId) parentMutator.periodId.replace(periodId);
       return this.props.parentMutator.periods.DELETE(periodId).then((e) => {
         that.props.onSuccessfulModifyPeriod(e);
-      }, (error) => {
-        console.log(error);
       });
     }
 
@@ -162,15 +157,11 @@ class OpeningPeriodFormWrapper extends React.Component {
         delete period.events;
         return parentMutator.periods.PUT(period).then((e) => {
           that.props.onSuccessfulModifyPeriod(e);
-        }, (error) => {
-          console.log(error);
         });
       }
       if (servicePointId) parentMutator.query.replace(servicePointId);
       return parentMutator.periods.POST(period).then((e) => {
         that.props.onSuccessfulCreatePeriod(e);
-      }, (error) => {
-        console.log(error);
       });
     }
 
@@ -185,8 +176,6 @@ class OpeningPeriodFormWrapper extends React.Component {
     render() {
       let modifyPeriod;
       let errorModal;
-      let errorDelete;
-      let errorExit;
       let start = '';
       let end = '';
       const name = this.state.name;
@@ -210,7 +199,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         start = moment(this.props.latestEvent).add(1, 'days').format('L');
       }
 
-      errorDelete =
+      const errorDelete =
         <ConfirmationModal
           id="delete-confirmation"
           open={confirmDelete}
@@ -225,7 +214,7 @@ class OpeningPeriodFormWrapper extends React.Component {
           confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
         />;
 
-      errorExit =
+      const errorExit =
         <ConfirmationModal
           id="exite-confirmation"
           open={confirmExit}

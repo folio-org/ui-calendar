@@ -32,8 +32,12 @@ class InputFields extends React.Component {
     parseDateToString(e) {
       let str = '';
       for (const p in e) {
-        if (e.hasOwnProperty(p) && p !== 'preventDefault') {
-          str += e[p];
+        if (p !== undefined) {
+          const hasProperty = Object.prototype.hasOwnProperty.call(p);
+
+          if (hasProperty && p !== 'preventDefault') {
+            str += e[p];
+          }
         }
       }
       return str;
