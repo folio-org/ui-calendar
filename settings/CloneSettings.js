@@ -2,8 +2,8 @@ import Headline from '@folio/stripes-components/lib/Headline/Headline';
 import List from '@folio/stripes-components/lib/List/List';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Pane from '../../stripes-components/lib/Pane/Pane';
-import Checkbox from '../../stripes-components/lib/Checkbox';
+import Pane from '@folio/stripes-components/lib/Pane/Pane';
+import Checkbox from '@folio/stripes-components/lib/Checkbox';
 
 class CloneSettings extends React.Component {
     static propTypes = {

@@ -3,9 +3,9 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
+import Datepicker from '@folio/stripes-components/lib/Datepicker/Datepicker';
+import Textfield from '@folio/stripes-components/lib/TextField';
 import CalendarUtils from '../../CalendarUtils';
-import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
-import Textfield from '../../../stripes-components/lib/TextField';
 
 class InputFields extends React.Component {
     static propTypes = {
