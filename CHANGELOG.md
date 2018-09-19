@@ -26,3 +26,7 @@
 * Add validations to opening periods - UICAL-32
 * Confirm dialog before delete opening period	- UICAL-38
 * Confirm dialog before closing editing opening period - UICAL-39
+
+## [2.0.1] (2018.09.19)
+
+* Fix release version
