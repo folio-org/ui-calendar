@@ -34,3 +34,7 @@
 ## [2.0.2] (2018.09.19)
 
 * Increase node version
+
+## [2.0.3 (2018.09.19)
+
+* Eliminate linter errors
