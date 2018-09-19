@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Opening hours",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
@@ -8,7 +8,7 @@
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.9.4"
   },
   "main": "index.js",
   "stripes": {
