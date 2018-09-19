@@ -375,7 +375,6 @@ class ServicePointDetails extends React.Component {
             />
 
           </Layer>
-
         </ErrorBoundary>
       );
     } else {
