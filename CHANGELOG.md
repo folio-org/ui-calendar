@@ -14,7 +14,7 @@
 * Rethink calendar ui
 * https://drive.google.com/open?id=10LT0QsVXKYRD1LRRaVAdlYk02-XUyZjX
 
-## [2.0.0] (2018.09.18)
+## [2.0.0] (2018.09.19)
 
 * Relocate language files - UICAL-19
 * Fix ui-calendar build error - UICAL-28
