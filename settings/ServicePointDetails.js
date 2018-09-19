@@ -12,6 +12,7 @@ import { Layer } from '@folio/stripes-components';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import CalendarUtils from '../CalendarUtils';
+import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 
 class ServicePointDetails extends React.Component {
   constructor() {
@@ -32,6 +33,9 @@ class ServicePointDetails extends React.Component {
         isOpen: false,
       },
       modifyPeriodLayer: {
+        isOpen: false,
+      },
+      openExceptions: {
         isOpen: false,
       },
       modifyPeriod: {},
@@ -171,6 +175,10 @@ class ServicePointDetails extends React.Component {
       }
     }
     this.setState({ modifyPeriodLayer: { isOpen: true } });
+  }
+
+  clickOpenExeptions() {
+    this.setState({ openExceptions: { isOpen: true } });
   }
 
   render() {
@@ -338,7 +346,7 @@ class ServicePointDetails extends React.Component {
                       size="large"
                       iconClassName="calendar-icon"
                     />
-                    <div className="icon-text"> Open calendar</div>
+                    <div className="icon-text" onClick={() => this.clickOpenExeptions()}> Open calendar</div>
                   </div>
                   <div className="text"> to add exceptions</div>
                 </div>
@@ -375,6 +383,16 @@ class ServicePointDetails extends React.Component {
             />
 
           </Layer>
+
+          <Layer
+            isOpen={this.state.openExceptions.isOpen}
+            label={this.props.stripes.intl.formatMessage({ id: 'stripes-core.label.editEntry' }, { entry: this.props.entryLabel })}
+            container={document.getElementById('ModuleContainer')}
+          >
+            <ExceptionWrapper />
+
+          </Layer>
+
         </ErrorBoundary>
       );
     } else {
