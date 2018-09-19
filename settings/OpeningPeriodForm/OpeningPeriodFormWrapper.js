@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import Button from '@folio/stripes-components/lib/Button';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import Modal from '@folio/stripes-components/lib/Modal/Modal';
+import ConfirmationModal from '@folio/stripes-components/lib/ConfirmationModal';
 import FromHeader from './FromHeader';
 import InputFields from './InputFields';
 import BigCalendarWrapper from './BigCalendarWrapper';
 import BigCalendarHeader from './BigCalendarHeader';
 import CalendarUtils from '../../CalendarUtils';
-import Modal from '../../../stripes-components/lib/Modal/Modal';
-import ConfirmationModal from '../../../stripes-components/lib/ConfirmationModal';
 
 
 class OpeningPeriodFormWrapper extends React.Component {
