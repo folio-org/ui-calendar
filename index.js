@@ -26,8 +26,10 @@ class CalendarRouting extends React.Component {
       <div>
         <h2>Uh-oh!</h2>
         <p>
+
 How did you get to
           <tt>{this.props.location.pathname}</tt>
+
 ?
         </p>
       </div>
