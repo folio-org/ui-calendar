@@ -3,21 +3,39 @@ import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
 import RandomColor from 'randomcolor';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import IconButton from '@folio/stripes-components/lib/IconButton';
+import Icon from '@folio/stripes-components/lib/Icon';
+import Button from '@folio/stripes-components/lib/Button';
 import ServicePointSelector from './ServicePointSelector';
-
+import CalendarUtils from '../../CalendarUtils';
+import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
       entries: PropTypes.object,
+      onClose: PropTypes.func.isRequired,
+      stripes: PropTypes.object,
+      intl: PropTypes.object
     };
 
     constructor() {
       super();
       this.setServicePoints = this.setServicePoints.bind(this);
       this.handleServicePointChange = this.handleServicePointChange.bind(this);
+      this.getPeriods = this.getPeriods.bind(this);
       this.setState({
-        servicePoints: []
+        servicePoints: [],
+        events: [{
+          id: undefined,
+          startDate: undefined,
+          endDate: undefined,
+        }]
       });
+    }
+
+    componentDidMount() {
+      this.getPeriods();
     }
 
     componentWillMount() {
@@ -62,9 +80,31 @@ class ExceptionWrapper extends React.Component {
       this.setServicePoints(tempServicePoints);
     }
 
-    render() {
-      return (
+    getPeriods() {
+      const events = [];
+      for (let i = 0; i < this.props.periods.length; i++) {
+        const event = {};
+        event.start = this.props.periods[i].startDate;
+        event.end = this.props.periods[i].endDate;
+        event.id = this.props.periods[i].id;
+        events.push({ ...event });
+      }
 
+      this.setState({
+        events
+      });
+    }
+
+    render() {
+      const paneStartMenu = <PaneMenu><IconButton icon="closeX" onClick={this.props.onClose} /></PaneMenu>;
+      const paneLastMenu = <PaneMenu><Button buttonStyle="primary">{CalendarUtils.translateToString('ui-calendar.exceptionalNewPeriod', this.props.stripes.intl)}</Button></PaneMenu>;
+      const paneTitle =
+        <PaneMenu>
+          <Icon icon="calendar" />
+          {CalendarUtils.translateToString('ui-calendar.settings.library_hours', this.props.stripes.intl)}
+        </PaneMenu>;
+
+      return (
         <Paneset>
           <Pane defaultWidth="30%" paneTitle="Filters">
             <ServicePointSelector
@@ -74,8 +114,12 @@ class ExceptionWrapper extends React.Component {
               servicePoints={this.state.servicePoints}
             />
           </Pane>
-
-          <Pane defaultWidth="fill" paneTitle="Search Results" />
+          <Pane defaultWidth="fill" paneTitle={paneTitle} firstMenu={paneStartMenu} lastMenu={paneLastMenu}>
+            <ExceptionalBigCalendar
+              {...this.props}
+              myEvents={this.state.events}
+            />
+          </Pane>
         </Paneset>
       );
     }
