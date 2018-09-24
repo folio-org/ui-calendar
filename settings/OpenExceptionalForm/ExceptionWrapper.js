@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Button from '@folio/stripes-components/lib/Button';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
+import events from "../../../stripes-core/src/events";
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -15,6 +16,39 @@ class ExceptionWrapper extends React.Component {
       stripes: PropTypes.object,
       intl: PropTypes.object
     };
+
+
+    constructor(){
+        super();
+        this.getPeriods=this.getPeriods.bind(this);
+        this.state={
+            events:[{
+             id:undefined,
+             startDate:undefined,
+             endDate:undefined,
+            }]
+        };
+    }
+
+    componentDidMount(){
+        this.getPeriods();
+    }
+
+    getPeriods(){
+     let events=[];
+     for (let i=0; i<this.props.periods.length;i++){
+     let event={};
+     event.start=this.props.periods[i].startDate;
+     event.end=this.props.periods[i].endDate;
+     event.id=this.props.periods[i].id;
+     events.push({...event});
+    }
+
+     this.setState({
+         events:events
+     })
+    }
+
     render() {
       const paneStartMenu = <PaneMenu><IconButton icon="closeX" onClick={this.props.onClose} /></PaneMenu>;
       const paneLastMenu = <PaneMenu><Button buttonStyle="primary">{CalendarUtils.translateToString('ui-calendar.exceptionalNewPeriod', this.props.stripes.intl)}</Button></PaneMenu>;
@@ -28,9 +62,12 @@ class ExceptionWrapper extends React.Component {
           <Pane defaultWidth="fill" paneTitle={paneTitle} firstMenu={paneStartMenu} lastMenu={paneLastMenu}>
             <ExceptionalBigCalendar
                 {...this.props}
+                myEvents={this.state.events}
             />
               {console.log("láásuk mi van itt")}
-              {console.log(this.props.modifyPeriod)}
+              {console.log(this.props.periods)}
+              {console.log("ezt pakoltam én össze")}
+              {console.log(this.state.events)}
           </Pane>
         </Paneset>
       );

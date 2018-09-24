@@ -28,6 +28,8 @@ class ServicePointDetails extends React.Component {
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
     this.getLatestPeriod = this.getLatestPeriod.bind(this);
+    this.getAllServicePoints=this.getAllServicePoints.bind(this);
+    this.getServicePoint=this.getServicePoint.bind(this);
     this.state = {
       newPeriodLayer: {
         isOpen: false,
@@ -40,6 +42,7 @@ class ServicePointDetails extends React.Component {
       },
       modifyPeriod: {},
       openingPeriods: [],
+      openingAllPeriods:[],
       nextPeriods: [],
       isPeriodsPending: true
     };
@@ -47,6 +50,7 @@ class ServicePointDetails extends React.Component {
 
   componentDidMount() {
     this.getServicePoints();
+   // this.getAllServicePoints();
   }
 
   getServicePoints() {
@@ -61,6 +65,89 @@ class ServicePointDetails extends React.Component {
         return error;
       });
   }
+    getAllServicePoints() {
+
+        this.props.parentMutator.query.replace('3a40852d-49fd-4df2-a1f9-6e2641a6e91f');
+        this.props.parentMutator.periods.GET()
+            .then((openingAllPeriodsee) => {
+                let tempStart = openingAllPeriodsee[0].startDate;
+                let tempEnd = openingAllPeriodsee[0].endDate;
+                let tempId = openingAllPeriodsee[0].id;
+                let tempName = openingAllPeriodsee[0].name;
+                let tempOpeningDays = openingAllPeriodsee[0].openingDays;
+                let tempServicePointId = openingAllPeriodsee[0].servicePointId;
+
+                this.setState({
+                    openingAllPeriods: [
+                        ...this.state.openingPeriods,
+                        {startDate:tempStart,
+                            endDate:tempEnd,
+                            id:tempId,
+                            name:tempName,
+                            openingDays:tempOpeningDays,
+                            servicePointId:tempServicePointId
+                        }
+                    ]
+                });
+            }, (error) => {
+                console.log(error);
+            });
+
+
+        this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
+        this.props.parentMutator.periods.GET()
+            .then((openingAllPeriods) => {
+                let tempStart = openingAllPeriods[0].startDate;
+                let tempEnd = openingAllPeriods[0].endDate;
+                let tempId = openingAllPeriods[0].id;
+                let tempName = openingAllPeriods[0].name;
+                let tempOpeningDays = openingAllPeriods[0].openingDays;
+                let tempServicePointId = openingAllPeriods[0].servicePointId;
+
+                this.setState({
+                    openingAllPeriods: [
+                        ...this.state.openingPeriods,
+                        {startDate:tempStart,
+                            endDate:tempEnd,
+                            id:tempId,
+                            name:tempName,
+                            openingDays:tempOpeningDays,
+                            servicePointId:tempServicePointId
+                        }
+                    ]
+                });
+            }, (error) => {
+                console.log(error);
+            });
+    }
+
+    getServicePoint(){
+        this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
+        let openingAllPeriods = this.props.parentMutator.periods.GET();
+
+        console.log("miapina");
+        console.log(openingAllPeriods);
+                // let tempStart = openingAllPeriods[0].startDate;
+                // let tempEnd = openingAllPeriods[0].endDate;
+                // let tempId = openingAllPeriods[0].id;
+                // let tempName = openingAllPeriods[0].name;
+                // let tempOpeningDays = openingAllPeriods[0].openingDays;
+                // let tempServicePointId = openingAllPeriods[0].servicePointId;
+                //
+                // this.setState({
+                //     openingAllPeriods: [
+                //         ...this.state.openingPeriods,
+                //         {startDate:tempStart,
+                //             endDate:tempEnd,
+                //             id:tempId,
+                //             name:tempName,
+                //             openingDays:tempOpeningDays,
+                //             servicePointId:tempServicePointId
+                //         }
+                //     ]
+                // });
+  }
+
 
   getWeekdayOpeningHours(weekday) {
     const openingPeriod = this.state.currentPeriod;
@@ -290,7 +377,9 @@ class ServicePointDetails extends React.Component {
       return (
 
         <ErrorBoundary>
-          <div>
+            {console.log(this.props)}
+            {console.log(this.state)}
+            <div>
             <Row>
               <Col xs>
                 <KeyValue
@@ -393,7 +482,7 @@ class ServicePointDetails extends React.Component {
             <ExceptionWrapper
               {...this.props}
               onClose={this.onClose}
-              modifyPeriod={this.state.modifyPeriod.period}
+              periods={this.state.openingAllPeriods}
               onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
             />
 
