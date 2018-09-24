@@ -124,6 +124,7 @@
     "prop-types": "^15.6.1",
     "proptypes": "^1.1.0",
     "query-string": "^6.1.0",
+    "randomcolor": "^0.5.3",
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
     "redux-form": "^7.0.3",

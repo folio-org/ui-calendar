@@ -389,7 +389,10 @@ class ServicePointDetails extends React.Component {
             label={this.props.stripes.intl.formatMessage({ id: 'stripes-core.label.editEntry' }, { entry: this.props.entryLabel })}
             container={document.getElementById('ModuleContainer')}
           >
-            <ExceptionWrapper />
+            <ExceptionWrapper
+              {...this.props}
+              entries={this.props.initialValues.allEntries}
+            />
 
           </Layer>
 
