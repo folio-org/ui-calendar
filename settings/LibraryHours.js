@@ -54,13 +54,19 @@ class LibraryHours extends React.Component {
       if (toggleCloneSettings) {
         renderedCloneSettings = <CloneSettings {...this.props} onToggle={that.onChildToggle()} />;
       }
+      const sortedList = sortBy((this.props.resources.entries || {}).records || [], ['name']);
+      if (sortedList !== undefined && sortedList !== null) {
+        for (let i = 0; i < sortedList.length; i++) {
+          sortedList[i].allEntries = sortBy((this.props.resources.entries || {}).records || [], ['name']);
+        }
+      }
 
       return (
         <ErrorBoundary>
           <EntryManager
             {...this.props}
             paneTitle={this.props.label}
-            entryList={sortBy((this.props.resources.entries || {}).records || [], ['name'])}
+            entryList={sortedList}
             detailComponent={ServicePointDetails}
             entryFormComponent={() => ({})}
             entryLabel={this.props.label}

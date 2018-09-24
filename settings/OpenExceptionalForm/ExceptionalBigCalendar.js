@@ -1,35 +1,39 @@
 import React from 'react';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
-import CalendarUtils from '../../CalendarUtils';
+import PropTypes from 'prop-types';
 
-BigCalendar.momentLocalizer(moment)
+BigCalendar.momentLocalizer(moment);
 
 class ExceptionalBigCalendar extends React.Component {
-  constructor() {
-    super();
-    // this.state = {
-    //   events: [ {
-    //       id: 0,
-    //       start: moment('2018/09/12')._d,
-    //       end: moment('2018/09/14').add(1,'day')._d,
-    //   }]
-    // };
-  }
+    static propTypes = {
+      myEvents: PropTypes.object.isRequired,
+    };
 
-  render() {
-      {console.log(new Date(2018, 8, 10))}
-      {console.log(moment('2018/08/12')._d)}
 
-    return (
-    <BigCalendar
-        popup
-        events={this.props.myEvents}
-        // view={month:true}
-        showMultiDayTimes
-    />
-    );
-  }
+    render() {
+      const myEvents = [
+        {
+          id: 0,
+          title: 'All Day Event very long title',
+          allDay: true,
+          start: new Date(2018, 10, 15),
+          end: new Date(2018, 10, 16),
+        },
+        {
+          id: 1,
+          title: 'Long Event',
+          start: new Date(2018, 10, 18),
+          end: new Date(2018, 10, 19),
+        },
+      ];
+      return (
+        <BigCalendar
+          popup
+          events={myEvents}
+          showMultiDayTimes
+        />
+      );
+    }
 }
-
 export default ExceptionalBigCalendar;
