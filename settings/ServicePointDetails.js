@@ -123,7 +123,7 @@ class ServicePointDetails extends React.Component {
     this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
     const openingAllPeriods = this.props.parentMutator.periods.GET();
 
-    console.log('miapina');
+    console.log('service point');
     console.log(openingAllPeriods);
     // let tempStart = openingAllPeriods[0].startDate;
     // let tempEnd = openingAllPeriods[0].endDate;
