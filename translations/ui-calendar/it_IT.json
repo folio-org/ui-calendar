@@ -83,5 +83,15 @@
     "allDayOpening": "All day opening",
     "code": "Code",
     "settings.locations.discoveryDisplayName": "Discovery display name",
-    "modifyRegularLibraryValidityPeriod": "Modify: Regular Library Hours Validity Period"
+    "modifyRegularLibraryValidityPeriod": "Modify: Regular Library Hours Validity Period",
+    "fillIn": "Si prega di compilare per continuare",
+    "invalidData": "Dati non validi",
+    "close": "Chiuso",
+    "noEvents": "Nessun evento trovato! Si prega di inserire almeno un evento!",
+    "wrongStartEndDate": "La data di inizio è successiva alla data di fine!",
+    "deleteQuestionMessage": "L'orario della biblioteca <strong> {name} </strong> sarà <strong> eliminato </strong> .",
+    "deleteQuestionTitle": "Elimina orario della biblioteca",
+    "exitQuestionTitle": "Sei sicuro?",
+    "exitWithoutSaving": "Uscire senza salvare",
+    "exitQuestionMessage": "Ci sono modifiche non salvate"
 }
