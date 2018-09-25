@@ -29,7 +29,6 @@ class ServicePointDetails extends React.Component {
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
     this.getLatestPeriod = this.getLatestPeriod.bind(this);
     this.getAllServicePoints = this.getAllServicePoints.bind(this);
-    this.getServicePoint = this.getServicePoint.bind(this);
     this.state = {
       newPeriodLayer: {
         isOpen: false,
@@ -44,19 +43,22 @@ class ServicePointDetails extends React.Component {
       openingPeriods: [],
       openingAllPeriods: [],
       nextPeriods: [],
-      isPeriodsPending: true
+      isPeriodsPending: true,
+      isPeriodssending: true
     };
   }
 
   componentDidMount() {
     this.getServicePoints();
-    // this.getAllServicePoints();
+    this.getAllServicePoints();
   }
+
 
   getServicePoints() {
     this.props.parentMutator.query.replace(this.props.initialValues.id);
     this.props.parentMutator.periods.GET()
       .then((openingPeriods) => {
+        console.log(openingPeriods);
         this.setState({ openingPeriods });
         this.setState({ currentPeriod: this.displayCurrentPeriod() });
         this.setState({ nextPeriods: this.displayNextPeriod() });
@@ -67,83 +69,89 @@ class ServicePointDetails extends React.Component {
   }
 
   getAllServicePoints() {
+    const openings = [{
+      startDate: undefined,
+      endDate: undefined,
+      id: undefined,
+      name: undefined,
+      openingDays: undefined,
+      servicePointId: undefined,
+    }];
+    const promises = [];
     this.props.parentMutator.query.replace('3a40852d-49fd-4df2-a1f9-6e2641a6e91f');
-    this.props.parentMutator.periods.GET()
-      .then((openingAllPeriodsee) => {
-        const tempStart = openingAllPeriodsee[0].startDate;
-        const tempEnd = openingAllPeriodsee[0].endDate;
-        const tempId = openingAllPeriodsee[0].id;
-        const tempName = openingAllPeriodsee[0].name;
-        const tempOpeningDays = openingAllPeriodsee[0].openingDays;
-        const tempServicePointId = openingAllPeriodsee[0].servicePointId;
-
-        this.setState({
-          openingAllPeriods: [
-            ...this.state.openingPeriods,
-            { startDate: tempStart,
-              endDate: tempEnd,
-              id: tempId,
-              name: tempName,
-              openingDays: tempOpeningDays,
-              servicePointId: tempServicePointId }
-          ]
-        });
-      }, (error) => {
-        console.log(error);
-      });
-
-
+    const a = this.props.parentMutator.periods.GET();
+    promises.push(a);
     this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
-    this.props.parentMutator.periods.GET()
-      .then((openingAllPeriods) => {
-        const tempStart = openingAllPeriods[0].startDate;
-        const tempEnd = openingAllPeriods[0].endDate;
-        const tempId = openingAllPeriods[0].id;
-        const tempName = openingAllPeriods[0].name;
-        const tempOpeningDays = openingAllPeriods[0].openingDays;
-        const tempServicePointId = openingAllPeriods[0].servicePointId;
+    const b = this.props.parentMutator.periods.GET();
+    promises.push(b);
 
-        this.setState({
-          openingAllPeriods: [
-            ...this.state.openingPeriods,
-            { startDate: tempStart,
-              endDate: tempEnd,
-              id: tempId,
-              name: tempName,
-              openingDays: tempOpeningDays,
-              servicePointId: tempServicePointId }
-          ]
-        });
-      }, (error) => {
-        console.log(error);
+    Promise.all(promises).then((openingAllPeriods) => {
+
+      console.log('res');
+      console.log(openingAllPeriods);
+
+      this.setState({
+        openingAllPeriods: [
+          ...this.state.openingPeriods,
+          { startDate: openingAllPeriods[0].startDate,
+            endDate: openingAllPeriods[0].endDate,
+            id: openingAllPeriods[0].id,
+            name: openingAllPeriods[0].name,
+            openingDays: openingAllPeriods[0].openingDays,
+            servicePointId: openingAllPeriods[0].servicePointId }
+        ]
       });
-  }
+    });
 
-  getServicePoint() {
-    this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
-    const openingAllPeriods = this.props.parentMutator.periods.GET();
-
-    console.log('service point');
-    console.log(openingAllPeriods);
-    // let tempStart = openingAllPeriods[0].startDate;
-    // let tempEnd = openingAllPeriods[0].endDate;
-    // let tempId = openingAllPeriods[0].id;
-    // let tempName = openingAllPeriods[0].name;
-    // let tempOpeningDays = openingAllPeriods[0].openingDays;
-    // let tempServicePointId = openingAllPeriods[0].servicePointId;
+    // ()
+    //   .then((openingAllPeriods) => {
+    //     const tempStart = openingAllPeriodsee[0].startDate;
+    //     const tempEnd = openingAllPeriodsee[0].endDate;
+    //     const tempId = openingAllPeriodsee[0].id;
+    //     const tempName = openingAllPeriodsee[0].name;
+    //     const tempOpeningDays = openingAllPeriodsee[0].openingDays;
+    //     const tempServicePointId = openingAllPeriodsee[0].servicePointId;
     //
-    // this.setState({
-    //     openingAllPeriods: [
+    //     this.setState({
+    //       openingAllPeriods: [
     //         ...this.state.openingPeriods,
-    //         {startDate:tempStart,
-    //             endDate:tempEnd,
-    //             id:tempId,
-    //             name:tempName,
-    //             openingDays:tempOpeningDays,
-    //             servicePointId:tempServicePointId
-    //         }
-    //     ]
-    // });
+    //         { startDate: tempStart,
+    //           endDate: tempEnd,
+    //           id: tempId,
+    //           name: tempName,
+    //           openingDays: tempOpeningDays,
+    //           servicePointId: tempServicePointId }
+    //       ]
+    //     });
+    //   }, (error) => {
+    //     console.log(error);
+    //   });
+    //
+    //
+    // this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
+    // this.props.parentMutator.periods.GET()
+    //   .then((openingAllPeriods) => {
+    //     const tempStart = openingAllPeriods[0].startDate;
+    //     const tempEnd = openingAllPeriods[0].endDate;
+    //     const tempId = openingAllPeriods[0].id;
+    //     const tempName = openingAllPeriods[0].name;
+    //     const tempOpeningDays = openingAllPeriods[0].openingDays;
+    //     const tempServicePointId = openingAllPeriods[0].servicePointId;
+    //
+    //     this.setState({
+    //       openingAllPeriods: [
+    //         ...this.state.openingPeriods,
+    //         { startDate: tempStart,
+    //           endDate: tempEnd,
+    //           id: tempId,
+    //           name: tempName,
+    //           openingDays: tempOpeningDays,
+    //           servicePointId: tempServicePointId }
+    //       ]
+    //     });
+    //   }, (error) => {
+    //     console.log(error);
+    //   });
   }
 
 
@@ -371,11 +379,12 @@ class ServicePointDetails extends React.Component {
     BigCalendar.momentLocalizer(moment);
     const servicePoint = this.props.initialValues;
 
-    if (!this.state.isPeriodsPending) {
+    if (!this.state.isPeriodsPending && !this.state.isPeriodsPending) {
       return (
 
         <ErrorBoundary>
-          {console.log(this.props)}
+
+          {console.log('mostmár jo lesz :) ')}
           {console.log(this.state)}
           <div>
             <Row>
