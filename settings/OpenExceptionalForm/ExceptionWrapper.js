@@ -38,7 +38,7 @@ class ExceptionWrapper extends React.Component {
       this.getPeriods();
     }
 
-    componentWillMount() {
+    componentWillMount() {      // eslint-disable-line react/no-deprecated
       const tempServicePoints = [{
         id: null,
         name: null,
@@ -106,7 +106,7 @@ class ExceptionWrapper extends React.Component {
 
       return (
         <Paneset>
-          <Pane defaultWidth="30%" paneTitle="Filters">
+          <Pane defaultWidth="30%" paneTitle={CalendarUtils.translateToString('ui-calendar.servicePoints', this.props.stripes.intl)}>
             <ServicePointSelector
               {...this.props}
               handleServicePointChange={this.handleServicePointChange}
