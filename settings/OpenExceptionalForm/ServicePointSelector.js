@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import List from '@folio/stripes-components/lib/List';
 import Checkbox from '../../../stripes-components/lib/Checkbox';
+import '!style-loader!css-loader!../../css/exception-form.css'; // eslint-disable-line
 
 
 class ServicePointSelector extends React.Component {
@@ -26,18 +27,15 @@ class ServicePointSelector extends React.Component {
     }
 
     render() {
-      // const entriNames = [];
-      // for (let i = 0; i < this.props.servicePoints.length; i++) {
-      //   entriNames[i] = this.props.servicePoints[i];
-      // }
       const items = this.props.servicePoints;
       const itemFormatter = (item) => (
-
         <li>
+          <div className="CircleDiv" style={{ background: item.color }} />
           <Checkbox
             id={item.id}
             label={item.name}
             onChange={() => this.onToggleSelect(item)}
+            fullWidth
           />
         </li>
       );
