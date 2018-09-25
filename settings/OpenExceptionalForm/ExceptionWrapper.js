@@ -62,6 +62,7 @@ class ExceptionWrapper extends React.Component {
         tempServicePoints[i] = tempSP;
       }
       this.setServicePoints(tempServicePoints);
+      this.getPeriods();
     }
 
     setServicePoints(sps) {
@@ -114,6 +115,8 @@ class ExceptionWrapper extends React.Component {
               servicePoints={this.state.servicePoints}
             />
           </Pane>
+            {console.log('wrapper state')}
+            {console.log(this.state)}
           <Pane defaultWidth="fill" paneTitle={paneTitle} firstMenu={paneStartMenu} lastMenu={paneLastMenu}>
             <ExceptionalBigCalendar
               {...this.props}
