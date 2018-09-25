@@ -69,89 +69,32 @@ class ServicePointDetails extends React.Component {
   }
 
   getAllServicePoints() {
-    const openings = [{
-      startDate: undefined,
-      endDate: undefined,
-      id: undefined,
-      name: undefined,
-      openingDays: undefined,
-      servicePointId: undefined,
-    }];
-    const promises = [];
-    this.props.parentMutator.query.replace('3a40852d-49fd-4df2-a1f9-6e2641a6e91f');
-    const a = this.props.parentMutator.periods.GET();
-    promises.push(a);
-    this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
-    const b = this.props.parentMutator.periods.GET();
-    promises.push(b);
-
-    Promise.all(promises).then((openingAllPeriods) => {
-
-      console.log('res');
-      console.log(openingAllPeriods);
-
-      this.setState({
-        openingAllPeriods: [
-          ...this.state.openingPeriods,
-          { startDate: openingAllPeriods[0].startDate,
-            endDate: openingAllPeriods[0].endDate,
-            id: openingAllPeriods[0].id,
-            name: openingAllPeriods[0].name,
-            openingDays: openingAllPeriods[0].openingDays,
-            servicePointId: openingAllPeriods[0].servicePointId }
-        ]
+    if (this.state.allServicePoints === null || this.state.allServicePoints === undefined) {
+      const promises = [];
+      this.props.parentMutator.query.replace('3a40852d-49fd-4df2-a1f9-6e2641a6e91f');
+      const a = this.props.parentMutator.periods.GET();
+      promises.push(a);
+      this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
+      const b = this.props.parentMutator.periods.GET();
+      promises.push(b);
+      const allSP = [];
+      let i = 0;
+      Promise.all(promises).then((openingAllPeriods) => {
+        const tempSP = {
+          startDate: openingAllPeriods[0].startDate,
+          endDate: openingAllPeriods[0].endDate,
+          id: openingAllPeriods[0].id,
+          name: openingAllPeriods[0].name,
+          openingDays: openingAllPeriods[0].openingDays,
+          servicePointId: openingAllPeriods[0].servicePointId
+        };
+        allSP[i] = tempSP;
+        i++;
       });
-    });
-
-    // ()
-    //   .then((openingAllPeriods) => {
-    //     const tempStart = openingAllPeriodsee[0].startDate;
-    //     const tempEnd = openingAllPeriodsee[0].endDate;
-    //     const tempId = openingAllPeriodsee[0].id;
-    //     const tempName = openingAllPeriodsee[0].name;
-    //     const tempOpeningDays = openingAllPeriodsee[0].openingDays;
-    //     const tempServicePointId = openingAllPeriodsee[0].servicePointId;
-    //
-    //     this.setState({
-    //       openingAllPeriods: [
-    //         ...this.state.openingPeriods,
-    //         { startDate: tempStart,
-    //           endDate: tempEnd,
-    //           id: tempId,
-    //           name: tempName,
-    //           openingDays: tempOpeningDays,
-    //           servicePointId: tempServicePointId }
-    //       ]
-    //     });
-    //   }, (error) => {
-    //     console.log(error);
-    //   });
-    //
-    //
-    // this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
-    // this.props.parentMutator.periods.GET()
-    //   .then((openingAllPeriods) => {
-    //     const tempStart = openingAllPeriods[0].startDate;
-    //     const tempEnd = openingAllPeriods[0].endDate;
-    //     const tempId = openingAllPeriods[0].id;
-    //     const tempName = openingAllPeriods[0].name;
-    //     const tempOpeningDays = openingAllPeriods[0].openingDays;
-    //     const tempServicePointId = openingAllPeriods[0].servicePointId;
-    //
-    //     this.setState({
-    //       openingAllPeriods: [
-    //         ...this.state.openingPeriods,
-    //         { startDate: tempStart,
-    //           endDate: tempEnd,
-    //           id: tempId,
-    //           name: tempName,
-    //           openingDays: tempOpeningDays,
-    //           servicePointId: tempServicePointId }
-    //       ]
-    //     });
-    //   }, (error) => {
-    //     console.log(error);
-    //   });
+      this.setState({
+        allServicePoints: allSP
+      });
+    }
   }
 
 
@@ -383,9 +326,6 @@ class ServicePointDetails extends React.Component {
       return (
 
         <ErrorBoundary>
-
-          {console.log('mostmár jo lesz :) ')}
-          {console.log(this.state)}
           <div>
             <Row>
               <Col xs>

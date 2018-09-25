@@ -91,5 +91,6 @@
   "exitQuestionTitle": "Are you sure?",
   "exitWithoutSaving": "Exit without saving",
   "exitQuestionMessage": "There are unsaved changes",
-  "exceptionalNewPeriod": "+ New Exception Period"
+  "exceptionalNewPeriod": "+ New Exception Period",
+  "servicePoints": "Service Points"
 }
