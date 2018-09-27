@@ -82,6 +82,8 @@ class ExceptionWrapper extends React.Component {
     }
 
     getPeriods() {
+
+        
       const events = [];
       for (let i = 0; i < this.props.periods.length; i++) {
         const event = {};
@@ -115,8 +117,6 @@ class ExceptionWrapper extends React.Component {
               servicePoints={this.state.servicePoints}
             />
           </Pane>
-            {console.log('wrapper state')}
-            {console.log(this.state)}
           <Pane defaultWidth="fill" paneTitle={paneTitle} firstMenu={paneStartMenu} lastMenu={paneLastMenu}>
             <ExceptionalBigCalendar
               {...this.props}
