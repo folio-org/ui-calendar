@@ -12,7 +12,6 @@ class ExceptionalBigCalendar extends React.Component {
 
     constructor() {
       super();
-      this.getEvents = this.getEvents.bind(this);
       this.separateEvents = this.separateEvents.bind(this);
       this.state = {
         events: [],
