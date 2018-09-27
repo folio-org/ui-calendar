@@ -12,6 +12,7 @@ import { Layer } from '@folio/stripes-components';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import CalendarUtils from '../CalendarUtils';
+import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 
 class ServicePointDetails extends React.Component {
   constructor() {
@@ -27,6 +28,7 @@ class ServicePointDetails extends React.Component {
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
     this.getLatestPeriod = this.getLatestPeriod.bind(this);
+    this.getAllServicePoints = this.getAllServicePoints.bind(this);
     this.state = {
       newPeriodLayer: {
         isOpen: false,
@@ -34,21 +36,29 @@ class ServicePointDetails extends React.Component {
       modifyPeriodLayer: {
         isOpen: false,
       },
+      openExceptions: {
+        isOpen: false,
+      },
       modifyPeriod: {},
       openingPeriods: [],
+      openingAllPeriods: [],
       nextPeriods: [],
-      isPeriodsPending: true
+      isPeriodsPending: true,
+      isPeriodssending: true
     };
   }
 
   componentDidMount() {
     this.getServicePoints();
+    this.getAllServicePoints();
   }
+
 
   getServicePoints() {
     this.props.parentMutator.query.replace(this.props.initialValues.id);
     this.props.parentMutator.periods.GET()
       .then((openingPeriods) => {
+        console.log(openingPeriods);
         this.setState({ openingPeriods });
         this.setState({ currentPeriod: this.displayCurrentPeriod() });
         this.setState({ nextPeriods: this.displayNextPeriod() });
@@ -57,6 +67,36 @@ class ServicePointDetails extends React.Component {
         return error;
       });
   }
+
+  getAllServicePoints() {
+    if (this.state.allServicePoints === null || this.state.allServicePoints === undefined) {
+      const promises = [];
+      this.props.parentMutator.query.replace('3a40852d-49fd-4df2-a1f9-6e2641a6e91f');
+      const a = this.props.parentMutator.periods.GET();
+      promises.push(a);
+      this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
+      const b = this.props.parentMutator.periods.GET();
+      promises.push(b);
+      const allSP = [];
+      let i = 0;
+      Promise.all(promises).then((openingAllPeriods) => {
+        const tempSP = {
+          startDate: openingAllPeriods[0].startDate,
+          endDate: openingAllPeriods[0].endDate,
+          id: openingAllPeriods[0].id,
+          name: openingAllPeriods[0].name,
+          openingDays: openingAllPeriods[0].openingDays,
+          servicePointId: openingAllPeriods[0].servicePointId
+        };
+        allSP[i] = tempSP;
+        i++;
+      });
+      this.setState({
+        allServicePoints: allSP
+      });
+    }
+  }
+
 
   getWeekdayOpeningHours(weekday) {
     const openingPeriod = this.state.currentPeriod;
@@ -160,6 +200,7 @@ class ServicePointDetails extends React.Component {
   onClose() {
     this.setState({ newPeriodLayer: { isOpen: false } });
     this.setState({ modifyPeriodLayer: { isOpen: false } });
+    this.setState({ openExceptions: { isOpen: false } });
   }
 
   handleSelectPeriod(id) {
@@ -171,6 +212,10 @@ class ServicePointDetails extends React.Component {
       }
     }
     this.setState({ modifyPeriodLayer: { isOpen: true } });
+  }
+
+  clickOpenExeptions() {
+    this.setState({ openExceptions: { isOpen: true } });
   }
 
   render() {
@@ -277,7 +322,7 @@ class ServicePointDetails extends React.Component {
     BigCalendar.momentLocalizer(moment);
     const servicePoint = this.props.initialValues;
 
-    if (!this.state.isPeriodsPending) {
+    if (!this.state.isPeriodsPending && !this.state.isPeriodsPending) {
       return (
 
         <ErrorBoundary>
@@ -338,7 +383,7 @@ class ServicePointDetails extends React.Component {
                       size="large"
                       iconClassName="calendar-icon"
                     />
-                    <div className="icon-text"> Open calendar</div>
+                    <div className="icon-text" onClick={() => this.clickOpenExeptions()}> Open calendar</div>
                   </div>
                   <div className="text"> to add exceptions</div>
                 </div>
@@ -372,6 +417,21 @@ class ServicePointDetails extends React.Component {
               onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
               onClose={this.onClose}
               servicePointId={servicePoint.id}
+            />
+
+          </Layer>
+          <Layer
+            isOpen={this.state.openExceptions.isOpen}
+            label={this.props.stripes.intl.formatMessage({ id: 'stripes-core.label.editEntry' }, { entry: this.props.entryLabel })}
+            container={document.getElementById('ModuleContainer')}
+          >
+
+            <ExceptionWrapper
+              {...this.props}
+              entries={this.props.initialValues.allEntries}
+              onClose={this.onClose}
+              periods={this.state.openingAllPeriods}
+              onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
             />
 
           </Layer>
