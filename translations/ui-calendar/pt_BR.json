@@ -83,5 +83,15 @@
     "allDayOpening": "Abertura de dia todo",
     "code": "Código",
     "settings.locations.discoveryDisplayName": "Nome de exibição no sistema de descoberta",
-    "modifyRegularLibraryValidityPeriod": "Modificar: Período regular de abertura da Biblioteca"
+    "modifyRegularLibraryValidityPeriod": "Modificar: Período regular de abertura da Biblioteca",
+    "fillIn": "Por favor, preencha isto para continuar",
+    "invalidData": "Dados inválidos",
+    "close": "Fechar",
+    "noEvents": "Nenhum evento encontrado! Por favor, faça pelo menos um evento!",
+    "wrongStartEndDate": "A data de início é após a data de término!",
+    "deleteQuestionMessage": "O horário regular da biblioteca <strong>{name}</strong> será <strong>excluído</strong>.",
+    "deleteQuestionTitle": "Excluir horário regular da biblioteca",
+    "exitQuestionTitle": "Você tem certeza?",
+    "exitWithoutSaving": "Sair sem salvar",
+    "exitQuestionMessage": "Existem alterações não salvas"
 }
