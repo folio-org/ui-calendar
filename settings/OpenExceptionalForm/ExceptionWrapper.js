@@ -8,6 +8,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import Icon from '@folio/stripes-components/lib/Icon';
 import Button from '@folio/stripes-components/lib/Button';
 import ServicePointSelector from './ServicePointSelector';
+import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 
@@ -99,6 +100,16 @@ class ExceptionWrapper extends React.Component {
     render() {
       const paneStartMenu = <PaneMenu><IconButton icon="closeX" onClick={this.props.onClose} /></PaneMenu>;
       const paneLastMenu = <PaneMenu><Button buttonStyle="primary">{CalendarUtils.translateToString('ui-calendar.exceptionalNewPeriod', this.props.stripes.intl)}</Button></PaneMenu>;
+      const lastMenus =
+        <div>
+          <Button buttonStyle="danger">
+            {CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
+          </Button>
+          <Button buttonStyle="primary">
+            {CalendarUtils.translateToString('ui-calendar.saveButton', this.props.stripes.intl)}
+          </Button>
+        </div>;
+
       const paneTitle =
         <PaneMenu>
           <Icon icon="calendar" />
@@ -107,20 +118,30 @@ class ExceptionWrapper extends React.Component {
 
       return (
         <Paneset>
-          <Pane defaultWidth="30%" paneTitle={CalendarUtils.translateToString('ui-calendar.servicePoints', this.props.stripes.intl)}>
-            <ServicePointSelector
-              {...this.props}
-              handleServicePointChange={this.handleServicePointChange}
-              setServicePoints={this.setServicePoints}
-              servicePoints={this.state.servicePoints}
-            />
-          </Pane>
-            {console.log('wrapper state')}
-            {console.log(this.state)}
+            {/*TODO open editor or selector*/}
+          {/* <Pane defaultWidth="30%" paneTitle={CalendarUtils.translateToString('ui-calendar.servicePoints', this.props.stripes.intl)}> */}
+          {/* <ServicePointSelector */}
+          {/* {...this.props} */}
+          {/* handleServicePointChange={this.handleServicePointChange} */}
+          {/* setServicePoints={this.setServicePoints} */}
+          {/* servicePoints={this.state.servicePoints} */}
+          {/* /> */}
+          {/* </Pane> */}
           <Pane defaultWidth="fill" paneTitle={paneTitle} firstMenu={paneStartMenu} lastMenu={paneLastMenu}>
             <ExceptionalBigCalendar
               {...this.props}
               myEvents={this.state.events}
+            />
+          </Pane>
+          <Pane
+            defaultWidth="30%"
+            paneTitle={CalendarUtils.translateToString('ui-calendar.ExceptionPeriod', this.props.stripes.intl)}
+            firstMenu={paneStartMenu}
+            lastMenu={lastMenus}
+          >
+            <ExceptionalPeriodEditor
+              {...this.props}
+              servicePoints={this.state.servicePoints}
             />
           </Pane>
         </Paneset>
