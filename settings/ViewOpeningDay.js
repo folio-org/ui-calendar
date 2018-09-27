@@ -75,5 +75,3 @@ function ViewOpeningDay(props) {
 ViewOpeningDay.propTypes = {
   initialValues: PropTypes.object,
 };
-
-export default ViewOpeningDay;
