@@ -58,7 +58,6 @@ class ServicePointDetails extends React.Component {
     this.props.parentMutator.query.replace(this.props.initialValues.id);
     this.props.parentMutator.periods.GET()
       .then((openingPeriods) => {
-        console.log(openingPeriods);
         this.setState({ openingPeriods });
         this.setState({ currentPeriod: this.displayCurrentPeriod() });
         this.setState({ nextPeriods: this.displayNextPeriod() });

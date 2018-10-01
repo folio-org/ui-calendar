@@ -118,15 +118,15 @@ class ExceptionWrapper extends React.Component {
 
       return (
         <Paneset>
-            {/*TODO open editor or selector*/}
-          {/* <Pane defaultWidth="30%" paneTitle={CalendarUtils.translateToString('ui-calendar.servicePoints', this.props.stripes.intl)}> */}
-          {/* <ServicePointSelector */}
-          {/* {...this.props} */}
-          {/* handleServicePointChange={this.handleServicePointChange} */}
-          {/* setServicePoints={this.setServicePoints} */}
-          {/* servicePoints={this.state.servicePoints} */}
-          {/* /> */}
-          {/* </Pane> */}
+          {/* TODO open editor or selector */}
+          {/*<Pane defaultWidth="20%" paneTitle={CalendarUtils.translateToString('ui-calendar.servicePoints', this.props.stripes.intl)}>*/}
+            {/*<ServicePointSelector*/}
+              {/*{...this.props}*/}
+              {/*handleServicePointChange={this.handleServicePointChange}*/}
+              {/*setServicePoints={this.setServicePoints}*/}
+              {/*servicePoints={this.state.servicePoints}*/}
+            {/*/>*/}
+          {/*</Pane>*/}
           <Pane defaultWidth="fill" paneTitle={paneTitle} firstMenu={paneStartMenu} lastMenu={paneLastMenu}>
             <ExceptionalBigCalendar
               {...this.props}
@@ -134,7 +134,7 @@ class ExceptionWrapper extends React.Component {
             />
           </Pane>
           <Pane
-            defaultWidth="30%"
+            defaultWidth="20%"
             paneTitle={CalendarUtils.translateToString('ui-calendar.ExceptionPeriod', this.props.stripes.intl)}
             firstMenu={paneStartMenu}
             lastMenu={lastMenus}
