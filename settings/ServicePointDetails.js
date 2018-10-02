@@ -382,14 +382,15 @@ class ServicePointDetails extends React.Component {
                 <p>{CalendarUtils.translate('ui-calendar.regularOpeningHoursWithExceptions')}</p>
                 <div className="add-exceptions-icon-wrapper">
                   <div className="icon-button">
-                    <Icon
-                      icon="calendar"
-                      size="large"
-                      iconClassName="calendar-icon"
-                    />
-                    <div className="icon-text" onClick={() => this.clickOpenExeptions()}> Open calendar</div>
+                    <Button onClick={() => this.clickOpenExeptions()}>
+                      <Icon
+                        icon="calendar"
+                        size="medium"
+                        iconClassName="calendar-icon"
+                      />
+                      {CalendarUtils.translate('ui-calendar.openCalendarExceptions')}
+                    </Button>
                   </div>
-                  <div className="text"> to add exceptions</div>
                 </div>
               </Col>
             </Row>
