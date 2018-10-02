@@ -16,6 +16,17 @@ class ExceptionalPeriodEditor extends React.Component {
       servicePoints: PropTypes.object.isRequired,
       stripes: PropTypes.object,
       intl: PropTypes.object,
+      allDay: PropTypes.object,
+      allSelector: PropTypes.object,
+      setStartDate: PropTypes.func,
+      setEndDate: PropTypes.func,
+      allSelectorHandle: PropTypes.func,
+      setClosed: PropTypes.func,
+      setAllDay: PropTypes.func,
+      setName: PropTypes.func,
+      setOpeningTime: PropTypes.func,
+      setClosingTime: PropTypes.func,
+      onToggleSelect: PropTypes.func,
     };
 
     constructor() {
@@ -24,108 +35,93 @@ class ExceptionalPeriodEditor extends React.Component {
       this.allSelectorHandle = this.allSelectorHandle.bind(this);
       this.setStartDate = this.setStartDate.bind(this);
       this.setEndDate = this.setEndDate.bind(this);
-      this.parseDateToString = this.parseDateToString.bind(this);
       this.setClosed = this.setClosed.bind(this);
+      this.setAllDay = this.setAllDay.bind(this);
       this.setName = this.setName.bind(this);
       this.setOpeningTime = this.setOpeningTime.bind(this);
       this.setClosingTime = this.setClosingTime.bind(this);
     }
 
-    componentWillMount() { // eslint-disable-line react/no-deprecated
-      this.setState({
-        servicePoints: this.props.servicePoints,
-        allSelector: true,
-        closed: false,
-      });
-    }
+    // componentDidUpdate() {
+    //   let period = [{
+    //     servicePointId: null,
+    //     name: null,
+    //     startDate: null,
+    //     endDate: null,
+    //     openingDays: [{
+    //       openingDay: {
+    //         openingHour: [{
+    //           startTime: null,
+    //           endTime: null,
+    //         }],
+    //         open: null,
+    //         allDay: null,
+    //       }
+    //     }]
+    //   }];
+    //   const selectedServicePoints = [];
+    //   // let k = 0;
+    //   // for(let i = 0; i < this.state.servicePoints.length){
+    //   //
+    //   // }
+    //   for (let i = 0; i < selectedServicePoints.length; i++) {
+    //     period = {
+    //       servicePointId: null,
+    //       name: this.state.name,
+    //       startDate: this.state.startDate,
+    //       endDate: this.state.endDate,
+    //       openingDays: [{
+    //         openingDay: {
+    //           openingHour: [{
+    //             startTime: this.state.startTime,
+    //             endTime: this.state.endTime,
+    //           }],
+    //           open: this.state.open,
+    //           allDay: this.state.allDay,
+    //         }
+    //       }]
+    //     };
+    //   }
+    // }
 
     setStartDate(e) {
-      this.setState({
-        startDate: this.parseDateToString(e),
-      });
+      this.props.setStartDate(e);
     }
 
     setEndDate(e) {
-      this.setState({
-        endDate: this.parseDateToString(e),
-      });
-    }
-
-    parseDateToString(e) {
-      let str = '';
-      for (const p in e) {
-        if (p !== undefined) {
-          if (Object.prototype.hasOwnProperty.call(e, p) && p !== 'preventDefault') {
-            str += e[p];
-          }
-        }
-      }
-      return str;
+      this.props.setEndDate(e);
     }
 
     allSelectorHandle(select) {
-      const tempServicePoints = this.state.servicePoints;
-      for (let i = 0; i < tempServicePoints.length; i++) {
-        tempServicePoints[i].selected = select;
-      }
-      if (select === true) {
-        this.setState({
-          servicePoints: tempServicePoints,
-          allSelector: false
-        });
-      } else {
-        this.setState({
-          servicePoints: tempServicePoints,
-          allSelector: true
-        });
-      }
+      this.props.allSelectorHandle(select);
     }
 
     setClosed() {
-      if (this.state.closed === false) {
-        this.setState({
-          closed: true
-        });
-      } else {
-        this.setState({
-          closed: false
-        });
-      }
+      this.props.setClosed();
+    }
+
+    setAllDay() {
+      this.props.setAllDay();
     }
 
     setName(e) {
-      this.setState({
-        name: e.target.value,
-      });
+      this.props.setName(e);
     }
 
     setOpeningTime(e) {
-      this.setState({
-        openingTime: e.target.value,
-      });
+      this.props.setOpeningTime(e);
     }
 
     setClosingTime(e) {
-      this.setState({
-        closingTime: e.target.value,
-      });
+      this.props.setClosingTime(e);
     }
 
     onToggleSelect(event) {
-      event.selected = !event.selected;
-      const tempServicePoints = this.state.servicePoints;
-      for (let i = 0; i < tempServicePoints.length; i++) {
-        if (tempServicePoints[i].id === event.id) {
-          tempServicePoints[i].selected = event.selected;
-        }
-      }
-      this.setState({
-        servicePoints: tempServicePoints,
-      });
+      this.props.onToggleSelect(event);
     }
 
     render() {
-      const items = this.state.servicePoints;
+      const items = this.props.servicePoints;
       const itemFormatter = (item) => (
         <li>
           <div className="CircleDiv" style={{ background: item.color }} />
@@ -165,23 +161,19 @@ class ExceptionalPeriodEditor extends React.Component {
       />;
 
       let allSelector;
-      if (this.state.allSelector === true) {
+      if (this.props.allSelector === true) {
         allSelector =
           <Button
-            onClick={() => {
-              this.allSelectorHandle(true);
-          }}
+            onClick={() => { this.allSelectorHandle(true); }}
           >
-        SELECTALL
+              SELECTALL
           </Button>;
       } else {
         allSelector =
           <Button
-            onClick={() => {
-                  this.allSelectorHandle(false);
-              }}
+            onClick={() => { this.allSelectorHandle(false); }}
           >
-            DESELECTALL
+              DESELECTALL
           </Button>;
       }
 
@@ -224,8 +216,22 @@ class ExceptionalPeriodEditor extends React.Component {
               </Row>
               <Row>
                 <Checkbox
-                  label="Closed"
+                  label="CLOSED"
                   onChange={() => this.setClosed()}
+                />
+              </Row>
+            </Col>
+          </Row>
+          <div style={{ height: '20px' }} />
+          <Row>
+            <Col>
+              <Row>
+                <div>ALLDAY -ALLNIGHT</div>
+              </Row>
+              <Row>
+                <Checkbox
+                  label="ALLDAY"
+                  onChange={() => this.setAllDay()}
                 />
               </Row>
             </Col>
@@ -238,6 +244,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 component={Textfield}
                 label="TODO Opening Time"
                 onChange={this.setOpeningTime}
+                disabled={this.props.allDay}
                 required
               />
             </Col>
@@ -249,6 +256,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 component={Textfield}
                 label="TODO Closing Time"
                 onChange={this.setClosingTime}
+                disabled={this.props.allDay}
                 required
               />
             </Col>
