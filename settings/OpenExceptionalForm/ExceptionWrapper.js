@@ -11,6 +11,7 @@ import Button from '@folio/stripes-components/lib/Button';
 import ServicePointSelector from './ServicePointSelector';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
+import '!style-loader!css-loader!../../css/exception-form.css'; // eslint-disable-line
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -65,6 +66,7 @@ class ExceptionWrapper extends React.Component {
     setting(sps) {
       const events = [];
       let k = 0;
+      let color = 'black';
       for (let i = 0; i < this.props.periods.length; i++) {
         for (let j = 0; j < sps.length; j++) {
           if (sps[j].id === this.props.periods[i].servicePointId && sps[j].selected === true) {
@@ -74,6 +76,15 @@ class ExceptionWrapper extends React.Component {
             event.id = this.props.periods[i].id;
             event.openingDays = this.props.periods[i].openingDays;
 
+            if (this.state.servicePoints) {
+              for (let l = 0; l < this.state.servicePoints.length; l++) {
+                if (this.state.servicePoints[l].id === this.props.periods[i].servicePointId) {
+                  color = this.state.servicePoints[l].color;
+                }
+              }
+            }
+
+            event.color = color;
             const sepEvent = this.separateEvents(event);
 
             for (let g = 0; g < sepEvent.length; g++) {
@@ -150,11 +161,15 @@ class ExceptionWrapper extends React.Component {
             for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
               if (event.openingDays[j].openingDay.allDay === true) {
                 dates.push(
-                  <p>All day</p>
+                  <div className="CircleDiv" style={{ background: event.color }} />
+                );
+                dates.push(
+                  <div>All day</div>
                 );
               } else {
                 dates.push(
-                  <p>{event.openingDays[j].openingDay.openingHour[k].startTime} - {event.openingDays[j].openingDay.openingHour[k].endTime}</p>
+                  <div >{event.openingDays[j].openingDay.openingHour[k].startTime} - {event.openingDays[j].openingDay.openingHour[k].endTime}</div>,
+                  <div>,</div>
                 );
               }
             }
@@ -162,15 +177,18 @@ class ExceptionWrapper extends React.Component {
 
           if (dates.length === 0) {
             dates.push(
-              <p>Closed</p>
+              <div>Closed</div>
             );
           }
+          const eventContent = <div className="rbc-event-dates-content" >{dates}</div>;
+          const eventTitle = <div className="rbc-event-dates" style={{ backgroundColor: event.color }}> {eventContent}</div>
 
           const tempObj = {
             id: event.id,
             end: moment(event.start).add(i, 'days'),
             start: moment(event.start).add(i, 'days'),
-            title: dates
+            title: eventTitle,
+
           };
           temp[g] = tempObj;
         }

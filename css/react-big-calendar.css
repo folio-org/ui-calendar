@@ -630,3 +630,14 @@ position: absolute;
   text-align: center;
   transform: translateY(-50%);
 }
+
+.rbc-event-dates{
+  background-color: white;
+  border-radius: 4px;
+  display: inline-block;
+  width: 100%;
+}
+.rbc-event-dates-content {
+  display: flex;
+  justify-content: center;
+}
