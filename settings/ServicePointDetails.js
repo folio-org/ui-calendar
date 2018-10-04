@@ -44,7 +44,6 @@ class ServicePointDetails extends React.Component {
       openingAllPeriods: [],
       nextPeriods: [],
       isPeriodsPending: true,
-      isPeriodssending: true
     };
   }
 
@@ -58,7 +57,6 @@ class ServicePointDetails extends React.Component {
     this.props.parentMutator.query.replace(this.props.initialValues.id);
     this.props.parentMutator.periods.GET()
       .then((openingPeriods) => {
-        console.log(openingPeriods);
         this.setState({ openingPeriods });
         this.setState({ currentPeriod: this.displayCurrentPeriod() });
         this.setState({ nextPeriods: this.displayNextPeriod() });
@@ -71,28 +69,34 @@ class ServicePointDetails extends React.Component {
   getAllServicePoints() {
     if (this.state.allServicePoints === null || this.state.allServicePoints === undefined) {
       const promises = [];
-      this.props.parentMutator.query.replace('3a40852d-49fd-4df2-a1f9-6e2641a6e91f');
-      const a = this.props.parentMutator.periods.GET();
-      promises.push(a);
-      this.props.parentMutator.query.replace('c4c90014-c8c9-4ade-8f24-b5e313319f4b');
-      const b = this.props.parentMutator.periods.GET();
-      promises.push(b);
+
+      for (let i = 0; i < this.props.initialValues.allEntries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.initialValues.allEntries[i].id);
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      let k = 0;
       const allSP = [];
-      let i = 0;
       Promise.all(promises).then((openingAllPeriods) => {
-        const tempSP = {
-          startDate: openingAllPeriods[0].startDate,
-          endDate: openingAllPeriods[0].endDate,
-          id: openingAllPeriods[0].id,
-          name: openingAllPeriods[0].name,
-          openingDays: openingAllPeriods[0].openingDays,
-          servicePointId: openingAllPeriods[0].servicePointId
-        };
-        allSP[i] = tempSP;
-        i++;
-      });
-      this.setState({
-        allServicePoints: allSP
+        for (let i = 0; i < openingAllPeriods.length; i++) {
+          const temp = openingAllPeriods[i];
+          for (let j = 0; j < temp.length; j++) {
+            const tempSP = {
+              startDate: temp[j].startDate,
+              endDate: temp[j].endDate,
+              id: temp[j].id,
+              name: temp[j].name,
+              openingDays: temp[j].openingDays,
+              servicePointId: temp[j].servicePointId
+            };
+            allSP[k] = tempSP;
+            k++;
+          }
+        }
+        this.setState({
+          openingAllPeriods: allSP
+        });
       });
     }
   }
@@ -322,7 +326,7 @@ class ServicePointDetails extends React.Component {
     BigCalendar.momentLocalizer(moment);
     const servicePoint = this.props.initialValues;
 
-    if (!this.state.isPeriodsPending && !this.state.isPeriodsPending) {
+    if (!this.state.isPeriodsPending) {
       return (
 
         <ErrorBoundary>
@@ -378,14 +382,15 @@ class ServicePointDetails extends React.Component {
                 <p>{CalendarUtils.translate('ui-calendar.regularOpeningHoursWithExceptions')}</p>
                 <div className="add-exceptions-icon-wrapper">
                   <div className="icon-button">
-                    <Icon
-                      icon="calendar"
-                      size="large"
-                      iconClassName="calendar-icon"
-                    />
-                    <div className="icon-text" onClick={() => this.clickOpenExeptions()}> Open calendar</div>
+                    <Button onClick={() => this.clickOpenExeptions()}>
+                      <Icon
+                        icon="calendar"
+                        size="medium"
+                        iconClassName="calendar-icon"
+                      />
+                      {CalendarUtils.translate('ui-calendar.openCalendarExceptions')}
+                    </Button>
                   </div>
-                  <div className="text"> to add exceptions</div>
                 </div>
               </Col>
             </Row>
