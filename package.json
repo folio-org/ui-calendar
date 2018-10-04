@@ -95,12 +95,14 @@
     ]
   },
   "scripts": {
+    "start": "stripes serve",
     "lint": "eslint .",
     "test": "echo 'placeholder. no tests implemented'"
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^3.2.0",
     "@folio/stripes": "^1.0.0",
+    "@folio/stripes-cli": "^1.5.0",
     "babel-eslint": "^8.2.2",
     "eslint": "^5.6.1",
     "react": "^16.5.2",
