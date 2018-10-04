@@ -63,6 +63,32 @@ class ExceptionWrapper extends React.Component {
       this.setting(tempServicePoints);
     }
 
+    componentDidMount() {
+      const tempServicePoints = [{
+        id: null,
+        name: null,
+        selected: null,
+        color: null,
+      }];
+      const colors = [];
+      for (let i = 0; i < this.props.entries.length; i++) {
+        colors[i] = RandomColor({
+          luminosity: 'random',
+          hue: 'random'
+        });
+      }
+      for (let i = 0; i < this.props.entries.length; i++) {
+        const tempSP = {
+          id: this.props.entries[i].id,
+          name: this.props.entries[i].name,
+          selected: false,
+          color: colors[i],
+        };
+        tempServicePoints[i] = tempSP;
+      }
+      this.setting(tempServicePoints);
+    }
+
     setting(sps) {
       const events = [];
       let k = 0;
@@ -109,32 +135,6 @@ class ExceptionWrapper extends React.Component {
       });
     }
 
-    componentDidMount() {
-      const tempServicePoints = [{
-        id: null,
-        name: null,
-        selected: null,
-        color: null,
-      }];
-      const colors = [];
-      for (let i = 0; i < this.props.entries.length; i++) {
-        colors[i] = RandomColor({
-          luminosity: 'random',
-          hue: 'random'
-        });
-      }
-      for (let i = 0; i < this.props.entries.length; i++) {
-        const tempSP = {
-          id: this.props.entries[i].id,
-          name: this.props.entries[i].name,
-          selected: false,
-          color: colors[i],
-        };
-        tempServicePoints[i] = tempSP;
-      }
-      this.setting(tempServicePoints);
-    }
-
     setServicePoints(sps) {
       const event = {};
       event.start = null;
@@ -165,17 +165,28 @@ class ExceptionWrapper extends React.Component {
             }
             for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
               dates.push(
-                <div >{event.openingDays[j].openingDay.openingHour[k].startTime} - {event.openingDays[j].openingDay.openingHour[k].endTime}</div>
+                <div>
+                  {event.openingDays[j].openingDay.openingHour[k].startTime}
+                  {' '}
+
+-
+                  {' '}
+                  {event.openingDays[j].openingDay.openingHour[k].endTime}
+                </div>
               );
-              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length ) {
+              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
                 dates.push(
-                  <div >,</div>
+                  <div>,</div>
                 );
               }
             }
           }
-          const eventContent = <div className="rbc-event-dates-content" >{dates}</div>;
-          const eventTitle = <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>  {eventContent}</div>;
+          const eventContent = <div className="rbc-event-dates-content">{dates}</div>;
+          const eventTitle =
+            <div className="rbc-event-dates" style={{ backgroundColor: event.color, border: '5px red' }}>
+              {' '}
+              {eventContent}
+            </div>;
 
           const tempObj = {
             id: event.id,
