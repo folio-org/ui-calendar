@@ -158,30 +158,24 @@ class ExceptionWrapper extends React.Component {
 
         for (let j = 0; j < event.openingDays.length; j++) {
           if (today === event.openingDays[j].weekdays.day) {
+            if (event.openingDays[j].openingDay.allDay === true) {
+              dates.push(
+                <div>All day</div>
+              );
+            }
             for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
-              if (event.openingDays[j].openingDay.allDay === true) {
+              dates.push(
+                <div >{event.openingDays[j].openingDay.openingHour[k].startTime} - {event.openingDays[j].openingDay.openingHour[k].endTime}</div>
+              );
+              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length ) {
                 dates.push(
-                  <div className="CircleDiv" style={{ background: event.color }} />
-                );
-                dates.push(
-                  <div>All day</div>
-                );
-              } else {
-                dates.push(
-                  <div >{event.openingDays[j].openingDay.openingHour[k].startTime} - {event.openingDays[j].openingDay.openingHour[k].endTime}</div>,
-                  <div>,</div>
+                  <div >,</div>
                 );
               }
             }
           }
-
-          if (dates.length === 0) {
-            dates.push(
-              <div>Closed</div>
-            );
-          }
           const eventContent = <div className="rbc-event-dates-content" >{dates}</div>;
-          const eventTitle = <div className="rbc-event-dates" style={{ backgroundColor: event.color }}> {eventContent}</div>
+          const eventTitle = <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>  {eventContent}</div>;
 
           const tempObj = {
             id: event.id,
