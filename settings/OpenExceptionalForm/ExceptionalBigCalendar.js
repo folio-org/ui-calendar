@@ -2,12 +2,16 @@ import React from 'react';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import withDragAndDrop from "../../../react-big-calendar/src/addons/dragAndDrop";
 
-BigCalendar.momentLocalizer(moment);
+
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
+
 
 class ExceptionalBigCalendar extends React.Component {
     static propTypes = {
       myEvents: PropTypes.object,
+      getEvent: PropTypes.func,
     };
 
     render() {
@@ -19,6 +23,7 @@ class ExceptionalBigCalendar extends React.Component {
           showMultiDayTimes
           label
           views={['month']}
+          getEvent={this.props.getEvent}
         />
 
 

@@ -26,14 +26,18 @@ class ExceptionWrapper extends React.Component {
       this.setServicePoints = this.setServicePoints.bind(this);
       this.handleServicePointChange = this.handleServicePointChange.bind(this);
       this.setting = this.setting.bind(this);
+      this.settingALL = this.settingALL.bind(this);
       this.separateEvents = this.separateEvents.bind(this);
+      this.getEvent = this.getEvent.bind(this);
+      this.getAllServicePoints = this.getAllServicePoints.bind(this);
       this.setState({
         servicePoints: [],
         events: [{
           id: null,
           startDate: null,
           endDate: null,
-        }]
+        }],
+        openingAllPeriods: []
       });
     }
 
@@ -64,6 +68,7 @@ class ExceptionWrapper extends React.Component {
     }
 
     componentDidMount() {
+      this.getAllServicePoints();
       const tempServicePoints = [{
         id: null,
         name: null,
@@ -86,36 +91,55 @@ class ExceptionWrapper extends React.Component {
         };
         tempServicePoints[i] = tempSP;
       }
+      this.getAllServicePoints();
       this.setting(tempServicePoints);
     }
 
     setting(sps) {
       const events = [];
+      if (events.length === 0) {
+        const event = {};
+        event.start = null;
+        event.end = null;
+        event.id = null;
+        events.push({ ...event });
+      }
+
+      this.setState({
+        servicePoints: sps,
+        events,
+      });
+    }
+
+    settingALL(sps) {
+      const events = [];
       let k = 0;
       let color = 'black';
-      for (let i = 0; i < this.props.periods.length; i++) {
-        for (let j = 0; j < sps.length; j++) {
-          if (sps[j].id === this.props.periods[i].servicePointId && sps[j].selected === true) {
-            const event = {};
-            event.start = this.props.periods[i].startDate;
-            event.end = this.props.periods[i].endDate;
-            event.id = this.props.periods[i].id;
-            event.openingDays = this.props.periods[i].openingDays;
+      if (this.state.openingAllPeriods !== null && this.state.openingAllPeriods !== undefined) {
+        for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
+          for (let j = 0; j < sps.length; j++) {
+            if (sps[j].id === this.state.openingAllPeriods[i].servicePointId && sps[j].selected === true) {
+              const event = {};
+              event.start = this.state.openingAllPeriods[i].startDate;
+              event.end = this.state.openingAllPeriods[i].endDate;
+              event.id = this.state.openingAllPeriods[i].id;
+              event.openingDays = this.state.openingAllPeriods[i].openingDays;
 
-            if (this.state.servicePoints) {
-              for (let l = 0; l < this.state.servicePoints.length; l++) {
-                if (this.state.servicePoints[l].id === this.props.periods[i].servicePointId) {
-                  color = this.state.servicePoints[l].color;
+              if (this.state.servicePoints) {
+                for (let l = 0; l < this.state.servicePoints.length; l++) {
+                  if (this.state.servicePoints[l].id === this.state.openingAllPeriods[i].servicePointId) {
+                    color = this.state.servicePoints[l].color;
+                  }
                 }
               }
-            }
 
-            event.color = color;
-            const sepEvent = this.separateEvents(event);
+              event.color = color;
+              const sepEvent = this.separateEvents(event);
 
-            for (let g = 0; g < sepEvent.length; g++) {
-              events[k] = sepEvent[g];
-              k++;
+              for (let g = 0; g < sepEvent.length; g++) {
+                events[k] = sepEvent[g];
+                k++;
+              }
             }
           }
         }
@@ -145,7 +169,7 @@ class ExceptionWrapper extends React.Component {
       this.setState({
         servicePoints: sps,
       });
-      this.setting(sps);
+      this.settingALL(sps);
     }
 
     separateEvents(event) {
@@ -183,7 +207,7 @@ class ExceptionWrapper extends React.Component {
           }
           const eventContent = <div className="rbc-event-dates-content">{dates}</div>;
           const eventTitle =
-            <div className="rbc-event-dates" style={{ backgroundColor: event.color, border: '5px red' }}>
+            <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>
               {' '}
               {eventContent}
             </div>;
@@ -212,6 +236,44 @@ class ExceptionWrapper extends React.Component {
       this.setServicePoints(tempServicePoints);
     }
 
+    getEvent(event) {
+      // TODO visszaadni az exceptioneleket + exceptional értéket hozzáadni az eventhez
+      console.log(event);
+    }
+
+    getAllServicePoints() {
+      const promises = [];
+
+      for (let i = 0; i < this.props.entries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.entries[i].id);
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      let k = 0;
+      const allSP = [];
+      Promise.all(promises).then((openingAllPeriods) => {
+        for (let i = 0; i < openingAllPeriods.length; i++) {
+          const temp = openingAllPeriods[i];
+          for (let j = 0; j < temp.length; j++) {
+            const tempSP = {
+              startDate: temp[j].startDate,
+              endDate: temp[j].endDate,
+              id: temp[j].id,
+              name: temp[j].name,
+              openingDays: temp[j].openingDays,
+              servicePointId: temp[j].servicePointId
+            };
+            allSP[k] = tempSP;
+            k++;
+          }
+        }
+        this.setState({
+          openingAllPeriods: allSP
+        });
+      });
+    }
+
 
     render() {
       const paneStartMenu = <PaneMenu><IconButton icon="closeX" onClick={this.props.onClose} /></PaneMenu>;
@@ -236,6 +298,7 @@ class ExceptionWrapper extends React.Component {
             <ExceptionalBigCalendar
               {...this.props}
               myEvents={this.state.events}
+              getEvent={this.getEvent}
             />
           </Pane>
         </Paneset>

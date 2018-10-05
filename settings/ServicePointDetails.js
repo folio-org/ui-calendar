@@ -28,7 +28,6 @@ class ServicePointDetails extends React.Component {
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
     this.getLatestPeriod = this.getLatestPeriod.bind(this);
-    this.getAllServicePoints = this.getAllServicePoints.bind(this);
     this.state = {
       newPeriodLayer: {
         isOpen: false,
@@ -41,7 +40,6 @@ class ServicePointDetails extends React.Component {
       },
       modifyPeriod: {},
       openingPeriods: [],
-      openingAllPeriods: [],
       nextPeriods: [],
       isPeriodsPending: true,
     };
@@ -49,7 +47,6 @@ class ServicePointDetails extends React.Component {
 
   componentDidMount() {
     this.getServicePoints();
-    this.getAllServicePoints();
   }
 
 
@@ -65,42 +62,6 @@ class ServicePointDetails extends React.Component {
         return error;
       });
   }
-
-  getAllServicePoints() {
-    if (this.state.allServicePoints === null || this.state.allServicePoints === undefined) {
-      const promises = [];
-
-      for (let i = 0; i < this.props.initialValues.allEntries.length; i++) {
-        this.props.parentMutator.query.replace(this.props.initialValues.allEntries[i].id);
-        const a = this.props.parentMutator.periods.GET();
-        promises.push(a);
-      }
-
-      let k = 0;
-      const allSP = [];
-      Promise.all(promises).then((openingAllPeriods) => {
-        for (let i = 0; i < openingAllPeriods.length; i++) {
-          const temp = openingAllPeriods[i];
-          for (let j = 0; j < temp.length; j++) {
-            const tempSP = {
-              startDate: temp[j].startDate,
-              endDate: temp[j].endDate,
-              id: temp[j].id,
-              name: temp[j].name,
-              openingDays: temp[j].openingDays,
-              servicePointId: temp[j].servicePointId
-            };
-            allSP[k] = tempSP;
-            k++;
-          }
-        }
-        this.setState({
-          openingAllPeriods: allSP
-        });
-      });
-    }
-  }
-
 
   getWeekdayOpeningHours(weekday) {
     const openingPeriod = this.state.currentPeriod;
@@ -435,8 +396,6 @@ class ServicePointDetails extends React.Component {
               {...this.props}
               entries={this.props.initialValues.allEntries}
               onClose={this.onClose}
-              periods={this.state.openingAllPeriods}
-              onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
             />
 
           </Layer>
