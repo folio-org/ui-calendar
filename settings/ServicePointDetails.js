@@ -53,7 +53,6 @@ class ServicePointDetails extends React.Component {
     this.getAllServicePoints();
   }
 
-
   getServicePoints() {
     this.props.parentMutator.query.replace(this.props.initialValues.id);
     this.props.parentMutator.periods.GET()
@@ -95,7 +94,6 @@ class ServicePointDetails extends React.Component {
       });
     }
   }
-
 
   getWeekdayOpeningHours(weekday) {
     const openingPeriod = this.state.currentPeriod;

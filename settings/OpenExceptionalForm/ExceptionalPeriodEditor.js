@@ -9,6 +9,7 @@ import CalendarUtils from '../../CalendarUtils';
 import TextField from '../../../stripes-components/lib/TextField/TextField';
 import Textfield from '../../../stripes-components/lib/TextField';
 import List from '../../../stripes-components/lib/List';
+import Timepicker from '../../../stripes-components/lib/Timepicker';
 
 
 class ExceptionalPeriodEditor extends React.Component {
@@ -16,7 +17,7 @@ class ExceptionalPeriodEditor extends React.Component {
       servicePoints: PropTypes.object.isRequired,
       stripes: PropTypes.object,
       intl: PropTypes.object,
-      allDay: PropTypes.object,
+      allDay: PropTypes.bool,
       allSelector: PropTypes.object,
       setStartDate: PropTypes.func,
       setEndDate: PropTypes.func,
@@ -26,7 +27,7 @@ class ExceptionalPeriodEditor extends React.Component {
       setName: PropTypes.func,
       setOpeningTime: PropTypes.func,
       setClosingTime: PropTypes.func,
-      onToggleSelect: PropTypes.func,
+      setEditorServicePoints: PropTypes.func,
     };
 
     constructor() {
@@ -40,88 +41,76 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setName = this.setName.bind(this);
       this.setOpeningTime = this.setOpeningTime.bind(this);
       this.setClosingTime = this.setClosingTime.bind(this);
+      this.setModifyed = this.setModifyed.bind(this);
     }
 
-    // componentDidUpdate() {
-    //   let period = [{
-    //     servicePointId: null,
-    //     name: null,
-    //     startDate: null,
-    //     endDate: null,
-    //     openingDays: [{
-    //       openingDay: {
-    //         openingHour: [{
-    //           startTime: null,
-    //           endTime: null,
-    //         }],
-    //         open: null,
-    //         allDay: null,
-    //       }
-    //     }]
-    //   }];
-    //   const selectedServicePoints = [];
-    //   // let k = 0;
-    //   // for(let i = 0; i < this.state.servicePoints.length){
-    //   //
-    //   // }
-    //   for (let i = 0; i < selectedServicePoints.length; i++) {
-    //     period = {
-    //       servicePointId: null,
-    //       name: this.state.name,
-    //       startDate: this.state.startDate,
-    //       endDate: this.state.endDate,
-    //       openingDays: [{
-    //         openingDay: {
-    //           openingHour: [{
-    //             startTime: this.state.startTime,
-    //             endTime: this.state.endTime,
-    //           }],
-    //           open: this.state.open,
-    //           allDay: this.state.allDay,
-    //         }
-    //       }]
-    //     };
-    //   }
-    // }
+    componentWillMount() {
+      this.setState({
+        servicePoints: this.props.servicePoints,
+      });
+    }
+
+    setModifyed() {
+      this.setState({
+        modifyed: true,
+      });
+    }
 
     setStartDate(e) {
       this.props.setStartDate(e);
+      this.setModifyed;
     }
 
     setEndDate(e) {
       this.props.setEndDate(e);
+      this.setModifyed;
     }
 
     allSelectorHandle(select) {
-      this.props.allSelectorHandle(select);
+      this.props.allSelectorHandle(select, this.state.servicePoints);
+      this.setModifyed;
     }
 
     setClosed() {
-      this.props.setClosed();
+      this.props.setClosed(this.state.closed);
+      this.setModifyed;
     }
 
     setAllDay() {
-      this.props.setAllDay();
+      this.props.setAllDay(this.props.allDay);
+      this.setModifyed;
     }
 
     setName(e) {
       this.props.setName(e);
     }
 
-    setOpeningTime(e) {
-      this.props.setOpeningTime(e);
+    setOpeningTime(e, value) {
+      this.props.setOpeningTime(value);
+      this.setModifyed;
     }
 
-    setClosingTime(e) {
-      this.props.setClosingTime(e);
+    setClosingTime(e, value) {
+      this.props.setClosingTime(value);
+      this.setModifyed;
     }
 
     onToggleSelect(event) {
-      this.props.onToggleSelect(event);
+      event.selected = !event.selected;
+      const tempServicePoints = this.props.servicePoints;
+      for (let i = 0; i < tempServicePoints.length; i++) {
+        if (tempServicePoints[i].id === event.id) {
+          tempServicePoints[i].selected = event.selected;
+        }
+      }
+      this.props.setEditorServicePoints(tempServicePoints);
+      this.setState({
+        servicePoints: tempServicePoints,
+      });
     }
 
     render() {
-      const items = this.props.servicePoints;
+      const items = this.state.servicePoints;
       const itemFormatter = (item) => (
         <li>
           <div className="CircleDiv" style={{ background: item.color }} />
@@ -161,19 +150,19 @@ class ExceptionalPeriodEditor extends React.Component {
       />;
 
       let allSelector;
-      if (this.props.allSelector === true) {
-        allSelector =
-          <Button
-            onClick={() => { this.allSelectorHandle(true); }}
-          >
-              SELECTALL
-          </Button>;
-      } else {
+      if (this.props.allSelector === false) {
         allSelector =
           <Button
             onClick={() => { this.allSelectorHandle(false); }}
           >
               DESELECTALL
+          </Button>;
+      } else {
+        allSelector =
+          <Button
+            onClick={() => { this.allSelectorHandle(true); }}
+          >
+                  SELECTALL
           </Button>;
       }
 
@@ -239,32 +228,49 @@ class ExceptionalPeriodEditor extends React.Component {
           <div style={{ height: '20px' }} />
           <Row>
             <Col>
-              <TextField
-                name="openintTime"
-                component={Textfield}
-                label="TODO Opening Time"
-                onChange={this.setOpeningTime}
-                disabled={this.props.allDay}
-                required
-              />
+              {/* <TextField */}
+              {/* name="openintTime" */}
+              {/* component={Textfield} */}
+              {/* label="TODO Opening Time" */}
+              {/* onChange={this.setOpeningTime} */}
+              {/* disabled={this.props.allDay} */}
+              {/* required */}
+              {/* /> */}
+              <div>
+                <Field
+                  name="openintTime"
+                  component={Timepicker}
+                  label="TODO openintTime"
+                  onChange={this.setOpeningTime}
+                />
+              </div>
             </Col>
           </Row>
           <Row>
             <Col>
-              <TextField
-                name="closingTime"
-                component={Textfield}
-                label="TODO Closing Time"
-                onChange={this.setClosingTime}
-                disabled={this.props.allDay}
-                required
-              />
+              {/* <TextField */}
+              {/* name="closingTime" */}
+              {/* component={Textfield} */}
+              {/* label="TODO Closing Time" */}
+              {/* onChange={this.setClosingTime} */}
+              {/* disabled={this.props.allDay} */}
+              {/* required */}
+              {/* /> */}
+              <div>
+                <Field
+                  name="closingTime"
+                  component={Timepicker}
+                  label="TODO openintTime"
+                  onChange={this.setClosingTime}
+                />
+              </div>
             </Col>
           </Row>
         </div>
       );
     }
 }
+// this.props.stripes.locale
 
 export default reduxForm({
   form: 'ExceptionalPeriodEditor',

@@ -19,8 +19,6 @@ class ExceptionalBigCalendar extends React.Component {
         end: new Date(2018, 10, 19),
       },
     ];
-    { console.log('bigcalendar props'); }
-    { console.log(this.props); }
     return (
       <BigCalendar
         popup
