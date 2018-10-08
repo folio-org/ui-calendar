@@ -93,5 +93,8 @@
     "deleteQuestionTitle": "Delete regular library hours",
     "exitQuestionTitle": "Are you sure?",
     "exitWithoutSaving": "Exit without saving",
-    "exitQuestionMessage": "There are unsaved changes"
+    "exitQuestionMessage": "There are unsaved changes",
+    "exceptionalNewPeriod": "+ New Exception Period",
+    "servicePoints": "Service Points",
+    "openCalendarExceptions": "Open calendar to add exceptions"
 }

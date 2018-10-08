@@ -93,5 +93,8 @@
     "deleteQuestionTitle": "Elimina orario della biblioteca",
     "exitQuestionTitle": "Sei sicuro?",
     "exitWithoutSaving": "Uscire senza salvare",
-    "exitQuestionMessage": "Ci sono modifiche non salvate"
+    "exitQuestionMessage": "Ci sono modifiche non salvate",
+    "exceptionalNewPeriod": "+ New Exception Period",
+    "servicePoints": "Service Points",
+    "openCalendarExceptions": "Open calendar to add exceptions"
 }
