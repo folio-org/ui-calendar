@@ -37,7 +37,10 @@ class ExceptionWrapper extends React.Component {
           startDate: null,
           endDate: null,
         }],
-        openingAllPeriods: []
+        openingAllPeriods: [],
+        modifyExceptional: [{
+          id: undefined,
+        }],
       });
     }
 
@@ -217,7 +220,7 @@ class ExceptionWrapper extends React.Component {
             end: moment(event.start).add(i, 'days'),
             start: moment(event.start).add(i, 'days'),
             title: eventTitle,
-
+            exceptional: false
           };
           temp[g] = tempObj;
         }
@@ -237,8 +240,26 @@ class ExceptionWrapper extends React.Component {
     }
 
     getEvent(event) {
-      // TODO visszaadni az exceptioneleket + exceptional értéket hozzáadni az eventhez
-      console.log(event);
+      const res = {};
+
+      for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
+        if (this.state.openingAllPeriods[i].id === event.id) {
+          for (let j = 0; j < this.state.openingAllPeriods[i].openingDays.length; j++) {
+            const day = moment(event.start).format('dddd').toUpperCase();
+            if (day === this.state.openingAllPeriods[i].openingDays[j].weekdays.day) {
+              res.startTime = this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].startTime;
+              res.endTime = this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].endTime;
+            }
+          }
+          res.servicePointId = this.state.openingAllPeriods[i].servicePointId;
+          res.id = this.state.openingAllPeriods[i].id;
+          res.startDate = this.state.openingAllPeriods[i].startDate;
+          res.endDate = this.state.openingAllPeriods[i].endDate;
+
+          res.servicePointIds = [];
+        }
+      }
+      console.log(res);
     }
 
     getAllServicePoints() {
