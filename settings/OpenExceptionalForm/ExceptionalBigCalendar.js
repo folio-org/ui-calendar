@@ -6,23 +6,26 @@ import PropTypes from 'prop-types';
 BigCalendar.momentLocalizer(moment);
 
 class ExceptionalBigCalendar extends React.Component {
-    static propTypes = {
-      myEvents: PropTypes.object,
-    };
-
-    render() {
-      return (
-
-        <BigCalendar
-          popup
-          events={this.props.myEvents}
-          showMultiDayTimes
-          label
-          views={['month']}
-        />
-
-
-      );
-    }
+  render() {
+    const myEvents = [
+      {
+        id: 0,
+        start: new Date(2018, 10, 15),
+        end: new Date(2018, 10, 16),
+      },
+      {
+        id: 1,
+        start: new Date(2018, 10, 18),
+        end: new Date(2018, 10, 19),
+      },
+    ];
+    return (
+      <BigCalendar
+        popup
+        events={this.props.myEvents}
+        showMultiDayTimes
+      />
+    );
+  }
 }
 export default ExceptionalBigCalendar;
