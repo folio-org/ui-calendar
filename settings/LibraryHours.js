@@ -15,10 +15,11 @@ class LibraryHours extends React.Component {
       },
       query: {},
       periodId: {},
+      exceptional: {},
       periods: {
         type: 'okapi',
         records: 'openingPeriods',
-        path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=false',
+        path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=%{exceptional}',
         fetch: false,
         accumulate: true,
         POST: {
@@ -106,6 +107,9 @@ LibraryHours.propTypes = {
       DELETE: PropTypes.func,
     }),
     query: PropTypes.shape({
+      replace: PropTypes.func,
+    }),
+    exceptional: PropTypes.shape({
       replace: PropTypes.func,
     }),
     periodId: PropTypes.shape({

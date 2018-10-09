@@ -51,6 +51,7 @@ class ServicePointDetails extends React.Component {
 
   getServicePoints() {
     this.props.parentMutator.query.replace(this.props.initialValues.id);
+    this.props.parentMutator.exceptional.replace('false');
     this.props.parentMutator.periods.GET()
       .then((openingPeriods) => {
         this.setState({ openingPeriods });

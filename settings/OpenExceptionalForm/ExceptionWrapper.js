@@ -62,11 +62,8 @@ class ExceptionWrapper extends React.Component {
           open: null,
           allDay: null,
           allSelector: null,
-        }
-        openingAllPeriods: [],
-        modifyExceptional: [{
-          id: undefined,
-        }],
+        },
+        openingAllPeriods: []
       });
     }
 
@@ -100,7 +97,7 @@ class ExceptionWrapper extends React.Component {
         }
       }
       Promise.all(promises).then((openingAllPeriods) => {
-        // TODO zárni a jobb oldali sávot, üríteni a this.state.editor-t, frissíteni a középső calt
+
       });
     }
 
@@ -116,7 +113,7 @@ class ExceptionWrapper extends React.Component {
         promises.push(a);
       }
       Promise.all(promises).then((openingAllPeriods) => {
-        // TODO zárni a jobb oldali sávot, üríteni a this.state.editor-t, frissíteni a középső calt
+
       });
     }
 
@@ -147,6 +144,9 @@ class ExceptionWrapper extends React.Component {
       this.setting(tempServicePoints);
     }
 
+    componentDidMount() {
+      this.getAllServicePoints();
+    }
 
     setStartDate(e) {
       const tempEditor = this.state.editor;
@@ -308,6 +308,7 @@ class ExceptionWrapper extends React.Component {
                 }
               }
 
+              event.exceptional = this.state.openingAllPeriods[i].exceptional;
               event.color = color;
               const sepEvent = this.separateEvents(event);
 
@@ -350,7 +351,32 @@ class ExceptionWrapper extends React.Component {
         const dates = [];
 
         for (let j = 0; j < event.openingDays.length; j++) {
-          if (today === event.openingDays[j].weekdays.day) {
+          if (event.exceptional === false) {
+            if (today === event.openingDays[j].weekdays.day) {
+              if (event.openingDays[j].openingDay.allDay === true) {
+                dates.push(
+                  <div>All day</div>
+                );
+              }
+              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
+                dates.push(
+                  <div>
+                    {event.openingDays[j].openingDay.openingHour[k].startTime}
+                    {' '}
+
+-
+                    {' '}
+                    {event.openingDays[j].openingDay.openingHour[k].endTime}
+                  </div>
+                );
+                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+                  dates.push(
+                    <div>,</div>
+                  );
+                }
+              }
+            }
+          } else if (event.exceptional === true) {
             if (event.openingDays[j].openingDay.allDay === true) {
               dates.push(
                 <div>All day</div>
@@ -358,11 +384,11 @@ class ExceptionWrapper extends React.Component {
             }
             for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
               dates.push(
-                <div>
+                <div style={{ border: '4px solid red' }}>
                   {event.openingDays[j].openingDay.openingHour[k].startTime}
                   {' '}
 
--
+                          -
                   {' '}
                   {event.openingDays[j].openingDay.openingHour[k].endTime}
                 </div>
@@ -374,6 +400,7 @@ class ExceptionWrapper extends React.Component {
               }
             }
           }
+
           const eventContent = <div className="rbc-event-dates-content">{dates}</div>;
           const eventTitle =
             <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>
@@ -413,19 +440,27 @@ class ExceptionWrapper extends React.Component {
           for (let j = 0; j < this.state.openingAllPeriods[i].openingDays.length; j++) {
             const day = moment(event.start).format('dddd').toUpperCase();
             if (day === this.state.openingAllPeriods[i].openingDays[j].weekdays.day) {
-              res.startTime = this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].startTime;
-              res.endTime = this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].endTime;
+              this.setState({
+                editor: {
+                  startTime: this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].startTime,
+                  endTime: this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].endTime,
+                }
+              });
+              console.log(this.state);
             }
           }
-          res.servicePointId = this.state.openingAllPeriods[i].servicePointId;
-          res.id = this.state.openingAllPeriods[i].id;
-          res.startDate = this.state.openingAllPeriods[i].startDate;
-          res.endDate = this.state.openingAllPeriods[i].endDate;
-
-          res.servicePointIds = [];
+          this.setState({
+            editor: {
+              servicePointId: this.state.openingAllPeriods[i].servicePointId,
+              id: this.state.openingAllPeriods[i].id,
+              startDate: this.state.openingAllPeriods[i].startDate,
+              endDate: this.state.openingAllPeriods[i].endDate,
+              name: this.state.openingAllPeriods[i].name,
+              editorServicePoints: this.state.servicePoints,
+            }
+          });
         }
       }
-      console.log(res);
     }
 
     getAllServicePoints() {
@@ -433,6 +468,14 @@ class ExceptionWrapper extends React.Component {
 
       for (let i = 0; i < this.props.entries.length; i++) {
         this.props.parentMutator.query.replace(this.props.entries[i].id);
+        this.props.parentMutator.exceptional.replace('false');
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      for (let i = 0; i < this.props.entries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.entries[i].id);
+        this.props.parentMutator.exceptional.replace('true');
         const a = this.props.parentMutator.periods.GET();
         promises.push(a);
       }
@@ -442,14 +485,19 @@ class ExceptionWrapper extends React.Component {
       Promise.all(promises).then((openingAllPeriods) => {
         for (let i = 0; i < openingAllPeriods.length; i++) {
           const temp = openingAllPeriods[i];
+          let exc = true;
           for (let j = 0; j < temp.length; j++) {
+            if (temp[j].openingDays[0].weekdays !== undefined && temp[j].openingDays[0].weekdays !== null) {
+              exc = false;
+            }
             const tempSP = {
               startDate: temp[j].startDate,
               endDate: temp[j].endDate,
               id: temp[j].id,
               name: temp[j].name,
               openingDays: temp[j].openingDays,
-              servicePointId: temp[j].servicePointId
+              servicePointId: temp[j].servicePointId,
+              exceptional: exc,
             };
             allSP[k] = tempSP;
             k++;
@@ -463,6 +511,18 @@ class ExceptionWrapper extends React.Component {
 
 
     render() {
+      let start = '';
+      let end = '';
+      let name = '';
+      let open = '';
+      let close = '';
+      if (this.state.editor !== null && this.state.editor !== undefined) {
+        start = moment(this.state.editor.startDate).format('L');
+        end = moment(this.state.editor.endDate).format('L');
+        name = this.state.editor.name;
+        open = this.state.editor.openTime;
+        close = this.state.editor.endTime;
+      }
       const paneStartMenu =
         <PaneMenu>
           <IconButton icon="closeX" onClick={this.props.onClose} />
@@ -520,6 +580,7 @@ class ExceptionWrapper extends React.Component {
           <ExceptionalBigCalendar
             {...this.props}
             myEvents={this.state.events}
+            getEvent={this.getEvent}
           />
         </Pane>;
 
@@ -545,6 +606,18 @@ class ExceptionWrapper extends React.Component {
             allSelector={this.state.editor.allSelector}
             open={this.state.editor.open}
             allDay={this.state.editor.allDay}
+            initialValues={
+                {
+                    item:
+                        {
+                            startDate: start,
+                            endDate: end,
+                            periodName: name,
+                            openTime: open,
+                            closingTime: close,
+                        }
+                }
+            }
           />
         </Pane>;
       return (

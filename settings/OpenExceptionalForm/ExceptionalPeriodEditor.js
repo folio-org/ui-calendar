@@ -6,7 +6,6 @@ import { Col, Row } from '../../../stripes-components/lib/LayoutGrid';
 import Checkbox from '../../../stripes-components/lib/Checkbox';
 import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
 import CalendarUtils from '../../CalendarUtils';
-import TextField from '../../../stripes-components/lib/TextField/TextField';
 import Textfield from '../../../stripes-components/lib/TextField';
 import List from '../../../stripes-components/lib/List';
 import Timepicker from '../../../stripes-components/lib/Timepicker';
@@ -42,6 +41,9 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setOpeningTime = this.setOpeningTime.bind(this);
       this.setClosingTime = this.setClosingTime.bind(this);
       this.setModifyed = this.setModifyed.bind(this);
+    }
+    componentWillReceiveProps(nextProps){
+        console.log(nextProps);
     }
 
     componentWillMount() {
@@ -124,6 +126,7 @@ class ExceptionalPeriodEditor extends React.Component {
       );
       const isEmptyMessage = 'No items to show';
       const startDate = <Field
+
         name="item.startDate"
         component={Datepicker}
         label="TODO Valid From*"
@@ -141,8 +144,8 @@ class ExceptionalPeriodEditor extends React.Component {
         required
       />;
 
-      const nameField = <TextField
-        name="periodName"
+      const nameField = <Field
+        name="item.periodName"
         component={Textfield}
         label="TODO Name"
         onChange={this.setName}
@@ -238,9 +241,9 @@ class ExceptionalPeriodEditor extends React.Component {
               {/* /> */}
               <div>
                 <Field
-                  name="openintTime"
+                  name="item.openingTime"
                   component={Timepicker}
-                  label="TODO openintTime"
+                  label="TODO openingTime"
                   onChange={this.setOpeningTime}
                 />
               </div>
@@ -258,7 +261,7 @@ class ExceptionalPeriodEditor extends React.Component {
               {/* /> */}
               <div>
                 <Field
-                  name="closingTime"
+                  name="item.closingTime"
                   component={Timepicker}
                   label="TODO openintTime"
                   onChange={this.setClosingTime}
