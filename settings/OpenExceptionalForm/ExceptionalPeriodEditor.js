@@ -24,8 +24,8 @@ class ExceptionalPeriodEditor extends React.Component {
       setClosed: PropTypes.func,
       setAllDay: PropTypes.func,
       setName: PropTypes.func,
-      setOpeningTime: PropTypes.func,
-      setClosingTime: PropTypes.func,
+      setStartTime: PropTypes.func,
+      setEndTime: PropTypes.func,
       setEditorServicePoints: PropTypes.func,
     };
 
@@ -38,8 +38,8 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setClosed = this.setClosed.bind(this);
       this.setAllDay = this.setAllDay.bind(this);
       this.setName = this.setName.bind(this);
-      this.setOpeningTime = this.setOpeningTime.bind(this);
-      this.setClosingTime = this.setClosingTime.bind(this);
+      this.setStartTime = this.setStartTime.bind(this);
+      this.setEndTime = this.setEndTime.bind(this);
       this.setModifyed = this.setModifyed.bind(this);
     }
     componentWillReceiveProps(nextProps){
@@ -87,13 +87,13 @@ class ExceptionalPeriodEditor extends React.Component {
       this.props.setName(e);
     }
 
-    setOpeningTime(e, value) {
-      this.props.setOpeningTime(value);
+    setStartTime(e, value) {
+      this.props.setStartTime(value);
       this.setModifyed;
     }
 
-    setClosingTime(e, value) {
-      this.props.setClosingTime(value);
+    setEndTime(e, value) {
+      this.props.setEndTime(value);
       this.setModifyed;
     }
 
@@ -158,14 +158,14 @@ class ExceptionalPeriodEditor extends React.Component {
           <Button
             onClick={() => { this.allSelectorHandle(false); }}
           >
-              DESELECTALL
+                    DESELECTALL
           </Button>;
       } else {
         allSelector =
           <Button
             onClick={() => { this.allSelectorHandle(true); }}
           >
-                  SELECTALL
+                    SELECTALL
           </Button>;
       }
 
@@ -231,14 +231,6 @@ class ExceptionalPeriodEditor extends React.Component {
           <div style={{ height: '20px' }} />
           <Row>
             <Col>
-              {/* <TextField */}
-              {/* name="openintTime" */}
-              {/* component={Textfield} */}
-              {/* label="TODO Opening Time" */}
-              {/* onChange={this.setOpeningTime} */}
-              {/* disabled={this.props.allDay} */}
-              {/* required */}
-              {/* /> */}
               <div>
                 <Field
                   name="item.openingTime"
@@ -251,20 +243,12 @@ class ExceptionalPeriodEditor extends React.Component {
           </Row>
           <Row>
             <Col>
-              {/* <TextField */}
-              {/* name="closingTime" */}
-              {/* component={Textfield} */}
-              {/* label="TODO Closing Time" */}
-              {/* onChange={this.setClosingTime} */}
-              {/* disabled={this.props.allDay} */}
-              {/* required */}
-              {/* /> */}
               <div>
                 <Field
                   name="item.closingTime"
                   component={Timepicker}
                   label="TODO openintTime"
-                  onChange={this.setClosingTime}
+                  onChange={this.setEndTime}
                 />
               </div>
             </Col>

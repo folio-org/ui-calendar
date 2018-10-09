@@ -33,6 +33,7 @@ class ServicePointSelector extends React.Component {
           <Checkbox
             id={item.id}
             label={item.name}
+            checked={item.selected}
             onChange={() => this.onToggleSelect(item)}
             fullWidth
           />
