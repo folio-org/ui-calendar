@@ -75,7 +75,7 @@ class ExceptionWrapper extends React.Component {
       const promises = [];
       const { parentMutator } = this.props;
       const { editor } = this.state;
-      if (this.state.editor.exceptionalIds === null) {
+      if (this.state.editor.exceptionalIds === null || this.state.editor.exceptionalIds === undefined) {
         for (let i = 0; i < this.state.editor.editorServicePoints.length; i++) {
           if (this.state.editor.editorServicePoints[i].selected === true) {
             parentMutator.query.replace(this.state.editor.editorServicePoints[i].id);
@@ -166,7 +166,6 @@ class ExceptionWrapper extends React.Component {
             const a = this.props.parentMutator.periods.PUT(exception);
             promises.push(a);
           }
-          // megnézzük ki van e selectálva a az ID-hez tartozó SP ha igen modify írása ha nem delete írása
         }
       }
       Promise.all(promises).then(() => {
@@ -175,7 +174,6 @@ class ExceptionWrapper extends React.Component {
           editor: null,
           exceptionalIds: [],
         });
-        // TODO rissíteni a középső calt
       });
     }
 
@@ -194,7 +192,6 @@ class ExceptionWrapper extends React.Component {
           editor: null,
           exceptionalIds: [],
         });
-        // TODO frissíteni a középső calt
       });
     }
 
@@ -621,20 +618,30 @@ class ExceptionWrapper extends React.Component {
           </Button>
         </PaneMenu>;
 
-      const lastMenus =
-        <div>
+      let deleteButton = null;
+
+      if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined) {
+        deleteButton =
           <Button
             buttonStyle="danger"
             onClick={this.deleteException}
           >
             {CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
-          </Button>
-          <Button
-            buttonStyle="primary"
-            onClick={this.saveException}
-          >
-            {CalendarUtils.translateToString('ui-calendar.saveButton', this.props.stripes.intl)}
-          </Button>
+          </Button>;
+      }
+
+      const saveButton =
+        <Button
+          buttonStyle="primary"
+          onClick={this.saveException}
+        >
+          {CalendarUtils.translateToString('ui-calendar.saveButton', this.props.stripes.intl)}
+        </Button>;
+
+      const lastMenus =
+        <div style={{ paddingRight: '15px', paddingTop: '15px' }}>
+          {deleteButton}
+          {saveButton}
         </div>;
 
       const paneTitle =
