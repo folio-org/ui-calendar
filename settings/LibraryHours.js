@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import EntryManager from '@folio/stripes-smart-components/lib/EntryManager';
+import { EntryManager } from '@folio/stripes/smart-components';
 import ServicePointDetails from './ServicePointDetails';
 import ErrorBoundary from '../ErrorBoundary';
 import CloneSettings from './CloneSettings';

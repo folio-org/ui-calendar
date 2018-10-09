@@ -2,9 +2,7 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { Pane, Paneset, Row, Col } from '@folio/stripes/components';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
