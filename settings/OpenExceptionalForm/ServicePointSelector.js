@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@folio/stripes-components/lib/List';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import { Checkbox, List } from '@folio/stripes/components';
 import '!style-loader!css-loader!../../css/exception-form.css'; // eslint-disable-line
 
 

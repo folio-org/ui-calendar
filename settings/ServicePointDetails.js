@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import Headline from '@folio/stripes-components/lib/Headline/Headline';
+import {
+  Button,
+  Col,
+  Headline,
+  Icon,
+  KeyValue,
+  Layer,
+  List,
+  Row
+} from '@folio/stripes/components';
 import moment from 'moment';
 import BigCalendar from '@folio/react-big-calendar/src';
-import List from '@folio/stripes-components/lib/List/List';
-import Button from '@folio/stripes-components/lib/Button/Button';
-import Icon from '@folio/stripes-components/lib/Icon/Icon';
-import { Layer } from '@folio/stripes-components';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import CalendarUtils from '../CalendarUtils';

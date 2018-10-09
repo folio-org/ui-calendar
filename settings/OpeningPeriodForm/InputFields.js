@@ -1,10 +1,7 @@
-import TextField from '@folio/stripes-components/lib/TextField/TextField';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { Datepicker, TextField, Row, Col } from '@folio/stripes/components';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
-import Datepicker from '@folio/stripes-components/lib/Datepicker/Datepicker';
-import Textfield from '@folio/stripes-components/lib/TextField';
 import CalendarUtils from '../../CalendarUtils';
 
 class InputFields extends React.Component {
@@ -89,23 +86,23 @@ class InputFields extends React.Component {
         />;
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
-          modifyName = <TextField
+          modifyName = <Field
             label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
             value={this.props.modifyPeriod.name || ''}
             name="periodName"
             id="input-period-name"
-            component={Textfield}
+            component={TextField}
             onChange={this.setName}
             error={CalendarUtils.translateToString('ui-calendar.fillIn', this.props.stripes.intl)}
             required
           />;
         } else {
-          modifyName = <TextField
+          modifyName = <Field
             label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
             value={this.props.modifyPeriod.name || ''}
             name="periodName"
             id="input-period-name"
-            component={Textfield}
+            component={TextField}
             onChange={this.setName}
             required
           />;
@@ -132,7 +129,7 @@ class InputFields extends React.Component {
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
           modifyName =
-            <TextField
+            <Field
               name="periodName"
               llabel={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
               id="input-period-name"
@@ -140,16 +137,18 @@ class InputFields extends React.Component {
               onChange={this.setName}
               required
               error={CalendarUtils.translateToString('ui-calendar.fillIn', this.props.stripes.intl)}
+              component={TextField}
             />;
         } else {
           modifyName =
-            <TextField
+            <Field
               name="periodName"
               label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
               id="input-period-name"
               onBlur={this.onBlur}
               onChange={this.setName}
               required
+              component={TextField}
             />;
         }
       }

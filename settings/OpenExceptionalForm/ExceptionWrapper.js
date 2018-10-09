@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Pane from '@folio/stripes-components/lib/Pane';
+import {
+  Button,
+  Icon,
+  IconButton,
+  Pane,
+  PaneMenu,
+  Paneset
+} from '@folio/stripes/components';
+
 import RandomColor from 'randomcolor';
 import moment from 'moment';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Button from '@folio/stripes-components/lib/Button';
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
