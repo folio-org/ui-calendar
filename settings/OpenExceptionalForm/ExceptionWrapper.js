@@ -41,9 +41,14 @@ class ExceptionWrapper extends React.Component {
       this.separateEvents = this.separateEvents.bind(this);
       this.setting = this.setting.bind(this);
       this.checkBeforeSave = this.checkBeforeSave.bind(this);
+      this.settingALL = this.settingALL.bind(this);
+      this.separateEvents = this.separateEvents.bind(this);
+      this.getEvent = this.getEvent.bind(this);
+      this.getAllServicePoints = this.getAllServicePoints.bind(this);
+      this.clickOnEvent = this.clickOnEvent.bind(this);
       this.setState({
         servicePoints: [],
-        openEditor: null,
+        openEditor: false,
         events: [{
           id: null,
           startDate: null,
@@ -63,7 +68,9 @@ class ExceptionWrapper extends React.Component {
           open: null,
           allDay: null,
           allSelector: null,
-        }
+        },
+        openingAllPeriods: [],
+        disableEvents: false,
       });
     }
 
@@ -93,7 +100,7 @@ class ExceptionWrapper extends React.Component {
                     }
                   ],
                   allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+                  open: editor.closed,
                 }
 
               }]
@@ -137,7 +144,7 @@ class ExceptionWrapper extends React.Component {
                     }
                   ],
                   allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+                  open: editor.closed,
                 }
               }]
             };
@@ -159,7 +166,7 @@ class ExceptionWrapper extends React.Component {
                     }
                   ],
                   allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+                  open: editor.closed,
                 }
               }]
             };
@@ -188,6 +195,7 @@ class ExceptionWrapper extends React.Component {
           }
         });
       });
+      this.setState({ disableEvents: false });
     }
 
     deleteException() {
@@ -219,6 +227,7 @@ class ExceptionWrapper extends React.Component {
           }
         });
       });
+      this.setState({ disableEvents: false });
     }
 
     componentWillMount() {      // eslint-disable-line react/no-deprecated
@@ -246,6 +255,11 @@ class ExceptionWrapper extends React.Component {
       }
       this.setEditorServicePoints(tempServicePoints);
       this.setting(tempServicePoints);
+    }
+
+    componentDidMount() {
+      this.getAllServicePoints();
+      this.setState({ disableEvents: false });
     }
 
     setStartDate(e) {
@@ -369,31 +383,50 @@ class ExceptionWrapper extends React.Component {
 
     setting(sps) {
       const events = [];
+      if (events.length === 0) {
+        const event = {};
+        event.start = null;
+        event.end = null;
+        event.id = null;
+        events.push({ ...event });
+      }
+
+      this.setState({
+        servicePoints: sps,
+        events,
+      });
+    }
+
+    settingALL(sps) {
+      const events = [];
       let k = 0;
       let color = 'black';
-      for (let i = 0; i < this.props.periods.length; i++) {
-        for (let j = 0; j < sps.length; j++) {
-          if (sps[j].id === this.props.periods[i].servicePointId && sps[j].selected === true) {
-            const event = {};
-            event.start = this.props.periods[i].startDate;
-            event.end = this.props.periods[i].endDate;
-            event.id = this.props.periods[i].id;
-            event.openingDays = this.props.periods[i].openingDays;
+      if (this.state.openingAllPeriods !== null && this.state.openingAllPeriods !== undefined) {
+        for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
+          for (let j = 0; j < sps.length; j++) {
+            if (sps[j].id === this.state.openingAllPeriods[i].servicePointId && sps[j].selected === true) {
+              const event = {};
+              event.start = this.state.openingAllPeriods[i].startDate;
+              event.end = this.state.openingAllPeriods[i].endDate;
+              event.id = this.state.openingAllPeriods[i].id;
+              event.openingDays = this.state.openingAllPeriods[i].openingDays;
 
-            if (this.state.servicePoints) {
-              for (let l = 0; l < this.state.servicePoints.length; l++) {
-                if (this.state.servicePoints[l].id === this.props.periods[i].servicePointId) {
-                  color = this.state.servicePoints[l].color;
+              if (this.state.servicePoints) {
+                for (let l = 0; l < this.state.servicePoints.length; l++) {
+                  if (this.state.servicePoints[l].id === this.state.openingAllPeriods[i].servicePointId) {
+                    color = this.state.servicePoints[l].color;
+                  }
                 }
               }
-            }
 
-            event.color = color;
-            const sepEvent = this.separateEvents(event);
+              event.exceptional = this.state.openingAllPeriods[i].exceptional;
+              event.color = color;
+              const sepEvent = this.separateEvents(event);
 
-            for (let g = 0; g < sepEvent.length; g++) {
-              events[k] = sepEvent[g];
-              k++;
+              for (let g = 0; g < sepEvent.length; g++) {
+                events[k] = sepEvent[g];
+                k++;
+              }
             }
           }
         }
@@ -417,6 +450,7 @@ class ExceptionWrapper extends React.Component {
       this.setState({
         servicePoints: sps,
       });
+      this.settingALL(sps);
     }
 
     separateEvents(event) {
@@ -426,35 +460,68 @@ class ExceptionWrapper extends React.Component {
         const today = moment(event.start).add(i, 'days').format('dddd').toUpperCase();
 
         const dates = [];
+        let eventContent;
 
         for (let j = 0; j < event.openingDays.length; j++) {
-          if (today === event.openingDays[j].weekdays.day) {
+          if (event.exceptional === false) {
+            if (today === event.openingDays[j].weekdays.day) {
+              if (event.openingDays[j].openingDay.allDay === true) {
+                dates.push(
+                  <div>All day</div>
+                );
+              }
+              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
+                dates.push(
+                  <div>
+                    {event.openingDays[j].openingDay.openingHour[k].startTime}
+                    {' '}
+
+-
+                    {' '}
+                    {event.openingDays[j].openingDay.openingHour[k].endTime}
+                  </div>
+                );
+                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+                  dates.push(
+                    <div>,</div>
+                  );
+                }
+              }
+            }
+            eventContent = <div className="rbc-event-dates-content">{dates}</div>;
+          } else if (event.exceptional === true) {
+            let allday = false;
             if (event.openingDays[j].openingDay.allDay === true) {
               dates.push(
                 <div>All day</div>
               );
+              allday = true;
             }
-            for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
-              dates.push(
-                <div>
-                  {event.openingDays[j].openingDay.openingHour[k].startTime}
-                  {' '}
-
-                                -
-                  {' '}
-                  {event.openingDays[j].openingDay.openingHour[k].endTime}
-                </div>
-              );
-              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+            if (allday === false) {
+              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
                 dates.push(
-                  <div>,</div>
+                  <div>
+                    {event.openingDays[j].openingDay.openingHour[k].startTime}
+                    {' '}
+
+                            -
+                    {' '}
+                    {event.openingDays[j].openingDay.openingHour[k].endTime}
+                  </div>
                 );
+                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+                  dates.push(
+                    <div>,</div>
+                  );
+                }
               }
             }
+            eventContent = <div className="rbc-event-dates-content" style={{ border: '4px solid red', borderRadius: '4px' }}>{dates}</div>;
           }
-          const eventContent = <div className="rbc-event-dates-content">{dates}</div>;
+
+
           const eventTitle =
-            <div className="rbc-event-dates" style={{ backgroundColor: event.color, border: '5px red' }}>
+            <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>
               {' '}
               {eventContent}
             </div>;
@@ -464,7 +531,7 @@ class ExceptionWrapper extends React.Component {
             end: moment(event.start).add(i, 'days'),
             start: moment(event.start).add(i, 'days'),
             title: eventTitle,
-
+            exceptional: event.exceptional,
           };
           temp[g] = tempObj;
         }
@@ -483,7 +550,135 @@ class ExceptionWrapper extends React.Component {
       this.setServicePoints(tempServicePoints);
     }
 
+    clickOnEvent(event) {
+      for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
+        if (this.state.openingAllPeriods[i].id === event.id) {
+          const filterStart = this.state.openingAllPeriods[i].startDate;
+          const filterEnd = this.state.openingAllPeriods[i].endDate;
+          const startTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime;
+          const endTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime;
+
+          const tempServicePoints = [{
+            servicePointId: null,
+            tempColor: null,
+            tempName: null,
+            selected: null,
+          }];
+
+          const tempId = [];
+
+          let k = 0;
+          let p = 0;
+          for (let j = 0; j < this.state.openingAllPeriods.length; j++) {
+            if (filterEnd === this.state.openingAllPeriods[j].endDate && filterStart === this.state.openingAllPeriods[j].startDate
+            && startTime === this.state.openingAllPeriods[j].openingDays[0].openingDay.openingHour[0].startTime && endTime === this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime) {
+              tempId[k] =
+                {
+                  servicePointId: this.state.openingAllPeriods[j].servicePointId,
+                  id: this.state.openingAllPeriods[j].id,
+                };
+              k++;
+            }
+          }
+
+          for (let l = 0; l < this.state.servicePoints.length; l++) {
+            for (let o = 0; o < tempId.length; o++) {
+              if (this.state.servicePoints[l].id === tempId[o].servicePointId) {
+                tempServicePoints[p] = {
+                  id: this.state.servicePoints[l].id,
+                  color: this.state.servicePoints[l].color,
+                  name: this.state.servicePoints[l].name,
+                  selected: true,
+                };
+                p++;
+              }
+            }
+          }
+
+
+          this.setState({
+            editor: {
+              exceptionalIds: tempId,
+              startDate: this.state.openingAllPeriods[i].startDate,
+              endDate: this.state.openingAllPeriods[i].endDate,
+              name: this.state.openingAllPeriods[i].name,
+              editorServicePoints: tempServicePoints,
+              endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
+              startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
+            }
+          });
+        }
+      }
+      this.setState({ openEditor: true });
+    }
+
+    getEvent(event) {
+      if (event.exceptional === true && this.state.disableEvents === false) {
+        this.clickOnEvent(event);
+        this.setState({ disableEvents: true });
+      }
+    }
+
+    getAllServicePoints() {
+      const promises = [];
+
+      for (let i = 0; i < this.props.entries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.entries[i].id);
+        this.props.parentMutator.exceptional.replace('false');
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      for (let i = 0; i < this.props.entries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.entries[i].id);
+        this.props.parentMutator.exceptional.replace('true');
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      let k = 0;
+      const allSP = [];
+      Promise.all(promises).then((openingAllPeriods) => {
+        for (let i = 0; i < openingAllPeriods.length; i++) {
+          const temp = openingAllPeriods[i];
+          let exc = true;
+          for (let j = 0; j < temp.length; j++) {
+            if (temp[j].openingDays[0].weekdays !== undefined && temp[j].openingDays[0].weekdays !== null) {
+              exc = false;
+            }
+            const tempSP = {
+              startDate: temp[j].startDate,
+              endDate: temp[j].endDate,
+              id: temp[j].id,
+              name: temp[j].name,
+              openingDays: temp[j].openingDays,
+              servicePointId: temp[j].servicePointId,
+              exceptional: exc,
+            };
+            allSP[k] = tempSP;
+            k++;
+          }
+        }
+        this.setState({
+          openingAllPeriods: allSP
+        });
+      });
+    }
+
+
     render() {
+      let start = '';
+      let end = '';
+      let name = '';
+      let open = '';
+      let close = '';
+      if (this.state.editor !== null && this.state.editor !== undefined) {
+        start = moment(this.state.editor.startDate).add(1, 'days').format('L');
+        end = moment(this.state.editor.endDate).add(1, 'days').format('L');
+        name = this.state.editor.name;
+        open = this.state.editor.startTime;
+        close = this.state.editor.endTime;
+      }
       const paneStartMenu =
         <PaneMenu>
           <IconButton icon="closeX" onClick={this.props.onClose} />
@@ -491,7 +686,7 @@ class ExceptionWrapper extends React.Component {
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false })} />
+          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false, disableEvents: false })} />
         </PaneMenu>;
 
       const paneLastMenu =
@@ -553,6 +748,7 @@ class ExceptionWrapper extends React.Component {
           <ExceptionalBigCalendar
             {...this.props}
             myEvents={this.state.events}
+            getEvent={this.getEvent}
           />
         </Pane>;
 
@@ -585,6 +781,19 @@ class ExceptionWrapper extends React.Component {
             allSelector={this.state.editor.allSelector}
             open={this.state.editor.open}
             allDay={this.state.editor.allDay}
+            initialValues={
+                {
+                    item:
+                        {
+                            startDate: start,
+                            endDate: end,
+                            periodName: name,
+                            openTime: open,
+                            closingTime: close,
+                            openingTime: open,
+                        }
+                }
+            }
           />
         </Pane>;
 

@@ -55,9 +55,41 @@ class CalendarUtils extends React.Component {
           });
         }
       }
+      const resultStartHour = moment(dayOpening.start).get('hour');
+      const resultStartMinute = moment(dayOpening.start).get('minute');
+      const resultEndHour = moment(dayOpening.start).get('hour');
+      const resultEndMinute = moment(dayOpening.start).get('minute');
+
+      let finalStartHour;
+      let finalStartMinute;
+      let finalEndHour;
+      let finalEndMinute;
+
+      if (resultStartHour < 10) {
+        finalStartHour = `0${resultStartHour}`;
+      } else {
+        finalStartHour = resultStartHour;
+      }
+      if (resultStartMinute < 10) {
+        finalStartMinute = `0${resultStartMinute}`;
+      } else {
+        finalStartMinute = resultStartMinute;
+      }
+      if (resultEndHour < 10) {
+        finalEndHour = `0${resultEndHour}`;
+      } else {
+        finalEndHour = resultEndHour;
+      }
+      if (resultEndMinute < 10) {
+        finalEndMinute = `0${resultEndMinute}`;
+      } else {
+        finalEndMinute = resultEndMinute;
+      }
+
+
       openingHour.push({
-        startTime: dayOpening.start.getHours() + ':' + dayOpening.start.getMinutes(),
-        endTime: dayOpening.end.getHours() + ':' + dayOpening.end.getMinutes()
+        startTime: finalStartHour + ':' + finalStartMinute,
+        endTime: finalEndHour + ':' + finalEndMinute
       });
     }
     return period;

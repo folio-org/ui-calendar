@@ -2,30 +2,32 @@ import React from 'react';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import withDragAndDrop from "../../../react-big-calendar/src/addons/dragAndDrop";
 
-BigCalendar.momentLocalizer(moment);
+
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
+
 
 class ExceptionalBigCalendar extends React.Component {
-  render() {
-    const myEvents = [
-      {
-        id: 0,
-        start: new Date(2018, 10, 15),
-        end: new Date(2018, 10, 16),
-      },
-      {
-        id: 1,
-        start: new Date(2018, 10, 18),
-        end: new Date(2018, 10, 19),
-      },
-    ];
-    return (
-      <BigCalendar
-        popup
-        events={this.props.myEvents}
-        showMultiDayTimes
-      />
-    );
-  }
+    static propTypes = {
+      myEvents: PropTypes.object,
+      getEvent: PropTypes.func,
+    };
+
+    render() {
+      return (
+
+        <BigCalendar
+          popup
+          events={this.props.myEvents}
+          showMultiDayTimes
+          label
+          views={['month']}
+          getEvent={this.props.getEvent}
+        />
+
+
+      );
+    }
 }
 export default ExceptionalBigCalendar;
