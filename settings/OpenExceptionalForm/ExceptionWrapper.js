@@ -13,7 +13,8 @@ import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';
-import {ConfirmationModal, Modal} from "@folio/stripes/components/index"; // eslint-disable-line
+import { ConfirmationModal, Modal } from '@folio/stripes/components/index';
+import SafeHTMLMessage from "@folio/react-intl-safe-html"; // eslint-disable-line
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -48,6 +49,7 @@ class ExceptionWrapper extends React.Component {
       this.getEvent = this.getEvent.bind(this);
       this.getAllServicePoints = this.getAllServicePoints.bind(this);
       this.clickOnEvent = this.clickOnEvent.bind(this);
+      this.setdeleteQuestion = this.setdeleteQuestion.bind(this);
       this.setState({
         servicePoints: [],
         openEditor: false,
@@ -714,6 +716,12 @@ class ExceptionWrapper extends React.Component {
       });
     }
 
+    setdeleteQuestion() {
+      this.setState({
+        deleteQuestion: true,
+      });
+    }
+
     render() {
       let start = '';
       let end = '';
@@ -755,7 +763,7 @@ class ExceptionWrapper extends React.Component {
         deleteButton =
           <Button
             buttonStyle="danger"
-            onClick={this.deleteException}
+            onClick={this.setdeleteQuestion}
           >
             {CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
           </Button>;
@@ -872,13 +880,17 @@ class ExceptionWrapper extends React.Component {
       }
       let deleteModal = null;
       if (this.state.deleteQuestion !== null && this.state.deleteQuestion !== undefined && this.state.deleteQuestion === true) {
-        const confirmationMessageDelete = 'ui-calendar.' + this.state.errorModalText;
+        const text =
+          <SafeHTMLMessage
+            id="ui-calendar.deleteQuestionException"
+            values={{ name }}
+          />;
         deleteModal =
           <ConfirmationModal
             id="delete-confirmation"
             open={this.state.deleteQuestion}
             heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionExceptionTitle', this.props.stripes.intl)}
-            message={CalendarUtils.translateToString('ui-calendar.deleteQuestionException', this.props.stripes.intl)}
+            message={text}
             onConfirm={() => {
                     this.deleteException();
                 }}
