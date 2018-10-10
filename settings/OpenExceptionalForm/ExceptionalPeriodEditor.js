@@ -177,7 +177,7 @@ class ExceptionalPeriodEditor extends React.Component {
                   <Field
                     name="openintTime"
                     component={Timepicker}
-                    label={CalendarUtils.translateToString('ui-calendar.settings.openingTime', this.props.stripes.intl)}
+                    label={CalendarUtils.translateToString('ui-calendar.openingTime', this.props.stripes.intl)}
                     onChange={this.setStartTime}
                   />
                 </div>
@@ -237,9 +237,6 @@ class ExceptionalPeriodEditor extends React.Component {
           <Row>
             <Col>
               <Row>
-                <div>{CalendarUtils.translateToString('ui-calendar.openClosed', this.props.stripes.intl)}</div>
-              </Row>
-              <Row>
                 <Checkbox
                   label={CalendarUtils.translateToString('ui-calendar.settings.closed', this.props.stripes.intl)}
                   onChange={() => this.setClosed()}
@@ -250,9 +247,6 @@ class ExceptionalPeriodEditor extends React.Component {
           <div style={{ height: '20px' }} />
           <Row>
             <Col>
-              <Row>
-                <div>{CalendarUtils.translateToString('ui-calendar.openAllDay', this.props.stripes.intl)}</div>
-              </Row>
               <Row>
                 <Checkbox
                   label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}

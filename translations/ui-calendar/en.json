@@ -102,5 +102,12 @@
   "openClosed": "Open/Closed",
   "openAllDay": "Open all day",
   "openingTime": "Opening Time",
-  "closingTime": "Closing Time"
+  "closingTime": "Closing Time",
+  "noStartDate": "Please set a start date.",
+  "noEndDate": "Please set an end date.",
+  "noName": "Please set a name.",
+  "noServicePointSelected": "Please select at least one service point",
+  "noStartTime": "Please set start time",
+  "noEndTime": "Please set end time",
+  "endTimeBeforeStartTime": "The start time is after the end time!"
 }

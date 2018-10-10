@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -12,7 +12,8 @@ import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
-import '!style-loader!css-loader!../../css/exception-form.css'; // eslint-disable-line
+import '!style-loader!css-loader!../../css/exception-form.css';
+import {Modal} from "@folio/stripes/components/index"; // eslint-disable-line
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -41,6 +42,7 @@ class ExceptionWrapper extends React.Component {
       this.separateEvents = this.separateEvents.bind(this);
       this.setting = this.setting.bind(this);
       this.checkBeforeSave = this.checkBeforeSave.bind(this);
+      this.closeErrorModal = this.closeErrorModal.bind(this);
       this.setState({
         servicePoints: [],
         openEditor: null,
@@ -49,6 +51,7 @@ class ExceptionWrapper extends React.Component {
           startDate: null,
           endDate: null,
         }],
+        errorModalText: null,
         editor: {
           exceptionalIds: [{
             id: null,
@@ -60,7 +63,7 @@ class ExceptionWrapper extends React.Component {
           endDate: null,
           startTime: null,
           endTime: null,
-          open: null,
+          closed: null,
           allDay: null,
           allSelector: null,
         }
@@ -68,126 +71,169 @@ class ExceptionWrapper extends React.Component {
     }
 
     checkBeforeSave() {
+      // return true ===  can save
+      const { editor } = this.state;
+      let errorMessage = null;
+      let isServicePointSelected = false;
+      for (let i = 0; i < editor.editorServicePoints.length; i++) {
+        if (editor.editorServicePoints[i].selected === true) {
+          isServicePointSelected = true;
+        }
+      }
+      if (editor.startDate === null || editor.startDate === undefined || editor.startDate === '') {
+        errorMessage = 'noStartDate';
+      } else if (editor.endDate === null || editor.endDate === undefined || editor.endDate === '') {
+        errorMessage = 'noEndDate';
+      } else if (moment(editor.endDate).toDate() < moment(editor.startDate).toDate()) {
+        errorMessage = 'wrongStartEndDate';
+      } else if (editor.name === null || editor.name === undefined) {
+        errorMessage = 'noName';
+      } else if (!isServicePointSelected) {
+        errorMessage = 'noServicePointSelected';
+      } else if (editor.startTime === null || editor.startTime === undefined || editor.startTime === '') {
+        errorMessage = 'noStartTime';
+      } else if (editor.endTime === null || editor.endTime === undefined || editor.endTime === '') {
+        errorMessage = 'noEndTime';
+      } else if (moment(editor.endTime) > moment(editor.startTime)) {
+        errorMessage = 'endTimeBeforeStartTime';
+      }
+      if (errorMessage === null) {
+        return true;
+      } else {
+        return errorMessage;
+      }
+    }
 
+    closeErrorModal() {
+      this.setState({
+        errorModalText: null,
+      });
     }
 
     saveException() {
-      const promises = [];
-      const { parentMutator } = this.props;
-      const { editor } = this.state;
-      if (this.state.editor.exceptionalIds === null || this.state.editor.exceptionalIds === undefined) {
-        for (let i = 0; i < this.state.editor.editorServicePoints.length; i++) {
-          if (this.state.editor.editorServicePoints[i].selected === true) {
-            parentMutator.query.replace(this.state.editor.editorServicePoints[i].id);
-            const exception = {
-              servicePointId: editor.editorServicePoints[i].id,
-              name: editor.name,
-              startDate: editor.startDate,
-              endDate: editor.endDate,
-              openingDays: [{
-                openingDay: {
-                  openingHour: [
-                    {
-                      startTime: editor.startTime,
-                      endTime: editor.endTime,
-                    }
-                  ],
-                  allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
-                }
+      const preCheck = this.checkBeforeSave();
+      if (preCheck === true) {
+        const promises = [];
+        const { parentMutator } = this.props;
+        const { editor } = this.state;
+        if (this.state.editor.exceptionalIds === null || this.state.editor.exceptionalIds === undefined) {
+          for (let i = 0; i < this.state.editor.editorServicePoints.length; i++) {
+            if (this.state.editor.editorServicePoints[i].selected === true) {
+              parentMutator.query.replace(this.state.editor.editorServicePoints[i].id);
+              const exception = {
+                servicePointId: editor.editorServicePoints[i].id,
+                name: editor.name,
+                startDate: editor.startDate,
+                endDate: editor.endDate,
+                openingDays: [{
+                  openingDay: {
+                    openingHour: [
+                      {
+                        startTime: editor.startTime,
+                        endTime: editor.endTime,
+                      }
+                    ],
+                    allDay: editor.allDay === undefined ? false : editor.allDay,
+                    open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  }
 
-              }]
-            };
-            const a = this.props.parentMutator.periods.POST(exception);
-            promises.push(a);
-          }
-        }
-      } else if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined && this.state.editor.exceptionalIds.length >= 0) {
-        for (let i = 0; i < this.state.editor.exceptionalIds.length; i++) {
-          const chekedId = this.state.editor.exceptionalIds[i].servicePointId;
-          let action = 'POST';
-          for (let j = 0; j < this.state.editor.editorServicePoints.length; j++) {
-            if (this.state.editor.editorServicePoints[j].id === chekedId) {
-              if (this.state.editor.editorServicePoints[j].selected === false) {
-                action = 'DELETE';
-              } else {
-                action = 'PUT';
-              }
+                }]
+              };
+              const a = this.props.parentMutator.periods.POST(exception);
+              promises.push(a);
             }
           }
-          if (action === 'DELETE') {
-            parentMutator.query.replace(this.state.editor.exceptionalIds[i].servicePointId);
-            parentMutator.periodId.replace(chekedId);
-            const a = this.props.parentMutator.periods.DELETE(chekedId);
-            promises.push(a);
-          } else if (action === 'PUT') {
-            parentMutator.query.replace(this.state.editor.exceptionalIds[i].id);
-            const exception = {
-              id: this.state.editor.exceptionalIds[i],
-              servicePointId: editor.exceptionalIds[i].servicePointId,
-              name: editor.name,
-              startDate: editor.startDate,
-              endDate: editor.endDate,
-              openingDays: [{
-                openingDay: {
-                  openingHour: [
-                    {
-                      startTime: editor.startTime,
-                      endTime: editor.endTime,
-                    }
-                  ],
-                  allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+        } else if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined && this.state.editor.exceptionalIds.length >= 0) {
+          for (let i = 0; i < this.state.editor.exceptionalIds.length; i++) {
+            const chekedId = this.state.editor.exceptionalIds[i].servicePointId;
+            let action = 'POST';
+            for (let j = 0; j < this.state.editor.editorServicePoints.length; j++) {
+              if (this.state.editor.editorServicePoints[j].id === chekedId) {
+                if (this.state.editor.editorServicePoints[j].selected === false) {
+                  action = 'DELETE';
+                } else {
+                  action = 'PUT';
                 }
-              }]
-            };
-            const a = this.props.parentMutator.periods.PUT(exception);
-            promises.push(a);
-          } else if (action === 'POST') {
-            parentMutator.query.replace(this.state.editor.exceptionalIds[i].id);
-            const exception = {
-              servicePointId: editor.exceptionalIds[i].servicePointId,
-              name: editor.name,
-              startDate: editor.startDate,
-              endDate: editor.endDate,
-              openingDays: [{
-                openingDay: {
-                  openingHour: [
-                    {
-                      startTime: editor.startTime,
-                      endTime: editor.endTime,
-                    }
-                  ],
-                  allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
-                }
-              }]
-            };
-            const a = this.props.parentMutator.periods.PUT(exception);
-            promises.push(a);
+              }
+            }
+            if (action === 'DELETE') {
+              parentMutator.query.replace(this.state.editor.exceptionalIds[i].servicePointId);
+              parentMutator.periodId.replace(chekedId);
+              const a = this.props.parentMutator.periods.DELETE(chekedId);
+              promises.push(a);
+            } else if (action === 'PUT') {
+              parentMutator.query.replace(this.state.editor.exceptionalIds[i].id);
+              const exception = {
+                id: this.state.editor.exceptionalIds[i],
+                servicePointId: editor.exceptionalIds[i].servicePointId,
+                name: editor.name,
+                startDate: editor.startDate,
+                endDate: editor.endDate,
+                openingDays: [{
+                  openingDay: {
+                    openingHour: [
+                      {
+                        startTime: editor.startTime,
+                        endTime: editor.endTime,
+                      }
+                    ],
+                    allDay: editor.allDay === undefined ? false : editor.allDay,
+                    open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  }
+                }]
+              };
+              const a = this.props.parentMutator.periods.PUT(exception);
+              promises.push(a);
+            } else if (action === 'POST') {
+              parentMutator.query.replace(this.state.editor.exceptionalIds[i].id);
+              const exception = {
+                servicePointId: editor.exceptionalIds[i].servicePointId,
+                name: editor.name,
+                startDate: editor.startDate,
+                endDate: editor.endDate,
+                openingDays: [{
+                  openingDay: {
+                    openingHour: [
+                      {
+                        startTime: editor.startTime,
+                        endTime: editor.endTime,
+                      }
+                    ],
+                    allDay: editor.allDay === undefined ? false : editor.allDay,
+                    open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  }
+                }]
+              };
+              const a = this.props.parentMutator.periods.POST(exception);
+              promises.push(a);
+            }
           }
         }
-      }
-      Promise.all(promises).then(() => {
-        this.setState({
-          openEditor: false,
-          editor: {
-            exceptionalIds: [{
-              id: null,
-              servicePointId: null,
-            }],
-            editorServicePoints: [],
-            name: null,
-            startDate: null,
-            endDate: null,
-            startTime: null,
-            endTime: null,
-            open: null,
-            allDay: null,
-            allSelector: null,
-          }
+        Promise.all(promises).then(() => {
+          this.setState({
+            openEditor: false,
+            editor: {
+              exceptionalIds: [{
+                id: null,
+                servicePointId: null,
+              }],
+              editorServicePoints: [],
+              name: null,
+              startDate: null,
+              endDate: null,
+              startTime: null,
+              endTime: null,
+              closed: null,
+              allDay: null,
+              allSelector: null,
+            }
+          });
         });
-      });
+      } else {
+        this.setState({
+          errorModalText: preCheck,
+        });
+      }
     }
 
     deleteException() {
@@ -213,8 +259,8 @@ class ExceptionWrapper extends React.Component {
             endDate: null,
             startTime: null,
             endTime: null,
-            open: null,
-            allDay: null,
+            closed: null,
+            allDay: false,
             allSelector: null,
           }
         });
@@ -330,13 +376,15 @@ class ExceptionWrapper extends React.Component {
       const tempEditor = this.state.editor;
       if (e === false || e === undefined) {
         tempEditor.allDay = true;
-        // tempEditor.startTime = '00:00';
-        // tempEditor.endTime = '23:59';
+        tempEditor.startTime = '00:00';
+        tempEditor.endTime = '23:59';
         this.setState({
           editor: tempEditor,
         });
       } else {
         tempEditor.allDay = false;
+        tempEditor.startTime = '00:00';
+        tempEditor.endTime = '00:00';
         this.setState({
           editor: tempEditor,
         });
@@ -588,9 +636,36 @@ class ExceptionWrapper extends React.Component {
           />
         </Pane>;
 
+      const footer = (
+        <Fragment>
+          <Button
+            onClick={this.closeErrorModal}
+            ButtonStyle="primary"
+          >
+            {CalendarUtils.translateToString('ui-calendar.close', this.props.stripes.intl)}
+          </Button>
+        </Fragment>
+      );
+
+      let errorModal = null;
+      if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
+        const label = 'ui-calendar.' + this.state.errorModalText;
+        const text = CalendarUtils.translateToString(label, this.props.stripes.intl);
+        errorModal =
+          <Modal
+            dismissible
+            onClose={this.closeErrorModal}
+            open
+            label={CalendarUtils.translateToString(label, this.props.stripes.intl)}
+            footer={footer}
+          >
+            <p>{this.state.errorModalText}</p>
+          </Modal>;
+      }
 
       return (
         <Paneset>
+          { errorModal }
           { !this.state.openEditor && selectorPane }
           { calendarPane }
           { this.state.openEditor && editorPane }
