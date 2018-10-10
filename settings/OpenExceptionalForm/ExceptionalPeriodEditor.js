@@ -10,6 +10,7 @@ import TextField from '../../../stripes-components/lib/TextField/TextField';
 import Textfield from '../../../stripes-components/lib/TextField';
 import List from '../../../stripes-components/lib/List';
 import Timepicker from '../../../stripes-components/lib/Timepicker';
+import Label from '../../../ui-users/src/components/Label/Label';
 
 
 class ExceptionalPeriodEditor extends React.Component {
@@ -17,17 +18,17 @@ class ExceptionalPeriodEditor extends React.Component {
       servicePoints: PropTypes.object.isRequired,
       stripes: PropTypes.object,
       intl: PropTypes.object,
-      allDay: PropTypes.bool,
-      allSelector: PropTypes.object,
-      setStartDate: PropTypes.func,
-      setEndDate: PropTypes.func,
-      allSelectorHandle: PropTypes.func,
-      setClosed: PropTypes.func,
-      setAllDay: PropTypes.func,
-      setName: PropTypes.func,
-      setOpeningTime: PropTypes.func,
-      setClosingTime: PropTypes.func,
-      setEditorServicePoints: PropTypes.func,
+      allDay: PropTypes.bool.isRequired,
+      allSelector: PropTypes.object.isRequired,
+      setStartDate: PropTypes.func.isRequired,
+      setEndDate: PropTypes.func.isRequired,
+      allSelectorHandle: PropTypes.func.isRequired,
+      setClosed: PropTypes.func.isRequired,
+      setAllDay: PropTypes.func.isRequired,
+      setName: PropTypes.func.isRequired,
+      setStartTime: PropTypes.func.isRequired,
+      setEndTime: PropTypes.func.isRequired,
+      setEditorServicePoints: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -39,8 +40,8 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setClosed = this.setClosed.bind(this);
       this.setAllDay = this.setAllDay.bind(this);
       this.setName = this.setName.bind(this);
-      this.setOpeningTime = this.setOpeningTime.bind(this);
-      this.setClosingTime = this.setClosingTime.bind(this);
+      this.setStartTime = this.setStartTime.bind(this);
+      this.setEndTime = this.setEndTime.bind(this);
       this.setModifyed = this.setModifyed.bind(this);
     }
 
@@ -85,13 +86,13 @@ class ExceptionalPeriodEditor extends React.Component {
       this.props.setName(e);
     }
 
-    setOpeningTime(e, value) {
-      this.props.setOpeningTime(value);
+    setStartTime(e, value) {
+      this.props.setStartTime(value);
       this.setModifyed;
     }
 
-    setClosingTime(e, value) {
-      this.props.setClosingTime(value);
+    setEndTime(e, value) {
+      this.props.setEndTime(value);
       this.setModifyed;
     }
 
@@ -126,7 +127,7 @@ class ExceptionalPeriodEditor extends React.Component {
       const startDate = <Field
         name="item.startDate"
         component={Datepicker}
-        label="TODO Valid From*"
+        label={CalendarUtils.translateToString('ui-calendar.validFrom', this.props.stripes.intl)}
         dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
         onChange={this.setStartDate}
         required
@@ -135,16 +136,16 @@ class ExceptionalPeriodEditor extends React.Component {
       const endDate = <Field
         name="item.endDate"
         component={Datepicker}
-        label="TODO Valid to"
+        label={CalendarUtils.translateToString('ui-calendar.validTo', this.props.stripes.intl)}
         dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
         onChange={this.setEndDate}
         required
       />;
 
-      const nameField = <TextField
+      const nameField = <Field
         name="periodName"
         component={Textfield}
-        label="TODO Name"
+        label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
         onChange={this.setName}
         required
       />;
@@ -155,15 +156,46 @@ class ExceptionalPeriodEditor extends React.Component {
           <Button
             onClick={() => { this.allSelectorHandle(false); }}
           >
-              DESELECTALL
+            {CalendarUtils.translateToString('ui-calendar.deselectAll', this.props.stripes.intl)}
           </Button>;
       } else {
         allSelector =
           <Button
             onClick={() => { this.allSelectorHandle(true); }}
           >
-                  SELECTALL
+            {CalendarUtils.translateToString('ui-calendar.selectAll', this.props.stripes.intl)}
           </Button>;
+      }
+
+      let timeSetter = null;
+      if (this.props.allDay !== true) {
+        timeSetter =
+          <div>
+            <Row>
+              <Col>
+                <div>
+                  <Field
+                    name="openintTime"
+                    component={Timepicker}
+                    label={CalendarUtils.translateToString('ui-calendar.settings.openingTime', this.props.stripes.intl)}
+                    onChange={this.setStartTime}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <div>
+                  <Field
+                    name="closingTime"
+                    component={Timepicker}
+                    label={CalendarUtils.translateToString('ui-calendar.closingTime', this.props.stripes.intl)}
+                    onChange={this.setEndTime}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </div>;
       }
 
       return (
@@ -183,8 +215,12 @@ class ExceptionalPeriodEditor extends React.Component {
               {nameField}
             </Col>
           </Row>
+          <div style={{ height: '20px' }} />
           <Row>
             <Col>
+              <div>
+                {CalendarUtils.translateToString('ui-calendar.settings.openingPeriodEnd', this.props.stripes.intl)}
+              </div>
               <List
                 items={items}
                 itemFormatter={itemFormatter}
@@ -201,11 +237,11 @@ class ExceptionalPeriodEditor extends React.Component {
           <Row>
             <Col>
               <Row>
-                <div>TODODODO Open/Close</div>
+                <div>{CalendarUtils.translateToString('ui-calendar.openClosed', this.props.stripes.intl)}</div>
               </Row>
               <Row>
                 <Checkbox
-                  label="CLOSED"
+                  label={CalendarUtils.translateToString('ui-calendar.settings.closed', this.props.stripes.intl)}
                   onChange={() => this.setClosed()}
                 />
               </Row>
@@ -215,57 +251,18 @@ class ExceptionalPeriodEditor extends React.Component {
           <Row>
             <Col>
               <Row>
-                <div>ALLDAY -ALLNIGHT</div>
+                <div>{CalendarUtils.translateToString('ui-calendar.openAllDay', this.props.stripes.intl)}</div>
               </Row>
               <Row>
                 <Checkbox
-                  label="ALLDAY"
+                  label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
                   onChange={() => this.setAllDay()}
                 />
               </Row>
             </Col>
           </Row>
           <div style={{ height: '20px' }} />
-          <Row>
-            <Col>
-              {/* <TextField */}
-              {/* name="openintTime" */}
-              {/* component={Textfield} */}
-              {/* label="TODO Opening Time" */}
-              {/* onChange={this.setOpeningTime} */}
-              {/* disabled={this.props.allDay} */}
-              {/* required */}
-              {/* /> */}
-              <div>
-                <Field
-                  name="openintTime"
-                  component={Timepicker}
-                  label="TODO openintTime"
-                  onChange={this.setOpeningTime}
-                />
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              {/* <TextField */}
-              {/* name="closingTime" */}
-              {/* component={Textfield} */}
-              {/* label="TODO Closing Time" */}
-              {/* onChange={this.setClosingTime} */}
-              {/* disabled={this.props.allDay} */}
-              {/* required */}
-              {/* /> */}
-              <div>
-                <Field
-                  name="closingTime"
-                  component={Timepicker}
-                  label="TODO openintTime"
-                  onChange={this.setClosingTime}
-                />
-              </div>
-            </Col>
-          </Row>
+          {timeSetter}
         </div>
       );
     }
