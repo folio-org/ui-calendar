@@ -13,7 +13,7 @@ import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';
-import {Modal} from "@folio/stripes/components/index"; // eslint-disable-line
+import {ConfirmationModal, Modal} from "@folio/stripes/components/index"; // eslint-disable-line
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -46,6 +46,7 @@ class ExceptionWrapper extends React.Component {
       this.setState({
         servicePoints: [],
         openEditor: null,
+        deleteQuestion: null,
         events: [{
           id: null,
           startDate: null,
@@ -94,7 +95,7 @@ class ExceptionWrapper extends React.Component {
         errorMessage = 'noStartTime';
       } else if (editor.endTime === null || editor.endTime === undefined || editor.endTime === '') {
         errorMessage = 'noEndTime';
-      } else if (moment(editor.endTime) > moment(editor.startTime)) {
+      } else if (moment(editor.endTime) < moment(editor.startTime)) {
         errorMessage = 'endTimeBeforeStartTime';
       }
       if (errorMessage === null) {
@@ -531,6 +532,12 @@ class ExceptionWrapper extends React.Component {
       this.setServicePoints(tempServicePoints);
     }
 
+    handleDeletequestion(boolean) {
+      this.setState({
+        deleteQuestion: boolean,
+      });
+    }
+
     render() {
       const paneStartMenu =
         <PaneMenu>
@@ -650,22 +657,40 @@ class ExceptionWrapper extends React.Component {
       let errorModal = null;
       if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
         const label = 'ui-calendar.' + this.state.errorModalText;
-        const text = CalendarUtils.translateToString(label, this.props.stripes.intl);
         errorModal =
           <Modal
             dismissible
             onClose={this.closeErrorModal}
             open
-            label={CalendarUtils.translateToString(label, this.props.stripes.intl)}
+            label={CalendarUtils.translateToString('ui-calendar.saveError', this.props.stripes.intl)}
             footer={footer}
           >
-            <p>{this.state.errorModalText}</p>
+            <p>{CalendarUtils.translateToString(label, this.props.stripes.intl)}</p>
           </Modal>;
+      }
+      let deleteModal = null;
+      if (this.state.deleteQuestion !== null && this.state.deleteQuestion !== undefined && this.state.deleteQuestion === true) {
+        const confirmationMessageDelete = 'ui-calendar.' + this.state.errorModalText;
+        deleteModal =
+          <ConfirmationModal
+            id="delete-confirmation"
+            open={this.state.deleteQuestion}
+            heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionExceptionTitle', this.props.stripes.intl)}
+            message={CalendarUtils.translateToString('ui-calendar.deleteQuestionException', this.props.stripes.intl)}
+            onConfirm={() => {
+                    this.deleteException();
+                }}
+            onCancel={() => {
+                    this.setState({ deleteQuestion: false });
+                }}
+            confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
+          />;
       }
 
       return (
         <Paneset>
           { errorModal }
+          { deleteModal }
           { !this.state.openEditor && selectorPane }
           { calendarPane }
           { this.state.openEditor && editorPane }

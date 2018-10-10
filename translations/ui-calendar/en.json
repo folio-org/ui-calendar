@@ -109,5 +109,9 @@
   "noServicePointSelected": "Please select at least one service point",
   "noStartTime": "Please set start time",
   "noEndTime": "Please set end time",
-  "endTimeBeforeStartTime": "The start time is after the end time!"
+  "endTimeBeforeStartTime": "The start time is after the end time!",
+  "saveError": "Error",
+  "deleteQuestionException": "The exceptional period will be <strong>deleted</strong>.",
+  "deleteQuestionExceptionTitle": "Delete exceptional period?"
+
 }
