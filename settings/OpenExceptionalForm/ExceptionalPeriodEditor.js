@@ -6,7 +6,6 @@ import { Col, Row } from '../../../stripes-components/lib/LayoutGrid';
 import Checkbox from '../../../stripes-components/lib/Checkbox';
 import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
 import CalendarUtils from '../../CalendarUtils';
-import TextField from '../../../stripes-components/lib/TextField/TextField';
 import Textfield from '../../../stripes-components/lib/TextField';
 import List from '../../../stripes-components/lib/List';
 import Timepicker from '../../../stripes-components/lib/Timepicker';
@@ -87,12 +86,18 @@ class ExceptionalPeriodEditor extends React.Component {
     }
 
     setStartTime(e, value) {
-      this.props.setStartTime(value);
+      const string = value;
+      const result = string.split(':');
+      const final = `${result[0]}:${result[1]}`;
+      this.props.setStartTime(final);
       this.setModifyed;
     }
 
     setEndTime(e, value) {
-      this.props.setEndTime(value);
+      const string = value;
+      const result = string.split(':');
+      const final = `${result[0]}:${result[1]}`;
+      this.props.setEndTime(final);
       this.setModifyed;
     }
 
@@ -125,6 +130,7 @@ class ExceptionalPeriodEditor extends React.Component {
       );
       const isEmptyMessage = 'No items to show';
       const startDate = <Field
+
         name="item.startDate"
         component={Datepicker}
         label={CalendarUtils.translateToString('ui-calendar.validFrom', this.props.stripes.intl)}
@@ -143,7 +149,7 @@ class ExceptionalPeriodEditor extends React.Component {
       />;
 
       const nameField = <Field
-        name="periodName"
+        name="item.periodName"
         component={Textfield}
         label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
         onChange={this.setName}
