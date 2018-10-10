@@ -44,9 +44,10 @@ class ExceptionWrapper extends React.Component {
       this.separateEvents = this.separateEvents.bind(this);
       this.getEvent = this.getEvent.bind(this);
       this.getAllServicePoints = this.getAllServicePoints.bind(this);
+      this.clickOnEvent = this.clickOnEvent.bind(this);
       this.setState({
         servicePoints: [],
-        openEditor: null,
+        openEditor: false,
         events: [{
           id: null,
           startDate: null,
@@ -67,7 +68,8 @@ class ExceptionWrapper extends React.Component {
           allDay: null,
           allSelector: null,
         },
-        openingAllPeriods: []
+        openingAllPeriods: [],
+        disableEvents: false,
       });
     }
 
@@ -93,7 +95,7 @@ class ExceptionWrapper extends React.Component {
                     }
                   ],
                   allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+                  open: editor.closed,
                 }
 
               }]
@@ -137,7 +139,7 @@ class ExceptionWrapper extends React.Component {
                     }
                   ],
                   allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+                  open: editor.closed,
                 }
               }]
             };
@@ -159,7 +161,7 @@ class ExceptionWrapper extends React.Component {
                     }
                   ],
                   allDay: editor.allDay,
-                  open: editor.closed,    // form asked for closed tag but backed except open so closed state store the velue for the backend
+                  open: editor.closed,
                 }
               }]
             };
@@ -175,6 +177,7 @@ class ExceptionWrapper extends React.Component {
           exceptionalIds: [],
         });
       });
+      this.setState({ disableEvents: false });
     }
 
     deleteException() {
@@ -193,6 +196,7 @@ class ExceptionWrapper extends React.Component {
           exceptionalIds: [],
         });
       });
+      this.setState({ disableEvents: false });
     }
 
     componentWillMount() {      // eslint-disable-line react/no-deprecated
@@ -224,6 +228,7 @@ class ExceptionWrapper extends React.Component {
 
     componentDidMount() {
       this.getAllServicePoints();
+      this.setState({ disableEvents: false });
     }
 
     setStartDate(e) {
@@ -424,6 +429,7 @@ class ExceptionWrapper extends React.Component {
         const today = moment(event.start).add(i, 'days').format('dddd').toUpperCase();
 
         const dates = [];
+        let eventContent;
 
         for (let j = 0; j < event.openingDays.length; j++) {
           if (event.exceptional === false) {
@@ -451,32 +457,38 @@ class ExceptionWrapper extends React.Component {
                 }
               }
             }
+            eventContent = <div className="rbc-event-dates-content">{dates}</div>;
           } else if (event.exceptional === true) {
+            let allday = false;
             if (event.openingDays[j].openingDay.allDay === true) {
               dates.push(
                 <div>All day</div>
               );
+              allday = true;
             }
-            for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
-              dates.push(
-                <div style={{ border: '4px solid red' }}>
-                  {event.openingDays[j].openingDay.openingHour[k].startTime}
-                  {' '}
-
-                          -
-                  {' '}
-                  {event.openingDays[j].openingDay.openingHour[k].endTime}
-                </div>
-              );
-              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+            if (allday === false) {
+              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
                 dates.push(
-                  <div>,</div>
+                  <div>
+                    {event.openingDays[j].openingDay.openingHour[k].startTime}
+                    {' '}
+
+                            -
+                    {' '}
+                    {event.openingDays[j].openingDay.openingHour[k].endTime}
+                  </div>
                 );
+                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+                  dates.push(
+                    <div>,</div>
+                  );
+                }
               }
             }
+            eventContent = <div className="rbc-event-dates-content" style={{ border: '4px solid red', borderRadius: '4px' }}>{dates}</div>;
           }
 
-          const eventContent = <div className="rbc-event-dates-content">{dates}</div>;
+
           const eventTitle =
             <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>
               {' '}
@@ -488,7 +500,7 @@ class ExceptionWrapper extends React.Component {
             end: moment(event.start).add(i, 'days'),
             start: moment(event.start).add(i, 'days'),
             title: eventTitle,
-            exceptional: false
+            exceptional: event.exceptional,
           };
           temp[g] = tempObj;
         }
@@ -507,34 +519,72 @@ class ExceptionWrapper extends React.Component {
       this.setServicePoints(tempServicePoints);
     }
 
-    getEvent(event) {
-      const res = {};
-
+    clickOnEvent(event) {
       for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
         if (this.state.openingAllPeriods[i].id === event.id) {
-          for (let j = 0; j < this.state.openingAllPeriods[i].openingDays.length; j++) {
-            const day = moment(event.start).format('dddd').toUpperCase();
-            if (day === this.state.openingAllPeriods[i].openingDays[j].weekdays.day) {
-              this.setState({
-                editor: {
-                  startTime: this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].startTime,
-                  endTime: this.state.openingAllPeriods[i].openingDays[j].openingDay.openingHour[0].endTime,
-                }
-              });
-              console.log(this.state);
+          const filterStart = this.state.openingAllPeriods[i].startDate;
+          const filterEnd = this.state.openingAllPeriods[i].endDate;
+          const startTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime;
+          const endTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime;
+
+          const tempServicePoints = [{
+            servicePointId: null,
+            tempColor: null,
+            tempName: null,
+            selected: null,
+          }];
+
+          const tempId = [];
+
+          let k = 0;
+          let p = 0;
+          for (let j = 0; j < this.state.openingAllPeriods.length; j++) {
+            if (filterEnd === this.state.openingAllPeriods[j].endDate && filterStart === this.state.openingAllPeriods[j].startDate
+            && startTime === this.state.openingAllPeriods[j].openingDays[0].openingDay.openingHour[0].startTime && endTime === this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime) {
+              tempId[k] =
+                {
+                  servicePointId: this.state.openingAllPeriods[j].servicePointId,
+                  id: this.state.openingAllPeriods[j].id,
+                };
+              k++;
             }
           }
+
+          for (let l = 0; l < this.state.servicePoints.length; l++) {
+            for (let o = 0; o < tempId.length; o++) {
+              if (this.state.servicePoints[l].id === tempId[o].servicePointId) {
+                tempServicePoints[p] = {
+                  id: this.state.servicePoints[l].id,
+                  color: this.state.servicePoints[l].color,
+                  name: this.state.servicePoints[l].name,
+                  selected: true,
+                };
+                p++;
+              }
+            }
+          }
+
+
           this.setState({
             editor: {
-              servicePointId: this.state.openingAllPeriods[i].servicePointId,
-              id: this.state.openingAllPeriods[i].id,
+              exceptionalIds: tempId,
               startDate: this.state.openingAllPeriods[i].startDate,
               endDate: this.state.openingAllPeriods[i].endDate,
               name: this.state.openingAllPeriods[i].name,
-              editorServicePoints: this.state.servicePoints,
+              editorServicePoints: tempServicePoints,
+              endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
+              startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
             }
           });
         }
+      }
+      this.setState({ openEditor: true });
+    }
+
+    getEvent(event) {
+      if (event.exceptional === true && this.state.disableEvents === false) {
+        this.clickOnEvent(event);
+        this.setState({ disableEvents: true });
       }
     }
 
@@ -592,10 +642,10 @@ class ExceptionWrapper extends React.Component {
       let open = '';
       let close = '';
       if (this.state.editor !== null && this.state.editor !== undefined) {
-        start = moment(this.state.editor.startDate).format('L');
-        end = moment(this.state.editor.endDate).format('L');
+        start = moment(this.state.editor.startDate).add(1, 'days').format('L');
+        end = moment(this.state.editor.endDate).add(1, 'days').format('L');
         name = this.state.editor.name;
-        open = this.state.editor.openTime;
+        open = this.state.editor.startTime;
         close = this.state.editor.endTime;
       }
       const paneStartMenu =
@@ -605,7 +655,7 @@ class ExceptionWrapper extends React.Component {
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false })} />
+          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false, disableEvents: false })} />
         </PaneMenu>;
 
       const paneLastMenu =
@@ -700,6 +750,7 @@ class ExceptionWrapper extends React.Component {
                             periodName: name,
                             openTime: open,
                             closingTime: close,
+                            openingTime: open,
                         }
                 }
             }

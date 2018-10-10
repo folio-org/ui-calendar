@@ -42,9 +42,6 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setEndTime = this.setEndTime.bind(this);
       this.setModifyed = this.setModifyed.bind(this);
     }
-    componentWillReceiveProps(nextProps){
-        console.log(nextProps);
-    }
 
     componentWillMount() {
       this.setState({
@@ -88,12 +85,18 @@ class ExceptionalPeriodEditor extends React.Component {
     }
 
     setStartTime(e, value) {
-      this.props.setStartTime(value);
+      const string = value;
+      const result = string.split(':');
+      const final = `${result[0]}:${result[1]}`;
+      this.props.setStartTime(final);
       this.setModifyed;
     }
 
     setEndTime(e, value) {
-      this.props.setEndTime(value);
+      const string = value;
+      const result = string.split(':');
+      const final = `${result[0]}:${result[1]}`;
+      this.props.setEndTime(final);
       this.setModifyed;
     }
 
