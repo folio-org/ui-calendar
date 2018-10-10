@@ -40,6 +40,7 @@ class ExceptionWrapper extends React.Component {
       this.setEndTime = this.setEndTime.bind(this);
       this.separateEvents = this.separateEvents.bind(this);
       this.setting = this.setting.bind(this);
+      this.checkBeforeSave = this.checkBeforeSave.bind(this);
       this.setState({
         servicePoints: [],
         openEditor: null,
@@ -64,6 +65,10 @@ class ExceptionWrapper extends React.Component {
           allSelector: null,
         }
       });
+    }
+
+    checkBeforeSave() {
+
     }
 
     saveException() {
@@ -97,7 +102,7 @@ class ExceptionWrapper extends React.Component {
             promises.push(a);
           }
         }
-      } else if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds >= 0) {
+      } else if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined && this.state.editor.exceptionalIds.length >= 0) {
         for (let i = 0; i < this.state.editor.exceptionalIds.length; i++) {
           const chekedId = this.state.editor.exceptionalIds[i].servicePointId;
           let action = 'POST';
@@ -166,8 +171,21 @@ class ExceptionWrapper extends React.Component {
       Promise.all(promises).then(() => {
         this.setState({
           openEditor: false,
-          editor: null,
-          exceptionalIds: [],
+          editor: {
+            exceptionalIds: [{
+              id: null,
+              servicePointId: null,
+            }],
+            editorServicePoints: [],
+            name: null,
+            startDate: null,
+            endDate: null,
+            startTime: null,
+            endTime: null,
+            open: null,
+            allDay: null,
+            allSelector: null,
+          }
         });
       });
     }
@@ -184,8 +202,21 @@ class ExceptionWrapper extends React.Component {
       Promise.all(promises).then(() => {
         this.setState({
           openEditor: false,
-          editor: null,
-          exceptionalIds: [],
+          editor: {
+            exceptionalIds: [{
+              id: null,
+              servicePointId: null,
+            }],
+            editorServicePoints: [],
+            name: null,
+            startDate: null,
+            endDate: null,
+            startTime: null,
+            endTime: null,
+            open: null,
+            allDay: null,
+            allSelector: null,
+          }
         });
       });
     }
@@ -197,8 +228,8 @@ class ExceptionWrapper extends React.Component {
         selected: null,
         color: null,
       }];
-      const colors = [];
-      for (let i = 0; i < this.props.entries.length; i++) {
+      const colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9', '#ffffff', '#000000'];
+      for (let i = 22; i < this.props.entries.length; i++) {
         colors[i] = RandomColor({
           luminosity: 'random',
           hue: 'random'
@@ -297,10 +328,10 @@ class ExceptionWrapper extends React.Component {
 
     setAllDay(e) {
       const tempEditor = this.state.editor;
-      if (e === false) {
+      if (e === false || e === undefined) {
         tempEditor.allDay = true;
-        tempEditor.startTime = '00:00';
-        tempEditor.endTime = '23:59';
+        // tempEditor.startTime = '00:00';
+        // tempEditor.endTime = '23:59';
         this.setState({
           editor: tempEditor,
         });
@@ -465,12 +496,14 @@ class ExceptionWrapper extends React.Component {
 
       const paneLastMenu =
         <PaneMenu>
-          <Button
-            buttonStyle="primary"
-            onClick={() => { this.setState({ openEditor: true }); }}
-          >
-            {CalendarUtils.translateToString('ui-calendar.exceptionalNewPeriod', this.props.stripes.intl)}
-          </Button>
+          <div style={{ paddingRight: '15px', paddingTop: '15px' }}>
+            <Button
+              buttonStyle="primary"
+              onClick={() => { this.setState({ openEditor: true }); }}
+            >
+              {CalendarUtils.translateToString('ui-calendar.exceptionalNewPeriod', this.props.stripes.intl)}
+            </Button>
+          </div>
         </PaneMenu>;
 
       let deleteButton = null;
@@ -523,10 +556,17 @@ class ExceptionWrapper extends React.Component {
           />
         </Pane>;
 
+      let editorPaneTittle = null;
+
+      if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined) {
+        editorPaneTittle = CalendarUtils.translateToString('ui-calendar.editExceptionPeriod', this.props.stripes.intl);
+      } else {
+        editorPaneTittle = CalendarUtils.translateToString('ui-calendar.newExceptionPeriod', this.props.stripes.intl);
+      }
       const editorPane =
         <Pane
           defaultWidth="20%"
-          paneTitle="TODO"
+          paneTitle={editorPaneTittle}
           firstMenu={editorStartMenu}
           lastMenu={lastMenus}
         >
@@ -547,6 +587,8 @@ class ExceptionWrapper extends React.Component {
             allDay={this.state.editor.allDay}
           />
         </Pane>;
+
+
       return (
         <Paneset>
           { !this.state.openEditor && selectorPane }

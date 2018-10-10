@@ -93,5 +93,14 @@
   "exitQuestionMessage": "There are unsaved changes",
   "exceptionalNewPeriod": "+ New Exception Period",
   "servicePoints": "Service Points",
-  "openCalendarExceptions": "Open calendar to add exceptions"
+  "openCalendarExceptions": "Open calendar to add exceptions",
+  "newExceptionPeriod": "New: Exception Period",
+  "editExceptionPeriod": "Edit: Exception Period",
+  "validFor": "Valid for:",
+  "selectAll": "Select All",
+  "deselectAll": "Clear All",
+  "openClosed": "Open/Closed",
+  "openAllDay": "Open all day",
+  "openingTime": "Opening Time",
+  "closingTime": "Closing Time"
 }
