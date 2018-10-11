@@ -2,7 +2,6 @@ import React from 'react';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import withDragAndDrop from "../../../react-big-calendar/src/addons/dragAndDrop";
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));

@@ -28,6 +28,8 @@ class ExceptionalPeriodEditor extends React.Component {
       setStartTime: PropTypes.func.isRequired,
       setEndTime: PropTypes.func.isRequired,
       setEditorServicePoints: PropTypes.func.isRequired,
+      editor: PropTypes.object,
+      isModify: PropTypes.bool,
     };
 
     constructor() {
@@ -48,6 +50,18 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setState({
         servicePoints: this.props.servicePoints,
       });
+    }
+
+    componentDidMount() {
+      if (this.props.isModify) {
+        console.log(this.props.editor);
+        this.props.setAllDay(this.props.allDay);
+        this.props.setName(this.props.editor.name);
+        this.props.setStartDate(this.props.editor.startDate);
+        this.props.setEndDate(this.props.editor.endDate);
+        this.props.setStartTime(this.props.editor.startTime);
+        this.props.setEndTime(this.props.editor.endTime);
+      }
     }
 
     setModifyed() {
@@ -82,22 +96,22 @@ class ExceptionalPeriodEditor extends React.Component {
     }
 
     setName(e) {
-      this.props.setName(e);
+      this.props.setName(e.target.value);
     }
 
     setStartTime(e, value) {
-      const string = value;
-      const result = string.split(':');
-      const final = `${result[0]}:${result[1]}`;
-      this.props.setStartTime(final);
+      // const string = value;
+      // const result = string.split(':');
+      // const final = `${result[0]}:${result[1]}`;
+      this.props.setStartTime(value);
       this.setModifyed;
     }
 
     setEndTime(e, value) {
-      const string = value;
-      const result = string.split(':');
-      const final = `${result[0]}:${result[1]}`;
-      this.props.setEndTime(final);
+      // const string = value;
+      // const result = string.split(':');
+      // const final = `${result[0]}:${result[1]}`;
+      this.props.setEndTime(value);
       this.setModifyed;
     }
 

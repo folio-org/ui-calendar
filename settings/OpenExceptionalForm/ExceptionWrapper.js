@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Pane from '@folio/stripes-components/lib/Pane';
 import RandomColor from 'randomcolor';
 import moment from 'moment';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Button from '@folio/stripes-components/lib/Button';
+import {
+  Button,
+  PaneMenu,
+  IconButton,
+  Icon,
+  Pane,
+  Paneset
+} from '@folio/stripes/components';
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
@@ -71,6 +73,7 @@ class ExceptionWrapper extends React.Component {
         },
         openingAllPeriods: [],
         disableEvents: false,
+        modifyEvent: false,
       });
     }
 
@@ -237,7 +240,7 @@ class ExceptionWrapper extends React.Component {
         selected: null,
         color: null,
       }];
-      const colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9', '#ffffff', '#000000'];
+      const colors = ['#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9', '#ffffff', '#000000', '#e6194B'];
       for (let i = 22; i < this.props.entries.length; i++) {
         colors[i] = RandomColor({
           luminosity: 'random',
@@ -359,7 +362,7 @@ class ExceptionWrapper extends React.Component {
 
     setName(e) {
       const tempEditor = this.state.editor;
-      tempEditor.name = e.target.value;
+      tempEditor.name = e;
       this.setState({
         editor: tempEditor,
       });
@@ -605,6 +608,7 @@ class ExceptionWrapper extends React.Component {
               editorServicePoints: tempServicePoints,
               endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
               startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
+              allDay: this.state.openingAllPeriods[i].openingDays[0].openingDay.allDay,
             }
           });
         }
@@ -616,6 +620,7 @@ class ExceptionWrapper extends React.Component {
       if (event.exceptional === true && this.state.disableEvents === false) {
         this.clickOnEvent(event);
         this.setState({ disableEvents: true });
+        this.setState({ modifyEvent: true });
       }
     }
 
@@ -679,6 +684,8 @@ class ExceptionWrapper extends React.Component {
         open = this.state.editor.startTime;
         close = this.state.editor.endTime;
       }
+
+
       const paneStartMenu =
         <PaneMenu>
           <IconButton icon="closeX" onClick={this.props.onClose} />
@@ -686,7 +693,7 @@ class ExceptionWrapper extends React.Component {
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false, disableEvents: false })} />
+          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false, disableEvents: false, modifyEvent: false })} />
         </PaneMenu>;
 
       const paneLastMenu =
@@ -781,6 +788,8 @@ class ExceptionWrapper extends React.Component {
             allSelector={this.state.editor.allSelector}
             open={this.state.editor.open}
             allDay={this.state.editor.allDay}
+            editor={this.state.editor}
+            isModify={this.state.modifyEvent}
             initialValues={
                 {
                     item:
