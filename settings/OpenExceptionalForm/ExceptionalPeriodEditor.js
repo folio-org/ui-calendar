@@ -44,6 +44,7 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setStartTime = this.setStartTime.bind(this);
       this.setEndTime = this.setEndTime.bind(this);
       this.setModifyed = this.setModifyed.bind(this);
+      this.getAllday = this.getAllday.bind(this);
     }
 
     componentWillMount() {
@@ -55,7 +56,6 @@ class ExceptionalPeriodEditor extends React.Component {
     componentDidMount() {
       if (this.props.isModify) {
         console.log(this.props.editor);
-        this.props.setAllDay(this.props.allDay);
         this.props.setName(this.props.editor.name);
         this.props.setStartDate(this.props.editor.startDate);
         this.props.setEndDate(this.props.editor.endDate);
@@ -129,6 +129,14 @@ class ExceptionalPeriodEditor extends React.Component {
       });
     }
 
+    getAllday() {
+      let allday = false;
+      if (this.props.isModify) {
+        allday = this.props.editor.allDay;
+      }
+      return allday;
+    }
+
     render() {
       const items = this.state.servicePoints;
       const itemFormatter = (item) => (
@@ -188,14 +196,14 @@ class ExceptionalPeriodEditor extends React.Component {
       }
 
       let timeSetter = null;
-      if (this.props.allDay !== true) {
+      if (this.props.allDay !== true || this.props.allDay === null) {
         timeSetter =
           <div>
             <Row>
               <Col>
                 <div>
                   <Field
-                    name="openintTime"
+                    name="item.openingTime"
                     component={Timepicker}
                     label={CalendarUtils.translateToString('ui-calendar.openingTime', this.props.stripes.intl)}
                     onChange={this.setStartTime}
@@ -207,7 +215,7 @@ class ExceptionalPeriodEditor extends React.Component {
               <Col>
                 <div>
                   <Field
-                    name="closingTime"
+                    name="item.closingTime"
                     component={Timepicker}
                     label={CalendarUtils.translateToString('ui-calendar.closingTime', this.props.stripes.intl)}
                     onChange={this.setEndTime}
@@ -216,6 +224,20 @@ class ExceptionalPeriodEditor extends React.Component {
               </Col>
             </Row>
           </div>;
+      }
+
+      let checkbox = null;
+      if (this.props.isModify) {
+        checkbox = <Checkbox
+          label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
+          onChange={() => this.setAllDay()}
+          checked={this.getAllday()}
+        />;
+      } else {
+        checkbox = <Checkbox
+          label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
+          onChange={() => this.setAllDay()}
+        />;
       }
 
       return (
@@ -268,10 +290,7 @@ class ExceptionalPeriodEditor extends React.Component {
           <Row>
             <Col>
               <Row>
-                <Checkbox
-                  label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
-                  onChange={() => this.setAllDay()}
-                />
+                {checkbox}
               </Row>
             </Col>
           </Row>

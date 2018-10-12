@@ -553,14 +553,20 @@ class ExceptionWrapper extends React.Component {
             }
             if (allday === false) {
               for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
+                const tempOpen = event.openingDays[j].openingDay.openingHour[k].startTime;
+                const resultOpen = tempOpen.split(':');
+                const finalOpen = `${resultOpen[0]}:${resultOpen[1]}`;
+                const tempEnd = event.openingDays[j].openingDay.openingHour[k].endTime;
+                const resultEnd = tempEnd.split(':');
+                const finalEnd = `${resultEnd[0]}:${resultEnd[1]}`;
                 dates.push(
                   <div>
-                    {event.openingDays[j].openingDay.openingHour[k].startTime}
+                    {finalOpen}
                     {' '}
 
                             -
                     {' '}
-                    {event.openingDays[j].openingDay.openingHour[k].endTime}
+                    {finalEnd}
                   </div>
                 );
                 if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
@@ -620,7 +626,7 @@ class ExceptionWrapper extends React.Component {
           }];
 
           const tempId = [];
-
+          let tempSelected;
           let k = 0;
           let p = 0;
           for (let j = 0; j < this.state.openingAllPeriods.length; j++) {
@@ -638,17 +644,19 @@ class ExceptionWrapper extends React.Component {
           for (let l = 0; l < this.state.servicePoints.length; l++) {
             for (let o = 0; o < tempId.length; o++) {
               if (this.state.servicePoints[l].id === tempId[o].servicePointId) {
-                tempServicePoints[p] = {
-                  id: this.state.servicePoints[l].id,
-                  color: this.state.servicePoints[l].color,
-                  name: this.state.servicePoints[l].name,
-                  selected: true,
-                };
-                p++;
+                tempSelected = true;
+              } else {
+                tempSelected = false;
               }
+              tempServicePoints[p] = {
+                id: this.state.servicePoints[l].id,
+                color: this.state.servicePoints[l].color,
+                name: this.state.servicePoints[l].name,
+                selected: tempSelected
+              };
+              p++;
             }
           }
-
 
           this.setState({
             editor: {
@@ -749,7 +757,27 @@ class ExceptionWrapper extends React.Component {
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => this.setState({ openEditor: false, disableEvents: false, modifyEvent: false })} />
+          <IconButton
+            icon="closeX"
+            onClick={() => this.setState({ openEditor: false,
+disableEvents: false,
+modifyEvent: false,
+editor: {
+                  exceptionalIds: [{
+                      id: null,
+                      servicePointId: null,
+                  }],
+                  editorServicePoints: [],
+                  name: null,
+                  startDate: null,
+                  endDate: null,
+                  startTime: null,
+                  endTime: null,
+                  closed: null,
+                  allDay: null,
+                  allSelector: null,
+              } })}
+          />
         </PaneMenu>;
 
       const paneLastMenu =
