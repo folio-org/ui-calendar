@@ -144,7 +144,7 @@ class ServicePointDetails extends React.Component {
       latestEvent = this.state.currentPeriod.endDate;
     }
 
-    return latestEvent;
+    return moment(latestEvent).add(1, 'days');
   }
 
   onOpenCloneSettings() {

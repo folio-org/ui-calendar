@@ -60,7 +60,7 @@ class OpeningPeriodFormWrapper extends React.Component {
       });
 
       if (this.props.latestEvent !== undefined && this.props.latestEvent !== null) {
-        this.setState({ startDate: moment(this.props.latestEvent).add(1, 'days').format() });
+        this.setState({ startDate: moment(this.props.latestEvent).format() });
       }
     }
 
@@ -125,7 +125,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     onFormSubmit(event) {
       event.preventDefault();
       const { parentMutator, servicePointId } = this.props;
-      if (moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) {
+      if ((moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) && (moment(this.state.startDate).toDate() === moment(this.state.endDate).toDate())) {
         this.setState({
           errorModalText: CalendarUtils.translateToString('ui-calendar.wrongStartEndDate', this.props.stripes.intl),
         });
