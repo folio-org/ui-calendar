@@ -133,18 +133,21 @@ class ServicePointDetails extends React.Component {
 
   getLatestPeriod() {
     let latestEvent = moment().format('L');
-
+    if ((this.state.currentPeriod === undefined || this.state.currentPeriod === null) && (this.state.nextPeriods.length === 0)) {
+      moment(latestEvent).add(2, 'days');
+    }
     if (this.state.nextPeriods.length !== 0) {
       for (let i = 0; i < this.state.nextPeriods.length; i++) {
-        if (this.state.nextPeriods[i].endDate > latestEvent) {
+        if (latestEvent < this.state.nextPeriods[i].endDate) {
           latestEvent = this.state.nextPeriods[i].endDate;
+          moment(latestEvent).add(2, 'days');
         }
       }
-    } else if (this.state.currentPeriod !== undefined) {
-      latestEvent = this.state.currentPeriod.endDate;
+    } else if (this.state.currentPeriod) {
+      latestEvent = moment(this.state.currentPeriod.endDate).add(2, 'days');
     }
 
-    return moment(latestEvent).add(1, 'days');
+    return moment(latestEvent).format('L');
   }
 
   onOpenCloneSettings() {
@@ -193,7 +196,7 @@ class ServicePointDetails extends React.Component {
     if (this.state.currentPeriod) {
       currentP =
         <KeyValue
-          label="Current:"
+          label={CalendarUtils.translate('ui-calendar.current')}
           value={
             <div
               className="periods"

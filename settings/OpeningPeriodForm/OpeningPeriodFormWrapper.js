@@ -60,7 +60,7 @@ class OpeningPeriodFormWrapper extends React.Component {
       });
 
       if (this.props.latestEvent !== undefined && this.props.latestEvent !== null) {
-        this.setState({ startDate: moment(this.props.latestEvent).format() });
+        this.setState({ startDate: moment(this.props.latestEvent).add(1, 'days').format() });
       }
     }
 
@@ -191,10 +191,10 @@ class OpeningPeriodFormWrapper extends React.Component {
       );
 
       if (this.props.modifyPeriod) {
-        start = moment(this.props.modifyPeriod.startDate).format('L');
         end = moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
+        start = moment(this.props.modifyPeriod.startDate).add(1, 'days').format('L');
       } else {
-        start = moment(this.props.latestEvent).add(1, 'days').format('L');
+        start = moment(this.props.latestEvent).add(2, 'days').format('L');
       }
 
       const errorDelete =

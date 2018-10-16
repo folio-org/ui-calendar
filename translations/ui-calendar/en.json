@@ -112,6 +112,6 @@
   "endTimeBeforeStartTime": "The start time is after the end time!",
   "saveError": "Error",
   "deleteQuestionException": "The exceptional period will be <strong>deleted</strong>.",
-  "deleteQuestionExceptionTitle": "Delete exceptional period?"
-
+  "deleteQuestionExceptionTitle": "Delete exceptional period?",
+  "current": "Current:"
 }
