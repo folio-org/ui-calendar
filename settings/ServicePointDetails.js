@@ -30,7 +30,6 @@ class ServicePointDetails extends React.Component {
     this.onClose = this.onClose.bind(this);
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
-    this.getLatestPeriod = this.getLatestPeriod.bind(this);
     this.state = {
       newPeriodLayer: {
         isOpen: false,
@@ -131,22 +130,6 @@ class ServicePointDetails extends React.Component {
     return displayPeriods;
   }
 
-  getLatestPeriod() {
-    let latestEvent = moment().format('L');
-
-    if (this.state.nextPeriods.length !== 0) {
-      for (let i = 0; i < this.state.nextPeriods.length; i++) {
-        if (this.state.nextPeriods[i].endDate > latestEvent) {
-          latestEvent = this.state.nextPeriods[i].endDate;
-        }
-      }
-    } else if (this.state.currentPeriod !== undefined) {
-      latestEvent = this.state.currentPeriod.endDate;
-    }
-
-    return latestEvent;
-  }
-
   onOpenCloneSettings() {
     this.props.onToggle(true);
   }
@@ -193,7 +176,7 @@ class ServicePointDetails extends React.Component {
     if (this.state.currentPeriod) {
       currentP =
         <KeyValue
-          label="Current:"
+          label={CalendarUtils.translate('ui-calendar.current')}
           value={
             <div
               className="periods"
@@ -370,7 +353,7 @@ class ServicePointDetails extends React.Component {
               onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
               onClose={this.onClose}
               servicePointId={servicePoint.id}
-              latestEvent={this.getLatestPeriod()}
+              newPeriod={this.state.newPeriodLayer}
             />
 
           </Layer>
