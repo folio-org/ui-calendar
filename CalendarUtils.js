@@ -57,8 +57,8 @@ class CalendarUtils extends React.Component {
       }
       const resultStartHour = moment(dayOpening.start).get('hour');
       const resultStartMinute = moment(dayOpening.start).get('minute');
-      const resultEndHour = moment(dayOpening.start).get('hour');
-      const resultEndMinute = moment(dayOpening.start).get('minute');
+      const resultEndHour = moment(dayOpening.end).get('hour');
+      const resultEndMinute = moment(dayOpening.end).get('minute');
 
       let finalStartHour;
       let finalStartMinute;
