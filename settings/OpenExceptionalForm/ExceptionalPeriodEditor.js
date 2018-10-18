@@ -30,6 +30,7 @@ class ExceptionalPeriodEditor extends React.Component {
       setEditorServicePoints: PropTypes.func.isRequired,
       editor: PropTypes.object,
       isModify: PropTypes.bool,
+      editorServicePoints: PropTypes.object
     };
 
     constructor() {
@@ -48,9 +49,15 @@ class ExceptionalPeriodEditor extends React.Component {
     }
 
     componentWillMount() {
-      this.setState({
-        servicePoints: this.props.servicePoints,
-      });
+      if (this.props.isModify) {
+        this.setState({
+          servicePoints: this.props.editorServicePoints,
+        });
+      } else {
+        this.setState({
+          servicePoints: this.props.servicePoints,
+        });
+      }
     }
 
     componentDidMount() {
@@ -117,7 +124,16 @@ class ExceptionalPeriodEditor extends React.Component {
 
     onToggleSelect(event) {
       event.selected = !event.selected;
-      const tempServicePoints = this.props.servicePoints;
+
+      let tempServicePoints;
+
+      if (this.props.isModify) {
+        tempServicePoints = this.props.editorServicePoints;
+      } else {
+        tempServicePoints = this.state.servicePoints;
+      }
+
+
       for (let i = 0; i < tempServicePoints.length; i++) {
         if (tempServicePoints[i].id === event.id) {
           tempServicePoints[i].selected = event.selected;
@@ -300,7 +316,6 @@ class ExceptionalPeriodEditor extends React.Component {
       );
     }
 }
-// this.props.stripes.locale
 
 export default reduxForm({
   form: 'ExceptionalPeriodEditor',

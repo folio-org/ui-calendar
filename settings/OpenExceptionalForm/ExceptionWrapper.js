@@ -52,6 +52,7 @@ class ExceptionWrapper extends React.Component {
       this.getAllServicePoints = this.getAllServicePoints.bind(this);
       this.clickOnEvent = this.clickOnEvent.bind(this);
       this.setdeleteQuestion = this.setdeleteQuestion.bind(this);
+      this.getServicePointToExceptional = this.getServicePointToExceptional.bind(this);
       this.setState({
         servicePoints: [],
         openEditor: false,
@@ -643,19 +644,20 @@ class ExceptionWrapper extends React.Component {
 
           for (let l = 0; l < this.state.servicePoints.length; l++) {
             for (let o = 0; o < tempId.length; o++) {
-              if (this.state.servicePoints[l].id === tempId[o].servicePointId) {
+              if ((this.state.servicePoints[l].id === tempId[o].servicePointId) && (this.state.servicePoints[l].selected === true)) {
                 tempSelected = true;
+                break;
               } else {
                 tempSelected = false;
               }
-              tempServicePoints[p] = {
-                id: this.state.servicePoints[l].id,
-                color: this.state.servicePoints[l].color,
-                name: this.state.servicePoints[l].name,
-                selected: tempSelected
-              };
-              p++;
             }
+            tempServicePoints[p] = {
+              id: this.state.servicePoints[l].id,
+              color: this.state.servicePoints[l].color,
+              name: this.state.servicePoints[l].name,
+              selected: tempSelected
+            };
+            p++;
           }
 
           this.setState({
@@ -735,6 +737,28 @@ class ExceptionWrapper extends React.Component {
       });
     }
 
+    getServicePointToExceptional() {
+      const tempServicePoints = [{
+        id: null,
+        name: null,
+        selected: null,
+        color: null,
+      }];
+
+      for (let i = 0; i < this.state.servicePoints.length; i++) {
+        const tempSP = {
+          id: this.state.servicePoints[i].id,
+          name: this.state.servicePoints[i].name,
+          selected: false,
+          color: this.state.servicePoints[i].color
+        };
+
+        tempServicePoints[i] = tempSP;
+      }
+
+      return tempServicePoints;
+    }
+
     render() {
       let start = '';
       let end = '';
@@ -761,22 +785,7 @@ class ExceptionWrapper extends React.Component {
             icon="closeX"
             onClick={() => this.setState({ openEditor: false,
 disableEvents: false,
-modifyEvent: false,
-editor: {
-                  exceptionalIds: [{
-                      id: null,
-                      servicePointId: null,
-                  }],
-                  editorServicePoints: [],
-                  name: null,
-                  startDate: null,
-                  endDate: null,
-                  startTime: null,
-                  endTime: null,
-                  closed: null,
-                  allDay: null,
-                  allSelector: null,
-              } })}
+modifyEvent: false })}
           />
         </PaneMenu>;
 
@@ -859,7 +868,8 @@ editor: {
         >
           <ExceptionalPeriodEditor
             {...this.props}
-            servicePoints={this.state.editor.editorServicePoints}
+            editorServicePoints={this.state.editor.editorServicePoints}
+            servicePoints={this.getServicePointToExceptional()}
             setStartDate={this.setStartDate}
             setEndDate={this.setEndDate}
             allSelectorHandle={this.allSelectorHandle}
