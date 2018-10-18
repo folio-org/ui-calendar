@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import Button from '@folio/stripes-components/lib/Button';
-import { Col, Row } from '../../../stripes-components/lib/LayoutGrid';
-import Checkbox from '../../../stripes-components/lib/Checkbox';
-import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
+import { Col, Row } from '@folio/stripes-components/lib/LayoutGrid';
+import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import Datepicker from '@folio/stripes-components/lib/Datepicker/Datepicker';
+import Textfield from '@folio/stripes-components/lib/TextField';
+import List from '@folio/stripes-components/lib/List';
+import Timepicker from '@folio/stripes-components/lib/Timepicker';
 import CalendarUtils from '../../CalendarUtils';
-import Textfield from '../../../stripes-components/lib/TextField';
-import List from '../../../stripes-components/lib/List';
-import Timepicker from '../../../stripes-components/lib/Timepicker';
-
 
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
