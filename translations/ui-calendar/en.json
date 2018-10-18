@@ -113,6 +113,6 @@
   "saveError": "Error",
   "deleteQuestionException": "The exceptional period will be <strong>deleted</strong>.",
   "deleteQuestionExceptionTitle": "Delete exceptional period?",
-  "closeWithoutSaving": "Close editor without saving"
-
+  "closeWithoutSaving": "Close editor without saving",
+  "current": "Current:"
 }

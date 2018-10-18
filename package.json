@@ -104,7 +104,7 @@
     "@folio/stripes": "^1.0.0",
     "@folio/stripes-cli": "^1.5.0",
     "babel-eslint": "^8.2.2",
-    "eslint": "^5.6.1",
+    "eslint": "^4.8",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
@@ -114,6 +114,7 @@
   "dependencies": {
     "@folio/react-big-calendar": "^1.0.1",
     "@folio/react-intl-safe-html": "^1.0.2",
+    "@folio/stripes-components": "^4.2.2000575",
     "css-loader": "^0.28.11",
     "dateformat": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",

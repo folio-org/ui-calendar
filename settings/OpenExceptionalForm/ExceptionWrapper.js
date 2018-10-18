@@ -1,20 +1,23 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import Pane from '@folio/stripes-components/lib/Pane';
 import RandomColor from 'randomcolor';
 import moment from 'moment';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import Icon from '@folio/stripes-components/lib/Icon';
-import Button from '@folio/stripes-components/lib/Button';
+import {
+  Button,
+  PaneMenu,
+  IconButton,
+  Icon,
+  Pane,
+  Paneset,
+  ConfirmationModal,
+  Modal
+} from '@folio/stripes/components';
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
-import '!style-loader!css-loader!../../css/exception-form.css';
-import { ConfirmationModal, Modal } from '@folio/stripes/components/index';
-import SafeHTMLMessage from "@folio/react-intl-safe-html"; // eslint-disable-line
+import '!style-loader!css-loader!../../css/exception-form.css';  // eslint-disable-line
+import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -49,6 +52,12 @@ class ExceptionWrapper extends React.Component {
       this.getEvent = this.getEvent.bind(this);
       this.getAllServicePoints = this.getAllServicePoints.bind(this);
       this.clickOnEvent = this.clickOnEvent.bind(this);
+      this.getServicePointToExceptional = this.getServicePointToExceptional.bind(this);
+      this.onCloseEditor = this.onCloseEditor.bind(this);
+      this.getStart = this.getStart.bind(this);
+      this.getEnd = this.getEnd.bind(this);
+      this.getOpen = this.getOpen.bind(this);
+      this.getClose = this.getClose.bind(this);
       this.setDeleteQuestion = this.setDeleteQuestion.bind(this);
       this.beforeExit = this.beforeExit.bind(this);
       this.setState({
@@ -81,47 +90,595 @@ class ExceptionWrapper extends React.Component {
         },
         openingAllPeriods: [],
         disableEvents: false,
+        modifyEvent: false,
+        tempStart: null,
+        tempClose: null
       });
     }
 
-    checkBeforeSave() {
-      // return true ===  can save
-      const { editor } = this.state;
-      let errorMessage = null;
-      let isServicePointSelected = false;
-      for (let i = 0; i < editor.editorServicePoints.length; i++) {
-        if (editor.editorServicePoints[i].selected === true) {
-          isServicePointSelected = true;
+    componentWillMount() {      // eslint-disable-line react/no-deprecated
+      const tempServicePoints = [{
+        id: null,
+        name: null,
+        selected: null,
+        color: null,
+      }];
+      const colors = ['#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9', '#ffffff', '#000000', '#e6194B'];
+      for (let i = 22; i < this.props.entries.length; i++) {
+        colors[i] = RandomColor({
+          luminosity: 'random',
+          hue: 'random'
+        });
+      }
+      for (let i = 0; i < this.props.entries.length; i++) {
+        const tempSP = {
+          id: this.props.entries[i].id,
+          name: this.props.entries[i].name,
+          selected: false,
+          color: colors[i],
+        };
+        tempServicePoints[i] = tempSP;
+      }
+      this.setEditorServicePoints(tempServicePoints);
+      this.setting(tempServicePoints);
+    }
+
+    componentDidMount() {
+      this.getAllServicePoints();
+      this.setState({ disableEvents: false });   // eslint-disable-line
+    }
+
+    setStartDate(e) {
+      const tempEditor = this.state.editor;
+      tempEditor.startDate = this.parseDateToString(e);
+      this.setState({
+        editor: tempEditor,
+        changed: true
+      });
+    }
+
+    setEndDate(e) {
+      const tempEditor = this.state.editor;
+      tempEditor.endDate = this.parseDateToString(e);
+      this.setState({
+        editor: tempEditor,
+        changed: true
+      });
+    }
+
+    parseDateToString(e) {
+      let str = '';
+      for (const p in e) {
+        if (p !== undefined) {
+          if (Object.prototype.hasOwnProperty.call(e, p) && p !== 'preventDefault') {
+            str += e[p];
+          }
         }
       }
-      if (editor.startDate === null || editor.startDate === undefined || editor.startDate === '') {
-        errorMessage = 'noStartDate';
-      } else if (editor.endDate === null || editor.endDate === undefined || editor.endDate === '') {
-        errorMessage = 'noEndDate';
-      } else if (moment(editor.endDate).toDate() < moment(editor.startDate).toDate()) {
-        errorMessage = 'wrongStartEndDate';
-      } else if (editor.name === null || editor.name === undefined) {
-        errorMessage = 'noName';
-      } else if (!isServicePointSelected) {
-        errorMessage = 'noServicePointSelected';
-      } else if (editor.startTime === null || editor.startTime === undefined || editor.startTime === '') {
-        errorMessage = 'noStartTime';
-      } else if (editor.endTime === null || editor.endTime === undefined || editor.endTime === '') {
-        errorMessage = 'noEndTime';
-      } else if (moment(editor.endTime) < moment(editor.startTime)) {
-        errorMessage = 'endTimeBeforeStartTime';
-      }
-      if (errorMessage === null) {
-        return true;
+      return str;
+    }
+
+    setEditorServicePoints(e) {
+      if (this.state !== null && this.state.editor !== null) {
+        const tempEditor = this.state.editor;
+        tempEditor.editorServicePoints = e;
+        this.setState({
+          editor: tempEditor,
+        });
       } else {
-        return errorMessage;
+        this.setState({
+          editor: {
+            editorServicePoints: e,
+          }
+        });
       }
     }
 
-    closeErrorModal() {
+    allSelectorHandle(select, sP) {
+      const tempServicePoints = sP;
+      for (let i = 0; i < tempServicePoints.length; i++) {
+        tempServicePoints[i].selected = select;
+      }
+      const tempEditor = this.state.editor;
+      tempEditor.editorServicePoints = tempServicePoints;
+      if (select === true) {
+        tempEditor.editorServicePoints = tempServicePoints;
+        tempEditor.allSelector = false;
+      } else {
+        tempEditor.editorServicePoints = tempServicePoints;
+        tempEditor.allSelector = true;
+      }
       this.setState({
-        errorModalText: null,
+        editor: tempEditor,
+        changed: true
       });
+    }
+
+    setClosed(e) {
+      const tempEditor = this.state.editor;
+      if (e === false) {
+        tempEditor.closed = true;
+        this.setState({
+          editor: tempEditor,
+          changed: true
+        });
+      } else {
+        tempEditor.closed = false;
+        this.setState({
+          editor: tempEditor,
+          changed: true
+
+        });
+      }
+    }
+
+    setAllDay(e) {
+      const tempEditor = this.state.editor;
+      if (e === false || e === undefined) {
+        tempEditor.allDay = true;
+        tempEditor.startTime = '00:00';
+        tempEditor.endTime = '23:59';
+        this.setState({
+          editor: tempEditor,
+          changed: true
+        });
+      } else {
+        tempEditor.allDay = false;
+        tempEditor.startTime = this.state.tempStart;
+        tempEditor.endTime = this.state.tempClose;
+        this.setState({
+          editor: tempEditor,
+          changed: true
+        });
+      }
+    }
+
+    setName(e) {
+      const tempEditor = this.state.editor;
+      tempEditor.name = e;
+      this.setState({
+        editor: tempEditor,
+        changed: true
+      });
+    }
+
+    setStartTime(e) {
+      const tempEditor = this.state.editor;
+      tempEditor.startTime = e;
+      this.setState({
+        editor: tempEditor,
+        changed: true,
+        tempStart: e
+      });
+    }
+
+    setEndTime(e) {
+      const tempEditor = this.state.editor;
+      tempEditor.endTime = e;
+      this.setState({
+        editor: tempEditor,
+        changed: true,
+        tempClose: e
+      });
+    }
+
+    setting(sps) {
+      const events = [];
+      if (events.length === 0) {
+        const event = {};
+        event.start = null;
+        event.end = null;
+        event.id = null;
+        events.push({ ...event });
+      }
+
+      this.setState({
+        servicePoints: sps,
+        events,
+      });
+    }
+
+    settingALL(sps) {
+      const events = [];
+      let k = 0;
+      let color = 'black';
+      if (this.state.openingAllPeriods !== null && this.state.openingAllPeriods !== undefined) {
+        for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
+          for (let j = 0; j < sps.length; j++) {
+            if (sps[j].id === this.state.openingAllPeriods[i].servicePointId && sps[j].selected === true) {
+              const event = {};
+              event.start = this.state.openingAllPeriods[i].startDate;
+              event.end = this.state.openingAllPeriods[i].endDate;
+              event.id = this.state.openingAllPeriods[i].id;
+              event.openingDays = this.state.openingAllPeriods[i].openingDays;
+
+              if (this.state.servicePoints) {
+                for (let l = 0; l < this.state.servicePoints.length; l++) {
+                  if (this.state.servicePoints[l].id === this.state.openingAllPeriods[i].servicePointId) {
+                    color = this.state.servicePoints[l].color;
+                  }
+                }
+              }
+
+              event.exceptional = this.state.openingAllPeriods[i].exceptional;
+              event.color = color;
+              const sepEvent = this.separateEvents(event);
+
+              for (let g = 0; g < sepEvent.length; g++) {
+                events[k] = sepEvent[g];
+                k++;
+              }
+            }
+          }
+        }
+      }
+
+      if (events.length === 0) {
+        const event = {};
+        event.start = null;
+        event.end = null;
+        event.id = null;
+        events.push({ ...event });
+      }
+
+      this.setState({
+        servicePoints: sps,
+        events,
+      });
+    }
+
+    setServicePoints(sps) {
+      this.setState({
+        servicePoints: sps,
+      });
+      this.settingALL(sps);
+    }
+
+    separateEvents(event) {
+      const temp = [];
+      let g = 0;
+      for (let i = 0; i < moment(event.end).diff(moment(event.start), 'days') + 1; i++) {
+        const today = moment(event.start).add(i, 'days').format('dddd').toUpperCase();
+
+        const dates = [];
+        let eventContent;
+
+        for (let j = 0; j < event.openingDays.length; j++) {
+          if (event.exceptional === false) {
+            if (today === event.openingDays[j].weekdays.day) {
+              if (event.openingDays[j].openingDay.allDay === true) {
+                dates.push(
+                  <div>All day</div>
+                );
+              }
+              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
+                dates.push(
+                  <div>
+                    {event.openingDays[j].openingDay.openingHour[k].startTime}
+                    {' '}
+
+
+-
+                    {' '}
+                    {event.openingDays[j].openingDay.openingHour[k].endTime}
+                  </div>
+                );
+                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+                  dates.push(
+                    <div>,</div>
+                  );
+                }
+              }
+            }
+            eventContent = <div className="rbc-event-dates-content">{dates}</div>;
+          } else if (event.exceptional === true) {
+            let allday = false;
+            if (event.openingDays[j].openingDay.allDay === true) {
+              dates.push(
+                <div>All day</div>
+              );
+              allday = true;
+            }
+            if (allday === false) {
+              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
+                const tempOpen = event.openingDays[j].openingDay.openingHour[k].startTime;
+                const resultOpen = tempOpen.split(':');
+                const finalOpen = `${resultOpen[0]}:${resultOpen[1]}`;
+                const tempEnd = event.openingDays[j].openingDay.openingHour[k].endTime;
+                const resultEnd = tempEnd.split(':');
+                const finalEnd = `${resultEnd[0]}:${resultEnd[1]}`;
+                dates.push(
+                  <div>
+                    {finalOpen}
+                    {' '}
+
+
+                            -
+                    {' '}
+                    {finalEnd}
+                  </div>
+                );
+                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+                  dates.push(
+                    <div>,</div>
+                  );
+                }
+              }
+            }
+            eventContent = <div className="rbc-event-dates-content" style={{ border: '4px solid red', borderRadius: '4px' }}>{dates}</div>;
+          }
+
+
+          const eventTitle =
+            <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>
+              {' '}
+              {eventContent}
+            </div>;
+
+          const tempObj = {
+            id: event.id,
+            end: moment(event.start).add(i, 'days'),
+            start: moment(event.start).add(i, 'days'),
+            title: eventTitle,
+            exceptional: event.exceptional,
+          };
+          temp[g] = tempObj;
+        }
+        g++;
+      }
+      return temp;
+    }
+
+    handleServicePointChange(sp) {
+      const tempServicePoints = this.state.servicePoints;
+      for (let i = 0; i < tempServicePoints.length; i++) {
+        if (tempServicePoints[i].id === sp.id) {
+          tempServicePoints.selected = sp.selected;
+        }
+      }
+      this.setServicePoints(tempServicePoints);
+    }
+
+    clickOnEvent(event) {
+      for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
+        if (this.state.openingAllPeriods[i].id === event.id) {
+          const filterStart = this.state.openingAllPeriods[i].startDate;
+          const filterEnd = this.state.openingAllPeriods[i].endDate;
+          const startTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime;
+          const endTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime;
+
+          const tempServicePoints = [{
+            servicePointId: null,
+            tempColor: null,
+            tempName: null,
+            selected: null,
+          }];
+
+          const tempId = [];
+          let tempSelected;
+          let k = 0;
+          let p = 0;
+          for (let j = 0; j < this.state.openingAllPeriods.length; j++) {
+            if (filterEnd === this.state.openingAllPeriods[j].endDate && filterStart === this.state.openingAllPeriods[j].startDate
+            && startTime === this.state.openingAllPeriods[j].openingDays[0].openingDay.openingHour[0].startTime && endTime === this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime) {
+              tempId[k] =
+                {
+                  servicePointId: this.state.openingAllPeriods[j].servicePointId,
+                  id: this.state.openingAllPeriods[j].id,
+                };
+              k++;
+            }
+          }
+
+          for (let l = 0; l < this.state.servicePoints.length; l++) {
+            for (let o = 0; o < tempId.length; o++) {
+              if ((this.state.servicePoints[l].id === tempId[o].servicePointId) && (this.state.servicePoints[l].selected === true)) {
+                tempSelected = true;
+                break;
+              } else {
+                tempSelected = false;
+              }
+            }
+            tempServicePoints[p] = {
+              id: this.state.servicePoints[l].id,
+              color: this.state.servicePoints[l].color,
+              name: this.state.servicePoints[l].name,
+              selected: tempSelected
+            };
+            p++;
+          }
+
+          this.setState({
+            editor: {
+              exceptionalIds: tempId,
+              startDate: this.state.openingAllPeriods[i].startDate,
+              endDate: this.state.openingAllPeriods[i].endDate,
+              name: this.state.openingAllPeriods[i].name,
+              editorServicePoints: tempServicePoints,
+              endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
+              startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
+              allDay: this.state.openingAllPeriods[i].openingDays[0].openingDay.allDay,
+            }
+          });
+        }
+      }
+      this.setState({ openEditor: true });
+    }
+
+    getEvent(event) {
+      if (event.exceptional === true && this.state.disableEvents === false) {
+        this.clickOnEvent(event);
+        this.setState({ disableEvents: true });
+        this.setState({ modifyEvent: true });
+      }
+    }
+
+    getAllServicePoints() {
+      const promises = [];
+
+      for (let i = 0; i < this.props.entries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.entries[i].id);
+        this.props.parentMutator.exceptional.replace('false');
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      for (let i = 0; i < this.props.entries.length; i++) {
+        this.props.parentMutator.query.replace(this.props.entries[i].id);
+        this.props.parentMutator.exceptional.replace('true');
+        const a = this.props.parentMutator.periods.GET();
+        promises.push(a);
+      }
+
+      let k = 0;
+      const allSP = [];
+      Promise.all(promises).then((openingAllPeriods) => {
+        for (let i = 0; i < openingAllPeriods.length; i++) {
+          const temp = openingAllPeriods[i];
+          let exc = true;
+          for (let j = 0; j < temp.length; j++) {
+            if (temp[j].openingDays[0].weekdays !== undefined && temp[j].openingDays[0].weekdays !== null) {
+              exc = false;
+            }
+            const tempSP = {
+              startDate: temp[j].startDate,
+              endDate: temp[j].endDate,
+              id: temp[j].id,
+              name: temp[j].name,
+              openingDays: temp[j].openingDays,
+              servicePointId: temp[j].servicePointId,
+              exceptional: exc,
+            };
+            allSP[k] = tempSP;
+            k++;
+          }
+        }
+        this.setState({
+          openingAllPeriods: allSP
+        });
+      });
+    }
+
+    setDeleteQuestion() {
+      this.setState({
+        deleteQuestion: true,
+      });
+    }
+
+    getServicePointToExceptional() {
+      const tempServicePoints = [{
+        id: null,
+        name: null,
+        selected: null,
+        color: null,
+      }];
+
+      for (let i = 0; i < this.state.servicePoints.length; i++) {
+        const tempSP = {
+          id: this.state.servicePoints[i].id,
+          name: this.state.servicePoints[i].name,
+          selected: false,
+          color: this.state.servicePoints[i].color
+        };
+
+        tempServicePoints[i] = tempSP;
+      }
+
+      return tempServicePoints;
+    }
+
+    onCloseEditor() {
+      this.setState({ openEditor: false,
+        disableEvents: false,
+        modifyEvent: false,
+        editor: {
+          exceptionalIds: [{
+            id: null,
+            servicePointId: null,
+          }],
+          editorServicePoints: [],
+          name: null,
+          startDate: null,
+          endDate: null,
+          startTime: null,
+          endTime: null,
+          closed: null,
+          allSelector: null,
+        } });
+    }
+
+    getStart() {
+      if (this.state.editor.startDate !== null && this.state.editor.startDate !== undefined && this.state.modifyEvent === true) {
+        return moment(this.state.editor.startDate).add(1, 'days').format('L');
+      } else return '';
+    }
+
+    getEnd() {
+      if (this.state.editor.endDate !== null && this.state.editor.endDate !== undefined && this.state.modifyEvent === true) {
+        return moment(this.state.editor.endDate).add(1, 'days').format('L');
+      } else return '';
+    }
+
+    getOpen() {
+      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+        return this.state.editor.startTime;
+      } else return '';
+    }
+
+    getClose() {
+      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+        return this.state.editor.endTime;
+      } else return '';
+    }
+
+    beforeExit(source) {
+      if (source === 'editorStartMenu') {
+        if (this.state.changed === true) {
+          this.setState({ errorEditorClose: true,
+            openEditor: false,
+            disableEvents: false,
+            editor: { exceptionalIds: [{
+              id: null,
+              servicePointId: null,
+            }],
+            editorServicePoints: [],
+            name: null,
+            startDate: null,
+            endDate: null,
+            startTime: null,
+            endTime: null,
+            closed: null,
+            allDay: null,
+            allSelector: null } });
+        } else {
+          this.setState({
+            openEditor: false,
+            disableEvents: false,
+            editor: {
+              exceptionalIds: [{
+                id: null,
+                servicePointId: null,
+              }],
+              editorServicePoints: [],
+              name: null,
+              startDate: null,
+              endDate: null,
+              startTime: null,
+              endTime: null,
+              closed: null,
+              allDay: null,
+              allSelector: null,
+            }
+          });
+        }
+      } else if (source === 'paneStartMenu') {
+        if (this.state.changed === true) {
+          this.setState({ errorExceptionExit: true });
+        } else {
+          return this.props.onClose();
+        }
+      }
+      return null;
     }
 
     saveException() {
@@ -289,507 +846,53 @@ class ExceptionWrapper extends React.Component {
       this.setState({ disableEvents: false });
     }
 
-    componentWillMount() {      // eslint-disable-line react/no-deprecated
-      const tempServicePoints = [{
-        id: null,
-        name: null,
-        selected: null,
-        color: null,
-      }];
-      const colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9', '#ffffff', '#000000'];
-      for (let i = 22; i < this.props.entries.length; i++) {
-        colors[i] = RandomColor({
-          luminosity: 'random',
-          hue: 'random'
-        });
-      }
-      for (let i = 0; i < this.props.entries.length; i++) {
-        const tempSP = {
-          id: this.props.entries[i].id,
-          name: this.props.entries[i].name,
-          selected: false,
-          color: colors[i],
-        };
-        tempServicePoints[i] = tempSP;
-      }
-      this.setEditorServicePoints(tempServicePoints);
-      this.setting(tempServicePoints);
-    }
-
-    componentDidMount() {
-      this.getAllServicePoints();
-      this.setState({ disableEvents: false });
-    }
-
-    setStartDate(e) {
-      const tempEditor = this.state.editor;
-      tempEditor.startDate = this.parseDateToString(e);
+    closeErrorModal() {
       this.setState({
-        editor: tempEditor,
-        changed: true
+        errorModalText: null,
       });
     }
 
-    setEndDate(e) {
-      const tempEditor = this.state.editor;
-      tempEditor.endDate = this.parseDateToString(e);
-      this.setState({
-        editor: tempEditor,
-        changed: true
-      });
-    }
-
-    parseDateToString(e) {
-      let str = '';
-      for (const p in e) {
-        if (p !== undefined) {
-          if (Object.prototype.hasOwnProperty.call(e, p) && p !== 'preventDefault') {
-            str += e[p];
-          }
+    checkBeforeSave() {
+      // return true ===  can save
+      const { editor } = this.state;
+      let errorMessage = null;
+      let isServicePointSelected = false;
+      for (let i = 0; i < editor.editorServicePoints.length; i++) {
+        if (editor.editorServicePoints[i].selected === true) {
+          isServicePointSelected = true;
         }
       }
-      return str;
-    }
-
-    setEditorServicePoints(e) {
-      if (this.state !== null && this.state.editor !== null) {
-        const tempEditor = this.state.editor;
-        tempEditor.editorServicePoints = e;
-        this.setState({
-          editor: tempEditor,
-        });
+      if (editor.startDate === null || editor.startDate === undefined || editor.startDate === '') {
+        errorMessage = 'noStartDate';
+      } else if (editor.endDate === null || editor.endDate === undefined || editor.endDate === '') {
+        errorMessage = 'noEndDate';
+      } else if (moment(editor.endDate).toDate() < moment(editor.startDate).toDate()) {
+        errorMessage = 'wrongStartEndDate';
+      } else if (editor.name === null || editor.name === undefined) {
+        errorMessage = 'noName';
+      } else if (!isServicePointSelected) {
+        errorMessage = 'noServicePointSelected';
+      } else if (editor.startTime === null || editor.startTime === undefined || editor.startTime === '') {
+        errorMessage = 'noStartTime';
+      } else if (editor.endTime === null || editor.endTime === undefined || editor.endTime === '') {
+        errorMessage = 'noEndTime';
+      } else if (moment(editor.endTime) < moment(editor.startTime)) {
+        errorMessage = 'endTimeBeforeStartTime';
+      }
+      if (errorMessage === null) {
+        return true;
       } else {
-        this.setState({
-          editor: {
-            editorServicePoints: e,
-          }
-        });
-      }
-    }
-
-    allSelectorHandle(select, sP) {
-      const tempServicePoints = sP;
-      for (let i = 0; i < tempServicePoints.length; i++) {
-        tempServicePoints[i].selected = select;
-      }
-      const tempEditor = this.state.editor;
-      tempEditor.editorServicePoints = tempServicePoints;
-      if (select === true) {
-        tempEditor.editorServicePoints = tempServicePoints;
-        tempEditor.allSelector = false;
-      } else {
-        tempEditor.editorServicePoints = tempServicePoints;
-        tempEditor.allSelector = true;
-      }
-      this.setState({
-        editor: tempEditor,
-        changed: true
-      });
-    }
-
-    setClosed(e) {
-      const tempEditor = this.state.editor;
-      if (e === false) {
-        tempEditor.closed = true;
-        this.setState({
-          editor: tempEditor,
-          changed: true
-        });
-      } else {
-        tempEditor.closed = false;
-        this.setState({
-          editor: tempEditor,
-          changed: true
-
-        });
-      }
-    }
-
-    setAllDay(e) {
-      const tempEditor = this.state.editor;
-      if (e === false || e === undefined) {
-        tempEditor.allDay = true;
-        tempEditor.startTime = '00:00';
-        tempEditor.endTime = '23:59';
-        this.setState({
-          editor: tempEditor,
-          changed: true
-        });
-      } else {
-        tempEditor.allDay = false;
-        tempEditor.startTime = '00:00';
-        tempEditor.endTime = '00:00';
-        this.setState({
-          editor: tempEditor,
-          changed: true
-        });
-      }
-    }
-
-    setName(e) {
-      const tempEditor = this.state.editor;
-      tempEditor.name = e.target.value;
-      this.setState({
-        editor: tempEditor,
-        changed: true
-      });
-    }
-
-    setStartTime(e) {
-      const tempEditor = this.state.editor;
-      tempEditor.startTime = e;
-      this.setState({
-        editor: tempEditor,
-        changed: true
-      });
-    }
-
-    setEndTime(e) {
-      const tempEditor = this.state.editor;
-      tempEditor.endTime = e;
-      this.setState({
-        editor: tempEditor,
-        changed: true
-      });
-    }
-
-    setting(sps) {
-      const events = [];
-      if (events.length === 0) {
-        const event = {};
-        event.start = null;
-        event.end = null;
-        event.id = null;
-        events.push({ ...event });
-      }
-
-      this.setState({
-        servicePoints: sps,
-        events,
-      });
-    }
-
-    settingALL(sps) {
-      const events = [];
-      let k = 0;
-      let color = 'black';
-      if (this.state.openingAllPeriods !== null && this.state.openingAllPeriods !== undefined) {
-        for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
-          for (let j = 0; j < sps.length; j++) {
-            if (sps[j].id === this.state.openingAllPeriods[i].servicePointId && sps[j].selected === true) {
-              const event = {};
-              event.start = this.state.openingAllPeriods[i].startDate;
-              event.end = this.state.openingAllPeriods[i].endDate;
-              event.id = this.state.openingAllPeriods[i].id;
-              event.openingDays = this.state.openingAllPeriods[i].openingDays;
-
-              if (this.state.servicePoints) {
-                for (let l = 0; l < this.state.servicePoints.length; l++) {
-                  if (this.state.servicePoints[l].id === this.state.openingAllPeriods[i].servicePointId) {
-                    color = this.state.servicePoints[l].color;
-                  }
-                }
-              }
-
-              event.exceptional = this.state.openingAllPeriods[i].exceptional;
-              event.color = color;
-              const sepEvent = this.separateEvents(event);
-
-              for (let g = 0; g < sepEvent.length; g++) {
-                events[k] = sepEvent[g];
-                k++;
-              }
-            }
-          }
-        }
-      }
-
-      if (events.length === 0) {
-        const event = {};
-        event.start = null;
-        event.end = null;
-        event.id = null;
-        events.push({ ...event });
-      }
-
-      this.setState({
-        servicePoints: sps,
-        events,
-      });
-    }
-
-    setServicePoints(sps) {
-      this.setState({
-        servicePoints: sps,
-      });
-      this.settingALL(sps);
-    }
-
-    separateEvents(event) {
-      const temp = [];
-      let g = 0;
-      for (let i = 0; i < moment(event.end).diff(moment(event.start), 'days') + 1; i++) {
-        const today = moment(event.start).add(i, 'days').format('dddd').toUpperCase();
-
-        const dates = [];
-        let eventContent;
-
-        for (let j = 0; j < event.openingDays.length; j++) {
-          if (event.exceptional === false) {
-            if (today === event.openingDays[j].weekdays.day) {
-              if (event.openingDays[j].openingDay.allDay === true) {
-                dates.push(
-                  <div>All day</div>
-                );
-              }
-              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
-                dates.push(
-                  <div>
-                    {event.openingDays[j].openingDay.openingHour[k].startTime}
-                    {' '}
-
--
-                    {' '}
-                    {event.openingDays[j].openingDay.openingHour[k].endTime}
-                  </div>
-                );
-                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
-                  dates.push(
-                    <div>,</div>
-                  );
-                }
-              }
-            }
-            eventContent = <div className="rbc-event-dates-content">{dates}</div>;
-          } else if (event.exceptional === true) {
-            let allday = false;
-            if (event.openingDays[j].openingDay.allDay === true) {
-              dates.push(
-                <div>All day</div>
-              );
-              allday = true;
-            }
-            if (allday === false) {
-              for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
-                dates.push(
-                  <div>
-                    {event.openingDays[j].openingDay.openingHour[k].startTime}
-                    {' '}
-
-                            -
-                    {' '}
-                    {event.openingDays[j].openingDay.openingHour[k].endTime}
-                  </div>
-                );
-                if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
-                  dates.push(
-                    <div>,</div>
-                  );
-                }
-              }
-            }
-            eventContent = <div className="rbc-event-dates-content" style={{ border: '4px solid red', borderRadius: '4px' }}>{dates}</div>;
-          }
-
-
-          const eventTitle =
-            <div className="rbc-event-dates" style={{ backgroundColor: event.color }}>
-              {' '}
-              {eventContent}
-            </div>;
-
-          const tempObj = {
-            id: event.id,
-            end: moment(event.start).add(i, 'days'),
-            start: moment(event.start).add(i, 'days'),
-            title: eventTitle,
-            exceptional: event.exceptional,
-          };
-          temp[g] = tempObj;
-        }
-        g++;
-      }
-      return temp;
-    }
-
-    handleServicePointChange(sp) {
-      const tempServicePoints = this.state.servicePoints;
-      for (let i = 0; i < tempServicePoints.length; i++) {
-        if (tempServicePoints[i].id === sp.id) {
-          tempServicePoints.selected = sp.selected;
-        }
-      }
-      this.setServicePoints(tempServicePoints);
-    }
-
-    clickOnEvent(event) {
-      for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
-        if (this.state.openingAllPeriods[i].id === event.id) {
-          const filterStart = this.state.openingAllPeriods[i].startDate;
-          const filterEnd = this.state.openingAllPeriods[i].endDate;
-          const startTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime;
-          const endTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime;
-
-          const tempServicePoints = [{
-            servicePointId: null,
-            tempColor: null,
-            tempName: null,
-            selected: null,
-          }];
-
-          const tempId = [];
-
-          let k = 0;
-          let p = 0;
-          for (let j = 0; j < this.state.openingAllPeriods.length; j++) {
-            if (filterEnd === this.state.openingAllPeriods[j].endDate && filterStart === this.state.openingAllPeriods[j].startDate
-            && startTime === this.state.openingAllPeriods[j].openingDays[0].openingDay.openingHour[0].startTime && endTime === this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime) {
-              tempId[k] =
-                {
-                  servicePointId: this.state.openingAllPeriods[j].servicePointId,
-                  id: this.state.openingAllPeriods[j].id,
-                };
-              k++;
-            }
-          }
-
-          for (let l = 0; l < this.state.servicePoints.length; l++) {
-            for (let o = 0; o < tempId.length; o++) {
-              if (this.state.servicePoints[l].id === tempId[o].servicePointId) {
-                tempServicePoints[p] = {
-                  id: this.state.servicePoints[l].id,
-                  color: this.state.servicePoints[l].color,
-                  name: this.state.servicePoints[l].name,
-                  selected: true,
-                };
-                p++;
-              }
-            }
-          }
-
-
-          this.setState({
-            editor: {
-              exceptionalIds: tempId,
-              startDate: this.state.openingAllPeriods[i].startDate,
-              endDate: this.state.openingAllPeriods[i].endDate,
-              name: this.state.openingAllPeriods[i].name,
-              editorServicePoints: tempServicePoints,
-              endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
-              startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
-            }
-          });
-        }
-      }
-      this.setState({ openEditor: true });
-    }
-
-    getEvent(event) {
-      if (event.exceptional === true && this.state.disableEvents === false) {
-        this.clickOnEvent(event);
-        this.setState({ disableEvents: true });
-      }
-    }
-
-    getAllServicePoints() {
-      const promises = [];
-
-      for (let i = 0; i < this.props.entries.length; i++) {
-        this.props.parentMutator.query.replace(this.props.entries[i].id);
-        this.props.parentMutator.exceptional.replace('false');
-        const a = this.props.parentMutator.periods.GET();
-        promises.push(a);
-      }
-
-      for (let i = 0; i < this.props.entries.length; i++) {
-        this.props.parentMutator.query.replace(this.props.entries[i].id);
-        this.props.parentMutator.exceptional.replace('true');
-        const a = this.props.parentMutator.periods.GET();
-        promises.push(a);
-      }
-
-      let k = 0;
-      const allSP = [];
-      Promise.all(promises).then((openingAllPeriods) => {
-        for (let i = 0; i < openingAllPeriods.length; i++) {
-          const temp = openingAllPeriods[i];
-          let exc = true;
-          for (let j = 0; j < temp.length; j++) {
-            if (temp[j].openingDays[0].weekdays !== undefined && temp[j].openingDays[0].weekdays !== null) {
-              exc = false;
-            }
-            const tempSP = {
-              startDate: temp[j].startDate,
-              endDate: temp[j].endDate,
-              id: temp[j].id,
-              name: temp[j].name,
-              openingDays: temp[j].openingDays,
-              servicePointId: temp[j].servicePointId,
-              exceptional: exc,
-            };
-            allSP[k] = tempSP;
-            k++;
-          }
-        }
-        this.setState({
-          openingAllPeriods: allSP
-        });
-      });
-    }
-
-    setDeleteQuestion() {
-      this.setState({
-        deleteQuestion: true,
-      });
-    }
-
-    beforeExit(source) {
-      if (source === 'editorStartMenu') {
-        if (this.state.changed === true) {
-          this.setState({ errorEditorClose: true });
-        } else {
-          this.setState({
-            openEditor: false,
-            disableEvents: false,
-            editor: {
-              exceptionalIds: [{
-                id: null,
-                servicePointId: null,
-              }],
-              editorServicePoints: [],
-              name: null,
-              startDate: null,
-              endDate: null,
-              startTime: null,
-              endTime: null,
-              closed: null,
-              allDay: null,
-              allSelector: null,
-            }
-          });
-        }
-      } else if (source === 'paneStartMenu') {
-        if (this.state.changed === true) {
-          this.setState({ errorExceptionExit: true });
-        } else {
-          return this.props.onClose();
-        }
+        return errorMessage;
       }
     }
 
     render() {
-      let start = '';
-      let end = '';
       let name = '';
-      let open = '';
-      let close = '';
       if (this.state.editor !== null && this.state.editor !== undefined) {
-        start = moment(this.state.editor.startDate).add(1, 'days').format('L');
-        end = moment(this.state.editor.endDate).add(1, 'days').format('L');
         name = this.state.editor.name;
-        open = this.state.editor.startTime;
-        close = this.state.editor.endTime;
       }
+
+
       const paneStartMenu =
         <PaneMenu>
           <IconButton icon="closeX" onClick={() => { this.beforeExit('paneStartMenu'); }} />
@@ -880,7 +983,8 @@ class ExceptionWrapper extends React.Component {
         >
           <ExceptionalPeriodEditor
             {...this.props}
-            servicePoints={this.state.editor.editorServicePoints}
+            editorServicePoints={this.state.editor.editorServicePoints}
+            servicePoints={this.getServicePointToExceptional()}
             setStartDate={this.setStartDate}
             setEndDate={this.setEndDate}
             allSelectorHandle={this.allSelectorHandle}
@@ -893,16 +997,17 @@ class ExceptionWrapper extends React.Component {
             allSelector={this.state.editor.allSelector}
             open={this.state.editor.open}
             allDay={this.state.editor.allDay}
+            editor={this.state.editor}
+            isModify={this.state.modifyEvent}
             initialValues={
                 {
-                    item:
+                  item:
                         {
-                            startDate: start,
-                            endDate: end,
-                            periodName: name,
-                            openTime: open,
-                            closingTime: close,
-                            openingTime: open,
+                          startDate: this.getStart(),
+                          endDate: this.getEnd(),
+                          periodName: name,
+                          closingTime: this.getClose(),
+                          openingTime: this.getOpen(),
                         }
                 }
             }
@@ -949,11 +1054,11 @@ class ExceptionWrapper extends React.Component {
             heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionExceptionTitle', this.props.stripes.intl)}
             message={text}
             onConfirm={() => {
-                    this.deleteException();
-                }}
+              this.deleteException();
+            }}
             onCancel={() => {
-                    this.setState({ deleteQuestion: false });
-                }}
+              this.setState({ deleteQuestion: false });
+            }}
             confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
           />;
       }
@@ -972,11 +1077,11 @@ class ExceptionWrapper extends React.Component {
             heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
             message={confirmationMessageClose}
             onConfirm={() => {
-                this.setState({ errorEditorClose: false, openEditor: false });
-                  }}
+              this.setState({ errorEditorClose: false, openEditor: false });
+            }}
             onCancel={() => {
-                      this.setState({ errorEditorClose: false });
-                  }}
+              this.setState({ errorEditorClose: false });
+            }}
             confirmLabel={CalendarUtils.translateToString('ui-calendar.closeWithoutSaving', this.props.stripes.intl)}
           />;
       }
@@ -995,11 +1100,11 @@ class ExceptionWrapper extends React.Component {
             heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
             message={confirmationMessageExit}
             onConfirm={() => {
-                return this.props.onClose();
+              return this.props.onClose();
             }}
             onCancel={() => {
-                      this.setState({ errorExceptionExit: false });
-                  }}
+              this.setState({ errorExceptionExit: false });
+            }}
             confirmLabel={CalendarUtils.translateToString('ui-calendar.exitWithoutSaving', this.props.stripes.intl)}
           />;
       }

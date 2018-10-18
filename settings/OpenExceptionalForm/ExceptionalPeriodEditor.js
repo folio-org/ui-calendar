@@ -2,15 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import Button from '@folio/stripes-components/lib/Button';
-import { Col, Row } from '../../../stripes-components/lib/LayoutGrid';
-import Checkbox from '../../../stripes-components/lib/Checkbox';
-import Datepicker from '../../../stripes-components/lib/Datepicker/Datepicker';
+import { Col, Row } from '@folio/stripes-components/lib/LayoutGrid';
+import Checkbox from '@folio/stripes-components/lib/Checkbox';
+import Datepicker from '@folio/stripes-components/lib/Datepicker/Datepicker';
+import Textfield from '@folio/stripes-components/lib/TextField';
+import List from '@folio/stripes-components/lib/List';
+import Timepicker from '@folio/stripes-components/lib/Timepicker';
 import CalendarUtils from '../../CalendarUtils';
-import Textfield from '../../../stripes-components/lib/TextField';
-import List from '../../../stripes-components/lib/List';
-import Timepicker from '../../../stripes-components/lib/Timepicker';
-import Label from '../../../ui-users/src/components/Label/Label';
-
 
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
@@ -28,6 +26,9 @@ class ExceptionalPeriodEditor extends React.Component {
       setStartTime: PropTypes.func.isRequired,
       setEndTime: PropTypes.func.isRequired,
       setEditorServicePoints: PropTypes.func.isRequired,
+      editor: PropTypes.object,
+      isModify: PropTypes.bool,
+      editorServicePoints: PropTypes.object
     };
 
     constructor() {
@@ -41,69 +42,89 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setName = this.setName.bind(this);
       this.setStartTime = this.setStartTime.bind(this);
       this.setEndTime = this.setEndTime.bind(this);
-      this.setModifyed = this.setModifyed.bind(this);
+      // this.setModifyed = this.setModifyed.bind(this);
+      this.getAllday = this.getAllday.bind(this);
     }
 
-    componentWillMount() {
-      this.setState({
-        servicePoints: this.props.servicePoints,
-      });
+    componentWillMount() { // eslint-disable-line
+      if (this.props.isModify) {
+        this.setState({
+          servicePoints: this.props.editorServicePoints,
+        });
+      } else {
+        this.setState({
+          servicePoints: this.props.servicePoints,
+        });
+      }
     }
 
-    setModifyed() {
-      this.setState({
-        modifyed: true,
-      });
+    componentDidMount() {
+      if (this.props.isModify) {
+        this.props.setName(this.props.editor.name);
+        this.props.setStartDate(this.props.editor.startDate);
+        this.props.setEndDate(this.props.editor.endDate);
+        this.props.setStartTime(this.props.editor.startTime);
+        this.props.setEndTime(this.props.editor.endTime);
+      }
     }
+
+    // setModifyed() {
+    //   this.setState({
+    //     modifyed: true,
+    //   });
+    // }
 
     setStartDate(e) {
       this.props.setStartDate(e);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setEndDate(e) {
       this.props.setEndDate(e);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     allSelectorHandle(select) {
       this.props.allSelectorHandle(select, this.state.servicePoints);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setClosed() {
       this.props.setClosed(this.state.closed);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setAllDay() {
       this.props.setAllDay(this.props.allDay);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setName(e) {
-      this.props.setName(e);
+      this.props.setName(e.target.value);
     }
 
     setStartTime(e, value) {
-      const string = value;
-      const result = string.split(':');
-      const final = `${result[0]}:${result[1]}`;
-      this.props.setStartTime(final);
-      this.setModifyed;
+      this.props.setStartTime(value);
+      // this.setModifyed;
     }
 
     setEndTime(e, value) {
-      const string = value;
-      const result = string.split(':');
-      const final = `${result[0]}:${result[1]}`;
-      this.props.setEndTime(final);
-      this.setModifyed;
+      this.props.setEndTime(value);
+      // this.setModifyed;
     }
 
     onToggleSelect(event) {
       event.selected = !event.selected;
-      const tempServicePoints = this.props.servicePoints;
+
+      let tempServicePoints;
+
+      if (this.props.isModify) {
+        tempServicePoints = this.props.editorServicePoints;
+      } else {
+        tempServicePoints = this.state.servicePoints;
+      }
+
+
       for (let i = 0; i < tempServicePoints.length; i++) {
         if (tempServicePoints[i].id === event.id) {
           tempServicePoints[i].selected = event.selected;
@@ -113,6 +134,14 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setState({
         servicePoints: tempServicePoints,
       });
+    }
+
+    getAllday() {
+      let allday = false;
+      if (this.props.isModify) {
+        allday = this.props.editor.allDay;
+      }
+      return allday;
     }
 
     render() {
@@ -174,14 +203,14 @@ class ExceptionalPeriodEditor extends React.Component {
       }
 
       let timeSetter = null;
-      if (this.props.allDay !== true) {
+      if (this.props.allDay !== true || this.props.allDay === null) {
         timeSetter =
           <div>
             <Row>
               <Col>
                 <div>
                   <Field
-                    name="openintTime"
+                    name="item.openingTime"
                     component={Timepicker}
                     label={CalendarUtils.translateToString('ui-calendar.openingTime', this.props.stripes.intl)}
                     onChange={this.setStartTime}
@@ -193,7 +222,7 @@ class ExceptionalPeriodEditor extends React.Component {
               <Col>
                 <div>
                   <Field
-                    name="closingTime"
+                    name="item.closingTime"
                     component={Timepicker}
                     label={CalendarUtils.translateToString('ui-calendar.closingTime', this.props.stripes.intl)}
                     onChange={this.setEndTime}
@@ -202,6 +231,20 @@ class ExceptionalPeriodEditor extends React.Component {
               </Col>
             </Row>
           </div>;
+      }
+
+      let checkbox = null;
+      if (this.props.isModify) {
+        checkbox = <Checkbox
+          label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
+          onChange={() => this.setAllDay()}
+          checked={this.getAllday()}
+        />;
+      } else {
+        checkbox = <Checkbox
+          label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
+          onChange={() => this.setAllDay()}
+        />;
       }
 
       return (
@@ -254,10 +297,7 @@ class ExceptionalPeriodEditor extends React.Component {
           <Row>
             <Col>
               <Row>
-                <Checkbox
-                  label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
-                  onChange={() => this.setAllDay()}
-                />
+                {checkbox}
               </Row>
             </Col>
           </Row>
@@ -267,7 +307,6 @@ class ExceptionalPeriodEditor extends React.Component {
       );
     }
 }
-// this.props.stripes.locale
 
 export default reduxForm({
   form: 'ExceptionalPeriodEditor',
