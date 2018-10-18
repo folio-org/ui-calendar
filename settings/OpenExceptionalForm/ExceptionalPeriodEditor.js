@@ -9,7 +9,6 @@ import CalendarUtils from '../../CalendarUtils';
 import Textfield from '../../../stripes-components/lib/TextField';
 import List from '../../../stripes-components/lib/List';
 import Timepicker from '../../../stripes-components/lib/Timepicker';
-import Label from '../../../ui-users/src/components/Label/Label';
 
 
 class ExceptionalPeriodEditor extends React.Component {
@@ -44,11 +43,11 @@ class ExceptionalPeriodEditor extends React.Component {
       this.setName = this.setName.bind(this);
       this.setStartTime = this.setStartTime.bind(this);
       this.setEndTime = this.setEndTime.bind(this);
-      this.setModifyed = this.setModifyed.bind(this);
+      // this.setModifyed = this.setModifyed.bind(this);
       this.getAllday = this.getAllday.bind(this);
     }
 
-    componentWillMount() {
+    componentWillMount() { // eslint-disable-line
       if (this.props.isModify) {
         this.setState({
           servicePoints: this.props.editorServicePoints,
@@ -62,7 +61,6 @@ class ExceptionalPeriodEditor extends React.Component {
 
     componentDidMount() {
       if (this.props.isModify) {
-        console.log(this.props.editor);
         this.props.setName(this.props.editor.name);
         this.props.setStartDate(this.props.editor.startDate);
         this.props.setEndDate(this.props.editor.endDate);
@@ -71,35 +69,35 @@ class ExceptionalPeriodEditor extends React.Component {
       }
     }
 
-    setModifyed() {
-      this.setState({
-        modifyed: true,
-      });
-    }
+    // setModifyed() {
+    //   this.setState({
+    //     modifyed: true,
+    //   });
+    // }
 
     setStartDate(e) {
       this.props.setStartDate(e);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setEndDate(e) {
       this.props.setEndDate(e);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     allSelectorHandle(select) {
       this.props.allSelectorHandle(select, this.state.servicePoints);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setClosed() {
       this.props.setClosed(this.state.closed);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setAllDay() {
       this.props.setAllDay(this.props.allDay);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setName(e) {
@@ -107,19 +105,13 @@ class ExceptionalPeriodEditor extends React.Component {
     }
 
     setStartTime(e, value) {
-      // const string = value;
-      // const result = string.split(':');
-      // const final = `${result[0]}:${result[1]}`;
       this.props.setStartTime(value);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     setEndTime(e, value) {
-      // const string = value;
-      // const result = string.split(':');
-      // const final = `${result[0]}:${result[1]}`;
       this.props.setEndTime(value);
-      this.setModifyed;
+      // this.setModifyed;
     }
 
     onToggleSelect(event) {
