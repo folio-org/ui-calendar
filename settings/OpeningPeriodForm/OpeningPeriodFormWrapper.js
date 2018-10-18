@@ -46,6 +46,8 @@ class OpeningPeriodFormWrapper extends React.Component {
       this.closeErrorModal = this.closeErrorModal.bind(this);
       this.confirmExit = this.confirmExit.bind(this);
       this.confirmDelete = this.confirmDelete.bind(this);
+      this.getStartDate = this.getStartDate.bind(this);
+      this.getEndDate = this.getEndDate.bind(this);
       this.state = {
         confirmDelete: false,
         confirmExit: false,
@@ -58,10 +60,6 @@ class OpeningPeriodFormWrapper extends React.Component {
         ...this.props.modifyPeriod,
         dirty: false
       });
-
-      if (this.props.latestEvent !== undefined && this.props.latestEvent !== null) {
-        this.setState({ startDate: moment(this.props.latestEvent).add(1, 'days').format() });
-      }
     }
 
     confirmExit() {
@@ -170,12 +168,26 @@ class OpeningPeriodFormWrapper extends React.Component {
       });
     }
 
+    getStartDate() {
+      let date = '';
+      if (this.props.modifyPeriod) {
+        date = moment(this.props.modifyPeriod.startDate).add(1, 'days').format('L');
+      }
+
+      return date;
+    }
+
+    getEndDate() {
+      let date = '';
+      if (this.props.modifyPeriod) {
+        date = moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
+      }
+      return date;
+    }
 
     render() {
       let modifyPeriod;
       let errorModal;
-      let start = '';
-      let end = '';
       const name = this.state.name;
       const { confirmDelete, confirmExit } = this.state;
       const confirmationMessageDelete = (
@@ -189,13 +201,6 @@ class OpeningPeriodFormWrapper extends React.Component {
           id="ui-calendar.exitQuestionMessage"
         />
       );
-
-      if (this.props.modifyPeriod) {
-        end = moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
-        start = moment(this.props.modifyPeriod.startDate).add(1, 'days').format('L');
-      } else {
-        start = moment(this.props.latestEvent).add(2, 'days').format('L');
-      }
 
       const errorDelete =
         <ConfirmationModal
@@ -279,8 +284,8 @@ class OpeningPeriodFormWrapper extends React.Component {
                             {
                               item:
                                     {
-                                      startDate: start,
-                                      endDate: end,
+                                      startDate: this.getStartDate(),
+                                      endDate: this.getEndDate(),
                                     }
                             }
                         }

@@ -53,6 +53,11 @@ class ExceptionWrapper extends React.Component {
       this.clickOnEvent = this.clickOnEvent.bind(this);
       this.setdeleteQuestion = this.setdeleteQuestion.bind(this);
       this.getServicePointToExceptional = this.getServicePointToExceptional.bind(this);
+      this.onCloseEditor = this.onCloseEditor.bind(this);
+      this.getStart = this.getStart.bind(this);
+      this.getEnd = this.getEnd.bind(this);
+      this.getOpen = this.getOpen.bind(this);
+      this.getClose = this.getClose.bind(this);
       this.setState({
         servicePoints: [],
         openEditor: false,
@@ -81,6 +86,8 @@ class ExceptionWrapper extends React.Component {
         openingAllPeriods: [],
         disableEvents: false,
         modifyEvent: false,
+        tempStart: null,
+        tempClose: null
       });
     }
 
@@ -404,8 +411,8 @@ class ExceptionWrapper extends React.Component {
         });
       } else {
         tempEditor.allDay = false;
-        tempEditor.startTime = '00:00';
-        tempEditor.endTime = '00:00';
+        tempEditor.startTime = this.state.tempOpen;
+        tempEditor.endTime = this.state.tempClose;
         this.setState({
           editor: tempEditor,
         });
@@ -425,6 +432,7 @@ class ExceptionWrapper extends React.Component {
       tempEditor.startTime = e;
       this.setState({
         editor: tempEditor,
+        tempOpen: e
       });
     }
 
@@ -432,7 +440,8 @@ class ExceptionWrapper extends React.Component {
       const tempEditor = this.state.editor;
       tempEditor.endTime = e;
       this.setState({
-        editor: tempEditor
+        editor: tempEditor,
+        tempClose: e
       });
     }
 
@@ -759,18 +768,55 @@ class ExceptionWrapper extends React.Component {
       return tempServicePoints;
     }
 
+    onCloseEditor() {
+      this.setState({ openEditor: false,
+        disableEvents: false,
+        modifyEvent: false,
+        editor: {
+          exceptionalIds: [{
+            id: null,
+            servicePointId: null,
+          }],
+          editorServicePoints: [],
+          name: null,
+          startDate: null,
+          endDate: null,
+          startTime: null,
+          endTime: null,
+          closed: null,
+          allSelector: null,
+        } });
+    }
+
+    getStart() {
+      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+        return moment(this.state.editor.startDate).add(1, 'days').format('L');
+      } else return '';
+    }
+
+    getEnd() {
+      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+        return moment(this.state.editor.endDate).add(1, 'days').format('L');
+      } else return '';
+    }
+
+    getOpen() {
+      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+        return this.state.editor.startTime;
+      } else return '';
+    }
+
+    getClose() {
+      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+        return this.state.editor.endTime;
+      } else return '';
+    }
+
+
     render() {
-      let start = '';
-      let end = '';
       let name = '';
-      let open = '';
-      let close = '';
       if (this.state.editor !== null && this.state.editor !== undefined) {
-        start = moment(this.state.editor.startDate).add(1, 'days').format('L');
-        end = moment(this.state.editor.endDate).add(1, 'days').format('L');
         name = this.state.editor.name;
-        open = this.state.editor.startTime;
-        close = this.state.editor.endTime;
       }
 
 
@@ -783,9 +829,7 @@ class ExceptionWrapper extends React.Component {
         <PaneMenu>
           <IconButton
             icon="closeX"
-            onClick={() => this.setState({ openEditor: false,
-disableEvents: false,
-modifyEvent: false })}
+            onClick={() => this.onCloseEditor()}
           />
         </PaneMenu>;
 
@@ -888,12 +932,11 @@ modifyEvent: false })}
                 {
                     item:
                         {
-                            startDate: start,
-                            endDate: end,
+                            startDate: this.getStart(),
+                            endDate: this.getEnd(),
                             periodName: name,
-                            openTime: open,
-                            closingTime: close,
-                            openingTime: open,
+                            closingTime: this.getClose(),
+                            openingTime: this.getOpen(),
                         }
                 }
             }
