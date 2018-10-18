@@ -16,7 +16,7 @@ import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';
 import { ConfirmationModal, Modal } from '@folio/stripes/components/index';
-import SafeHTMLMessage from "@folio/react-intl-safe-html"; // eslint-disable-line
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 class ExceptionWrapper extends React.Component {
     static propTypes = {
@@ -51,17 +51,21 @@ class ExceptionWrapper extends React.Component {
       this.getEvent = this.getEvent.bind(this);
       this.getAllServicePoints = this.getAllServicePoints.bind(this);
       this.clickOnEvent = this.clickOnEvent.bind(this);
-      this.setdeleteQuestion = this.setdeleteQuestion.bind(this);
       this.getServicePointToExceptional = this.getServicePointToExceptional.bind(this);
       this.onCloseEditor = this.onCloseEditor.bind(this);
       this.getStart = this.getStart.bind(this);
       this.getEnd = this.getEnd.bind(this);
       this.getOpen = this.getOpen.bind(this);
       this.getClose = this.getClose.bind(this);
+      this.setDeleteQuestion = this.setDeleteQuestion.bind(this);
+      this.beforeExit = this.beforeExit.bind(this);
       this.setState({
         servicePoints: [],
         openEditor: false,
         deleteQuestion: null,
+        errorExceptionExit: false,
+        errorEditorClose: false,
+        changed: false,
         events: [{
           id: null,
           startDate: null,
@@ -157,7 +161,6 @@ class ExceptionWrapper extends React.Component {
                     allDay: editor.allDay === undefined ? false : editor.allDay,
                     open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                   }
-
                 }]
               };
               const a = this.props.parentMutator.periods.POST(exception);
@@ -177,16 +180,18 @@ class ExceptionWrapper extends React.Component {
                 }
               }
             }
+            const index = i;
             if (action === 'DELETE') {
-              parentMutator.query.replace(this.state.editor.exceptionalIds[i].servicePointId);
-              parentMutator.periodId.replace(chekedId);
-              const a = this.props.parentMutator.periods.DELETE(chekedId);
-              promises.push(a);
+              parentMutator.query.replace(this.state.editor.exceptionalIds[index].servicePointId);
+              parentMutator.periodId.replace(this.state.editor.exceptionalIds[index].id);
+              const modifyDelete = this.props.parentMutator.periods.DELETE(this.state.editor.exceptionalIds[index].id);
+              promises.push(modifyDelete);
             } else if (action === 'PUT') {
-              parentMutator.query.replace(this.state.editor.exceptionalIds[i].id);
-              const exception = {
-                id: this.state.editor.exceptionalIds[i],
-                servicePointId: editor.exceptionalIds[i].servicePointId,
+              parentMutator.query.replace(this.state.editor.exceptionalIds[index].servicePointId);
+              parentMutator.periodId.replace(this.state.editor.exceptionalIds[index].id);
+              const modifyExceptionPut = {
+                id: this.state.editor.exceptionalIds[index].id,
+                servicePointId: editor.exceptionalIds[index].servicePointId,
                 name: editor.name,
                 startDate: editor.startDate,
                 endDate: editor.endDate,
@@ -203,12 +208,12 @@ class ExceptionWrapper extends React.Component {
                   }
                 }]
               };
-              const a = this.props.parentMutator.periods.PUT(exception);
-              promises.push(a);
+              const modifyPromisePut = this.props.parentMutator.periods.PUT(modifyExceptionPut);
+              promises.push(modifyPromisePut);
             } else if (action === 'POST') {
-              parentMutator.query.replace(this.state.editor.exceptionalIds[i].id);
-              const exception = {
-                servicePointId: editor.exceptionalIds[i].servicePointId,
+              parentMutator.query.replace(this.state.editor.exceptionalIds[index].servicePointId);
+              const modifyExceptionPost = {
+                servicePointId: editor.exceptionalIds[index].servicePointId,
                 name: editor.name,
                 startDate: editor.startDate,
                 endDate: editor.endDate,
@@ -225,13 +230,14 @@ class ExceptionWrapper extends React.Component {
                   }
                 }]
               };
-              const a = this.props.parentMutator.periods.POST(exception);
-              promises.push(a);
+              const modifyPromisPost = this.props.parentMutator.periods.POST(modifyExceptionPost);
+              promises.push(modifyPromisPost);
             }
           }
         }
         Promise.all(promises).then(() => {
           this.setState({
+            changed: false,
             openEditor: false,
             editor: {
               exceptionalIds: [{
@@ -249,6 +255,7 @@ class ExceptionWrapper extends React.Component {
               allSelector: null,
             }
           });
+          this.setAllDay(this.state.servicePoints);
         });
       } else {
         this.setState({
@@ -269,6 +276,8 @@ class ExceptionWrapper extends React.Component {
       }
       Promise.all(promises).then(() => {
         this.setState({
+          changed: false,
+          deleteQuestion: false,
           openEditor: false,
           editor: {
             exceptionalIds: [{
@@ -286,6 +295,7 @@ class ExceptionWrapper extends React.Component {
             allSelector: null,
           }
         });
+        this.setAllDay(this.state.servicePoints);
       });
       this.setState({ disableEvents: false });
     }
@@ -326,7 +336,8 @@ class ExceptionWrapper extends React.Component {
       const tempEditor = this.state.editor;
       tempEditor.startDate = this.parseDateToString(e);
       this.setState({
-        editor: tempEditor
+        editor: tempEditor,
+        changed: true
       });
     }
 
@@ -334,7 +345,8 @@ class ExceptionWrapper extends React.Component {
       const tempEditor = this.state.editor;
       tempEditor.endDate = this.parseDateToString(e);
       this.setState({
-        editor: tempEditor
+        editor: tempEditor,
+        changed: true
       });
     }
 
@@ -382,6 +394,7 @@ class ExceptionWrapper extends React.Component {
       }
       this.setState({
         editor: tempEditor,
+        changed: true
       });
     }
 
@@ -390,12 +403,15 @@ class ExceptionWrapper extends React.Component {
       if (e === false) {
         tempEditor.closed = true;
         this.setState({
-          editor: tempEditor
+          editor: tempEditor,
+          changed: true
         });
       } else {
         tempEditor.closed = false;
         this.setState({
-          editor: tempEditor
+          editor: tempEditor,
+          changed: true
+
         });
       }
     }
@@ -408,6 +424,7 @@ class ExceptionWrapper extends React.Component {
         tempEditor.endTime = '23:59';
         this.setState({
           editor: tempEditor,
+          changed: true
         });
       } else {
         tempEditor.allDay = false;
@@ -415,6 +432,7 @@ class ExceptionWrapper extends React.Component {
         tempEditor.endTime = this.state.tempClose;
         this.setState({
           editor: tempEditor,
+          changed: true
         });
       }
     }
@@ -424,6 +442,7 @@ class ExceptionWrapper extends React.Component {
       tempEditor.name = e;
       this.setState({
         editor: tempEditor,
+        changed: true
       });
     }
 
@@ -432,6 +451,7 @@ class ExceptionWrapper extends React.Component {
       tempEditor.startTime = e;
       this.setState({
         editor: tempEditor,
+        changed: true,
         tempOpen: e
       });
     }
@@ -441,6 +461,7 @@ class ExceptionWrapper extends React.Component {
       tempEditor.endTime = e;
       this.setState({
         editor: tempEditor,
+        changed: true,
         tempClose: e
       });
     }
@@ -740,7 +761,7 @@ class ExceptionWrapper extends React.Component {
       });
     }
 
-    setdeleteQuestion() {
+    setDeleteQuestion() {
       this.setState({
         deleteQuestion: true,
       });
@@ -789,13 +810,13 @@ class ExceptionWrapper extends React.Component {
     }
 
     getStart() {
-      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+      if (this.state.editor.startDate !== null && this.state.editor.startDate !== undefined && this.state.modifyEvent === true) {
         return moment(this.state.editor.startDate).add(1, 'days').format('L');
       } else return '';
     }
 
     getEnd() {
-      if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
+      if (this.state.editor.endDate !== null && this.state.editor.endDate !== undefined && this.state.modifyEvent === true) {
         return moment(this.state.editor.endDate).add(1, 'days').format('L');
       } else return '';
     }
@@ -812,6 +833,54 @@ class ExceptionWrapper extends React.Component {
       } else return '';
     }
 
+    beforeExit(source) {
+      if (source === 'editorStartMenu') {
+        if (this.state.changed === true) {
+          this.setState({ errorEditorClose: true,
+            openEditor: false,
+            disableEvents: false,
+            editor: { exceptionalIds: [{
+              id: null,
+              servicePointId: null,
+            }],
+            editorServicePoints: [],
+            name: null,
+            startDate: null,
+            endDate: null,
+            startTime: null,
+            endTime: null,
+            closed: null,
+            allDay: null,
+            allSelector: null } });
+        } else {
+          this.setState({
+            openEditor: false,
+            disableEvents: false,
+            editor: {
+              exceptionalIds: [{
+                id: null,
+                servicePointId: null,
+              }],
+              editorServicePoints: [],
+              name: null,
+              startDate: null,
+              endDate: null,
+              startTime: null,
+              endTime: null,
+              closed: null,
+              allDay: null,
+              allSelector: null,
+            }
+          });
+        }
+      } else if (source === 'paneStartMenu') {
+        if (this.state.changed === true) {
+          this.setState({ errorExceptionExit: true });
+        } else {
+          return this.props.onClose();
+        }
+      }
+    }
 
     render() {
       let name = '';
@@ -822,15 +891,12 @@ class ExceptionWrapper extends React.Component {
 
       const paneStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={this.props.onClose} />
+          <IconButton icon="closeX" onClick={() => { this.beforeExit('paneStartMenu'); }} />
         </PaneMenu>;
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton
-            icon="closeX"
-            onClick={() => this.onCloseEditor()}
-          />
+          <IconButton icon="closeX" onClick={() => { this.beforeExit('editorStartMenu'); }} />
         </PaneMenu>;
 
       const paneLastMenu =
@@ -851,7 +917,7 @@ class ExceptionWrapper extends React.Component {
         deleteButton =
           <Button
             buttonStyle="danger"
-            onClick={this.setdeleteQuestion}
+            onClick={this.setDeleteQuestion}
           >
             {CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
           </Button>;
@@ -903,6 +969,7 @@ class ExceptionWrapper extends React.Component {
       } else {
         editorPaneTittle = CalendarUtils.translateToString('ui-calendar.newExceptionPeriod', this.props.stripes.intl);
       }
+
       const editorPane =
         <Pane
           defaultWidth="20%"
@@ -968,6 +1035,7 @@ class ExceptionWrapper extends React.Component {
             <p>{CalendarUtils.translateToString(label, this.props.stripes.intl)}</p>
           </Modal>;
       }
+
       let deleteModal = null;
       if (this.state.deleteQuestion !== null && this.state.deleteQuestion !== undefined && this.state.deleteQuestion === true) {
         const text =
@@ -991,8 +1059,55 @@ class ExceptionWrapper extends React.Component {
           />;
       }
 
+      let errorCloseEditor = null;
+      if (this.state.errorEditorClose === true) {
+        const confirmationMessageClose = (
+          <SafeHTMLMessage
+            id="ui-calendar.exitQuestionMessage"
+          />
+        );
+        errorCloseEditor =
+          <ConfirmationModal
+            id="exite-confirmation"
+            open={this.state.errorEditorClose}
+            heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
+            message={confirmationMessageClose}
+            onConfirm={() => {
+                this.setState({ errorEditorClose: false, openEditor: false });
+                  }}
+            onCancel={() => {
+                      this.setState({ errorEditorClose: false });
+                  }}
+            confirmLabel={CalendarUtils.translateToString('ui-calendar.closeWithoutSaving', this.props.stripes.intl)}
+          />;
+      }
+
+      let errorExitException = null;
+      if (this.state.errorExceptionExit === true) {
+        const confirmationMessageExit = (
+          <SafeHTMLMessage
+            id="ui-calendar.exitQuestionMessage"
+          />
+        );
+        errorExitException =
+          <ConfirmationModal
+            id="exite-confirmation"
+            open={this.state.errorExceptionExit}
+            heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
+            message={confirmationMessageExit}
+            onConfirm={() => {
+                return this.props.onClose();
+            }}
+            onCancel={() => {
+                      this.setState({ errorExceptionExit: false });
+                  }}
+            confirmLabel={CalendarUtils.translateToString('ui-calendar.exitWithoutSaving', this.props.stripes.intl)}
+          />;
+      }
       return (
         <Paneset>
+          { errorCloseEditor }
+          { errorExitException }
           { errorModal }
           { deleteModal }
           { !this.state.openEditor && selectorPane }
