@@ -283,8 +283,8 @@ class ExceptionWrapper extends React.Component {
             endDate: prevState.editor.endDate,
             startDate: prevState.editor.startDate,
             name: prevState.editor.name,
-            startTime: this.state.tempStart,
-            endTime: this.state.tempClose,
+            startTime: prevState.tempStart,
+            endTime: prevState.tempClose,
             editorServicePoints: prevState.editor.editorServicePoints,
             closed: false,
             allday: false,
@@ -576,18 +576,19 @@ class ExceptionWrapper extends React.Component {
             };
             p++;
           }
+          const tempEditor = {
+            exceptionalIds: tempId,
+            startDate: this.state.openingAllPeriods[i].startDate,
+            endDate: this.state.openingAllPeriods[i].endDate,
+            name: this.state.openingAllPeriods[i].name,
+            editorServicePoints: tempServicePoints,
+            endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
+            startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
+            allDay: this.state.openingAllPeriods[i].openingDays[0].openingDay.allDay,
+          };
 
           this.setState({
-            editor: {
-              exceptionalIds: tempId,
-              startDate: this.state.openingAllPeriods[i].startDate,
-              endDate: this.state.openingAllPeriods[i].endDate,
-              name: this.state.openingAllPeriods[i].name,
-              editorServicePoints: tempServicePoints,
-              endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
-              startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
-              allDay: this.state.openingAllPeriods[i].openingDays[0].openingDay.allDay,
-            }
+            editor: tempEditor
           });
         }
       }
