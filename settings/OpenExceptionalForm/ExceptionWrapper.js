@@ -211,16 +211,40 @@ class ExceptionWrapper extends React.Component {
       const tempEditor = this.state.editor;
       tempEditor.editorServicePoints = tempServicePoints;
       if (select === true) {
-        tempEditor.editorServicePoints = tempServicePoints;
-        tempEditor.allSelector = false;
+        this.setState(prevState => ({
+          prevState,
+          editor: {
+            endDate: prevState.editor.endDate,
+            startDate: prevState.editor.startDate,
+            name: prevState.editor.name,
+            startTime: prevState.editor.startTime,
+            endTime: prevState.editor.endTime,
+            editorServicePoints: tempServicePoints,
+            closed: prevState.editor.closed,
+            allday: prevState.editor.allDay,
+            exceptionalIds: prevState.editor.exceptionalIds,
+            allSelector: false
+          },
+          changed: true
+        }));
       } else {
-        tempEditor.editorServicePoints = tempServicePoints;
-        tempEditor.allSelector = true;
+        this.setState(prevState => ({
+          prevState,
+          editor: {
+            endDate: prevState.editor.endDate,
+            startDate: prevState.editor.startDate,
+            name: prevState.editor.name,
+            startTime: prevState.editor.startTime,
+            endTime: prevState.editor.endTime,
+            editorServicePoints: tempServicePoints,
+            closed: prevState.editor.closed,
+            allday: prevState.editor.allDay,
+            exceptionalIds: prevState.editor.exceptionalIds,
+            allSelector: true
+          },
+          changed: true
+        }));
       }
-      this.setState({
-        editor: tempEditor,
-        changed: true
-      });
     }
 
     setClosed(e) {
@@ -576,20 +600,20 @@ class ExceptionWrapper extends React.Component {
             };
             p++;
           }
-          const tempEditor = {
-            exceptionalIds: tempId,
-            startDate: this.state.openingAllPeriods[i].startDate,
-            endDate: this.state.openingAllPeriods[i].endDate,
-            name: this.state.openingAllPeriods[i].name,
-            editorServicePoints: tempServicePoints,
-            endTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
-            startTime: this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
-            allDay: this.state.openingAllPeriods[i].openingDays[0].openingDay.allDay,
-          };
 
-          this.setState({
-            editor: tempEditor
-          });
+          this.setState(prevState => ({
+            prevState,
+            editor: {
+              exceptionalIds: tempId,
+              startDate: prevState.openingAllPeriods[i].startDate,
+              endDate: prevState.openingAllPeriods[i].endDate,
+              name: prevState.openingAllPeriods[i].name,
+              editorServicePoints: tempServicePoints,
+              endTime: prevState.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
+              startTime: prevState.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
+              allDay: prevState.openingAllPeriods[i].openingDays[0].openingDay.allDay,
+            }
+          }));
         }
       }
       this.setState({ openEditor: true });
