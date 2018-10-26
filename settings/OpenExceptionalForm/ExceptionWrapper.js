@@ -140,7 +140,7 @@ class ExceptionWrapper extends React.Component {
           endTime: prevState.editor.endTime,
           editorServicePoints: prevState.editor.editorServicePoints,
           closed: prevState.editor.closed,
-          allday: prevState.editor.allDay,
+          allDay: prevState.editor.allDay,
           exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
@@ -159,7 +159,7 @@ class ExceptionWrapper extends React.Component {
           endTime: prevState.editor.endTime,
           editorServicePoints: prevState.editor.editorServicePoints,
           closed: prevState.editor.closed,
-          allday: prevState.editor.allDay,
+          allDay: prevState.editor.allDay,
           exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
@@ -190,7 +190,7 @@ class ExceptionWrapper extends React.Component {
             endTime: prevState.editor.endTime,
             editorServicePoints: e,
             closed: prevState.editor.closed,
-            allday: prevState.editor.allDay,
+            allDay: prevState.editor.allDay,
             exceptionalIds: prevState.editor.exceptionalIds
           },
         }));
@@ -221,7 +221,7 @@ class ExceptionWrapper extends React.Component {
             endTime: prevState.editor.endTime,
             editorServicePoints: tempServicePoints,
             closed: prevState.editor.closed,
-            allday: prevState.editor.allDay,
+            allDay: prevState.editor.allDay,
             exceptionalIds: prevState.editor.exceptionalIds,
             allSelector: false
           },
@@ -238,7 +238,7 @@ class ExceptionWrapper extends React.Component {
             endTime: prevState.editor.endTime,
             editorServicePoints: tempServicePoints,
             closed: prevState.editor.closed,
-            allday: prevState.editor.allDay,
+            allDay: prevState.editor.allDay,
             exceptionalIds: prevState.editor.exceptionalIds,
             allSelector: true
           },
@@ -259,7 +259,7 @@ class ExceptionWrapper extends React.Component {
             endTime: prevState.editor.endTime,
             editorServicePoints: prevState.editor.editorServicePoints,
             closed: true,
-            allday: prevState.editor.allDay,
+            allDay: prevState.editor.allDay,
             exceptionalIds: prevState.editor.exceptionalIds
           },
           changed: true
@@ -275,7 +275,7 @@ class ExceptionWrapper extends React.Component {
             endTime: prevState.editor.endTime,
             editorServicePoints: prevState.editor.editorServicePoints,
             closed: false,
-            allday: prevState.editor.allDay,
+            allDay: prevState.editor.allDay,
             exceptionalIds: prevState.editor.exceptionalIds
           },
           changed: true
@@ -295,7 +295,7 @@ class ExceptionWrapper extends React.Component {
             endTime: '23:59',
             editorServicePoints: prevState.editor.editorServicePoints,
             closed: false,
-            allday: true,
+            allDay: true,
             exceptionalIds: prevState.editor.exceptionalIds
           },
           changed: true
@@ -311,7 +311,7 @@ class ExceptionWrapper extends React.Component {
             endTime: prevState.tempClose,
             editorServicePoints: prevState.editor.editorServicePoints,
             closed: false,
-            allday: false,
+            allDay: false,
             exceptionalIds: prevState.editor.exceptionalIds
           },
           changed: true
@@ -330,7 +330,7 @@ class ExceptionWrapper extends React.Component {
           endTime: prevState.editor.endTime,
           editorServicePoints: prevState.editor.editorServicePoints,
           closed: prevState.editor.closed,
-          allday: prevState.editor.allDay,
+          allDay: prevState.editor.allDay,
           exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
@@ -348,7 +348,7 @@ class ExceptionWrapper extends React.Component {
           endTime: prevState.editor.endTime,
           editorServicePoints: prevState.editor.editorServicePoints,
           closed: prevState.editor.closed,
-          allday: prevState.editor.allDay,
+          allDay: prevState.editor.allDay,
           exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true,
@@ -367,7 +367,7 @@ class ExceptionWrapper extends React.Component {
           endTime: e,
           editorServicePoints: prevState.editor.editorServicePoints,
           closed: prevState.editor.closed,
-          allday: prevState.editor.allDay,
+          allDay: prevState.editor.allDay,
           exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true,
@@ -670,6 +670,7 @@ class ExceptionWrapper extends React.Component {
         this.setState({
           openingAllPeriods: allSP
         });
+        this.settingALL(this.state.servicePoints);
       });
     }
 
@@ -763,7 +764,8 @@ class ExceptionWrapper extends React.Component {
             endTime: null,
             closed: null,
             allDay: null,
-            allSelector: null } });
+            allSelector: null },
+            modifyEvent: false });
         } else {
           this.setState({
             openEditor: false,
@@ -781,13 +783,14 @@ class ExceptionWrapper extends React.Component {
               endTime: null,
               closed: null,
               allDay: null,
-              allSelector: null,
-            }
+              allSelector: null
+            },
+            modifyEvent: false
           });
         }
       } else if (source === 'paneStartMenu') {
         if (this.state.changed === true) {
-          this.setState({ errorExceptionExit: true });
+          this.setState({ errorExceptionExit: true, modifyEvent: false });
         } else {
           return this.props.onClose();
         }
@@ -900,10 +903,7 @@ class ExceptionWrapper extends React.Component {
             changed: false,
             openEditor: false,
             editor: {
-              exceptionalIds: [{
-                id: null,
-                servicePointId: null,
-              }],
+              exceptionalIds: undefined,
               editorServicePoints: [],
               name: null,
               startDate: null,
@@ -916,13 +916,17 @@ class ExceptionWrapper extends React.Component {
             }
           });
           this.setAllDay(this.state.servicePoints);
-        });
+        },
+        this.getAllServicePoints());
       } else {
         this.setState({
           errorModalText: preCheck,
         });
       }
       this.setState({ disableEvents: false });
+
+      this.getAllServicePoints();
+      this.settingALL(this.state.servicePoints);
     }
 
     deleteException() {
@@ -939,11 +943,9 @@ class ExceptionWrapper extends React.Component {
           changed: false,
           deleteQuestion: false,
           openEditor: false,
+          modifyEvent: false,
           editor: {
-            exceptionalIds: [{
-              id: null,
-              servicePointId: null,
-            }],
+            exceptionalIds: undefined,
             editorServicePoints: [],
             name: null,
             startDate: null,
@@ -958,6 +960,9 @@ class ExceptionWrapper extends React.Component {
         this.setAllDay(this.state.servicePoints);
       });
       this.setState({ disableEvents: false });
+
+      this.getAllServicePoints();
+      this.settingALL(this.state.servicePoints);
     }
 
     closeErrorModal() {
@@ -1031,7 +1036,7 @@ class ExceptionWrapper extends React.Component {
 
       let deleteButton = null;
 
-      if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined) {
+      if (this.state.modifyEvent) {
         deleteButton =
           <Button
             buttonStyle="danger"
