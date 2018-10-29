@@ -48,6 +48,7 @@ class OpeningPeriodFormWrapper extends React.Component {
       this.confirmDelete = this.confirmDelete.bind(this);
       this.getStartDate = this.getStartDate.bind(this);
       this.getEndDate = this.getEndDate.bind(this);
+      this.getName = this.getName.bind(this);
       this.state = {
         confirmDelete: false,
         confirmExit: false,
@@ -185,6 +186,14 @@ class OpeningPeriodFormWrapper extends React.Component {
       return date;
     }
 
+    getName() {
+      let name = '';
+      if (this.props.modifyPeriod) {
+        name = this.props.modifyPeriod.name;
+      }
+      return name;
+    }
+
     render() {
       let modifyPeriod;
       let errorModal;
@@ -286,7 +295,8 @@ class OpeningPeriodFormWrapper extends React.Component {
                                     {
                                       startDate: this.getStartDate(),
                                       endDate: this.getEndDate(),
-                                    }
+                                    },
+                              periodName: this.getName()
                             }
                         }
             />
