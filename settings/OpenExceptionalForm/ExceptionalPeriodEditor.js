@@ -90,7 +90,7 @@ class ExceptionalPeriodEditor extends React.Component {
     }
 
     setClosed() {
-      this.props.setClosed(this.state.closed);
+      this.props.setClosed(this.props.editor.closed);
       // this.setModifyed;
     }
 
@@ -138,8 +138,8 @@ class ExceptionalPeriodEditor extends React.Component {
 
     getAllday() {
       let allday = false;
-      if (this.props.isModify) {
-        allday = this.props.editor.allDay;
+      if (this.props.allDay) {
+        allday = this.props.allDay;
       }
       return allday;
     }
@@ -234,16 +234,18 @@ class ExceptionalPeriodEditor extends React.Component {
       }
 
       let checkbox = null;
-      if (this.props.isModify) {
+      if (this.props.editor.closed === true) {
         checkbox = <Checkbox
           label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
           onChange={() => this.setAllDay()}
           checked={this.getAllday()}
+          disabled
         />;
       } else {
         checkbox = <Checkbox
           label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
           onChange={() => this.setAllDay()}
+          checked={this.getAllday()}
         />;
       }
 
