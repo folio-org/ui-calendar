@@ -1170,25 +1170,25 @@ class ExceptionWrapper extends React.Component {
             message={confirmationMessageClose}
             onConfirm={() => {
               this.setState({
-                  errorEditorClose: false,
-                  changed: false,
-                  openEditor: false,
-                  modifyEvent: false,
-                  editor: {
-                      exceptionalIds: [{
-                          id: null,
-                          servicePointId: null,
-                      }],
-                      editorServicePoints: [],
-                      name: null,
-                      startDate: null,
-                      endDate: null,
-                      startTime: null,
-                      endTime: null,
-                      closed: null,
-                      allDay: null,
-                      allSelector: null,
-                  }
+                errorEditorClose: false,
+                changed: false,
+                openEditor: false,
+                modifyEvent: false,
+                editor: {
+                  exceptionalIds: [{
+                    id: null,
+                    servicePointId: null,
+                  }],
+                  editorServicePoints: [],
+                  name: null,
+                  startDate: null,
+                  endDate: null,
+                  startTime: null,
+                  endTime: null,
+                  closed: null,
+                  allDay: null,
+                  allSelector: null,
+                }
               });
             }}
             onCancel={() => {
