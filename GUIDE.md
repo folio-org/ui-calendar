@@ -59,7 +59,7 @@ to add exceptions_.
 7. Select the service points that will be effected by the exception.
 8. Now you have two options:
  * defining an exception when the service point is closed instead of the regular opening. In this case click _Closed_. You can define closed period only for a whole day.
- * defining an exception when the service point is open instead of the regular opening when it would be closed. Specify the opening and closing time.
+ * defining an exception when the service point is open, the exceptional opening hours overwrite the regular opening (and closing) hours. Specify the opening and closing time.
 9. Click _Save_.
 
 > As you can see exceptions can be defined for several service points at the same time.
