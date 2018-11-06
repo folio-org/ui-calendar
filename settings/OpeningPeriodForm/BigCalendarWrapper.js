@@ -4,7 +4,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
-import withDragAndDrop from '@folio/react-big-calendar/src/addons/dragAndDrop';
+import withDragAndDrop from '@folio/react-big-calendar/lib/addons/dragAndDrop';
 import CalendarUtils from '../../CalendarUtils';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
