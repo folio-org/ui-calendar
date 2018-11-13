@@ -1,18 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
 
 class CalendarUtils extends React.Component {
-  static translate(id) {
-    return <FormattedMessage id={id} />;
-  }
-
-  static translateToString(id, intl) {
-    return intl.formatMessage({
-      id: `${id}`
-    });
-  }
-
   static convertNewPeriodToValidBackendPeriod(period, event) {
     const weekDays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
     let weekDay = 8;

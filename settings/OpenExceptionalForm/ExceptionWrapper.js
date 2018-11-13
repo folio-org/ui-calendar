@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import RandomColor from 'randomcolor';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 import {
   Button,
   PaneMenu,
@@ -14,7 +15,6 @@ import {
 } from '@folio/stripes/components';
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
-import CalendarUtils from '../../CalendarUtils';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';  // eslint-disable-line
 import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
@@ -23,7 +23,6 @@ class ExceptionWrapper extends React.Component {
     static propTypes = {
       entries: PropTypes.object,
       onClose: PropTypes.func.isRequired,
-      stripes: PropTypes.object,
       intl: PropTypes.object
     };
 
@@ -1002,7 +1001,7 @@ class ExceptionWrapper extends React.Component {
               buttonStyle="primary"
               onClick={() => { this.setState({ openEditor: true }); }}
             >
-              {CalendarUtils.translateToString('ui-calendar.exceptionalNewPeriod', this.props.stripes.intl)}
+              <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
             </Button>
           </div>
         </PaneMenu>;
@@ -1015,7 +1014,7 @@ class ExceptionWrapper extends React.Component {
             buttonStyle="danger"
             onClick={this.setDeleteQuestion}
           >
-            {CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
+            <FormattedMessage id="ui-calendar.deleteButton" />
           </Button>;
       }
 
@@ -1024,7 +1023,7 @@ class ExceptionWrapper extends React.Component {
           buttonStyle="primary"
           onClick={this.saveException}
         >
-          {CalendarUtils.translateToString('ui-calendar.saveButton', this.props.stripes.intl)}
+          <FormattedMessage id="ui-calendar.saveButton" />
         </Button>;
 
       const lastMenus =
@@ -1036,11 +1035,11 @@ class ExceptionWrapper extends React.Component {
       const paneTitle =
         <PaneMenu>
           <Icon icon="calendar" />
-          {CalendarUtils.translateToString('ui-calendar.settings.library_hours', this.props.stripes.intl)}
+          <FormattedMessage id="ui-calendar.settings.library_hours" />
         </PaneMenu>;
 
       const selectorPane =
-        <Pane defaultWidth="20%" paneTitle={CalendarUtils.translateToString('ui-calendar.servicePoints', this.props.stripes.intl)}>
+        <Pane defaultWidth="20%" paneTitle={<FormattedMessage id="ui-calendar.servicePoints" />}>
           <ServicePointSelector
             {...this.props}
             handleServicePointChange={this.handleServicePointChange}
@@ -1061,9 +1060,9 @@ class ExceptionWrapper extends React.Component {
       let editorPaneTittle = null;
 
       if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined) {
-        editorPaneTittle = CalendarUtils.translateToString('ui-calendar.editExceptionPeriod', this.props.stripes.intl);
+        editorPaneTittle = <FormattedMessage id="ui-calendar.editExceptionPeriod" />;
       } else {
-        editorPaneTittle = CalendarUtils.translateToString('ui-calendar.newExceptionPeriod', this.props.stripes.intl);
+        editorPaneTittle = <FormattedMessage id="ui-calendar.newExceptionPeriod" />;
       }
 
       const editorPane =
@@ -1112,7 +1111,7 @@ class ExceptionWrapper extends React.Component {
             onClick={this.closeErrorModal}
             ButtonStyle="primary"
           >
-            {CalendarUtils.translateToString('ui-calendar.close', this.props.stripes.intl)}
+            <FormattedMessage id="ui-calendar.close" />
           </Button>
         </Fragment>
       );
@@ -1125,10 +1124,10 @@ class ExceptionWrapper extends React.Component {
             dismissible
             onClose={this.closeErrorModal}
             open
-            label={CalendarUtils.translateToString('ui-calendar.saveError', this.props.stripes.intl)}
+            label={<FormattedMessage id="ui-calendar.saveError" />}
             footer={footer}
           >
-            <p>{CalendarUtils.translateToString(label, this.props.stripes.intl)}</p>
+            <p><FormattedMessage id={label} /></p>
           </Modal>;
       }
 
@@ -1143,7 +1142,7 @@ class ExceptionWrapper extends React.Component {
           <ConfirmationModal
             id="delete-confirmation"
             open={this.state.deleteQuestion}
-            heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionExceptionTitle', this.props.stripes.intl)}
+            heading={<FormattedMessage id="ui-calendar.deleteQuestionExceptionTitle" />}
             message={text}
             onConfirm={() => {
               this.deleteException();
@@ -1151,7 +1150,7 @@ class ExceptionWrapper extends React.Component {
             onCancel={() => {
               this.setState({ deleteQuestion: false });
             }}
-            confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
+            confirmLabel={<FormattedMessage id="ui-calendar.deleteButton" />}
           />;
       }
 
@@ -1166,7 +1165,7 @@ class ExceptionWrapper extends React.Component {
           <ConfirmationModal
             id="exite-confirmation"
             open={this.state.errorEditorClose}
-            heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
+            heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
             message={confirmationMessageClose}
             onConfirm={() => {
               this.setState({
@@ -1194,7 +1193,7 @@ class ExceptionWrapper extends React.Component {
             onCancel={() => {
               this.setState({ errorEditorClose: false });
             }}
-            confirmLabel={CalendarUtils.translateToString('ui-calendar.closeWithoutSaving', this.props.stripes.intl)}
+            confirmLabel={<FormattedMessage id="ui-calendar.closeWithoutSaving" />}
           />;
       }
 
@@ -1209,7 +1208,7 @@ class ExceptionWrapper extends React.Component {
           <ConfirmationModal
             id="exite-confirmation"
             open={this.state.errorExceptionExit}
-            heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
+            heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
             message={confirmationMessageExit}
             onConfirm={() => {
               return this.props.onClose();
@@ -1217,7 +1216,7 @@ class ExceptionWrapper extends React.Component {
             onCancel={() => {
               this.setState({ errorExceptionExit: false });
             }}
-            confirmLabel={CalendarUtils.translateToString('ui-calendar.exitWithoutSaving', this.props.stripes.intl)}
+            confirmLabel={<FormattedMessage id="ui-calendar.exitWithoutSaving" />}
           />;
       }
       return (

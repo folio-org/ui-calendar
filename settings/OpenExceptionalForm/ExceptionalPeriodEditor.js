@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import { FormattedMessage } from 'react-intl';
 import {
   Button,
   Col,
@@ -16,8 +17,6 @@ import CalendarUtils from '../../CalendarUtils';
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
       servicePoints: PropTypes.object.isRequired,
-      stripes: PropTypes.object,
-      intl: PropTypes.object,
       allDay: PropTypes.bool.isRequired,
       allSelector: PropTypes.object.isRequired,
       setStartDate: PropTypes.func.isRequired,
@@ -165,8 +164,7 @@ class ExceptionalPeriodEditor extends React.Component {
 
         name="item.startDate"
         component={Datepicker}
-        label={CalendarUtils.translateToString('ui-calendar.validFrom', this.props.stripes.intl)}
-        dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
+        label={<FormattedMessage id="ui-calendar.validFrom" />}
         onChange={this.setStartDate}
         required
       />;
@@ -174,8 +172,7 @@ class ExceptionalPeriodEditor extends React.Component {
       const endDate = <Field
         name="item.endDate"
         component={Datepicker}
-        label={CalendarUtils.translateToString('ui-calendar.validTo', this.props.stripes.intl)}
-        dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
+        label={<FormattedMessage id="ui-calendar.validTo" />}
         onChange={this.setEndDate}
         required
       />;
@@ -183,7 +180,7 @@ class ExceptionalPeriodEditor extends React.Component {
       const nameField = <Field
         name="item.periodName"
         component={TextField}
-        label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
+        label={<FormattedMessage id="ui-calendar.name" />}
         onChange={this.setName}
         required
       />;
@@ -194,14 +191,14 @@ class ExceptionalPeriodEditor extends React.Component {
           <Button
             onClick={() => { this.allSelectorHandle(false); }}
           >
-            {CalendarUtils.translateToString('ui-calendar.deselectAll', this.props.stripes.intl)}
+            <FormattedMessage id="ui-calendar.deselectAll" />
           </Button>;
       } else {
         allSelector =
           <Button
             onClick={() => { this.allSelectorHandle(true); }}
           >
-            {CalendarUtils.translateToString('ui-calendar.selectAll', this.props.stripes.intl)}
+            <FormattedMessage id="ui-calendar.selectAll" />
           </Button>;
       }
 
@@ -215,7 +212,7 @@ class ExceptionalPeriodEditor extends React.Component {
                   <Field
                     name="item.openingTime"
                     component={Timepicker}
-                    label={CalendarUtils.translateToString('ui-calendar.openingTime', this.props.stripes.intl)}
+                    label={<FormattedMessage id="ui-calendar.openingTime" />}
                     onChange={this.setStartTime}
                   />
                 </div>
@@ -227,7 +224,7 @@ class ExceptionalPeriodEditor extends React.Component {
                   <Field
                     name="item.closingTime"
                     component={Timepicker}
-                    label={CalendarUtils.translateToString('ui-calendar.closingTime', this.props.stripes.intl)}
+                    label={<FormattedMessage id="ui-calendar.closingTime" />}
                     onChange={this.setEndTime}
                   />
                 </div>
@@ -239,14 +236,14 @@ class ExceptionalPeriodEditor extends React.Component {
       let checkbox = null;
       if (this.props.editor.closed === true) {
         checkbox = <Checkbox
-          label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
+          label={<FormattedMessage id="ui-calendar.settings.allDay" />}
           onChange={() => this.setAllDay()}
           checked={this.getAllday()}
           disabled
         />;
       } else {
         checkbox = <Checkbox
-          label={CalendarUtils.translateToString('ui-calendar.settings.allDay', this.props.stripes.intl)}
+          label={<FormattedMessage id="ui-calendar.settings.allDay" />}
           onChange={() => this.setAllDay()}
           checked={this.getAllday()}
         />;
@@ -273,7 +270,7 @@ class ExceptionalPeriodEditor extends React.Component {
           <Row>
             <Col>
               <div>
-                {CalendarUtils.translateToString('ui-calendar.settings.openingPeriodEnd', this.props.stripes.intl)}
+                <FormattedMessage id="ui-calendar.settings.openingPeriodEnd" />
               </div>
               <List
                 items={items}
@@ -292,7 +289,7 @@ class ExceptionalPeriodEditor extends React.Component {
             <Col>
               <Row>
                 <Checkbox
-                  label={CalendarUtils.translateToString('ui-calendar.settings.closed', this.props.stripes.intl)}
+                  label={<FormattedMessage id="ui-calendar.settings.closed" />}
                   onChange={() => this.setClosed()}
                 />
               </Row>

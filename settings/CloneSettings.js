@@ -5,10 +5,6 @@ import { Checkbox, Headline, List, Pane } from '@folio/stripes/components';
 class CloneSettings extends React.Component {
     static propTypes = {
       onToggle: PropTypes.func.isRequired,
-      stripes: PropTypes.shape({
-        connect: PropTypes.func.isRequired,
-        intl: PropTypes.object.isRequired,
-      }).isRequired,
     };
 
     static manifest = Object.freeze({

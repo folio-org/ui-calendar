@@ -1,5 +1,5 @@
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { injectIntl, intlShape, FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Pane, Paneset, Row, Col } from '@folio/stripes/components';
@@ -11,6 +11,7 @@ import ErrorBoundary from './ErrorBoundary';
 
 class UiCalendar extends React.Component {
   static propTypes = {
+    intl: intlShape.isRequired,
     resources: PropTypes.shape({
       calendarEvent: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -22,9 +23,6 @@ class UiCalendar extends React.Component {
         reset: PropTypes.func,
       }),
     }),
-    stripes: PropTypes.shape({
-      locale: PropTypes.string,
-    }).isRequired,
   };
 
   static manifest = Object.freeze({
@@ -82,6 +80,9 @@ class UiCalendar extends React.Component {
   }
 
   render() {
+    const {
+      intl: { locale }
+    } = this.props;
     const views = [
       BigCalendar.Views.MONTH,
       BigCalendar.Views.WEEK,
@@ -97,7 +98,7 @@ class UiCalendar extends React.Component {
         mappedEvent.endDate = new Date(event.endDate);
 
         const eventTitleTranslationKey = `ui-calendar.settings.event_type.${event.eventType.toLowerCase()}`;
-        const eventTitleTranslation = this.props.stripes.intl.formatMessage({ id: eventTitleTranslationKey });
+        const eventTitleTranslation = <FormattedMessage id={eventTitleTranslationKey} />;
 
         if (eventTitleTranslationKey !== eventTitleTranslation) {
           mappedEvent.eventType = eventTitleTranslation;
@@ -147,7 +148,7 @@ class UiCalendar extends React.Component {
               titleAccessor="eventType"
               views={views}
               resources={[null]}
-              culture={this.props.stripes.locale}
+              culture={locale}
               messages={messages}
               onNavigate={this.navigate}
               onView={this.changeView}
@@ -162,7 +163,7 @@ class UiCalendar extends React.Component {
             defaultWidth="fill"
             height="100%"
             fluidContentWidth
-            paneTitle={this.props.stripes.intl.formatMessage({ id: 'ui-calendar.main.eventDetails' })}
+            paneTitle={<FormattedMessage id="ui-calendar.main.eventDetails" />}
             dismissible
             onClose={this.handleClose}
           >
@@ -194,4 +195,4 @@ class UiCalendar extends React.Component {
   }
 }
 
-export default UiCalendar;
+export default injectIntl(UiCalendar);

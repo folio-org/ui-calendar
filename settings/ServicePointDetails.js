@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import {
   Button,
   Col,
@@ -14,7 +15,6 @@ import moment from 'moment';
 import BigCalendar from '@folio/react-big-calendar/lib';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
-import CalendarUtils from '../CalendarUtils';
 import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 
 class ServicePointDetails extends React.Component {
@@ -94,6 +94,7 @@ class ServicePointDetails extends React.Component {
   }
 
   displayCurrentPeriod() {
+    const { intl: { formatMessage } } = this.props;
     let res;
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
@@ -101,8 +102,8 @@ class ServicePointDetails extends React.Component {
       const end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
       if (moment() > start && moment() < end) {
         res = {
-          startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
-          endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
+          startDate: start.format(formatMessage('ui-calendar.dateFormat')),
+          endDate: end.format(formatMessage('ui-calendar.dateFormat')),
           name: openingPeriod.name,
           openingDays: openingPeriod.openingDays,
           id: openingPeriod.id
@@ -113,6 +114,7 @@ class ServicePointDetails extends React.Component {
   }
 
   displayNextPeriod() {
+    const { intl: { formatMessage } } = this.props;
     const displayPeriods = [];
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
@@ -121,8 +123,8 @@ class ServicePointDetails extends React.Component {
       if (!(moment() > start && moment() < end) && start > new Date()) {
         displayPeriods.push({
           id: openingPeriod.id,
-          startDate: start.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
-          endDate: end.format(CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)),
+          startDate: start.format(formatMessage('ui-calendar.dateFormat')),
+          endDate: end.format(formatMessage('ui-calendar.dateFormat')),
           name: openingPeriod.name
         });
       }
@@ -176,7 +178,7 @@ class ServicePointDetails extends React.Component {
     if (this.state.currentPeriod) {
       currentP =
         <KeyValue
-          label={CalendarUtils.translate('ui-calendar.current')}
+          label={<FormattedMessage id="ui-calendar.current" />}
           value={
             <div
               className="periods"
@@ -195,43 +197,43 @@ class ServicePointDetails extends React.Component {
             <div className="seven-cols">
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.sunDayShort')}
+                  label={<FormattedMessage id="ui-calendar.sunDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[0])}
                 />
               </div>
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.monDayShort')}
+                  label={<FormattedMessage id="ui-calendar.monDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[1])}
                 />
               </div>
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.tueDayShort')}
+                  label={<FormattedMessage id="ui-calendar.tueDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[2])}
                 />
               </div>
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.wedDayShort')}
+                  label={<FormattedMessage id="ui-calendar.wedDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[3])}
                 />
               </div>
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.thuDayShort')}
+                  label={<FormattedMessage id="ui-calendar.thuDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[4])}
                 />
               </div>
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.friDayShort')}
+                  label={<FormattedMessage id="ui-calendar.friDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[5])}
                 />
               </div>
               <div className="col-sm-1">
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.satDayShort')}
+                  label={<FormattedMessage id="ui-calendar.satDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[6])}
                 />
               </div>
@@ -261,7 +263,7 @@ class ServicePointDetails extends React.Component {
               size="small"
               margin="large"
             >
-              {CalendarUtils.translate('ui-calendar.nextPeriod')}
+              <FormattedMessage id="ui-calendar.nextPeriod" />
             </Headline>
             <List
               items={this.state.nextPeriods}
@@ -281,22 +283,22 @@ class ServicePointDetails extends React.Component {
             <Row>
               <Col xs>
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.name')}
+                  label={<FormattedMessage id="ui-calendar.name" />}
                   value={servicePoint.name}
                 />
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.code')}
+                  label={<FormattedMessage id="ui-calendar.code" />}
                   value={servicePoint.code}
                 />
                 <KeyValue
-                  label={CalendarUtils.translate('ui-calendar.settings.locations.discoveryDisplayName')}
+                  label={<FormattedMessage id="ui-calendar.settings.locations.discoveryDisplayName" />}
                   value={servicePoint.discoveryDisplayName}
                 />
                 <Headline
                   size="small"
                   margin="large"
                 >
-                  {CalendarUtils.translate('ui-calendar.regularLibraryHours')}
+                  <FormattedMessage id="ui-calendar.regularLibraryHours" />
                 </Headline>
                 {currentP}
 
@@ -307,12 +309,12 @@ class ServicePointDetails extends React.Component {
             <Row>
               <Col xs={4}>
                 <Button onClick={() => this.clickNewPeriod()}>
-                  {CalendarUtils.translate('ui-calendar.newButton')}
+                  <FormattedMessage id="ui-calendar.newButton" />
                 </Button>
               </Col>
               <Col xs={6}>
                 <Button disabled>
-                  {CalendarUtils.translate('ui-calendar.cloneSettings')}
+                  <FormattedMessage id="ui-calendar.cloneSettings" />
                 </Button>
               </Col>
             </Row>
@@ -323,10 +325,10 @@ class ServicePointDetails extends React.Component {
                   size="small"
                   margin="large"
                 >
-                  {CalendarUtils.translate('ui-calendar.actualLibraryHours')}
+                  <FormattedMessage id="ui-calendar.actualLibraryHours" />
                 </Headline>
 
-                <p>{CalendarUtils.translate('ui-calendar.regularOpeningHoursWithExceptions')}</p>
+                <p><FormattedMessage id="ui-calendar.regularOpeningHoursWithExceptions" /></p>
                 <div className="add-exceptions-icon-wrapper">
                   <div className="icon-button">
                     <Button onClick={() => this.clickOpenExeptions()}>
@@ -335,7 +337,7 @@ class ServicePointDetails extends React.Component {
                         size="medium"
                         iconClassName="calendar-icon"
                       />
-                      {CalendarUtils.translate('ui-calendar.openCalendarExceptions')}
+                      <FormattedMessage id="ui-calendar.openCalendarExceptions" />
                     </Button>
                   </div>
                 </div>
@@ -345,7 +347,7 @@ class ServicePointDetails extends React.Component {
 
           <Layer
             isOpen={this.state.newPeriodLayer.isOpen}
-            label={this.props.stripes.intl.formatMessage({ id: 'stripes-core.label.editEntry' }, { entry: this.props.entryLabel })}
+            label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
             container={document.getElementById('ModuleContainer')}
           >
             <OpeningPeriodFormWrapper
@@ -360,7 +362,7 @@ class ServicePointDetails extends React.Component {
 
           <Layer
             isOpen={this.state.modifyPeriodLayer.isOpen}
-            label={this.props.stripes.intl.formatMessage({ id: 'stripes-core.label.editEntry' }, { entry: this.props.entryLabel })}
+            label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
             container={document.getElementById('ModuleContainer')}
           >
             <OpeningPeriodFormWrapper
@@ -374,7 +376,7 @@ class ServicePointDetails extends React.Component {
           </Layer>
           <Layer
             isOpen={this.state.openExceptions.isOpen}
-            label={this.props.stripes.intl.formatMessage({ id: 'stripes-core.label.editEntry' }, { entry: this.props.entryLabel })}
+            label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
             container={document.getElementById('ModuleContainer')}
           >
 
@@ -403,10 +405,7 @@ class ServicePointDetails extends React.Component {
 
 ServicePointDetails.propTypes = {
   initialValues: PropTypes.object,
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-    connect: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   resources: PropTypes.shape({
     periods: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
@@ -415,4 +414,4 @@ ServicePointDetails.propTypes = {
 };
 
 
-export default ServicePointDetails;
+export default injectIntl(ServicePointDetails);

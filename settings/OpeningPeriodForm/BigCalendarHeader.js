@@ -1,6 +1,6 @@
-import { Button, Headline, Row, Col } from '@folio/stripes/components';
 import React from 'react';
-import CalendarUtils from '../../CalendarUtils';
+import { FormattedMessage } from 'react-intl';
+import { Button, Headline, Row, Col } from '@folio/stripes/components';
 
 class BigCalendarHeader extends React.Component {
   render() {
@@ -9,16 +9,16 @@ class BigCalendarHeader extends React.Component {
         <Row>
           <Col xs={6}>
             <Headline>
-              {CalendarUtils.translate('ui-calendar.regularLibraryHoursCalendar')}
+              <FormattedMessage id="ui-calendar.regularLibraryHoursCalendar" />
             </Headline>
           </Col>
           <Col xs={6} className="new-period-buttons">
 
             <Button disabled>
-              {CalendarUtils.translate('ui-calendar.selectTemplate')}
+              <FormattedMessage id="ui-calendar.selectTemplate" />
             </Button>
             <Button disabled>
-              {CalendarUtils.translate('ui-calendar.copy')}
+              <FormattedMessage id="ui-calendar.copy" />
             </Button>
           </Col>
         </Row>
