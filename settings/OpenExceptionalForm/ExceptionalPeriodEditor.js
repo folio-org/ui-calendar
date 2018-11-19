@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import Button from '@folio/stripes-components/lib/Button';
-import { Col, Row } from '@folio/stripes-components/lib/LayoutGrid';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import Datepicker from '@folio/stripes-components/lib/Datepicker/Datepicker';
-import Textfield from '@folio/stripes-components/lib/TextField';
-import List from '@folio/stripes-components/lib/List';
-import Timepicker from '@folio/stripes-components/lib/Timepicker';
+import {
+  Button,
+  Col,
+  Row,
+  Checkbox,
+  Datepicker,
+  TextField,
+  List,
+  Timepicker
+} from '@folio/stripes/components';
 import CalendarUtils from '../../CalendarUtils';
 
 class ExceptionalPeriodEditor extends React.Component {
@@ -179,7 +182,7 @@ class ExceptionalPeriodEditor extends React.Component {
 
       const nameField = <Field
         name="item.periodName"
-        component={Textfield}
+        component={TextField}
         label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
         onChange={this.setName}
         required

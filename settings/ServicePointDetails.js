@@ -11,7 +11,7 @@ import {
   Row
 } from '@folio/stripes/components';
 import moment from 'moment';
-import BigCalendar from '@folio/react-big-calendar/src';
+import BigCalendar from '@folio/react-big-calendar/lib';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import CalendarUtils from '../CalendarUtils';

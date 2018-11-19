@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Opening hours",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
@@ -112,9 +112,8 @@
     "webpack": "1.11.0"
   },
   "dependencies": {
-    "@folio/react-big-calendar": "^1.0.1",
+    "@folio/react-big-calendar": "^2.0.0",
     "@folio/react-intl-safe-html": "^1.0.2",
-    "@folio/stripes-components": "^4.2.2000575",
     "css-loader": "^0.28.11",
     "dateformat": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
