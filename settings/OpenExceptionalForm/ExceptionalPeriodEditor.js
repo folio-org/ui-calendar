@@ -12,7 +12,6 @@ import {
   List,
   Timepicker
 } from '@folio/stripes/components';
-import CalendarUtils from '../../CalendarUtils';
 
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
