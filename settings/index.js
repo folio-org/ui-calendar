@@ -1,6 +1,6 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Settings } from '@folio/stripes/smart-components';
-import CalendarUtils from '../CalendarUtils';
 
 import LibraryHours from './LibraryHours';
 
@@ -13,12 +13,12 @@ const pages = [
 ];
 
 
-function getPages(pageDefinitions, props) {
+function getPages(pageDefinitions) {
   const routes = [];
   pageDefinitions.forEach((page) => {
     routes.push({
       route: page.route,
-      label: props.stripes.intl.formatMessage({ id: page.labelKey }),
+      label: <FormattedMessage id={page.labelKey} />,
       component: page.component,
     });
   });
@@ -27,6 +27,6 @@ function getPages(pageDefinitions, props) {
 
 export default props => <Settings
   {...props}
-  pages={getPages(pages, props)}
-  paneTitle={CalendarUtils.translateToString('ui-calendar.settings.calendar', props.stripes.intl)}
+  pages={getPages(pages)}
+  paneTitle={<FormattedMessage id="ui-calendar.settings.calendar" />}
 />;

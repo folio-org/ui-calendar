@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Headline, IconButton, Row, Col } from '@folio/stripes/components';
 import PropTypes from 'prop-types';
-import CalendarUtils from '../../CalendarUtils';
+import { FormattedMessage } from 'react-intl';
 
 class FromHeader extends React.Component {
     static propTypes = {
@@ -13,21 +13,31 @@ class FromHeader extends React.Component {
     render() {
       let disabled;
       if (this.props.modifyPeriod) {
-        disabled = <Button onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
+        disabled = (
+          <Button onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">
+            <FormattedMessage id="ui-calendar.deleteButton" />
+          </Button>
+        );
       } else {
-        disabled = <Button disabled onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">{CalendarUtils.translate('ui-calendar.deleteButton')}</Button>;
+        disabled = (
+          <Button disabled onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">
+            <FormattedMessage id="ui-calendar.deleteButton" />
+          </Button>
+        );
       }
       let title;
       if (this.props.modifyPeriod) {
-        title =
+        title = (
           <Headline size="large" margin="medium" tag="h3">
-            {CalendarUtils.translate('ui-calendar.modifyRegularLibraryValidityPeriod')}
-          </Headline>;
+            <FormattedMessage id="ui-calendar.modifyRegularLibraryValidityPeriod" />
+          </Headline>
+        );
       } else {
-        title =
+        title = (
           <Headline size="large" margin="medium" tag="h3">
-            {CalendarUtils.translate('ui-calendar.regularLibraryValidityPeriod')}
-          </Headline>;
+            <FormattedMessage id="ui-calendar.regularLibraryValidityPeriod" />
+          </Headline>
+        );
       }
 
       return (
@@ -49,8 +59,12 @@ class FromHeader extends React.Component {
             <Col sm={3} className="new-period-buttons">
 
               {disabled}
-              <Button type="submit" buttonStyle="default">{CalendarUtils.translate('ui-calendar.saveButton')}</Button>
-              <Button disabled buttonStyle="primary">{CalendarUtils.translate('ui-calendar.savesAsTemplate')}</Button>
+              <Button type="submit" buttonStyle="default">
+                <FormattedMessage id="ui-calendar.saveButton" />
+              </Button>
+              <Button disabled buttonStyle="primary">
+                <FormattedMessage id="ui-calendar.savesAsTemplate" />
+              </Button>
 
             </Col>
           </Row>

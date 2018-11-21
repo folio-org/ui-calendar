@@ -1,8 +1,8 @@
 import { Datepicker, TextField, Row, Col } from '@folio/stripes/components';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import CalendarUtils from '../../CalendarUtils';
 
 class InputFields extends React.Component {
     static propTypes = {
@@ -10,8 +10,6 @@ class InputFields extends React.Component {
       onNameChange: PropTypes.func.isRequired,
       nameValue: PropTypes.string.isRequired,
       modifyPeriod: PropTypes.object,
-      stripes: PropTypes.object,
-      intl: PropTypes.object
     };
 
 
@@ -70,8 +68,7 @@ class InputFields extends React.Component {
         modifyStart = <Field
           name="item.startDate"
           component={Datepicker}
-          label={CalendarUtils.translateToString('ui-calendar.validFrom', this.props.stripes.intl)}
-          dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
+          label={<FormattedMessage id="ui-calendar.validFrom" />}
           onChange={this.setStartDate}
           required
         />;
@@ -79,26 +76,25 @@ class InputFields extends React.Component {
         modifyEnd = <Field
           name="item.endDate"
           component={Datepicker}
-          label={CalendarUtils.translateToString('ui-calendar.validTo', this.props.stripes.intl)}
-          dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
+          label={<FormattedMessage id="ui-calendar.validTo" />}
           onChange={this.setEndDate}
           required
         />;
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
           modifyName = <Field
-            label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
+            label={<FormattedMessage id="ui-calendar.name" />}
             value={this.props.modifyPeriod.name || ''}
             name="periodName"
             id="input-period-name"
             component={TextField}
             onChange={this.setName}
-            error={CalendarUtils.translateToString('ui-calendar.fillIn', this.props.stripes.intl)}
+            error={<FormattedMessage id="ui-calendar.fillIn" />}
             required
           />;
         } else {
           modifyName = <Field
-            label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
+            label={<FormattedMessage id="ui-calendar.name" />}
             value={this.props.modifyPeriod.name || ''}
             name="periodName"
             id="input-period-name"
@@ -111,8 +107,7 @@ class InputFields extends React.Component {
         modifyStart = <Field
           name="item.startDate"
           component={Datepicker}
-          label={CalendarUtils.translateToString('ui-calendar.validFrom', this.props.stripes.intl)}
-          dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
+          label={<FormattedMessage id="ui-calendar.validFrom" />}
           onChange={this.setStartDate}
           required
         />;
@@ -120,8 +115,7 @@ class InputFields extends React.Component {
         modifyEnd = <Field
           name="item.endDate"
           component={Datepicker}
-          label={CalendarUtils.translateToString('ui-calendar.validTo', this.props.stripes.intl)}
-          dateFormat={CalendarUtils.translateToString('ui-calendar.dateFormat', this.props.stripes.intl)}
+          label={<FormattedMessage id="ui-calendar.validTo" />}
           onChange={this.setEndDate}
           required
         />;
@@ -131,19 +125,19 @@ class InputFields extends React.Component {
           modifyName =
             <Field
               name="periodName"
-              llabel={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
+              label={<FormattedMessage id="ui-calendar.name" />}
               id="input-period-name"
               onBlur={this.onBlur}
               onChange={this.setName}
               required
-              error={CalendarUtils.translateToString('ui-calendar.fillIn', this.props.stripes.intl)}
+              error={<FormattedMessage id="ui-calendar.fillIn" />}
               component={TextField}
             />;
         } else {
           modifyName =
             <Field
               name="periodName"
-              label={CalendarUtils.translateToString('ui-calendar.name', this.props.stripes.intl)}
+              label={<FormattedMessage id="ui-calendar.name" />}
               id="input-period-name"
               onBlur={this.onBlur}
               onChange={this.setName}

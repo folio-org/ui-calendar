@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 import { Button, ConfirmationModal, Modal } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import FromHeader from './FromHeader';
@@ -29,9 +30,6 @@ class OpeningPeriodFormWrapper extends React.Component {
         period: PropTypes.shape({
           POST: PropTypes.func.isRequired,
         }),
-      }),
-      stripes: PropTypes.shape({
-        intl: PropTypes.object.isRequired,
       }),
     };
 
@@ -126,14 +124,14 @@ class OpeningPeriodFormWrapper extends React.Component {
       const { parentMutator, servicePointId } = this.props;
       if ((moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) && (moment(this.state.startDate).toDate() === moment(this.state.endDate).toDate())) {
         this.setState({
-          errorModalText: CalendarUtils.translateToString('ui-calendar.wrongStartEndDate', this.props.stripes.intl),
+          errorModalText: <FormattedMessage id="ui-calendar.wrongStartEndDate" />,
         });
         this.render();
         return null;
       }
       if (this.state.event === null || this.state.event === undefined || this.state.event.length === 0) {
         this.setState({
-          errorModalText: CalendarUtils.translateToString('ui-calendar.noEvents', this.props.stripes.intl),
+          errorModalText: <FormattedMessage id="ui-calendar.noEvents" />,
         });
         this.render();
         return null;
@@ -215,7 +213,7 @@ class OpeningPeriodFormWrapper extends React.Component {
         <ConfirmationModal
           id="delete-confirmation"
           open={confirmDelete}
-          heading={CalendarUtils.translateToString('ui-calendar.deleteQuestionTitle', this.props.stripes.intl)}
+          heading={<FormattedMessage id="ui-calendar.deleteQuestionTitle" />}
           message={confirmationMessageDelete}
           onConfirm={() => {
             this.handleDelete();
@@ -223,14 +221,14 @@ class OpeningPeriodFormWrapper extends React.Component {
           onCancel={() => {
             this.setState({ confirmDelete: false });
           }}
-          confirmLabel={CalendarUtils.translateToString('ui-calendar.deleteButton', this.props.stripes.intl)}
+          confirmLabel={<FormattedMessage id="ui-calendar.deleteButton" />}
         />;
 
       const errorExit =
         <ConfirmationModal
           id="exite-confirmation"
           open={confirmExit}
-          heading={CalendarUtils.translateToString('ui-calendar.exitQuestionTitle', this.props.stripes.intl)}
+          heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
           message={confirmationMessageExit}
           onConfirm={() => {
             return this.props.onClose();
@@ -238,7 +236,7 @@ class OpeningPeriodFormWrapper extends React.Component {
           onCancel={() => {
             this.setState({ confirmExit: false });
           }}
-          confirmLabel={CalendarUtils.translateToString('ui-calendar.exitWithoutSaving', this.props.stripes.intl)}
+          confirmLabel={<FormattedMessage id="ui-calendar.exitWithoutSaving" />}
         />;
       if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
         const footer = (
@@ -247,7 +245,7 @@ class OpeningPeriodFormWrapper extends React.Component {
               onClick={this.closeErrorModal}
               ButtonStyle="primary"
             >
-              {CalendarUtils.translateToString('ui-calendar.close', this.props.stripes.intl)}
+              <FormattedMessage id="ui-calendar.close" />
             </Button>
           </Fragment>
         );
@@ -257,7 +255,7 @@ class OpeningPeriodFormWrapper extends React.Component {
             dismissible
             onClose={this.closeErrorModal}
             open
-            label={CalendarUtils.translateToString('ui-calendar.invalidData', this.props.stripes.intl)}
+            label={<FormattedMessage id="ui-calendar.invalidData" />}
             footer={footer}
           >
             <p>{this.state.errorModalText}</p>

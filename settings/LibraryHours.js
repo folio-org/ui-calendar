@@ -116,9 +116,6 @@ LibraryHours.propTypes = {
       replace: PropTypes.func,
     }),
   }).isRequired,
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }),
 };
 
 

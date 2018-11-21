@@ -9,7 +9,6 @@ class CalendarRouting extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      locale: PropTypes.string.isRequired,
     }).isRequired,
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,

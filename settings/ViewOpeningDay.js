@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import dateFormat from 'dateformat';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Row, Col } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import CalendarUtils from '../CalendarUtils';
 
 function calculateTime(startTime, endTime, open, allDay) {
   if (!open) {
@@ -32,8 +31,8 @@ function ViewOpeningDay(props) {
   const openingDays = props.initialValues;
 
   const eventTypeOptions = {
-    'OPENING_DAY': CalendarUtils.translate('ui-calendar.settings.event_type.opening_day'),
-    'EXCEPTION': CalendarUtils.translate('ui-calendar.settings.event_type.exception'),
+    'OPENING_DAY': <FormattedMessage id="ui-calendar.settings.event_type.opening_day" />,
+    'EXCEPTION': <FormattedMessage id="ui-calendar.settings.event_type.exception" />,
   };
 
   return (
