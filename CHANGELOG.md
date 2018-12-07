@@ -42,3 +42,8 @@
 ## [2.0.4] (2018.09.20)
 
 * Update reac-big-calendar dependency - UICAL-42
+
+## [2.0.6] (2018.12.07)
+
+* Replace stripes intl with react-intl - UICAL-50
+* Update ui-calendar translations - UICAL-51
