@@ -2,7 +2,13 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { injectIntl, intlShape, FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pane, Paneset, Row, Col } from '@folio/stripes/components';
+import {
+  Pane,
+  Paneset,
+  Row,
+  Col,
+  Icon,
+} from '@folio/stripes/components';
 import BigCalendar from '@folio/react-big-calendar';
 import moment from 'moment';
 import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
@@ -122,7 +128,11 @@ class UiCalendar extends React.Component {
       today: (<SafeHTMLMessage id="ui-calendar.today" />),
       agenda: (<SafeHTMLMessage id="ui-calendar.agenda" />),
 
-      showMore: total => (<SafeHTMLMessage id="ui-calendar.showMore" values={{ total }} />),
+      showMore: total => (
+        <Icon icon="plus-sign">
+          <SafeHTMLMessage id="ui-calendar.showMore" values={{ total }} />
+        </Icon>
+      ),
     };
 
     const paneTitle = (

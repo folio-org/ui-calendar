@@ -1001,7 +1001,9 @@ class ExceptionWrapper extends React.Component {
               buttonStyle="primary"
               onClick={() => { this.setState({ openEditor: true }); }}
             >
-              <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
+              <Icon icon="plus-sign">
+                <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
+              </Icon>
             </Button>
           </div>
         </PaneMenu>;
