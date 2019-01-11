@@ -123,8 +123,8 @@ class ServicePointDetails extends React.Component {
       if (!(moment() > start && moment() < end) && start > new Date()) {
         displayPeriods.push({
           id: openingPeriod.id,
-          startDate: start.format(formatMessage('ui-calendar.dateFormat')),
-          endDate: end.format(formatMessage('ui-calendar.dateFormat')),
+          startDate: start.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
+          endDate: end.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
           name: openingPeriod.name
         });
       }
