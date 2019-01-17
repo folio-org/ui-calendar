@@ -102,8 +102,8 @@ class ServicePointDetails extends React.Component {
       const end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
       if (moment() > start && moment() < end) {
         res = {
-          startDate: start.format(formatMessage('ui-calendar.dateFormat')),
-          endDate: end.format(formatMessage('ui-calendar.dateFormat')),
+          startDate: start.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
+          endDate: end.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
           name: openingPeriod.name,
           openingDays: openingPeriod.openingDays,
           id: openingPeriod.id
