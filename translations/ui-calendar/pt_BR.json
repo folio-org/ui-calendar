@@ -41,7 +41,7 @@
     "tomorrow": "amanhã",
     "today": "hoje",
     "agenda": "agenda",
-    "showMore": "+{total} mais",
+    "showMore": "{total} mais",
     "main.eventDetails": "Detalhes do evento",
     "settings.description_type": "Tipo",
     "settings.event_type.opening_day": "Período de Abertura Regular",
