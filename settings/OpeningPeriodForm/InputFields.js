@@ -71,6 +71,9 @@ class InputFields extends React.Component {
           label={<FormattedMessage id="ui-calendar.validFrom" />}
           onChange={this.setStartDate}
           required
+          timeZone="UTC"
+          backendDateStandard="YYYY-MM-DD"
+          dateFormat="MM/DD/YYYY"
         />;
 
         modifyEnd = <Field
@@ -79,6 +82,9 @@ class InputFields extends React.Component {
           label={<FormattedMessage id="ui-calendar.validTo" />}
           onChange={this.setEndDate}
           required
+          timeZone="UTC"
+          backendDateStandard="YYYY-MM-DD"
+          dateFormat="MM/DD/YYYY"
         />;
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
@@ -110,6 +116,9 @@ class InputFields extends React.Component {
           label={<FormattedMessage id="ui-calendar.validFrom" />}
           onChange={this.setStartDate}
           required
+          dateFormat="MM/DD/YYYY"
+          timeZone="UTC"
+          backendDateStandard="YYYY-MM-DD"
         />;
 
         modifyEnd = <Field
@@ -118,6 +127,9 @@ class InputFields extends React.Component {
           label={<FormattedMessage id="ui-calendar.validTo" />}
           onChange={this.setEndDate}
           required
+          dateFormat="MM/DD/YYYY"
+          timeZone="UTC"
+          backendDateStandard="YYYY-MM-DD"
         />;
 
 

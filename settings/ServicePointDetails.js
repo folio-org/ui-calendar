@@ -94,13 +94,20 @@ class ServicePointDetails extends React.Component {
   }
 
   displayCurrentPeriod() {
-    const { intl: { formatMessage } } = this.props;
+    const {
+      intl: {
+        formatMessage,
+      },
+    } = this.props;
+
     let res;
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
-      const start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
-      const end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
-      if (moment() > start && moment() < end) {
+      const start = moment.utc(openingPeriod.startDate);
+      const end = moment.utc(openingPeriod.endDate);
+      const now = moment.utc();
+
+      if (now > start && now < end) {
         res = {
           startDate: start.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
           endDate: end.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
@@ -114,13 +121,20 @@ class ServicePointDetails extends React.Component {
   }
 
   displayNextPeriod() {
-    const { intl: { formatMessage } } = this.props;
+    const {
+      intl: {
+        formatMessage,
+      },
+    } = this.props;
+
     const displayPeriods = [];
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
-      const start = moment(openingPeriod.startDate, 'YYYY-MM-DD');
-      const end = moment(openingPeriod.endDate, 'YYYY-MM-DD');
-      if (!(moment() > start && moment() < end) && start > new Date()) {
+      const start = moment.utc(openingPeriod.startDate);
+      const end = moment.utc(openingPeriod.endDate);
+      const now = moment.utc();
+
+      if (!(now > start && now < end) && start > new Date()) {
         displayPeriods.push({
           id: openingPeriod.id,
           startDate: start.format(formatMessage({ id: 'ui-calendar.dateFormat' })),

@@ -145,6 +145,8 @@ class ExceptionalPeriodEditor extends React.Component {
       return allday;
     }
 
+    trimTimezone = value => value.slice(0, value.lastIndexOf(':'));
+
     render() {
       const items = this.state.servicePoints;
       const itemFormatter = (item) => (
@@ -160,12 +162,13 @@ class ExceptionalPeriodEditor extends React.Component {
       );
       const isEmptyMessage = 'No items to show';
       const startDate = <Field
-
         name="item.startDate"
         component={Datepicker}
         label={<FormattedMessage id="ui-calendar.validFrom" />}
         onChange={this.setStartDate}
         required
+        timeZone="UTC"
+        backendDateStandard="YYYY-MM-DD"
       />;
 
       const endDate = <Field
@@ -174,6 +177,8 @@ class ExceptionalPeriodEditor extends React.Component {
         label={<FormattedMessage id="ui-calendar.validTo" />}
         onChange={this.setEndDate}
         required
+        timeZone="UTC"
+        backendDateStandard="YYYY-MM-DD"
       />;
 
       const nameField = <Field
@@ -213,6 +218,8 @@ class ExceptionalPeriodEditor extends React.Component {
                     component={Timepicker}
                     label={<FormattedMessage id="ui-calendar.openingTime" />}
                     onChange={this.setStartTime}
+                    timeZone="UTC"
+                    parse={this.trimTimezone}
                   />
                 </div>
               </Col>
@@ -225,6 +232,8 @@ class ExceptionalPeriodEditor extends React.Component {
                     component={Timepicker}
                     label={<FormattedMessage id="ui-calendar.closingTime" />}
                     onChange={this.setEndTime}
+                    timeZone="UTC"
+                    parse={this.trimTimezone}
                   />
                 </div>
               </Col>
