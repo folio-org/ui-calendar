@@ -1,11 +1,12 @@
 import { Datepicker, TextField, Row, Col } from '@folio/stripes/components';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
 
 class InputFields extends React.Component {
     static propTypes = {
+      intl: intlShape.isRequired,
       onDateChange: PropTypes.func.isRequired,
       onNameChange: PropTypes.func.isRequired,
       nameValue: PropTypes.string.isRequired,
@@ -61,6 +62,10 @@ class InputFields extends React.Component {
     }
 
     render() {
+      const { intl: {
+        formatMessage,
+      } } = this.props;
+
       let modifyStart;
       let modifyEnd;
       let modifyName;
@@ -73,7 +78,7 @@ class InputFields extends React.Component {
           required
           timeZone="UTC"
           backendDateStandard="YYYY-MM-DD"
-          dateFormat="MM/DD/YYYY"
+          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
         />;
 
         modifyEnd = <Field
@@ -84,7 +89,7 @@ class InputFields extends React.Component {
           required
           timeZone="UTC"
           backendDateStandard="YYYY-MM-DD"
-          dateFormat="MM/DD/YYYY"
+          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
         />;
 
         if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
@@ -116,9 +121,9 @@ class InputFields extends React.Component {
           label={<FormattedMessage id="ui-calendar.validFrom" />}
           onChange={this.setStartDate}
           required
-          dateFormat="MM/DD/YYYY"
           timeZone="UTC"
           backendDateStandard="YYYY-MM-DD"
+          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
         />;
 
         modifyEnd = <Field
@@ -127,9 +132,9 @@ class InputFields extends React.Component {
           label={<FormattedMessage id="ui-calendar.validTo" />}
           onChange={this.setEndDate}
           required
-          dateFormat="MM/DD/YYYY"
           timeZone="UTC"
           backendDateStandard="YYYY-MM-DD"
+          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
         />;
 
 
@@ -183,4 +188,4 @@ class InputFields extends React.Component {
 
 export default reduxForm({
   form: 'InputFields',
-})(InputFields);
+})(injectIntl(InputFields));

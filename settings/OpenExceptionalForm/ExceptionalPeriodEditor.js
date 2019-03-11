@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import {
   Button,
   Col,
@@ -15,6 +15,7 @@ import {
 
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
+      intl: PropTypes.isRequired,
       servicePoints: PropTypes.object.isRequired,
       allDay: PropTypes.bool.isRequired,
       allSelector: PropTypes.object.isRequired,
@@ -148,6 +149,12 @@ class ExceptionalPeriodEditor extends React.Component {
     trimTimezone = value => value.slice(0, value.lastIndexOf(':'));
 
     render() {
+      const {
+        intl: {
+          formatMessage,
+        },
+      } = this.props;
+
       const items = this.state.servicePoints;
       const itemFormatter = (item) => (
         <li>
@@ -169,6 +176,7 @@ class ExceptionalPeriodEditor extends React.Component {
         required
         timeZone="UTC"
         backendDateStandard="YYYY-MM-DD"
+        dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
       />;
 
       const endDate = <Field
@@ -179,6 +187,7 @@ class ExceptionalPeriodEditor extends React.Component {
         required
         timeZone="UTC"
         backendDateStandard="YYYY-MM-DD"
+        dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
       />;
 
       const nameField = <Field
@@ -320,4 +329,4 @@ class ExceptionalPeriodEditor extends React.Component {
 
 export default reduxForm({
   form: 'ExceptionalPeriodEditor',
-})(ExceptionalPeriodEditor);
+})(injectIntl(ExceptionalPeriodEditor));
