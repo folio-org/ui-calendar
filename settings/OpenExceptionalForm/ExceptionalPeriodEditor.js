@@ -15,7 +15,7 @@ import {
 
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
-      intl: PropTypes.isRequired,
+      intl: intlShape.isRequired,
       servicePoints: PropTypes.object.isRequired,
       allDay: PropTypes.bool.isRequired,
       allSelector: PropTypes.object.isRequired,
