@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import {
   Button,
   Col,
@@ -15,6 +15,7 @@ import {
 
 class ExceptionalPeriodEditor extends React.Component {
     static propTypes = {
+      intl: intlShape.isRequired,
       servicePoints: PropTypes.object.isRequired,
       allDay: PropTypes.bool.isRequired,
       allSelector: PropTypes.object.isRequired,
@@ -145,7 +146,15 @@ class ExceptionalPeriodEditor extends React.Component {
       return allday;
     }
 
+    trimTimezone = value => value.slice(0, value.lastIndexOf(':'));
+
     render() {
+      const {
+        intl: {
+          formatMessage,
+        },
+      } = this.props;
+
       const items = this.state.servicePoints;
       const itemFormatter = (item) => (
         <li>
@@ -160,12 +169,14 @@ class ExceptionalPeriodEditor extends React.Component {
       );
       const isEmptyMessage = 'No items to show';
       const startDate = <Field
-
         name="item.startDate"
         component={Datepicker}
         label={<FormattedMessage id="ui-calendar.validFrom" />}
         onChange={this.setStartDate}
         required
+        timeZone="UTC"
+        backendDateStandard="YYYY-MM-DD"
+        dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
       />;
 
       const endDate = <Field
@@ -174,6 +185,9 @@ class ExceptionalPeriodEditor extends React.Component {
         label={<FormattedMessage id="ui-calendar.validTo" />}
         onChange={this.setEndDate}
         required
+        timeZone="UTC"
+        backendDateStandard="YYYY-MM-DD"
+        dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
       />;
 
       const nameField = <Field
@@ -213,6 +227,8 @@ class ExceptionalPeriodEditor extends React.Component {
                     component={Timepicker}
                     label={<FormattedMessage id="ui-calendar.openingTime" />}
                     onChange={this.setStartTime}
+                    timeZone="UTC"
+                    parse={this.trimTimezone}
                   />
                 </div>
               </Col>
@@ -225,6 +241,8 @@ class ExceptionalPeriodEditor extends React.Component {
                     component={Timepicker}
                     label={<FormattedMessage id="ui-calendar.closingTime" />}
                     onChange={this.setEndTime}
+                    timeZone="UTC"
+                    parse={this.trimTimezone}
                   />
                 </div>
               </Col>
@@ -311,4 +329,4 @@ class ExceptionalPeriodEditor extends React.Component {
 
 export default reduxForm({
   form: 'ExceptionalPeriodEditor',
-})(ExceptionalPeriodEditor);
+})(injectIntl(ExceptionalPeriodEditor));
