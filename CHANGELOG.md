@@ -47,3 +47,11 @@
 
 * Replace stripes intl with react-intl - UICAL-50
 * Update ui-calendar translations - UICAL-51
+
+## [2.1.0](https://github.com/folio-org/ui-calendar/tree/v2.1.0) (2019-03-14)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.0.6...v2.1.0)
+
+* Update translation strings
+* Fix applying locale date format for whole module
+* Change BE interface version
+* Apply UTC time zone for date/time controls (UICAL-55)
