@@ -55,3 +55,9 @@
 * Fix applying locale date format for whole module
 * Change BE interface version
 * Apply UTC time zone for date/time controls (UICAL-55)
+
+## [2.1.1](https://github.com/folio-org/ui-calendar/tree/v2.1.1) (2019-03-15)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.1.0...v2.1.1)
+
+* Remove moment js convertation for string dates
+
