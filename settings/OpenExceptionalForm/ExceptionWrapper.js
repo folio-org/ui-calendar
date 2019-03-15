@@ -720,13 +720,13 @@ class ExceptionWrapper extends React.Component {
 
     getStart() {
       if (this.state.editor.startDate !== null && this.state.editor.startDate !== undefined && this.state.modifyEvent === true) {
-        return moment(this.state.editor.startDate).add(1, 'days').format('L');
+        return this.state.editor.startDate;
       } else return '';
     }
 
     getEnd() {
       if (this.state.editor.endDate !== null && this.state.editor.endDate !== undefined && this.state.modifyEvent === true) {
-        return moment(this.state.editor.endDate).add(1, 'days').format('L');
+        return this.state.editor.endDate;
       } else return '';
     }
 

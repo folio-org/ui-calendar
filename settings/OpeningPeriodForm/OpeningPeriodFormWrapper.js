@@ -170,7 +170,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     getStartDate() {
       let date = '';
       if (this.props.modifyPeriod) {
-        date = moment(this.props.modifyPeriod.startDate).add(1, 'days').format('L');
+        date = this.props.modifyPeriod.startDate;
       }
 
       return date;
@@ -179,7 +179,7 @@ class OpeningPeriodFormWrapper extends React.Component {
     getEndDate() {
       let date = '';
       if (this.props.modifyPeriod) {
-        date = moment(this.props.modifyPeriod.endDate).add(1, 'days').format('L');
+        date = this.props.modifyPeriod.endDate;
       }
       return date;
     }
