@@ -61,3 +61,8 @@
 
 * Remove moment js convertation for string dates
 
+## [2.1.2](https://github.com/folio-org/ui-calendar/tree/v2.1.2) (2019-03-29)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.1.1...v2.1.2)
+
+* Correct stripes dependency to `^2.0.0`
+
