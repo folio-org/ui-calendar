@@ -50,11 +50,11 @@ class InputFields extends React.Component {
     }
 
     setStartDate(e) {
-      this.props.onDateChange(true, this.parseDateToString(e));
+      this.props.onDateChange(true, this.parseDateToString(e.target.value));
     }
 
     setEndDate(e) {
-      this.props.onDateChange(false, this.parseDateToString(e));
+      this.props.onDateChange(false, this.parseDateToString(e.target.value));
     }
 
     setName(e) {

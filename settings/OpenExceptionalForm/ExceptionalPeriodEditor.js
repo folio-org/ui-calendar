@@ -77,12 +77,12 @@ class ExceptionalPeriodEditor extends React.Component {
     // }
 
     setStartDate(e) {
-      this.props.setStartDate(e);
+      this.props.setStartDate(e.target.value);
       // this.setModifyed;
     }
 
     setEndDate(e) {
-      this.props.setEndDate(e);
+      this.props.setEndDate(e.target.value);
       // this.setModifyed;
     }
 
