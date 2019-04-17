@@ -610,6 +610,7 @@ class ExceptionWrapper extends React.Component {
               endTime: prevState.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime,
               startTime: prevState.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime,
               allDay: prevState.openingAllPeriods[i].openingDays[0].openingDay.allDay,
+              closed: !prevState.openingAllPeriods[i].openingDays[0].openingDay.open,
             }
           }));
         }
@@ -790,7 +791,7 @@ class ExceptionWrapper extends React.Component {
                       }
                     ],
                     allDay: editor.allDay === undefined ? false : editor.allDay,
-                    open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                    open: editor.closed === undefined ? false : !editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                   }
                 }]
               };
@@ -835,7 +836,7 @@ class ExceptionWrapper extends React.Component {
                       }
                     ],
                     allDay: editor.allDay === undefined ? false : editor.allDay,
-                    open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                    open: editor.closed === undefined ? false : !editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                   }
                 }]
               };
@@ -857,7 +858,7 @@ class ExceptionWrapper extends React.Component {
                       }
                     ],
                     allDay: editor.allDay === undefined ? false : editor.allDay,
-                    open: editor.closed === undefined ? false : editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                    open: editor.closed === undefined ? false : !editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                   }
                 }]
               };
@@ -1086,7 +1087,7 @@ class ExceptionWrapper extends React.Component {
             setEndTime={this.setEndTime}
             setEditorServicePoints={this.setEditorServicePoints}
             allSelector={this.state.editor.allSelector}
-            open={this.state.editor.open}
+            closed={this.state.editor.closed}
             allDay={this.state.editor.allDay}
             editor={this.state.editor}
             isModify={this.state.modifyEvent}
