@@ -18,6 +18,7 @@ class ExceptionalPeriodEditor extends React.Component {
       intl: intlShape.isRequired,
       servicePoints: PropTypes.object.isRequired,
       allDay: PropTypes.bool.isRequired,
+      closed: PropTypes.bool.isRequired,
       allSelector: PropTypes.object.isRequired,
       setStartDate: PropTypes.func.isRequired,
       setEndDate: PropTypes.func.isRequired,
@@ -144,6 +145,10 @@ class ExceptionalPeriodEditor extends React.Component {
         allday = this.props.allDay;
       }
       return allday;
+    }
+
+    getClosed = () => {
+      return this.props.closed;
     }
 
     trimTimezone = value => value.slice(0, value.lastIndexOf(':'));
@@ -308,6 +313,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 <Checkbox
                   label={<FormattedMessage id="ui-calendar.settings.closed" />}
                   onChange={() => this.setClosed()}
+                  checked={this.getClosed()}
                 />
               </Row>
             </Col>
