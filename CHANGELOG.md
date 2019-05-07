@@ -66,3 +66,9 @@
 
 * Correct stripes dependency to `^2.0.0`
 
+## [2.1.3](https://github.com/folio-org/ui-calendar/tree/v2.1.3) (2019-05-07)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.1.2...v2.1.3)
+
+* Update ui-calendar translations
+* Fix sending of incorrect model to BE (UICAL-60)
+* Add BigTest setup 
