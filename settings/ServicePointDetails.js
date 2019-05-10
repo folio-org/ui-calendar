@@ -191,61 +191,87 @@ class ServicePointDetails extends React.Component {
     const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
     if (this.state.currentPeriod) {
       currentP =
-        <KeyValue
-          label={<FormattedMessage id="ui-calendar.current" />}
-          value={
-            <div
-              className="periods"
-              onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
-              onKeyDown={() => {}}
-              role="button"
-              tabIndex={0}
-            >
-              {this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
-            </div>}
-        />;
+        <div data-test-service-point-current-period>
+          <KeyValue
+            label={<FormattedMessage id="ui-calendar.current" />}
+            value={
+              <div
+                className="periods"
+                onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex={0}
+              >
+                {this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
+              </div>}
+          />
+        </div>;
 
       currentPTimes =
         <Row>
           <Col xs>
-            <div className="seven-cols">
-              <div className="col-sm-1">
+            <div
+              data-test-service-point-current-period-times
+              className="seven-cols"
+            >
+              <div
+                data-test-sunday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.sunDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[0])}
                 />
               </div>
-              <div className="col-sm-1">
+              <div
+                data-test-monday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.monDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[1])}
                 />
               </div>
-              <div className="col-sm-1">
+              <div
+                data-test-tuesday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.tueDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[2])}
                 />
               </div>
-              <div className="col-sm-1">
+              <div
+                data-test-wednesday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.wedDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[3])}
                 />
               </div>
-              <div className="col-sm-1">
+              <div
+                data-test-thursday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.thuDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[4])}
                 />
               </div>
-              <div className="col-sm-1">
+              <div
+                data-test-friday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.friDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[5])}
                 />
               </div>
-              <div className="col-sm-1">
+              <div
+                data-test-saturday
+                className="col-sm-1"
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-calendar.satDayShort" />}
                   value={this.getWeekdayOpeningHours(weekdays[6])}
@@ -269,51 +295,62 @@ class ServicePointDetails extends React.Component {
           {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
         </div>
       </li>);
+
     if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {
       nextPeriodDetails =
-        <Row>
-          <Col xs>
-            <Headline
-              size="small"
-              margin="large"
-            >
-              <FormattedMessage id="ui-calendar.nextPeriod" />
-            </Headline>
-            <List
-              items={this.state.nextPeriods}
-              itemFormatter={itemFormatter}
-            />
-          </Col>
-        </Row>;
+        <div data-test-service-point-next-period>
+          <Row>
+            <Col xs>
+              <Headline
+                size="small"
+                margin="large"
+              >
+                <FormattedMessage id="ui-calendar.nextPeriod" />
+              </Headline>
+              <List
+                items={this.state.nextPeriods}
+                itemFormatter={itemFormatter}
+              />
+            </Col>
+          </Row>
+        </div>;
     }
+
     BigCalendar.momentLocalizer(moment);
     const servicePoint = this.props.initialValues;
 
     if (!this.state.isPeriodsPending) {
       return (
-
         <ErrorBoundary>
           <div>
             <Row>
               <Col xs>
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.name" />}
-                  value={servicePoint.name}
-                />
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.code" />}
-                  value={servicePoint.code}
-                />
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.settings.locations.discoveryDisplayName" />}
-                  value={servicePoint.discoveryDisplayName}
-                />
-                <Headline
-                  size="small"
-                  margin="large"
-                >
-                  <FormattedMessage id="ui-calendar.regularLibraryHours" />
-                </Headline>
+                <div data-test-service-point-name>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-calendar.name" />}
+                    value={servicePoint.name}
+                  />
+                </div>
+                <div data-test-service-point-code>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-calendar.code" />}
+                    value={servicePoint.code}
+                  />
+                </div>
+                <div data-test-service-point-discovery-display-name>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-calendar.settings.locations.discoveryDisplayName" />}
+                    value={servicePoint.discoveryDisplayName}
+                  />
+                </div>
+                <div data-test-service-point-regular-library-hours>
+                  <Headline
+                    size="small"
+                    margin="large"
+                  >
+                    <FormattedMessage id="ui-calendar.regularLibraryHours" />
+                  </Headline>
+                </div>
                 {currentP}
 
               </Col>
@@ -322,40 +359,53 @@ class ServicePointDetails extends React.Component {
             {nextPeriodDetails}
             <Row>
               <Col xs={4}>
-                <Button onClick={() => this.clickNewPeriod()}>
+                <Button
+                  data-test-new-period
+                  onClick={() => this.clickNewPeriod()}
+                >
                   <FormattedMessage id="ui-calendar.newButton" />
                 </Button>
               </Col>
               <Col xs={6}>
-                <Button disabled>
+                <Button
+                  data-test-clone-settings
+                  disabled
+                >
                   <FormattedMessage id="ui-calendar.cloneSettings" />
                 </Button>
               </Col>
             </Row>
             <Row>
-
-              <Col xs>
-                <Headline
-                  size="small"
-                  margin="large"
-                >
-                  <FormattedMessage id="ui-calendar.actualLibraryHours" />
-                </Headline>
-
-                <p><FormattedMessage id="ui-calendar.regularOpeningHoursWithExceptions" /></p>
-                <div className="add-exceptions-icon-wrapper">
-                  <div className="icon-button">
-                    <Button onClick={() => this.clickOpenExeptions()}>
-                      <Icon
-                        icon="calendar"
-                        size="medium"
-                        iconClassName="calendar-icon"
-                      />
-                      <FormattedMessage id="ui-calendar.openCalendarExceptions" />
-                    </Button>
+              <div data-test-actual-library-hours>
+                <Col xs>
+                  <div data-test-actual-library-hours-header>
+                    <Headline
+                      size="small"
+                      margin="large"
+                    >
+                      <FormattedMessage id="ui-calendar.actualLibraryHours" />
+                    </Headline>
                   </div>
-                </div>
-              </Col>
+                  <div data-test-regular-opening-hours-with-exceptions>
+                    <p><FormattedMessage id="ui-calendar.regularOpeningHoursWithExceptions" /></p>
+                  </div>
+                  <div className="add-exceptions-icon-wrapper">
+                    <div className="icon-button">
+                      <Button
+                        data-test-add-exeptions
+                        onClick={() => this.clickOpenExeptions()}
+                      >
+                        <Icon
+                          icon="calendar"
+                          size="medium"
+                          iconClassName="calendar-icon"
+                        />
+                        <FormattedMessage id="ui-calendar.openCalendarExceptions" />
+                      </Button>
+                    </div>
+                  </div>
+                </Col>
+              </div>
             </Row>
           </div>
 
@@ -364,13 +414,15 @@ class ServicePointDetails extends React.Component {
             label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
             container={document.getElementById('ModuleContainer')}
           >
-            <OpeningPeriodFormWrapper
-              {...this.props}
-              onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
-              onClose={this.onClose}
-              servicePointId={servicePoint.id}
-              newPeriod={this.state.newPeriodLayer}
-            />
+            <div data-test-opening-period-form>
+              <OpeningPeriodFormWrapper
+                {...this.props}
+                onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
+                onClose={this.onClose}
+                servicePointId={servicePoint.id}
+                newPeriod={this.state.newPeriodLayer}
+              />
+            </div>
 
           </Layer>
 
@@ -393,13 +445,13 @@ class ServicePointDetails extends React.Component {
             label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
             container={document.getElementById('ModuleContainer')}
           >
-
-            <ExceptionWrapper
-              {...this.props}
-              entries={this.props.initialValues.allEntries}
-              onClose={this.onClose}
-            />
-
+            <div data-test-exceptional-form>
+              <ExceptionWrapper
+                {...this.props}
+                entries={this.props.initialValues.allEntries}
+                onClose={this.onClose}
+              />
+            </div>
           </Layer>
         </ErrorBoundary>
       );
