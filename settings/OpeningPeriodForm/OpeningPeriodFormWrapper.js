@@ -272,7 +272,10 @@ class OpeningPeriodFormWrapper extends React.Component {
         modifyPeriod = <BigCalendarWrapper onCalendarChange={this.onCalendarChange} />;
       }
       return (
-        <div id="newPeriodForm">
+        <div
+          data-test-new-period-form
+          id="newPeriodForm"
+        >
           {errorDelete}
           {errorExit}
           {errorModal}
