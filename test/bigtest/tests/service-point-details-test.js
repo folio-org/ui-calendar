@@ -32,6 +32,22 @@ describe('service point details', () => {
     expect(calendarSettingsInteractor.servicePointDetails.title.text).to.equal(servicePoint.name);
   });
 
+  describe('close button', () => {
+    it('should be presented', () => {
+      expect(calendarSettingsInteractor.servicePointDetails.closeButton.isPresent).to.be.true;
+    });
+
+    describe('close button click', () => {
+      beforeEach(async () => {
+        await calendarSettingsInteractor.servicePointDetails.closeButton.click();
+      });
+
+      it('service point details should not be presented', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.isPresent).to.be.false;
+      });
+    });
+  });
+
   describe('name', () => {
     it('should be displayed', () => {
       expect(calendarSettingsInteractor.servicePointDetails.name.isPresent).to.be.true;
@@ -100,6 +116,16 @@ describe('service point details', () => {
           `${formatDateString(period.startDate)} - ${formatDateString(period.endDate)} (${period.name})`
         );
       });
+
+      describe('current period click', () => {
+        beforeEach(async () => {
+          await calendarSettingsInteractor.servicePointDetails.currentPeriod.value.click('div');
+        });
+
+        it('opening period form should be presented', () => {
+          expect(calendarSettingsInteractor.newPeriodForm.isPresent).to.be.true;
+        });
+      });
     });
   });
 
@@ -107,11 +133,262 @@ describe('service point details', () => {
     it.always('should not be displayed', () => {
       expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.isPresent).to.be.false;
     });
+
+    describe('service point with current periods', () => {
+      let period;
+
+      beforeEach(function () {
+        period = this.server.create('period', {
+          servicePointId: servicePoint.id,
+          startDate: faker.date.past(),
+          openingDays: [
+            {
+              'weekdays' : {
+                'day' : 'MONDAY'
+              },
+              'openingDay' : {
+                'openingHour' : [{
+                  'startTime' : '02:00',
+                  'endTime' : '08:30'
+                }],
+                'allDay' : false,
+                'open' : true
+              }
+            }, {
+              'weekdays' : {
+                'day' : 'TUESDAY'
+              },
+              'openingDay' : {
+                'openingHour' : [{
+                  'startTime' : '03:30',
+                  'endTime' : '04:00'
+                }],
+                'allDay' : false,
+                'open' : true
+              }
+            }, {
+              'weekdays' : {
+                'day' : 'WEDNESDAY'
+              },
+              'openingDay' : {
+                'openingHour' : [],
+                'allDay' : true,
+                'open' : true
+              }
+            }, {
+              'weekdays' : {
+                'day' : 'THURSDAY'
+              },
+              'openingDay' : {
+                'openingHour' : [],
+                'allDay' : true,
+                'open' : false
+              }
+            },
+          ]
+        });
+        this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+      });
+
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.isPresent).to.be.true;
+      });
+
+      describe('sunday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.sunday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.sunday.label.text).to.equal(
+            translation.sunDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.sunday.value.text).to.equal(
+            translation['settings.closed']
+          );
+        });
+      });
+
+      describe('monday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.monday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.monday.label.text).to.equal(
+            translation.monDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.monday.value.text).to.equal(
+            `${period.openingDays[0].openingDay.openingHour[0].startTime} - ${period.openingDays[0].openingDay.openingHour[0].endTime}`
+          );
+        });
+      });
+
+      describe('tuesday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.tuesday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.tuesday.label.text).to.equal(
+            translation.tueDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.tuesday.value.text).to.equal(
+            `${period.openingDays[1].openingDay.openingHour[0].startTime} - ${period.openingDays[1].openingDay.openingHour[0].endTime}`
+          );
+        });
+      });
+
+      describe('wednesday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.wednesday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.wednesday.label.text).to.equal(
+            translation.wedDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.wednesday.value.text).to.equal(
+            translation['settings.allDay']
+          );
+        });
+      });
+
+      describe('thursday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.thursday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.thursday.label.text).to.equal(
+            translation.thuDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.thursday.value.text).to.equal(
+            translation['settings.closed']
+          );
+        });
+      });
+
+      describe('friday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.friday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.friday.label.text).to.equal(
+            translation.friDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.friday.value.text).to.equal(
+            translation['settings.closed']
+          );
+        });
+      });
+
+      describe('saturday', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.saturday.isPresent).to.be.true;
+        });
+
+        it('should have proper label', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.saturday.label.text).to.equal(
+            translation.satDayShort
+          );
+        });
+
+        it('should have proper value', () => {
+          expect(calendarSettingsInteractor.servicePointDetails.currentPeriodTimes.saturday.value.text).to.equal(
+            translation['settings.closed']
+          );
+        });
+      });
+    });
   });
 
   describe('next period', () => {
-    it('should not be displayed', () => {
+    it.always('should not be displayed', () => {
       expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.isPresent).to.be.false;
+    });
+
+    describe('service point with next period', () => {
+      let period;
+
+      beforeEach(function () {
+        period = this.server.create('period', {
+          servicePointId: servicePoint.id
+        });
+      });
+
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.isPresent).to.be.true;
+      });
+
+      it('should have proper header', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.header.text).to.equal(
+          translation.nextPeriod
+        );
+      });
+
+      it('should have proper amount of periods', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list().length).to.equal(1);
+      });
+
+      it('should have proper value', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).text).to.equal(
+          `${formatDateString(period.startDate)} - ${formatDateString(period.endDate)} (${period.name})`
+        );
+      });
+
+      describe('next period click', () => {
+        beforeEach(async () => {
+          await calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).click();
+        });
+
+        it('opening period form should be presented', () => {
+          expect(calendarSettingsInteractor.newPeriodForm.isPresent).to.be.true;
+        });
+      });
+    });
+
+    const nextPeriodAmount = 3;
+
+    describe('service point with several next periods', () => {
+      beforeEach(function () {
+        this.server.createList('period', nextPeriodAmount, {
+          servicePointId: servicePoint.id
+        });
+      });
+
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.isPresent).to.be.true;
+      });
+
+      it('should have proper header', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.header.text).to.equal(
+          translation.nextPeriod
+        );
+      });
+
+      it('should have proper amount of periods', () => {
+        expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list().length).to.equal(nextPeriodAmount);
+      });
     });
   });
 

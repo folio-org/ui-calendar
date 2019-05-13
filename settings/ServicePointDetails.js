@@ -81,7 +81,7 @@ class ServicePointDetails extends React.Component {
               const hour = day.openingHour[k];
               const t1 = moment(hour.startTime, 'HH:mm');
               const t2 = moment(hour.endTime, 'HH:mm');
-              periodTime += t1.format('HH:    mm') + ' - ' + t2.format('HH:mm') + ' \n';
+              periodTime += t1.format('HH:mm') + ' - ' + t2.format('HH:mm') + ' \n';
             }
             return periodTime;
           }
@@ -285,6 +285,7 @@ class ServicePointDetails extends React.Component {
     const itemFormatter = (item) => (
       <li>
         <div
+          data-test-next-period-item
           className="periods"
           onClick={() => { this.handleSelectPeriod(item.id); }}
           onKeyDown={() => {}}
@@ -301,12 +302,14 @@ class ServicePointDetails extends React.Component {
         <div data-test-service-point-next-period>
           <Row>
             <Col xs>
-              <Headline
-                size="small"
-                margin="large"
-              >
-                <FormattedMessage id="ui-calendar.nextPeriod" />
-              </Headline>
+              <div data-test-next-period-header>
+                <Headline
+                  size="small"
+                  margin="large"
+                >
+                  <FormattedMessage id="ui-calendar.nextPeriod" />
+                </Headline>
+              </div>
               <List
                 items={this.state.nextPeriods}
                 itemFormatter={itemFormatter}
