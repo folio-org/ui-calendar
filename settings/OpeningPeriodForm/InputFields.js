@@ -1,189 +1,147 @@
-import { Datepicker, TextField, Row, Col } from '@folio/stripes/components';
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
+import {
+  Field,
+  reduxForm,
+} from 'redux-form';
+
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+import {
+  Datepicker,
+  TextField,
+  Row,
+  Col,
+} from '@folio/stripes/components';
 
 class InputFields extends React.Component {
-    static propTypes = {
-      intl: intlShape.isRequired,
-      onDateChange: PropTypes.func.isRequired,
-      onNameChange: PropTypes.func.isRequired,
-      nameValue: PropTypes.string.isRequired,
-      modifyPeriod: PropTypes.object,
+  static propTypes = {
+    intl: intlShape.isRequired,
+    onDateChange: PropTypes.func.isRequired,
+    onNameChange: PropTypes.func.isRequired,
+    nameValue: PropTypes.string.isRequired,
+    modifyPeriod: PropTypes.object,
+  };
+
+  static defaultProps = {
+    modifyPeriod: {},
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      errorBoolean: false,
     };
+  }
 
-
-    constructor() {
-      super();
-      this.setName = this.setName.bind(this);
-      this.setEndDate = this.setEndDate.bind(this);
-      this.setStartDate = this.setStartDate.bind(this);
-      this.onBlur = this.onBlur.bind(this);
-    }
-
-    componentDidMount() {
-    }
-
-    parseDateToString(e) {
-      let str = '';
-      for (const p in e) {
-        if (p !== undefined) {
-          if (Object.prototype.hasOwnProperty.call(e, p) && p !== 'preventDefault') {
-            str += e[p];
-          }
+  parseDateToString(e) {
+    let str = '';
+    for (const p in e) {
+      if (p !== undefined) {
+        if (Object.prototype.hasOwnProperty.call(e, p) && p !== 'preventDefault') {
+          str += e[p];
         }
       }
-      return str;
     }
+    return str;
+  }
 
-    onBlur() {
-      if (this.props.nameValue !== undefined && this.props.nameValue !== null && this.props.nameValue.length > 0) {
-        this.setState({
-          errorBoolean: false,
-        });
-      } else {
-        this.setState({
-          errorBoolean: true,
-        });
-      }
-    }
+  onBlur = () => {
+    const { nameValue } = this.props;
 
-    setStartDate(e) {
-      this.props.onDateChange(true, this.parseDateToString(e.target.value));
-    }
+    this.setState({
+      errorBoolean: !nameValue,
+    });
+  };
 
-    setEndDate(e) {
-      this.props.onDateChange(false, this.parseDateToString(e.target.value));
-    }
+  setStartDate = (e) => {
+    this.props.onDateChange(true, this.parseDateToString(e.target.value));
+  };
 
-    setName(e) {
-      this.props.onNameChange(e.target.value);
-    }
+  setEndDate = (e) => {
+    this.props.onDateChange(false, this.parseDateToString(e.target.value));
+  };
 
-    render() {
-      const { intl: {
+  setName = (e) => {
+    this.props.onNameChange(e.target.value);
+  };
+
+  render() {
+    const {
+      intl: {
         formatMessage,
-      } } = this.props;
+      },
+      modifyPeriod: {
+        name: modifyPeriodName,
+      },
+      modifyPeriod,
+    } = this.props;
+    const { errorBoolean } = this.state;
 
-      let modifyStart;
-      let modifyEnd;
-      let modifyName;
-      if (this.props.modifyPeriod) {
-        modifyStart = <Field
-          name="item.startDate"
-          component={Datepicker}
-          label={<FormattedMessage id="ui-calendar.validFrom" />}
-          onChange={this.setStartDate}
-          required
-          timeZone="UTC"
-          backendDateStandard="YYYY-MM-DD"
-          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
-        />;
-
-        modifyEnd = <Field
-          name="item.endDate"
-          component={Datepicker}
-          label={<FormattedMessage id="ui-calendar.validTo" />}
-          onChange={this.setEndDate}
-          required
-          timeZone="UTC"
-          backendDateStandard="YYYY-MM-DD"
-          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
-        />;
-
-        if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
-          modifyName = <Field
-            label={<FormattedMessage id="ui-calendar.name" />}
-            value={this.props.modifyPeriod.name || ''}
-            name="periodName"
-            id="input-period-name"
-            component={TextField}
-            onChange={this.setName}
-            error={<FormattedMessage id="ui-calendar.fillIn" />}
-            required
-          />;
-        } else {
-          modifyName = <Field
-            label={<FormattedMessage id="ui-calendar.name" />}
-            value={this.props.modifyPeriod.name || ''}
-            name="periodName"
-            id="input-period-name"
-            component={TextField}
-            onChange={this.setName}
-            required
-          />;
-        }
-      } else {
-        modifyStart = <Field
-          name="item.startDate"
-          component={Datepicker}
-          label={<FormattedMessage id="ui-calendar.validFrom" />}
-          onChange={this.setStartDate}
-          required
-          timeZone="UTC"
-          backendDateStandard="YYYY-MM-DD"
-          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
-        />;
-
-        modifyEnd = <Field
-          name="item.endDate"
-          component={Datepicker}
-          label={<FormattedMessage id="ui-calendar.validTo" />}
-          onChange={this.setEndDate}
-          required
-          timeZone="UTC"
-          backendDateStandard="YYYY-MM-DD"
-          dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
-        />;
-
-
-        if (this.state !== null && this.state !== undefined && this.state.errorBoolean !== null && this.state.errorBoolean !== undefined && this.state.errorBoolean) {
-          modifyName =
+    return (
+      <div data-test-input-fields>
+        <Row>
+          <Col
+            data-test-item-start-date
+            sm={4}
+          >
             <Field
-              name="periodName"
-              label={<FormattedMessage id="ui-calendar.name" />}
-              id="input-period-name"
-              onBlur={this.onBlur}
-              onChange={this.setName}
               required
-              error={<FormattedMessage id="ui-calendar.fillIn" />}
-              component={TextField}
-            />;
-        } else {
-          modifyName =
+              timeZone="UTC"
+              name="item.startDate"
+              backendDateStandard="YYYY-MM-DD"
+              component={Datepicker}
+              label={<FormattedMessage id="ui-calendar.validFrom" />}
+              dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
+              onChange={this.setStartDate}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            data-test-item-end-date
+            sm={4}
+          >
             <Field
-              name="periodName"
-              label={<FormattedMessage id="ui-calendar.name" />}
-              id="input-period-name"
-              onBlur={this.onBlur}
-              onChange={this.setName}
               required
+              timeZone="UTC"
+              name="item.endDate"
+              backendDateStandard="YYYY-MM-DD"
+              component={Datepicker}
+              label={<FormattedMessage id="ui-calendar.validTo" />}
+              dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
+              onChange={this.setEndDate}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            data-test-item-period-name
+            sm={4}
+          >
+            <Field
+              required
+              name="periodName"
+              id="input-period-name"
               component={TextField}
-            />;
-        }
-      }
-
-      return (
-        <div>
-          <Row>
-            <Col sm={4}>
-              {modifyStart}
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={4}>
-              {modifyEnd}
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={4}>
-              {modifyName}
-            </Col>
-          </Row>
-        </div>
-      );
-    }
+              label={<FormattedMessage id="ui-calendar.name" />}
+              value={modifyPeriodName || ''}
+              {...(isEmpty(modifyPeriod) && { onBlur: this.onBlur })}
+              {...(errorBoolean && {
+                error: <div data-test-item-period-name-error><FormattedMessage id="ui-calendar.fillIn" /></div>
+              })}
+              onChange={this.setName}
+            />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
 }
 
 export default reduxForm({

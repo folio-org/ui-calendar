@@ -417,16 +417,13 @@ class ServicePointDetails extends React.Component {
             label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
             container={document.getElementById('ModuleContainer')}
           >
-            <div data-test-opening-period-form>
-              <OpeningPeriodFormWrapper
-                {...this.props}
-                onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
-                onClose={this.onClose}
-                servicePointId={servicePoint.id}
-                newPeriod={this.state.newPeriodLayer}
-              />
-            </div>
-
+            <OpeningPeriodFormWrapper
+              {...this.props}
+              onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
+              onClose={this.onClose}
+              servicePointId={servicePoint.id}
+              newPeriod={this.state.newPeriodLayer}
+            />
           </Layer>
 
           <Layer

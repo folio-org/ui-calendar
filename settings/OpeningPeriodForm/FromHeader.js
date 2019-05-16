@@ -1,77 +1,98 @@
 import React from 'react';
-import { Button, Headline, IconButton, Row, Col } from '@folio/stripes/components';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import {
+  noop,
+  isEmpty,
+} from 'lodash';
 
-class FromHeader extends React.Component {
-    static propTypes = {
-      onClose: PropTypes.func.isRequired,
-      handleDelete: PropTypes.func,
-      modifyPeriod: PropTypes.object
-    };
+import {
+  Button,
+  Headline,
+  IconButton,
+  Row,
+  Col,
+} from '@folio/stripes/components';
 
-    render() {
-      let disabled;
-      if (this.props.modifyPeriod) {
-        disabled = (
-          <Button onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">
+const FromHeader = (props) => {
+  const {
+    modifyPeriod,
+    onClose,
+    handleDelete,
+  } = props;
+  const isPeriodFormNew = isEmpty(modifyPeriod);
+  const title = isPeriodFormNew
+    ? 'ui-calendar.regularLibraryValidityPeriod'
+    : 'ui-calendar.modifyRegularLibraryValidityPeriod';
+
+  return (
+    <div data-test-opening-period-form-header>
+      <Row>
+        <Col
+          data-test-close-button
+          sm={3}
+        >
+          <IconButton
+            onClick={onClose}
+            icon="times"
+            size="medium"
+            iconClassName="closeIcon"
+          />
+        </Col>
+        <Col
+          data-test-title
+          sm={6}
+        >
+          <Headline
+            size="large"
+            margin="medium"
+            tag="h3"
+          >
+            <FormattedMessage id={title} />
+          </Headline>
+        </Col>
+        <Col
+          sm={3}
+          className="new-period-buttons"
+        >
+          <Button
+            data-test-delete-button
+            disabled={isPeriodFormNew}
+            buttonStyle="danger"
+            onClick={() => { handleDelete(); }}
+          >
             <FormattedMessage id="ui-calendar.deleteButton" />
           </Button>
-        );
-      } else {
-        disabled = (
-          <Button disabled onClick={() => { this.props.handleDelete(); }} buttonStyle="danger">
-            <FormattedMessage id="ui-calendar.deleteButton" />
+          <Button
+            data-test-save-button
+            type="submit"
+            buttonStyle="default"
+          >
+            <FormattedMessage id="ui-calendar.saveButton" />
           </Button>
-        );
-      }
-      let title;
-      if (this.props.modifyPeriod) {
-        title = (
-          <Headline size="large" margin="medium" tag="h3">
-            <FormattedMessage id="ui-calendar.modifyRegularLibraryValidityPeriod" />
-          </Headline>
-        );
-      } else {
-        title = (
-          <Headline size="large" margin="medium" tag="h3">
-            <FormattedMessage id="ui-calendar.regularLibraryValidityPeriod" />
-          </Headline>
-        );
-      }
+          <Button
+            data-test-save-as-template
+            buttonStyle="primary"
+            disabled
+          >
+            <FormattedMessage id="ui-calendar.savesAsTemplate" />
+          </Button>
+        </Col>
+      </Row>
+      <hr />
+    </div>
+  );
+};
 
-      return (
+FromHeader.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func,
+  modifyPeriod: PropTypes.object
+};
 
-
-        <div>
-          <Row>
-            <Col sm={3}>
-              <IconButton
-                onClick={this.props.onClose}
-                icon="closeX"
-                size="medium"
-                iconClassName="closeIcon"
-              />
-            </Col>
-            <Col sm={6}>
-              {title}
-            </Col>
-            <Col sm={3} className="new-period-buttons">
-
-              {disabled}
-              <Button type="submit" buttonStyle="default">
-                <FormattedMessage id="ui-calendar.saveButton" />
-              </Button>
-              <Button disabled buttonStyle="primary">
-                <FormattedMessage id="ui-calendar.savesAsTemplate" />
-              </Button>
-
-            </Col>
-          </Row>
-          <hr />
-        </div>
-      );
-    }
-}
+FromHeader.defaultProps = {
+  handleDelete: noop,
+  modifyPeriod: {},
+};
 
 export default FromHeader;

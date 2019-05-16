@@ -8,7 +8,7 @@ import {
 import { faker } from '@bigtest/mirage';
 
 import setupApplication from '../helpers/setup-application';
-import formatDateString from '../helpers/formatDateString';
+import { formatDateString } from '../helpers/messageConverters';
 import CalendarSettingsInteractor from '../interactors/calendar-settings';
 
 import translation from '../../../translations/ui-calendar/en';
@@ -123,7 +123,7 @@ describe('service point details', () => {
         });
 
         it('opening period form should be presented', () => {
-          expect(calendarSettingsInteractor.newPeriodForm.isPresent).to.be.true;
+          expect(calendarSettingsInteractor.openingPeriodForm.isPresent).to.be.true;
         });
       });
     });
@@ -362,7 +362,7 @@ describe('service point details', () => {
         });
 
         it('opening period form should be presented', () => {
-          expect(calendarSettingsInteractor.newPeriodForm.isPresent).to.be.true;
+          expect(calendarSettingsInteractor.openingPeriodForm.isPresent).to.be.true;
         });
       });
     });

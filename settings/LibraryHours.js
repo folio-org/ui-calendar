@@ -87,7 +87,7 @@ class LibraryHours extends React.Component {
 }
 
 LibraryHours.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.object.isRequired,
   resources: PropTypes.shape({
     entries: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),

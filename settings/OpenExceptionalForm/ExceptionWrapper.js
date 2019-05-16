@@ -987,12 +987,12 @@ class ExceptionWrapper extends React.Component {
 
       const paneStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => { this.beforeExit('paneStartMenu'); }} />
+          <IconButton icon="times" onClick={() => { this.beforeExit('paneStartMenu'); }} />
         </PaneMenu>;
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => { this.beforeExit('editorStartMenu'); }} />
+          <IconButton icon="times" onClick={() => { this.beforeExit('editorStartMenu'); }} />
         </PaneMenu>;
 
       const paneLastMenu =
