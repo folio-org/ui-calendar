@@ -11,6 +11,15 @@ import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests
 
 import createBigCalendarEvent from '../helpers/createBigCalendarEvent';
 
+@interactor class DeleteConfirmationModal {
+  defaultScope = '#delete-confirmation';
+
+  header = scoped('[class^="modalHeader--"]');
+  modalContent = scoped('[class^="modalContent"]');
+  confirmButton = scoped('[data-test-confirmation-modal-confirm-button]');
+  cancelButton = scoped('[data-test-confirmation-modal-cancel-button]');
+}
+
 @interactor class FormHeader {
   defaultScope = '[data-test-opening-period-form-header]';
 
@@ -62,4 +71,6 @@ export default @interactor class OpeningPeriodForm {
   inputFields = new InputFields();
   bigCalendarHeader = new BigCalendarHeader();
   bigCalendar = new BigCalendar();
+
+  deleteConfirmationModal = new DeleteConfirmationModal();
 }

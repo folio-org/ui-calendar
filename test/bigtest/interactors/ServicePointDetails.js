@@ -40,7 +40,7 @@ export default @interactor class ServicePointDetails {
   nextPeriod = new NextPeriod();
   newPeriodButton = scoped('[data-test-new-period]');
   clonePeriodButton = scoped('[data-test-clone-settings]');
-  isclonePeriodButtonDisabled = property('[data-test-clone-settings]', 'disabled');
+  isClonePeriodButtonDisabled = property('[data-test-clone-settings]', 'disabled');
   actualLibraryHours = scoped('[data-test-actual-library-hours]');
   actualLibraryHoursHeader = scoped('[data-test-actual-library-hours-header]');
   regularOpeningHoursWithExceptions = scoped('[data-test-regular-opening-hours-with-exceptions]');

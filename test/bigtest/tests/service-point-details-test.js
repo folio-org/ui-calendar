@@ -426,7 +426,7 @@ describe('service point details', () => {
     });
 
     it('should be disabled', () => {
-      expect(calendarSettingsInteractor.servicePointDetails.isclonePeriodButtonDisabled).to.be.true;
+      expect(calendarSettingsInteractor.servicePointDetails.isClonePeriodButtonDisabled).to.be.true;
     });
   });
 
