@@ -9,16 +9,23 @@ import {
 import setupApplication from '../helpers/setup-application';
 import CalendarSettingsInteractor from '../interactors/calendar-settings';
 import { getRequiredLabel } from '../helpers/messageConverters';
+import {
+  name,
+  endDate,
+  startDatePast,
+  startDateFuture,
+} from '../constants';
 
 import translation from '../../../translations/ui-calendar/en';
 
 describe('opening period form', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
-  let servicePoint;
-
-  setupApplication();
 
   describe('new opening period form', () => {
+    let servicePoint;
+
+    setupApplication();
+
     beforeEach(async function () {
       servicePoint = this.server.create('servicePoint');
       this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
@@ -226,6 +233,112 @@ describe('opening period form', () => {
       describe('big galendar', () => {
         it('should be displayed', () => {
           expect(calendarSettingsInteractor.openingPeriodForm.bigCalendar.isPresent).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('error modals', () => {
+    describe('wrong date error modal', () => {
+      let servicePoint;
+
+      setupApplication();
+
+      beforeEach(async function () {
+        servicePoint = await this.server.create('servicePoint');
+        await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+        await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
+        await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
+        await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
+          startDateFuture
+        );
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.fillAndBlur(
+          startDatePast
+        );
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
+        await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
+      });
+
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.openingPeriodForm.errorModal.isPresent).to.be.true;
+      });
+
+      it('should have proper text', () => {
+        expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(
+          translation.wrongStartEndDate
+        );
+      });
+
+      describe('close button', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.openingPeriodForm.errorModal.closeButton.isPresent).to.be.true;
+        });
+
+        describe('close button click', () => {
+          beforeEach(async () => {
+            await calendarSettingsInteractor.openingPeriodForm.errorModal.closeButton.click();
+          });
+
+          it('error modal should not be displayed', () => {
+            expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.isPresent).to.be.false;
+          });
+
+          it('opening period form should be displayed', () => {
+            expect(calendarSettingsInteractor.openingPeriodForm.isPresent).to.be.true;
+          });
+        });
+      });
+    });
+
+    describe('no events error modal', () => {
+      let servicePoint;
+
+      setupApplication();
+
+      beforeEach(async function () {
+        servicePoint = await this.server.create('servicePoint');
+        await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+        await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
+        await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
+        await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
+          startDateFuture
+        );
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.fillAndBlur(
+          endDate
+        );
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
+        await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
+      });
+
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.openingPeriodForm.errorModal.isPresent).to.be.true;
+      });
+
+      it('should have proper text', () => {
+        expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(
+          translation.noEvents
+        );
+      });
+
+      describe('close button', () => {
+        it('should be displayed', () => {
+          expect(calendarSettingsInteractor.openingPeriodForm.errorModal.closeButton.isPresent).to.be.true;
+        });
+
+        describe('close button click', () => {
+          beforeEach(async () => {
+            await calendarSettingsInteractor.openingPeriodForm.errorModal.closeButton.click();
+          });
+
+          it('error modal should not be displayed', () => {
+            expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.isPresent).to.be.false;
+          });
+
+          it('opening period form should be displayed', () => {
+            expect(calendarSettingsInteractor.openingPeriodForm.isPresent).to.be.true;
+          });
         });
       });
     });

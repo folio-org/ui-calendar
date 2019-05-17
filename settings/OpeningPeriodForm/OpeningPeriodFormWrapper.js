@@ -127,7 +127,7 @@ class OpeningPeriodFormWrapper extends React.Component {
   onFormSubmit(event) {
     event.preventDefault();
     const { parentMutator, servicePointId } = this.props;
-    if ((moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) && (moment(this.state.startDate).toDate() === moment(this.state.endDate).toDate())) {
+    if ((moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) || (moment(this.state.startDate).toDate() === moment(this.state.endDate).toDate())) {
       this.setState({
         errorModalText: <FormattedMessage id="ui-calendar.wrongStartEndDate" />,
       });
@@ -246,6 +246,7 @@ class OpeningPeriodFormWrapper extends React.Component {
       const footer = (
         <Fragment>
           <Button
+            data-test-error-modal-close-button
             onClick={this.closeErrorModal}
             ButtonStyle="primary"
           >
@@ -256,13 +257,16 @@ class OpeningPeriodFormWrapper extends React.Component {
 
       errorModal =
         <Modal
+          id="error-modal"
           dismissible
           onClose={this.closeErrorModal}
           open
           label={<FormattedMessage id="ui-calendar.invalidData" />}
           footer={footer}
         >
-          <p>{this.state.errorModalText}</p>
+          <div data-test-error-modal-content>
+            <p>{this.state.errorModalText}</p>
+          </div>
         </Modal>;
     }
 

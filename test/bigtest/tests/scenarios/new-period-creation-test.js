@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { faker } from '@bigtest/mirage';
 
 import {
   beforeEach,
@@ -9,13 +8,14 @@ import {
 import CalendarSettingsInteractor from '../../interactors/calendar-settings';
 import setupApplication from '../../helpers/setup-application';
 import { formatDateString } from '../../helpers/messageConverters';
+import {
+  name,
+  endDate,
+  startDatePast,
+  startDateFuture,
+} from '../../constants';
 
 import translation from '../../../../translations/ui-calendar/en';
-
-const startDateFuture = formatDateString(faker.date.future().toString());
-const startDatePast = formatDateString(faker.date.past().toString());
-const endDate = formatDateString(faker.date.future().toString());
-const name = 'test';
 
 describe('new period creation', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
