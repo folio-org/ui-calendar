@@ -230,9 +230,24 @@ describe('opening period form', () => {
         });
       });
 
-      describe('big galendar', () => {
+      describe('big calendar', () => {
         it('should be displayed', () => {
           expect(calendarSettingsInteractor.openingPeriodForm.bigCalendar.isPresent).to.be.true;
+        });
+
+        describe('event creation', () => {
+          beforeEach(async () => {
+            const timeSlots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
+
+            await calendarSettingsInteractor.openingPeriodForm.bigCalendar.createEvent(
+              timeSlots[25],
+              timeSlots[27],
+            );
+          });
+
+          it('should be displayed', () => {
+            expect(calendarSettingsInteractor.openingPeriodForm.bigCalendar.isPresent).to.be.true;
+          });
         });
       });
     });

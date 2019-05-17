@@ -52,6 +52,7 @@ import createBigCalendarEvent from '../helpers/createBigCalendarEvent';
   defaultScope = '[data-test-big-calendar-wrapper]';
 
   wholeDay = collection('.rbc-day-bg');
+  timeSlots = collection('.rbc-timeslot-group');
 
   createEvent(startElem, endElem) {
     createBigCalendarEvent(startElem, endElem);

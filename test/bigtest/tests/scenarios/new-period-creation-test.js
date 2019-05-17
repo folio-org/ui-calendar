@@ -38,7 +38,9 @@ describe('new period creation', () => {
       );
       await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
       await calendarSettingsInteractor.openingPeriodForm.bigCalendar.click();
+
       const weekDays = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.wholeDay();
+
       await calendarSettingsInteractor.openingPeriodForm.bigCalendar.createEvent(
         weekDays[0],
         weekDays[1],
