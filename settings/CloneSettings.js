@@ -1,3 +1,5 @@
+// dead code
+/* istanbul ignore file */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Headline, List, Pane } from '@folio/stripes/components';
