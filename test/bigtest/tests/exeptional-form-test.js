@@ -11,7 +11,7 @@ import CalendarSettingsInteractor from '../interactors/calendar-settings';
 
 import translation from '../../../translations/ui-calendar/en';
 
-describe('open exeptional form', () => {
+describe.only('open exeptional form', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
   let servicePoint;
 

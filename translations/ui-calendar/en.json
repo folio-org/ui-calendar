@@ -114,5 +114,6 @@
   "deleteQuestionException": "The exceptional period will be <strong>deleted</strong>.",
   "deleteQuestionExceptionTitle": "Delete exceptional period?",
   "closeWithoutSaving": "Close editor without saving",
-  "current": "Current:"
+  "current": "Current:",
+  "isEmptyMessage": "No items to show"
 }
