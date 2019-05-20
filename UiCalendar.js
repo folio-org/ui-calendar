@@ -1,3 +1,6 @@
+// dead code
+/* istanbul ignore file */
+
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { injectIntl, intlShape, FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import React from 'react';

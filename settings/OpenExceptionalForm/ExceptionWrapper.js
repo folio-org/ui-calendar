@@ -987,12 +987,12 @@ class ExceptionWrapper extends React.Component {
 
       const paneStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => { this.beforeExit('paneStartMenu'); }} />
+          <IconButton icon="times" onClick={() => { this.beforeExit('paneStartMenu'); }} />
         </PaneMenu>;
 
       const editorStartMenu =
         <PaneMenu>
-          <IconButton icon="closeX" onClick={() => { this.beforeExit('editorStartMenu'); }} />
+          <IconButton icon="times" onClick={() => { this.beforeExit('editorStartMenu'); }} />
         </PaneMenu>;
 
       const paneLastMenu =
@@ -1001,6 +1001,7 @@ class ExceptionWrapper extends React.Component {
             <Button
               buttonStyle="primary"
               onClick={() => { this.setState({ openEditor: true }); }}
+              data-test-exceptional-new-period-button
             >
               <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
             </Button>

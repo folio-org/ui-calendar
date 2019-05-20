@@ -272,7 +272,7 @@ class ExceptionalPeriodEditor extends React.Component {
       }
 
       return (
-        <div>
+        <div data-test-exceptional-period-editor>
           <Row>
             <Col>
               {startDate}
