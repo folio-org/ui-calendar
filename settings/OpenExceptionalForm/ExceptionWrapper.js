@@ -1001,6 +1001,7 @@ class ExceptionWrapper extends React.Component {
             <Button
               buttonStyle="primary"
               onClick={() => { this.setState({ openEditor: true }); }}
+              data-test-exceptional-new-period-button
             >
               <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
             </Button>

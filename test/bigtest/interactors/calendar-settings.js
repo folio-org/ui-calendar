@@ -6,6 +6,7 @@ import {
 
 import ServicePointDetails from './ServicePointDetails';
 import OpeningPeriodForm from './OpeningPeriodForm';
+import ExeptionalForm from './ExeptionalForm';
 
 @interactor class SettingsPane {
   title = scoped('[class^="paneTitleLabel--"]');
@@ -20,5 +21,5 @@ export default @interactor class CalendarSettingsInteractor {
   libraryHoursSettings = new SettingsPane('div[class^="paneset--"] div[class^="paneset--"] > section[class^="pane--"]:nth-child(1)');
   servicePointDetails = new ServicePointDetails();
   openingPeriodForm = new OpeningPeriodForm();
-  exceptionalForm = scoped('[data-test-exceptional-form]');
+  exceptionalForm = new ExeptionalForm();
 }
