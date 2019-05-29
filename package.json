@@ -37,6 +37,7 @@
         "displayName": "Calendar: All permissions",
         "description": "Entire set of permissions needed to use the calendar module",
         "subPermissions": [
+          "inventory-storage.service-points.collection.get",
           "calendar.collection.all",
           "ui-calendar.edit",
           "ui-calendar.create",
@@ -88,6 +89,7 @@
         "permissionName": "settings.calendar.enabled",
         "displayName": "Settings (Calendar): display calendar settings",
         "subPermissions": [
+          "inventory-storage.service-points.collection.get",
           "settings.enabled"
         ],
         "visible": true
