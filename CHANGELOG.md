@@ -71,4 +71,8 @@
 
 * Update ui-calendar translations
 * Fix sending of incorrect model to BE (UICAL-60)
-* Add BigTest setup 
+* Add BigTest setup
+
+## 2.2.0 (IN PROGRESS)
+
+* Prune deps to remove transitive dep on js-yaml v3.7.0 via css-loader > cssnano > postcss-svgo > svgo. Refs FOLIO-2083.
