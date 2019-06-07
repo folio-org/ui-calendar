@@ -1,6 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import {
+  reduce,
+  cloneDeep,
+} from 'lodash';
 
 import BigCalendar from '@folio/react-big-calendar';
 
@@ -8,27 +12,46 @@ BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 class ExceptionalBigCalendar extends React.Component {
   static propTypes = {
-    myEvents: PropTypes.object,
-    getEvent: PropTypes.func,
+    myEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
+    getEvent: PropTypes.func.isRequired,
+  };
+
+  /* *
+   * Fix for https://github.com/intljusticemission/react-big-calendar/issues/118
+   * */
+  getEvents = () => {
+    const { myEvents } = this.props;
+
+    const localPcTimezoneOffset = (new Date().getTimezoneOffset()) / 60;
+
+    return reduce(myEvents, (events, event) => {
+      const transformedEvent = cloneDeep(event);
+
+      if (transformedEvent.end) {
+        transformedEvent.end.add(localPcTimezoneOffset, 'h');
+      }
+
+      if (transformedEvent.start) {
+        transformedEvent.start.add(localPcTimezoneOffset, 'h');
+      }
+
+      return [...events, transformedEvent];
+    }, []);
   };
 
   render() {
-    const {
-      myEvents,
-      getEvent,
-    } = this.props;
+    const { getEvent } = this.props;
 
     return (
       <BigCalendar
         label
         popup
         showMultiDayTimes
-        events={myEvents}
+        events={this.getEvents()}
         views={['month']}
         getEvent={getEvent}
       />
     );
   }
 }
-
 export default ExceptionalBigCalendar;

@@ -520,15 +520,18 @@ class ExceptionWrapper extends React.Component {
               }
             }
           }
-          eventContent = <div
-            className="rbc-event-dates-content"
-            style={{
-              border: '4px solid red',
-              borderRadius: '4px'
-            }}
-          >
-            {dates}
-          </div>;
+          eventContent =
+            (
+              <div
+                className="rbc-event-dates-content"
+                style={{
+                  border: '4px solid red',
+                  borderRadius: '4px'
+                }}
+              >
+                {dates}
+              </div>
+            );
         }
 
 
