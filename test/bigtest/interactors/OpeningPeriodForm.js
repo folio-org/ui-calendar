@@ -2,14 +2,13 @@ import {
   interactor,
   property,
   scoped,
-  collection,
 } from '@bigtest/interactor';
 // eslint-disable-next-line
 import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor';
 // eslint-disable-next-line
 import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests/interactor';
 
-import createBigCalendarEvent from '../helpers/createBigCalendarEvent';
+import BigCalendar from './BigCalendar';
 
 @interactor class ErrorModal {
   defaultScope = '#error-modal';
@@ -47,16 +46,6 @@ import createBigCalendarEvent from '../helpers/createBigCalendarEvent';
   endDate = scoped('[data-test-item-end-date]', DatepickerInteractor);
   periodName = scoped('[data-test-item-period-name]', TextFieldInteractor);
   periodNameError = scoped('[data-test-item-period-name-error]');
-}
-@interactor class BigCalendar {
-  defaultScope = '[data-test-big-calendar-wrapper]';
-
-  wholeDay = collection('.rbc-day-bg');
-  timeSlots = collection('.rbc-timeslot-group');
-
-  createEvent(startElem, endElem) {
-    createBigCalendarEvent(startElem, endElem);
-  }
 }
 
 @interactor class BigCalendarHeader {
