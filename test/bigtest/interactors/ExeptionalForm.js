@@ -11,6 +11,8 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 // eslint-disable-next-line
 import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests/interactor';
+// eslint-disable-next-line
+import TimepickerInteractor from '@folio/stripes-components/lib/Timepicker/tests/interactor';
 import BigCalendar from './BigCalendar';
 
 @interactor class ServicePointSelector {
@@ -37,8 +39,8 @@ import BigCalendar from './BigCalendar';
   servicePoints = new ServicePoints();
   closedCheckbox = scoped('[data-test-closed]', CheckboxInteractor);
   allDay = scoped('[data-test-all-day]', CheckboxInteractor);
-  openingTime = scoped('[data-test-opening-time]', DatepickerInteractor);
-  closingTime = scoped('[data-test-closing-time]', DatepickerInteractor);
+  openingTime = scoped('[data-test-opening-time]', TimepickerInteractor);
+  closingTime = scoped('[data-test-closing-time]', TimepickerInteractor);
 }
 
 export default @interactor class ExeptionalForm {

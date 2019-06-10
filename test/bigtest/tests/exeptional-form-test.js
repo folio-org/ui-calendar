@@ -104,6 +104,7 @@ describe('open exeptional form', () => {
                 translation['settings.openingPeriodEnd']
               );
             });
+
             describe('select all button', () => {
               it('should be presented', () => {
                 expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.selectAllButton.isPresent).to.be.true;
@@ -113,6 +114,30 @@ describe('open exeptional form', () => {
                 expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.selectAllButton.text).to.equal(
                   translation.selectAll
                 );
+              });
+
+              describe('select all button click', () => {
+                beforeEach(async () => {
+                  await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.selectAllButton.click();
+                });
+
+                it('should have proper text', () => {
+                  expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.selectAllButton.text).to.equal(
+                    translation.deselectAll
+                  );
+                });
+
+                describe('select all button click', () => {
+                  beforeEach(async () => {
+                    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.selectAllButton.click();
+                  });
+
+                  it('should have proper text', () => {
+                    expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.selectAllButton.text).to.equal(
+                      translation.selectAll
+                    );
+                  });
+                });
               });
             });
 
@@ -185,7 +210,7 @@ describe('open exeptional form', () => {
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.labelText).to.equal(
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.text).to.equal(
                 translation.openingTime
               );
             });
@@ -197,7 +222,7 @@ describe('open exeptional form', () => {
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closingTime.labelText).to.equal(
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closingTime.text).to.equal(
                 translation.closingTime
               );
             });

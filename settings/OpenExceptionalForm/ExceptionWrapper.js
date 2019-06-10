@@ -201,48 +201,20 @@ class ExceptionWrapper extends React.Component {
     }
   }
 
-  allSelectorHandle(select, sP) {
-    const tempServicePoints = sP;
-    for (let i = 0; i < tempServicePoints.length; i++) {
-      tempServicePoints[i].selected = select;
-    }
-    const tempEditor = this.state.editor;
-    tempEditor.editorServicePoints = tempServicePoints;
-    if (select === true) {
-      this.setState(prevState => ({
-        prevState,
-        editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
-          startTime: prevState.editor.startTime,
-          endTime: prevState.editor.endTime,
-          editorServicePoints: tempServicePoints,
-          closed: prevState.editor.closed,
-          allDay: prevState.editor.allDay,
-          exceptionalIds: prevState.editor.exceptionalIds,
-          allSelector: false
-        },
-        changed: true
-      }));
-    } else {
-      this.setState(prevState => ({
-        prevState,
-        editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
-          startTime: prevState.editor.startTime,
-          endTime: prevState.editor.endTime,
-          editorServicePoints: tempServicePoints,
-          closed: prevState.editor.closed,
-          allDay: prevState.editor.allDay,
-          exceptionalIds: prevState.editor.exceptionalIds,
-          allSelector: true
-        },
-        changed: true
-      }));
-    }
+  allSelectorHandle(select, servicePoints) {
+    const editorServicePoints = servicePoints.map(servicePoint => {
+      servicePoint.selected = select;
+
+      return servicePoint;
+    });
+
+    this.setState({
+      editor: {
+        editorServicePoints,
+        allSelector: !select
+      },
+      changed: true
+    });
   }
 
   setClosed(e) {

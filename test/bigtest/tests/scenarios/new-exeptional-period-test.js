@@ -32,28 +32,92 @@ describe('open exeptional form', () => {
     await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
     await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
     await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.items(testServicePointId).clickAndBlur();
-    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closedCheckbox.clickAndBlur();
-    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
   });
 
-  describe('service point selector', () => {
-    it('should be displayed', () => {
-      expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.isPresent).to.be.true;
+  describe('new period', () => {
+    beforeEach(async function () {
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.fillInput('04:04 PM');
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closingTime.fillInput('04:04 AM');
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
     });
 
-    it('should have proper amount of service points', () => {
-      expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.items().length).to.equal(
-        servicePointAmount
-      );
-    });
-
-    describe('service point click', () => {
-      beforeEach(async function () {
-        await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
+    describe('service point selector', () => {
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.isPresent).to.be.true;
       });
 
       it('should have proper amount of service points', () => {
-        expect(calendarSettingsInteractor.exceptionalForm.bigCalendar.events().length > 0).to.be.true;
+        expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.items().length).to.equal(
+          servicePointAmount
+        );
+      });
+
+      describe('service point click', () => {
+        beforeEach(async function () {
+          await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
+        });
+
+        it('exceptional period should be created', () => {
+          expect(calendarSettingsInteractor.exceptionalForm.bigCalendar.events().length > 0).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('closed period', () => {
+    beforeEach(async function () {
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closedCheckbox.clickAndBlur();
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+    });
+
+    describe('service point selector', () => {
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.isPresent).to.be.true;
+      });
+
+      it('should have proper amount of service points', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.items().length).to.equal(
+          servicePointAmount
+        );
+      });
+
+      describe('service point click', () => {
+        beforeEach(async function () {
+          await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
+        });
+
+        it('exceptional period should be created', () => {
+          expect(calendarSettingsInteractor.exceptionalForm.bigCalendar.events().length > 0).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('all day period', () => {
+    beforeEach(async function () {
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.allDay.clickAndBlur();
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+    });
+
+    describe('service point selector', () => {
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.isPresent).to.be.true;
+      });
+
+      it('should have proper amount of service points', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.servicePointSelector.items().length).to.equal(
+          servicePointAmount
+        );
+      });
+
+      describe('service point click', () => {
+        beforeEach(async function () {
+          await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
+        });
+
+        it('exceptional period should be created', () => {
+          expect(calendarSettingsInteractor.exceptionalForm.bigCalendar.events().length > 0).to.be.true;
+        });
       });
     });
   });

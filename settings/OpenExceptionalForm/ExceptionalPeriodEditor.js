@@ -19,10 +19,10 @@ import {
 
 class ExceptionalPeriodEditor extends React.Component {
   static propTypes = {
-    editor: PropTypes.object,
-    editorServicePoints: PropTypes.object,
-    allSelector: PropTypes.object.isRequired,
+    allSelector: PropTypes.bool,
+    editor: PropTypes.object.isRequired,
     servicePoints: PropTypes.object.isRequired,
+    editorServicePoints: PropTypes.object.isRequired,
     allDay: PropTypes.bool.isRequired,
     closed: PropTypes.bool.isRequired,
     isModify: PropTypes.bool.isRequired,
@@ -35,6 +35,10 @@ class ExceptionalPeriodEditor extends React.Component {
     setStartDate: PropTypes.func.isRequired,
     allSelectorHandle: PropTypes.func.isRequired,
     setEditorServicePoints: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    allSelector: true,
   };
 
   componentWillMount() { // eslint-disable-line
