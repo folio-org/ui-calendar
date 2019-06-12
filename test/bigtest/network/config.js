@@ -30,11 +30,11 @@ export default function config() {
 
   this.put('/calendar/periods/:id/period/:periodId', ({ periods }, request) => {
     const newData = JSON.parse(request.requestBody);
-    const patronNoticePolicy = periods.find(newData.id);
+    const period = periods.find(newData.id);
 
-    patronNoticePolicy.update(newData);
+    period.update(newData);
 
-    return patronNoticePolicy.attrs;
+    return period.attrs;
   });
 
   this.post('/calendar/periods/:id/period', ({ periods }, request) => {

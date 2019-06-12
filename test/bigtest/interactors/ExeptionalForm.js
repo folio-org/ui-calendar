@@ -47,6 +47,7 @@ export default @interactor class ExeptionalForm {
   defaultScope = '[data-test-exceptional-form]';
 
   newPeriod = new Interactor('[data-test-exceptional-new-period-button]');
+  closeButton = new Interactor('[data-test-close-button]');
   exceptionalPeriodEditor = new ExceptionalPeriodEditor();
   servicePointSelector = new ServicePointSelector();
   bigCalendar = new BigCalendar();

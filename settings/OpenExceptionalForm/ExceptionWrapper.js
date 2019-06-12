@@ -1007,6 +1007,7 @@ class ExceptionWrapper extends React.Component {
     const editorStartMenu =
       <PaneMenu>
         <IconButton
+          data-test-close-button
           icon="times"
           onClick={() => {
             this.beforeExit('editorStartMenu');
