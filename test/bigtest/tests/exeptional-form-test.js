@@ -227,6 +227,59 @@ describe('open exeptional form', () => {
               );
             });
           });
+
+          describe('exit confirmation modal', () => {
+            beforeEach(async () => {
+              await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.allDay.clickAndBlur();
+              await calendarSettingsInteractor.exceptionalForm.closeButton.click();
+            });
+
+            it('should be displayed', () => {
+              expect(calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.isPresent).to.be.true;
+            });
+
+            it('should have proper text', () => {
+              expect(calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.modalContent.text).to.equal(
+                translation.exitQuestionMessage
+              );
+            });
+
+            describe('cancel button', () => {
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.cancelButton.isPresent).to.be.true;
+              });
+
+              describe('cancel button click', () => {
+                beforeEach(async () => {
+                  await calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.cancelButton.click();
+                });
+
+                it('exit confirmation modal should not be displayed', () => {
+                  expect(calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.isPresent).to.be.false;
+                });
+
+                it('opening period form should be displayed', () => {
+                  expect(calendarSettingsInteractor.exceptionalForm.isPresent).to.be.true;
+                });
+              });
+            });
+
+            describe('confirm button', () => {
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.confirmButton.isPresent).to.be.true;
+              });
+
+              describe('confirm button click', () => {
+                beforeEach(async () => {
+                  await calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.confirmButton.click();
+                });
+
+                it('service point details should be displayed', () => {
+                  expect(calendarSettingsInteractor.servicePointDetails.isPresent).to.be.true;
+                });
+              });
+            });
+          });
         });
       });
     });

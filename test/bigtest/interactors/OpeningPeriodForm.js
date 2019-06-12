@@ -8,6 +8,7 @@ import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/i
 // eslint-disable-next-line
 import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests/interactor';
 
+import ConfirmationModal from './ConfirmationModal';
 import BigCalendar from './BigCalendar';
 
 @interactor class ErrorModal {
@@ -15,13 +16,6 @@ import BigCalendar from './BigCalendar';
 
   content = scoped('[data-test-error-modal-content]');
   closeButton = scoped('[data-test-error-modal-close-button]');
-}
-
-@interactor class ConfirmationModal {
-  header = scoped('[class^="modalHeader--"]');
-  modalContent = scoped('[class^="modalContent"]');
-  confirmButton = scoped('[data-test-confirmation-modal-confirm-button]');
-  cancelButton = scoped('[data-test-confirmation-modal-cancel-button]');
 }
 
 @interactor class FormHeader {

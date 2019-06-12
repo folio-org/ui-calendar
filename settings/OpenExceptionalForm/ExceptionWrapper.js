@@ -19,6 +19,8 @@ import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';  // eslint-disable-line
 import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
 
+import { colors } from './constants';
+
 class ExceptionWrapper extends React.Component {
   static propTypes = {
     entries: PropTypes.object,
@@ -101,8 +103,7 @@ class ExceptionWrapper extends React.Component {
       selected: null,
       color: null,
     }];
-    const colors = ['#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9', '#ffffff', '#000000', '#e6194B'];
-    for (let i = 22; i < this.props.entries.length; i++) {
+    for (let i = colors.length; i < this.props.entries.length; i++) {
       colors[i] = RandomColor({
         luminosity: 'random',
         hue: 'random'
@@ -993,7 +994,6 @@ class ExceptionWrapper extends React.Component {
       name = this.state.editor.name;
     }
 
-
     const paneStartMenu =
       <PaneMenu>
         <IconButton
@@ -1195,17 +1195,12 @@ class ExceptionWrapper extends React.Component {
 
     let errorCloseEditor = null;
     if (this.state.errorEditorClose === true) {
-      const confirmationMessageClose = (
-        <SafeHTMLMessage
-          id="ui-calendar.exitQuestionMessage"
-        />
-      );
       errorCloseEditor =
         <ConfirmationModal
           id="exite-confirmation"
           open={this.state.errorEditorClose}
           heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
-          message={confirmationMessageClose}
+          message={<SafeHTMLMessage id="ui-calendar.exitQuestionMessage" />}
           onConfirm={() => {
             this.setState({
               errorEditorClose: false,
@@ -1238,17 +1233,12 @@ class ExceptionWrapper extends React.Component {
 
     let errorExitException = null;
     if (this.state.errorExceptionExit === true) {
-      const confirmationMessageExit = (
-        <SafeHTMLMessage
-          id="ui-calendar.exitQuestionMessage"
-        />
-      );
       errorExitException =
         <ConfirmationModal
           id="exite-confirmation"
           open={this.state.errorExceptionExit}
           heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
-          message={confirmationMessageExit}
+          message={<SafeHTMLMessage id="ui-calendar.exitQuestionMessage" />}
           onConfirm={() => {
             return this.props.onClose();
           }}

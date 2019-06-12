@@ -14,6 +14,7 @@ import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests
 // eslint-disable-next-line
 import TimepickerInteractor from '@folio/stripes-components/lib/Timepicker/tests/interactor';
 import BigCalendar from './BigCalendar';
+import ConfirmationModal from './ConfirmationModal';
 
 @interactor class ServicePointSelector {
   defaultScope = '[data-test-service-point-selector]';
@@ -51,4 +52,5 @@ export default @interactor class ExeptionalForm {
   exceptionalPeriodEditor = new ExceptionalPeriodEditor();
   servicePointSelector = new ServicePointSelector();
   bigCalendar = new BigCalendar();
+  exiteConfirmationModal = new ConfirmationModal('#exite-confirmation');
 }
