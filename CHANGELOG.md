@@ -73,6 +73,9 @@
 * Fix sending of incorrect model to BE (UICAL-60)
 * Add BigTest setup
 
-## 2.2.0 (IN PROGRESS)
+## [2.2.0](https://github.com/folio-org/ui-calendar/tree/v2.1.3) (2019-06-12)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.1.3...v2.2.0)
 
 * Prune deps to remove transitive dep on js-yaml v3.7.0 via css-loader > cssnano > postcss-svgo > svgo. Refs FOLIO-2083.
+* Add timezone support for react-big-calendar
+* Cover existing functionality with tests
