@@ -53,4 +53,5 @@ export default @interactor class ExeptionalForm {
   servicePointSelector = new ServicePointSelector();
   bigCalendar = new BigCalendar();
   exiteConfirmationModal = new ConfirmationModal('#exite-confirmation');
+  errorModal = new ConfirmationModal('[data-test-error-modal]');
 }

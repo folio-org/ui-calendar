@@ -11,8 +11,14 @@ import CalendarSettingsInteractor from '../interactors/calendar-settings';
 
 import translation from '../../../translations/ui-calendar/en';
 import { getRequiredLabel } from '../helpers/messageConverters';
+import {
+  endDate,
+  name,
+  startDatePast,
+  startTime,
+} from '../constants';
 
-describe('open exeptional form', () => {
+describe('open exceptional form', () => {
   const servicePointAmount = 2;
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
   let servicePoint;
@@ -258,7 +264,7 @@ describe('open exeptional form', () => {
                   expect(calendarSettingsInteractor.exceptionalForm.exiteConfirmationModal.isPresent).to.be.false;
                 });
 
-                it('opening period form should be displayed', () => {
+                it('exceptional period form should be displayed', () => {
                   expect(calendarSettingsInteractor.exceptionalForm.isPresent).to.be.true;
                 });
               });
@@ -277,6 +283,158 @@ describe('open exeptional form', () => {
                 it('service point details should be displayed', () => {
                   expect(calendarSettingsInteractor.servicePointDetails.isPresent).to.be.true;
                 });
+              });
+            });
+          });
+
+          describe('error modal modal', () => {
+            describe('no start date error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.noStartDate
+                );
+              });
+
+              describe('cancel button', () => {
+                it('should be displayed', () => {
+                  expect(calendarSettingsInteractor.exceptionalForm.errorModal.closeButton.isPresent).to.be.true;
+                });
+
+                describe('cancel button click', () => {
+                  beforeEach(async () => {
+                    await calendarSettingsInteractor.exceptionalForm.errorModal.closeButton.click();
+                  });
+
+                  it('exit confirmation modal should not be displayed', () => {
+                    expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.false;
+                  });
+
+                  it('exceptional period form should be displayed', () => {
+                    expect(calendarSettingsInteractor.exceptionalForm.isPresent).to.be.true;
+                  });
+                });
+              });
+            });
+
+            describe('no end date error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.noEndDate
+                );
+              });
+            });
+
+            describe('wrong start end date error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(endDate);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(startDatePast);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.wrongStartEndDate
+                );
+              });
+            });
+
+            describe('no name error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.noName
+                );
+              });
+            });
+
+
+            describe('no service point selected error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.noServicePointSelected
+                );
+              });
+            });
+
+            describe('no start time error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.items(0).clickAndBlur();
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.noStartTime
+                );
+              });
+            });
+
+            describe('no end time error', () => {
+              beforeEach(async () => {
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.items(0).clickAndBlur();
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.fillInput(startTime);
+                await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+              });
+
+              it('should be displayed', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+              });
+
+              it('should have proper text', () => {
+                expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+                  translation.noEndTime
+                );
               });
             });
           });

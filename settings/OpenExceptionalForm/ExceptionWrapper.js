@@ -1147,6 +1147,7 @@ class ExceptionWrapper extends React.Component {
     const footer = (
       <Fragment>
         <Button
+          data-test-close-button
           onClick={this.closeErrorModal}
           ButtonStyle="primary"
         >
@@ -1160,6 +1161,7 @@ class ExceptionWrapper extends React.Component {
       const label = 'ui-calendar.' + this.state.errorModalText;
       errorModal =
         <Modal
+          data-test-error-modal
           dismissible
           onClose={this.closeErrorModal}
           open

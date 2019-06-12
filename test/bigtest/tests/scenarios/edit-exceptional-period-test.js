@@ -16,7 +16,7 @@ import {
 } from '../../constants';
 import { formatDateString } from '../../helpers/messageConverters';
 
-describe('open exeptional period edit ', () => {
+describe('open exceptional period edit ', () => {
   describe('edit period ', () => {
     const calendarSettingsInteractor = new CalendarSettingsInteractor();
     let servicePoint;

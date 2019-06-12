@@ -12,10 +12,12 @@ import CalendarSettingsInteractor from '../../interactors/calendar-settings';
 import {
   name,
   endDate,
+  endTime,
+  startTime,
   startDatePast,
 } from '../../constants';
 
-describe('open exeptional form', () => {
+describe('open exceptional form', () => {
   const servicePointAmount = 2;
   const testServicePointId = 1;
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
@@ -36,8 +38,8 @@ describe('open exeptional form', () => {
 
   describe('new period', () => {
     beforeEach(async function () {
-      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.fillInput('04:04 PM');
-      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closingTime.fillInput('04:04 AM');
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.fillInput(startTime);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closingTime.fillInput(endTime);
       await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
     });
 
