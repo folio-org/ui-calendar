@@ -9,7 +9,8 @@ import {
   KeyValue,
   Layer,
   List,
-  Row
+  Row,
+  IconButton,
 } from '@folio/stripes/components';
 import moment from 'moment';
 import BigCalendar from '@folio/react-big-calendar/lib';
@@ -283,18 +284,29 @@ class ServicePointDetails extends React.Component {
     }
     let nextPeriodDetails;
     const itemFormatter = (item) => (
-      <li>
-        <div
-          data-test-next-period-item
-          className="periods"
-          onClick={() => { this.handleSelectPeriod(item.id); }}
-          onKeyDown={() => {}}
-          role="button"
-          tabIndex={0}
-          key={item.id}
+      <li
+        data-test-next-period-item
+        key={item.id}
+      >
+        <Row
+          className="new-period"
+          between="xs"
         >
-          {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
-        </div>
+          <Col
+            xs={11}
+            data-test-next-period-item-label
+          >
+            {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
+          </Col>
+          <Col xs={1}>
+            <IconButton
+              data-test-next-period-item-edit-button
+              onClick={() => { this.handleSelectPeriod(item.id); }}
+              ariaLabel="edit period button"
+              icon="edit"
+            />
+          </Col>
+        </Row>
       </li>);
 
     if (this.state.nextPeriods && this.state.nextPeriods.length > 0) {

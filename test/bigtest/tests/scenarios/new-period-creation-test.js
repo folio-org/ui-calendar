@@ -54,7 +54,7 @@ describe('new period creation', () => {
     });
 
     it('should have proper next period', () => {
-      expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).text).to.equal(
+      expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).label.text).to.equal(
         `${formatDateString(startDateFuture)} - ${formatDateString(endDate)} (${name})`
       );
     });
