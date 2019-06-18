@@ -51,7 +51,7 @@ describe('edit period', () => {
     });
 
     it('should have proper value', () => {
-      expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).text).to.equal(
+      expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).label.text).to.equal(
         `${formatDateString(period.startDate)} - ${formatDateString(period.endDate)} (${period.name})`
       );
     });
@@ -59,7 +59,7 @@ describe('edit period', () => {
 
   describe('click on created period', () => {
     beforeEach(async () => {
-      await calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).click();
+      await calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).editButton.click();
     });
 
     it('opening period form should be displayed', () => {
@@ -153,7 +153,7 @@ describe('edit period', () => {
           });
 
           it('should have proper value', () => {
-            expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).text).to.equal(
+            expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).label.text).to.equal(
               `${startDateFuture} - ${endDate} (${period.name})`
             );
           });

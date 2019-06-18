@@ -7,11 +7,16 @@ import {
 
 import KeyValue from './KeyValue';
 
+@interactor class NextPeriodItem {
+  label = scoped('[data-test-next-period-item-label]');
+  editButton = scoped('[data-test-next-period-item-edit-button]');
+}
+
 @interactor class NextPeriod {
   static defaultScope = '[data-test-service-point-next-period]';
 
   header = scoped('[data-test-next-period-header]');
-  list = collection('[data-test-next-period-item]');
+  list = collection('[data-test-next-period-item]', NextPeriodItem);
 }
 
 @interactor class CurrentPeriodTimes {
