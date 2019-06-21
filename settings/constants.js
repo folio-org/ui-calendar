@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 export const colors = [
   '#3cb44b',
   '#ffe119',
@@ -23,3 +22,9 @@ export const colors = [
   '#000000',
   '#e6194B'
 ];
+
+export const permissions = {
+  DELETE: 'calendar.periods.item.delete',
+  POST: 'calendar.periods.item.post',
+  PUT:  'calendar.periods.item.put'
+};

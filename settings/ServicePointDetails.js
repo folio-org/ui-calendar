@@ -14,9 +14,11 @@ import {
 } from '@folio/stripes/components';
 import moment from 'moment';
 import BigCalendar from '@folio/react-big-calendar/lib';
+import { IfPermission } from '@folio/stripes-core';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
+import { permissions } from './constants';
 
 class ServicePointDetails extends React.Component {
   constructor() {
@@ -196,15 +198,26 @@ class ServicePointDetails extends React.Component {
           <KeyValue
             label={<FormattedMessage id="ui-calendar.current" />}
             value={
-              <div
-                className="periods"
-                onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
-                onKeyDown={() => {}}
-                role="button"
-                tabIndex={0}
+              <Row
+                className="new-period"
+                between="xs"
               >
-                {this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
-              </div>}
+                <Col
+                  xs={11}
+                  data-test-next-period-item-label
+                >
+                  {this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
+                </Col>
+                <Col xs={1}>
+                  <IconButton
+                    data-test-next-period-item-edit-button
+                    onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
+                    ariaLabel="edit period button"
+                    icon="edit"
+                  />
+                </Col>
+              </Row>
+             }
           />
         </div>;
 
@@ -373,14 +386,16 @@ class ServicePointDetails extends React.Component {
             {currentPTimes}
             {nextPeriodDetails}
             <Row>
-              <Col xs={4}>
-                <Button
-                  data-test-new-period
-                  onClick={() => this.clickNewPeriod()}
-                >
-                  <FormattedMessage id="ui-calendar.newButton" />
-                </Button>
-              </Col>
+              <IfPermission perm={permissions.POST}>
+                <Col xs={4}>
+                  <Button
+                    data-test-new-period
+                    onClick={() => this.clickNewPeriod()}
+                  >
+                    <FormattedMessage id="ui-calendar.newButton" />
+                  </Button>
+                </Col>
+              </IfPermission>
               <Col xs={6}>
                 <Button
                   data-test-clone-settings
