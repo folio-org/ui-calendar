@@ -210,7 +210,7 @@ class ServicePointDetails extends React.Component {
                 </Col>
                 <Col xs={1}>
                   <IconButton
-                    data-test-next-period-item-edit-button
+                    data-test-current-period-item-edit-button
                     onClick={() => { this.handleSelectPeriod(this.state.currentPeriod.id); }}
                     ariaLabel="edit period button"
                     icon="edit"

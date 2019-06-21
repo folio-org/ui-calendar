@@ -119,7 +119,7 @@ describe('service point details', () => {
 
       describe('current period click', () => {
         beforeEach(async () => {
-          await calendarSettingsInteractor.servicePointDetails.currentPeriod.value.click('div');
+          await calendarSettingsInteractor.servicePointDetails.currentPeriod.value.click('button');
         });
 
         it('opening period form should be presented', () => {
