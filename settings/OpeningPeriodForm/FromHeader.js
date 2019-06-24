@@ -63,7 +63,7 @@ const FromHeader = (props) => {
               data-test-delete-button
               disabled={isPeriodFormNew}
               buttonStyle="danger"
-              onClick={() => { handleDelete(); }}
+              onClick={handleDelete}
             >
               <FormattedMessage id="ui-calendar.deleteButton" />
             </Button>

@@ -184,9 +184,9 @@ class ServicePointDetails extends React.Component {
     this.setState({ modifyPeriodLayer: { isOpen: true } });
   }
 
-  clickOpenExeptions() {
+  clickOpenExeptions = () => {
     this.setState({ openExceptions: { isOpen: true } });
-  }
+  };
 
   render() {
     let currentP;
@@ -390,7 +390,7 @@ class ServicePointDetails extends React.Component {
                 <Col xs={4}>
                   <Button
                     data-test-new-period
-                    onClick={() => this.clickNewPeriod()}
+                    onClick={this.clickNewPeriod}
                   >
                     <FormattedMessage id="ui-calendar.newButton" />
                   </Button>
@@ -423,7 +423,7 @@ class ServicePointDetails extends React.Component {
                     <div className="icon-button">
                       <Button
                         data-test-add-exeptions
-                        onClick={() => this.clickOpenExeptions()}
+                        onClick={this.clickOpenExeptions}
                       >
                         <Icon
                           icon="calendar"
