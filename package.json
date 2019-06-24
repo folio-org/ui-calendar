@@ -24,7 +24,7 @@
       }
     ],
     "okapiInterfaces": {
-      "calendar": "2.0",
+      "calendar": "3.0",
       "service-points": "3.0"
     },
     "permissionSets": [
