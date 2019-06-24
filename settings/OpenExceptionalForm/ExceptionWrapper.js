@@ -13,13 +13,17 @@ import {
   ConfirmationModal,
   Modal
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes-core';
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';  // eslint-disable-line
 import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
 
-import { colors } from './constants';
+import {
+  colors,
+  permissions,
+} from '../constants';
 
 class ExceptionWrapper extends React.Component {
   static propTypes = {
@@ -1022,15 +1026,17 @@ class ExceptionWrapper extends React.Component {
           paddingTop: '15px'
         }}
         >
-          <Button
-            buttonStyle="primary"
-            onClick={() => {
-              this.setState({ openEditor: true });
-            }}
-            data-test-exceptional-new-period-button
-          >
-            <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
-          </Button>
+          <IfPermission perm={permissions.POST}>
+            <Button
+              buttonStyle="primary"
+              onClick={() => {
+                this.setState({ openEditor: true });
+              }}
+              data-test-exceptional-new-period-button
+            >
+              <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
+            </Button>
+          </IfPermission>
         </div>
       </PaneMenu>;
 
@@ -1061,8 +1067,12 @@ class ExceptionWrapper extends React.Component {
         paddingTop: '15px'
       }}
       >
-        {deleteButton}
-        {saveButton}
+        <IfPermission perm={permissions.DELETE}>
+          {deleteButton}
+        </IfPermission>
+        <IfPermission perm={permissions.PUT}>
+          {saveButton}
+        </IfPermission>
       </div>;
 
     const paneTitle =

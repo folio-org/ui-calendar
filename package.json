@@ -24,7 +24,7 @@
       }
     ],
     "okapiInterfaces": {
-      "calendar": "2.0",
+      "calendar": "3.0",
       "service-points": "3.0"
     },
     "permissionSets": [
@@ -34,63 +34,37 @@
       },
       {
         "permissionName": "ui-calendar.all",
-        "displayName": "Calendar: All permissions",
-        "description": "Entire set of permissions needed to use the calendar module",
+        "displayName": "Settings (Calendar): Can create, view, edit, and remove calendar events.",
+        "description": "User can create,edit, view, and remove calendar events",
         "subPermissions": [
-          "inventory-storage.service-points.collection.get",
-          "calendar.collection.all",
           "ui-calendar.edit",
-          "ui-calendar.create",
-          "ui-calendar.delete"
+          "calendar.periods.item.delete"
         ],
         "visible": true
       },
       {
         "permissionName": "ui-calendar.view",
-        "displayName": "Calendar: View calendar events",
+        "displayName": "Settings (Calendar): Can view calendar events",
         "description": "Can view calendar events",
         "subPermissions": [
-          "calendar.collection.get",
-          "module.calendar.enabled"
+          "configuration.entries.collection.get",
+          "inventory-storage.service-points.collection.get",
+          "calendar.opening-hours.collection.get",
+          "calendar.periods.collection.get",
+          "calendar.periods.item.get",
+          "module.calendar.enabled",
+          "settings.calendar.enabled"
         ],
         "visible": true
       },
       {
         "permissionName": "ui-calendar.edit",
-        "displayName": "Calendar: Edit calendar events",
-        "description": "Can edit calendar events",
+        "displayName": "Settings (Calendar): Can create, view, and edit calendar events",
+        "description": "Can edit calendar events. User cannot remove any calendar event.",
         "subPermissions": [
           "ui-calendar.view",
-          "calendar.collection.update"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "ui-calendar.create",
-        "displayName": "Calendar: Create calendar events",
-        "description": "Can create calendar events",
-        "subPermissions": [
-          "ui-calendar.view",
-          "calendar.collection.add"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "ui-calendar.delete",
-        "displayName": "Calendar: Delete calendar events",
-        "description": "Can remove calendar events",
-        "subPermissions": [
-          "ui-calendar.view",
-          "calendar.collection.delete"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "settings.calendar.enabled",
-        "displayName": "Settings (Calendar): display calendar settings",
-        "subPermissions": [
-          "inventory-storage.service-points.collection.get",
-          "settings.enabled"
+          "calendar.periods.item.post",
+          "calendar.periods.item.put"
         ],
         "visible": true
       }

@@ -13,6 +13,9 @@ import {
   Row,
   Col,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes-core';
+
+import { permissions } from '../constants';
 
 const FromHeader = (props) => {
   const {
@@ -21,9 +24,9 @@ const FromHeader = (props) => {
     handleDelete,
   } = props;
   const isPeriodFormNew = isEmpty(modifyPeriod);
-  const title = isPeriodFormNew
-    ? 'ui-calendar.regularLibraryValidityPeriod'
-    : 'ui-calendar.modifyRegularLibraryValidityPeriod';
+  const [title, submitPermission] = isPeriodFormNew
+    ? ['ui-calendar.regularLibraryValidityPeriod', permissions.POST]
+    : ['ui-calendar.modifyRegularLibraryValidityPeriod', permissions.PUT];
 
   return (
     <div data-test-opening-period-form-header>
@@ -55,21 +58,25 @@ const FromHeader = (props) => {
           sm={3}
           className="new-period-buttons"
         >
-          <Button
-            data-test-delete-button
-            disabled={isPeriodFormNew}
-            buttonStyle="danger"
-            onClick={() => { handleDelete(); }}
-          >
-            <FormattedMessage id="ui-calendar.deleteButton" />
-          </Button>
-          <Button
-            data-test-save-button
-            type="submit"
-            buttonStyle="default"
-          >
-            <FormattedMessage id="ui-calendar.saveButton" />
-          </Button>
+          <IfPermission perm={permissions.DELETE}>
+            <Button
+              data-test-delete-button
+              disabled={isPeriodFormNew}
+              buttonStyle="danger"
+              onClick={handleDelete}
+            >
+              <FormattedMessage id="ui-calendar.deleteButton" />
+            </Button>
+          </IfPermission>
+          <IfPermission perm={submitPermission}>
+            <Button
+              data-test-save-button
+              type="submit"
+              buttonStyle="default"
+            >
+              <FormattedMessage id="ui-calendar.saveButton" />
+            </Button>
+          </IfPermission>
           <Button
             data-test-save-as-template
             buttonStyle="primary"
