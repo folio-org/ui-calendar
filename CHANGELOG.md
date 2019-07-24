@@ -79,3 +79,9 @@
 * Prune deps to remove transitive dep on js-yaml v3.7.0 via css-loader > cssnano > postcss-svgo > svgo. Refs FOLIO-2083.
 * Add timezone support for react-big-calendar
 * Cover existing functionality with tests
+
+## [2.3.0](https://github.com/folio-org/ui-calendar/tree/v2.3.0) (2019-07-24)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.2.0...v2.3.0)
+
+* Add edit button for new periods (UICAL-71)
+* Add permission to display settings (UICAL-72)
