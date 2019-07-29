@@ -85,3 +85,7 @@
 
 * Add edit button for new periods (UICAL-71)
 * Add permission to display settings (UICAL-72)
+
+## 2.4.0 (IN PROGRESS)
+
+* Correctly define `settings.calendar.enabled` permission (UICAL-75)
