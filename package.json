@@ -43,6 +43,13 @@
         "visible": true
       },
       {
+        "permissionName": "settings.calendar.enabled",
+        "displayName": "Settings (Calendar): display list of settings pages",
+        "subPermissions": [
+          "settings.enabled"
+        ]
+      },
+      {
         "permissionName": "ui-calendar.view",
         "displayName": "Settings (Calendar): Can view calendar events",
         "description": "Can view calendar events",
@@ -53,8 +60,7 @@
           "calendar.periods.collection.get",
           "calendar.periods.item.get",
           "module.calendar.enabled",
-          "settings.calendar.enabled",
-          "settings.enabled"
+          "settings.calendar.enabled"
         ],
         "visible": true
       },
@@ -63,6 +69,7 @@
         "displayName": "Settings (Calendar): Can create, view, and edit calendar events",
         "description": "Can edit calendar events. User cannot remove any calendar event.",
         "subPermissions": [
+          "settings.calendar.enabled",
           "ui-calendar.view",
           "calendar.periods.item.post",
           "calendar.periods.item.put"
