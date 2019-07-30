@@ -60,7 +60,7 @@
           "calendar.periods.collection.get",
           "calendar.periods.item.get",
           "module.calendar.enabled",
-          "settings.calendar.enabled",
+          "settings.calendar.enabled"
         ],
         "visible": true
       },
