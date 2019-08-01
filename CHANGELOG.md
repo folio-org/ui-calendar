@@ -86,6 +86,8 @@
 * Add edit button for new periods (UICAL-71)
 * Add permission to display settings (UICAL-72)
 
-## 2.4.0 (IN PROGRESS)
+## [2.4.0](https://github.com/folio-org/ui-calendar/tree/v2.4.0) (2019-08-01)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.3.0...v2.4.0)
 
 * Correctly define `settings.calendar.enabled` permission (UICAL-75)
+* Update translations strings
