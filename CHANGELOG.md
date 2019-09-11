@@ -91,3 +91,8 @@
 
 * Correctly define `settings.calendar.enabled` permission (UICAL-75)
 * Update translations strings
+
+## [2.5.0](https://github.com/folio-org/ui-calendar/tree/v2.5.0) (2019-09-11)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.4.0...v2.5.0)
+
+* Update translations strings
