@@ -1,15 +1,19 @@
 import React from 'react';
-import BigCalendar from '@folio/react-big-calendar';
-import moment from 'moment';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+
 import { DragDropContext } from 'react-dnd';
-import withDragAndDrop from '@folio/react-big-calendar/lib/addons/dragAndDrop';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+
 import CalendarUtils from '../../CalendarUtils';
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
-const DragAndDropCalendar = withDragAndDrop(BigCalendar);
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+const localizer = momentLocalizer(moment);
+const DnDCalendar = withDragAndDrop(Calendar);
 
 class BigCalendarWrapper extends React.Component {
     static propTypes = {
@@ -90,62 +94,61 @@ class BigCalendarWrapper extends React.Component {
       }
     }
 
-    onEventDnD = (event) => {
+    onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
       const { events } = this.state;
-      let updatedEvent = {};
-      if (event.allDay) {
-        event.start.setHours(0, 0, 0, 0);
-        event.end.setHours(0, 0, 0, 0);
-        updatedEvent = {
-          title: 'All day',
-          allDay: event.allDay,
-          start: event.start,
-          end: event.end,
-          id: event.event.id
-        };
-      } else {
-        updatedEvent = {
-          allDay: event.allDay,
-          start: event.start,
-          end: event.end,
-          id: event.event.id
-        };
+      const isSameDay = start.getDay() === end.getDay();
+      const idx = events.indexOf(event);
+      let allDay = event.allDay;
+
+      if (!event.allDay && droppedOnAllDaySlot) {
+        allDay = true;
+      } else if (event.allDay && !droppedOnAllDaySlot) {
+        allDay = false;
       }
+
+      const updatedEvent = {
+        ...event,
+        start,
+        end: isSameDay ? end : moment(start).endOf('day').toDate(),
+        allDay,
+        title: allDay ? 'All day' : '',
+      };
+
       const nextEvents = [...events];
-      for (let i = 0; i < nextEvents.length; i++) {
-        if (nextEvents[i].id === event.event.id) {
-          nextEvents.splice(i, 1, updatedEvent);
-        }
-      }
+      nextEvents.splice(idx, 1, updatedEvent);
+
       this.onCalendarChange(nextEvents);
     };
 
-    onEventResize = (type, { event, start, end }) => {
+    onEventResize = ({ event, start, end }) => {
       const { events } = this.state;
+
       const nextEvents = events.map(existingEvent => {
         return existingEvent.id === event.id
           ? { ...existingEvent, start, end }
           : existingEvent;
       });
+
       this.onCalendarChange(nextEvents);
     };
 
-    onSlotSelect(event) {
-      let id = this.state.eventIdCounter;
-      id++;
-      if (event.start instanceof Date && !Number.isNaN(event.start)) {
-        if (event.slots.length === 1) {
-          this.setState(state => {
-            state.events.push({ start: event.start, end: event.end, id, allDay: true, title: 'All day' });
-            return { events: state.events, eventIdCounter: id };
-          });
-        } else {
-          this.setState(state => {
-            state.events.push({ start: event.start, end: event.end, id, allDay: false });
-            return { events: state.events, eventIdCounter: id };
-          });
-        }
-      }
+    onSlotSelect({ start, end }) {
+      const { eventIdCounter } = this.state;
+      const isAllDay = start === end;
+      const id = eventIdCounter + 1;
+
+      this.setState(state => {
+        state.events.push({
+          id,
+          end,
+          start,
+          allDay: isAllDay,
+          ...(isAllDay && { title: 'All day' }),
+        });
+
+        return { events: state.events, eventIdCounter: id };
+      });
+
       this.onCalendarChange(this.state.events);
     }
 
@@ -193,9 +196,10 @@ class BigCalendarWrapper extends React.Component {
           }}
           data-test-big-calendar-wrapper
         >
-          <DragAndDropCalendar
+          <DnDCalendar
             events={this.state.events}
-            defaultView={BigCalendar.Views.WEEK}
+            defaultView="week"
+            localizer={localizer}
             defaultDate={new Date()}
             toolbar={false}
             formats={formats}
