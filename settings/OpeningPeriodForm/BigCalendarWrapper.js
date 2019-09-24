@@ -9,8 +9,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 
 import CalendarUtils from '../../CalendarUtils';
 
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import EventComponent from '../../components/EventComponent';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -22,21 +21,10 @@ class BigCalendarWrapper extends React.Component {
       eventsChange: PropTypes.func
     };
 
-    constructor() {
-      super();
-      this.onSlotSelect = this.onSlotSelect.bind(this);
-      this.onEventDnD = this.onEventDnD.bind(this);
-      this.onEventResize = this.onEventResize.bind(this);
-      this.onCalendarChange = this.onCalendarChange.bind(this);
-      this.onDeleteEvent = this.onDeleteEvent.bind(this);
-      this.onDeleteAlldayEvent = this.onDeleteAlldayEvent.bind(this);
-      this.filterEvent = this.filterEvent.bind(this);
-      this.state = {
-        eventIdCounter: 0,
-        events: []
-      };
-    }
-
+    state = {
+      eventIdCounter: 0,
+      events: [],
+    };
 
     componentDidMount() {
       if (this.props.periodEvents) {
@@ -132,61 +120,39 @@ class BigCalendarWrapper extends React.Component {
       this.onCalendarChange(nextEvents);
     };
 
-    onSlotSelect({ start, end }) {
+    onSlotSelect = ({ start, end }) => {
       const { eventIdCounter } = this.state;
       const isAllDay = start === end;
       const id = eventIdCounter + 1;
+      const events = [...this.state.events];
 
-      this.setState(state => {
-        state.events.push({
-          id,
-          end,
-          start,
-          allDay: isAllDay,
-          ...(isAllDay && { title: 'All day' }),
-        });
-
-        return { events: state.events, eventIdCounter: id };
+      events.push({
+        id,
+        end,
+        start,
+        allDay: isAllDay,
+        ...(isAllDay && { title: 'All day' }),
       });
 
-      this.onCalendarChange(this.state.events);
-    }
+      this.onCalendarChange(events);
+    };
 
-    onCalendarChange(events) {
-      this.setState({ events });
+    onCalendarChange = (events) => {
+      this.setState({
+        events,
+        eventIdCounter: events.length
+      });
+
       this.props.onCalendarChange(events);
-    }
+    };
 
-    onDeleteEvent(events, eventTodelete) {
-      const filteredEvent = this.state.events.filter((event) => event.id !== eventTodelete.id);
+    onDeleteEvent = ({ id: eventToDeleteId }) => {
+      const filteredEvent = this.state.events.filter(({ id }) => id !== eventToDeleteId);
 
-      this.setState({
-        events: this.filterEvent(eventTodelete),
-      });
-
-      this.state.eventIdCounter--;
       this.onCalendarChange(filteredEvent);
-    }
-
-    onDeleteAlldayEvent(eventToDelete) {
-      const filteredEvent = this.state.events.filter((event) => event.id !== eventToDelete.id);
-
-      this.setState({
-        events: this.filterEvent(eventToDelete),
-      });
-      this.state.eventIdCounter--;
-      this.onCalendarChange(filteredEvent);
-    }
-
-    filterEvent(eventToDelete) {
-      return this.state.events.filter((event) => event.id !== eventToDelete.id);
-    }
+    };
 
     render() {
-      const formats = {
-        dayFormat: (date, culture, localizer) => localizer.format(date, 'dddd', culture),
-      };
-
       return (
         <div
           className="period-big-calendar"
@@ -202,15 +168,19 @@ class BigCalendarWrapper extends React.Component {
             localizer={localizer}
             defaultDate={new Date()}
             toolbar={false}
-            formats={formats}
             selectable
             resizable
             onEventDrop={this.onEventDnD}
             onEventResize={this.onEventResize}
             onSelectSlot={this.onSlotSelect}
             views={['week']}
-            onDeleteEvent={this.onDeleteEvent}
-            onDeleteAlldayEvent={this.onDeleteAlldayEvent}
+            components={{
+              event: ({ event, title }) => <EventComponent
+                event={event}
+                title={title}
+                onDeleteEvent={this.onDeleteEvent}
+              />
+            }}
             labelTranslate={CalendarUtils.translate}
           />
         </div>
