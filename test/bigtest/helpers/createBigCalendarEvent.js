@@ -37,12 +37,14 @@ export default (startElement, endElement) => {
     view: window
   });
   const mouseup = new MouseEvent('mouseup', {
+    clientX: endX,
+    clientY: endY,
     bubbles: true,
     cancelable: true,
     view: window
   });
 
-  document.dispatchEvent(mousedown);
-  document.dispatchEvent(mousemove);
-  document.dispatchEvent(mouseup);
+  startElement.$root.dispatchEvent(mousedown);
+  endElement.$root.dispatchEvent(mousemove);
+  endElement.$root.dispatchEvent(mouseup);
 };

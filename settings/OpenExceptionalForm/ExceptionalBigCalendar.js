@@ -55,7 +55,7 @@ class ExceptionalBigCalendar extends React.Component {
         showMultiDayTimes
         events={this.getEvents()}
         views={['month']}
-        getEvent={getEvent}
+        onSelectEvent={getEvent}
       />
     );
   }
