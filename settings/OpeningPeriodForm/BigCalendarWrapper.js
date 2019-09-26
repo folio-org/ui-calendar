@@ -5,16 +5,18 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
 import { DragDropContext } from 'react-dnd';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import {
+  Calendar,
+  momentLocalizer,
+} from 'react-big-calendar';
 
 import CalendarUtils from '../../CalendarUtils';
-
 import EventComponent from '../../components/EventComponent';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
-class BigCalendarWrapper extends React.Component {
+class BigCalendarWrapper extends React.PureComponent {
     static propTypes = {
       onCalendarChange: PropTypes.func.isRequired,
       periodEvents: PropTypes.arrayOf(PropTypes.object),

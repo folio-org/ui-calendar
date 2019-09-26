@@ -239,7 +239,7 @@ describe('opening period form', () => {
           beforeEach(async () => {
             const timeSlots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
 
-            await calendarSettingsInteractor.openingPeriodForm.bigCalendar.createEvent(
+            await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
               timeSlots[25],
               timeSlots[27],
             );

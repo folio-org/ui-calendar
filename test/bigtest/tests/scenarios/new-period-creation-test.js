@@ -5,6 +5,7 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
+
 import CalendarSettingsInteractor from '../../interactors/calendar-settings';
 import setupApplication from '../../helpers/setup-application';
 import { formatDateString } from '../../helpers/messageConverters';
@@ -41,7 +42,7 @@ describe('new period creation', () => {
 
       const weekDays = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.wholeDay();
 
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.createEvent(
+      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
         weekDays[0],
         weekDays[1],
       );
@@ -79,7 +80,7 @@ describe('new period creation', () => {
       await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
       await calendarSettingsInteractor.openingPeriodForm.bigCalendar.click();
       const weekDays = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.wholeDay();
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.createEvent(
+      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
         weekDays[0],
         weekDays[1],
       );
