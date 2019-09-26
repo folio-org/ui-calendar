@@ -13,6 +13,7 @@ const EventComponent = memo(({ title, event, onDeleteEvent }) => {
     <div className={css.container}>
       {title}
       <IconButton
+        data-test-event-delete-button
         className={css.resetButton}
         innerClassName={css.icon}
         icon="times-circle-solid"

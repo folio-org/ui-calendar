@@ -16,7 +16,7 @@ import {
 const initialEventText = '12:00 AM – 1:30 AM';
 const modifiedEventText = '3:00 AM – 4:30 AM';
 
-describe('new period dnd', () => {
+describe('calendar events', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
   let timeslots;
 
@@ -49,6 +49,16 @@ describe('new period dnd', () => {
 
     it('should have proper event text', () => {
       expect(calendarSettingsInteractor.openingPeriodForm.bigCalendar.eventLabels(0).text).to.equal(initialEventText);
+    });
+
+    describe('event deletion', () => {
+      beforeEach(async function () {
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.eventDeleteButtons(0).click();
+      });
+
+      it('event should be deleted', () => {
+        expect(calendarSettingsInteractor.openingPeriodForm.bigCalendar.events().length).to.equal(0);
+      });
     });
 
     describe('dnd', () => {

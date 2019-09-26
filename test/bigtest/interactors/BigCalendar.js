@@ -11,6 +11,7 @@ export default @interactor class BigCalendar {
   timeSlots = collection('.rbc-time-slot');
   events = collection('.rbc-event-content');
   eventLabels = collection('.rbc-event-label');
+  eventDeleteButtons = collection('[data-test-event-delete-button]');
 
   simulateClick(startElem, endElem) {
     simulateClick(startElem, endElem);
