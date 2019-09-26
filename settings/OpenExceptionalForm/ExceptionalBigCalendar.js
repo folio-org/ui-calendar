@@ -1,14 +1,18 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+
 import {
   reduce,
   cloneDeep,
 } from 'lodash';
 
-import BigCalendar from '@folio/react-big-calendar';
+import {
+  Calendar,
+  momentLocalizer,
+} from 'react-big-calendar';
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
+const localizer = momentLocalizer(moment);
 
 class ExceptionalBigCalendar extends React.Component {
   static propTypes = {
@@ -43,13 +47,15 @@ class ExceptionalBigCalendar extends React.Component {
     const { getEvent } = this.props;
 
     return (
-      <BigCalendar
+      <Calendar
+        localizer={localizer}
         label
         popup
+        toolbar={false}
         showMultiDayTimes
         events={this.getEvents()}
         views={['month']}
-        getEvent={getEvent}
+        onSelectEvent={getEvent}
       />
     );
   }

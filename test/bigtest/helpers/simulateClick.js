@@ -22,27 +22,23 @@ export default (startElement, endElement) => {
     y: endY,
   } = getClickCoordinate(endElement);
 
-  const mousedown = new MouseEvent('mousedown', {
+  const startEventData = {
     clientX: startX,
     clientY: startY,
     bubbles: true,
     cancelable: true,
     view: window
-  });
-  const mousemove = new MouseEvent('mousemove', {
+  };
+
+  const endEventData = {
     clientX: endX,
     clientY: endY,
     bubbles: true,
     cancelable: true,
     view: window
-  });
-  const mouseup = new MouseEvent('mouseup', {
-    bubbles: true,
-    cancelable: true,
-    view: window
-  });
+  };
 
-  document.dispatchEvent(mousedown);
-  document.dispatchEvent(mousemove);
-  document.dispatchEvent(mouseup);
+  startElement.$root.dispatchEvent(new MouseEvent('mousedown', startEventData));
+  endElement.$root.dispatchEvent(new MouseEvent('mousemove', endEventData));
+  endElement.$root.dispatchEvent(new MouseEvent('mouseup', endEventData));
 };

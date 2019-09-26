@@ -13,7 +13,6 @@ import {
   IconButton,
 } from '@folio/stripes/components';
 import moment from 'moment';
-import BigCalendar from '@folio/react-big-calendar/lib';
 import { IfPermission } from '@folio/stripes-core';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
@@ -28,7 +27,6 @@ class ServicePointDetails extends React.Component {
     this.displayNextPeriod = this.displayNextPeriod.bind(this);
     this.onOpenCloneSettings = this.onOpenCloneSettings.bind(this);
     this.onSuccessfulCreatePeriod = this.onSuccessfulCreatePeriod.bind(this);
-    this.onSuccessfulModifyPeriod = this.onSuccessfulModifyPeriod.bind(this);
     this.clickNewPeriod = this.clickNewPeriod.bind(this);
     this.onClose = this.onClose.bind(this);
     this.getServicePoints = this.getServicePoints.bind(this);
@@ -162,10 +160,10 @@ class ServicePointDetails extends React.Component {
     this.getServicePoints();
   }
 
-  onSuccessfulModifyPeriod() {
+  onSuccessfulModifyPeriod = () => {
     this.setState({ modifyPeriodLayer: { isOpen: false } });
     this.getServicePoints();
-  }
+  };
 
   onClose() {
     this.setState({ newPeriodLayer: { isOpen: false } });
@@ -344,7 +342,6 @@ class ServicePointDetails extends React.Component {
         </div>;
     }
 
-    BigCalendar.momentLocalizer(moment);
     const servicePoint = this.props.initialValues;
 
     if (!this.state.isPeriodsPending) {

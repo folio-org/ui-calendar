@@ -1,0 +1,15 @@
+@import "@folio/stripes-components/lib/variables";
+
+.container {
+  position: relative;
+}
+
+.icon {
+  color: var(--bg);
+}
+
+.resetButton {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+}

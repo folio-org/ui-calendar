@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
-import UiCalendar from './UiCalendar';
 import Settings from './settings';
+
+import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
+import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
 
 class CalendarRouting extends React.Component {
   static propTypes = {
@@ -13,25 +13,16 @@ class CalendarRouting extends React.Component {
     location: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     showSettings: PropTypes.bool,
-  }
-
-  constructor(props) {
-    super(props);
-    this.connectedApp = props.stripes.connect(UiCalendar);
-  }
+  };
 
   NoMatch() {
     return (
       <div>
         <h2>Uh-oh!</h2>
         <p>
-
-
-How did you get to
-          <tt>{this.props.location.pathname}</tt>
-
-
-?
+          How did you get to
+          {this.props.location.pathname}
+          ?
         </p>
       </div>
     );
@@ -41,15 +32,7 @@ How did you get to
     if (this.props.showSettings) {
       return <Settings {...this.props} />;
     }
-    return (
-      <Switch>
-        <Route
-          path={`${this.props.match.path}`}
-          render={() => <this.connectedApp {...this.props} />}
-        />
-        <Route component={() => { this.NoMatch(); }} />
-      </Switch>
-    );
+    return this.NoMatch();
   }
 }
 
