@@ -154,6 +154,12 @@ class BigCalendarWrapper extends React.PureComponent {
       this.onCalendarChange(filteredEvent);
     };
 
+    renderEventComponent = ({ event, title }) => <EventComponent
+      event={event}
+      title={title}
+      onDeleteEvent={this.onDeleteEvent}
+    />;
+
     render() {
       return (
         <div
@@ -177,11 +183,7 @@ class BigCalendarWrapper extends React.PureComponent {
             onSelectSlot={this.onSlotSelect}
             views={['week']}
             components={{
-              event: ({ event, title }) => <EventComponent
-                event={event}
-                title={title}
-                onDeleteEvent={this.onDeleteEvent}
-              />
+              event: this.renderEventComponent
             }}
             labelTranslate={CalendarUtils.translate}
           />
