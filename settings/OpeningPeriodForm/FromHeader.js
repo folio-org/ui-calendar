@@ -77,13 +77,6 @@ const FromHeader = (props) => {
               <FormattedMessage id="ui-calendar.saveButton" />
             </Button>
           </IfPermission>
-          <Button
-            data-test-save-as-template
-            buttonStyle="primary"
-            disabled
-          >
-            <FormattedMessage id="ui-calendar.savesAsTemplate" />
-          </Button>
         </Col>
       </Row>
       <hr />

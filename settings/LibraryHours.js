@@ -11,7 +11,12 @@ class LibraryHours extends React.Component {
       entries: {
         type: 'okapi',
         records: 'servicepoints',
+        perRequest: 100,
         path: 'service-points',
+        params: {
+          query: 'cql.allRecords=1',
+          limit: '1000',
+        },
       },
       query: {},
       periodId: {},

@@ -46,7 +46,6 @@ import BigCalendar from './BigCalendar';
   defaultScope = '[data-test-big-calendar-header]';
 
   hedline = scoped('[data-test-big-calendar-header-hedline]');
-  copyButton = scoped('[data-test-copy]');
   selectTemplateButton = scoped('[data-test-select-template]');
 
   isCopyButtonDisabled = property('[data-test-copy]', 'disabled');

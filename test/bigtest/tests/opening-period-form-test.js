@@ -214,22 +214,6 @@ describe('opening period form', () => {
         });
       });
 
-      describe('copy button', () => {
-        it('should be displayed', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.copyButton.isPresent).to.be.true;
-        });
-
-        it('should have proper text', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.copyButton.text).to.equal(
-            translation.copy
-          );
-        });
-
-        it('should be disabled', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.isCopyButtonDisabled).to.be.true;
-        });
-      });
-
       describe('big calendar', () => {
         it('should be displayed', () => {
           expect(calendarSettingsInteractor.openingPeriodForm.bigCalendar.isPresent).to.be.true;
