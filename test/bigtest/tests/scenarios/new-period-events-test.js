@@ -14,11 +14,10 @@ import {
 } from '../../constants';
 
 const initialEventText = '12:00 AM – 1:30 AM';
-const modifiedEventText = '3:00 AM – 4:30 AM';
+const modifiedEventText = '3:30 AM – 5:00 AM';
 
 describe('calendar events', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
-  let timeslots;
 
   describe('next period', () => {
     let servicePoint;
@@ -39,7 +38,7 @@ describe('calendar events', () => {
       await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
       await calendarSettingsInteractor.openingPeriodForm.bigCalendar.click();
 
-      timeslots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
+      const timeslots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
 
       await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
         timeslots[48],
@@ -64,6 +63,12 @@ describe('calendar events', () => {
     describe('dnd', () => {
       beforeEach(async function () {
         const events = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.events();
+        const timeslots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
+
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          events[0],
+          timeslots[56],
+        );
         await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
           events[0],
           timeslots[56],

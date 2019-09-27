@@ -1,7 +1,6 @@
 import {
   collection,
   interactor,
-  property,
   scoped,
 } from '@bigtest/interactor';
 
@@ -44,8 +43,6 @@ export default @interactor class ServicePointDetails {
   currentPeriodTimes = new CurrentPeriodTimes();
   nextPeriod = new NextPeriod();
   newPeriodButton = scoped('[data-test-new-period]');
-  clonePeriodButton = scoped('[data-test-clone-settings]');
-  isClonePeriodButtonDisabled = property('[data-test-clone-settings]', 'disabled');
   actualLibraryHours = scoped('[data-test-actual-library-hours]');
   actualLibraryHoursHeader = scoped('[data-test-actual-library-hours-header]');
   regularOpeningHoursWithExceptions = scoped('[data-test-regular-opening-hours-with-exceptions]');
