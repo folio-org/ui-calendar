@@ -414,22 +414,6 @@ describe('service point details', () => {
     });
   });
 
-  describe('clone period button', () => {
-    it('should be displayed', () => {
-      expect(calendarSettingsInteractor.servicePointDetails.clonePeriodButton.isPresent).to.be.true;
-    });
-
-    it('should have proper text', () => {
-      expect(calendarSettingsInteractor.servicePointDetails.clonePeriodButton.text).to.equal(
-        translation.cloneSettings
-      );
-    });
-
-    it('should be disabled', () => {
-      expect(calendarSettingsInteractor.servicePointDetails.isClonePeriodButtonDisabled).to.be.true;
-    });
-  });
-
   describe('actual library hours', () => {
     describe('actual library hours header', () => {
       it('should be displayed', () => {

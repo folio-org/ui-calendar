@@ -25,12 +25,10 @@ import BigCalendar from './BigCalendar';
   saveButton = scoped('[data-test-save-button]');
   deleteButton = scoped('[data-test-delete-button]');
   closeButton = scoped('[data-test-close-button] button');
-  saveAsTemlateButton = scoped('[data-test-save-as-template]');
 
   isSaveButtonDisabled = property('[data-test-save-button]', 'disabled');
   isDeleteButtonDisabled = property('[data-test-delete-button]', 'disabled');
   isCloseButtonDisabled = property('[data-test-close-button] button', 'disabled');
-  isSaveAsTemlateButtonDisabled = property('[data-test-save-as-template]', 'disabled');
 }
 
 @interactor class InputFields {
@@ -46,11 +44,6 @@ import BigCalendar from './BigCalendar';
   defaultScope = '[data-test-big-calendar-header]';
 
   hedline = scoped('[data-test-big-calendar-header-hedline]');
-  copyButton = scoped('[data-test-copy]');
-  selectTemplateButton = scoped('[data-test-select-template]');
-
-  isCopyButtonDisabled = property('[data-test-copy]', 'disabled');
-  isSelectTemplateButtonDisabled = property('[data-test-save-as-template]', 'disabled');
 }
 
 export default @interactor class OpeningPeriodForm {

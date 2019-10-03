@@ -104,22 +104,6 @@ describe('opening period form', () => {
           );
         });
       });
-
-      describe('saves as template button', () => {
-        it('should be displayed', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.formHeader.saveAsTemlateButton.isPresent).to.be.true;
-        });
-
-        it('should be disabled', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.formHeader.isSaveAsTemlateButtonDisabled).to.be.true;
-        });
-
-        it('should have proper text', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.formHeader.saveAsTemlateButton.text).to.equal(
-            translation.savesAsTemplate
-          );
-        });
-      });
     });
 
     describe('input fields', () => {
@@ -195,38 +179,6 @@ describe('opening period form', () => {
           expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.hedline.text).to.equal(
             translation.regularLibraryHoursCalendar
           );
-        });
-      });
-
-      describe('select template button', () => {
-        it('should be displayed', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.selectTemplateButton.isPresent).to.be.true;
-        });
-
-        it('should have proper text', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.selectTemplateButton.text).to.equal(
-            translation.selectTemplate
-          );
-        });
-
-        it('should be disabled', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.isSelectTemplateButtonDisabled).to.be.true;
-        });
-      });
-
-      describe('copy button', () => {
-        it('should be displayed', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.copyButton.isPresent).to.be.true;
-        });
-
-        it('should have proper text', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.copyButton.text).to.equal(
-            translation.copy
-          );
-        });
-
-        it('should be disabled', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.bigCalendarHeader.isCopyButtonDisabled).to.be.true;
         });
       });
 

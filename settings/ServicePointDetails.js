@@ -393,14 +393,6 @@ class ServicePointDetails extends React.Component {
                   </Button>
                 </Col>
               </IfPermission>
-              <Col xs={6}>
-                <Button
-                  data-test-clone-settings
-                  disabled
-                >
-                  <FormattedMessage id="ui-calendar.cloneSettings" />
-                </Button>
-              </Col>
             </Row>
             <Row>
               <div data-test-actual-library-hours>
