@@ -96,3 +96,11 @@
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.4.0...v2.5.0)
 
 * Update translations strings
+
+## [2.6.0](https://github.com/folio-org/ui-calendar/tree/v2.6.0) (2019-10-25)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.5.0...v2.6.0)
+
+* Update translations strings
+* Remove non-functional buttons UICAL-79
+* Update react-big-calendar version - UICAL-86
+* Increase amount of visible service points - UICAL-88
