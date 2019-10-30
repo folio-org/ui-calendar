@@ -26,6 +26,7 @@ class LibraryHours extends React.Component {
         records: 'openingPeriods',
         path: 'calendar/periods/%{query}/period?withOpeningDays=true&showPast=true&showExceptional=%{exceptional}',
         fetch: false,
+        throwErrors: false,
         accumulate: true,
         POST: {
           path: 'calendar/periods/%{query}/period',
