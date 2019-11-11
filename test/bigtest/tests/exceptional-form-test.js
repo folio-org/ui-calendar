@@ -59,16 +59,6 @@ describe('open exceptional form', () => {
           await calendarSettingsInteractor.exceptionalForm.newPeriod.click();
         });
 
-        describe('close exceptional period editor form', () => {
-          beforeEach(async () => {
-            await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.cancelEditing.click();
-          });
-
-          it('click on cancel button in the footer', () => {
-            expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.isPresent).to.be.false;
-          });
-        });
-
         describe('exceptional period editor', () => {
           it('should be presented', () => {
             expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.isPresent).to.be.true;
