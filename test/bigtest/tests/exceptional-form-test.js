@@ -18,7 +18,7 @@ import {
   startTime,
 } from '../constants';
 
-describe.only('open exceptional form', () => {
+describe('open exceptional form', () => {
   const servicePointAmount = 2;
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
   let servicePoint;
