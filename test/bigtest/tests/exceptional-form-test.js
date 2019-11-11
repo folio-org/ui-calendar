@@ -165,7 +165,7 @@ describe('open exceptional form', () => {
               );
             });
 
-            describe.only('closed checkbox click', () => {
+            describe('closed checkbox click', () => {
               beforeEach(async () => {
                 await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closedCheckbox.clickAndBlur();
               });
