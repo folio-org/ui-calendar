@@ -286,9 +286,10 @@ class OpeningPeriodFormWrapper extends React.Component {
       <Paneset isRoot>
         <Pane
           defaultWidth="100%"
-          paneTitle={<FormattedMessage id={title} />}
+          paneTitle={<FormattedMessage data-test-title id={title} />}
           firstMenu={(
             <IconButton
+              data-test-close-button
               icon="times"
               size="medium"
               iconClassName="closeIcon"
