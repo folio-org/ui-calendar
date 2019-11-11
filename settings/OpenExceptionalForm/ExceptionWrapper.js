@@ -1067,6 +1067,7 @@ class ExceptionWrapper extends React.Component {
           <PaneFooter
             renderStart={(
               <Button
+                data-test-cancel-exception-form
                 marginBottom0
                 onClick={() => { this.beforeExit('paneStartMenu'); }}
               >
@@ -1111,6 +1112,7 @@ class ExceptionWrapper extends React.Component {
           <PaneFooter
             renderStart={(
               <Button
+                data-test-cancel-exception-period
                 marginBottom0
                 onClick={() => { this.beforeExit('editorStartMenu'); }}
               >

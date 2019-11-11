@@ -54,9 +54,29 @@ describe('open exceptional form', () => {
         expect(calendarSettingsInteractor.exceptionalForm.newPeriod.isPresent).to.be.true;
       });
 
+      describe('close exceptional form', () => {
+        beforeEach(async () => {
+          await calendarSettingsInteractor.exceptionalForm.cancelEditing.click();
+        });
+
+        it('click on cancel button in the footer', () => {
+          expect(calendarSettingsInteractor.exceptionalForm.isPresent).to.be.false;
+        });
+      });
+
       describe('new period button click', () => {
         beforeEach(async () => {
           await calendarSettingsInteractor.exceptionalForm.newPeriod.click();
+        });
+
+        describe('cancel editing', () => {
+          beforeEach(async () => {
+            await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.cancelEditing.click();
+          });
+
+          it('close exceptional period editor', () => {
+            expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.isPresent).to.be.false;
+          });
         });
 
         describe('exceptional period editor', () => {
