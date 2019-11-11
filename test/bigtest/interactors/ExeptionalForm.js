@@ -42,7 +42,6 @@ import ConfirmationModal from './ConfirmationModal';
   allDay = scoped('[data-test-all-day]', CheckboxInteractor);
   openingTime = scoped('[data-test-opening-time]', TimepickerInteractor);
   closingTime = scoped('[data-test-closing-time]', TimepickerInteractor);
-  cancelEditing = new Interactor('[data-test-cancel-exception-period]');
 }
 
 export default @interactor class ExeptionalForm {

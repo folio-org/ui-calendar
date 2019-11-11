@@ -1077,9 +1077,9 @@ class ExceptionWrapper extends React.Component {
             renderEnd={(
               <IfPermission perm={permissions.POST}>
                 <Button
+                  data-test-exceptional-new-period-button
                   buttonStyle="primary"
                   onClick={() => { this.setState({ openEditor: true }); }}
-                  data-test-exceptional-new-period-button
                 >
                   <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
                 </Button>

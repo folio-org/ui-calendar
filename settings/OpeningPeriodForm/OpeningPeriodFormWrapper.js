@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
-import { IfPermission } from '@folio/stripes-core';
 
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { IfPermission } from '@folio/stripes-core';
 import {
   Button,
   ConfirmationModal,
@@ -14,7 +15,6 @@ import {
   Paneset,
   PaneFooter,
 } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import InputFields from './InputFields';
 import BigCalendarWrapper from './BigCalendarWrapper';
