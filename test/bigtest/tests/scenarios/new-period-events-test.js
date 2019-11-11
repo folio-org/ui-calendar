@@ -69,10 +69,6 @@ describe('calendar events', () => {
           events[0],
           timeslots[56],
         );
-        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-          events[0],
-          timeslots[56],
-        );
       });
 
       it('should have proper event text', () => {
