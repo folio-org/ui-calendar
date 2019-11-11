@@ -18,7 +18,7 @@ import {
   startTime,
 } from '../constants';
 
-describe('open exceptional form', () => {
+describe.only('open exceptional form', () => {
   const servicePointAmount = 2;
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
   let servicePoint;
@@ -70,20 +70,20 @@ describe('open exceptional form', () => {
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.labelText).to.equal(
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.text).to.equal(
                 getRequiredLabel(translation.validFrom, false)
               );
             });
           });
 
-          describe('valid from', () => {
+          describe('valid to', () => {
             it('should be presented', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.isPresent).to.be.true;
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.isPresent).to.be.true;
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.labelText).to.equal(
-                getRequiredLabel(translation.validFrom, false)
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.text).to.equal(
+                getRequiredLabel(translation.validTo, false)
               );
             });
           });
@@ -94,7 +94,7 @@ describe('open exceptional form', () => {
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.label).to.equal(
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.text).to.equal(
                 getRequiredLabel(translation.name, false)
               );
             });
@@ -165,8 +165,9 @@ describe('open exceptional form', () => {
               );
             });
 
-            describe('closed checkbox click', () => {
+            describe.only('closed checkbox click', () => {
               beforeEach(async () => {
+                debugger;
                 await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closedCheckbox.clickAndBlur();
               });
 
