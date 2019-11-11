@@ -206,7 +206,7 @@ describe('opening period form', () => {
   });
 
   describe('error modals', () => {
-    describe.only('wrong date error modal', () => {
+    describe('wrong date error modal', () => {
       let servicePoint;
 
       setupApplication();
@@ -217,13 +217,13 @@ describe('opening period form', () => {
         await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
         await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
         await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
-        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.prototype.fillAndBlur(
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
           startDateFuture
         );
-        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.prototype.fillAndBlur(
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.fillAndBlur(
           startDatePast
         );
-        await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.prototype.fillAndBlur(name);
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
         await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
       });
 
