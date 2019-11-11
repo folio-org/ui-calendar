@@ -283,65 +283,69 @@ class OpeningPeriodFormWrapper extends React.Component {
       : ['ui-calendar.modifyRegularLibraryValidityPeriod', permissions.PUT];
 
     return (
-      <Paneset isRoot>
-        <Pane
-          data-test-opening-period-form-header
-          defaultWidth="100%"
-          paneTitle={<FormattedMessage data-test-title id={title} />}
-          firstMenu={(
-            <div data-test-close-button>
-              <IconButton
-                icon="times"
-                size="medium"
-                iconClassName="closeIcon"
-                onClick={this.confirmExit}
-              />
-            </div>
-          )}
-          footer={(
-            <PaneFooter
-              renderStart={(
-                <Button
-                  marginBottom0
+      <form onSubmit={this.onFormSubmit}>
+        <Paneset isRoot>
+          <Pane
+            data-test-opening-period-form-header
+            defaultWidth="100%"
+            paneTitle={(
+              <div data-test-title>
+                <FormattedMessage id={title} />
+              </div>
+            )}
+            firstMenu={(
+              <div data-test-close-button>
+                <IconButton
+                  icon="times"
+                  size="medium"
+                  iconClassName="closeIcon"
                   onClick={this.confirmExit}
-                >
-                  <FormattedMessage id="ui-calendar.common.cancel" />
-                </Button>
-              )}
-              renderEnd={(
-                <React.Fragment>
-                  <IfPermission perm={permissions.DELETE}>
-                    <Button
-                      data-test-delete-button
-                      disabled={isPeriodFormNew}
-                      buttonStyle="danger"
-                      onClick={this.confirmDelete}
-                    >
-                      <FormattedMessage id="ui-calendar.deleteButton" />
-                    </Button>
-                  </IfPermission>
-                  <IfPermission perm={submitPermission}>
-                    <Button
-                      data-test-save-button
-                      type="submit"
-                      buttonStyle="default"
-                    >
-                      <FormattedMessage id="ui-calendar.saveButton" />
-                    </Button>
-                  </IfPermission>
-                </React.Fragment>
-              )}
-            />
-          )}
-        >
-          <div
-            data-test-opening-period-form
-            id="newPeriodForm"
+                />
+              </div>
+            )}
+            footer={(
+              <PaneFooter
+                renderStart={(
+                  <Button
+                    marginBottom0
+                    onClick={this.confirmExit}
+                  >
+                    <FormattedMessage id="ui-calendar.common.cancel" />
+                  </Button>
+                )}
+                renderEnd={(
+                  <React.Fragment>
+                    <IfPermission perm={permissions.DELETE}>
+                      <Button
+                        data-test-delete-button
+                        disabled={isPeriodFormNew}
+                        buttonStyle="danger"
+                        onClick={this.confirmDelete}
+                      >
+                        <FormattedMessage id="ui-calendar.deleteButton" />
+                      </Button>
+                    </IfPermission>
+                    <IfPermission perm={submitPermission}>
+                      <Button
+                        data-test-save-button
+                        type="submit"
+                        buttonStyle="default"
+                      >
+                        <FormattedMessage id="ui-calendar.saveButton" />
+                      </Button>
+                    </IfPermission>
+                  </React.Fragment>
+                )}
+              />
+            )}
           >
-            {errorDelete}
-            {errorExit}
-            {errorModal}
-            <form onSubmit={this.onFormSubmit}>
+            <div
+              data-test-opening-period-form
+              id="newPeriodForm"
+            >
+              {errorDelete}
+              {errorExit}
+              {errorModal}
               <InputFields
                 {...this.props}
                 nameValue={this.state.name || ''}
@@ -365,10 +369,10 @@ class OpeningPeriodFormWrapper extends React.Component {
                   periodEvents: this.props.modifyPeriod.openingDays,
                 })}
               />
-            </form>
-          </div>
-        </Pane>
-      </Paneset>
+            </div>
+          </Pane>
+        </Paneset>
+      </form>
     );
   }
 }
