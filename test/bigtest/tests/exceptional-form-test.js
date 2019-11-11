@@ -70,7 +70,7 @@ describe('open exceptional form', () => {
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.text).to.equal(
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.labelText).to.equal(
                 getRequiredLabel(translation.validFrom, false)
               );
             });
@@ -82,7 +82,7 @@ describe('open exceptional form', () => {
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.text).to.equal(
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.labelText).to.equal(
                 getRequiredLabel(translation.validTo, false)
               );
             });
