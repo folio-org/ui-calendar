@@ -76,14 +76,14 @@ describe('open exceptional form', () => {
             });
           });
 
-          describe('valid from', () => {
+          describe('valid to', () => {
             it('should be presented', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.isPresent).to.be.true;
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.isPresent).to.be.true;
             });
 
             it('should have proper label', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.labelText).to.equal(
-                getRequiredLabel(translation.validFrom, false)
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.labelText).to.equal(
+                getRequiredLabel(translation.validTo, false)
               );
             });
           });
@@ -237,7 +237,7 @@ describe('open exceptional form', () => {
           describe('exit confirmation modal', () => {
             beforeEach(async () => {
               await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.allDay.clickAndBlur();
-              await calendarSettingsInteractor.exceptionalForm.closeButton.click();
+              await calendarSettingsInteractor.exceptionalForm.cancelEditing.click();
             });
 
             it('should be displayed', () => {

@@ -54,4 +54,5 @@ export default @interactor class ExeptionalForm {
   bigCalendar = new BigCalendar();
   exiteConfirmationModal = new ConfirmationModal('#exite-confirmation');
   errorModal = new ConfirmationModal('[data-test-error-modal]');
+  cancelEditing = new Interactor('[data-test-cancel-exception-form]');
 }

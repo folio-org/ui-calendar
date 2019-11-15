@@ -2,19 +2,26 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
+import { isEmpty } from 'lodash';
 
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import { IfPermission } from '@folio/stripes-core';
 import {
   Button,
   ConfirmationModal,
+  IconButton,
   Modal,
+  Pane,
+  Paneset,
+  PaneFooter,
 } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
-import FromHeader from './FromHeader';
 import InputFields from './InputFields';
 import BigCalendarWrapper from './BigCalendarWrapper';
 import BigCalendarHeader from './BigCalendarHeader';
 import CalendarUtils from '../../CalendarUtils';
+
+import { permissions } from '../constants';
 
 class OpeningPeriodFormWrapper extends React.Component {
   static propTypes = {
@@ -270,46 +277,102 @@ class OpeningPeriodFormWrapper extends React.Component {
         </Modal>;
     }
 
+    const isPeriodFormNew = isEmpty(this.props.modifyPeriod);
+    const [title, submitPermission] = isPeriodFormNew
+      ? ['ui-calendar.regularLibraryValidityPeriod', permissions.POST]
+      : ['ui-calendar.modifyRegularLibraryValidityPeriod', permissions.PUT];
+
     return (
-      <div
-        data-test-opening-period-form
-        id="newPeriodForm"
-      >
-        {errorDelete}
-        {errorExit}
-        {errorModal}
-        <form onSubmit={this.onFormSubmit}>
-          <FromHeader
-            {...this.props}
-            handleDelete={this.confirmDelete}
-            onClose={this.confirmExit}
-          />
-          <InputFields
-            {...this.props}
-            nameValue={this.state.name || ''}
-            onNameChange={this.handleNameChange}
-            onDateChange={this.handleDateChange}
-            initialValues={
-              {
-                item:
+      <form onSubmit={this.onFormSubmit}>
+        <Paneset isRoot>
+          <Pane
+            data-test-opening-period-form-header
+            defaultWidth="100%"
+            paneTitle={(
+              <div data-test-title>
+                <FormattedMessage id={title} />
+              </div>
+            )}
+            firstMenu={(
+              <div data-test-close-button>
+                <IconButton
+                  icon="times"
+                  size="medium"
+                  iconClassName="closeIcon"
+                  onClick={this.confirmExit}
+                />
+              </div>
+            )}
+            footer={(
+              <PaneFooter
+                renderStart={(
+                  <Button
+                    marginBottom0
+                    onClick={this.confirmExit}
+                  >
+                    <FormattedMessage id="ui-calendar.common.cancel" />
+                  </Button>
+                )}
+                renderEnd={(
+                  <React.Fragment>
+                    <IfPermission perm={permissions.DELETE}>
+                      <Button
+                        data-test-delete-button
+                        disabled={isPeriodFormNew}
+                        buttonStyle="danger"
+                        onClick={this.confirmDelete}
+                      >
+                        <FormattedMessage id="ui-calendar.deleteButton" />
+                      </Button>
+                    </IfPermission>
+                    <IfPermission perm={submitPermission}>
+                      <Button
+                        data-test-save-button
+                        type="submit"
+                        buttonStyle="default"
+                      >
+                        <FormattedMessage id="ui-calendar.saveButton" />
+                      </Button>
+                    </IfPermission>
+                  </React.Fragment>
+                )}
+              />
+            )}
+          >
+            <div
+              data-test-opening-period-form
+              id="newPeriodForm"
+            >
+              {errorDelete}
+              {errorExit}
+              {errorModal}
+              <InputFields
+                {...this.props}
+                nameValue={this.state.name || ''}
+                onNameChange={this.handleNameChange}
+                onDateChange={this.handleDateChange}
+                initialValues={
                   {
-                    startDate: this.getStartDate(),
-                    endDate: this.getEndDate(),
-                  },
-                periodName: this.getName()
-              }
-            }
-          />
-          <BigCalendarHeader {...this.props} />
-          <BigCalendarWrapper
-            onCalendarChange={this.onCalendarChange}
-            {...(this.props.modifyPeriod && {
-              eventsChange: this.onEventChange,
-              periodEvents: this.props.modifyPeriod.openingDays,
-            })}
-          />
-        </form>
-      </div>
+                    item: {
+                      startDate: this.getStartDate(),
+                      endDate: this.getEndDate(),
+                    },
+                    periodName: this.getName()
+                  }
+                }
+              />
+              <BigCalendarHeader {...this.props} />
+              <BigCalendarWrapper
+                onCalendarChange={this.onCalendarChange}
+                {...(this.props.modifyPeriod && {
+                  eventsChange: this.onEventChange,
+                  periodEvents: this.props.modifyPeriod.openingDays,
+                })}
+              />
+            </div>
+          </Pane>
+        </Paneset>
+      </form>
     );
   }
 }

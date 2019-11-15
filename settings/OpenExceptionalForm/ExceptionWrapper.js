@@ -9,6 +9,7 @@ import {
   IconButton,
   Icon,
   Pane,
+  PaneFooter,
   Paneset,
   ConfirmationModal,
   Modal
@@ -1019,27 +1020,6 @@ class ExceptionWrapper extends React.Component {
         />
       </PaneMenu>;
 
-    const paneLastMenu =
-      <PaneMenu>
-        <div style={{
-          paddingRight: '15px',
-          paddingTop: '15px'
-        }}
-        >
-          <IfPermission perm={permissions.POST}>
-            <Button
-              buttonStyle="primary"
-              onClick={() => {
-                this.setState({ openEditor: true });
-              }}
-              data-test-exceptional-new-period-button
-            >
-              <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
-            </Button>
-          </IfPermission>
-        </div>
-      </PaneMenu>;
-
     let deleteButton = null;
 
     if (this.state.modifyEvent) {
@@ -1060,20 +1040,6 @@ class ExceptionWrapper extends React.Component {
       >
         <FormattedMessage id="ui-calendar.saveButton" />
       </Button>;
-
-    const lastMenus =
-      <div style={{
-        paddingRight: '15px',
-        paddingTop: '15px'
-      }}
-      >
-        <IfPermission perm={permissions.DELETE}>
-          {deleteButton}
-        </IfPermission>
-        <IfPermission perm={permissions.PUT}>
-          {saveButton}
-        </IfPermission>
-      </div>;
 
     const paneTitle =
       <PaneMenu>
@@ -1097,7 +1063,30 @@ class ExceptionWrapper extends React.Component {
         defaultWidth="fill"
         paneTitle={paneTitle}
         firstMenu={paneStartMenu}
-        lastMenu={paneLastMenu}
+        footer={(
+          <PaneFooter
+            renderStart={(
+              <Button
+                data-test-cancel-exception-form
+                marginBottom0
+                onClick={() => { this.beforeExit('paneStartMenu'); }}
+              >
+                <FormattedMessage id="ui-calendar.common.cancel" />
+              </Button>
+            )}
+            renderEnd={(
+              <IfPermission perm={permissions.POST}>
+                <Button
+                  data-test-exceptional-new-period-button
+                  buttonStyle="primary"
+                  onClick={() => { this.setState({ openEditor: true }); }}
+                >
+                  <FormattedMessage id="ui-calendar.exceptionalNewPeriod" />
+                </Button>
+              </IfPermission>
+            )}
+          />
+        )}
       >
         <ExceptionalBigCalendar
           {...this.props}
@@ -1119,7 +1108,29 @@ class ExceptionWrapper extends React.Component {
         defaultWidth="20%"
         paneTitle={editorPaneTittle}
         firstMenu={editorStartMenu}
-        lastMenu={lastMenus}
+        footer={(
+          <PaneFooter
+            renderStart={(
+              <Button
+                data-test-cancel-exception-period
+                marginBottom0
+                onClick={() => { this.beforeExit('editorStartMenu'); }}
+              >
+                <FormattedMessage id="ui-calendar.common.cancel" />
+              </Button>
+            )}
+            renderEnd={(
+              <React.Fragment>
+                <IfPermission perm={permissions.DELETE}>
+                  {deleteButton}
+                </IfPermission>
+                <IfPermission perm={permissions.PUT}>
+                  {saveButton}
+                </IfPermission>
+              </React.Fragment>
+            )}
+          />
+        )}
       >
         <ExceptionalPeriodEditor
           {...this.props}
