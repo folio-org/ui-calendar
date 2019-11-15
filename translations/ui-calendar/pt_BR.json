@@ -114,5 +114,6 @@
     "deleteQuestionException": "O período excepcional será <strong>apagado</strong>.",
     "deleteQuestionExceptionTitle": "Excluir período excepcional?",
     "closeWithoutSaving": "Fechar o editor sem salvar",
-    "current": "Atual:"
+    "current": "Atual:",
+    "common.cancel": "Cancel"
 }

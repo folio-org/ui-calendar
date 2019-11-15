@@ -114,5 +114,6 @@
     "deleteQuestionException": "例外时段将<strong>删除</strong> 。",
     "deleteQuestionExceptionTitle": "是否删除例外时段？",
     "closeWithoutSaving": "关闭编辑器而不保存",
-    "current": "当前："
+    "current": "当前：",
+    "common.cancel": "Cancel"
 }
