@@ -68,7 +68,7 @@
     "nextPeriod": "Next:",
     "regularLibraryValidityPeriod": "New: Regular Library Hours Validity Period",
     "deleteButton": "Delete",
-    "saveButton": "Save",
+    "saveButton": "Save & close",
     "savesAsTemplate": "Saves as Template",
     "validFrom": "Valid From:",
     "validTo": "Valid To:",
@@ -114,5 +114,6 @@
     "deleteQuestionException": "The exceptional period will be <strong>deleted</strong>.",
     "deleteQuestionExceptionTitle": "Delete exceptional period?",
     "closeWithoutSaving": "Close editor without saving",
-    "current": "Current:"
+    "current": "Current:",
+    "common.cancel": "Cancel"
 }

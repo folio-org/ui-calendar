@@ -114,5 +114,6 @@
     "deleteQuestionException": "The exceptional period will be <strong>deleted</strong>.",
     "deleteQuestionExceptionTitle": "Удалить исключенный период?",
     "closeWithoutSaving": "Close editor without saving",
-    "current": "Текущий"
+    "current": "Текущий",
+    "common.cancel": "Cancel"
 }
