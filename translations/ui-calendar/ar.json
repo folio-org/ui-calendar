@@ -114,5 +114,6 @@
     "deleteQuestionException": "سيتم <strong>حذف</strong> فترة الاستثناء",
     "deleteQuestionExceptionTitle": "حذف الفترة الاستثنائية؟",
     "closeWithoutSaving": "إغلاق المحرر بدون حفظ",
-    "current": "الحالي:"
+    "current": "الحالي:",
+    "common.cancel": "إلغاء"
 }
