@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import RandomColor from 'randomcolor';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
+import { isEmpty } from 'lodash';
 import {
   Button,
   PaneMenu,
@@ -77,7 +78,7 @@ class ExceptionWrapper extends React.Component {
         startDate: null,
         endDate: null,
       }],
-      errorModalText: null,
+      errors: [],
       editor: {
         exceptionalIds: [{
           id: null,
@@ -903,10 +904,16 @@ class ExceptionWrapper extends React.Component {
             .then(() => {
               this.setEvents(this.state.servicePoints);
             });
+        })
+        .catch(async (response) => {
+          const { errors } = await response.json();
+          const errorCodes = errors.map(({ code }) => code);
+
+          this.setState({ errors: errorCodes });
         });
     } else {
       this.setState({
-        errorModalText: preCheck,
+        errors: [preCheck],
       });
     }
   }
@@ -953,7 +960,7 @@ class ExceptionWrapper extends React.Component {
 
   closeErrorModal() {
     this.setState({
-      errorModalText: null,
+      errors: [],
     });
   }
 
@@ -994,6 +1001,7 @@ class ExceptionWrapper extends React.Component {
   }
 
   render() {
+    const { errors } = this.state;
     let name = '';
     if (this.state.editor !== null && this.state.editor !== undefined) {
       name = this.state.editor.name;
@@ -1178,8 +1186,10 @@ class ExceptionWrapper extends React.Component {
     );
 
     let errorModal = null;
-    if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
-      const label = 'ui-calendar.' + this.state.errorModalText;
+
+    if (!isEmpty(errors)) {
+      const errorMessages = errors.map(errorCode => <FormattedMessage tagName="p" id={`ui-calendar.${errorCode}`} />);
+
       errorModal =
         <Modal
           data-test-error-modal
@@ -1189,7 +1199,7 @@ class ExceptionWrapper extends React.Component {
           label={<FormattedMessage id="ui-calendar.saveError" />}
           footer={footer}
         >
-          <p><FormattedMessage id={label} /></p>
+          {errorMessages}
         </Modal>;
     }
 

@@ -16,6 +16,7 @@ import {
   startTime,
   startDatePast,
 } from '../../constants';
+import translation from '../../../../translations/ui-calendar/en';
 
 describe('open exceptional form', () => {
   const servicePointAmount = 2;
@@ -120,6 +121,37 @@ describe('open exceptional form', () => {
         it('exceptional period should be created', () => {
           expect(calendarSettingsInteractor.exceptionalForm.bigCalendar.events().length > 0).to.be.true;
         });
+      });
+    });
+  });
+
+  describe('handle exceptional period overlap error', () => {
+    setupApplication({ scenarios: ['periodOverlapError'] });
+
+    beforeEach(async function () {
+      servicePoint = this.server.createList('servicePoint', servicePointAmount);
+      this.visit(`/settings/calendar/library-hours/${servicePoint[0].id}`);
+      await calendarSettingsInteractor.servicePointDetails.addExeptionsButton.click();
+      await calendarSettingsInteractor.exceptionalForm.newPeriod.click();
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.items(
+        testServicePointId
+      ).clickAndBlur();
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.allDay.clickAndBlur();
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
+    });
+
+    describe('error modal', () => {
+      it('should be displayed', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.errorModal.isPresent).to.be.true;
+      });
+
+      it('should have proper text', () => {
+        expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
+          translation.intervalsOverlap
+        );
       });
     });
   });
