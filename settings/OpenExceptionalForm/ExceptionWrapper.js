@@ -1188,7 +1188,7 @@ class ExceptionWrapper extends React.Component {
     let errorModal = null;
 
     if (!isEmpty(errors)) {
-      const errorMessages = errors.map((errorCode) => (<p><FormattedMessage id={`ui-calendar.${errorCode}`} /></p>));
+      const errorMessages = errors.map(errorCode => <FormattedMessage tagName="p" id={`ui-calendar.${errorCode}`} />);
 
       errorModal =
         <Modal
