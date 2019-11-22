@@ -115,5 +115,6 @@
     "deleteQuestionExceptionTitle": "Delete exceptional period?",
     "closeWithoutSaving": "Close editor without saving",
     "current": "Current:",
-    "common.cancel": "Cancel"
+    "common.cancel": "Cancel",
+    "intervalsOverlap": "Intervals can not overlap."
 }

@@ -115,5 +115,6 @@
     "deleteQuestionExceptionTitle": "حذف الفترة الاستثنائية؟",
     "closeWithoutSaving": "إغلاق المحرر بدون حفظ",
     "current": "الحالي:",
-    "common.cancel": "إلغاء"
+    "common.cancel": "إلغاء",
+    "intervalsOverlap": "لا يمكن أن تتداخل الفواصل الزمنية"
 }
