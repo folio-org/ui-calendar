@@ -115,5 +115,6 @@
     "deleteQuestionExceptionTitle": "是否删除例外时段？",
     "closeWithoutSaving": "关闭编辑器而不保存",
     "current": "当前：",
-    "common.cancel": "Cancel"
+    "common.cancel": "Cancel",
+    "intervalsOverlap": "Intervals can not overlap."
 }

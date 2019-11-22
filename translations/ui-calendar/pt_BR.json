@@ -115,5 +115,6 @@
     "deleteQuestionExceptionTitle": "Excluir período excepcional?",
     "closeWithoutSaving": "Fechar o editor sem salvar",
     "current": "Atual:",
-    "common.cancel": "Cancelar"
+    "common.cancel": "Cancelar",
+    "intervalsOverlap": "Intervalos não podem se sobrepor."
 }
