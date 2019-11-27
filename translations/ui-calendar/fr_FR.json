@@ -90,7 +90,7 @@
     "deleteQuestionTitle": "Supprimer les horaires réguliers de la bibliothèque",
     "exitQuestionTitle": "Êtes-vous sûr(e)?",
     "exitWithoutSaving": "Quitter sans sauvegarder",
-    "exitQuestionMessage": "Il y a des modifications non enregistrées",
+    "exitQuestionMessage": "Certaines modifications ne sont pas enregistrées",
     "exceptionalNewPeriod": "+ Nouvelle période exceptionnelle",
     "servicePoints": "Points de service",
     "openCalendarExceptions": "Ouvrir le calendrier pour ajouter des exceptions",

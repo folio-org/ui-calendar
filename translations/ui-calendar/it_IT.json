@@ -116,5 +116,5 @@
     "closeWithoutSaving": "Chiudi l'editor senza salvare",
     "current": "Attuale:",
     "common.cancel": "Annulla",
-    "intervalsOverlap": "Intervals can not overlap."
+    "intervalsOverlap": "Gli intervalli non possono sovrapporsi."
 }
