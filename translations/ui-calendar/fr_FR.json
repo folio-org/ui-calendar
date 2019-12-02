@@ -106,7 +106,7 @@
     "noStartDate": "Veuillez définir une date de début.",
     "noEndDate": "Veuillez définir une date de fin.",
     "noName": "Merci de définir un nom",
-    "noServicePointSelected": "Veuillez sélectionner au moins un point de service",
+    "noServicePointSelected": "Veuillez sélectionner au moins une unité de services",
     "noStartTime": "Merci de définir l'heure de début",
     "noEndTime": "Veuillez régler l'heure de fin",
     "endTimeBeforeStartTime": "L'heure de début est après l'heure de fin!",
