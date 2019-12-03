@@ -104,3 +104,10 @@
 * Remove non-functional buttons UICAL-79
 * Update react-big-calendar version - UICAL-86
 * Increase amount of visible service points - UICAL-88
+
+## [2.7.0](https://github.com/folio-org/ui-calendar/tree/v2.7.0) (2019-12-03)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.6.0...v2.7.0)
+
+* Update translations strings
+* Add handling of exceptional periods errors - UICAL-81
+* Move Save/Cancel buttons to the footer, add a Cancel button to this fixed footer, on New record remove the Delete button - UICAL-92
