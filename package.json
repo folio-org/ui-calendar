@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Opening hours",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
