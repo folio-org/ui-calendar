@@ -106,7 +106,7 @@
     "noStartDate": "Пожалуйста, введите дату начала",
     "noEndDate": "Пожалуйста, введите дату окончания",
     "noName": "Пожалуйста, введите название.",
-    "noServicePointSelected": "Please select at least one service point",
+    "noServicePointSelected": "Пожалуйста, выберите хотя бы один пункт обслуживания",
     "noStartTime": "Пожалуйста, установите время начала",
     "noEndTime": "Пожалуйста, установите время окончания",
     "endTimeBeforeStartTime": "Время начала - после времени окончания!",
