@@ -10,6 +10,8 @@ import {
   momentLocalizer,
 } from 'react-big-calendar';
 
+import { Callout } from '@folio/stripes/components';
+
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
 
@@ -85,6 +87,10 @@ class BigCalendarWrapper extends React.PureComponent {
     }
 
     onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
+      if (!this.preventEventDublication(start, end)) {
+        return;
+      }
+
       const { events } = this.state;
       const isSameDay = start.getDay() === end.getDay();
       const idx = events.indexOf(event);
@@ -122,11 +128,34 @@ class BigCalendarWrapper extends React.PureComponent {
       this.onCalendarChange(nextEvents);
     };
 
+    preventEventDublication = (startTime, endTime) => {
+      const { events } = this.state;
+      const existingEventsArr = events.map(event => {
+        const { start, end } = event;
+        const startOfExistedEvent = moment(start);
+        const endOfExistedEvent = moment(end);
+        const startTimeMoment = moment(startTime);
+        const endTimeMoment = moment(endTime);
+
+        if (startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent)) {
+          return false;
+        }
+        return true;
+      });
+
+      return existingEventsArr.every(event => event);
+    }
+
     onSlotSelect = ({ start, end }) => {
+      if (!this.preventEventDublication(start, end)) {
+        return;
+      }
+
       const { eventIdCounter } = this.state;
       const isAllDay = start === end;
       const id = eventIdCounter + 1;
       const events = [...this.state.events];
+
 
       events.push({
         id,
