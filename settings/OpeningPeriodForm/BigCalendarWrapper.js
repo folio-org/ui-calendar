@@ -10,8 +10,6 @@ import {
   momentLocalizer,
 } from 'react-big-calendar';
 
-import { Callout } from '@folio/stripes/components';
-
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
 
@@ -21,6 +19,7 @@ const DnDCalendar = withDragAndDrop(Calendar);
 class BigCalendarWrapper extends React.PureComponent {
     static propTypes = {
       onCalendarChange: PropTypes.func.isRequired,
+      onEventDublication: PropTypes.func.isRequired,
       periodEvents: PropTypes.arrayOf(PropTypes.object),
       eventsChange: PropTypes.func
     };
@@ -87,10 +86,6 @@ class BigCalendarWrapper extends React.PureComponent {
     }
 
     onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
-      if (!this.preventEventDublication(start, end)) {
-        return;
-      }
-
       const { events } = this.state;
       const isSameDay = start.getDay() === end.getDay();
       const idx = events.indexOf(event);
@@ -128,29 +123,26 @@ class BigCalendarWrapper extends React.PureComponent {
       this.onCalendarChange(nextEvents);
     };
 
-    preventEventDublication = (startTime, endTime) => {
-      const { events } = this.state;
-      const existingEventsArr = events.map(event => {
-        const { start, end } = event;
-        const startOfExistedEvent = moment(start);
-        const endOfExistedEvent = moment(end);
-        const startTimeMoment = moment(startTime);
-        const endTimeMoment = moment(endTime);
+  getEventDublication = (startTime, endTime) => {
+    const { events } = this.state;
+    const existingEventsArr = events.map(event => {
+      const { start, end } = event;
+      const startOfExistedEvent = moment(start);
+      const endOfExistedEvent = moment(end);
+      const startTimeMoment = moment(startTime);
+      const endTimeMoment = moment(endTime);
 
-        if (startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent)) {
-          return false;
-        }
-        return true;
-      });
+      if (startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent)) {
+        return false;
+      }
+      return true;
+    });
 
-      return existingEventsArr.every(event => event);
-    }
+    const eventDublication = existingEventsArr.every(event => event);
+    this.props.onEventDublication(eventDublication);
+  }
 
     onSlotSelect = ({ start, end }) => {
-      if (!this.preventEventDublication(start, end)) {
-        return;
-      }
-
       const { eventIdCounter } = this.state;
       const isAllDay = start === end;
       const id = eventIdCounter + 1;
@@ -165,6 +157,7 @@ class BigCalendarWrapper extends React.PureComponent {
         ...(isAllDay && { title: 'All day' }),
       });
 
+      this.getEventDublication(start, end);
       this.onCalendarChange(events);
     };
 
@@ -177,10 +170,10 @@ class BigCalendarWrapper extends React.PureComponent {
       this.props.onCalendarChange(events);
     };
 
-    onDeleteEvent = ({ id: eventToDeleteId }) => {
+    onDeleteEvent = ({ id: eventToDeleteId, start, end }) => {
       const filteredEvent = this.state.events.filter(({ id }) => id !== eventToDeleteId);
-
       this.onCalendarChange(filteredEvent);
+      this.getEventDublication(start, end);
     };
 
     renderEventComponent = ({ event, title }) => <EventComponent
