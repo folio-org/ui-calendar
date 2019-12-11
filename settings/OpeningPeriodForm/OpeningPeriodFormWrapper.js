@@ -70,9 +70,6 @@ class OpeningPeriodFormWrapper extends React.Component {
     this.setState({
       ...this.props.modifyPeriod,
       dirty: false,
-      eventDublication: false,
-      eventDublicationDay: null,
-
     });
   }
 
@@ -135,29 +132,11 @@ class OpeningPeriodFormWrapper extends React.Component {
 
   onFormSubmit(event) {
     event.preventDefault();
-
-    const {
-      parentMutator,
-      servicePointId,
-    } = this.props;
-    const {
-      eventDublication,
-      eventDublicationDay,
-    } = this.state;
+    const { parentMutator, servicePointId } = this.props;
 
     if ((moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) || (moment(this.state.startDate).toDate() === moment(this.state.endDate).toDate())) {
       this.setState({
         errorModalText: <FormattedMessage id="ui-calendar.wrongStartEndDate" />,
-      });
-      this.render();
-      return null;
-    }
-    if (eventDublication === true) {
-      this.setState({
-        errorModalText: <SafeHTMLMessage
-          id="ui-calendar.dublication"
-          values={{ eventDublicationDay }}
-        />,
       });
       this.render();
       return null;
@@ -169,7 +148,6 @@ class OpeningPeriodFormWrapper extends React.Component {
       this.render();
       return null;
     }
-
     let period = {
       name: this.state.name,
       startDate: this.state.startDate,
@@ -224,22 +202,6 @@ class OpeningPeriodFormWrapper extends React.Component {
       name = this.props.modifyPeriod.name;
     }
     return name;
-  }
-
-  handleEventDublication = (dublication) => {
-    this.setState({ eventDublication: !dublication });
-    const { eventDublication, event } = this.state;
-
-    if (eventDublication) {
-      const day = event[event.length - 1].end;
-      const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      console.log('getDay ', day);
-      this.setState({ eventDublicationDay: weekday[day.getDay()] });
-      console.log('getDay ', day.getDay());
-    }
-
-    console.log('OpeningPeriodFormWrapper state.eventDublication ', this.state.eventDublication);
-    console.log('state OpeningPeriodFormWrapper', this.state);
   }
 
   render() {
@@ -402,7 +364,6 @@ class OpeningPeriodFormWrapper extends React.Component {
               <BigCalendarHeader {...this.props} />
               <BigCalendarWrapper
                 onCalendarChange={this.onCalendarChange}
-                onEventDublication={this.handleEventDublication}
                 {...(this.props.modifyPeriod && {
                   eventsChange: this.onEventChange,
                   periodEvents: this.props.modifyPeriod.openingDays,

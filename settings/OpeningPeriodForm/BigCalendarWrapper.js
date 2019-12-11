@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-
 import { DragDropContext } from 'react-dnd';
 import {
   Calendar,
@@ -16,12 +15,11 @@ import EventComponent from '../../components/EventComponent';
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
-class BigCalendarWrapper extends React.PureComponent {
+class BigCalendarWrapper extends PureComponent {
     static propTypes = {
       onCalendarChange: PropTypes.func.isRequired,
-      onEventDublication: PropTypes.func.isRequired,
       periodEvents: PropTypes.arrayOf(PropTypes.object),
-      eventsChange: PropTypes.func
+      eventsChange: PropTypes.func,
     };
 
     state = {
@@ -86,6 +84,10 @@ class BigCalendarWrapper extends React.PureComponent {
     }
 
     onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
+      if (!this.checkEventExistOrOverlap(start, end)) {
+        return;
+      }
+
       const { events } = this.state;
       const isSameDay = start.getDay() === end.getDay();
       const idx = events.indexOf(event);
@@ -123,7 +125,7 @@ class BigCalendarWrapper extends React.PureComponent {
       this.onCalendarChange(nextEvents);
     };
 
-  getEventDublication = (startTime, endTime) => {
+  checkEventExistOrOverlap = (startTime, endTime) => {
     const { events } = this.state;
     const existingEventsArr = events.map(event => {
       const { start, end } = event;
@@ -131,23 +133,29 @@ class BigCalendarWrapper extends React.PureComponent {
       const endOfExistedEvent = moment(end);
       const startTimeMoment = moment(startTime);
       const endTimeMoment = moment(endTime);
+      const dublicatedEvent = startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent);
+      const startBeforeEvent = startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isSameOrBefore(endOfExistedEvent) && endTimeMoment.isAfter(startOfExistedEvent);
+      const startAfterEvent = startTimeMoment.isAfter(startOfExistedEvent) && startTimeMoment.isBefore(endOfExistedEvent) && endTimeMoment.isSameOrAfter(endOfExistedEvent);
+      const fullOverlap = (startTimeMoment.isAfter(startOfExistedEvent) && endTimeMoment.isBefore(endOfExistedEvent)) || (startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isAfter(endOfExistedEvent));
 
-      if (startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent)) {
+      if (dublicatedEvent || startBeforeEvent || startAfterEvent || fullOverlap) {
         return false;
       }
       return true;
     });
 
-    const eventDublication = existingEventsArr.every(event => event);
-    this.props.onEventDublication(eventDublication);
+    return existingEventsArr.every(event => event);
   }
 
     onSlotSelect = ({ start, end }) => {
+      if (!this.checkEventExistOrOverlap(start, end)) {
+        return;
+      }
+
       const { eventIdCounter } = this.state;
       const isAllDay = start === end;
       const id = eventIdCounter + 1;
       const events = [...this.state.events];
-
 
       events.push({
         id,
@@ -157,7 +165,7 @@ class BigCalendarWrapper extends React.PureComponent {
         ...(isAllDay && { title: 'All day' }),
       });
 
-      this.getEventDublication(start, end);
+      this.checkEventExistOrOverlap(start, end);
       this.onCalendarChange(events);
     };
 
@@ -170,10 +178,9 @@ class BigCalendarWrapper extends React.PureComponent {
       this.props.onCalendarChange(events);
     };
 
-    onDeleteEvent = ({ id: eventToDeleteId, start, end }) => {
+    onDeleteEvent = ({ id: eventToDeleteId }) => {
       const filteredEvent = this.state.events.filter(({ id }) => id !== eventToDeleteId);
       this.onCalendarChange(filteredEvent);
-      this.getEventDublication(start, end);
     };
 
     renderEventComponent = ({ event, title }) => <EventComponent
