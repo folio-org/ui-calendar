@@ -111,3 +111,9 @@
 * Update translations strings
 * Add handling of exceptional periods errors - UICAL-81
 * Move Save/Cancel buttons to the footer, add a Cancel button to this fixed footer, on New record remove the Delete button - UICAL-92
+
+## [2.7.1](https://github.com/folio-org/ui-calendar/tree/v2.7.1) (2019-12-12)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.0...v2.7.1)
+
+* Update translations strings.
+* Update okapi interface version.
