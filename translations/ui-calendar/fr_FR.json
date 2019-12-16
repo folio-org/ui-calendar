@@ -70,7 +70,7 @@
     "deleteButton": "Supprimer",
     "saveButton": "Sauvegarder et fermer",
     "savesAsTemplate": "Enregistre comme modèle",
-    "validFrom": "Valable à partir de:",
+    "validFrom": "Valable à partir du:",
     "validTo": "Valable jusqu'au :",
     "name": "Nom",
     "regularLibraryHoursCalendar": "Horaires réguliers d'ouverture de la bibliothèque :",
