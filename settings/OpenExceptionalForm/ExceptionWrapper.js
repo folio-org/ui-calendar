@@ -36,8 +36,8 @@ class ExceptionWrapper extends Component {
     intl: PropTypes.object
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.setState({
       servicePoints: [],
@@ -370,6 +370,8 @@ class ExceptionWrapper extends Component {
       let eventContent;
 
       for (let j = 0; j < openingDays.length; j++) {
+        const openingHour = openingDays[j].openingDay.openingHour;
+
         if (exceptional === false) {
           if (today === openingDays[j].weekdays.day) {
             if (openingDays[j].openingDay.allDay === true) {
@@ -377,19 +379,19 @@ class ExceptionWrapper extends Component {
                 <div>All day</div>
               );
             }
-            for (let k = 0; k < openingDays[j].openingDay.openingHour.length; k++) {
+            for (let k = 0; k < openingHour.length; k++) {
               dates.push(
                 <div>
-                  {openingDays[j].openingDay.openingHour[k].startTime}
+                  {openingHour[k].startTime}
                   {' '}
 
 
                   -
                   {' '}
-                  {openingDays[j].openingDay.openingHour[k].endTime}
+                  {openingHour[k].endTime}
                 </div>
               );
-              if (openingDays[j].openingDay.openingHour.length > 1 && openingDays[j].openingDay.openingHour.length > dates.length) {
+              if (openingHour.length > 1 && openingHour.length > dates.length) {
                 dates.push(
                   <div>,</div>
                 );
@@ -406,11 +408,11 @@ class ExceptionWrapper extends Component {
             allday = true;
           }
           if (allday === false) {
-            for (let k = 0; k < openingDays[j].openingDay.openingHour.length; k++) {
-              const tempOpen = openingDays[j].openingDay.openingHour[k].startTime;
+            for (let k = 0; k < openingHour.length; k++) {
+              const tempOpen = openingHour[k].startTime;
               const resultOpen = tempOpen.split(':');
               const finalOpen = `${resultOpen[0]}:${resultOpen[1]}`;
-              const tempEnd = openingDays[j].openingDay.openingHour[k].endTime;
+              const tempEnd = openingHour[k].endTime;
               const resultEnd = tempEnd.split(':');
               const finalEnd = `${resultEnd[0]}:${resultEnd[1]}`;
               dates.push(
@@ -424,7 +426,7 @@ class ExceptionWrapper extends Component {
                   {finalEnd}
                 </div>
               );
-              if (openingDays[j].openingDay.openingHour.length > 1 && openingDays[j].openingDay.openingHour.length > dates.length) {
+              if (openingHour.length > 1 && openingHour.length > dates.length) {
                 dates.push(
                   <div>,</div>
                 );
@@ -562,14 +564,14 @@ class ExceptionWrapper extends Component {
     const { entries, parentMutator: { query, exceptional, periods } } = this.props;
 
     for (let i = 0; i < entries.length; i++) {
-      query.replace(this.props.entries[i].id);
+      query.replace(entries[i].id);
       exceptional.replace('false');
-      const a = periods.GET();
-      promises.push(a);
+      const receivedPeriods1 = periods.GET();
+      promises.push(receivedPeriods1);
       query.replace(entries[i].id);
       exceptional.replace('true');
-      const b = periods.GET();
-      promises.push(b);
+      const receivedPeriods2 = periods.GET();
+      promises.push(receivedPeriods2);
     }
 
 
@@ -604,7 +606,7 @@ class ExceptionWrapper extends Component {
       });
   }
 
-  setDeleteQuestion() {
+  setDeleteQuestion = () => {
     this.setState({
       deleteQuestion: true,
     });
@@ -794,8 +796,8 @@ class ExceptionWrapper extends Component {
                 }
               }]
             };
-            const a = periods.POST(exception);
-            promises.push(a);
+            const createdPeriods = periods.POST(exception);
+            promises.push(createdPeriods);
           }
         }
       } else if (exceptionalIds.length) {
@@ -926,8 +928,8 @@ class ExceptionWrapper extends Component {
     for (let i = 0; i < exceptionalIds.length; i++) {
       query.replace(exceptionalIds[i].servicePointId);
       periodId.replace(exceptionalIds[i].id);
-      const a = periods.DELETE(exceptionalIds[i].id);
-      promises.push(a);
+      const deletedPeriods = periods.DELETE(exceptionalIds[i].id);
+      promises.push(deletedPeriods);
     }
     Promise.all(promises)
       .then(() => {
