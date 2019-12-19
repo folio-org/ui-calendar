@@ -215,12 +215,16 @@ class ExceptionWrapper extends React.Component {
       return servicePoint;
     });
 
-    this.setState({
-      editor: {
-        editorServicePoints,
-        allSelector: !select
-      },
-      changed: true
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        editor: {
+          ...prevState.editor,
+          editorServicePoints,
+          allSelector: !select
+        },
+        changed: true
+      };
     });
   }
 
