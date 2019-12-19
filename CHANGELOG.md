@@ -117,3 +117,8 @@
 
 * Update translations strings.
 * Update okapi interface version.
+
+## [2.8.0](IN PROGRESS)
+
+* Fix bug with the error message is shown when the start and end dates were already entered. Refs UICAL-95.
+* Refactoring of `ExceptionWrapper` component. Refs UICAL-95.
