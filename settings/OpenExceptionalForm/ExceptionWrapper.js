@@ -798,7 +798,7 @@ class ExceptionWrapper extends Component {
             promises.push(a);
           }
         }
-      } else if (exceptionalIds !== null && exceptionalIds !== undefined && exceptionalIds.length >= 0) {
+      } else if (exceptionalIds.length) {
         for (let i = 0; i < exceptionalIds.length; i++) {
           const chekedId = exceptionalIds[i].servicePointId;
           let action = 'POST';
