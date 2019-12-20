@@ -117,3 +117,7 @@
 
 * Update translations strings.
 * Update okapi interface version.
+
+## [2.8.0](IN PROGRESS)
+
+* Display the Today, Back and Next buttons on the calendar exceptions screen in the calendar. Refs UICAL-98.
