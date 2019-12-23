@@ -118,6 +118,7 @@
 * Update translations strings.
 * Update okapi interface version.
 
-## [2.8.0](IN PROGRESS)
+## [2.7.2](https://github.com/folio-org/ui-calendar/tree/v2.7.2) (2019-12-23)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.1...v2.7.2)
 
 * Display the Today, Back and Next buttons on the calendar exceptions screen in the calendar. Refs UICAL-98.
