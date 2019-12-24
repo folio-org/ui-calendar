@@ -147,6 +147,39 @@ button.rbc-input::-moz-focus-inner {
 .rbc-btn-group + button {
   margin-left: 10px;
 }
+.rbc-toolbar .rbc-btn-group button[type="button"] {
+  background-color: transparent;
+  border: 1px solid #2b75bb;
+  color: #2b75bb;
+  padding: 0 15px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background-color 0.25s, color 0.25s, opacity 0.07s;
+  margin: 0 0 1rem;
+  white-space: nowrap;
+  line-height: 1.5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  outline: 0;
+  opacity: 1;
+  font-weight: 700;
+  font-size: 1rem;
+  min-height: 24px;
+}
+.rbc-toolbar .rbc-btn-group button[type="button"]:hover {
+  background-color:#D3E4F3;
+}
+.rbc-toolbar .rbc-btn-group button[type="button"]:focus {
+  background-color: #2b75bb;
+  border: 1px solid #2b75bb;
+  color: #fff;
+}
+.rbc-toolbar .rbc-btn-group button[type="button"]:nth-child(2) {
+  margin: 0 .5rem 1rem;
+}
 .rbc-event {
   padding: 2px 5px;
   background-color: #3174ad;
