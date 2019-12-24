@@ -122,3 +122,8 @@
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.1...v2.7.2)
 
 * Display the Today, Back and Next buttons on the calendar exceptions screen in the calendar. Refs UICAL-98.
+
+## [2.8.0](IN PROGRESS)
+
+* Fix bug with the error message is shown when the start and end dates were already entered. Refs UICAL-95.
+* Refactoring of `ExceptionWrapper` component. Refs UICAL-95.

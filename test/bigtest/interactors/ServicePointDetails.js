@@ -46,6 +46,6 @@ export default @interactor class ServicePointDetails {
   actualLibraryHours = scoped('[data-test-actual-library-hours]');
   actualLibraryHoursHeader = scoped('[data-test-actual-library-hours-header]');
   regularOpeningHoursWithExceptions = scoped('[data-test-regular-opening-hours-with-exceptions]');
-  addExeptionsButton = scoped('[ data-test-add-exeptions]');
+  addExeptionsButton = scoped('[data-test-add-exeptions]');
   closeButton = scoped('div[class^="paneHeaderButtonsArea--"] button')
 }
