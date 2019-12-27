@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import RandomColor from 'randomcolor';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
+
 import {
   Button,
   PaneMenu,
@@ -16,56 +17,28 @@ import {
   Modal
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes-core';
+import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
+
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
 import ExceptionalBigCalendar from './ExceptionalBigCalendar';
 import '!style-loader!css-loader!../../css/exception-form.css';  // eslint-disable-line
-import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
 
 import {
   colors,
   permissions,
 } from '../constants';
 
-class ExceptionWrapper extends React.Component {
+class ExceptionWrapper extends Component {
   static propTypes = {
     entries: PropTypes.object,
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object
   };
 
-  constructor() {
-    super();
-    this.setServicePoints = this.setServicePoints.bind(this);
-    this.setEditorServicePoints = this.setEditorServicePoints.bind(this);
-    this.handleServicePointChange = this.handleServicePointChange.bind(this);
-    this.saveException = this.saveException.bind(this);
-    this.deleteException = this.deleteException.bind(this);
-    this.setStartDate = this.setStartDate.bind(this);
-    this.setEndDate = this.setEndDate.bind(this);
-    this.parseDateToString = this.parseDateToString.bind(this);
-    this.allSelectorHandle = this.allSelectorHandle.bind(this);
-    this.setClosed = this.setClosed.bind(this);
-    this.setAllDay = this.setAllDay.bind(this);
-    this.setName = this.setName.bind(this);
-    this.setStartTime = this.setStartTime.bind(this);
-    this.setEndTime = this.setEndTime.bind(this);
-    this.separateEvents = this.separateEvents.bind(this);
-    this.setting = this.setting.bind(this);
-    this.checkBeforeSave = this.checkBeforeSave.bind(this);
-    this.closeErrorModal = this.closeErrorModal.bind(this);
-    this.setEvents = this.setEvents.bind(this);
-    this.getEvent = this.getEvent.bind(this);
-    this.getPeriods = this.getPeriods.bind(this);
-    this.clickOnEvent = this.clickOnEvent.bind(this);
-    this.getServicePointToExceptional = this.getServicePointToExceptional.bind(this);
-    this.onCloseEditor = this.onCloseEditor.bind(this);
-    this.getStart = this.getStart.bind(this);
-    this.getEnd = this.getEnd.bind(this);
-    this.getOpen = this.getOpen.bind(this);
-    this.getClose = this.getClose.bind(this);
-    this.setDeleteQuestion = this.setDeleteQuestion.bind(this);
-    this.beforeExit = this.beforeExit.bind(this);
+  constructor(props) {
+    super(props);
+
     this.setState({
       servicePoints: [],
       openEditor: false,
@@ -109,16 +82,18 @@ class ExceptionWrapper extends React.Component {
       selected: null,
       color: null,
     }];
-    for (let i = colors.length; i < this.props.entries.length; i++) {
+    const { entries } = this.props;
+
+    for (let i = colors.length; i < entries.length; i++) {
       colors[i] = RandomColor({
         luminosity: 'random',
         hue: 'random'
       });
     }
-    for (let i = 0; i < this.props.entries.length; i++) {
+    for (let i = 0; i < entries.length; i++) {
       const tempSP = {
-        id: this.props.entries[i].id,
-        name: this.props.entries[i].name,
+        id: entries[i].id,
+        name: entries[i].name,
         selected: false,
         color: colors[i],
       };
@@ -133,45 +108,31 @@ class ExceptionWrapper extends React.Component {
     this.setState({ disableEvents: false });   // eslint-disable-line
   }
 
-  setStartDate(e) {
+  setStartDate = e => {
     const tempDate = this.parseDateToString(e);
     this.setState(prevState => ({
-      prevState,
+      ...prevState,
       editor: {
+        ...prevState.editor,
         startDate: tempDate,
-        endDate: prevState.editor.endDate,
-        name: prevState.editor.name,
-        startTime: prevState.editor.startTime,
-        endTime: prevState.editor.endTime,
-        editorServicePoints: prevState.editor.editorServicePoints,
-        closed: prevState.editor.closed,
-        allDay: prevState.editor.allDay,
-        exceptionalIds: prevState.editor.exceptionalIds
       },
       changed: true
     }));
   }
 
-  setEndDate(e) {
+  setEndDate = e => {
     const tempDate = this.parseDateToString(e);
     this.setState(prevState => ({
-      prevState,
+      ...prevState,
       editor: {
+        ...prevState.editor,
         endDate: tempDate,
-        startDate: prevState.editor.startDate,
-        name: prevState.editor.name,
-        startTime: prevState.editor.startTime,
-        endTime: prevState.editor.endTime,
-        editorServicePoints: prevState.editor.editorServicePoints,
-        closed: prevState.editor.closed,
-        allDay: prevState.editor.allDay,
-        exceptionalIds: prevState.editor.exceptionalIds
       },
       changed: true
     }));
   }
 
-  parseDateToString(e) {
+  parseDateToString = e => {
     let str = '';
     for (const p in e) {
       if (p !== undefined) {
@@ -183,20 +144,13 @@ class ExceptionWrapper extends React.Component {
     return str;
   }
 
-  setEditorServicePoints(e) {
+  setEditorServicePoints = e => {
     if (this.state !== null && this.state.editor !== null) {
       this.setState(prevState => ({
-        prevState,
+        ...prevState,
         editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
-          startTime: prevState.editor.startTime,
-          endTime: prevState.editor.endTime,
+          ...prevState.editor,
           editorServicePoints: e,
-          closed: prevState.editor.closed,
-          allDay: prevState.editor.allDay,
-          exceptionalIds: prevState.editor.exceptionalIds
         },
       }));
     } else {
@@ -208,151 +162,116 @@ class ExceptionWrapper extends React.Component {
     }
   }
 
-  allSelectorHandle(select, servicePoints) {
+  allSelectorHandle = (select, servicePoints) => {
     const editorServicePoints = servicePoints.map(servicePoint => {
       servicePoint.selected = select;
 
       return servicePoint;
     });
 
-    this.setState({
-      editor: {
-        editorServicePoints,
-        allSelector: !select
-      },
-      changed: true
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        editor: {
+          ...prevState.editor,
+          editorServicePoints,
+          allSelector: !select
+        },
+        changed: true
+      };
     });
   }
 
-  setClosed(e) {
+  setClosed = e => {
     if (e === false || e === undefined || e === null) {
       this.setState(prevState => ({
-        prevState,
+        ...prevState,
         editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
+          ...prevState.editor,
           startTime: '00:00',
           endTime: '23:59',
-          editorServicePoints: prevState.editor.editorServicePoints,
           closed: true,
           allDay: true,
-          exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
       }));
     } else {
       this.setState(prevState => ({
-        prevState,
+        ...prevState,
         editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
+          ...prevState.editor,
           startTime: prevState.tempStart,
           endTime: prevState.tempClose,
-          editorServicePoints: prevState.editor.editorServicePoints,
           closed: false,
           allDay: false,
-          exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
       }));
     }
   }
 
-  setAllDay(e) {
+  setAllDay = e => {
     if (e === false || e === undefined) {
       this.setState(prevState => ({
-        prevState,
+        ...prevState,
         editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
+          ...prevState.editor,
           startTime: '00:00',
           endTime: '23:59',
-          editorServicePoints: prevState.editor.editorServicePoints,
-          closed: prevState.editor.closed,
           allDay: true,
-          exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
       }));
     } else {
       this.setState(prevState => ({
-        prevState,
+        ...prevState,
         editor: {
-          endDate: prevState.editor.endDate,
-          startDate: prevState.editor.startDate,
-          name: prevState.editor.name,
+          ...prevState.editor,
           startTime: prevState.tempStart,
           endTime: prevState.tempClose,
-          editorServicePoints: prevState.editor.editorServicePoints,
-          closed: prevState.editor.closed,
           allDay: false,
-          exceptionalIds: prevState.editor.exceptionalIds
         },
         changed: true
       }));
     }
   }
 
-  setName(e) {
+  setName = e => {
     this.setState(prevState => ({
-      prevState,
+      ...prevState,
       editor: {
-        endDate: prevState.editor.endDate,
-        startDate: prevState.editor.startDate,
+        ...prevState.editor,
         name: e,
-        startTime: prevState.editor.startTime,
-        endTime: prevState.editor.endTime,
-        editorServicePoints: prevState.editor.editorServicePoints,
-        closed: prevState.editor.closed,
-        allDay: prevState.editor.allDay,
-        exceptionalIds: prevState.editor.exceptionalIds
       },
       changed: true
     }));
   }
 
-  setStartTime(e) {
+  setStartTime = e => {
     this.setState(prevState => ({
-      prevState,
+      ...prevState,
       editor: {
-        endDate: prevState.editor.endDate,
-        startDate: prevState.editor.startDate,
-        name: prevState.editor.name,
+        ...prevState.editor,
         startTime: e,
-        endTime: prevState.editor.endTime,
-        editorServicePoints: prevState.editor.editorServicePoints,
-        closed: prevState.editor.closed,
-        allDay: prevState.editor.allDay,
-        exceptionalIds: prevState.editor.exceptionalIds
       },
       changed: true,
       tempStart: e,
     }));
   }
 
-  setEndTime(e) {
+  setEndTime = e => {
     this.setState(prevState => ({
-      prevState,
+      ...prevState,
       editor: {
-        endDate: prevState.editor.endDate,
-        startDate: prevState.editor.startDate,
-        name: prevState.editor.name,
-        startTime: prevState.editor.startTime,
+        ...prevState.editor,
         endTime: e,
-        editorServicePoints: prevState.editor.editorServicePoints,
-        closed: prevState.editor.closed,
-        allDay: prevState.editor.allDay,
-        exceptionalIds: prevState.editor.exceptionalIds
       },
       changed: true,
       tempClose: e
     }));
   }
 
-  setting(sps) {
+  setting = sps => {
     const events = [];
     if (events.length === 0) {
       const event = {};
@@ -368,29 +287,34 @@ class ExceptionWrapper extends React.Component {
     });
   }
 
-  setEvents(sps) {
+  setEvents = sps => {
     const events = [];
+    const {
+      openingAllPeriods,
+      servicePoints,
+    } = this.state;
     let k = 0;
     let color = 'black';
-    if (this.state.openingAllPeriods !== null && this.state.openingAllPeriods !== undefined) {
-      for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
-        for (let j = 0; j < sps.length; j++) {
-          if (sps[j].id === this.state.openingAllPeriods[i].servicePointId && sps[j].selected === true) {
-            const event = {};
-            event.start = this.state.openingAllPeriods[i].startDate;
-            event.end = this.state.openingAllPeriods[i].endDate;
-            event.id = this.state.openingAllPeriods[i].id;
-            event.openingDays = this.state.openingAllPeriods[i].openingDays;
 
-            if (this.state.servicePoints) {
-              for (let l = 0; l < this.state.servicePoints.length; l++) {
-                if (this.state.servicePoints[l].id === this.state.openingAllPeriods[i].servicePointId) {
-                  color = this.state.servicePoints[l].color;
+    if (openingAllPeriods !== null && openingAllPeriods !== undefined) {
+      for (let i = 0; i < openingAllPeriods.length; i++) {
+        for (let j = 0; j < sps.length; j++) {
+          if (sps[j].id === openingAllPeriods[i].servicePointId && sps[j].selected === true) {
+            const event = {};
+            event.start = openingAllPeriods[i].startDate;
+            event.end = openingAllPeriods[i].endDate;
+            event.id = openingAllPeriods[i].id;
+            event.openingDays = openingAllPeriods[i].openingDays;
+
+            if (servicePoints) {
+              for (let l = 0; l < servicePoints.length; l++) {
+                if (servicePoints[l].id === openingAllPeriods[i].servicePointId) {
+                  color = servicePoints[l].color;
                 }
               }
             }
 
-            event.exceptional = this.state.openingAllPeriods[i].exceptional;
+            event.exceptional = openingAllPeriods[i].exceptional;
             event.color = color;
             const sepEvent = this.separateEvents(event);
 
@@ -417,19 +341,27 @@ class ExceptionWrapper extends React.Component {
     });
   }
 
-  setServicePoints(sps) {
+  setServicePoints = sps => {
     this.setState({
       servicePoints: sps,
     });
     this.setEvents(sps);
   }
 
-  separateEvents(event) {
+  separateEvents = event => {
     const temp = [];
+    const {
+      start,
+      end,
+      openingDays,
+      exceptional,
+      id,
+    } = event;
     let g = 0;
-    for (let i = 0; i < moment(event.end)
-      .diff(moment(event.start), 'days') + 1; i++) {
-      const today = moment(event.start)
+
+    for (let i = 0; i < moment(end)
+      .diff(moment(start), 'days') + 1; i++) {
+      const today = moment(start)
         .add(i, 'days')
         .format('dddd')
         .toUpperCase();
@@ -437,27 +369,29 @@ class ExceptionWrapper extends React.Component {
       const dates = [];
       let eventContent;
 
-      for (let j = 0; j < event.openingDays.length; j++) {
-        if (event.exceptional === false) {
-          if (today === event.openingDays[j].weekdays.day) {
-            if (event.openingDays[j].openingDay.allDay === true) {
+      for (let j = 0; j < openingDays.length; j++) {
+        const openingHour = openingDays[j].openingDay.openingHour;
+
+        if (exceptional === false) {
+          if (today === openingDays[j].weekdays.day) {
+            if (openingDays[j].openingDay.allDay === true) {
               dates.push(
                 <div>All day</div>
               );
             }
-            for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
+            for (let k = 0; k < openingHour.length; k++) {
               dates.push(
                 <div>
-                  {event.openingDays[j].openingDay.openingHour[k].startTime}
+                  {openingHour[k].startTime}
                   {' '}
 
 
                   -
                   {' '}
-                  {event.openingDays[j].openingDay.openingHour[k].endTime}
+                  {openingHour[k].endTime}
                 </div>
               );
-              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+              if (openingHour.length > 1 && openingHour.length > dates.length) {
                 dates.push(
                   <div>,</div>
                 );
@@ -465,20 +399,20 @@ class ExceptionWrapper extends React.Component {
             }
           }
           eventContent = <div className="rbc-event-dates-content">{dates}</div>;
-        } else if (event.exceptional === true) {
+        } else if (exceptional === true) {
           let allday = false;
-          if (event.openingDays[j].openingDay.allDay === true) {
+          if (openingDays[j].openingDay.allDay === true) {
             dates.push(
               <div>All day</div>
             );
             allday = true;
           }
           if (allday === false) {
-            for (let k = 0; k < event.openingDays[j].openingDay.openingHour.length; k++) {
-              const tempOpen = event.openingDays[j].openingDay.openingHour[k].startTime;
+            for (let k = 0; k < openingHour.length; k++) {
+              const tempOpen = openingHour[k].startTime;
               const resultOpen = tempOpen.split(':');
               const finalOpen = `${resultOpen[0]}:${resultOpen[1]}`;
-              const tempEnd = event.openingDays[j].openingDay.openingHour[k].endTime;
+              const tempEnd = openingHour[k].endTime;
               const resultEnd = tempEnd.split(':');
               const finalEnd = `${resultEnd[0]}:${resultEnd[1]}`;
               dates.push(
@@ -492,7 +426,7 @@ class ExceptionWrapper extends React.Component {
                   {finalEnd}
                 </div>
               );
-              if (event.openingDays[j].openingDay.openingHour.length > 1 && event.openingDays[j].openingDay.openingHour.length > dates.length) {
+              if (openingHour.length > 1 && openingHour.length > dates.length) {
                 dates.push(
                   <div>,</div>
                 );
@@ -521,13 +455,11 @@ class ExceptionWrapper extends React.Component {
           </div>;
 
         const tempObj = {
-          id: event.id,
-          end: moment(event.start)
-            .add(i, 'days'),
-          start: moment(event.start)
-            .add(i, 'days'),
+          id,
+          end: moment(start).add(i, 'days'),
+          start: moment(start).add(i, 'days'),
           title: eventTitle,
-          exceptional: event.exceptional,
+          exceptional,
         };
         temp[g] = tempObj;
       }
@@ -536,7 +468,7 @@ class ExceptionWrapper extends React.Component {
     return temp;
   }
 
-  handleServicePointChange(sp) {
+  handleServicePointChange = sp => {
     const tempServicePoints = this.state.servicePoints;
     for (let i = 0; i < tempServicePoints.length; i++) {
       if (tempServicePoints[i].id === sp.id) {
@@ -546,13 +478,18 @@ class ExceptionWrapper extends React.Component {
     this.setServicePoints(tempServicePoints);
   }
 
-  clickOnEvent(event) {
-    for (let i = 0; i < this.state.openingAllPeriods.length; i++) {
-      if (this.state.openingAllPeriods[i].id === event.id) {
-        const filterStart = this.state.openingAllPeriods[i].startDate;
-        const filterEnd = this.state.openingAllPeriods[i].endDate;
-        const startTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime;
-        const endTime = this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime;
+  clickOnEvent = event => {
+    const {
+      openingAllPeriods,
+      servicePoints,
+    } = this.state;
+
+    for (let i = 0; i < openingAllPeriods.length; i++) {
+      if (openingAllPeriods[i].id === event.id) {
+        const filterStart = openingAllPeriods[i].startDate;
+        const filterEnd = openingAllPeriods[i].endDate;
+        const startTime = openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].startTime;
+        const endTime = openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime;
 
         const tempServicePoints = [{
           servicePointId: null,
@@ -565,21 +502,21 @@ class ExceptionWrapper extends React.Component {
         let tempSelected;
         let k = 0;
         let p = 0;
-        for (let j = 0; j < this.state.openingAllPeriods.length; j++) {
-          if (filterEnd === this.state.openingAllPeriods[j].endDate && filterStart === this.state.openingAllPeriods[j].startDate
-            && startTime === this.state.openingAllPeriods[j].openingDays[0].openingDay.openingHour[0].startTime && endTime === this.state.openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime) {
+        for (let j = 0; j < openingAllPeriods.length; j++) {
+          if (filterEnd === openingAllPeriods[j].endDate && filterStart === openingAllPeriods[j].startDate
+            && startTime === openingAllPeriods[j].openingDays[0].openingDay.openingHour[0].startTime && endTime === openingAllPeriods[i].openingDays[0].openingDay.openingHour[0].endTime) {
             tempId[k] =
               {
-                servicePointId: this.state.openingAllPeriods[j].servicePointId,
-                id: this.state.openingAllPeriods[j].id,
+                servicePointId: openingAllPeriods[j].servicePointId,
+                id: openingAllPeriods[j].id,
               };
             k++;
           }
         }
 
-        for (let l = 0; l < this.state.servicePoints.length; l++) {
+        for (let l = 0; l < servicePoints.length; l++) {
           for (let o = 0; o < tempId.length; o++) {
-            if ((this.state.servicePoints[l].id === tempId[o].servicePointId) && (this.state.servicePoints[l].selected === true)) {
+            if ((servicePoints[l].id === tempId[o].servicePointId) && (servicePoints[l].selected === true)) {
               tempSelected = true;
               break;
             } else {
@@ -587,9 +524,9 @@ class ExceptionWrapper extends React.Component {
             }
           }
           tempServicePoints[p] = {
-            id: this.state.servicePoints[l].id,
-            color: this.state.servicePoints[l].color,
-            name: this.state.servicePoints[l].name,
+            id: servicePoints[l].id,
+            color: servicePoints[l].color,
+            name: servicePoints[l].name,
             selected: tempSelected
           };
           p++;
@@ -614,7 +551,7 @@ class ExceptionWrapper extends React.Component {
     this.setState({ openEditor: true });
   }
 
-  getEvent(event) {
+  getEvent = event => {
     if (event.exceptional === true && this.state.disableEvents === false) {
       this.clickOnEvent(event);
       this.setState({ disableEvents: true });
@@ -622,18 +559,19 @@ class ExceptionWrapper extends React.Component {
     }
   }
 
-  getPeriods() {
+  getPeriods = () => {
     const promises = [];
+    const { entries, parentMutator: { query, exceptional, periods } } = this.props;
 
-    for (let i = 0; i < this.props.entries.length; i++) {
-      this.props.parentMutator.query.replace(this.props.entries[i].id);
-      this.props.parentMutator.exceptional.replace('false');
-      const a = this.props.parentMutator.periods.GET();
-      promises.push(a);
-      this.props.parentMutator.query.replace(this.props.entries[i].id);
-      this.props.parentMutator.exceptional.replace('true');
-      const b = this.props.parentMutator.periods.GET();
-      promises.push(b);
+    for (let i = 0; i < entries.length; i++) {
+      query.replace(entries[i].id);
+      exceptional.replace('false');
+      const receivedPeriods1 = periods.GET();
+      promises.push(receivedPeriods1);
+      query.replace(entries[i].id);
+      exceptional.replace('true');
+      const receivedPeriods2 = periods.GET();
+      promises.push(receivedPeriods2);
     }
 
 
@@ -668,26 +606,27 @@ class ExceptionWrapper extends React.Component {
       });
   }
 
-  setDeleteQuestion() {
+  setDeleteQuestion = () => {
     this.setState({
       deleteQuestion: true,
     });
   }
 
-  getServicePointToExceptional() {
+  getServicePointToExceptional = () => {
     const tempServicePoints = [{
       id: null,
       name: null,
       selected: null,
       color: null,
     }];
+    const { servicePoints } = this.state;
 
-    for (let i = 0; i < this.state.servicePoints.length; i++) {
+    for (let i = 0; i < servicePoints.length; i++) {
       const tempSP = {
-        id: this.state.servicePoints[i].id,
-        name: this.state.servicePoints[i].name,
+        id: servicePoints[i].id,
+        name: servicePoints[i].name,
         selected: false,
-        color: this.state.servicePoints[i].color
+        color: servicePoints[i].color
       };
 
       tempServicePoints[i] = tempSP;
@@ -696,7 +635,7 @@ class ExceptionWrapper extends React.Component {
     return tempServicePoints;
   }
 
-  onCloseEditor() {
+  onCloseEditor = () => {
     this.setState({
       openEditor: false,
       disableEvents: false,
@@ -718,41 +657,73 @@ class ExceptionWrapper extends React.Component {
     });
   }
 
-  getStart() {
-    if (this.state.editor.startDate !== null && this.state.editor.startDate !== undefined && this.state.modifyEvent === true) {
-      return this.state.editor.startDate;
+  getStart = () => {
+    const {
+      modifyEvent,
+      editor: {
+        startDate,
+      },
+    } = this.state;
+
+    if (startDate !== null && startDate !== undefined && modifyEvent === true) {
+      return startDate;
     } else {
       return '';
     }
   }
 
-  getEnd() {
-    if (this.state.editor.endDate !== null && this.state.editor.endDate !== undefined && this.state.modifyEvent === true) {
-      return this.state.editor.endDate;
+  getEnd = () => {
+    const {
+      modifyEvent,
+      editor: {
+        endDate,
+      }
+    } = this.state;
+
+    if (endDate !== null && endDate !== undefined && modifyEvent === true) {
+      return endDate;
     } else {
       return '';
     }
   }
 
-  getOpen() {
-    if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
-      return this.state.editor.startTime;
+  getOpen = () => {
+    const {
+      modifyEvent,
+      editor,
+      editor: {
+        startTime,
+      }
+    } = this.state;
+
+    if (editor !== null && editor !== undefined && modifyEvent === true) {
+      return startTime;
     } else {
       return '';
     }
   }
 
-  getClose() {
-    if (this.state.editor !== null && this.state.editor !== undefined && this.state.modifyEvent === true) {
-      return this.state.editor.endTime;
+  getClose = () => {
+    const {
+      modifyEvent,
+      editor,
+      editor: {
+        endTime,
+      }
+    } = this.state;
+
+    if (editor !== null && editor !== undefined && modifyEvent === true) {
+      return endTime;
     } else {
       return '';
     }
   }
 
-  beforeExit(source) {
+  beforeExit = source => {
+    const { changed } = this.state;
+
     if (source === 'editorStartMenu') {
-      if (this.state.changed === true) {
+      if (changed === true) {
         this.setState({
           errorEditorClose: true,
           disableEvents: false
@@ -765,7 +736,7 @@ class ExceptionWrapper extends React.Component {
         });
       }
     } else if (source === 'paneStartMenu') {
-      if (this.state.changed === true) {
+      if (changed === true) {
         this.setState({
           errorExceptionExit: true,
           modifyEvent: false
@@ -777,45 +748,65 @@ class ExceptionWrapper extends React.Component {
     return null;
   }
 
-  saveException() {
+  saveException = () => {
     const preCheck = this.checkBeforeSave();
     if (preCheck === true) {
       const promises = [];
-      const { parentMutator } = this.props;
-      const { editor } = this.state;
-      if (this.state.editor.exceptionalIds === null || this.state.editor.exceptionalIds === undefined) {
-        for (let i = 0; i < this.state.editor.editorServicePoints.length; i++) {
-          if (this.state.editor.editorServicePoints[i].selected === true) {
-            parentMutator.query.replace(this.state.editor.editorServicePoints[i].id);
+      const {
+        parentMutator: {
+          query,
+          periods,
+          periodId,
+        }
+      } = this.props;
+      const {
+        editor,
+        editor: {
+          exceptionalIds,
+          name,
+          startTime,
+          endTime,
+          startDate,
+          endDate,
+          editorServicePoints,
+          allDay,
+          closed
+        }
+      } = this.state;
+
+      if (exceptionalIds === null || exceptionalIds === undefined) {
+        for (let i = 0; i < editorServicePoints.length; i++) {
+          if (editorServicePoints[i].selected === true) {
+            query.replace(editorServicePoints[i].id);
             const exception = {
               servicePointId: editor.editorServicePoints[i].id,
-              name: editor.name,
-              startDate: editor.startDate,
-              endDate: editor.endDate,
+              name,
+              startDate,
+              endDate,
               openingDays: [{
                 openingDay: {
                   openingHour: [
                     {
-                      startTime: editor.startTime,
-                      endTime: editor.endTime,
+                      startTime,
+                      endTime,
                     }
                   ],
-                  allDay: editor.allDay === undefined ? false : editor.allDay,
-                  open: editor.closed === undefined ? false : !editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  allDay: allDay === undefined ? false : allDay,
+                  open: closed === undefined ? false : !closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                 }
               }]
             };
-            const a = this.props.parentMutator.periods.POST(exception);
-            promises.push(a);
+            const createdPeriods = periods.POST(exception);
+            promises.push(createdPeriods);
           }
         }
-      } else if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined && this.state.editor.exceptionalIds.length >= 0) {
-        for (let i = 0; i < this.state.editor.exceptionalIds.length; i++) {
-          const chekedId = this.state.editor.exceptionalIds[i].servicePointId;
+      } else if (exceptionalIds.length) {
+        for (let i = 0; i < exceptionalIds.length; i++) {
+          const chekedId = exceptionalIds[i].servicePointId;
           let action = 'POST';
-          for (let j = 0; j < this.state.editor.editorServicePoints.length; j++) {
-            if (this.state.editor.editorServicePoints[j].id === chekedId) {
-              if (this.state.editor.editorServicePoints[j].selected === false) {
+          for (let j = 0; j < editorServicePoints.length; j++) {
+            if (editorServicePoints[j].id === chekedId) {
+              if (editorServicePoints[j].selected === false) {
                 action = 'DELETE';
               } else {
                 action = 'PUT';
@@ -824,55 +815,55 @@ class ExceptionWrapper extends React.Component {
           }
           const index = i;
           if (action === 'DELETE') {
-            parentMutator.query.replace(this.state.editor.exceptionalIds[index].servicePointId);
-            parentMutator.periodId.replace(this.state.editor.exceptionalIds[index].id);
-            const modifyDelete = this.props.parentMutator.periods.DELETE(this.state.editor.exceptionalIds[index].id);
+            query.replace(exceptionalIds[index].servicePointId);
+            periodId.replace(exceptionalIds[index].id);
+            const modifyDelete = periods.DELETE(exceptionalIds[index].id);
             promises.push(modifyDelete);
           } else if (action === 'PUT') {
-            parentMutator.query.replace(this.state.editor.exceptionalIds[index].servicePointId);
-            parentMutator.periodId.replace(this.state.editor.exceptionalIds[index].id);
+            query.replace(exceptionalIds[index].servicePointId);
+            periodId.replace(exceptionalIds[index].id);
             const modifyExceptionPut = {
-              id: this.state.editor.exceptionalIds[index].id,
-              servicePointId: editor.exceptionalIds[index].servicePointId,
-              name: editor.name,
-              startDate: editor.startDate,
-              endDate: editor.endDate,
+              id: exceptionalIds[index].id,
+              servicePointId: exceptionalIds[index].servicePointId,
+              name,
+              startDate,
+              endDate,
               openingDays: [{
                 openingDay: {
                   openingHour: [
                     {
-                      startTime: editor.startTime,
-                      endTime: editor.endTime,
+                      startTime,
+                      endTime,
                     }
                   ],
-                  allDay: editor.allDay === undefined ? false : editor.allDay,
-                  open: editor.closed === undefined ? false : !editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  allDay: allDay === undefined ? false : allDay,
+                  open: closed === undefined ? false : !closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                 }
               }]
             };
-            const modifyPromisePut = this.props.parentMutator.periods.PUT(modifyExceptionPut);
+            const modifyPromisePut = periods.PUT(modifyExceptionPut);
             promises.push(modifyPromisePut);
           } else if (action === 'POST') {
-            parentMutator.query.replace(this.state.editor.exceptionalIds[index].servicePointId);
+            query.replace(exceptionalIds[index].servicePointId);
             const modifyExceptionPost = {
-              servicePointId: editor.exceptionalIds[index].servicePointId,
-              name: editor.name,
-              startDate: editor.startDate,
-              endDate: editor.endDate,
+              servicePointId: exceptionalIds[index].servicePointId,
+              name,
+              startDate,
+              endDate,
               openingDays: [{
                 openingDay: {
                   openingHour: [
                     {
-                      startTime: editor.startTime,
-                      endTime: editor.endTime,
+                      startTime,
+                      endTime,
                     }
                   ],
-                  allDay: editor.allDay === undefined ? false : editor.allDay,
-                  open: editor.closed === undefined ? false : !editor.closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  allDay: allDay === undefined ? false : allDay,
+                  open: closed === undefined ? false : !closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
                 }
               }]
             };
-            const modifyPromisPost = this.props.parentMutator.periods.POST(modifyExceptionPost);
+            const modifyPromisPost = periods.POST(modifyExceptionPost);
             promises.push(modifyPromisPost);
           }
         }
@@ -918,14 +909,27 @@ class ExceptionWrapper extends React.Component {
     }
   }
 
-  deleteException() {
+  deleteException = () => {
     const promises = [];
-    const { parentMutator } = this.props;
-    for (let i = 0; i < this.state.editor.exceptionalIds.length; i++) {
-      parentMutator.query.replace(this.state.editor.exceptionalIds[i].servicePointId);
-      parentMutator.periodId.replace(this.state.editor.exceptionalIds[i].id);
-      const a = this.props.parentMutator.periods.DELETE(this.state.editor.exceptionalIds[i].id);
-      promises.push(a);
+    const {
+      parentMutator: {
+        query,
+        periodId,
+        periods,
+      }
+    } = this.props;
+    const {
+      servicePoints,
+      editor: {
+        exceptionalIds,
+      }
+    } = this.state;
+
+    for (let i = 0; i < exceptionalIds.length; i++) {
+      query.replace(exceptionalIds[i].servicePointId);
+      periodId.replace(exceptionalIds[i].id);
+      const deletedPeriods = periods.DELETE(exceptionalIds[i].id);
+      promises.push(deletedPeriods);
     }
     Promise.all(promises)
       .then(() => {
@@ -953,44 +957,54 @@ class ExceptionWrapper extends React.Component {
         update.push(promise);
         Promise.all(update)
           .then(() => {
-            this.setEvents(this.state.servicePoints);
+            this.setEvents(servicePoints);
           });
       });
   }
 
-  closeErrorModal() {
+  closeErrorModal = () => {
     this.setState({
       errors: [],
     });
   }
 
-  checkBeforeSave() {
+  checkBeforeSave = () => {
     // return true ===  can save
-    const { editor } = this.state;
+    const {
+      editor: {
+        editorServicePoints,
+        startDate,
+        endDate,
+        name,
+        startTime,
+        endTime,
+      }
+    } = this.state;
     let errorMessage = null;
     let isServicePointSelected = false;
-    for (let i = 0; i < editor.editorServicePoints.length; i++) {
-      if (editor.editorServicePoints[i].selected === true) {
+
+    for (let i = 0; i < editorServicePoints.length; i++) {
+      if (editorServicePoints[i].selected === true) {
         isServicePointSelected = true;
       }
     }
-    if (editor.startDate === null || editor.startDate === undefined || editor.startDate === '') {
+    if (startDate === null || startDate === undefined || startDate === '') {
       errorMessage = 'noStartDate';
-    } else if (editor.endDate === null || editor.endDate === undefined || editor.endDate === '') {
+    } else if (endDate === null || endDate === undefined || endDate === '') {
       errorMessage = 'noEndDate';
-    } else if (moment(editor.endDate)
-      .toDate() < moment(editor.startDate)
+    } else if (moment(endDate)
+      .toDate() < moment(startDate)
       .toDate()) {
       errorMessage = 'wrongStartEndDate';
-    } else if (editor.name === null || editor.name === undefined) {
+    } else if (name === null || name === undefined) {
       errorMessage = 'noName';
     } else if (!isServicePointSelected) {
       errorMessage = 'noServicePointSelected';
-    } else if (editor.startTime === null || editor.startTime === undefined || editor.startTime === '') {
+    } else if (startTime === null || startTime === undefined || startTime === '') {
       errorMessage = 'noStartTime';
-    } else if (editor.endTime === null || editor.endTime === undefined || editor.endTime === '') {
+    } else if (endTime === null || endTime === undefined || endTime === '') {
       errorMessage = 'noEndTime';
-    } else if (moment(editor.endTime) < moment(editor.startTime)) {
+    } else if (moment(endTime) < moment(startTime)) {
       errorMessage = 'endTimeBeforeStartTime';
     }
     if (errorMessage === null) {
@@ -1001,9 +1015,27 @@ class ExceptionWrapper extends React.Component {
   }
 
   render() {
-    const { errors } = this.state;
+    const {
+      errors,
+      editor,
+      editor: {
+        exceptionalIds,
+        editorServicePoints,
+        allSelector,
+        closed,
+        allDay,
+      },
+      modifyEvent,
+      servicePoints,
+      events,
+      deleteQuestion,
+      errorEditorClose,
+      errorExceptionExit,
+      openEditor,
+    } = this.state;
     let name = '';
-    if (this.state.editor !== null && this.state.editor !== undefined) {
+
+    if (editor !== null && editor !== undefined) {
       name = this.state.editor.name;
     }
 
@@ -1030,7 +1062,7 @@ class ExceptionWrapper extends React.Component {
 
     let deleteButton = null;
 
-    if (this.state.modifyEvent) {
+    if (modifyEvent) {
       deleteButton =
         <Button
           buttonStyle="danger"
@@ -1061,7 +1093,7 @@ class ExceptionWrapper extends React.Component {
           {...this.props}
           handleServicePointChange={this.handleServicePointChange}
           setServicePoints={this.setServicePoints}
-          servicePoints={this.state.servicePoints}
+          servicePoints={servicePoints}
         />
       </Pane>;
 
@@ -1098,14 +1130,14 @@ class ExceptionWrapper extends React.Component {
       >
         <ExceptionalBigCalendar
           {...this.props}
-          myEvents={this.state.events}
+          myEvents={events}
           getEvent={this.getEvent}
         />
       </Pane>;
 
     let editorPaneTittle = null;
 
-    if (this.state.editor.exceptionalIds !== null && this.state.editor.exceptionalIds !== undefined) {
+    if (exceptionalIds !== null && exceptionalIds !== undefined) {
       editorPaneTittle = <FormattedMessage id="ui-calendar.editExceptionPeriod" />;
     } else {
       editorPaneTittle = <FormattedMessage id="ui-calendar.newExceptionPeriod" />;
@@ -1142,7 +1174,7 @@ class ExceptionWrapper extends React.Component {
       >
         <ExceptionalPeriodEditor
           {...this.props}
-          editorServicePoints={this.state.editor.editorServicePoints}
+          editorServicePoints={editorServicePoints}
           servicePoints={this.getServicePointToExceptional()}
           setStartDate={this.setStartDate}
           setEndDate={this.setEndDate}
@@ -1153,11 +1185,11 @@ class ExceptionWrapper extends React.Component {
           setStartTime={this.setStartTime}
           setEndTime={this.setEndTime}
           setEditorServicePoints={this.setEditorServicePoints}
-          allSelector={this.state.editor.allSelector}
-          closed={this.state.editor.closed}
-          allDay={this.state.editor.allDay}
-          editor={this.state.editor}
-          isModify={this.state.modifyEvent}
+          allSelector={allSelector}
+          closed={closed}
+          allDay={allDay}
+          editor={editor}
+          isModify={modifyEvent}
           initialValues={
             {
               item:
@@ -1204,7 +1236,7 @@ class ExceptionWrapper extends React.Component {
     }
 
     let deleteModal = null;
-    if (this.state.deleteQuestion !== null && this.state.deleteQuestion !== undefined && this.state.deleteQuestion === true) {
+    if (deleteQuestion !== null && deleteQuestion !== undefined && deleteQuestion === true) {
       const text =
         <SafeHTMLMessage
           id="ui-calendar.deleteQuestionException"
@@ -1213,7 +1245,7 @@ class ExceptionWrapper extends React.Component {
       deleteModal =
         <ConfirmationModal
           id="delete-confirmation"
-          open={this.state.deleteQuestion}
+          open={deleteQuestion}
           heading={<FormattedMessage id="ui-calendar.deleteQuestionExceptionTitle" />}
           message={text}
           onConfirm={() => {
@@ -1227,11 +1259,11 @@ class ExceptionWrapper extends React.Component {
     }
 
     let errorCloseEditor = null;
-    if (this.state.errorEditorClose === true) {
+    if (errorEditorClose === true) {
       errorCloseEditor =
         <ConfirmationModal
           id="exite-confirmation"
-          open={this.state.errorEditorClose}
+          open={errorEditorClose}
           heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
           message={<SafeHTMLMessage id="ui-calendar.exitQuestionMessage" />}
           onConfirm={() => {
@@ -1265,11 +1297,11 @@ class ExceptionWrapper extends React.Component {
     }
 
     let errorExitException = null;
-    if (this.state.errorExceptionExit === true) {
+    if (errorExceptionExit === true) {
       errorExitException =
         <ConfirmationModal
           id="exite-confirmation"
-          open={this.state.errorExceptionExit}
+          open={errorExceptionExit}
           heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
           message={<SafeHTMLMessage id="ui-calendar.exitQuestionMessage" />}
           onConfirm={() => {
@@ -1287,9 +1319,9 @@ class ExceptionWrapper extends React.Component {
         {errorExitException}
         {errorModal}
         {deleteModal}
-        {!this.state.openEditor && selectorPane}
+        {!openEditor && selectorPane}
         {calendarPane}
-        {this.state.openEditor && editorPane}
+        {openEditor && editorPane}
       </Paneset>
     );
   }

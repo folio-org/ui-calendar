@@ -255,7 +255,7 @@ class OpeningPeriodFormWrapper extends React.Component {
           <Button
             data-test-error-modal-close-button
             onClick={this.closeErrorModal}
-            ButtonStyle="primary"
+            buttonStyle="primary"
           >
             <FormattedMessage id="ui-calendar.close" />
           </Button>
