@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-
 import {
   reduce,
   cloneDeep,
 } from 'lodash';
-
 import {
   Calendar,
   momentLocalizer,
@@ -14,7 +12,7 @@ import {
 
 const localizer = momentLocalizer(moment);
 
-class ExceptionalBigCalendar extends React.Component {
+class ExceptionalBigCalendar extends Component {
   static propTypes = {
     myEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
     getEvent: PropTypes.func.isRequired,
@@ -51,7 +49,7 @@ class ExceptionalBigCalendar extends React.Component {
         localizer={localizer}
         label
         popup
-        toolbar={false}
+        toolbar
         showMultiDayTimes
         events={this.getEvents()}
         views={['month']}
