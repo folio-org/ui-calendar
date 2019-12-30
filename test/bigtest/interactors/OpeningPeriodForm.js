@@ -34,8 +34,10 @@ import BigCalendar from './BigCalendar';
 @interactor class InputFields {
   defaultScope = '[data-test-input-fields]';
 
-  startDate = new TextFieldInteractor('[data-test-item-start-date]');
-  endDate = new TextFieldInteractor('[data-test-item-end-date]');
+  startDate = new DatepickerInteractor('[data-test-item-start-date]');
+  endDate = new DatepickerInteractor('[data-test-item-end-date]');
+  startDateField = new TextFieldInteractor('[data-test-item-start-date]');
+  endDateField = new TextFieldInteractor('[data-test-item-end-date]');
   periodName = new TextFieldInteractor('[data-test-item-period-name]');
   periodNameError = scoped('[data-test-item-period-name-error]');
 }

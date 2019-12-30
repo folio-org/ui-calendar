@@ -89,8 +89,8 @@ describe('events for current period were created', () => {
 
     describe('show error modal if duclicated/overlapped event was created', () => {
       beforeEach(async function () {
-        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(startDatePast);
-        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.fillAndBlur(endDate);
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDateField.fillAndBlur(startDatePast);
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDateField.fillAndBlur(endDate);
         await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
         const weekDays = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.wholeDay();
 
