@@ -134,9 +134,14 @@ class BigCalendarWrapper extends PureComponent {
       const startTimeMoment = moment(startTime);
       const endTimeMoment = moment(endTime);
       const dublicatedEvent = startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent);
-      const startBeforeEvent = startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isSameOrBefore(endOfExistedEvent) && endTimeMoment.isAfter(startOfExistedEvent);
-      const startAfterEvent = startTimeMoment.isAfter(startOfExistedEvent) && startTimeMoment.isBefore(endOfExistedEvent) && endTimeMoment.isSameOrAfter(endOfExistedEvent);
-      const fullOverlap = (startTimeMoment.isAfter(startOfExistedEvent) && endTimeMoment.isBefore(endOfExistedEvent)) || (startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isAfter(endOfExistedEvent));
+      const startBeforeEvent = startTimeMoment.isBefore(startOfExistedEvent)
+        && endTimeMoment.isSameOrBefore(endOfExistedEvent)
+        && endTimeMoment.isAfter(startOfExistedEvent);
+      const startAfterEvent = startTimeMoment.isSameOrAfter(startOfExistedEvent)
+        && startTimeMoment.isBefore(endOfExistedEvent)
+        && (endTimeMoment.isSameOrAfter(endOfExistedEvent) || endTimeMoment.isSameOrBefore(endOfExistedEvent));
+      const fullOverlap = (startTimeMoment.isAfter(startOfExistedEvent) && endTimeMoment.isBefore(endOfExistedEvent))
+        || (startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isAfter(endOfExistedEvent));
 
       if (dublicatedEvent || startBeforeEvent || startAfterEvent || fullOverlap) {
         return false;
@@ -151,7 +156,6 @@ class BigCalendarWrapper extends PureComponent {
       if (!this.checkEventExistOrOverlap(start, end)) {
         return;
       }
-
       const { eventIdCounter } = this.state;
       const isAllDay = start === end;
       const id = eventIdCounter + 1;

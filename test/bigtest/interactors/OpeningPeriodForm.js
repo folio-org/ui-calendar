@@ -14,7 +14,7 @@ import BigCalendar from './BigCalendar';
 @interactor class ErrorModal {
   defaultScope = '#error-modal';
 
-  content = scoped('[data-test-error-modal-content]');
+  content = scoped('[data-test-error-modal-content] p');
   closeButton = scoped('[data-test-error-modal-close-button]');
 }
 

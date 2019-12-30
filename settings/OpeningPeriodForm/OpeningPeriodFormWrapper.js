@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
@@ -23,7 +23,7 @@ import CalendarUtils from '../../CalendarUtils';
 
 import { permissions } from '../constants';
 
-class OpeningPeriodFormWrapper extends React.Component {
+class OpeningPeriodFormWrapper extends Component {
   static propTypes = {
     modifyPeriod: PropTypes.object,
     onSuccessfulCreatePeriod: PropTypes.func,
@@ -45,8 +45,8 @@ class OpeningPeriodFormWrapper extends React.Component {
     }),
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -130,6 +130,17 @@ class OpeningPeriodFormWrapper extends React.Component {
     });
   }
 
+  catchOverlappedEvents = (err) => {
+    if (err.status === 422) {
+      this.setState({
+        errorModalText: <FormattedMessage id="ui-calendar.dublication" />,
+      });
+      this.render();
+      return null;
+    }
+    return null;
+  }
+
   onFormSubmit(event) {
     event.preventDefault();
     const { parentMutator, servicePointId } = this.props;
@@ -162,14 +173,22 @@ class OpeningPeriodFormWrapper extends React.Component {
       if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
       period.id = this.props.modifyPeriod.id;
       delete period.events;
-      return parentMutator.periods.PUT(period).then((e) => {
-        that.props.onSuccessfulModifyPeriod(e);
-      });
+      return parentMutator.periods.PUT(period)
+        .then((e) => {
+          that.props.onSuccessfulModifyPeriod(e);
+        })
+        .catch((err) => {
+          this.catchOverlappedEvents(err);
+        });
     }
     if (servicePointId) parentMutator.query.replace(servicePointId);
-    return parentMutator.periods.POST(period).then((e) => {
-      that.props.onSuccessfulCreatePeriod(e);
-    });
+    return parentMutator.periods.POST(period)
+      .then((e) => {
+        that.props.onSuccessfulCreatePeriod(e);
+      })
+      .catch((err) => {
+        this.catchOverlappedEvents(err);
+      });
   }
 
   onEventChange(e) {
