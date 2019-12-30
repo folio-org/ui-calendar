@@ -106,51 +106,51 @@ describe('events for current period were created', () => {
     });
     await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
     await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
-  });
 
-  it('should be displayed opening period form', () => {
-    expect(calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.isPresent).to.be.true;
-  });
-
-  describe('show error modal if duclicated/overlapped event was created', () => {
-    beforeEach(async function () {
-      await calendarSettingsInteractor.openingPeriodForm.inputFields.startDateField.fillAndBlur(startDatePast);
-      await calendarSettingsInteractor.openingPeriodForm.inputFields.endDateField.fillAndBlur(endDate);
-      await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
-      const weekDays = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.wholeDay();
-      const timeSlots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
-
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-        weekDays[2],
-        weekDays[3]
-      );
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-        timeSlots[7],
-        timeSlots[15]
-      );
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-        timeSlots[4],
-        timeSlots[8]
-      );
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-        timeSlots[12],
-        timeSlots[16]
-      );
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-        timeSlots[14],
-        timeSlots[15]
-      );
-      await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-        timeSlots[3],
-        timeSlots[20]
-      );
-      await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
+    it('should be displayed opening period form', () => {
+      expect(calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.isPresent).to.be.true;
     });
-  });
-  it('should be displayed error modal', () => {
-    expect(calendarSettingsInteractor.openingPeriodForm.errorModal.isPresent).to.be.true;
-  });
-  it('should be displayed error message', () => {
-    expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(translation.dublication);
+
+    describe('show error modal if duclicated/overlapped event was created', () => {
+      beforeEach(async function () {
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(startDatePast);
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.fillAndBlur(endDate);
+        await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.fillAndBlur(name);
+        const weekDays = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.wholeDay();
+        const timeSlots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
+
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          weekDays[2],
+          weekDays[3]
+        );
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          timeSlots[7],
+          timeSlots[15]
+        );
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          timeSlots[4],
+          timeSlots[8]
+        );
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          timeSlots[12],
+          timeSlots[16]
+        );
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          timeSlots[14],
+          timeSlots[15]
+        );
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
+          timeSlots[3],
+          timeSlots[20]
+        );
+        await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
+      });
+    });
+    it('should be displayed error modal', () => {
+      expect(calendarSettingsInteractor.openingPeriodForm.errorModal.isPresent).to.be.true;
+    });
+    it('should be displayed error message', () => {
+      expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(translation.dublication);
+    });
   });
 });
