@@ -146,9 +146,11 @@ describe('events for current period were created', () => {
         await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
       });
     });
+
     it('should be displayed error modal', () => {
       expect(calendarSettingsInteractor.openingPeriodForm.errorModal.isPresent).to.be.true;
     });
+
     it('should be displayed error message', () => {
       expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(translation.dublication);
     });

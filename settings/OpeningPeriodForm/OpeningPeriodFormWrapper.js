@@ -130,16 +130,27 @@ class OpeningPeriodFormWrapper extends Component {
     });
   }
 
-  catchOverlappedEvents = (err) => {
+  catchOverlappedEvents = err => {
     if (err.status === 422) {
       this.setState({
         errorModalText: <FormattedMessage id="ui-calendar.dublication" />,
       });
-      this.render();
-      return null;
     }
-    return null;
-  }
+  };
+
+  createUpdatePeriod = (parentMutator, period, method) => {
+    const event = method === 'POST'
+      ? parentMutator.periods.POST(period)
+        .then(e => this.props.onSuccessfulCreatePeriod(e))
+      : parentMutator.periods.PUT(period)
+        .then(e => this.props.onSuccessfulModifyPeriod(e));
+
+    event.catch(err => {
+      this.catchOverlappedEvents(err);
+    });
+
+    return event;
+  };
 
   onFormSubmit(event) {
     event.preventDefault();
@@ -166,29 +177,19 @@ class OpeningPeriodFormWrapper extends Component {
       openingDays: [],
       servicePointId
     };
+
     period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
-    const that = this;
     if (this.props.modifyPeriod) {
       if (servicePointId) parentMutator.query.replace(servicePointId);
       if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
       period.id = this.props.modifyPeriod.id;
       delete period.events;
-      return parentMutator.periods.PUT(period)
-        .then((e) => {
-          that.props.onSuccessfulModifyPeriod(e);
-        })
-        .catch((err) => {
-          this.catchOverlappedEvents(err);
-        });
+
+      return this.createUpdatePeriod(parentMutator, period, 'PUT');
     }
     if (servicePointId) parentMutator.query.replace(servicePointId);
-    return parentMutator.periods.POST(period)
-      .then((e) => {
-        that.props.onSuccessfulCreatePeriod(e);
-      })
-      .catch((err) => {
-        this.catchOverlappedEvents(err);
-      });
+
+    return this.createUpdatePeriod(parentMutator, period, 'POST');
   }
 
   onEventChange(e) {

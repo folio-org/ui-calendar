@@ -16,72 +16,75 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 class BigCalendarWrapper extends PureComponent {
-    static propTypes = {
-      onCalendarChange: PropTypes.func.isRequired,
-      periodEvents: PropTypes.arrayOf(PropTypes.object),
-      eventsChange: PropTypes.func,
-    };
+  static propTypes = {
+    onCalendarChange: PropTypes.func.isRequired,
+    periodEvents: PropTypes.arrayOf(PropTypes.object),
+    eventsChange: PropTypes.func,
+  };
 
-    state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       eventIdCounter: 0,
       events: [],
     };
+  }
 
-    componentDidMount() {
-      if (this.props.periodEvents) {
-        const weekdays = new Array(7);
-        weekdays[0] = 'SUNDAY';
-        weekdays[1] = 'MONDAY';
-        weekdays[2] = 'TUESDAY';
-        weekdays[3] = 'WEDNESDAY';
-        weekdays[4] = 'THURSDAY';
-        weekdays[5] = 'FRIDAY';
-        weekdays[6] = 'SATURDAY';
+  componentDidMount() {
+    if (this.props.periodEvents) {
+      const weekdays = new Array(7);
+      weekdays[0] = 'SUNDAY';
+      weekdays[1] = 'MONDAY';
+      weekdays[2] = 'TUESDAY';
+      weekdays[3] = 'WEDNESDAY';
+      weekdays[4] = 'THURSDAY';
+      weekdays[5] = 'FRIDAY';
+      weekdays[6] = 'SATURDAY';
 
-        const events = [];
-        let eventId = 0;
-        for (let i = 0; i < this.props.periodEvents.length; i++) {
-          const openingDay = this.props.periodEvents[i].openingDay;
-          const event = {};
-          let eventDay = moment().startOf('week').toDate();
-          const weekday = this.props.periodEvents[i].weekdays.day;
-          eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
-          event.start = moment(eventDay);
-          event.end = moment(eventDay);
-          event.allDay = openingDay.allDay;
-          if (!event.allDay) {
-            for (let j = 0; j < openingDay.openingHour.length; j++) {
-              event.id = eventId;
-              const start = openingDay.openingHour[j].startTime;
-              const end = openingDay.openingHour[j].endTime;
-              let minutes = start.split(':')[1];
-              let hours = start.split(':')[0];
-              event.start = moment(event.start).add(hours, 'hours');
-              event.start = moment(event.start).add(minutes, 'minutes');
-              minutes = end.split(':')[1];
-              hours = end.split(':')[0];
-              event.end = moment(event.end).add(hours, 'hours');
-              event.end = moment(event.end).add(minutes, 'minutes');
-              event.start = moment(event.start).toDate();
-              event.end = moment(event.end).toDate();
-              events.push({ ...event });
-              eventId++;
-              event.start = moment(eventDay);
-              event.end = moment(eventDay);
-            }
-          } else {
+      const events = [];
+      let eventId = 0;
+      for (let i = 0; i < this.props.periodEvents.length; i++) {
+        const openingDay = this.props.periodEvents[i].openingDay;
+        const event = {};
+        let eventDay = moment().startOf('week').toDate();
+        const weekday = this.props.periodEvents[i].weekdays.day;
+        eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
+        event.start = moment(eventDay);
+        event.end = moment(eventDay);
+        event.allDay = openingDay.allDay;
+        if (!event.allDay) {
+          for (let j = 0; j < openingDay.openingHour.length; j++) {
             event.id = eventId;
+            const start = openingDay.openingHour[j].startTime;
+            const end = openingDay.openingHour[j].endTime;
+            let minutes = start.split(':')[1];
+            let hours = start.split(':')[0];
+            event.start = moment(event.start).add(hours, 'hours');
+            event.start = moment(event.start).add(minutes, 'minutes');
+            minutes = end.split(':')[1];
+            hours = end.split(':')[0];
+            event.end = moment(event.end).add(hours, 'hours');
+            event.end = moment(event.end).add(minutes, 'minutes');
+            event.start = moment(event.start).toDate();
+            event.end = moment(event.end).toDate();
             events.push({ ...event });
             eventId++;
+            event.start = moment(eventDay);
+            event.end = moment(eventDay);
           }
+        } else {
+          event.id = eventId;
+          events.push({ ...event });
+          eventId++;
         }
-        this.props.eventsChange(events);
-        this.setState({
-          events,
-          eventIdCounter: eventId
-        });
       }
+      this.props.eventsChange(events);
+      this.setState({
+        events,
+        eventIdCounter: eventId
+      });
     }
+  }
 
     onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
       if (!this.checkEventExistOrOverlap(start, end)) {
@@ -127,13 +130,13 @@ class BigCalendarWrapper extends PureComponent {
 
   checkEventExistOrOverlap = (startTime, endTime) => {
     const { events } = this.state;
-    const existingEventsArr = events.map(event => {
+    return events.every(event => {
       const { start, end } = event;
       const startOfExistedEvent = moment(start);
       const endOfExistedEvent = moment(end);
       const startTimeMoment = moment(startTime);
       const endTimeMoment = moment(endTime);
-      const dublicatedEvent = startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent);
+      const duplicateEvent = startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent);
       const startBeforeEvent = startTimeMoment.isBefore(startOfExistedEvent)
         && endTimeMoment.isSameOrBefore(endOfExistedEvent)
         && endTimeMoment.isAfter(startOfExistedEvent);
@@ -143,14 +146,9 @@ class BigCalendarWrapper extends PureComponent {
       const fullOverlap = (startTimeMoment.isAfter(startOfExistedEvent) && endTimeMoment.isBefore(endOfExistedEvent))
         || (startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isAfter(endOfExistedEvent));
 
-      if (dublicatedEvent || startBeforeEvent || startAfterEvent || fullOverlap) {
-        return false;
-      }
-      return true;
+      return !(duplicateEvent || startBeforeEvent || startAfterEvent || fullOverlap);
     });
-
-    return existingEventsArr.every(event => event);
-  }
+  };
 
     onSlotSelect = ({ start, end }) => {
       if (!this.checkEventExistOrOverlap(start, end)) {
@@ -169,7 +167,6 @@ class BigCalendarWrapper extends PureComponent {
         ...(isAllDay && { title: 'All day' }),
       });
 
-      this.checkEventExistOrOverlap(start, end);
       this.onCalendarChange(events);
     };
 

@@ -63,13 +63,13 @@ describe('new period creation', () => {
 
   describe('new current period', () => {
     let servicePoint;
+    const servicePointAmount = 2;
 
-    setupApplication();
+    setupApplication({ scenarios: ['periodOverlapError'] });
 
     beforeEach(async function () {
-      servicePoint = await this.server.create('servicePoint');
-      await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
-
+      servicePoint = await this.server.createList('servicePoint', servicePointAmount);
+      await this.visit(`/settings/calendar/library-hours/${servicePoint[0].id}`);
       await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
       await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
         startDatePast
@@ -86,7 +86,6 @@ describe('new period creation', () => {
       );
       await calendarSettingsInteractor.openingPeriodForm.formHeader.saveButton.click();
     });
-
 
     it('should be displayed', () => {
       expect(calendarSettingsInteractor.servicePointDetails.currentPeriod.isPresent).to.be.true;
