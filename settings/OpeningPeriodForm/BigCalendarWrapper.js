@@ -24,6 +24,7 @@ class BigCalendarWrapper extends PureComponent {
 
   constructor(props) {
     super(props);
+
     this.state = {
       eventIdCounter: 0,
       events: [],
@@ -31,34 +32,42 @@ class BigCalendarWrapper extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.periodEvents) {
-      const weekdays = new Array(7);
-      weekdays[0] = 'SUNDAY';
-      weekdays[1] = 'MONDAY';
-      weekdays[2] = 'TUESDAY';
-      weekdays[3] = 'WEDNESDAY';
-      weekdays[4] = 'THURSDAY';
-      weekdays[5] = 'FRIDAY';
-      weekdays[6] = 'SATURDAY';
+    const {
+      periodEvents,
+      eventsChange,
+    } = this.props;
 
+    if (periodEvents) {
+      const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
       const events = [];
       let eventId = 0;
-      for (let i = 0; i < this.props.periodEvents.length; i++) {
-        const openingDay = this.props.periodEvents[i].openingDay;
+
+      periodEvents.forEach(({
+        openingDay: {
+          allDay,
+          openingHour,
+        },
+        weekdays: {
+          day: weekday
+        }
+      }) => {
         const event = {};
         let eventDay = moment().startOf('week').toDate();
-        const weekday = this.props.periodEvents[i].weekdays.day;
+
         eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
         event.start = moment(eventDay);
         event.end = moment(eventDay);
-        event.allDay = openingDay.allDay;
+        event.allDay = allDay;
+
         if (!event.allDay) {
-          for (let j = 0; j < openingDay.openingHour.length; j++) {
-            event.id = eventId;
-            const start = openingDay.openingHour[j].startTime;
-            const end = openingDay.openingHour[j].endTime;
+          openingHour.forEach(({
+            startTime: start,
+            endTime: end,
+          }) => {
             let minutes = start.split(':')[1];
             let hours = start.split(':')[0];
+
+            event.id = eventId;
             event.start = moment(event.start).add(hours, 'hours');
             event.start = moment(event.start).add(minutes, 'minutes');
             minutes = end.split(':')[1];
@@ -71,14 +80,14 @@ class BigCalendarWrapper extends PureComponent {
             eventId++;
             event.start = moment(eventDay);
             event.end = moment(eventDay);
-          }
+          });
         } else {
           event.id = eventId;
           events.push({ ...event });
           eventId++;
         }
-      }
-      this.props.eventsChange(events);
+      });
+      eventsChange(events);
       this.setState({
         events,
         eventIdCounter: eventId
@@ -86,47 +95,52 @@ class BigCalendarWrapper extends PureComponent {
     }
   }
 
-    onEventDnD = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
-      if (!this.checkEventExistOrOverlap(start, end)) {
-        return;
-      }
+  onEventDnD = ({
+    event,
+    start,
+    end,
+    isAllDay: droppedOnAllDaySlot,
+  }) => {
+    if (!this.checkEventExistOrOverlap(start, end)) {
+      return;
+    }
 
-      const { events } = this.state;
-      const isSameDay = start.getDay() === end.getDay();
-      const idx = events.indexOf(event);
-      let allDay = event.allDay;
+    const { events } = this.state;
+    const isSameDay = start.getDay() === end.getDay();
+    const idx = events.indexOf(event);
+    let allDay = event.allDay;
 
-      if (!event.allDay && droppedOnAllDaySlot) {
-        allDay = true;
-      } else if (event.allDay && !droppedOnAllDaySlot) {
-        allDay = false;
-      }
+    if (!event.allDay && droppedOnAllDaySlot) {
+      allDay = true;
+    } else if (event.allDay && !droppedOnAllDaySlot) {
+      allDay = false;
+    }
 
-      const updatedEvent = {
-        ...event,
-        start,
-        end: isSameDay ? end : moment(start).endOf('day').toDate(),
-        allDay,
-        title: allDay ? 'All day' : '',
-      };
-
-      const nextEvents = [...events];
-      nextEvents.splice(idx, 1, updatedEvent);
-
-      this.onCalendarChange(nextEvents);
+    const updatedEvent = {
+      ...event,
+      start,
+      end: isSameDay ? end : moment(start).endOf('day').toDate(),
+      allDay,
+      title: allDay ? 'All day' : '',
     };
 
-    onEventResize = ({ event, start, end }) => {
-      const { events } = this.state;
+    const nextEvents = [...events];
+    nextEvents.splice(idx, 1, updatedEvent);
 
-      const nextEvents = events.map(existingEvent => {
-        return existingEvent.id === event.id
-          ? { ...existingEvent, start, end }
-          : existingEvent;
-      });
+    this.onCalendarChange(nextEvents);
+  };
 
-      this.onCalendarChange(nextEvents);
-    };
+  onEventResize = ({ event, start, end }) => {
+    const { events } = this.state;
+
+    const nextEvents = events.map(existingEvent => {
+      return existingEvent.id === event.id
+        ? { ...existingEvent, start, end }
+        : existingEvent;
+    });
+
+    this.onCalendarChange(nextEvents);
+  };
 
   checkEventExistOrOverlap = (startTime, endTime) => {
     const { events } = this.state;
@@ -181,6 +195,7 @@ class BigCalendarWrapper extends PureComponent {
 
     onDeleteEvent = ({ id: eventToDeleteId }) => {
       const filteredEvent = this.state.events.filter(({ id }) => id !== eventToDeleteId);
+
       this.onCalendarChange(filteredEvent);
     };
 
