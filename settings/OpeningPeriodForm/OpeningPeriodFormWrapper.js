@@ -47,18 +47,7 @@ class OpeningPeriodFormWrapper extends Component {
 
   constructor(props) {
     super(props);
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onCalendarChange = this.onCalendarChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.onEventChange = this.onEventChange.bind(this);
-    this.closeErrorModal = this.closeErrorModal.bind(this);
-    this.confirmExit = this.confirmExit.bind(this);
-    this.confirmDelete = this.confirmDelete.bind(this);
-    this.getStartDate = this.getStartDate.bind(this);
-    this.getEndDate = this.getEndDate.bind(this);
-    this.getName = this.getName.bind(this);
+
     this.state = {
       confirmDelete: false,
       confirmExit: false,
@@ -73,23 +62,25 @@ class OpeningPeriodFormWrapper extends Component {
     });
   }
 
-  confirmExit() {
-    if (this.state.dirty === undefined || this.state.dirty === null || this.state.dirty === false) {
+  confirmExit = () => {
+    const { dirty } = this.state;
+
+    if (!dirty) {
       this.props.onClose();
-    } else if (this.state.dirty === true) {
+    } else {
       this.setState({
         confirmExit: true
       });
     }
   }
 
-  confirmDelete() {
+  confirmDelete = () => {
     this.setState({
       confirmDelete: true
     });
   }
 
-  handleDateChange(isStart, date) {
+  handleDateChange = (isStart, date) => {
     if (isStart) {
       this.setState({ startDate: date });
     } else {
@@ -98,33 +89,35 @@ class OpeningPeriodFormWrapper extends Component {
     this.setState({ dirty: true });
   }
 
-  handleNameChange(name) {
+  handleNameChange = name => {
     this.setState({
       name,
       dirty: true,
     });
   }
 
-  onCalendarChange(event) {
+  onCalendarChange = event => {
     this.setState({
       event,
       dirty: true,
     });
   }
 
-  handleDelete() {
-    const that = this;
+  handleDelete = () => {
     const parentMutator = this.props.parentMutator;
     const periodId = this.props.modifyPeriod.id;
     const servicePointId = this.props.modifyPeriod.servicePointId;
+
     if (servicePointId) parentMutator.query.replace(servicePointId);
     if (periodId) parentMutator.periodId.replace(periodId);
-    return this.props.parentMutator.periods.DELETE(periodId).then((e) => {
-      that.props.onSuccessfulModifyPeriod(e);
-    });
+
+    return this.props.parentMutator.periods.DELETE(periodId)
+      .then(e => {
+        this.props.onSuccessfulModifyPeriod(e);
+      });
   }
 
-  closeErrorModal() {
+  closeErrorModal = () => {
     this.setState({
       errorModalText: null
     });
@@ -153,37 +146,48 @@ class OpeningPeriodFormWrapper extends Component {
     return event;
   };
 
-  onFormSubmit(event) {
-    event.preventDefault();
-    const { parentMutator, servicePointId } = this.props;
+  onFormSubmit = e => {
+    e.preventDefault();
 
-    if ((moment(this.state.startDate).toDate() > moment(this.state.endDate).toDate()) || (moment(this.state.startDate).toDate() === moment(this.state.endDate).toDate())) {
+    const {
+      parentMutator,
+      servicePointId,
+      modifyPeriod,
+    } = this.props;
+    const {
+      startDate,
+      endDate,
+      event,
+      name,
+    } = this.state;
+
+    if ((moment(startDate).toDate() > moment(endDate).toDate()) || (moment(startDate).toDate() === moment(endDate).toDate())) {
       this.setState({
         errorModalText: <FormattedMessage id="ui-calendar.wrongStartEndDate" />,
       });
-      this.render();
+
       return null;
     }
-    if (this.state.event === null || this.state.event === undefined || this.state.event.length === 0) {
+    if (event === null || event === undefined || event.length === 0) {
       this.setState({
         errorModalText: <FormattedMessage id="ui-calendar.noEvents" />,
       });
-      this.render();
+
       return null;
     }
     let period = {
-      name: this.state.name,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
+      name,
+      startDate,
+      endDate,
       openingDays: [],
       servicePointId
     };
 
-    period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, this.state.event);
-    if (this.props.modifyPeriod) {
+    period = CalendarUtils.convertNewPeriodToValidBackendPeriod(period, event);
+    if (modifyPeriod) {
       if (servicePointId) parentMutator.query.replace(servicePointId);
-      if (servicePointId) parentMutator.periodId.replace(this.props.modifyPeriod.id);
-      period.id = this.props.modifyPeriod.id;
+      if (servicePointId) parentMutator.periodId.replace(modifyPeriod.id);
+      period.id = modifyPeriod.id;
       delete period.events;
 
       return this.createUpdatePeriod(period, 'PUT');
@@ -193,42 +197,55 @@ class OpeningPeriodFormWrapper extends Component {
     return this.createUpdatePeriod(period, 'POST');
   }
 
-  onEventChange(e) {
+  onEventChange = e => {
     this.setState({
       event: e,
       dirty: true,
     });
   }
 
-  getStartDate() {
+  getStartDate = () => {
+    const { modifyPeriod } = this.props;
     let date = '';
-    if (this.props.modifyPeriod) {
-      date = this.props.modifyPeriod.startDate;
+
+    if (modifyPeriod) {
+      date = modifyPeriod.startDate;
     }
 
     return date;
   }
 
-  getEndDate() {
+  getEndDate = () => {
+    const { modifyPeriod } = this.props;
     let date = '';
-    if (this.props.modifyPeriod) {
-      date = this.props.modifyPeriod.endDate;
+
+    if (modifyPeriod) {
+      date = modifyPeriod.endDate;
     }
+
     return date;
   }
 
-  getName() {
+  getName = () => {
+    const { modifyPeriod } = this.props;
     let name = '';
-    if (this.props.modifyPeriod) {
-      name = this.props.modifyPeriod.name;
+
+    if (modifyPeriod) {
+      name = modifyPeriod.name;
     }
+
     return name;
   }
 
   render() {
     let errorModal;
-    const name = this.state.name;
-    const { confirmDelete, confirmExit } = this.state;
+    const {
+      confirmDelete,
+      confirmExit,
+      name,
+      errorModalText,
+    } = this.state;
+
     const confirmationMessageDelete = (
       <SafeHTMLMessage
         id="ui-calendar.deleteQuestionMessage"
@@ -270,7 +287,7 @@ class OpeningPeriodFormWrapper extends Component {
         }}
         confirmLabel={<FormattedMessage id="ui-calendar.exitWithoutSaving" />}
       />;
-    if (this.state.errorModalText !== null && this.state.errorModalText !== undefined) {
+    if (errorModalText !== null && errorModalText !== undefined) {
       const footer = (
         <Fragment>
           <Button
@@ -293,7 +310,7 @@ class OpeningPeriodFormWrapper extends Component {
           footer={footer}
         >
           <div data-test-error-modal-content>
-            <p>{this.state.errorModalText}</p>
+            <p>{errorModalText}</p>
           </div>
         </Modal>;
     }
@@ -369,7 +386,7 @@ class OpeningPeriodFormWrapper extends Component {
               {errorModal}
               <InputFields
                 {...this.props}
-                nameValue={this.state.name || ''}
+                nameValue={name || ''}
                 onNameChange={this.handleNameChange}
                 onDateChange={this.handleDateChange}
                 initialValues={
