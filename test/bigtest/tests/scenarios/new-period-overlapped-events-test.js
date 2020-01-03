@@ -111,7 +111,7 @@ describe('events for current period were created', () => {
       expect(calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.isPresent).to.be.true;
     });
 
-    describe('show error modal if duclicated/overlapped event was created', () => {
+    describe('show error modal if duplicated/overlapped event was created', () => {
       beforeEach(async function () {
         await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(startDatePast);
         await calendarSettingsInteractor.openingPeriodForm.inputFields.endDate.fillAndBlur(endDate);
@@ -152,7 +152,7 @@ describe('events for current period were created', () => {
     });
 
     it('should be displayed error message', () => {
-      expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(translation.dublication);
+      expect(calendarSettingsInteractor.openingPeriodForm.errorModal.content.text).to.equal(translation.duplication);
     });
   });
 });

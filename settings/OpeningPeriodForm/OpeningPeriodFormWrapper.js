@@ -133,12 +133,13 @@ class OpeningPeriodFormWrapper extends Component {
   catchOverlappedEvents = err => {
     if (err.status === 422) {
       this.setState({
-        errorModalText: <FormattedMessage id="ui-calendar.dublication" />,
+        errorModalText: <FormattedMessage id="ui-calendar.duplication" />,
       });
     }
   };
 
-  createUpdatePeriod = (parentMutator, period, method) => {
+  createUpdatePeriod = (period, method) => {
+    const { parentMutator } = this.props;
     const event = method === 'POST'
       ? parentMutator.periods.POST(period)
         .then(e => this.props.onSuccessfulCreatePeriod(e))
@@ -185,11 +186,11 @@ class OpeningPeriodFormWrapper extends Component {
       period.id = this.props.modifyPeriod.id;
       delete period.events;
 
-      return this.createUpdatePeriod(parentMutator, period, 'PUT');
+      return this.createUpdatePeriod(period, 'PUT');
     }
     if (servicePointId) parentMutator.query.replace(servicePointId);
 
-    return this.createUpdatePeriod(parentMutator, period, 'POST');
+    return this.createUpdatePeriod(period, 'POST');
   }
 
   onEventChange(e) {

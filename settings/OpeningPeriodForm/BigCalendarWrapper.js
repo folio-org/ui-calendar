@@ -144,23 +144,18 @@ class BigCalendarWrapper extends PureComponent {
 
   checkEventExistOrOverlap = (startTime, endTime) => {
     const { events } = this.state;
+
     return events.every(event => {
       const { start, end } = event;
       const startOfExistedEvent = moment(start);
       const endOfExistedEvent = moment(end);
       const startTimeMoment = moment(startTime);
       const endTimeMoment = moment(endTime);
-      const duplicateEvent = startTimeMoment.isSame(startOfExistedEvent) && endTimeMoment.isSame(endOfExistedEvent);
-      const startBeforeEvent = startTimeMoment.isBefore(startOfExistedEvent)
-        && endTimeMoment.isSameOrBefore(endOfExistedEvent)
-        && endTimeMoment.isAfter(startOfExistedEvent);
-      const startAfterEvent = startTimeMoment.isSameOrAfter(startOfExistedEvent)
-        && startTimeMoment.isBefore(endOfExistedEvent)
-        && (endTimeMoment.isSameOrAfter(endOfExistedEvent) || endTimeMoment.isSameOrBefore(endOfExistedEvent));
-      const fullOverlap = (startTimeMoment.isAfter(startOfExistedEvent) && endTimeMoment.isBefore(endOfExistedEvent))
-        || (startTimeMoment.isBefore(startOfExistedEvent) && endTimeMoment.isAfter(endOfExistedEvent));
+      const existedEventRange = moment.range(startOfExistedEvent, endOfExistedEvent);
+      const newEventRange = moment.range(startTimeMoment, endTimeMoment);
+      const isEventOverlapped = newEventRange.overlaps(existedEventRange);
 
-      return !(duplicateEvent || startBeforeEvent || startAfterEvent || fullOverlap);
+      return !isEventOverlapped;
     });
   };
 
