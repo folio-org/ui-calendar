@@ -65,7 +65,7 @@ describe('new period creation', () => {
     let servicePoint;
     const servicePointAmount = 2;
 
-    setupApplication({ scenarios: ['periodOverlapError'] });
+    setupApplication();
 
     beforeEach(async function () {
       servicePoint = await this.server.createList('servicePoint', servicePointAmount);
