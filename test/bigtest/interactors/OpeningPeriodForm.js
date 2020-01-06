@@ -14,7 +14,7 @@ import BigCalendar from './BigCalendar';
 @interactor class ErrorModal {
   defaultScope = '#error-modal';
 
-  content = scoped('[data-test-error-modal-content]');
+  content = scoped('[data-test-error-modal-content] p');
   closeButton = scoped('[data-test-error-modal-close-button]');
 }
 
@@ -34,9 +34,11 @@ import BigCalendar from './BigCalendar';
 @interactor class InputFields {
   defaultScope = '[data-test-input-fields]';
 
-  startDate = scoped('[data-test-item-start-date]', DatepickerInteractor);
-  endDate = scoped('[data-test-item-end-date]', DatepickerInteractor);
-  periodName = scoped('[data-test-item-period-name]', TextFieldInteractor);
+  startDate = new DatepickerInteractor('[data-test-item-start-date]');
+  endDate = new DatepickerInteractor('[data-test-item-end-date]');
+  startDateField = new TextFieldInteractor('[data-test-item-start-date]');
+  endDateField = new TextFieldInteractor('[data-test-item-end-date]');
+  periodName = new TextFieldInteractor('[data-test-item-period-name]');
   periodNameError = scoped('[data-test-item-period-name-error]');
 }
 

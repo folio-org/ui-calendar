@@ -34,9 +34,9 @@ import ConfirmationModal from './ConfirmationModal';
   defaultScope = '[data-test-exceptional-period-editor]';
 
   savePeriod = new Interactor('[data-test-save-exceptional-period]');
-  validFrom = scoped('[data-test-start-date]', DatepickerInteractor);
-  validTo = scoped('[data-test-end-date]', DatepickerInteractor);
-  name = scoped('[data-test-period-name]', TextFieldInteractor);
+  validFrom = new DatepickerInteractor('[data-test-start-date]');
+  validTo = new DatepickerInteractor('[data-test-end-date]');
+  name = new TextFieldInteractor('[data-test-period-name]');
   servicePoints = new ServicePoints();
   closedCheckbox = scoped('[data-test-closed]', CheckboxInteractor);
   allDay = scoped('[data-test-all-day]', CheckboxInteractor);
