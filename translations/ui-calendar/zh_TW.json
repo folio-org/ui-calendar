@@ -116,5 +116,6 @@
     "closeWithoutSaving": "关闭编辑器而不保存",
     "current": "当前：",
     "common.cancel": "Cancel",
-    "intervalsOverlap": "Intervals can not overlap."
+    "intervalsOverlap": "Intervals can not overlap.",
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
 }

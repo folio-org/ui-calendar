@@ -116,5 +116,6 @@
     "closeWithoutSaving": "Ferme l'éditeur sans sauvegarder",
     "current": "Actuel",
     "common.cancel": "Annuler",
-    "intervalsOverlap": "Les intervalles ne peuvent pas se chevaucher."
+    "intervalsOverlap": "Les intervalles ne peuvent pas se chevaucher.",
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
 }

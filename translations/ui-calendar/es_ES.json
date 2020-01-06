@@ -116,5 +116,6 @@
     "closeWithoutSaving": "Close editor without saving",
     "current": "Current:",
     "common.cancel": "Cancelar",
-    "intervalsOverlap": "Los intervalos no pueden solaparse."
+    "intervalsOverlap": "Los intervalos no pueden solaparse.",
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
 }

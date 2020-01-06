@@ -116,5 +116,6 @@
     "closeWithoutSaving": "Chiudi l'editor senza salvare",
     "current": "Attuale:",
     "common.cancel": "Annulla",
-    "intervalsOverlap": "Gli intervalli non possono sovrapporsi."
+    "intervalsOverlap": "Gli intervalli non possono sovrapporsi.",
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
 }

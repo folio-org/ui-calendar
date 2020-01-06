@@ -116,5 +116,6 @@
     "closeWithoutSaving": "Закрыть редактор без сохранения",
     "current": "Текущий",
     "common.cancel": "Отмена",
-    "intervalsOverlap": "Intervals can not overlap."
+    "intervalsOverlap": "Intervals can not overlap.",
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
 }
