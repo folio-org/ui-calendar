@@ -117,5 +117,5 @@
     "current": "Current:",
     "common.cancel": "Cancel",
     "intervalsOverlap": "Intervals can not overlap.",
-    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
+    "duplication": "入力された日付範囲は、このサービス ポイントの別のカレンダーと重複しています。日付範囲を修正するか、例外として時間を入力してください。"
 }
