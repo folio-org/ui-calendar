@@ -117,5 +117,5 @@
     "current": "Actuel",
     "common.cancel": "Annuler",
     "intervalsOverlap": "Les intervalles ne peuvent pas se chevaucher.",
-    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
+    "duplication": "La plage de dates entrée chevauche un autre calendrier pour ce point de service. Veuillez corriger la plage de dates ou saisir les heures comme exceptions."
 }
