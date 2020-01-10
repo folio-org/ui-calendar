@@ -182,6 +182,7 @@ class ExceptionalPeriodEditor extends React.Component {
           <Col>
             <div data-test-period-name>
               <Field
+                id="item-period-name"
                 name="item.periodName"
                 component={TextField}
                 label={<FormattedMessage id="ui-calendar.name" />}
