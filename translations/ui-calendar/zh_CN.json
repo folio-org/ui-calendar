@@ -88,7 +88,7 @@
     "wrongStartEndDate": "开始时间必须在结束时间之前！",
     "deleteQuestionMessage": "图书馆正常开放时间<strong> {name} </strong>将<strong>被删除</strong> 。",
     "deleteQuestionTitle": "删除图书馆正常开放时间",
-    "exitQuestionTitle": "你确定吗？",
+    "exitQuestionTitle": "是否确定？",
     "exitWithoutSaving": "退出而不保存",
     "exitQuestionMessage": "有未保存的更改",
     "exceptionalNewPeriod": "+新建例外时期",
@@ -117,5 +117,5 @@
     "current": "当前：",
     "common.cancel": "取消",
     "intervalsOverlap": "间隔不能重叠。",
-    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
+    "duplication": "输入的日期范围与此服务点的另一个日历重叠。请更正日期范围或输入小时作为例外。"
 }
