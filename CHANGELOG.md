@@ -128,3 +128,4 @@
 * Fix bug with the error message is shown when the start and end dates were already entered. Refs UICAL-95.
 * Refactoring of `ExceptionWrapper` component. Refs UICAL-95.
 * Fix bug with ability to create duplicated or overlapped events. Refs UICAL-82.
+* Fix error message shown for duplicated or overlapped events. Fixes UICAL-82.

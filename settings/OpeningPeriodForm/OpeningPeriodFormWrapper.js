@@ -123,10 +123,13 @@ class OpeningPeriodFormWrapper extends Component {
     });
   }
 
-  catchOverlappedEvents = err => {
+  catchOverlappedEvents = async err => {
     if (err.status === 422) {
+      const response = await err.json();
+      const errorMessage = response.errors[0].message;
+
       this.setState({
-        errorModalText: <FormattedMessage id="ui-calendar.duplication" />,
+        errorModalText: errorMessage,
       });
     }
   };
