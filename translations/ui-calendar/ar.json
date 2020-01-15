@@ -117,5 +117,5 @@
     "current": "الحالي:",
     "common.cancel": "إلغاء",
     "intervalsOverlap": "لا يمكن أن تتداخل الفواصل الزمنية",
-    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
+    "duplication": "يتداخل نطاق التاريخ الذي تم إدخاله مع تقويم آخر لنقطة الخدمة هذه. يرجى تصحيح النطاق الزمني أو إدخال الساعات كاستثناءات."
 }
