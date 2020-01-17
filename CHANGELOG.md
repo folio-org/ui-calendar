@@ -129,3 +129,4 @@
 * Refactoring of `ExceptionWrapper` component. Refs UICAL-95.
 * Fix bug with ability to create duplicated or overlapped events. Refs UICAL-82.
 * Fix error message shown for duplicated or overlapped events. Fixes UICAL-82.
+* Fix issue the "+ more" link is not working, when patron tries to view all the values for the exception day. Refs UICAl-99.
