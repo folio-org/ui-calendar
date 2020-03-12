@@ -1,14 +1,16 @@
 # Change history for ui-calendar
 
-## 3.0.0 (IN PROGRESS)
+## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)
+(2020-03-12)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.2...v3.0.0)
 
 * Fix bug with the error message is shown when the start and end dates were already entered. Refs UICAL-95.
-* Refactoring of `ExceptionWrapper` component. Refs UICAL-95.
 * Fix bug with ability to create duplicated or overlapped events. Refs UICAL-82.
-* Fix error message shown for duplicated or overlapped events. Fixes UICAL-82.
-* Fix issue the "+ more" link is not working, when patron tries to view all the values for the exception day. Refs UICAl-99.
+* Fix issue the "+ more" link is not working, when patron tries to view all the values for the exception day. Refs UICAL-99.
+* Handle accessibility issues. Refs UICAL-85.
 * Rearrange CHANGELOG to be consistent with other core apps
 * Migrate to `stripes` `v3.0.0` and remove `react-intl` from dependencies (it was already a peer).
+* Update translations strings.
 
 ## [2.7.2](https://github.com/folio-org/ui-calendar/tree/v2.7.2) (2019-12-23)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.1...v2.7.2)
