@@ -26,7 +26,7 @@
     "settings.error.endDateRequired": "Пожалуйста, выберите дату окончания для открытия",
     "settings.error.descriptionRequired": "Пожалуйста, добавьте описание для периода открытия",
     "settings.error.invalidDateRange": "Дата окончания не может быть раньше даты начала",
-    "calendar": "Institutional calendar",
+    "calendar": "Календарь учреждения",
     "date": "Дата",
     "time": "Время",
     "event": "Событие",
