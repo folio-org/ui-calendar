@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## 3.0.1 (IN PROGRESS)
+
+* Fix failing test. Refs UICAL-105.
+
 ## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)
 (2020-03-12)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.2...v3.0.0)

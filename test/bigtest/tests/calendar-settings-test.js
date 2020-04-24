@@ -40,7 +40,7 @@ describe('Calendar settings', () => {
     });
 
     it('should have proper amount of links', () => {
-      expect(calendarSettingsInteractor.allSettings.items().length).to.equal(1);
+      expect(calendarSettingsInteractor.allSettings.items().length).to.equal(2);
     });
 
     describe('calendar link', () => {
