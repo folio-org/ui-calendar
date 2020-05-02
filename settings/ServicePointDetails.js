@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   Button,
   Col,
@@ -487,7 +487,7 @@ class ServicePointDetails extends React.Component {
 
 ServicePointDetails.propTypes = {
   initialValues: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object,
   resources: PropTypes.shape({
     periods: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
