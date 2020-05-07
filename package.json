@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=8.9.4"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "stripes": {
     "type": "settings",
     "displayName": "ui-calendar.meta.title",
