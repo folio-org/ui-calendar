@@ -3,6 +3,7 @@
 ## 3.1.0 (IN PROGRESS)
 
 * Fix failing test. Refs UICAL-105.
+* Pin `moment` at `~2.24.0`. Refs STRIPES-678.
 * Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
 
 ## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)

@@ -112,7 +112,7 @@
     "@folio/react-intl-safe-html": "^1.0.2",
     "dateformat": "^2.0.0",
     "lodash": "^4.17.5",
-    "moment": "^2.22.2",
+    "moment": "~2.24.0",
     "prop-types": "^15.6.1",
     "randomcolor": "^0.5.3",
     "react-big-calendar": "^0.22.1",
