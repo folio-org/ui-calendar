@@ -9,7 +9,6 @@ import {
 import {
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import {
   Datepicker,
@@ -20,7 +19,7 @@ import {
 
 class InputFields extends React.Component {
   static propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.object.isRequired,
     onDateChange: PropTypes.func.isRequired,
     onNameChange: PropTypes.func.isRequired,
     nameValue: PropTypes.string.isRequired,
