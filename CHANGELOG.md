@@ -1,8 +1,9 @@
 # Change history for ui-calendar
 
-## 3.0.1 (IN PROGRESS)
+## 3.1.0 (IN PROGRESS)
 
 * Fix failing test. Refs UICAL-105.
+* Pin `moment` at `~2.24.0`. Refs STRIPES-678.
 
 ## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)
 (2020-03-12)
