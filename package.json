@@ -90,9 +90,9 @@
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^3.2.1",
-    "@folio/stripes": "^3.0.0",
+    "@folio/stripes": "^4.0.0",
     "@folio/stripes-cli": "^1.8.0",
-    "@folio/stripes-core": "^4.0.0",
+    "@folio/stripes-core": "^5.0.0",
     "babel-eslint": "^9.0.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
@@ -101,6 +101,7 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
+    "react-intl": "^4.5.3",
     "react-router-dom": "^4.0.0",
     "redux": "^4.0.0",
     "sinon": "^7.3.2",
@@ -109,7 +110,7 @@
     "stylelint-junit-formatter": "^0.2.1"
   },
   "dependencies": {
-    "@folio/react-intl-safe-html": "^1.0.2",
+    "@folio/react-intl-safe-html": "^2.0.0",
     "dateformat": "^2.0.0",
     "lodash": "^4.17.5",
     "moment": "~2.24.0",
@@ -122,11 +123,11 @@
     "style-loader": "^0.21.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^3.0.0",
+    "@folio/stripes": "^4.0.0",
     "react": "*",
     "react-bootstrap": "0.32.1",
     "react-dom": "^16.3.0",
-    "react-intl": "^2.4.0",
+    "react-intl": "^4.5.3",
     "react-router-dom": "^4.0.0"
   }
 }
