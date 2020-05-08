@@ -7,6 +7,7 @@
 * Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
 * Use correct prop-type for `childen` in `ErrorBoundary`.
 * Increment `stripes` to `v4.0`, `react-intl` to `v4.5`. Refs STRIPES-672.
+* Clean up, clean up, everybody clean up: proptypes incoming and outgoing, a11y attributes, state init, CLEAN UP!
 
 ## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)
 (2020-03-12)

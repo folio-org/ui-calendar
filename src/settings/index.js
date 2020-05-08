@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Settings } from '@folio/stripes/smart-components';
 
 import LibraryHours from './LibraryHours';
@@ -13,20 +13,25 @@ const pages = [
 ];
 
 
-function getPages(pageDefinitions) {
+function getPages(pageDefinitions, intl) {
   const routes = [];
   pageDefinitions.forEach((page) => {
     routes.push({
       route: page.route,
-      label: <FormattedMessage id={page.labelKey} />,
+      label: intl.formatMessage({ id: page.labelKey }),
       component: page.component,
     });
   });
   return routes;
 }
 
-export default props => <Settings
-  {...props}
-  pages={getPages(pages)}
-  paneTitle={<FormattedMessage id="ui-calendar.settings.calendar" />}
-/>;
+export default props => {
+  const intl = useIntl();
+  return (
+    <Settings
+      {...props}
+      pages={getPages(pages, intl)}
+      paneTitle={<FormattedMessage id="ui-calendar.settings.calendar" />}
+    />
+  );
+};

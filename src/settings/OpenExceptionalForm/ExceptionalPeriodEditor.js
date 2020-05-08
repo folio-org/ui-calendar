@@ -21,8 +21,8 @@ class ExceptionalPeriodEditor extends React.Component {
   static propTypes = {
     allSelector: PropTypes.bool,
     editor: PropTypes.object.isRequired,
-    servicePoints: PropTypes.object.isRequired,
-    editorServicePoints: PropTypes.object.isRequired,
+    servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+    editorServicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
     allDay: PropTypes.bool.isRequired,
     closed: PropTypes.bool.isRequired,
     isModify: PropTypes.bool.isRequired,
@@ -133,7 +133,7 @@ class ExceptionalPeriodEditor extends React.Component {
 
     const items = this.state.servicePoints;
     const itemFormatter = (item) => (
-      <li data-test-service-point>
+      <li data-test-service-point key={item.id}>
         <div className="CircleDiv" style={{ background: item.color }} />
         <Checkbox
           id={item.id}

@@ -31,7 +31,7 @@ import {
 
 class ExceptionWrapper extends Component {
   static propTypes = {
-    entries: PropTypes.object,
+    entries: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object
   };
@@ -39,7 +39,7 @@ class ExceptionWrapper extends Component {
   constructor(props) {
     super(props);
 
-    this.setState({
+    this.state = {
       servicePoints: [],
       openEditor: false,
       deleteQuestion: null,
@@ -72,7 +72,7 @@ class ExceptionWrapper extends Component {
       modifyEvent: false,
       tempStart: null,
       tempClose: null
-    });
+    };
   }
 
   componentWillMount() {      // eslint-disable-line react/no-deprecated
