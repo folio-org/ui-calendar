@@ -5,6 +5,7 @@
 * Fix failing test. Refs UICAL-105.
 * Pin `moment` at `~2.24.0`. Refs STRIPES-678.
 * Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
+* Use correct prop-type for `childen` in `ErrorBoundary`.
 
 ## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)
 (2020-03-12)
