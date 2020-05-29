@@ -12,7 +12,9 @@
   },
   "main": "src/index.js",
   "stripes": {
-    "type": "settings",
+    "actsAs": [
+      "settings"
+    ],
     "displayName": "ui-calendar.meta.title",
     "route": "/calendar",
     "hasSettings": true,
