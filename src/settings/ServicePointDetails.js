@@ -20,8 +20,8 @@ import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 import { permissions } from './constants';
 
 class ServicePointDetails extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.getWeekdayOpeningHours = this.getWeekdayOpeningHours.bind(this);
     this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
     this.displayNextPeriod = this.displayNextPeriod.bind(this);

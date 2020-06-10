@@ -11,7 +11,7 @@ import '!style-loader!css-loader!../../css/exception-form.css'; // eslint-disabl
 
 class ServicePointSelector extends React.Component {
   static propTypes = {
-    servicePoints: PropTypes.object.isRequired,
+    servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
     handleServicePointChange: PropTypes.func.isRequired,
   };
 
@@ -27,7 +27,7 @@ class ServicePointSelector extends React.Component {
   render() {
     const items = this.props.servicePoints;
     const itemFormatter = (item) => (
-      <li data-test-service-point>
+      <li data-test-service-point key={item.id}>
         <div
           className="CircleDiv"
           style={{ background: item.color }}

@@ -324,7 +324,7 @@ class OpeningPeriodFormWrapper extends Component {
       : ['ui-calendar.modifyRegularLibraryValidityPeriod', permissions.PUT];
 
     return (
-      <form onSubmit={this.onFormSubmit}>
+      <form style={{ height: 'inherit' }} onSubmit={this.onFormSubmit}>
         <Paneset isRoot>
           <Pane
             data-test-opening-period-form-header
