@@ -54,6 +54,7 @@ class ExceptionalBigCalendar extends Component {
         events={this.getEvents()}
         views={['month']}
         onSelectEvent={getEvent}
+        style={{ height: '90vh' }}
       />
     );
   }

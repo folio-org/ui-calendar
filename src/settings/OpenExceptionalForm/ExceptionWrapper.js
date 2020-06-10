@@ -31,7 +31,7 @@ import {
 
 class ExceptionWrapper extends Component {
   static propTypes = {
-    entries: PropTypes.object,
+    entries: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object
   };
@@ -1088,7 +1088,7 @@ class ExceptionWrapper extends Component {
       </PaneMenu>;
 
     const selectorPane =
-      <Pane defaultWidth="20%" paneTitle={<FormattedMessage id="ui-calendar.servicePoints" />}>
+      <Pane defaultWidth="20%" style={{ height: '100vh' }} paneTitle={<FormattedMessage id="ui-calendar.servicePoints" />}>
         <ServicePointSelector
           {...this.props}
           handleServicePointChange={this.handleServicePointChange}
@@ -1146,6 +1146,7 @@ class ExceptionWrapper extends Component {
     const editorPane =
       <Pane
         defaultWidth="20%"
+        style={{ height: '100vh' }}
         paneTitle={editorPaneTittle}
         firstMenu={editorStartMenu}
         footer={(
@@ -1210,7 +1211,7 @@ class ExceptionWrapper extends Component {
         <Button
           data-test-close-button
           onClick={this.closeErrorModal}
-          ButtonStyle="primary"
+          buttonStyle="primary"
         >
           <FormattedMessage id="ui-calendar.close" />
         </Button>
