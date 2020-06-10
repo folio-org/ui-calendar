@@ -1,16 +1,16 @@
 # Change history for ui-calendar
 
-## 4.0.0 (IN PROGRESS)
+## [4.0.0](https://github.com/folio-org/ui-calendar/tree/v4.0.0) (2019-06-10)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v3.0.0...v4.0.0)
 
 * Fix failing test. Refs UICAL-105.
 * Pin `moment` at `~2.24.0`. Refs STRIPES-678.
-* Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
+* Purge `intlShape` in prep for `react-intl` `v4` migration. Increment `stripes` to `v4.0`, `react-intl` to `v4.5`. Refs STRIPES-672.
 * Use correct prop-type for `childen` in `ErrorBoundary`.
-* Increment `stripes` to `v4.0`, `react-intl` to `v4.5`. Refs STRIPES-672.
 * Prefer `stripes.actsAs` to the deprecated `stripes.type` in `package.json`. Refs STCOR-148.
+* Fix incorrect footer positioning. Refs UICAL-107.
 
-## 3.0.0 ((https://github.com/folio-org/ui-calendar/tree/v3.0.0)
-(2020-03-12)
+## [3.0.0](https://github.com/folio-org/ui-calendar/tree/v3.0.0) (2020-03-12)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.2...v3.0.0)
 
 * Fix bug with the error message is shown when the start and end dates were already entered. Refs UICAL-95.
