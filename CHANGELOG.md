@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## 4.0.1 (IN PROGRESS)
+
+* Replace `bigtest/mirage` with `miragejs`.
+
 ## [4.0.0](https://github.com/folio-org/ui-calendar/tree/v4.0.0) (2019-06-10)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v3.0.0...v4.0.0)
 
