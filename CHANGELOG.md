@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## 5.0.0 (IN PROGRESS)
+
+* Increment `@folio/stripes` to `v5`, `react-router` to `v5.2`.
+
 ## [4.0.0](https://github.com/folio-org/ui-calendar/tree/v4.0.0) (2019-06-10)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v3.0.0...v4.0.0)
 
