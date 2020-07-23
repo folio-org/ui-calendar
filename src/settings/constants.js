@@ -28,3 +28,5 @@ export const permissions = {
   POST: 'calendar.periods.item.post',
   PUT:  'calendar.periods.item.put'
 };
+
+export const ALL_DAY = 'All day';

@@ -27,6 +27,7 @@ import '!style-loader!css-loader!../../css/exception-form.css';  // eslint-disab
 import {
   colors,
   permissions,
+  ALL_DAY,
 } from '../constants';
 
 class ExceptionWrapper extends Component {
@@ -376,7 +377,7 @@ class ExceptionWrapper extends Component {
           if (today === openingDays[j].weekdays.day) {
             if (openingDays[j].openingDay.allDay === true) {
               dates.push(
-                <div>All day</div>
+                <div>{ALL_DAY}</div>
               );
             }
             for (let k = 0; k < openingHour.length; k++) {
@@ -403,7 +404,7 @@ class ExceptionWrapper extends Component {
           let allday = false;
           if (openingDays[j].openingDay.allDay === true) {
             dates.push(
-              <div>All day</div>
+              <div>{ALL_DAY}</div>
             );
             allday = true;
           }
