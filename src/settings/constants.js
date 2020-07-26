@@ -1,3 +1,6 @@
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 export const colors = [
   '#3cb44b',
   '#ffe119',
@@ -28,3 +31,5 @@ export const permissions = {
   POST: 'calendar.periods.item.post',
   PUT:  'calendar.periods.item.put'
 };
+
+export const ALL_DAY = <FormattedMessage id="ui-calendar.settings.allDay" />;
