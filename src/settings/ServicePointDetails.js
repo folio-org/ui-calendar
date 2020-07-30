@@ -17,7 +17,10 @@ import { IfPermission } from '@folio/stripes-core';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
-import { permissions } from './constants';
+import {
+  permissions,
+  ALL_DAY,
+} from './constants';
 
 class ServicePointDetails extends React.Component {
   constructor(props) {
@@ -76,7 +79,7 @@ class ServicePointDetails extends React.Component {
       if (weekdays === weekday) {
         if (day.open) {
           if (day.allDay) {
-            return 'All day';
+            return ALL_DAY;
           } else {
             for (let k = 0; k < day.openingHour.length; k++) {
               const hour = day.openingHour[k];

@@ -1,5 +1,10 @@
 # Change history for ui-calendar
 
+## [4.0.1](https://github.com/folio-org/ui-calendar/tree/v4.0.1) (2020-07-30)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v4.0.0...v4.0.1)
+
+* All Day setting for daily regular hours virtually impossible to delete. Refs UICAL-109.
+
 ## [4.0.0](https://github.com/folio-org/ui-calendar/tree/v4.0.0) (2019-06-10)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v3.0.0...v4.0.0)
 
