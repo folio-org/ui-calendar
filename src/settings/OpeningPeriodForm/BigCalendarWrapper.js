@@ -9,6 +9,7 @@ import {
   momentLocalizer,
 } from 'react-big-calendar';
 
+import { ALL_DAY } from '../constants';
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
 
@@ -121,7 +122,7 @@ class BigCalendarWrapper extends PureComponent {
       start,
       end: isSameDay ? end : moment(start).endOf('day').toDate(),
       allDay,
-      title: allDay ? 'All day' : '',
+      title: allDay ? ALL_DAY : '',
     };
 
     const nextEvents = [...events];
@@ -173,7 +174,7 @@ class BigCalendarWrapper extends PureComponent {
         end,
         start,
         allDay: isAllDay,
-        ...(isAllDay && { title: 'All day' }),
+        ...(isAllDay && { title: ALL_DAY }),
       });
 
       this.onCalendarChange(events);
@@ -196,7 +197,7 @@ class BigCalendarWrapper extends PureComponent {
 
     renderEventComponent = ({ event, title }) => <EventComponent
       event={event}
-      title={title}
+      title={event?.allDay ? ALL_DAY : title}
       onDeleteEvent={this.onDeleteEvent}
     />;
 

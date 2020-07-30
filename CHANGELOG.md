@@ -2,6 +2,7 @@
 
 ## 5.0.0 (IN PROGRESS)
 
+* Replace `bigtest/mirage` with `miragejs`.
 * Increment `@folio/stripes` to `v5`, `react-router` to `v5.2`.
 
 ## [4.0.0](https://github.com/folio-org/ui-calendar/tree/v4.0.0) (2019-06-10)

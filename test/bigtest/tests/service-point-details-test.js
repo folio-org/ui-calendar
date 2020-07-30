@@ -5,7 +5,7 @@ import {
   beforeEach,
   it,
 } from '@bigtest/mocha';
-import { faker } from '@bigtest/mirage';
+import faker from 'faker';
 
 import setupApplication from '../helpers/setup-application';
 import { formatDateString } from '../helpers/messageConverters';

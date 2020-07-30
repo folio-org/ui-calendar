@@ -17,6 +17,8 @@ import {
   Timepicker
 } from '@folio/stripes/components';
 
+import { ALL_DAY } from '../constants';
+
 class ExceptionalPeriodEditor extends React.Component {
   static propTypes = {
     allSelector: PropTypes.bool,
@@ -242,7 +244,7 @@ class ExceptionalPeriodEditor extends React.Component {
             <Row>
               <div data-test-all-day>
                 <Checkbox
-                  label={<FormattedMessage id="ui-calendar.settings.allDay" />}
+                  label={ALL_DAY}
                   onChange={() => this.setAllDay()}
                   checked={allDay}
                   disabled={editor.closed}

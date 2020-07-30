@@ -1,4 +1,4 @@
-import { faker } from '@bigtest/mirage';
+import faker from 'faker';
 import { formatDateString } from './helpers/messageConverters';
 
 const startDateFuture = formatDateString(faker.date.future(0.1).toString());
