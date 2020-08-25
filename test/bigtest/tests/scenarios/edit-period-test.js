@@ -23,7 +23,7 @@ describe('edit period', () => {
 
   setupApplication();
 
-  beforeEach(async function () {
+  beforeEach(function () {
     servicePoint = this.server.create('servicePoint');
     period = this.server.create('period', {
       servicePointId: servicePoint.id,

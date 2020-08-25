@@ -350,6 +350,7 @@ class ServicePointDetails extends React.Component {
     }
 
     const servicePoint = this.props.initialValues;
+
     if (!this.state.isPeriodsPending) {
       return (
         <ErrorBoundary>
@@ -456,6 +457,7 @@ class ServicePointDetails extends React.Component {
             >
               <OpeningPeriodFormWrapper
                 {...this.props}
+                entries={this.props.initialValues.allEntries}
                 modifyPeriod={this.state.modifyPeriod.period}
                 onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
                 onClose={this.onClose}

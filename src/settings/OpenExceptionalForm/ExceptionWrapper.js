@@ -40,7 +40,6 @@ class ExceptionWrapper extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
     this.setState({
       servicePoints: [],
       openEditor: false,
