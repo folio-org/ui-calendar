@@ -11,6 +11,7 @@ import {
   List,
   Row,
   IconButton,
+  Paneset,
 } from '@folio/stripes/components';
 import moment from 'moment';
 import { IfPermission } from '@folio/stripes-core';
@@ -192,7 +193,10 @@ class ServicePointDetails extends React.Component {
   render() {
     let currentP;
     let currentPTimes;
+    const { intl: { formatMessage } } = this.props;
+    const container = document.getElementById('ModuleContainer');
     const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
     if (this.state.currentPeriod) {
       currentP =
         <div data-test-service-point-current-period>
@@ -346,7 +350,6 @@ class ServicePointDetails extends React.Component {
     }
 
     const servicePoint = this.props.initialValues;
-
     if (!this.state.isPeriodsPending) {
       return (
         <ErrorBoundary>
@@ -431,47 +434,49 @@ class ServicePointDetails extends React.Component {
             </Row>
           </div>
 
-          <Layer
-            isOpen={this.state.newPeriodLayer.isOpen}
-            label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
-            container={document.getElementById('ModuleContainer')}
-          >
-            <OpeningPeriodFormWrapper
-              {...this.props}
-              onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
-              onClose={this.onClose}
-              servicePointId={servicePoint.id}
-              newPeriod={this.state.newPeriodLayer}
-            />
-          </Layer>
-
-          <Layer
-            isOpen={this.state.modifyPeriodLayer.isOpen}
-            label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
-            container={document.getElementById('ModuleContainer')}
-          >
-            <OpeningPeriodFormWrapper
-              {...this.props}
-              modifyPeriod={this.state.modifyPeriod.period}
-              onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
-              onClose={this.onClose}
-              servicePointId={servicePoint.id}
-            />
-
-          </Layer>
-          <Layer
-            isOpen={this.state.openExceptions.isOpen}
-            label={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
-            container={document.getElementById('ModuleContainer')}
-          >
-            <div data-test-exceptional-form>
-              <ExceptionWrapper
+          <Paneset>
+            <Layer
+              isOpen={this.state.newPeriodLayer.isOpen}
+              contentLabel={formatMessage({ id: 'stripes-core.label.editEntry' })}
+              container={container}
+            >
+              <OpeningPeriodFormWrapper
                 {...this.props}
-                entries={this.props.initialValues.allEntries}
+                onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
                 onClose={this.onClose}
+                servicePointId={servicePoint.id}
+                newPeriod={this.state.newPeriodLayer}
               />
-            </div>
-          </Layer>
+            </Layer>
+
+            <Layer
+              isOpen={this.state.modifyPeriodLayer.isOpen}
+              contentLabel={formatMessage({ id: 'stripes-core.label.editEntry' })}
+              container={container}
+            >
+              <OpeningPeriodFormWrapper
+                {...this.props}
+                modifyPeriod={this.state.modifyPeriod.period}
+                onSuccessfulModifyPeriod={this.onSuccessfulModifyPeriod}
+                onClose={this.onClose}
+                servicePointId={servicePoint.id}
+              />
+
+            </Layer>
+            <Layer
+              isOpen={this.state.openExceptions.isOpen}
+              contentLabel={formatMessage({ id: 'stripes-core.label.editEntry' })}
+              container={container}
+            >
+              <div data-test-exceptional-form>
+                <ExceptionWrapper
+                  {...this.props}
+                  entries={this.props.initialValues.allEntries}
+                  onClose={this.onClose}
+                />
+              </div>
+            </Layer>
+          </Paneset>
         </ErrorBoundary>
       );
     } else {

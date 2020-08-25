@@ -14,7 +14,7 @@ import {
 } from '../../constants';
 
 const initialEventText = '12:00 AM – 1:30 AM';
-const modifiedEventText = '3:00 AM – 4:30 AM';
+const modifiedEventText = '3:30 AM – 5:00 AM';
 
 describe('calendar events', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
