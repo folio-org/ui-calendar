@@ -354,88 +354,88 @@ class ServicePointDetails extends React.Component {
     if (!this.state.isPeriodsPending) {
       return (
         <ErrorBoundary>
-          <div>
-            <Row>
-              <Col xs>
-                <div data-test-service-point-name>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-calendar.name" />}
-                    value={servicePoint.name}
-                  />
-                </div>
-                <div data-test-service-point-code>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-calendar.code" />}
-                    value={servicePoint.code}
-                  />
-                </div>
-                <div data-test-service-point-discovery-display-name>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-calendar.settings.locations.discoveryDisplayName" />}
-                    value={servicePoint.discoveryDisplayName}
-                  />
-                </div>
-                <div data-test-service-point-regular-library-hours>
-                  <Headline
-                    size="small"
-                    margin="large"
-                  >
-                    <FormattedMessage id="ui-calendar.regularLibraryHours" />
-                  </Headline>
-                </div>
-                {currentP}
-
-              </Col>
-            </Row>
-            {currentPTimes}
-            {nextPeriodDetails}
-            <Row>
-              <IfPermission perm={permissions.POST}>
-                <Col xs={4}>
-                  <Button
-                    data-test-new-period
-                    onClick={this.clickNewPeriod}
-                  >
-                    <FormattedMessage id="ui-calendar.newButton" />
-                  </Button>
-                </Col>
-              </IfPermission>
-            </Row>
-            <Row>
-              <div data-test-actual-library-hours>
+          <Paneset>
+            <div>
+              <Row>
                 <Col xs>
-                  <div data-test-actual-library-hours-header>
+                  <div data-test-service-point-name>
+                    <KeyValue
+                      label={<FormattedMessage id="ui-calendar.name" />}
+                      value={servicePoint.name}
+                    />
+                  </div>
+                  <div data-test-service-point-code>
+                    <KeyValue
+                      label={<FormattedMessage id="ui-calendar.code" />}
+                      value={servicePoint.code}
+                    />
+                  </div>
+                  <div data-test-service-point-discovery-display-name>
+                    <KeyValue
+                      label={<FormattedMessage id="ui-calendar.settings.locations.discoveryDisplayName" />}
+                      value={servicePoint.discoveryDisplayName}
+                    />
+                  </div>
+                  <div data-test-service-point-regular-library-hours>
                     <Headline
                       size="small"
                       margin="large"
                     >
-                      <FormattedMessage id="ui-calendar.actualLibraryHours" />
+                      <FormattedMessage id="ui-calendar.regularLibraryHours" />
                     </Headline>
                   </div>
-                  <div data-test-regular-opening-hours-with-exceptions>
-                    <p><FormattedMessage id="ui-calendar.regularOpeningHoursWithExceptions" /></p>
-                  </div>
-                  <div className="add-exceptions-icon-wrapper">
-                    <div className="icon-button">
-                      <Button
-                        data-test-add-exeptions
-                        onClick={this.clickOpenExeptions}
-                      >
-                        <Icon
-                          icon="calendar"
-                          size="medium"
-                          iconClassName="calendar-icon"
-                        />
-                        <FormattedMessage id="ui-calendar.openCalendarExceptions" />
-                      </Button>
-                    </div>
-                  </div>
-                </Col>
-              </div>
-            </Row>
-          </div>
+                  {currentP}
 
-          <Paneset>
+                </Col>
+              </Row>
+              {currentPTimes}
+              {nextPeriodDetails}
+              <Row>
+                <IfPermission perm={permissions.POST}>
+                  <Col xs={4}>
+                    <Button
+                      data-test-new-period
+                      onClick={this.clickNewPeriod}
+                    >
+                      <FormattedMessage id="ui-calendar.newButton" />
+                    </Button>
+                  </Col>
+                </IfPermission>
+              </Row>
+              <Row>
+                <div data-test-actual-library-hours>
+                  <Col xs>
+                    <div data-test-actual-library-hours-header>
+                      <Headline
+                        size="small"
+                        margin="large"
+                      >
+                        <FormattedMessage id="ui-calendar.actualLibraryHours" />
+                      </Headline>
+                    </div>
+                    <div data-test-regular-opening-hours-with-exceptions>
+                      <p><FormattedMessage id="ui-calendar.regularOpeningHoursWithExceptions" /></p>
+                    </div>
+                    <div className="add-exceptions-icon-wrapper">
+                      <div className="icon-button">
+                        <Button
+                          data-test-add-exeptions
+                          onClick={this.clickOpenExeptions}
+                        >
+                          <Icon
+                            icon="calendar"
+                            size="medium"
+                            iconClassName="calendar-icon"
+                          />
+                          <FormattedMessage id="ui-calendar.openCalendarExceptions" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Col>
+                </div>
+              </Row>
+            </div>
+    
             <Layer
               isOpen={this.state.newPeriodLayer.isOpen}
               contentLabel={formatMessage({ id: 'stripes-core.label.editEntry' })}
