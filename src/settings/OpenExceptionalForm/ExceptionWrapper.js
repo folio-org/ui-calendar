@@ -40,40 +40,22 @@ class ExceptionWrapper extends Component {
   constructor(props) {
     super(props);
 
-    this.setState({
+    this.state = {
       servicePoints: [],
       openEditor: false,
       deleteQuestion: null,
       errorExceptionExit: false,
       errorEditorClose: false,
       changed: false,
-      events: [{
-        id: null,
-        startDate: null,
-        endDate: null,
-      }],
+      events: [],
       errors: [],
-      editor: {
-        exceptionalIds: [{
-          id: null,
-          servicePointId: null,
-        }],
-        editorServicePoints: [],
-        name: null,
-        startDate: null,
-        endDate: null,
-        startTime: null,
-        endTime: null,
-        closed: null,
-        allDay: null,
-        allSelector: null,
-      },
+      editor: {},
       openingAllPeriods: [],
       disableEvents: false,
       modifyEvent: false,
       tempStart: null,
       tempClose: null
-    });
+    };
   }
 
   // eslint-disable-next-line camelcase
@@ -107,7 +89,6 @@ class ExceptionWrapper extends Component {
 
   componentDidMount() {
     this.getPeriods();
-    this.setState({ disableEvents: false });   // eslint-disable-line
   }
 
   setStartDate = e => {
