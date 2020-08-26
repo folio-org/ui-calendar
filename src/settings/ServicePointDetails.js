@@ -435,7 +435,7 @@ class ServicePointDetails extends React.Component {
                 </div>
               </Row>
             </div>
-    
+
             <Layer
               isOpen={this.state.newPeriodLayer.isOpen}
               contentLabel={formatMessage({ id: 'stripes-core.label.editEntry' })}
