@@ -26,6 +26,7 @@ import {
 class ServicePointDetails extends React.Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.getWeekdayOpeningHours = this.getWeekdayOpeningHours.bind(this);
     this.displayCurrentPeriod = this.displayCurrentPeriod.bind(this);
     this.displayNextPeriod = this.displayNextPeriod.bind(this);
@@ -36,6 +37,19 @@ class ServicePointDetails extends React.Component {
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
     this.state = {
+      newPeriodLayer: {},
+      modifyPeriodLayer: {},
+      openExceptions: {},
+      modifyPeriod: {},
+      openingPeriods: [],
+      nextPeriods: [],
+      isPeriodsPending: true,
+    };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+    this.setState({
       newPeriodLayer: {
         isOpen: false,
       },
@@ -45,15 +59,12 @@ class ServicePointDetails extends React.Component {
       openExceptions: {
         isOpen: false,
       },
-      modifyPeriod: {},
-      openingPeriods: [],
-      nextPeriods: [],
-      isPeriodsPending: true,
-    };
+    });
+    this.getServicePoints();
   }
 
-  componentDidMount() {
-    this.getServicePoints();
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getServicePoints() {
@@ -191,6 +202,10 @@ class ServicePointDetails extends React.Component {
   };
 
   render() {
+    if (!this._isMounted) {
+      return null;
+    }
+
     let currentP;
     let currentPTimes;
     const { intl: { formatMessage } } = this.props;

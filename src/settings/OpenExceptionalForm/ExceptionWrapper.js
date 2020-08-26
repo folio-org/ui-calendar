@@ -40,6 +40,7 @@ class ExceptionWrapper extends Component {
   constructor(props) {
     super(props);
 
+    this._isMounted = false;
     this.state = {
       servicePoints: [],
       openEditor: false,
@@ -88,7 +89,12 @@ class ExceptionWrapper extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.getPeriods();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   setStartDate = e => {
@@ -728,6 +734,7 @@ class ExceptionWrapper extends Component {
         return this.props.onClose();
       }
     }
+
     return null;
   }
 
@@ -998,6 +1005,10 @@ class ExceptionWrapper extends Component {
   }
 
   render() {
+    if (!this._isMounted) {
+      return null;
+    }
+
     const {
       errors,
       editor,
