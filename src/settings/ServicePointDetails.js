@@ -12,7 +12,6 @@ import {
   Row,
   IconButton,
 } from '@folio/stripes/components';
-import moment from 'moment';
 import { IfPermission } from '@folio/stripes-core';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
@@ -20,6 +19,7 @@ import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 import {
   permissions,
   ALL_DAY,
+  moment,
 } from './constants';
 
 class ServicePointDetails extends React.Component {

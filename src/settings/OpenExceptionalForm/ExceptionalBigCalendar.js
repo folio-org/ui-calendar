@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import {
   reduce,
@@ -9,6 +8,8 @@ import {
   Calendar,
   momentLocalizer,
 } from 'react-big-calendar';
+
+import { moment } from '../constants';
 
 const localizer = momentLocalizer(moment);
 

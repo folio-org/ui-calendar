@@ -1,6 +1,5 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
 
@@ -21,7 +20,7 @@ import BigCalendarWrapper from './BigCalendarWrapper';
 import BigCalendarHeader from './BigCalendarHeader';
 import CalendarUtils from '../../CalendarUtils';
 
-import { permissions } from '../constants';
+import { permissions, moment } from '../constants';
 
 class OpeningPeriodFormWrapper extends Component {
   static propTypes = {

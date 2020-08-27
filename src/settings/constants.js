@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 
 export const colors = [
   '#3cb44b',
@@ -33,3 +34,12 @@ export const permissions = {
 };
 
 export const ALL_DAY = <FormattedMessage id="ui-calendar.settings.allDay" />;
+
+
+// createFromInputFallback fixes the deprecation warning: value provided is not in a recognized RFC2822 or ISO format
+// eslint-disable-next-line func-names
+moment.createFromInputFallback = function (config) {
+  config._d = new Date(config._i);
+};
+
+export { moment };

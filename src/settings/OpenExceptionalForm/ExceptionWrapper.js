@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import RandomColor from 'randomcolor';
-import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
 
@@ -28,6 +27,7 @@ import {
   colors,
   permissions,
   ALL_DAY,
+  moment,
 } from '../constants';
 
 class ExceptionWrapper extends Component {
