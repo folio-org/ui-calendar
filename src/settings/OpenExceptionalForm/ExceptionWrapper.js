@@ -76,7 +76,7 @@ class ExceptionWrapper extends Component {
     });
   }
 
-  componentWillMount() {      // eslint-disable-line react/no-deprecated
+  UNSAFE_componentWillMount() {      // eslint-disable-line react/no-deprecated
     const tempServicePoints = [{
       id: null,
       name: null,

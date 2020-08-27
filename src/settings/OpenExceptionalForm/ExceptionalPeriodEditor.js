@@ -46,7 +46,7 @@ class ExceptionalPeriodEditor extends React.Component {
     isModify: false,
   };
 
-  componentWillMount() { // eslint-disable-line
+  UNSAFE_componentWillMount() { // eslint-disable-line
     const {
       isModify,
       servicePoints: unmodifiedServicePoints,

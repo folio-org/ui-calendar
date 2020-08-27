@@ -1,8 +1,9 @@
 # Change history for ui-calendar
 
-## 4.0.1 (IN PROGRESS)
+## 5.0.0 (IN PROGRESS)
 
 * Replace `bigtest/mirage` with `miragejs`.
+* Update `@folio/stripes` to `v5`, `react-router` to `v5.2`, `react-intl` to `v5.7`.
 
 ## [4.0.0](https://github.com/folio-org/ui-calendar/tree/v4.0.0) (2019-06-10)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v3.0.0...v4.0.0)
