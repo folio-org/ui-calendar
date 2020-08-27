@@ -26,10 +26,12 @@ describe('new period creation', () => {
 
     setupApplication();
 
-    beforeEach(async function () {
-      servicePoint = await this.server.create('servicePoint');
-      await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+    beforeEach(function () {
+      servicePoint = this.server.create('servicePoint');
+      this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+    });
 
+    beforeEach(async () => {
       await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
       await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
         startDateFuture

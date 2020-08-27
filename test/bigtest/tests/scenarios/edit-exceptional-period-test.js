@@ -23,7 +23,7 @@ describe('open exceptional period edit ', () => {
 
     setupApplication();
 
-    beforeEach(async function () {
+    beforeEach(function () {
       servicePoint = this.server.create('servicePoint');
       this.server.create('period', {
         servicePointId: servicePoint.id,
@@ -43,7 +43,10 @@ describe('open exceptional period edit ', () => {
         ],
         startDate: tomorrow,
       });
-      await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+      this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+    });
+
+    beforeEach(async () => {
       await calendarSettingsInteractor.servicePointDetails.addExeptionsButton.click();
       await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(0).clickAndBlur();
       await calendarSettingsInteractor.exceptionalForm.bigCalendar.events(0).click();
