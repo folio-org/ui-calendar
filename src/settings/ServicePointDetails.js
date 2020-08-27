@@ -190,6 +190,8 @@ class ServicePointDetails extends React.Component {
   };
 
   render() {
+    const { intl } = this.props;
+    const layerContentLabel = intl.formatMessage({ id: 'stripes-core.label.editEntry' });
     let currentP;
     let currentPTimes;
     const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
@@ -433,7 +435,7 @@ class ServicePointDetails extends React.Component {
 
           <Layer
             isOpen={this.state.newPeriodLayer.isOpen}
-            contentLabel={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
+            contentLabel={layerContentLabel}
             container={document.getElementById('ModuleContainer')}
           >
             <OpeningPeriodFormWrapper
@@ -447,7 +449,7 @@ class ServicePointDetails extends React.Component {
 
           <Layer
             isOpen={this.state.modifyPeriodLayer.isOpen}
-            contentLabel={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
+            contentLabel={layerContentLabel}
             container={document.getElementById('ModuleContainer')}
           >
             <OpeningPeriodFormWrapper
@@ -461,7 +463,7 @@ class ServicePointDetails extends React.Component {
           </Layer>
           <Layer
             isOpen={this.state.openExceptions.isOpen}
-            contentLabel={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
+            contentLabel={layerContentLabel}
             container={document.getElementById('ModuleContainer')}
           >
             <div data-test-exceptional-form>

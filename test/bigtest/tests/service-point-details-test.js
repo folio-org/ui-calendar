@@ -97,7 +97,7 @@ describe('service point details', () => {
 
     describe('service point with current periods', () => {
       beforeEach(function () {
-        period = this.server.create('period', { servicePointId: servicePoint.id, startDate: faker.date.past() });
+        period = this.server.create('period', { servicePointId: servicePoint.id, startDate: faker.date.past().toString() });
         this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
       });
 
