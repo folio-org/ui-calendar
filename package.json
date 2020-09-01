@@ -119,7 +119,7 @@
     "lodash": "^4.17.5",
     "moment": "~2.24.0",
     "prop-types": "^15.6.1",
-    "randomcolor": "^0.5.3",
+    "randomcolor": "^0.6.2",
     "react-big-calendar": "^0.22.1",
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
