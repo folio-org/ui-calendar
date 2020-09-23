@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dateFormat from 'dateformat';
+import moment from 'moment';
 import { FormattedDate, FormattedTime, FormattedMessage } from 'react-intl';
 import { Row, Col } from '@folio/stripes/components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-
-import { moment } from './constants';
 
 function calculateTime(startTime, endTime, open, allDay) {
   if (!open) {

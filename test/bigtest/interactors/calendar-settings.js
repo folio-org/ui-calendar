@@ -22,4 +22,8 @@ export default @interactor class CalendarSettingsInteractor {
   servicePointDetails = new ServicePointDetails();
   openingPeriodForm = new OpeningPeriodForm();
   exceptionalForm = new ExeptionalForm();
+
+  whenLoaded() {
+    return this.when(() => this.isPresent).timeout(5000);
+  }
 }

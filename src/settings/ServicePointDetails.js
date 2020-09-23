@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import moment from 'moment';
 import {
   Button,
   Col,
@@ -19,7 +20,6 @@ import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 import {
   permissions,
   ALL_DAY,
-  moment,
 } from './constants';
 
 class ServicePointDetails extends React.Component {
@@ -35,35 +35,38 @@ class ServicePointDetails extends React.Component {
     this.getServicePoints = this.getServicePoints.bind(this);
     this.handleSelectPeriod = this.handleSelectPeriod.bind(this);
     this.state = {
-      newPeriodLayer: {
-        isOpen: false,
-      },
-      modifyPeriodLayer: {
-        isOpen: false,
-      },
-      openExceptions: {
-        isOpen: false,
-      },
+      newPeriodLayerIsOpen: false,
+      modifyPeriodLayerIsOpen: false,
+      openExceptionsIsOpen: false,
       modifyPeriod: {},
       openingPeriods: [],
       nextPeriods: [],
       isPeriodsPending: true,
     };
+    this._isMounted = false;
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.getServicePoints();
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   getServicePoints() {
+    const isMounted = this._isMounted;
     this.props.parentMutator.query.replace(this.props.initialValues.id);
     this.props.parentMutator.exceptional.replace('false');
     this.props.parentMutator.periods.GET()
       .then((openingPeriods) => {
-        this.setState({ openingPeriods });
-        this.setState({ currentPeriod: this.displayCurrentPeriod() });
-        this.setState({ nextPeriods: this.displayNextPeriod() });
-        this.setState({ isPeriodsPending: false });
+        if (isMounted) {
+          this.setState({ openingPeriods });
+          this.setState({ currentPeriod: this.displayCurrentPeriod() });
+          this.setState({ nextPeriods: this.displayNextPeriod() });
+          this.setState({ isPeriodsPending: false });
+        }
       }, (error) => {
         return error;
       });
@@ -155,23 +158,23 @@ class ServicePointDetails extends React.Component {
   }
 
   clickNewPeriod() {
-    this.setState({ newPeriodLayer: { isOpen: true } });
+    this.setState({ newPeriodLayerIsOpen: true });
   }
 
   onSuccessfulCreatePeriod() {
-    this.setState({ newPeriodLayer: { isOpen: false } });
+    this.setState({ newPeriodLayerIsOpen: false });
     this.getServicePoints();
   }
 
   onSuccessfulModifyPeriod = () => {
-    this.setState({ modifyPeriodLayer: { isOpen: false } });
+    this.setState({ modifyPeriodLayerIsOpen: false });
     this.getServicePoints();
   };
 
   onClose() {
-    this.setState({ newPeriodLayer: { isOpen: false } });
-    this.setState({ modifyPeriodLayer: { isOpen: false } });
-    this.setState({ openExceptions: { isOpen: false } });
+    this.setState({ newPeriodLayerIsOpen: false });
+    this.setState({ modifyPeriodLayerIsOpen: false });
+    this.setState({ openExceptionsIsOpen: false });
   }
 
   handleSelectPeriod(id) {
@@ -182,11 +185,11 @@ class ServicePointDetails extends React.Component {
         break;
       }
     }
-    this.setState({ modifyPeriodLayer: { isOpen: true } });
+    this.setState({ modifyPeriodLayerIsOpen: true });
   }
 
   clickOpenExeptions = () => {
-    this.setState({ openExceptions: { isOpen: true } });
+    this.setState({ openExceptionsIsOpen: true });
   };
 
   render() {
@@ -434,7 +437,7 @@ class ServicePointDetails extends React.Component {
           </div>
 
           <Layer
-            isOpen={this.state.newPeriodLayer.isOpen}
+            isOpen={this.state.newPeriodLayerIsOpen}
             contentLabel={layerContentLabel}
             container={document.getElementById('ModuleContainer')}
           >
@@ -443,12 +446,12 @@ class ServicePointDetails extends React.Component {
               onSuccessfulCreatePeriod={this.onSuccessfulCreatePeriod}
               onClose={this.onClose}
               servicePointId={servicePoint.id}
-              newPeriod={this.state.newPeriodLayer}
+              newPeriod={this.state.newPeriodLayerIsOpen}
             />
           </Layer>
 
           <Layer
-            isOpen={this.state.modifyPeriodLayer.isOpen}
+            isOpen={this.state.modifyPeriodLayerIsOpen}
             contentLabel={layerContentLabel}
             container={document.getElementById('ModuleContainer')}
           >
@@ -462,7 +465,7 @@ class ServicePointDetails extends React.Component {
 
           </Layer>
           <Layer
-            isOpen={this.state.openExceptions.isOpen}
+            isOpen={this.state.openExceptionsIsOpen}
             contentLabel={layerContentLabel}
             container={document.getElementById('ModuleContainer')}
           >

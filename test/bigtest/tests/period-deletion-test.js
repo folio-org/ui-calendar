@@ -6,12 +6,12 @@ import {
   it,
 } from '@bigtest/mocha';
 
-import CalendarSettingsInteractor from '../../interactors/calendar-settings';
-import setupApplication from '../../helpers/setup-application';
-import parseMessageFromJsx from '../../helpers/parseMessageFromJsx';
-import { formatDateString } from '../../helpers/messageConverters';
+import CalendarSettingsInteractor from '../interactors/calendar-settings';
+import setupApplication from '../helpers/setup-application';
+import parseMessageFromJsx from '../helpers/parseMessageFromJsx';
+import { formatDateString } from '../helpers/messageConverters';
 
-import translation from '../../../../translations/ui-calendar/en';
+import translation from '../../../translations/ui-calendar/en';
 
 describe('period deletion', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
@@ -26,6 +26,10 @@ describe('period deletion', () => {
       servicePointId: servicePoint.id
     });
     this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+  });
+
+  beforeEach(async () => {
+    await calendarSettingsInteractor.whenLoaded();
   });
 
   describe('next period', () => {

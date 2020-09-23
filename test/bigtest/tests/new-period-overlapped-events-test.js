@@ -6,15 +6,15 @@ import {
   it,
 } from '@bigtest/mocha';
 
-import setupApplication from '../../helpers/setup-application';
-import CalendarSettingsInteractor from '../../interactors/calendar-settings';
+import setupApplication from '../helpers/setup-application';
+import CalendarSettingsInteractor from '../interactors/calendar-settings';
 
 import {
   name,
   endDate,
   startDatePast,
-} from '../../constants';
-import translation from '../../../../translations/ui-calendar/en';
+} from '../constants';
+import translation from '../../../translations/ui-calendar/en';
 
 describe('events for current period were created', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
@@ -105,6 +105,7 @@ describe('events for current period were created', () => {
       ]
     });
     await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
+    await calendarSettingsInteractor.whenLoaded();
     await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
 
     it('should be displayed opening period form', () => {

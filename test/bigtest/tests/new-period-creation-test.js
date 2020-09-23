@@ -6,17 +6,17 @@ import {
   it,
 } from '@bigtest/mocha';
 
-import CalendarSettingsInteractor from '../../interactors/calendar-settings';
-import setupApplication from '../../helpers/setup-application';
-import { formatDateString } from '../../helpers/messageConverters';
+import CalendarSettingsInteractor from '../interactors/calendar-settings';
+import setupApplication from '../helpers/setup-application';
+import { formatDateString } from '../helpers/messageConverters';
 import {
   name,
   endDate,
   startDatePast,
   startDateFuture,
-} from '../../constants';
+} from '../constants';
 
-import translation from '../../../../translations/ui-calendar/en';
+import translation from '../../../translations/ui-calendar/en';
 
 describe('new period creation', () => {
   const calendarSettingsInteractor = new CalendarSettingsInteractor();
@@ -32,6 +32,7 @@ describe('new period creation', () => {
     });
 
     beforeEach(async () => {
+      await calendarSettingsInteractor.whenLoaded();
       await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
       await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
         startDateFuture
@@ -72,6 +73,7 @@ describe('new period creation', () => {
     beforeEach(async function () {
       servicePoint = await this.server.createList('servicePoint', servicePointAmount);
       await this.visit(`/settings/calendar/library-hours/${servicePoint[0].id}`);
+      await calendarSettingsInteractor.whenLoaded();
       await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
       await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
         startDatePast

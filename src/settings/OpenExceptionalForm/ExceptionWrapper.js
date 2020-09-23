@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import RandomColor from 'randomcolor';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
+import moment from 'moment';
 
 import {
   Button,
@@ -27,7 +28,6 @@ import {
   colors,
   permissions,
   ALL_DAY,
-  moment,
 } from '../constants';
 
 class ExceptionWrapper extends Component {
@@ -74,6 +74,8 @@ class ExceptionWrapper extends Component {
       tempStart: null,
       tempClose: null
     });
+
+    this._isMounted = false;
   }
 
   UNSAFE_componentWillMount() {      // eslint-disable-line react/no-deprecated
@@ -105,8 +107,13 @@ class ExceptionWrapper extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.getPeriods();
     this.setState({ disableEvents: false });   // eslint-disable-line
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   setStartDate = e => {
@@ -561,6 +568,7 @@ class ExceptionWrapper extends Component {
   }
 
   getPeriods = () => {
+    const isMounted = this._isMounted;
     const promises = [];
     const { entries, parentMutator: { query, exceptional, periods } } = this.props;
 
@@ -600,10 +608,12 @@ class ExceptionWrapper extends Component {
             k++;
           }
         }
-        this.setState({
-          openingAllPeriods: allSP
-        });
-        this.setEvents(this.state.servicePoints);
+        if (isMounted) {
+          this.setState({
+            openingAllPeriods: allSP
+          });
+          this.setEvents(this.state.servicePoints);
+        }
       });
   }
 
@@ -750,6 +760,7 @@ class ExceptionWrapper extends Component {
   }
 
   saveException = () => {
+    const isMounted = this._isMounted;
     const preCheck = this.checkBeforeSave();
     if (preCheck === true) {
       const promises = [];
@@ -871,30 +882,34 @@ class ExceptionWrapper extends Component {
       }
       Promise.all(promises)
         .then(() => {
-          this.setState({
-            modifyEvent: false,
-            disableEvents: false,
-            changed: false,
-            openEditor: false,
-            editor: {
-              exceptionalIds: undefined,
-              editorServicePoints: [],
-              name: null,
-              startDate: null,
-              endDate: null,
-              startTime: null,
-              endTime: null,
-              closed: null,
-              allDay: null,
-              allSelector: null,
-            }
-          });
+          if (isMounted) {
+            this.setState({
+              modifyEvent: false,
+              disableEvents: false,
+              changed: false,
+              openEditor: false,
+              editor: {
+                exceptionalIds: undefined,
+                editorServicePoints: [],
+                name: null,
+                startDate: null,
+                endDate: null,
+                startTime: null,
+                endTime: null,
+                closed: null,
+                allDay: null,
+                allSelector: null,
+              }
+            });
+          }
           const update = [];
           const promise = new Promise(() => this.getPeriods());
           update.push(promise);
           Promise.all(update)
             .then(() => {
-              this.setEvents(this.state.servicePoints);
+              if (isMounted) {
+                this.setEvents(this.state.servicePoints);
+              }
             });
         })
         .catch(async (response) => {
@@ -911,6 +926,7 @@ class ExceptionWrapper extends Component {
   }
 
   deleteException = () => {
+    const isMounted = this._isMounted;
     const promises = [];
     const {
       parentMutator: {
@@ -934,31 +950,35 @@ class ExceptionWrapper extends Component {
     }
     Promise.all(promises)
       .then(() => {
-        this.setState({
-          disableEvents: false,
-          changed: false,
-          deleteQuestion: false,
-          openEditor: false,
-          modifyEvent: false,
-          editor: {
-            exceptionalIds: undefined,
-            editorServicePoints: [],
-            name: null,
-            startDate: null,
-            endDate: null,
-            startTime: null,
-            endTime: null,
-            closed: null,
-            allDay: false,
-            allSelector: null,
-          }
-        });
+        if (isMounted) {
+          this.setState({
+            disableEvents: false,
+            changed: false,
+            deleteQuestion: false,
+            openEditor: false,
+            modifyEvent: false,
+            editor: {
+              exceptionalIds: undefined,
+              editorServicePoints: [],
+              name: null,
+              startDate: null,
+              endDate: null,
+              startTime: null,
+              endTime: null,
+              closed: null,
+              allDay: false,
+              allSelector: null,
+            }
+          });
+        }
         const update = [];
         const promise = new Promise(() => this.getPeriods());
         update.push(promise);
         Promise.all(update)
           .then(() => {
-            this.setEvents(servicePoints);
+            if (isMounted) {
+              this.setEvents(servicePoints);
+            }
           });
       });
   }

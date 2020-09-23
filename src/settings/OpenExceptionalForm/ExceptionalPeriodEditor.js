@@ -17,7 +17,10 @@ import {
   Timepicker
 } from '@folio/stripes/components';
 
-import { ALL_DAY } from '../constants';
+import {
+  ALL_DAY,
+  parseDateOnlyString,
+} from '../constants';
 
 class ExceptionalPeriodEditor extends React.Component {
   static propTypes = {
@@ -164,6 +167,8 @@ class ExceptionalPeriodEditor extends React.Component {
                 required
                 timeZone="UTC"
                 backendDateStandard="YYYY-MM-DD"
+                parse={v => v}
+                parser={parseDateOnlyString}
               />
             </div>
           </Col>
@@ -179,6 +184,8 @@ class ExceptionalPeriodEditor extends React.Component {
                 required
                 timeZone="UTC"
                 backendDateStandard="YYYY-MM-DD"
+                parse={v => v}
+                parser={parseDateOnlyString}
               />
             </div>
           </Col>

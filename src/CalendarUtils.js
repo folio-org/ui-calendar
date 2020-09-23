@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { moment } from './settings/constants';
+import moment from 'moment';
 
 class CalendarUtils extends React.Component {
   static convertNewPeriodToValidBackendPeriod(period, event) {

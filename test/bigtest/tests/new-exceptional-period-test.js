@@ -6,8 +6,8 @@ import {
   it,
 } from '@bigtest/mocha';
 
-import setupApplication from '../../helpers/setup-application';
-import CalendarSettingsInteractor from '../../interactors/calendar-settings';
+import setupApplication from '../helpers/setup-application';
+import CalendarSettingsInteractor from '../interactors/calendar-settings';
 
 import {
   name,
@@ -15,8 +15,8 @@ import {
   endTime,
   startTime,
   startDatePast,
-} from '../../constants';
-import translation from '../../../../translations/ui-calendar/en';
+} from '../constants';
+import translation from '../../../translations/ui-calendar/en';
 
 describe('open exceptional form', () => {
   const servicePointAmount = 2;
@@ -26,19 +26,20 @@ describe('open exceptional form', () => {
 
   setupApplication();
 
-  beforeEach(async function () {
+  beforeEach(function () {
     servicePoint = this.server.createList('servicePoint', servicePointAmount);
     this.visit(`/settings/calendar/library-hours/${servicePoint[0].id}`);
-    await calendarSettingsInteractor.servicePointDetails.addExeptionsButton.click();
-    await calendarSettingsInteractor.exceptionalForm.newPeriod.click();
-    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
-    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
-    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
-    await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.items(testServicePointId).clickAndBlur();
   });
 
   describe('new period', () => {
     beforeEach(async function () {
+      await calendarSettingsInteractor.whenLoaded();
+      await calendarSettingsInteractor.servicePointDetails.addExeptionsButton.click();
+      await calendarSettingsInteractor.exceptionalForm.newPeriod.click();
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validTo.fillAndBlur(endDate);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.name.fillAndBlur(name);
+      await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.items(testServicePointId).clickAndBlur();
       await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.openingTime.fillInput(startTime);
       await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.closingTime.fillInput(endTime);
       await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.savePeriod.click();
@@ -128,9 +129,13 @@ describe('open exceptional form', () => {
   describe('handle exceptional period overlap error', () => {
     setupApplication({ scenarios: ['periodOverlapError'] });
 
-    beforeEach(async function () {
+    beforeEach(function () {
       servicePoint = this.server.createList('servicePoint', servicePointAmount);
       this.visit(`/settings/calendar/library-hours/${servicePoint[0].id}`);
+    });
+
+    beforeEach(async function () {
+      await calendarSettingsInteractor.whenLoaded();
       await calendarSettingsInteractor.servicePointDetails.addExeptionsButton.click();
       await calendarSettingsInteractor.exceptionalForm.newPeriod.click();
       await calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.validFrom.fillAndBlur(startDatePast);

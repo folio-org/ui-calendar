@@ -17,6 +17,8 @@ import {
   Col,
 } from '@folio/stripes/components';
 
+import { parseDateOnlyString } from '../constants';
+
 class InputFields extends React.Component {
   static propTypes = {
     intl: PropTypes.object.isRequired,
@@ -98,6 +100,8 @@ class InputFields extends React.Component {
               label={<FormattedMessage id="ui-calendar.validFrom" />}
               dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
               onChange={this.setStartDate}
+              parse={v => v}
+              parser={parseDateOnlyString}
             />
           </Col>
         </Row>
@@ -115,6 +119,8 @@ class InputFields extends React.Component {
               label={<FormattedMessage id="ui-calendar.validTo" />}
               dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
               onChange={this.setEndDate}
+              parse={v => v}
+              parser={parseDateOnlyString}
             />
           </Col>
         </Row>

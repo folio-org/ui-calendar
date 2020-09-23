@@ -4,12 +4,11 @@ import {
   reduce,
   cloneDeep,
 } from 'lodash';
+import moment from 'moment';
 import {
   Calendar,
   momentLocalizer,
 } from 'react-big-calendar';
-
-import { moment } from '../constants';
 
 const localizer = momentLocalizer(moment);
 

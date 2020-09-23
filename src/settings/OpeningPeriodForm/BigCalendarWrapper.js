@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { DragDropContext } from 'react-dnd';
@@ -8,7 +9,7 @@ import {
   momentLocalizer,
 } from 'react-big-calendar';
 
-import { ALL_DAY, moment } from '../constants';
+import { ALL_DAY } from '../constants';
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
 

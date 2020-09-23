@@ -2,12 +2,13 @@ import {
   interactor,
   property,
   scoped,
+  text,
 } from '@bigtest/interactor';
-// eslint-disable-next-line
-import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor';
+
 // eslint-disable-next-line
 import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests/interactor';
 
+import TextFieldInteractor from './TextField';
 import ConfirmationModal from './ConfirmationModal';
 import BigCalendar from './BigCalendar';
 
@@ -36,9 +37,10 @@ import BigCalendar from './BigCalendar';
 
   startDate = new DatepickerInteractor('[data-test-item-start-date]');
   endDate = new DatepickerInteractor('[data-test-item-end-date]');
-  startDateField = new TextFieldInteractor('[data-test-item-start-date]');
-  endDateField = new TextFieldInteractor('[data-test-item-end-date]');
-  periodName = new TextFieldInteractor('[data-test-item-period-name]');
+  startDateField = new DatepickerInteractor('[data-test-item-start-date]');
+  endDateField = new DatepickerInteractor('[data-test-item-end-date]');
+  periodName = new TextFieldInteractor('[data-test-item-period-name] input');
+  periodNameLabel = text('[data-test-item-period-name] label');
   periodNameError = scoped('[data-test-item-period-name-error]');
 }
 

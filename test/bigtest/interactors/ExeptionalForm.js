@@ -3,16 +3,17 @@ import {
   scoped,
   Interactor,
   collection,
+  text,
 } from '@bigtest/interactor';
 
-// eslint-disable-next-line
-import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor';
 // eslint-disable-next-line
 import CheckboxInteractor from '@folio/stripes-components/lib/Checkbox/tests/interactor';
 // eslint-disable-next-line
 import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests/interactor';
 // eslint-disable-next-line
 import TimepickerInteractor from '@folio/stripes-components/lib/Timepicker/tests/interactor';
+
+import TextFieldInteractor from './TextField';
 import BigCalendar from './BigCalendar';
 import ConfirmationModal from './ConfirmationModal';
 
@@ -36,7 +37,8 @@ import ConfirmationModal from './ConfirmationModal';
   savePeriod = new Interactor('[data-test-save-exceptional-period]');
   validFrom = new DatepickerInteractor('[data-test-start-date]');
   validTo = new DatepickerInteractor('[data-test-end-date]');
-  name = new TextFieldInteractor('[data-test-period-name]');
+  name = new TextFieldInteractor('[data-test-period-name] input');
+  nameLabel = text('[data-test-period-name] label');
   servicePoints = new ServicePoints();
   closedCheckbox = scoped('[data-test-closed]', CheckboxInteractor);
   allDay = scoped('[data-test-all-day]', CheckboxInteractor);

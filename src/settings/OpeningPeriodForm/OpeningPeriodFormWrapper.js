@@ -2,6 +2,7 @@ import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
+import moment from 'moment';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { IfPermission } from '@folio/stripes-core';
@@ -20,7 +21,7 @@ import BigCalendarWrapper from './BigCalendarWrapper';
 import BigCalendarHeader from './BigCalendarHeader';
 import CalendarUtils from '../../CalendarUtils';
 
-import { permissions, moment } from '../constants';
+import { permissions } from '../constants';
 
 class OpeningPeriodFormWrapper extends Component {
   static propTypes = {

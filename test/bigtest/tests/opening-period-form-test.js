@@ -141,7 +141,7 @@ describe('opening period form', () => {
         });
 
         it('should have proper label', () => {
-          expect(calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.label).to.equal(
+          expect(calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameLabel).to.equal(
             getRequiredLabel(translation.name, false)
           );
         });

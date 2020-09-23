@@ -5,13 +5,13 @@ import {
   describe,
   it,
 } from '@bigtest/mocha';
-import CalendarSettingsInteractor from '../../interactors/calendar-settings';
-import setupApplication from '../../helpers/setup-application';
+import CalendarSettingsInteractor from '../interactors/calendar-settings';
+import setupApplication from '../helpers/setup-application';
 import {
   name,
   endDate,
   startDateFuture,
-} from '../../constants';
+} from '../constants';
 
 const initialEventText = '12:00 AM – 1:30 AM';
 const modifiedEventText = '3:30 AM – 5:00 AM';
@@ -27,7 +27,7 @@ describe('calendar events', () => {
     beforeEach(async function () {
       servicePoint = await this.server.create('servicePoint');
       await this.visit(`/settings/calendar/library-hours/${servicePoint.id}`);
-
+      await calendarSettingsInteractor.whenLoaded();
       await calendarSettingsInteractor.servicePointDetails.newPeriodButton.click();
       await calendarSettingsInteractor.openingPeriodForm.inputFields.startDate.fillAndBlur(
         startDateFuture
