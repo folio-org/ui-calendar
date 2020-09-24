@@ -86,7 +86,7 @@
     "close": "Bezár",
     "noEvents": "Nincs esemény! Kérjük, készítsen legalább egy eseményt!",
     "wrongStartEndDate": "A kezdő dátum a záró után van!",
-    "deleteQuestionMessage": "A szokásos könyvtári órák <strong>{name}törölve lesznek</strong>.",
+    "deleteQuestionMessage": "The regular library hours <strong>{name}</strong> will be <strong>deleted</strong>.",
     "deleteQuestionTitle": "Szokásos könyvtári órák törlése",
     "exitQuestionTitle": "Biztosan?",
     "exitWithoutSaving": "Kilépés mentés nélkűl",
