@@ -36,7 +36,7 @@
       },
       {
         "permissionName": "ui-calendar.all",
-        "displayName": "Settings (Calendar): Can create, view, edit, and remove calendar events.",
+        "displayName": "Settings (Calendar): Can create, view, edit, and remove calendar events",
         "description": "User can create,edit, view, and remove calendar events",
         "subPermissions": [
           "ui-calendar.edit",
