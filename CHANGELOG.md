@@ -13,6 +13,7 @@
 * Use correct prop-type for `childen` in `ErrorBoundary`.
 * Prefer `stripes.actsAs` to the deprecated `stripes.type` in `package.json`. Refs STCOR-148.
 * Fix incorrect footer positioning. Refs UICAL-107.
+* Localize permission names. Refs UICAL-118.
 
 ## [3.0.0](https://github.com/folio-org/ui-calendar/tree/v3.0.0) (2020-03-12)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v2.7.2...v3.0.0)
