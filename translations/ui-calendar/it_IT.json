@@ -86,7 +86,7 @@
     "close": "Chiuso",
     "noEvents": "Nessun evento trovato! Inserisci almeno un evento",
     "wrongStartEndDate": "La data di inizio è successiva alla data di fine!",
-    "deleteQuestionMessage": "L'orario abituale della biblioteca <strong> {name} </strong> sarà <strong> eliminato </strong> .",
+    "deleteQuestionMessage": "L'orario abituale della biblioteca <strong>{name}</strong> sarà <strong>eliminato</strong>.",
     "deleteQuestionTitle": "Elimina orario abituale della biblioteca",
     "exitQuestionTitle": "Sei sicuro?",
     "exitWithoutSaving": "Uscire senza salvare",
