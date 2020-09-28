@@ -589,7 +589,7 @@ class ExceptionWrapper extends Component {
             }
             const tempSP = {
               startDate: temp[j].startDate,
-              endDate: temp[j].endDate,
+              endDate: moment(temp[j].endDate).toISOString(),
               id: temp[j].id,
               name: temp[j].name,
               openingDays: temp[j].openingDays,
@@ -1005,7 +1005,7 @@ class ExceptionWrapper extends Component {
       errorMessage = 'noStartTime';
     } else if (endTime === null || endTime === undefined || endTime === '') {
       errorMessage = 'noEndTime';
-    } else if (moment(endTime) < moment(startTime)) {
+    } else if (moment(endTime, 'hh:mm').isSameOrBefore(moment(startTime, 'hh:mm'))) {
       errorMessage = 'endTimeBeforeStartTime';
     }
     if (errorMessage === null) {
