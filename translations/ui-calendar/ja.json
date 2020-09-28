@@ -117,5 +117,8 @@
     "current": "現在：",
     "common.cancel": "キャンセル",
     "intervalsOverlap": "Intervals can not overlap.",
-    "duplication": "入力された日付範囲は、このサービス ポイントの別のカレンダーと重複しています。日付範囲を修正するか、例外として時間を入力してください。"
+    "duplication": "入力された日付範囲は、このサービス ポイントの別のカレンダーと重複しています。日付範囲を修正するか、例外として時間を入力してください。",
+    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
+    "permission.view": "Settings (Calendar): Can view calendar events",
+    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
 }

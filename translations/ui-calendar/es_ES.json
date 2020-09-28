@@ -117,5 +117,8 @@
     "current": "Current:",
     "common.cancel": "Cancelar",
     "intervalsOverlap": "Los intervalos no pueden solaparse.",
-    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions.",
+    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
+    "permission.view": "Settings (Calendar): Can view calendar events",
+    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
 }
