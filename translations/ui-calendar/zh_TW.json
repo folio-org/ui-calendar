@@ -117,5 +117,8 @@
     "current": "当前：",
     "common.cancel": "Cancel",
     "intervalsOverlap": "Intervals can not overlap.",
-    "duplication": "輸入的工作區日期範圍和另一個時間表重疊。請更正日期範圍，或是輸入時間做為例外。"
+    "duplication": "輸入的工作區日期範圍和另一個時間表重疊。請更正日期範圍，或是輸入時間做為例外。",
+    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
+    "permission.view": "Settings (Calendar): Can view calendar events",
+    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
 }
