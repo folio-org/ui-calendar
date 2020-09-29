@@ -36,7 +36,8 @@ class ExceptionalPeriodEditor extends React.Component {
     setStartTime: PropTypes.func.isRequired,
     setStartDate: PropTypes.func.isRequired,
     allSelectorHandle: PropTypes.func.isRequired,
-    setEditorServicePoints: PropTypes.func.isRequired
+    setEditorServicePoints: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -46,7 +47,7 @@ class ExceptionalPeriodEditor extends React.Component {
     isModify: false,
   };
 
-  componentWillMount() { // eslint-disable-line
+  UNSAFE_componentWillMount() { // eslint-disable-line
     const {
       isModify,
       servicePoints: unmodifiedServicePoints,
@@ -134,6 +135,9 @@ class ExceptionalPeriodEditor extends React.Component {
       allDay,
       editor,
       closed,
+      intl: {
+        formatMessage,
+      },
     } = this.props;
 
     const items = this.state.servicePoints;
@@ -163,6 +167,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 onChange={this.setStartDate}
                 required
                 timeZone="UTC"
+                dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
                 backendDateStandard="YYYY-MM-DD"
               />
             </div>
@@ -178,6 +183,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 onChange={this.setEndDate}
                 required
                 timeZone="UTC"
+                dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
                 backendDateStandard="YYYY-MM-DD"
               />
             </div>

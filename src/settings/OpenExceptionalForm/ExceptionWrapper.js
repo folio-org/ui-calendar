@@ -76,7 +76,7 @@ class ExceptionWrapper extends Component {
     });
   }
 
-  componentWillMount() {      // eslint-disable-line react/no-deprecated
+  UNSAFE_componentWillMount() {      // eslint-disable-line react/no-deprecated
     const tempServicePoints = [{
       id: null,
       name: null,
@@ -589,7 +589,7 @@ class ExceptionWrapper extends Component {
             }
             const tempSP = {
               startDate: temp[j].startDate,
-              endDate: temp[j].endDate,
+              endDate: moment(temp[j].endDate).toISOString(),
               id: temp[j].id,
               name: temp[j].name,
               openingDays: temp[j].openingDays,

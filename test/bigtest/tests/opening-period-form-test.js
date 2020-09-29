@@ -148,15 +148,15 @@ describe('opening period form', () => {
 
         describe('focus and leave', () => {
           beforeEach(async () => {
-            await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.focusInput();
-            await calendarSettingsInteractor.openingPeriodForm.inputFields.periodName.blurInput();
+            await calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameInput.focus();
+            await calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameInput.blur();
           });
 
           it('error should be displayed', () => {
             expect(calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameError.isPresent).to.be.true;
           });
 
-          it('error should have proper test', () => {
+          it('error should have proper text', () => {
             expect(calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameError.text).to.equal(
               translation.fillIn
             );

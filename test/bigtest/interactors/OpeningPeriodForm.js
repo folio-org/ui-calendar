@@ -2,6 +2,8 @@ import {
   interactor,
   property,
   scoped,
+  blurrable,
+  focusable,
 } from '@bigtest/interactor';
 // eslint-disable-next-line
 import TextFieldInteractor from '@folio/stripes-components/lib/TextField/tests/interactor';
@@ -10,6 +12,11 @@ import DatepickerInteractor from '@folio/stripes-components/lib/Datepicker/tests
 
 import ConfirmationModal from './ConfirmationModal';
 import BigCalendar from './BigCalendar';
+
+@interactor class InputFieldInteractor {
+  blur = blurrable();
+  focus = focusable();
+}
 
 @interactor class ErrorModal {
   defaultScope = '#error-modal';
@@ -39,6 +46,7 @@ import BigCalendar from './BigCalendar';
   startDateField = new TextFieldInteractor('[data-test-item-start-date]');
   endDateField = new TextFieldInteractor('[data-test-item-end-date]');
   periodName = new TextFieldInteractor('[data-test-item-period-name]');
+  periodNameInput = new InputFieldInteractor('#input-period-name');
   periodNameError = scoped('[data-test-item-period-name-error]');
 }
 
