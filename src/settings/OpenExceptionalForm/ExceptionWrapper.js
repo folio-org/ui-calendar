@@ -1005,7 +1005,7 @@ class ExceptionWrapper extends Component {
       errorMessage = 'noStartTime';
     } else if (endTime === null || endTime === undefined || endTime === '') {
       errorMessage = 'noEndTime';
-    } else if (moment(endTime, 'hh:mm').isSameOrBefore(moment(startTime, 'hh:mm'))) {
+    } else if (moment(endTime) < moment(startTime)) {
       errorMessage = 'endTimeBeforeStartTime';
     }
     if (errorMessage === null) {

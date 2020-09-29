@@ -156,7 +156,7 @@ describe('opening period form', () => {
             expect(calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameError.isPresent).to.be.true;
           });
 
-          it('error should have proper test', () => {
+          it('error should have proper text', () => {
             expect(calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameError.text).to.equal(
               translation.fillIn
             );
