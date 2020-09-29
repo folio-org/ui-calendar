@@ -86,7 +86,7 @@
     "close": "Bezár",
     "noEvents": "Nincs esemény! Kérjük, készítsen legalább egy eseményt!",
     "wrongStartEndDate": "A kezdő dátum a záró után van!",
-    "deleteQuestionMessage": "A szokásos könyvtári órák <strong>{name}törölve lesznek</strong>.",
+    "deleteQuestionMessage": "The regular library hours <strong>{name}</strong> will be <strong>deleted</strong>.",
     "deleteQuestionTitle": "Szokásos könyvtári órák törlése",
     "exitQuestionTitle": "Biztosan?",
     "exitWithoutSaving": "Kilépés mentés nélkűl",
@@ -117,5 +117,8 @@
     "current": "Current:",
     "common.cancel": "Cancel",
     "intervalsOverlap": "Intervals can not overlap.",
-    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions."
+    "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions.",
+    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
+    "permission.view": "Settings (Calendar): Can view calendar events",
+    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
 }

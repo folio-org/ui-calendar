@@ -19,8 +19,8 @@
     "settings.openingPeriod": "فترة الافتتاح",
     "settings.openingTime": "وقت الافتتاح",
     "settings.calendar": "الروزنامة",
-    "settings.openingPeriodStart": "تاريخ بدء فترة الافتتاح",
-    "settings.openingPeriodEnd": "تاريخ انتهاء فترة الافتتاح",
+    "settings.openingPeriodStart": "صالح منذ",
+    "settings.openingPeriodEnd": "صالح حتى",
     "settings.description": "الاسم",
     "settings.error.startDateRequired": "يرجي تحديد تاريخ بدء للافتتاح",
     "settings.error.endDateRequired": "يرجى تحديد تاريخ انتهاء للافتتاح",
@@ -68,7 +68,7 @@
     "nextPeriod": "التالى:",
     "regularLibraryValidityPeriod": "جديد: فترة صلاحية ساعات المكتبة الاعتيادية",
     "deleteButton": "حذف",
-    "saveButton": "حفظ",
+    "saveButton": "حفظ وإغلاق",
     "savesAsTemplate": "حفظ كقالب",
     "validFrom": "صالح منذ:",
     "validTo": "صالح حتى:",
@@ -117,5 +117,8 @@
     "current": "الحالي:",
     "common.cancel": "إلغاء",
     "intervalsOverlap": "لا يمكن أن تتداخل الفواصل الزمنية",
-    "duplication": "يتداخل نطاق التاريخ الذي تم إدخاله مع تقويم آخر لنقطة الخدمة هذه. يرجى تصحيح النطاق الزمني أو إدخال الساعات كاستثناءات."
+    "duplication": "يتداخل نطاق التاريخ الذي تم إدخاله مع تقويم آخر لنقطة الخدمة هذه. يرجى تصحيح النطاق الزمني أو إدخال الساعات كاستثناءات.",
+    "permission.all": "الإعدادات (الروزنامة): إمكانية إنشاء، وعرض، وتحرير، وإزالة أحداث وفعاليات الروزنامة",
+    "permission.view": "الإعدادات (الروزنامة): إمكانية عرض أحداث وفعاليات الروزنامة",
+    "permission.edit": "الإعدادات (الروزنامة): إمكانية إنشاء، وعرض، وتحرير أحداث وفعاليات الروزنامة"
 }

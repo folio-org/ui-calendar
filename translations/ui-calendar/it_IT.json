@@ -86,7 +86,7 @@
     "close": "Chiuso",
     "noEvents": "Nessun evento trovato! Inserisci almeno un evento",
     "wrongStartEndDate": "La data di inizio è successiva alla data di fine!",
-    "deleteQuestionMessage": "L'orario abituale della biblioteca <strong> {name} </strong> sarà <strong> eliminato </strong> .",
+    "deleteQuestionMessage": "L'orario abituale della biblioteca <strong>{name}</strong> sarà <strong>eliminato</strong>.",
     "deleteQuestionTitle": "Elimina orario abituale della biblioteca",
     "exitQuestionTitle": "Sei sicuro?",
     "exitWithoutSaving": "Uscire senza salvare",
@@ -117,5 +117,8 @@
     "current": "Attuale:",
     "common.cancel": "Annulla",
     "intervalsOverlap": "Gli intervalli non possono sovrapporsi.",
-    "duplication": "L'intervallo di date inserito si sovrappone per questo punto di servizio a un altro calendario. Correggi l'intervallo di date o inserisci le ore come eccezioni."
+    "duplication": "L'intervallo di date inserito si sovrappone per questo punto di servizio a un altro calendario. Correggi l'intervallo di date o inserisci le ore come eccezioni.",
+    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
+    "permission.view": "Settings (Calendar): Can view calendar events",
+    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
 }

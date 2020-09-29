@@ -117,5 +117,8 @@
     "current": "Atual:",
     "common.cancel": "Cancelar",
     "intervalsOverlap": "Intervalos não podem se sobrepor.",
-    "duplication": "O período inserido se sobrepõe a outro calendário para este ponto de serviço. Corrija o período ou insira as horas como exceções."
+    "duplication": "O período inserido se sobrepõe a outro calendário para este ponto de serviço. Corrija o período ou insira as horas como exceções.",
+    "permission.all": "Configurações (Calendário): Pode criar, visualizar, editar e remover eventos de calendário",
+    "permission.view": "Configurações (Calendário): Pode ver eventos do calendário",
+    "permission.edit": "Configurações (Calendário): Pode criar, visualizar e editar eventos de calendário"
 }
