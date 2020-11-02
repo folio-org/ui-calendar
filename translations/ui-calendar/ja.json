@@ -83,7 +83,7 @@
     "modifyRegularLibraryValidityPeriod": "変更：通常の開館時間有効期間",
     "fillIn": "続行するには入力してください",
     "invalidData": "Invalid data",
-    "close": "Close",
+    "close": "閉じる",
     "noEvents": "No event found! Please make at least one event!",
     "wrongStartEndDate": "開始日が終了日より後になっています！",
     "deleteQuestionMessage": "The regular library hours <strong>{name}</strong> will be <strong>deleted</strong>.",
