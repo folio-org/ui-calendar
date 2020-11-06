@@ -169,6 +169,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 timeZone="UTC"
                 dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
                 backendDateStandard="YYYY-MM-DD"
+                usePortal
               />
             </div>
           </Col>
@@ -185,6 +186,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 timeZone="UTC"
                 dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
                 backendDateStandard="YYYY-MM-DD"
+                usePortal
               />
             </div>
           </Col>
