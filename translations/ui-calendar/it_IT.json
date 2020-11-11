@@ -50,7 +50,7 @@
     "settings.error.endTimeRequired": "Seleziona la data di fine",
     "settings.error.invalidTimeRange": "L'orario di chiusura deve essere successivo all'orario di apertura",
     "settings.error.overlappingInterval": "Gli intervalli non possono sovrapporsi",
-    "dateFormat": "MM/DD/YYYY",
+    "dateFormat": "MM/GG/AAAA",
     "sunDayShort": "Dom",
     "monDayShort": "Lun",
     "tueDayShort": "Mar",
@@ -118,7 +118,7 @@
     "common.cancel": "Annulla",
     "intervalsOverlap": "Gli intervalli non possono sovrapporsi.",
     "duplication": "L'intervallo di date inserito si sovrappone per questo punto di servizio a un altro calendario. Correggi l'intervallo di date o inserisci le ore come eccezioni.",
-    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
-    "permission.view": "Settings (Calendar): Can view calendar events",
-    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
+    "permission.all": "Impostazioni (Calendar): può creare, visualizzare, modificare e rimuovere eventi del calendario",
+    "permission.view": "Impostazioni (Calendar): può visualizzare eventi del calendario",
+    "permission.edit": "Impostazioni (Calendar): può creare, visualizzare e modificare eventi del calendario"
 }
