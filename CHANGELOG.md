@@ -1,9 +1,10 @@
 # Change history for ui-calendar
 
-## 5.1.0 IN PROGRESS
+## 6.0.0 IN PROGRESS
 
 * Remove unused `react-bootstrap` dependency. Refs UICAL-123.
 * Calendar `Datepicker` cut off in add exception screen. Refs UICAL-124.
+* Update to stripes v6. Refs UICAL-128.
 
 ## [5.0.0](https://github.com/folio-org/ui-calendar/tree/v5.0.0) (2020-10-08)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v4.0.0...v5.0.0)
