@@ -6,6 +6,7 @@
 * Calendar `Datepicker` cut off in add exception screen. Refs UICAL-124.
 * Update to stripes v6. Refs UICAL-128.
 * Move moment from a regular to a peer and dev dependencies. Refs UICAL-122.
+* Increment `@folio/stripes-cli` to `v2`. Refs UICAL-131.
 
 ## [5.0.0](https://github.com/folio-org/ui-calendar/tree/v5.0.0) (2020-10-08)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v4.0.0...v5.0.0)
