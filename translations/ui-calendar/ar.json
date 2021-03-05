@@ -26,7 +26,7 @@
     "settings.error.endDateRequired": "يرجى تحديد تاريخ انتهاء للافتتاح",
     "settings.error.descriptionRequired": "يرجى إضافة وصف لفترة الافتتاح",
     "settings.error.invalidDateRange": "لا يمكن أن يكون تاريخ اانتهاء قبل تاريخ البدء",
-    "calendar": "التقويم المؤسسي",
+    "calendar": "الروزنامة المؤسسية",
     "date": "التاريخ",
     "time": "الوقت",
     "event": "حدث",
