@@ -1,12 +1,17 @@
 # Change history for ui-calendar
 
-## 6.0.0 IN PROGRESS
+## [6.0.0](https://github.com/folio-org/ui-calendar/tree/v6.0.0) (2021-03-09)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v5.0.1...v6.0.0)
 
 * Remove unused `react-bootstrap` dependency. Refs UICAL-123.
 * Calendar `Datepicker` cut off in add exception screen. Refs UICAL-124.
 * Update to stripes v6. Refs UICAL-128.
 * Move moment from a regular to a peer and dev dependencies. Refs UICAL-122.
 * Increment `@folio/stripes-cli` to `v2`. Refs UICAL-131.
+
+## [5.0.1](https://github.com/folio-org/ui-calendar/tree/v5.0.1) (2021-02-26)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v5.0.0...v5.0.1)
+
 * Calendar hours displaying on wrong day of week (offset by a day). Refs UICAL-132.
 
 ## [5.0.0](https://github.com/folio-org/ui-calendar/tree/v5.0.0) (2020-10-08)
