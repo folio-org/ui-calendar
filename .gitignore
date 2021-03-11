@@ -3,3 +3,18 @@ yarn.lock
 .history/
 *.log
 package-lock.json
+.DS_Store
+yarn-error.log
+*.idea*
+.vscode
+junit.xml
+artifacts
+debug.log
+ModuleDescriptor.json
+.npmrc
+*.swp
+*.swo
+
+# stripes
+stripes.config.js.local
+.stripesclirc
