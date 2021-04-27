@@ -115,10 +115,10 @@
     "deleteQuestionExceptionTitle": "是否刪除例外時段？",
     "closeWithoutSaving": "不儲存就關閉編輯器",
     "current": "當前：",
-    "common.cancel": "Cancel",
-    "intervalsOverlap": "Intervals can not overlap.",
+    "common.cancel": "取消",
+    "intervalsOverlap": "间隔不能重叠。",
     "duplication": "輸入的工作區日期範圍和另一個時間表重疊。請更正日期範圍，或是輸入時間做為例外。",
-    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
-    "permission.view": "Settings (Calendar): Can view calendar events",
-    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
+    "permission.all": "设置（日历）：可以创建、查看、编辑和移除日历事件",
+    "permission.view": "设置（日历）：可以查看日历事件",
+    "permission.edit": "设置（日历）：可以创建、查看和编辑日历事件"
 }
