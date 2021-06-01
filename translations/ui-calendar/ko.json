@@ -41,7 +41,7 @@
     "tomorrow": "내일",
     "today": "오늘",
     "agenda": "의제",
-    "showMore": "+{합계} 더",
+    "showMore": "+{total} more",
     "main.eventDetails": "이벤트 세부 정보",
     "settings.description_type": "유형",
     "settings.event_type.opening_day": "정규 운영 기간",
