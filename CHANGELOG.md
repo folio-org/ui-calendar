@@ -13,6 +13,7 @@
 * Update to stripes v6. Refs UICAL-128.
 * Move moment from a regular to a peer and dev dependencies. Refs UICAL-122.
 * Increment `@folio/stripes-cli` to `v2`. Refs UICAL-131.
+* Investigate will be build with error `Pattern ./test/bigtest/index.js does not match any file`. Refs UICAL-143.
 
 ## [5.0.1](https://github.com/folio-org/ui-calendar/tree/v5.0.1) (2021-02-26)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v5.0.0...v5.0.1)
