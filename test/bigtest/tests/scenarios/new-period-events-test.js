@@ -62,11 +62,11 @@ describe('calendar events', () => {
 
     describe('dnd', () => {
       beforeEach(async function () {
-        const events = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.events();
         const timeslots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
 
+        await calendarSettingsInteractor.openingPeriodForm.bigCalendar.eventDeleteButtons(0).click();
         await calendarSettingsInteractor.openingPeriodForm.bigCalendar.simulateClick(
-          events[0],
+          timeslots[54],
           timeslots[56],
         );
       });
