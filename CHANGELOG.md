@@ -1,6 +1,7 @@
 # Change history for ui-calendar
 
-## [6.1.0] (IN PROGRESS)
+## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)
 
 * Update the .gitignore file. Refs UICAL-135.
 * Add pull request template. Refs UICAL-136.
