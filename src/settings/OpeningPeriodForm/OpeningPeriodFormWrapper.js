@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { IfPermission } from '@folio/stripes-core';
+import { IfPermission } from '@folio/stripes/core';
 import {
   Button,
   ConfirmationModal,
