@@ -13,7 +13,7 @@ import {
   IconButton,
 } from '@folio/stripes/components';
 import moment from 'moment';
-import { IfPermission } from '@folio/stripes-core';
+import { IfPermission } from '@folio/stripes/core';
 import OpeningPeriodFormWrapper from './OpeningPeriodForm/OpeningPeriodFormWrapper';
 import ErrorBoundary from '../ErrorBoundary';
 import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';

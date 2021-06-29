@@ -16,7 +16,7 @@ import {
   ConfirmationModal,
   Modal
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes-core';
+import { IfPermission } from '@folio/stripes/core';
 import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
 
 import ServicePointSelector from './ServicePointSelector';

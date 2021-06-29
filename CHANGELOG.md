@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## [7.0.0] (IN PROGRESS)
+
+* Fix import paths. Refs UICAL-139.
+
 ## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)
 
