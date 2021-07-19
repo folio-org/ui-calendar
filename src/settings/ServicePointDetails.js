@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   Button,
   Col,
+  FormattedUTCDate,
   Headline,
   Icon,
   KeyValue,
@@ -90,20 +91,15 @@ class ServicePointDetails extends React.Component {
             return periodTime;
           }
         } else {
-          return 'Closed';
+          return <FormattedMessage id="ui-calendar.settings.closed" />;
         }
       }
     }
-    return 'Closed';
+
+    return <FormattedMessage id="ui-calendar.settings.closed" />;
   }
 
   displayCurrentPeriod() {
-    const {
-      intl: {
-        formatMessage,
-      },
-    } = this.props;
-
     let res;
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
@@ -113,8 +109,8 @@ class ServicePointDetails extends React.Component {
 
       if (now > start && now < end) {
         res = {
-          startDate: start.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
-          endDate: end.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
+          startDate: <FormattedUTCDate value={openingPeriod.startDate} />,
+          endDate: <FormattedUTCDate value={openingPeriod.endDate} />,
           name: openingPeriod.name,
           openingDays: openingPeriod.openingDays,
           id: openingPeriod.id
@@ -125,12 +121,6 @@ class ServicePointDetails extends React.Component {
   }
 
   displayNextPeriod() {
-    const {
-      intl: {
-        formatMessage,
-      },
-    } = this.props;
-
     const displayPeriods = [];
     for (let index = 0; index < this.state.openingPeriods.length; index++) {
       const openingPeriod = this.state.openingPeriods[index];
@@ -141,8 +131,8 @@ class ServicePointDetails extends React.Component {
       if (!(now > start && now < end) && start > new Date()) {
         displayPeriods.push({
           id: openingPeriod.id,
-          startDate: start.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
-          endDate: end.format(formatMessage({ id: 'ui-calendar.dateFormat' })),
+          startDate: <FormattedUTCDate value={openingPeriod.startDate} />,
+          endDate: <FormattedUTCDate value={openingPeriod.endDate} />,
           name: openingPeriod.name
         });
       }
@@ -207,7 +197,13 @@ class ServicePointDetails extends React.Component {
                   xs={11}
                   data-test-next-period-item-label
                 >
-                  {this.state.currentPeriod.startDate + ' - ' + this.state.currentPeriod.endDate + ' (' + this.state.currentPeriod.name + ')'}
+                  {this.state.currentPeriod.startDate}
+                  -
+                  {this.state.currentPeriod.endDate}
+                  {' '}
+                  (
+                  {this.state.currentPeriod.name}
+                  )
                 </Col>
                 <Col xs={1}>
                   <IconButton
@@ -310,7 +306,13 @@ class ServicePointDetails extends React.Component {
             xs={11}
             data-test-next-period-item-label
           >
-            {item.startDate + ' - ' + item.endDate + ' (' + item.name + ')'}
+            {item.startDate}
+            -
+            {item.endDate}
+            {' '}
+            (
+            {item.name}
+            )
           </Col>
           <Col xs={1}>
             <IconButton
@@ -433,7 +435,10 @@ class ServicePointDetails extends React.Component {
 
           <Layer
             isOpen={this.state.newPeriodLayer.isOpen}
-            contentLabel={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
+            contentLabel={this.props.intl.formatMessage({
+              id: 'stripes-core.label.editEntry',
+              values: { entry: this.props.entryLabel }
+            })}
             container={document.getElementById('ModuleContainer')}
           >
             <OpeningPeriodFormWrapper
@@ -447,7 +452,10 @@ class ServicePointDetails extends React.Component {
 
           <Layer
             isOpen={this.state.modifyPeriodLayer.isOpen}
-            contentLabel={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
+            contentLabel={this.props.intl.formatMessage({
+              id: 'stripes-core.label.editEntry',
+              values: { entry: this.props.entryLabel }
+            })}
             container={document.getElementById('ModuleContainer')}
           >
             <OpeningPeriodFormWrapper
@@ -461,7 +469,10 @@ class ServicePointDetails extends React.Component {
           </Layer>
           <Layer
             isOpen={this.state.openExceptions.isOpen}
-            contentLabel={<FormattedMessage id="stripes-core.label.editEntry" values={{ entry: this.props.entryLabel }} />}
+            contentLabel={this.props.intl.formatMessage({
+              id: 'stripes-core.label.editEntry',
+              values: { entry: this.props.entryLabel }
+            })}
             container={document.getElementById('ModuleContainer')}
           >
             <div data-test-exceptional-form>

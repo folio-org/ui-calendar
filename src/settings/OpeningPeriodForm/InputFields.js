@@ -96,7 +96,6 @@ class InputFields extends React.Component {
               backendDateStandard="YYYY-MM-DD"
               component={Datepicker}
               label={<FormattedMessage id="ui-calendar.validFrom" />}
-              dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
               onChange={this.setStartDate}
             />
           </Col>
@@ -113,7 +112,6 @@ class InputFields extends React.Component {
               backendDateStandard="YYYY-MM-DD"
               component={Datepicker}
               label={<FormattedMessage id="ui-calendar.validTo" />}
-              dateFormat={formatMessage({ id: 'ui-calendar.dateFormat' })}
               onChange={this.setEndDate}
             />
           </Col>
