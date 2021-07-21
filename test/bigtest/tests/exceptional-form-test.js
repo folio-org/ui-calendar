@@ -335,6 +335,7 @@ describe('open exceptional form', () => {
               });
 
               it('should have proper text', () => {
+                console.log(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text)
                 expect(calendarSettingsInteractor.exceptionalForm.errorModal.modalContent.text).to.equal(
                   translation.noEndDate
                 );

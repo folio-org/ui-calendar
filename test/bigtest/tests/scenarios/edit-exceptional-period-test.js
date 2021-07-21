@@ -14,7 +14,7 @@ import {
   startDateFuture,
   tomorrow,
 } from '../../constants';
-import { formatDateString } from '../../helpers/messageConverters';
+import { formatDisplayDateString } from '../../helpers/messageConverters';
 
 describe('open exceptional period edit ', () => {
   describe('edit period ', () => {
@@ -65,7 +65,7 @@ describe('open exceptional period edit ', () => {
 
       it('should have updated period', () => {
         expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).text).to.equal(
-          `${formatDateString(startDateFuture)} - ${formatDateString(endDate)} (${name})`
+          `${formatDisplayDateString(startDateFuture)} - ${formatDisplayDateString(endDate)} (${name})`
         );
       });
     });

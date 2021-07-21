@@ -8,7 +8,7 @@ import {
 import faker from 'faker';
 
 import setupApplication from '../helpers/setup-application';
-import { formatDateString } from '../helpers/messageConverters';
+import { formatDisplayDateString } from '../helpers/messageConverters';
 import CalendarSettingsInteractor from '../interactors/calendar-settings';
 
 import translation from '../../../translations/ui-calendar/en';
@@ -113,7 +113,7 @@ describe('service point details', () => {
 
       it('should have proper value', () => {
         expect(calendarSettingsInteractor.servicePointDetails.currentPeriod.value.text).to.equal(
-          `${formatDateString(period.startDate)} - ${formatDateString(period.endDate)} (${period.name})`
+          `${formatDisplayDateString(period.startDate)} - ${formatDisplayDateString(period.endDate)} (${period.name})`
         );
       });
 
@@ -352,7 +352,7 @@ describe('service point details', () => {
 
       it('should have proper value', () => {
         expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).label.text).to.equal(
-          `${formatDateString(period.startDate)} - ${formatDateString(period.endDate)} (${period.name})`
+          `${formatDisplayDateString(period.startDate)} - ${formatDisplayDateString(period.endDate)} (${period.name})`
         );
       });
 
