@@ -1,4 +1,5 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import PropTypes from 'prop-types';
 import Settings from './settings';
 
@@ -36,4 +37,4 @@ class CalendarRouting extends React.Component {
   }
 }
 
-export default CalendarRouting;
+export default hot(module)(CalendarRouting);

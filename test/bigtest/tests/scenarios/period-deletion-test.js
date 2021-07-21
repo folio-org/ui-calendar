@@ -9,7 +9,7 @@ import {
 import CalendarSettingsInteractor from '../../interactors/calendar-settings';
 import setupApplication from '../../helpers/setup-application';
 import parseMessageFromJsx from '../../helpers/parseMessageFromJsx';
-import { formatDateString } from '../../helpers/messageConverters';
+import { formatDisplayDateString } from '../../helpers/messageConverters';
 
 import translation from '../../../../translations/ui-calendar/en';
 
@@ -35,7 +35,7 @@ describe('period deletion', () => {
 
     it('should have proper value', () => {
       expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).label.text).to.equal(
-        `${formatDateString(period.startDate)} - ${formatDateString(period.endDate)} (${period.name})`
+        `${formatDisplayDateString(period.startDate)} - ${formatDisplayDateString(period.endDate)} (${period.name})`
       );
     });
   });
