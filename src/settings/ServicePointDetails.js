@@ -198,7 +198,9 @@ class ServicePointDetails extends React.Component {
                   data-test-next-period-item-label
                 >
                   {this.state.currentPeriod.startDate}
+                  {' '}
                   -
+                  {' '}
                   {this.state.currentPeriod.endDate}
                   {' '}
                   (
@@ -307,7 +309,9 @@ class ServicePointDetails extends React.Component {
             data-test-next-period-item-label
           >
             {item.startDate}
+            {' '}
             -
+            {' '}
             {item.endDate}
             {' '}
             (
