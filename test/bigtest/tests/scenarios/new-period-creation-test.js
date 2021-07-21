@@ -8,7 +8,7 @@ import {
 
 import CalendarSettingsInteractor from '../../interactors/calendar-settings';
 import setupApplication from '../../helpers/setup-application';
-import { formatDateString } from '../../helpers/messageConverters';
+import { formatDisplayDateString } from '../../helpers/messageConverters';
 import {
   name,
   endDate,
@@ -56,7 +56,7 @@ describe('new period creation', () => {
 
     it('should have proper next period', () => {
       expect(calendarSettingsInteractor.servicePointDetails.nextPeriod.list(0).label.text).to.equal(
-        `${formatDateString(startDateFuture)} - ${formatDateString(endDate)} (${name})`
+        `${formatDisplayDateString(startDateFuture)} - ${formatDisplayDateString(endDate)} (${name})`
       );
     });
   });
