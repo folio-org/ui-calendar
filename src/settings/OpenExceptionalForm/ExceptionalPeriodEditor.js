@@ -37,7 +37,6 @@ class ExceptionalPeriodEditor extends React.Component {
     setStartDate: PropTypes.func.isRequired,
     allSelectorHandle: PropTypes.func.isRequired,
     setEditorServicePoints: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -135,9 +134,6 @@ class ExceptionalPeriodEditor extends React.Component {
       allDay,
       editor,
       closed,
-      intl: {
-        formatMessage,
-      },
     } = this.props;
 
     const items = this.state.servicePoints;

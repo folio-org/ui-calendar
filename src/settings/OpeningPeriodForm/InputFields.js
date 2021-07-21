@@ -72,9 +72,6 @@ class InputFields extends React.Component {
 
   render() {
     const {
-      intl: {
-        formatMessage,
-      },
       modifyPeriod: {
         name: modifyPeriodName,
       },
