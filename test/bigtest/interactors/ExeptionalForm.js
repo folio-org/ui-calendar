@@ -3,6 +3,7 @@ import {
   scoped,
   Interactor,
   collection,
+  isPresent,
 } from '@bigtest/interactor';
 
 // eslint-disable-next-line
@@ -20,6 +21,12 @@ import ConfirmationModal from './ConfirmationModal';
   defaultScope = '[data-test-service-point-selector]';
 
   items = collection('[data-test-service-point]', CheckboxInteractor);
+
+  isLoaded = isPresent('[data-test-service-point-selector]');
+
+  whenLoaded() {
+    return this.when(() => this.isLoaded);
+  }
 }
 
 @interactor class ServicePoints {
