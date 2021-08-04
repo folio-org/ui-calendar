@@ -1,5 +1,10 @@
 # Change history for ui-calendar
 
+## [6.1.2] (https://github.com/folio-org/ui-calendar/tree/v6.1.2) (2021-08-04)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.1...v6.1.2)
+
+* Fix failed test. Refs UICAL-150.
+
 ## [6.1.1] (https://github.com/folio-org/ui-calendar/tree/v6.1.1) (2021-08-04)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.0...v6.1.1)
 
