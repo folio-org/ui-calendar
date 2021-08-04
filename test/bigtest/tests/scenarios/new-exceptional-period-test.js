@@ -57,6 +57,7 @@ describe('open exceptional form', () => {
 
       describe('service point click', () => {
         beforeEach(async function () {
+          await calendarSettingsInteractor.exceptionalForm.servicePointSelector.whenLoaded();
           await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
         });
 
@@ -86,6 +87,7 @@ describe('open exceptional form', () => {
 
       describe('service point click', () => {
         beforeEach(async function () {
+          await calendarSettingsInteractor.exceptionalForm.servicePointSelector.whenLoaded();
           await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
         });
 
@@ -115,6 +117,7 @@ describe('open exceptional form', () => {
 
       describe('service point click', () => {
         beforeEach(async function () {
+          await calendarSettingsInteractor.exceptionalForm.servicePointSelector.whenLoaded();
           await calendarSettingsInteractor.exceptionalForm.servicePointSelector.items(testServicePointId).clickAndBlur();
         });
 

@@ -4,6 +4,7 @@
 
 * Fix import paths. Refs UICAL-139.
 * Compile Translation Files into AST Format. Refs UICAL-138.
+* Fix failed test. Refs UICAL-150.
 
 ## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)
