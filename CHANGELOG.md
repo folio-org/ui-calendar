@@ -1,5 +1,10 @@
 # Change history for ui-calendar
 
+## [6.1.1] (https://github.com/folio-org/ui-calendar/tree/v6.1.1) (2021-08-04)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.0...v6.1.1)
+
+* Use react-intl for date formatting. Refs UICAL-148.
+
 ## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)
 
