@@ -105,15 +105,20 @@ class ServicePointDetails extends React.Component {
       const openingPeriod = this.state.openingPeriods[index];
       const start = moment.utc(openingPeriod.startDate);
       const end = moment.utc(openingPeriod.endDate);
-      const now = moment.utc();
+      const now = moment.utc().set({
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      });
 
-      if (now > start && now < end) {
+      if (moment(now).isSameOrAfter(start) && moment(now).isSameOrBefore(end)) {
         res = {
           startDate: <FormattedUTCDate value={openingPeriod.startDate} />,
           endDate: <FormattedUTCDate value={openingPeriod.endDate} />,
           name: openingPeriod.name,
           openingDays: openingPeriod.openingDays,
-          id: openingPeriod.id
+          id: openingPeriod.id,
         };
       }
     }
@@ -133,7 +138,7 @@ class ServicePointDetails extends React.Component {
           id: openingPeriod.id,
           startDate: <FormattedUTCDate value={openingPeriod.startDate} />,
           endDate: <FormattedUTCDate value={openingPeriod.endDate} />,
-          name: openingPeriod.name
+          name: openingPeriod.name,
         });
       }
     }
@@ -441,7 +446,7 @@ class ServicePointDetails extends React.Component {
             isOpen={this.state.newPeriodLayer.isOpen}
             contentLabel={this.props.intl.formatMessage({
               id: 'stripes-core.label.editEntry',
-              values: { entry: this.props.entryLabel }
+              values: { entry: this.props.entryLabel },
             })}
             container={document.getElementById('ModuleContainer')}
           >
@@ -458,7 +463,7 @@ class ServicePointDetails extends React.Component {
             isOpen={this.state.modifyPeriodLayer.isOpen}
             contentLabel={this.props.intl.formatMessage({
               id: 'stripes-core.label.editEntry',
-              values: { entry: this.props.entryLabel }
+              values: { entry: this.props.entryLabel },
             })}
             container={document.getElementById('ModuleContainer')}
           >
@@ -475,7 +480,7 @@ class ServicePointDetails extends React.Component {
             isOpen={this.state.openExceptions.isOpen}
             contentLabel={this.props.intl.formatMessage({
               id: 'stripes-core.label.editEntry',
-              values: { entry: this.props.entryLabel }
+              values: { entry: this.props.entryLabel },
             })}
             container={document.getElementById('ModuleContainer')}
           >
@@ -509,7 +514,7 @@ ServicePointDetails.propTypes = {
   resources: PropTypes.shape({
     periods: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
-    })
+    }),
   }),
 };
 
