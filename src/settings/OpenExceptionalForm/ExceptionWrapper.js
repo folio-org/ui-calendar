@@ -30,6 +30,10 @@ import {
   ALL_DAY,
 } from '../constants';
 
+import {
+  OFFSET_HOURS,
+} from '../utils/time';
+
 class ExceptionWrapper extends Component {
   static propTypes = {
     entries: PropTypes.arrayOf(PropTypes.object),
@@ -364,6 +368,7 @@ class ExceptionWrapper extends Component {
       .diff(moment(start), 'days') + 1; i++) {
       const today = moment(start)
         .add(i, 'days')
+        .add(OFFSET_HOURS, 'hours')
         .format('dddd')
         .toUpperCase();
 
