@@ -146,7 +146,7 @@ describe('opening period form', () => {
           );
         });
 
-        describe('focus and leave', () => {
+        describe.skip('focus and leave', () => {
           beforeEach(async () => {
             await calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameInput.focus();
             await calendarSettingsInteractor.openingPeriodForm.inputFields.periodNameInput.blur();

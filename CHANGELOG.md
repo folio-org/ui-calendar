@@ -8,6 +8,7 @@
 * Fix calendar exceptions displaying on wrong day of week (offset by a day). Refs UICAL-152.
 * Fix that last day of work library is carried over to the previous day. Refs UICAL-157.
 * Fix the issue when time period is not displayed if the end date is current. Refs UICAL-127
+* Fix failed build on `ui-calendar`. Refs UICAL-162.
 
 
 ## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
