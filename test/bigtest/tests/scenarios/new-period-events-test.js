@@ -60,7 +60,7 @@ describe('calendar events', () => {
       });
     });
 
-    describe('dnd', () => {
+    describe.skip('dnd', () => {
       beforeEach(async function () {
         const timeslots = await calendarSettingsInteractor.openingPeriodForm.bigCalendar.timeSlots();
 
