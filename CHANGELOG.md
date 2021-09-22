@@ -10,6 +10,7 @@
 * Fix the issue when time period is not displayed if the end date is current. Refs UICAL-127
 * Fix failed build on `ui-calendar`. Refs UICAL-162.
 * Increment `stripes` to `v7`, `react` to `v17`. Refs UICAL-154.
+* Fix issue when viewing library hours causes browser crash after viewing other settings. Refs UICAL-134.
 
 ## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)

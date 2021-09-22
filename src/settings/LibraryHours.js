@@ -36,8 +36,8 @@ class LibraryHours extends React.Component {
         },
         PUT: {
           path: 'calendar/periods/%{query}/period/%{periodId}',
-        }
-      }
+        },
+      },
     });
 
     constructor() {
@@ -62,10 +62,9 @@ class LibraryHours extends React.Component {
         renderedCloneSettings = <CloneSettings {...this.props} onToggle={that.onChildToggle()} />;
       }
       const sortedList = sortBy((this.props.resources.entries || {}).records || [], ['name']);
-      if (sortedList !== undefined && sortedList !== null) {
-        for (let i = 0; i < sortedList.length; i++) {
-          sortedList[i].allEntries = sortBy((this.props.resources.entries || {}).records || [], ['name']);
-        }
+
+      for (let i = 0; i < sortedList.length; i++) {
+        sortedList[i].allEntries = sortedList;
       }
 
       return (
@@ -100,7 +99,7 @@ LibraryHours.propTypes = {
     }),
     periods: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
-    })
+    }),
   }).isRequired,
   mutator: PropTypes.shape({
     entries: PropTypes.shape({
