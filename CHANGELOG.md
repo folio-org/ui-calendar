@@ -1,6 +1,7 @@
 # Change history for ui-calendar
 
-## [7.0.0] (IN PROGRESS)
+## [7.0.0] (https://github.com/folio-org/ui-calendar/tree/v7.0.0) (2021-09-30)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.2...v7.0.0)
 
 * Fix import paths. Refs UICAL-139.
 * Compile Translation Files into AST Format. Refs UICAL-138.
@@ -11,6 +12,16 @@
 * Fix failed build on `ui-calendar`. Refs UICAL-162.
 * Increment `stripes` to `v7`, `react` to `v17`. Refs UICAL-154.
 * Fix issue when viewing library hours causes browser crash after viewing other settings. Refs UICAL-134.
+
+## [6.1.2] (https://github.com/folio-org/ui-calendar/tree/v6.1.2) (2021-08-04)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.1...v6.1.2)
+
+* Fix failed test. Refs UICAL-150.
+
+## [6.1.1] (https://github.com/folio-org/ui-calendar/tree/v6.1.1) (2021-08-04)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.0...v6.1.1)
+
+* Use react-intl for date formatting. Refs UICAL-148.
 
 ## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)
