@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "يرجى ضبط وقت الانتهاء",
     "settings.error.invalidTimeRange": "يجب أن يكون وقت الإغلاق بعد وقت الافتتاح",
     "settings.error.overlappingInterval": "لا يمكن أن تتداخل الفواصل الزمنية",
-    "dateFormat": "MM/DD/YYYY",
     "sunDayShort": "الأحد",
     "monDayShort": "الاثنين",
     "tueDayShort": "الثلاثاء",

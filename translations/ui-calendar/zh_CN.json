@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "请设置终止时间",
     "settings.error.invalidTimeRange": "闭馆时间必须在开馆时间之后",
     "settings.error.overlappingInterval": "间隔不能重叠",
-    "dateFormat": "月/日/年",
     "sunDayShort": "周日",
     "monDayShort": "周一",
     "tueDayShort": "周二",

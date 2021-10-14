@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Merci de régler l'heure de fin",
     "settings.error.invalidTimeRange": "L'heure de fermeture doit être postérieure à l'heure d'ouverture",
     "settings.error.overlappingInterval": "Les intervalles ne peuvent pas se chevaucher",
-    "dateFormat": "MM / JJ / AAAA",
     "sunDayShort": "Dim",
     "monDayShort": "Lun",
     "tueDayShort": "Mar",

@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "終了時間を設定してください",
     "settings.error.invalidTimeRange": "閉館時間は開館時間後でなければなりません",
     "settings.error.overlappingInterval": "間隔は重複できません",
-    "dateFormat": "MM/DD/YYYY",
     "sunDayShort": "Sun",
     "monDayShort": "Mon",
     "tueDayShort": "Tue",
