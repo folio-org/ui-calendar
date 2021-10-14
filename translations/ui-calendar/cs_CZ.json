@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Please set end time",
     "settings.error.invalidTimeRange": "Closing time must be after opening time",
     "settings.error.overlappingInterval": "Intervals can not overlap",
-    "dateFormat": "MM/DD/YYYY",
     "sunDayShort": "Sun",
     "monDayShort": "Mon",
     "tueDayShort": "Tue",

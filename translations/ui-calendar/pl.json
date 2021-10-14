@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Ustaw godzinę zakończenia",
     "settings.error.invalidTimeRange": "Godzina zamknięcia musi być późniejsza niż godzina otwarcia",
     "settings.error.overlappingInterval": "Odstępy nie mogą się nakładać",
-    "dateFormat": "MM/DD/RRRR",
     "sunDayShort": "Nd",
     "monDayShort": "Pon",
     "tueDayShort": "Wt",

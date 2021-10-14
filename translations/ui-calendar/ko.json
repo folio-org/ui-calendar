@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "종료 시간을 설정하십시오",
     "settings.error.invalidTimeRange": "마감 시간은 개장 시간 이후 여야합니다.",
     "settings.error.overlappingInterval": "간격은 겹칠 수 없습니다.",
-    "dateFormat": "월/일/연(MM/DD/YYYY)",
     "sunDayShort": "일",
     "monDayShort": "월",
     "tueDayShort": "화",
