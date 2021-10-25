@@ -84,6 +84,7 @@
     "start": "stripes serve",
     "lint": "eslint .",
     "test": "stripes test karma",
+    "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-calendar ./translations/ui-calendar/compiled"
   },
   "devDependencies": {
