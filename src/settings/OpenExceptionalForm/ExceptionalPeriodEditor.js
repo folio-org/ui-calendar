@@ -139,8 +139,8 @@ class ExceptionalPeriodEditor extends React.Component {
 
     const items = this.state.servicePoints;
     const itemFormatter = (item) => (
-      <li data-test-service-point key={item.id}>
-        <div className="CircleDiv" style={{ background: item.color }} />
+      <li data-test-service-point key={item.id} style={{ justifyContent: "flex-start" }}>
+        <div className="CircleDiv" style={{ background: item.color, marginRight: ".5rem" }} />
         <Checkbox
           id={item.id}
           label={item.name}
