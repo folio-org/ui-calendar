@@ -84,6 +84,7 @@
     "start": "stripes serve",
     "lint": "eslint .",
     "test": "stripes test karma",
+    "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-calendar ./translations/ui-calendar/compiled"
   },
   "devDependencies": {
@@ -119,7 +120,7 @@
     "stylelint-junit-formatter": "^0.2.1"
   },
   "dependencies": {
-    "@folio/react-intl-safe-html": "^2.0.0",
+    "@folio/react-intl-safe-html": "^3.1.0",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
     "randomcolor": "^0.5.3",

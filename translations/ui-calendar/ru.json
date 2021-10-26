@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Пожалуйста, установите время окончания",
     "settings.error.invalidTimeRange": "Время закрытия должно быть после времени открытия",
     "settings.error.overlappingInterval": "Интервалы не могут пересекаться",
-    "dateFormat": "ММ/ДД/ГГГГ",
     "sunDayShort": "Вс",
     "monDayShort": "Пн",
     "tueDayShort": "Вт",

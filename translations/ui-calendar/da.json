@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Please set end time",
     "settings.error.invalidTimeRange": "Lukketid skal være efter åbningstidspunkt",
     "settings.error.overlappingInterval": "Intervals can not overlap",
-    "dateFormat": "MM/DD/YYYY",
     "sunDayShort": "Søn",
     "monDayShort": "Man",
     "tueDayShort": "Tir",

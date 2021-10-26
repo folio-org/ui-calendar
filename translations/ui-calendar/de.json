@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Bitte Endzeit einstellen",
     "settings.error.invalidTimeRange": "Schließzeit muss nach Öffnungszeit liegen",
     "settings.error.overlappingInterval": "Intervalle können sich nicht überschneiden",
-    "dateFormat": "MM/DD/YYYY",
     "sunDayShort": "Sonntag",
     "monDayShort": "Montag",
     "tueDayShort": "Dienstag",

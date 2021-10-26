@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Kérem, adja meg a záró időpontot",
     "settings.error.invalidTimeRange": "A zárási időnek a nyitásinál későbbinek kell lennie",
     "settings.error.overlappingInterval": "Az intervallumok nem lehetnek átfedőek",
-    "dateFormat": "YYYY/MM/DD",
     "sunDayShort": "Vasárnap",
     "monDayShort": "Hétfő",
     "tueDayShort": "Kedd",

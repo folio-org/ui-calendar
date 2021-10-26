@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "Seleziona la data di fine",
     "settings.error.invalidTimeRange": "L'orario di chiusura deve essere successivo all'orario di apertura",
     "settings.error.overlappingInterval": "Gli intervalli non possono sovrapporsi",
-    "dateFormat": "MM/GG/AAAA",
     "sunDayShort": "Dom",
     "monDayShort": "Lun",
     "tueDayShort": "Mar",
