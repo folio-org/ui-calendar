@@ -149,7 +149,6 @@ class ExceptionalPeriodEditor extends React.Component {
         />
       </li>
     );
-    const isEmptyMessage = 'No items to show';
     const allSelectorText = `ui-calendar.${allSelector ? 'selectAll' : 'deselectAll'}`;
 
     return (
@@ -210,7 +209,7 @@ class ExceptionalPeriodEditor extends React.Component {
               <List
                 items={items}
                 itemFormatter={itemFormatter}
-                isEmptyMessage={isEmptyMessage}
+                isEmptyMessage={<FormattedMessage id="ui-calendar.noServicePoints" />}
               />
             </div>
           </Col>

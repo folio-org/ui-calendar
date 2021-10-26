@@ -108,6 +108,7 @@
   "noEndDate": "Please set an end date.",
   "noName": "Please set a name.",
   "noServicePointSelected": "Please select at least one service point",
+  "noServicePoints": "No service points were found.",
   "noStartTime": "Please set start time",
   "noEndTime": "Please set end time",
   "endTimeBeforeStartTime": "The start time is after the end time!",
