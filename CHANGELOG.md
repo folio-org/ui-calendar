@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## [7.0.1] (IN PROGRESS)
+
+* Fix spacing on exception modal service point picker.  Refs UICAL-145.
+
 ## [7.0.0] (https://github.com/folio-org/ui-calendar/tree/v7.0.0) (2021-09-30)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.2...v7.0.0)
 
