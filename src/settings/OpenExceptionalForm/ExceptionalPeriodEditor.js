@@ -210,6 +210,7 @@ class ExceptionalPeriodEditor extends React.Component {
                 items={items}
                 itemFormatter={itemFormatter}
                 isEmptyMessage={<FormattedMessage id="ui-calendar.noServicePoints" />}
+                marginBottom0
               />
             </div>
           </Col>
