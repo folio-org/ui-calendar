@@ -32,7 +32,7 @@ import ConfirmationModal from './ConfirmationModal';
 @interactor class ServicePoints {
   defaultScope = '[data-test-service-points]';
 
-  title = scoped('[data-test-service-points-title]');
+  label = scoped('[data-test-service-points-label]');
   selectAllButton = scoped('[data-test-select-all]');
   items = collection('[data-test-service-point]', CheckboxInteractor);
 }

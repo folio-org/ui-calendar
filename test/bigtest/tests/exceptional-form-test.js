@@ -105,9 +105,9 @@ describe('open exceptional form', () => {
               expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.isPresent).to.be.true;
             });
 
-            it('should have proper title', () => {
-              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.title.text).to.equal(
-                translation['settings.openingPeriodEnd']
+            it('should have proper label', () => {
+              expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.label.text).to.equal(
+                getRequiredLabel(translation.affectedServicePoints, false)
               );
             });
 

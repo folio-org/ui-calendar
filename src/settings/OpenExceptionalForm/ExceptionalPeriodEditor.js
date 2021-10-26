@@ -8,12 +8,13 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   Button,
-  Col,
-  Row,
   Checkbox,
+  Col,
   Datepicker,
-  TextField,
+  Label,
   List,
+  Row,
+  TextField,
   Timepicker
 } from '@folio/stripes/components';
 
@@ -203,9 +204,9 @@ class ExceptionalPeriodEditor extends React.Component {
         <Row>
           <Col>
             <div data-test-service-points>
-              <div data-test-service-points-title>
-                <FormattedMessage id="ui-calendar.settings.openingPeriodEnd" />
-              </div>
+              <Label required data-test-service-points-label>
+                <FormattedMessage id="ui-calendar.affectedServicePoints" />
+              </Label>
               <List
                 items={items}
                 itemFormatter={itemFormatter}
