@@ -50,7 +50,6 @@
     "settings.error.endTimeRequired": "請設定結束時間",
     "settings.error.invalidTimeRange": "閉館時間必須在開館時間之後",
     "settings.error.overlappingInterval": "間隔不能重疊",
-    "dateFormat": "MM/DD/YYYY",
     "sunDayShort": "週日",
     "monDayShort": "週一",
     "tueDayShort": "週二",
