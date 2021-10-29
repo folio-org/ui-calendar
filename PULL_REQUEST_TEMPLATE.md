@@ -29,7 +29,7 @@
  How does this change fulfill the purpose? It's best to talk
  high-level strategy and avoid code-splaining the commit history.
 
- The goal is not only to explain what you did, but to also help other
+ The goal is not only to explain what you did, but also to help other
  developers *work* with your solution in the future.
 -->
 
