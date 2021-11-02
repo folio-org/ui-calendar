@@ -3,11 +3,15 @@
 ## IN PROGRESS
 
 * Upgrade `@folio/react-intl-safe-html` for compatibility with `@folio/stripes` `v7`. Refs UICAL-173.
-* Fix issue when after the transition from summer to winter time, the graphical interface displays Exception Period one day less. Refs UICAL-181.
 * Improve grammar in pull request template. Refs UICAL-184.
 * Remove `react-dnd` and `react-dnd-html5-backend` by security vulnerability reason. Refs UICAL-182.
 * Fix spacing on exception modal service point picker. Refs UICAL-145.
 * Use constant instead of hardcoded value for query limit. Refs UICAL-185.
+
+## [7.0.2] (https://github.com/folio-org/ui-calendar/tree/v7.0.2) (2021-11-12)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.1...v7.0.2)
+
+* Fix issue when after the transition from summer to winter time, the graphical interface displays Exception Period one day less. Refs UICAL-181.
 
 ## [7.0.1] (https://github.com/folio-org/ui-calendar/tree/v7.0.1) (2021-11-11)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.0...v7.0.1)
