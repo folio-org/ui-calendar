@@ -53,9 +53,16 @@ class BigCalendarWrapper extends PureComponent {
         }
       }) => {
         const event = {};
+        // localized start of week
         let eventDay = moment().startOf('week').toDate();
+        // 0 to 6 from Sunday - Saturday.  Not localized
+        const localizedStartDay = moment(eventDay).day();
+        // distance from Sunday (where `weekdays` array starts to actual start day)
+        // add seven to keep this positive (stay in week we're displaying)
+        const localizedStartOffset = (0 - localizedStartDay) + 7;
 
-        eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
+        // add the offset to ensure weekdays array correlates to presented week
+        eventDay = moment(eventDay).add((weekdays.indexOf(weekday) + localizedStartOffset) % 7, 'day');
         event.start = moment(eventDay);
         event.end = moment(eventDay);
         event.allDay = allDay;
