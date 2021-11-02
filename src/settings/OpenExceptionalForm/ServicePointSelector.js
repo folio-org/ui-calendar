@@ -30,7 +30,7 @@ class ServicePointSelector extends React.Component {
     const itemFormatter = (item) => (
       <li data-test-service-point key={item.id}>
         <div
-          className="CircleDiv"
+          className="circle-div"
           style={{ background: item.color }}
         />
         <Checkbox
