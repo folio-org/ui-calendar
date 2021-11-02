@@ -204,7 +204,7 @@ class ExceptionalPeriodEditor extends React.Component {
           <Col>
             <div data-test-service-points>
               <Label required data-test-service-points-label>
-                <FormattedMessage id="ui-calendar.affectedServicePoints" />
+                <FormattedMessage id="ui-calendar.settings.openingPeriodEnd" />
               </Label>
               <List
                 items={items}
