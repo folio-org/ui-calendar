@@ -107,7 +107,7 @@ describe('open exceptional form', () => {
 
             it('should have proper label', () => {
               expect(calendarSettingsInteractor.exceptionalForm.exceptionalPeriodEditor.servicePoints.label.text).to.equal(
-                getRequiredLabel(translation.affectedServicePoints, false)
+                getRequiredLabel(translation['settings.openingPeriodEnd'], false)
               );
             });
 
