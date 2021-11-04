@@ -9,7 +9,7 @@ import {
   momentLocalizer,
 } from 'react-big-calendar';
 
-import { ALL_DAY } from '../constants';
+import { ALL_DAY, NUMBER_OF_DAYS_IN_WEEK } from '../constants';
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
 
@@ -53,16 +53,12 @@ class BigCalendarWrapper extends PureComponent {
         }
       }) => {
         const event = {};
-        // localized start of week
-        let eventDay = moment().startOf('week').toDate();
-        // 0 to 6 from Sunday - Saturday.  Not localized
-        const localizedStartDay = moment(eventDay).day();
-        // distance from Sunday (where `weekdays` array starts to actual start day)
-        // add seven to keep this positive (stay in week we're displaying)
-        const localizedStartOffset = (0 - localizedStartDay) + 7;
+        const localizedStartOfWeek = moment().startOf('week').toDate();
+        const relativeStartOfWeek = moment(eventDay).day(); // 0 to 6 from Sunday - Saturday.  Not localized
+        const localizedStartOffset = (0 - relativeStartOfWeek) + NUMBER_OF_DAYS_IN_WEEK; // force positive
 
         // add the offset to ensure weekdays array correlates to presented week
-        eventDay = moment(eventDay).add((weekdays.indexOf(weekday) + localizedStartOffset) % 7, 'day');
+        const eventDay = moment(localizedStartOfWeek).add((weekdays.indexOf(weekday) + localizedStartOffset) % NUMBER_OF_DAYS_IN_WEEK, 'day');
         event.start = moment(eventDay);
         event.end = moment(eventDay);
         event.allDay = allDay;

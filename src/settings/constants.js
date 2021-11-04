@@ -32,4 +32,6 @@ export const permissions = {
   PUT:  'calendar.periods.item.put'
 };
 
+export const NUMBER_OF_DAYS_IN_WEEK = 7;
+
 export const ALL_DAY = <FormattedMessage id="ui-calendar.settings.allDay" />;
