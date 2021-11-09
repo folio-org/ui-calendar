@@ -41,7 +41,7 @@
     "tomorrow": "내일",
     "today": "오늘",
     "agenda": "의제",
-    "showMore": "+{total} more",
+    "showMore": "+ {total} 개 더",
     "main.eventDetails": "이벤트 세부 정보",
     "settings.description_type": "유형",
     "settings.event_type.opening_day": "정규 운영 기간",
@@ -117,7 +117,7 @@
     "common.cancel": "취소",
     "intervalsOverlap": "간격은 겹칠 수 없습니다.",
     "duplication": "입력한 날짜 범위가 이 서비스 지점의 다른 캘린더와 겹칩니다. 날짜 범위를 수정하거나 예외로 시간을 입력하세요.",
-    "permission.all": "Settings (Calendar): Can create, view, edit, and remove calendar events",
-    "permission.view": "Settings (Calendar): Can view calendar events",
-    "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events"
+    "permission.all": "설정(캘린더): 캘린더 이벤트를 생성, 보기, 편집 및 제거할 수 있습니다.",
+    "permission.view": "설정(캘린더): 캘린더 이벤트를 볼 수 있습니다.",
+    "permission.edit": "설정(캘린더): 캘린더 이벤트를 만들고, 보고, 편집할 수 있습니다."
 }
