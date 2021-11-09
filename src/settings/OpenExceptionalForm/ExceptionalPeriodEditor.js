@@ -139,8 +139,12 @@ class ExceptionalPeriodEditor extends React.Component {
 
     const items = this.state.servicePoints;
     const itemFormatter = (item) => (
-      <li data-test-service-point key={item.id} class="service-point-selector-row">
-        <div className="circle-div" style={{ background: item.color }} />
+      <li
+        data-test-service-point
+        key={item.id}
+        class="servicePointSelectorRow">
+        <div className="circleDiv"
+          style={{ background: item.color }} />
         <Checkbox
           id={item.id}
           label={item.name}
@@ -203,7 +207,9 @@ class ExceptionalPeriodEditor extends React.Component {
         <Row>
           <Col>
             <div data-test-service-points>
-              <Label required data-test-service-points-label>
+              <Label
+                required
+                data-test-service-points-label>
                 <FormattedMessage id="ui-calendar.settings.openingPeriodEnd" />
               </Label>
               <List
