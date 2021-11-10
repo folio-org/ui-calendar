@@ -6,6 +6,8 @@ import ServicePointDetails from './ServicePointDetails';
 import ErrorBoundary from '../ErrorBoundary';
 import CloneSettings from './CloneSettings';
 
+import { MAX_RECORDS } from './constants';
+
 class LibraryHours extends React.Component {
     static manifest = Object.freeze({
       entries: {
@@ -15,7 +17,7 @@ class LibraryHours extends React.Component {
         path: 'service-points',
         params: {
           query: 'cql.allRecords=1',
-          limit: '1000',
+          limit: MAX_RECORDS,
         },
       },
       query: {},

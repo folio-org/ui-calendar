@@ -23,13 +23,15 @@ export const colors = [
   '#a9a9a9',
   '#ffffff',
   '#000000',
-  '#e6194B'
+  '#e6194B',
 ];
 
 export const permissions = {
   DELETE: 'calendar.periods.item.delete',
   POST: 'calendar.periods.item.post',
-  PUT:  'calendar.periods.item.put'
+  PUT:  'calendar.periods.item.put',
 };
 
 export const ALL_DAY = <FormattedMessage id="ui-calendar.settings.allDay" />;
+
+export const MAX_RECORDS = '1000';
