@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import HTML5Backend from 'react-dnd-html5-backend';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import { DragDropContext } from 'react-dnd';
 import {
   Calendar,
   momentLocalizer,
@@ -12,6 +10,8 @@ import {
 import { ALL_DAY } from '../constants';
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
+
+import style from './BigCalendarWrapper.css';
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -49,8 +49,8 @@ class BigCalendarWrapper extends PureComponent {
           openingHour,
         },
         weekdays: {
-          day: weekday
-        }
+          day: weekday,
+        },
       }) => {
         const event = {};
         let eventDay = moment().startOf('week').toDate();
@@ -91,7 +91,7 @@ class BigCalendarWrapper extends PureComponent {
       eventsChange(events);
       this.setState({
         events,
-        eventIdCounter: eventId
+        eventIdCounter: eventId,
       });
     }
   }
@@ -183,7 +183,7 @@ class BigCalendarWrapper extends PureComponent {
     onCalendarChange = (events) => {
       this.setState({
         events,
-        eventIdCounter: events.length
+        eventIdCounter: events.length,
       });
 
       this.props.onCalendarChange(events);
@@ -204,11 +204,7 @@ class BigCalendarWrapper extends PureComponent {
     render() {
       return (
         <div
-          className="period-big-calendar"
-          style={{
-            height: '100%',
-            marginBottom: '1rem',
-          }}
+          className={style.periodBigCalendar}
           data-test-big-calendar-wrapper
         >
           <DnDCalendar
@@ -224,7 +220,7 @@ class BigCalendarWrapper extends PureComponent {
             onSelectSlot={this.onSlotSelect}
             views={['week']}
             components={{
-              event: this.renderEventComponent
+              event: this.renderEventComponent,
             }}
             labelTranslate={CalendarUtils.translate}
           />
@@ -233,4 +229,4 @@ class BigCalendarWrapper extends PureComponent {
     }
 }
 
-export default DragDropContext(HTML5Backend)(BigCalendarWrapper);
+export default BigCalendarWrapper;
