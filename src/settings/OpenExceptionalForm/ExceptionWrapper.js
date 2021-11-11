@@ -30,9 +30,7 @@ import {
   ALL_DAY,
 } from '../constants';
 
-import {
-  OFFSET_HOURS,
-} from '../utils/time';
+import { setTimezoneOffset } from '../utils/time';
 
 class ExceptionWrapper extends Component {
   static propTypes = {
@@ -366,9 +364,8 @@ class ExceptionWrapper extends Component {
 
     for (let i = 0; i < moment(end)
       .diff(moment(start), 'days') + 1; i++) {
-      const today = moment(start)
+      const today = setTimezoneOffset(start)
         .add(i, 'days')
-        .add(OFFSET_HOURS, 'hours')
         .format('dddd')
         .toUpperCase();
 
@@ -460,10 +457,11 @@ class ExceptionWrapper extends Component {
             {eventContent}
           </div>;
 
+        const eventStart = setTimezoneOffset(start).add(i, 'days');
         const tempObj = {
           id,
-          end: moment(start).add(i, 'days'),
-          start: moment(start).add(i, 'days'),
+          end: eventStart.clone(),
+          start: eventStart,
           title: eventTitle,
           exceptional,
         };
