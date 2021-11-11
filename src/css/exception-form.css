@@ -1,5 +1,11 @@
-.CircleDiv{
+.servicePointSelectorRow {
+    /* important required to override List component of higher precedence */
+    justify-content: flex-start !important;
+}
+
+.circleDiv {
     border-radius: 50px;
     height: 15px;
     width: 15px;
+    margin-right: 0.5rem;
 }

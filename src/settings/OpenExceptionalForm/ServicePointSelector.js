@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Checkbox,
@@ -29,7 +30,7 @@ class ServicePointSelector extends React.Component {
     const itemFormatter = (item) => (
       <li data-test-service-point key={item.id}>
         <div
-          className="CircleDiv"
+          className="circleDiv"
           style={{ background: item.color }}
         />
         <Checkbox
@@ -41,14 +42,13 @@ class ServicePointSelector extends React.Component {
         />
       </li>
     );
-    const isEmptyMessage = 'No items to show';
 
     return (
       <div data-test-service-point-selector>
         <List
           items={items}
           itemFormatter={itemFormatter}
-          isEmptyMessage={isEmptyMessage}
+          isEmptyMessage={<FormattedMessage id="ui-calendar.noServicePoints" />}
         />
       </div>
     );
