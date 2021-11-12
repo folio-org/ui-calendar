@@ -362,8 +362,8 @@ class ExceptionWrapper extends Component {
     } = event;
     let g = 0;
 
-    for (let i = 0; i < moment(end)
-      .diff(moment(start), 'days') + 1; i++) {
+    for (let i = 0; i < moment.utc(end)
+      .diff(moment.utc(start), 'days') + 1; i++) {
       const today = setTimezoneOffset(start)
         .add(i, 'days')
         .format('dddd')
