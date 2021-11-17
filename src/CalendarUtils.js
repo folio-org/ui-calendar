@@ -1,9 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 
+import { getWeekDays } from './settings/utils/time';
+
 class CalendarUtils extends React.Component {
   static convertNewPeriodToValidBackendPeriod(period, event) {
-    const weekDays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    const weekDays = getWeekDays();
     let weekDay = 8;
     let openingHour = [];
     let sortedEvents = [];

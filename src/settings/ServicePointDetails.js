@@ -21,7 +21,15 @@ import ExceptionWrapper from './OpenExceptionalForm/ExceptionWrapper';
 import {
   permissions,
   ALL_DAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
+  SUNDAY,
 } from './constants';
+import { getWeekDays } from './utils/time';
 
 class ServicePointDetails extends React.Component {
   constructor(props) {
@@ -50,6 +58,8 @@ class ServicePointDetails extends React.Component {
       nextPeriods: [],
       isPeriodsPending: true,
     };
+
+    moment.locale(props.intl.locale);
   }
 
   componentDidMount() {
@@ -187,7 +197,8 @@ class ServicePointDetails extends React.Component {
   render() {
     let currentP;
     let currentPTimes;
-    const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    const weekDays = getWeekDays(this.props.intl.locale);
+
     if (this.state.currentPeriod) {
       currentP =
         <div data-test-service-point-current-period>
@@ -225,6 +236,37 @@ class ServicePointDetails extends React.Component {
           />
         </div>;
 
+      const weekDaysData = {
+        [SUNDAY]: {
+          columnTestProp: 'sunday',
+          labelId: 'sunDayShort',
+        },
+        [MONDAY]: {
+          columnTestProp: 'monday',
+          labelId: 'monDayShort',
+        },
+        [TUESDAY]: {
+          columnTestProp: 'tuesday',
+          labelId: 'tueDayShort',
+        },
+        [WEDNESDAY]: {
+          columnTestProp: 'wednesday',
+          labelId: 'wedDayShort',
+        },
+        [THURSDAY]: {
+          columnTestProp: 'thursday',
+          labelId: 'thuDayShort',
+        },
+        [FRIDAY]: {
+          columnTestProp: 'friday',
+          labelId: 'friDayShort',
+        },
+        [SATURDAY]: {
+          columnTestProp: 'saturday',
+          labelId: 'satDayShort',
+        },
+      };
+
       currentPTimes =
         <Row>
           <Col xs>
@@ -232,69 +274,26 @@ class ServicePointDetails extends React.Component {
               data-test-service-point-current-period-times
               className="seven-cols"
             >
-              <div
-                data-test-sunday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.sunDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[0])}
-                />
-              </div>
-              <div
-                data-test-monday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.monDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[1])}
-                />
-              </div>
-              <div
-                data-test-tuesday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.tueDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[2])}
-                />
-              </div>
-              <div
-                data-test-wednesday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.wedDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[3])}
-                />
-              </div>
-              <div
-                data-test-thursday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.thuDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[4])}
-                />
-              </div>
-              <div
-                data-test-friday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.friDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[5])}
-                />
-              </div>
-              <div
-                data-test-saturday
-                className="col-sm-1"
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-calendar.satDayShort" />}
-                  value={this.getWeekdayOpeningHours(weekdays[6])}
-                />
-              </div>
+              {weekDays.map((weekDay) => {
+                const weekDayData = weekDaysData[weekDay];
+                const columnTestProp = `data-test-${weekDayData.columnTestProp}`;
+                const columnDynamicProps = {
+                  [columnTestProp]: true,
+                };
+
+                return (
+                  <div
+                    key={weekDay}
+                    className="col-sm-1"
+                    {...columnDynamicProps}
+                  >
+                    <KeyValue
+                      label={<FormattedMessage id={`ui-calendar.${weekDayData.labelId}`} />}
+                      value={this.getWeekdayOpeningHours(weekDay)}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </Col>
         </Row>;
