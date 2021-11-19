@@ -2,18 +2,19 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import {
-  Calendar,
-  momentLocalizer,
-} from 'react-big-calendar';
+import { Calendar } from 'react-big-calendar';
+import { injectIntl } from 'react-intl';
 
-import { ALL_DAY } from '../constants';
+import {
+  ALL_DAY,
+  localizer,
+} from '../constants';
 import CalendarUtils from '../../CalendarUtils';
 import EventComponent from '../../components/EventComponent';
+import { getWeekDays } from '../utils/time';
 
 import style from './BigCalendarWrapper.css';
 
-const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 class BigCalendarWrapper extends PureComponent {
@@ -21,6 +22,7 @@ class BigCalendarWrapper extends PureComponent {
     onCalendarChange: PropTypes.func.isRequired,
     periodEvents: PropTypes.arrayOf(PropTypes.object),
     eventsChange: PropTypes.func,
+    intl: PropTypes.object,
   };
 
   constructor(props) {
@@ -30,16 +32,19 @@ class BigCalendarWrapper extends PureComponent {
       eventIdCounter: 0,
       events: [],
     };
+
+    moment.locale(props.intl.locale);
   }
 
   componentDidMount() {
     const {
       periodEvents,
       eventsChange,
+      intl,
     } = this.props;
 
     if (periodEvents) {
-      const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+      const weekDays = getWeekDays(intl.locale);
       const events = [];
       let eventId = 0;
 
@@ -49,13 +54,11 @@ class BigCalendarWrapper extends PureComponent {
           openingHour,
         },
         weekdays: {
-          day: weekday,
+          day: weekDay,
         },
       }) => {
         const event = {};
-        let eventDay = moment().startOf('week').toDate();
-
-        eventDay = moment(eventDay).add(weekdays.indexOf(weekday), 'day');
+        const eventDay = moment().startOf('week').add(weekDays.indexOf(weekDay), 'day');
         event.start = moment(eventDay);
         event.end = moment(eventDay);
         event.allDay = allDay;
@@ -229,4 +232,4 @@ class BigCalendarWrapper extends PureComponent {
     }
 }
 
-export default BigCalendarWrapper;
+export default injectIntl(BigCalendarWrapper);

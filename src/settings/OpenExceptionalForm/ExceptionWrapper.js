@@ -36,7 +36,7 @@ class ExceptionWrapper extends Component {
   static propTypes = {
     entries: PropTypes.arrayOf(PropTypes.object),
     onClose: PropTypes.func.isRequired,
-    intl: PropTypes.object
+    intl: PropTypes.object,
   };
 
   constructor(props) {
@@ -76,6 +76,8 @@ class ExceptionWrapper extends Component {
       tempStart: null,
       tempClose: null
     });
+
+    moment.locale(props.intl.locale);
   }
 
   UNSAFE_componentWillMount() {      // eslint-disable-line react/no-deprecated, camelcase

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import {
   Calendar,
-  momentLocalizer,
 } from 'react-big-calendar';
-
-const localizer = momentLocalizer(moment);
+import { localizer } from '../constants';
 
 class ExceptionalBigCalendar extends Component {
   static propTypes = {

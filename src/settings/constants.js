@@ -1,5 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+import { momentLocalizer } from 'react-big-calendar';
 
 export const colors = [
   '#3cb44b',
@@ -35,3 +37,13 @@ export const permissions = {
 export const ALL_DAY = <FormattedMessage id="ui-calendar.settings.allDay" />;
 
 export const MAX_RECORDS = '1000';
+
+export const localizer = momentLocalizer(moment);
+
+export const MONDAY = 'MONDAY';
+export const TUESDAY = 'TUESDAY';
+export const WEDNESDAY = 'WEDNESDAY';
+export const THURSDAY = 'THURSDAY';
+export const FRIDAY = 'FRIDAY';
+export const SATURDAY = 'SATURDAY';
+export const SUNDAY = 'SUNDAY';
