@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import RandomColor from 'randomcolor';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-import { isEmpty } from 'lodash';
+import {
+  isEmpty,
+} from 'lodash';
 
 import {
   Button,
@@ -994,21 +996,21 @@ class ExceptionWrapper extends Component {
         isServicePointSelected = true;
       }
     }
-    if (startDate === null || startDate === undefined || startDate === '') {
+    if (isEmpty(startDate)) {
       errorMessage = 'noStartDate';
-    } else if (endDate === null || endDate === undefined || endDate === '') {
+    } else if (isEmpty(endDate)) {
       errorMessage = 'noEndDate';
     } else if (moment(endDate)
       .toDate() < moment(startDate)
       .toDate()) {
       errorMessage = 'wrongStartEndDate';
-    } else if (name === null || name === undefined) {
+    } else if (isEmpty(name)) {
       errorMessage = 'noName';
     } else if (!isServicePointSelected) {
       errorMessage = 'noServicePointSelected';
-    } else if (startTime === null || startTime === undefined || startTime === '') {
+    } else if (isEmpty(startTime)) {
       errorMessage = 'noStartTime';
-    } else if (endTime === null || endTime === undefined || endTime === '') {
+    } else if (isEmpty(endTime)) {
       errorMessage = 'noEndTime';
     } else if (moment(endTime) < moment(startTime)) {
       errorMessage = 'endTimeBeforeStartTime';
