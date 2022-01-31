@@ -119,5 +119,6 @@
     "duplication": "El rango de fechas ingresado se superpone con otro calendario para este punto de servicio. Corrija el rango de fechas o ingrese las horas como excepciones.",
     "permission.all": "Configuración (calendario): puede crear, ver, editar y eliminar eventos del calendario",
     "permission.view": "Configuración (calendario): puede ver los eventos del calendario",
-    "permission.edit": "Configuración (calendario): puede crear, ver y editar eventos del calendario"
+    "permission.edit": "Configuración (calendario): puede crear, ver y editar eventos del calendario",
+    "noServicePoints": "No items to show"
 }

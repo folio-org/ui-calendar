@@ -119,5 +119,6 @@
     "duplication": "输入的日期范围与此服务点的另一个日历重叠。请更正日期范围或输入小时作为例外。",
     "permission.all": "设置（日历）：可以创建、查看、编辑和移除日历事件",
     "permission.view": "设置（日历）：可以查看日历事件",
-    "permission.edit": "设置（日历）：可以创建、查看和编辑日历事件"
+    "permission.edit": "设置（日历）：可以创建、查看和编辑日历事件",
+    "noServicePoints": "没有可显示的单件"
 }
