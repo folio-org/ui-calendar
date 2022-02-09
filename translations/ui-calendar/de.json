@@ -119,5 +119,6 @@
     "duplication": "Der eingegebene Datumsbereich überschneidet sich mit einem anderen Kalender für diese Servicestelle. Bitte den Datumsbereich korrigieren oder die Stunden als Ausnahmen eingeben.",
     "permission.all": "Einstellungen (Kalender): Kann Kalenderereignisse erstellen, anzeigen, bearbeiten und entfernen",
     "permission.view": "Einstellungen (Kalender): Kann Kalenderereignisse anzeigen",
-    "permission.edit": "Einstellungen (Kalender): Kann Kalenderereignisse erstellen, anzeigen und bearbeiten"
+    "permission.edit": "Einstellungen (Kalender): Kann Kalenderereignisse erstellen, anzeigen und bearbeiten",
+    "noServicePoints": "Keine Servicestellen zum Anzeigen"
 }
