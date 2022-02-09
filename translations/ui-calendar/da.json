@@ -119,5 +119,6 @@
     "duplication": "The date range entered overlaps with another calendar for this service point. Please correct the date range or enter the hours as exceptions.",
     "permission.all": "Indstillinger (Kalender): Kan oprette, se, redigere og fjerne kalenderbegivenheder",
     "permission.view": "Settings (Calendar): Can view calendar events",
-    "permission.edit": "Indstillinger (Kalender): Kan oprette, se og redigere kalenderbegivenheder"
+    "permission.edit": "Indstillinger (Kalender): Kan oprette, se og redigere kalenderbegivenheder",
+    "noServicePoints": "No items to show"
 }

@@ -119,5 +119,6 @@
     "duplication": "Wprowadzony zakres dat pokrywa się z innym kalendarzem dla tego punktu obsługi. Popraw zakres dat lub wprowadź godziny jako wyjątki.",
     "permission.all": "Ustawienia (Kalendarz): Można tworzyć, przeglądać, edytować i usuwać wydarzenia kalendarza.",
     "permission.view": "Ustawienia (Kalendarz): Możliwość przeglądania wydarzeń z kalendarza",
-    "permission.edit": "Ustawienia (Kalendarz): Można tworzyć, przeglądać i edytować wydarzenia kalendarza"
+    "permission.edit": "Ustawienia (Kalendarz): Można tworzyć, przeglądać i edytować wydarzenia kalendarza",
+    "noServicePoints": "No items to show"
 }

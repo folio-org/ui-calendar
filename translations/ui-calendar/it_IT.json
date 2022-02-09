@@ -119,5 +119,6 @@
     "duplication": "L'intervallo di date inserito si sovrappone per questo punto di servizio a un altro calendario. Correggi l'intervallo di date o inserisci le ore come eccezioni.",
     "permission.all": "Impostazioni (Calendario): Creare, visualizzare, modificare e rimuovere eventi del calendario",
     "permission.view": "Impostazioni (Calendar): può visualizzare eventi del calendario",
-    "permission.edit": "Impostazioni (Calendar): può creare, visualizzare e modificare eventi del calendario"
+    "permission.edit": "Impostazioni (Calendar): può creare, visualizzare e modificare eventi del calendario",
+    "noServicePoints": "No items to show"
 }
