@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "Opening hours",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
@@ -37,44 +37,50 @@
       {
         "permissionName": "ui-calendar.all",
         "displayName": "Settings (Calendar): Can create, view, edit, and remove calendar events",
-        "description": "User can create,edit, view, and remove calendar events",
+        "description": "User can create, edit, view, and remove calendar events",
         "subPermissions": [
-          "ui-calendar.edit",
-          "calendar.periods.item.delete"
+          "ui-calendar.create",
+          "ui-calendar.update",
+          "ui-calendar.delete"
         ],
         "visible": true
       },
       {
-        "permissionName": "settings.calendar.enabled",
-        "displayName": "Settings (Calendar): display list of settings pages",
+        "permissionName": "ui-calendar.create",
+        "displayName": "Settings (Calendar): Can create new calendars",
+        "description": "Can create calendar events, but not edit or remove them.",
         "subPermissions": [
-          "settings.enabled"
-        ]
+          "ui-calendar.view",
+          "modperms.calendar.create"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-calendar.update",
+        "displayName": "Settings (Calendar): Can edit existing calendars",
+        "description": "Can edit calendar events, but not create or remove them.",
+        "subPermissions": [
+          "ui-calendar.view",
+          "modperms.calendar.update"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-calendar.delete",
+        "displayName": "Settings (Calendar): Can delete existing calendars",
+        "description": "Can delete calendar events, but not create or edit them.",
+        "subPermissions": [
+          "ui-calendar.view",
+          "modperms.calendar.delete"
+        ],
+        "visible": true
       },
       {
         "permissionName": "ui-calendar.view",
-        "displayName": "Settings (Calendar): Can view calendar events",
-        "description": "Can view calendar events",
+        "displayName": "Settings (Calendar): Can view calendars",
+        "description": "Can create calendar events, but not edit or remove them.",
         "subPermissions": [
-          "configuration.entries.collection.get",
-          "inventory-storage.service-points.collection.get",
-          "calendar.opening-hours.collection.get",
-          "calendar.periods.collection.get",
-          "calendar.periods.item.get",
-          "module.calendar.enabled",
-          "settings.calendar.enabled"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "ui-calendar.edit",
-        "displayName": "Settings (Calendar): Can create, view, and edit calendar events",
-        "description": "Can edit calendar events. User cannot remove any calendar event.",
-        "subPermissions": [
-          "settings.calendar.enabled",
-          "ui-calendar.view",
-          "calendar.periods.item.post",
-          "calendar.periods.item.put"
+          "modperms.calendar.view"
         ],
         "visible": true
       }
