@@ -9,6 +9,7 @@
 * Use constant instead of hardcoded value for query limit. Refs UICAL-185.
 * Fix Calendar hours displayed off by one day in Regular hours Edit view. Refs UICAL-176.
 * User can save empty "Name" field in editing Exception Period page. Refs UICAL-179.
+* Check possible to run test. Refs UICIRC-764.
 
 ## [7.0.2] (https://github.com/folio-org/ui-calendar/tree/v7.0.2) (2021-11-12)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.1...v7.0.2)
