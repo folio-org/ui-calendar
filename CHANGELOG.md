@@ -1,6 +1,7 @@
 # Change history for ui-calendar
 
-## IN PROGRESS
+## [7.1.0] (https://github.com/folio-org/ui-calendar/tree/v7.1.0) (2022-02-24)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.2...v7.1.0)
 
 * Upgrade `@folio/react-intl-safe-html` for compatibility with `@folio/stripes` `v7`. Refs UICAL-173.
 * Improve grammar in pull request template. Refs UICAL-184.
