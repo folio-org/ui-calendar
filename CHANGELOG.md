@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## IN PROGRESS
+
+* Fix exceptional defaults for opening/closure. Refs UICAL-196
+
 ## [7.1.0] (https://github.com/folio-org/ui-calendar/tree/v7.1.0) (2022-02-24)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.2...v7.1.0)
 
