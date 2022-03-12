@@ -800,7 +800,7 @@ class ExceptionWrapper extends Component {
                     }
                   ],
                   allDay: allDay === undefined ? false : allDay,
-                  open: closed === undefined ? false : !closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  open: closed === undefined ? true : !closed,    // form asked for closed tag but backed expect open so closed state store the value for the backend
                 }
               }]
             };
@@ -810,10 +810,10 @@ class ExceptionWrapper extends Component {
         }
       } else if (exceptionalIds.length) {
         for (let i = 0; i < exceptionalIds.length; i++) {
-          const chekedId = exceptionalIds[i].servicePointId;
+          const checkedId = exceptionalIds[i].servicePointId;
           let action = 'POST';
           for (let j = 0; j < editorServicePoints.length; j++) {
-            if (editorServicePoints[j].id === chekedId) {
+            if (editorServicePoints[j].id === checkedId) {
               if (editorServicePoints[j].selected === false) {
                 action = 'DELETE';
               } else {
@@ -845,7 +845,7 @@ class ExceptionWrapper extends Component {
                     }
                   ],
                   allDay: allDay === undefined ? false : allDay,
-                  open: closed === undefined ? false : !closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  open: closed === undefined ? true : !closed,    // form asked for closed tag but backed expect open so closed state store the value for the backend
                 }
               }]
             };
@@ -867,12 +867,12 @@ class ExceptionWrapper extends Component {
                     }
                   ],
                   allDay: allDay === undefined ? false : allDay,
-                  open: closed === undefined ? false : !closed,    // form asked for closed tag but backed expect open so closed state store the velue for the backend
+                  open: closed === undefined ? true : !closed,    // form asked for closed tag but backed expect open so closed state store the value for the backend
                 }
               }]
             };
-            const modifyPromisPost = periods.POST(modifyExceptionPost);
-            promises.push(modifyPromisPost);
+            const modifyPromisePost = periods.POST(modifyExceptionPost);
+            promises.push(modifyPromisePost);
           }
         }
       }
