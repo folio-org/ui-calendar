@@ -123,8 +123,8 @@ class OpeningPeriodFormWrapper extends Component {
     });
   }
 
-  catchOverlappedEvents = async err => {
-    if (err.status === 422) {
+  catchOverlappedEvents = async (err) => {
+    if (err.status >= 400) {
       const response = await err.json();
       const errorMessage = response.errors[0].message;
 
@@ -309,7 +309,7 @@ class OpeningPeriodFormWrapper extends Component {
           dismissible
           onClose={this.closeErrorModal}
           open
-          label={<FormattedMessage id="ui-calendar.invalidData" />}
+          label={<FormattedMessage id="ui-calendar.saveError" />}
           footer={footer}
         >
           <div data-test-error-modal-content>
