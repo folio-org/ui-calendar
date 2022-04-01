@@ -120,5 +120,5 @@
     "permission.all": "Configurações (Calendário): Pode criar, visualizar, editar e remover eventos de calendário",
     "permission.view": "Configurações (Calendário): Pode ver eventos do calendário",
     "permission.edit": "Configurações (Calendário): Pode criar, visualizar e editar eventos de calendário",
-    "noServicePoints": "No items to show"
+    "noServicePoints": "Nenhum item para mostrar"
 }
