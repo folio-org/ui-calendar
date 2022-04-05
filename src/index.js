@@ -1,10 +1,7 @@
-import React from 'react';
-import { hot } from 'react-hot-loader';
-import PropTypes from 'prop-types';
-import Settings from './settings';
-
-import '!style-loader!css-loader!./css/react-big-calendar.css'; // eslint-disable-line
-import '!style-loader!css-loader!./css/folio-calendar.css'; // eslint-disable-line
+import React from "react";
+import { hot } from "react-hot-loader";
+import PropTypes from "prop-types";
+import Settings from "./settings";
 
 class CalendarRouting extends React.Component {
   static propTypes = {
@@ -22,8 +19,7 @@ class CalendarRouting extends React.Component {
         <h2>Uh-oh!</h2>
         <p>
           How did you get to
-          {this.props.location.pathname}
-          ?
+          {this.props.location.pathname}?
         </p>
       </div>
     );

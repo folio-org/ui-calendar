@@ -1,37 +1,25 @@
-import React from 'react';
-import { useIntl, FormattedMessage } from 'react-intl';
-import { Settings } from '@folio/stripes/smart-components';
+import React from "react";
+import { useIntl, FormattedMessage } from "react-intl";
+import { Settings } from "@folio/stripes/smart-components";
 
-import LibraryHours from './LibraryHours';
+import CurrentAssignmentView from "./CurrentAssignmentView";
 
-const pages = [
-  {
-    route: 'library-hours',
-    labelKey: 'ui-calendar.settings.library_hours',
-    component: LibraryHours,
-  }
-];
-
-
-function getPages(pageDefinitions, intl) {
-  const routes = [];
-  pageDefinitions.forEach((page) => {
-    routes.push({
-      route: page.route,
-      label: intl.formatMessage({ id: page.labelKey }),
-      component: page.component,
-    });
-  });
-  return routes;
-}
-
-export default props => {
-  const intl = useIntl();
-
+export default (props) => {
   return (
     <Settings
       {...props}
-      pages={getPages(pages, intl)}
+      pages={[
+        {
+          route: "active",
+          label: "Current Assignments",
+          component: CurrentAssignmentView,
+        },
+        {
+          route: "calendars",
+          label: "All Calendars",
+          component: CurrentAssignmentView,
+        },
+      ]}
       paneTitle={<FormattedMessage id="ui-calendar.settings.calendar" />}
     />
   );
