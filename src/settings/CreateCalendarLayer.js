@@ -1,12 +1,44 @@
-import { Button, Layer, Pane, Paneset } from "@folio/stripes-components";
+import {
+  Button,
+  Layer,
+  Pane,
+  Icon,
+  Paneset,
+  PaneMenu,
+  AccordionSet,
+  Accordion,
+} from "@folio/stripes-components";
 
 export default function CreateCalendarLayer(props) {
   return (
-    <Layer isOpen={props.isOpen}>
+    <Layer contentLabel="Calendar creation form" isOpen={props.isOpen}>
       <Paneset isRoot>
-        <Pane defaultWidth="fill">
-          Content goes here
-          <Button onClick={props.onClose}>Dismiss</Button>
+        <Pane
+          paneTitle="Create new calendar"
+          defaultWidth="fill"
+          dismissible
+          onClose={props.onClose}
+          lastMenu={
+            <PaneMenu>
+              <Button
+                buttonStyle="primary"
+                marginBottom0
+                onClick={props.onClose}
+              >
+                Save
+              </Button>
+            </PaneMenu>
+          }
+        >
+          <AccordionSet>
+            <Accordion label="General information">
+              <ul>
+                <li>All</li>
+                <li>The</li>
+                <li>Items!</li>
+              </ul>
+            </Accordion>
+          </AccordionSet>
         </Pane>
       </Paneset>
     </Layer>
