@@ -1,6 +1,5 @@
 import {
   Button,
-  Icon,
   MultiColumnList,
   Pane,
   PaneMenu,
@@ -9,22 +8,25 @@ import React, { useRef, useState } from "react";
 import ErrorBoundary from "../ErrorBoundary";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 
-function objify(servicePoint, calendarName, startDate, endDate, currentStatus) {
+function objectify(
+  servicePoint,
+  calendarName,
+  startDate,
+  endDate,
+  currentStatus
+) {
   return {
     servicePoint,
-    calendarName:
-      calendarName === null ? (
-        <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
-      ) : (
-        calendarName
-      ),
+    calendarName: calendarName ?? (
+      <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
+    ),
     startDate,
     endDate,
     currentStatus,
   };
 }
 
-export default function CurrentAssignmentView(props) {
+export default function CurrentAssignmentView() {
   const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef(null);
 
@@ -39,32 +41,54 @@ export default function CurrentAssignmentView(props) {
               onClick={() => setShowCreateLayer(true)}
               buttonRef={showCreateLayerButtonRef}
             >
-              <Icon size="small" icon="plus-sign">
-                Create
-              </Icon>
+              Create
             </Button>
           </PaneMenu>
         }
         defaultWidth="fill"
-        paneTitle="Current Calendar Assignments"
+        paneTitle="Current calendar assignments"
       >
         <MultiColumnList
+          sortedColumn="servicePoint"
+          sortDirection="ascending"
+          onHeaderClick={() => ({})}
           columnMapping={{
             servicePoint: "Service point",
             calendarName: "Calendar",
-            startDate: "Start Date",
-            endDate: "End Date",
+            startDate: "Start date",
+            endDate: "End date",
             currentStatus: "Current status",
           }}
           contentData={[
-            objify(
+            objectify(
               "Service point 1",
-              "Spring Hours",
-              "March 2, 2022",
-              "May 31, 2022",
+              "2022 Spring Hours",
+              "01/02/2022",
+              "05/31/2022",
               "Open until 7pm"
             ),
-            objify("Service point 2", null, "", "", "Closed"),
+            objectify("Service point 2 (inactive)", null, "", "", "Closed"),
+            objectify(
+              "Service point 3",
+              "2022 Spring Hours",
+              "01/02/2022",
+              "05/31/2022",
+              "Open until 7pm"
+            ),
+            objectify(
+              "Service point 4",
+              "Sample with Exceptions",
+              "03/02/2022",
+              "05/31/2022",
+              "Closed (Sample Exception Name)"
+            ),
+            objectify(
+              "Service point long hours",
+              "24/5",
+              "01/02/2022",
+              "05/31/2022",
+              "Open until 9pm Friday"
+            ),
           ]}
         />
       </Pane>
