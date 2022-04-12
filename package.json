@@ -95,8 +95,8 @@
     "@folio/eslint-config-stripes": "^3.2.1",
     "@folio/stripes": "^7.0.0",
     "@folio/stripes-cli": "^2.0.0",
-    "@folio/stripes-core": "^8.0.0",
     "@folio/stripes-components": "^10.0.0",
+    "@folio/stripes-core": "^8.0.0",
     "@formatjs/cli": "^4.2.21",
     "babel-eslint": "^9.0.0",
     "babel-polyfill": "^6.26.0",
@@ -121,10 +121,13 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^3.1.0",
+    "@folio/stripes-final-form": "^6.0.1000003",
+    "fuse.js": "^6.5.3",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
     "randomcolor": "^0.5.3",
     "react-big-calendar": "^0.22.1",
+    "react-final-form": "^6.5.9",
     "redux-form": "^8.3.7"
   },
   "peerDependencies": {

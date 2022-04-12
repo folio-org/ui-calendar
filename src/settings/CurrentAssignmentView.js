@@ -83,7 +83,7 @@ export default function CurrentAssignmentView() {
               "Closed (Sample Exception Name)"
             ),
             objectify(
-              "Service point long hours",
+              "Service point 5 (overnight)",
               "24/5",
               "01/02/2022",
               "05/31/2022",

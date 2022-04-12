@@ -1,46 +1,42 @@
 import {
   Button,
+  HasCommand,
   Layer,
   Pane,
-  Icon,
-  Paneset,
   PaneMenu,
-  AccordionSet,
-  Accordion,
+  Paneset,
 } from "@folio/stripes-components";
+import CreateCalendarForm from "./CreateCalendarForm";
 
 export default function CreateCalendarLayer(props) {
   return (
-    <Layer contentLabel="Calendar creation form" isOpen={props.isOpen}>
-      <Paneset isRoot>
-        <Pane
-          paneTitle="Create new calendar"
-          defaultWidth="fill"
-          dismissible
-          onClose={props.onClose}
-          lastMenu={
-            <PaneMenu>
-              <Button
-                buttonStyle="primary"
-                marginBottom0
-                onClick={props.onClose}
-              >
-                Save
-              </Button>
-            </PaneMenu>
-          }
-        >
-          <AccordionSet>
-            <Accordion label="General information">
-              <ul>
-                <li>All</li>
-                <li>The</li>
-                <li>Items!</li>
-              </ul>
-            </Accordion>
-          </AccordionSet>
-        </Pane>
-      </Paneset>
-    </Layer>
+    <HasCommand
+      commands={[{ name: "cancel", handler: props.onClose, shortcut: "esc" }]}
+    >
+      <Layer contentLabel="Calendar creation form" isOpen={props.isOpen}>
+        <Paneset isRoot>
+          <Pane
+            paneTitle="Create new calendar"
+            defaultWidth="fill"
+            centerContent={true}
+            onClose={props.onClose}
+            dismissible
+            lastMenu={
+              <PaneMenu>
+                <Button
+                  buttonStyle="primary"
+                  marginBottom0
+                  onClick={props.onClose}
+                >
+                  Save
+                </Button>
+              </PaneMenu>
+            }
+          >
+            <CreateCalendarForm />
+          </Pane>
+        </Paneset>
+      </Layer>
+    </HasCommand>
   );
 }
