@@ -19,7 +19,6 @@ import {
   Modal
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
-import SafeHTMLMessage from '@folio/react-intl-safe-html' ;// eslint-disable-line
 
 import ServicePointSelector from './ServicePointSelector';
 import ExceptionalPeriodEditor from './ExceptionalPeriodEditor';
@@ -1247,10 +1246,7 @@ class ExceptionWrapper extends Component {
     let deleteModal = null;
     if (deleteQuestion !== null && deleteQuestion !== undefined && deleteQuestion === true) {
       const text =
-        <SafeHTMLMessage
-          id="ui-calendar.deleteQuestionException"
-          values={{ name }}
-        />;
+        <FormattedMessage id="ui-calendar.deleteQuestionException" />;
       deleteModal =
         <ConfirmationModal
           id="delete-confirmation"
@@ -1274,7 +1270,7 @@ class ExceptionWrapper extends Component {
           id="exite-confirmation"
           open={errorEditorClose}
           heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
-          message={<SafeHTMLMessage id="ui-calendar.exitQuestionMessage" />}
+          message={<FormattedMessage id="ui-calendar.exitQuestionMessage" />}
           onConfirm={() => {
             this.setState({
               errorEditorClose: false,
@@ -1312,7 +1308,7 @@ class ExceptionWrapper extends Component {
           id="exite-confirmation"
           open={errorExceptionExit}
           heading={<FormattedMessage id="ui-calendar.exitQuestionTitle" />}
-          message={<SafeHTMLMessage id="ui-calendar.exitQuestionMessage" />}
+          message={<FormattedMessage id="ui-calendar.exitQuestionMessage" />}
           onConfirm={() => {
             return this.props.onClose();
           }}
