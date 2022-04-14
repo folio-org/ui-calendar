@@ -4,7 +4,6 @@ import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
 
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { IfPermission } from '@folio/stripes/core';
 import {
   Button,
@@ -250,13 +249,13 @@ class OpeningPeriodFormWrapper extends Component {
     } = this.state;
 
     const confirmationMessageDelete = (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-calendar.deleteQuestionMessage"
         values={{ name }}
       />
     );
     const confirmationMessageExit = (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-calendar.exitQuestionMessage"
       />
     );
