@@ -1,13 +1,16 @@
-import { MultiSelection } from "@folio/stripes-components";
-import DefaultOptionFormatter from "@folio/stripes-components/lib/Selection/DefaultOptionFormatter";
-import Fuse from "fuse.js";
+import { MultiSelection, OptionSegment } from "@folio/stripes-components";
+import fuzzysort from "fuzzysort";
+import { useMemo } from "react";
 import { Field } from "react-final-form";
 
 export default function ServicePointAssignmentField(props) {
-  const fuse = new Fuse(props.servicePoints, {
-    keys: ["label"],
-    includeMatches: true,
-  });
+  const servicePointsForSearch = useMemo(
+    () =>
+      props.servicePoints.map((servicePoint) =>
+        fuzzysort.prepare(servicePoint.label)
+      ),
+    props.servicePoints
+  );
 
   return (
     <Field
@@ -15,60 +18,48 @@ export default function ServicePointAssignmentField(props) {
       component={MultiSelection}
       label="Service points"
       required
-      formatter={({ option }) => <DefaultOptionFormatter option={option} />}
+      formatter={({ option, searchTerm }) => {
+        if (typeof searchTerm !== "string" || searchTerm === "") {
+          return <OptionSegment>{option.label}</OptionSegment>;
+        }
+
+        const result = fuzzysort.single(searchTerm, option.label);
+        return (
+          <OptionSegment>
+            {fuzzysort.highlight(result, (m, i) => (
+              <strong key={i}>{m}</strong>
+            ))}
+          </OptionSegment>
+        );
+      }}
       filter={(filterText, list) => {
-        if (filterText === "") {
+        if (typeof filterText !== "string" || filterText === "") {
           return { renderedItems: list, exactMatch: false };
         }
 
-        const results = fuse.search(filterText);
-        const renderedItems = results.map((result) => {
-          const label = result.item.label;
-          debugger;
-
-          let nextUnparsed = 0;
-          const sets = [];
-          result.matches[0].indices.forEach(([start, end]) => {
-            if (nextUnparsed < start) {
-              sets.push({ start: nextUnparsed, end: start - 1, match: false });
-            }
-            sets.push({ start, end, match: true });
-            nextUnparsed = end + 1;
-          });
-          if (nextUnparsed < label.length()) {
-            sets.push({
-              start: nextUnparsed,
-              end: label.length() - 1,
-            });
+        const results = fuzzysort.go(filterText, servicePointsForSearch);
+        // score descending, then name ascending
+        // fixes "service point 1".."service point 4" etc having undefined order
+        results.sort((a, b) => {
+          if (a.score === b.score) {
+            return a.target.localeCompare(b.target);
           }
-
-          return {
-            label: (
-              <>
-                {sets.map((set, i) => {
-                  if (set.match) {
-                    return (
-                      <strong key={i}>
-                        {label.substring(set.start, set.end + 1)}
-                      </strong>
-                    );
-                  } else {
-                    return (
-                      <span key={i}>
-                        {label.substring(set.start, set.end + 1)}
-                      </span>
-                    );
-                  }
-                })}
-              </>
-            ),
-          };
+          return -(a.score - b.score);
         });
 
         return {
-          renderedItems,
+          renderedItems: results.map((result) => ({
+            label: result.target,
+          })),
           exactMatch: false,
         };
+      }}
+      itemToString={(servicePoint) => {
+        if (typeof servicePoint === "object" && servicePoint !== null) {
+          return servicePoint.label;
+        } else {
+          return "";
+        }
       }}
       dataOptions={props.servicePoints}
     />

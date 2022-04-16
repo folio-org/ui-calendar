@@ -58,9 +58,9 @@ export default function CreateCalendarForm() {
               </Row>
               <ServicePointAssignmentField servicePoints={SERVICE_POINTS} />
             </Accordion>
-            <Accordion label="Gene12ral information"></Accordion>
-            <Accordion label="Gene23al information"></Accordion>
-            <Accordion label="Gene34al information"></Accordion>
+            <Accordion label="Gene12ral information">blank</Accordion>
+            <Accordion label="Gene23al information">blank</Accordion>
+            <Accordion label="Gene34al information">blank</Accordion>
           </AccordionSet>
         )}
       </Form>
