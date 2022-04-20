@@ -1,10 +1,12 @@
 import {
   Accordion,
   AccordionSet,
+  Button,
   Col,
   Datepicker as DateField,
   ExpandAllButton,
   IconButton,
+  Layout,
   MultiColumnList,
   Row,
   Select,
@@ -64,6 +66,7 @@ export default function CreateCalendarForm() {
             </Accordion>
             <Accordion label="Hours of Operation">
               <MultiColumnList
+                interactive={false}
                 onHeaderClick={() => ({})}
                 columnMapping={{
                   status: "Status",
@@ -72,6 +75,14 @@ export default function CreateCalendarForm() {
                   endDay: "End day",
                   endTime: "End time",
                   actions: "Actions",
+                }}
+                columnWidths={{
+                  status: "10%",
+                  startDay: "20%",
+                  startTime: "20%",
+                  endDay: "20%",
+                  endTime: "20%",
+                  actions: "10%",
                 }}
                 contentData={[
                   {
@@ -104,9 +115,7 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
-                    ),
+                    startTime: <TimeField usePortal marginBottom0 />,
                     endDay: (
                       <Select
                         portal={document.getElementById("OverlayContainer")}
@@ -124,10 +133,12 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    endTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    endTime: <TimeField usePortal marginBottom0 />,
+                    actions: (
+                      <Layout className="centered">
+                        <IconButton icon="trash" />
+                      </Layout>
                     ),
-                    actions: <IconButton icon="trash" />,
                   },
                   {
                     status: (
@@ -159,9 +170,7 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
-                    ),
+                    startTime: <TimeField usePortal marginBottom0 />,
                     endDay: (
                       <Select
                         portal={document.getElementById("OverlayContainer")}
@@ -179,10 +188,12 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    endTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    endTime: <TimeField usePortal marginBottom0 />,
+                    actions: (
+                      <Layout className="centered">
+                        <IconButton icon="trash" />
+                      </Layout>
                     ),
-                    actions: <IconButton icon="trash" />,
                   },
                   {
                     status: (
@@ -214,9 +225,7 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
-                    ),
+                    startTime: <TimeField usePortal marginBottom0 />,
                     endDay: (
                       <Select
                         portal={document.getElementById("OverlayContainer")}
@@ -234,10 +243,12 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    endTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    endTime: <TimeField usePortal marginBottom0 />,
+                    actions: (
+                      <Layout className="centered">
+                        <IconButton icon="trash" />
+                      </Layout>
                     ),
-                    actions: <IconButton icon="trash" />,
                   },
                   {
                     status: (
@@ -269,9 +280,7 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
-                    ),
+                    startTime: <TimeField usePortal marginBottom0 />,
                     endDay: (
                       <Select
                         portal={document.getElementById("OverlayContainer")}
@@ -289,10 +298,12 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    endTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    endTime: <TimeField usePortal marginBottom0 />,
+                    actions: (
+                      <Layout className="centered">
+                        <IconButton icon="trash" />
+                      </Layout>
                     ),
-                    actions: <IconButton icon="trash" />,
                   },
                   {
                     status: (
@@ -324,9 +335,7 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
-                    ),
+                    startTime: <TimeField usePortal marginBottom0 />,
                     endDay: (
                       <Select
                         portal={document.getElementById("OverlayContainer")}
@@ -344,11 +353,14 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    endTime: (
-                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    endTime: <TimeField usePortal marginBottom0 />,
+                    actions: (
+                      <Layout className="centered">
+                        <IconButton icon="trash" />
+                      </Layout>
                     ),
-                    actions: <IconButton icon="trash" />,
                   },
+                  { status: <Button marginBottom0>Add row</Button> },
                 ]}
               />
             </Accordion>
