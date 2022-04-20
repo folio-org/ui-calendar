@@ -4,8 +4,12 @@ import {
   Col,
   Datepicker as DateField,
   ExpandAllButton,
+  IconButton,
+  MultiColumnList,
   Row,
+  Select,
   TextField,
+  Timepicker as TimeField,
 } from "@folio/stripes-components";
 import { Field, Form } from "react-final-form";
 import ServicePointAssignmentField from "./ServicePointAssignmentField";
@@ -58,9 +62,297 @@ export default function CreateCalendarForm() {
               </Row>
               <ServicePointAssignmentField servicePoints={SERVICE_POINTS} />
             </Accordion>
-            <Accordion label="Gene12ral information">blank</Accordion>
-            <Accordion label="Gene23al information">blank</Accordion>
-            <Accordion label="Gene34al information">blank</Accordion>
+            <Accordion label="Hours of Operation">
+              <MultiColumnList
+                onHeaderClick={() => ({})}
+                columnMapping={{
+                  status: "Status",
+                  startDay: "Start day",
+                  startTime: "Start time",
+                  endDay: "End day",
+                  endTime: "End time",
+                  actions: "Actions",
+                }}
+                contentData={[
+                  {
+                    status: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "open", label: "Open" },
+                          { value: "closed", label: "Closed" },
+                        ]}
+                      />
+                    ),
+                    startDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    startTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    endDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    endTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    actions: <IconButton icon="trash" />,
+                  },
+                  {
+                    status: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "open", label: "Open" },
+                          { value: "closed", label: "Closed" },
+                        ]}
+                      />
+                    ),
+                    startDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    startTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    endDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    endTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    actions: <IconButton icon="trash" />,
+                  },
+                  {
+                    status: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "open", label: "Open" },
+                          { value: "closed", label: "Closed" },
+                        ]}
+                      />
+                    ),
+                    startDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    startTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    endDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    endTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    actions: <IconButton icon="trash" />,
+                  },
+                  {
+                    status: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "open", label: "Open" },
+                          { value: "closed", label: "Closed" },
+                        ]}
+                      />
+                    ),
+                    startDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    startTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    endDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    endTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    actions: <IconButton icon="trash" />,
+                  },
+                  {
+                    status: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "open", label: "Open" },
+                          { value: "closed", label: "Closed" },
+                        ]}
+                      />
+                    ),
+                    startDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    startTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    endDay: (
+                      <Select
+                        portal={document.getElementById("OverlayContainer")}
+                        fullWidth
+                        marginBottom0
+                        dataOptions={[
+                          { value: "", label: "" },
+                          { value: "n", label: "Sunday" },
+                          { value: "m", label: "Monday" },
+                          { value: "t", label: "Tuesday" },
+                          { value: "w", label: "Wednesday" },
+                          { value: "r", label: "Thursday" },
+                          { value: "f", label: "Friday" },
+                          { value: "s", label: "Saturday" },
+                        ]}
+                      />
+                    ),
+                    endTime: (
+                      <TimeField usePortal placement="bottom" marginBottom0 />
+                    ),
+                    actions: <IconButton icon="trash" />,
+                  },
+                ]}
+              />
+            </Accordion>
+            <Accordion label="Exceptions">blank</Accordion>
           </AccordionSet>
         )}
       </Form>
