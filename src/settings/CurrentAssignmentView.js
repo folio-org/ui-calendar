@@ -6,27 +6,11 @@ import {
 } from "@folio/stripes-components";
 import React, { useRef, useState } from "react";
 import ErrorBoundary from "../ErrorBoundary";
-import CalendarSettings, { SettingPaneSizeContext } from "./CalendarSettings";
+import { SettingPaneSizeContext } from "./CalendarSettings";
+import * as CalendarUtils from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import InfoPane from "./InfoPane";
-
-function objectify(
-  servicePoint,
-  calendarName,
-  startDate,
-  endDate,
-  currentStatus
-) {
-  return {
-    servicePoint,
-    calendarName: calendarName ?? (
-      <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
-    ),
-    startDate,
-    endDate,
-    currentStatus,
-  };
-}
+import * as MockConstants from "./MockConstants";
 
 /** Information used for an empty row, to prevent it displaying or highlighting */
 const EMPTY_ROW_INFO = {
@@ -44,6 +28,45 @@ export default function CurrentAssignmentView() {
   });
   const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef(null);
+
+  const rows = MockConstants.SERVICE_POINT_LIST.map((servicePoint) => {
+    const calendars = MockConstants.CALENDARS.filter(
+      (calendar) =>
+        MockConstants.MOCKED_DATE_OBJ.isBetween(
+          calendar.startDate,
+          calendar.endDate,
+          "day",
+          "[]"
+        ) && calendar.servicePoints.includes(servicePoint.label)
+    );
+    if (calendars.length === 0) {
+      return {
+        servicePoint: servicePoint.label.concat(
+          servicePoint.inactive ? " (inactive)" : ""
+        ),
+        calendarName: (
+          <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
+        ),
+        startDate: "",
+        endDate: "",
+        currentStatus: "Closed",
+        calendar: null,
+      };
+    }
+    return {
+      servicePoint: servicePoint.label.concat(
+        servicePoint.inactive ? " (inactive)" : ""
+      ),
+      calendarName: calendars[0].name,
+      startDate: calendars[0].startDate,
+      endDate: calendars[0].endDate,
+      currentStatus: CalendarUtils.getStatus(
+        MockConstants.MOCKED_DATE_TIME_OBJ,
+        calendars[0]
+      ),
+      calendar: calendars[0],
+    };
+  });
 
   return (
     <ErrorBoundary>
@@ -77,43 +100,8 @@ export default function CurrentAssignmentView() {
                   endDate: "End date",
                   currentStatus: "Current status",
                 }}
-                contentData={[
-                  objectify(
-                    "Service point 1",
-                    "2022 Spring Hours",
-                    "01/02/2022",
-                    "05/31/2022",
-                    "Open until 7pm"
-                  ),
-                  objectify(
-                    "Service point 2 (inactive)",
-                    null,
-                    "",
-                    "",
-                    "Closed"
-                  ),
-                  objectify(
-                    "Service point 3",
-                    "2022 Spring Hours",
-                    "01/02/2022",
-                    "05/31/2022",
-                    "Open until 7pm"
-                  ),
-                  objectify(
-                    "Service point 4",
-                    "Sample with Exceptions",
-                    "03/02/2022",
-                    "05/31/2022",
-                    "Closed (Sample Exception Name)"
-                  ),
-                  objectify(
-                    "Service point 5 (overnight)",
-                    "24/5",
-                    "01/02/2022",
-                    "05/31/2022",
-                    "Open until 9pm Friday"
-                  ),
-                ]}
+                contentData={rows}
+                rowMetadata={["calendar"]}
                 isSelected={({ item }) => {
                   return (
                     infoPaneStatus.displayed &&

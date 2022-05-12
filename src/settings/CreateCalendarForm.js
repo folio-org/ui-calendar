@@ -88,7 +88,7 @@ export default function CreateCalendarForm() {
               </Row>
               <ServicePointAssignmentField servicePoints={SERVICE_POINTS} />
             </Accordion>
-            <Accordion label="Hours of Operation">
+            <Accordion label="Hours of operation">
               <MultiColumnList
                 interactive={false}
                 onHeaderClick={() => ({})}
@@ -163,18 +163,18 @@ export default function CreateCalendarForm() {
                 columnMapping={{
                   name: "Name",
                   status: "Status",
-                  startDay: "Start day",
+                  startDate: "Start date",
                   startTime: "Start time",
-                  endDay: "End day",
+                  endDate: "End date",
                   endTime: "End time",
                   actions: "Actions",
                 }}
                 columnWidths={{
                   name: "22%",
                   status: "12%",
-                  startDay: "15%",
+                  startDate: "15%",
                   startTime: "15%",
-                  endDay: "15%",
+                  endDate: "15%",
                   endTime: "15%",
                   actions: "6%",
                 }}
@@ -193,7 +193,7 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startDay: (
+                    startDate: (
                       <Layout class="flex flex-direction-column">
                         <DateField usePortal marginBottom0 />
                         <Layout class="marginTopHalf" />
@@ -211,7 +211,7 @@ export default function CreateCalendarForm() {
                         <TimeField usePortal marginBottom0 />
                       </Layout>
                     ),
-                    endDay: (
+                    endDate: (
                       <Layout class="flex flex-direction-column">
                         <DateField usePortal marginBottom0 />
                         <Layout class="marginTopHalf" />
@@ -250,9 +250,9 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startDay: <DateField usePortal marginBottom0 />,
+                    startDate: <DateField usePortal marginBottom0 />,
                     startTime: <TimeField usePortal marginBottom0 />,
-                    endDay: <DateField usePortal marginBottom0 />,
+                    endDate: <DateField usePortal marginBottom0 />,
                     endTime: <TimeField usePortal marginBottom0 />,
                     actions: (
                       <Layout className="full flex flex-direction-row centerContent">
@@ -275,8 +275,8 @@ export default function CreateCalendarForm() {
                         ]}
                       />
                     ),
-                    startDay: <DateField usePortal marginBottom0 />,
-                    endDay: <DateField usePortal marginBottom0 />,
+                    startDate: <DateField usePortal marginBottom0 />,
+                    endDate: <DateField usePortal marginBottom0 />,
                     actions: (
                       <Layout className="full flex flex-direction-row centerContent">
                         <IconButton
