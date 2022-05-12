@@ -158,7 +158,7 @@ export default function CreateCalendarForm() {
                 interactive={false}
                 onHeaderClick={() => ({})}
                 getCellClass={(defaultClass) =>
-                  `${defaultClass} flex-align-items-start`
+                  `${defaultClass} flex-align-start`
                 }
                 columnMapping={{
                   name: "Name",

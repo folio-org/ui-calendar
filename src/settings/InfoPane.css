@@ -1,0 +1,25 @@
+.weekday-cell {
+  align-items: start;
+}
+
+.hours-cell {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+}
+.hours-cell p {
+  margin: 0;
+  padding: 5px 10px;
+}
+.hours-cell p:not(:first-child) {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.closed {
+  font-style: italic;
+  color: grey;
+}
+
+.hidden {
+  display: none;
+}

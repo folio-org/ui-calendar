@@ -14,7 +14,7 @@ const dayjsCal = dayjs
   .extend(isSameOrBefore)
   .extend(localizedFormat);
 
-const WEEKDAYS = {
+export const WEEKDAYS = {
   SUNDAY: 0,
   MONDAY: 1,
   TUESDAY: 2,
@@ -23,7 +23,16 @@ const WEEKDAYS = {
   FRIDAY: 5,
   SATURDAY: 6,
 };
-const WEEKDAY_STRINGS = {
+export const WEEKDAY_INDEX = [
+  "SUNDAY",
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+];
+export const WEEKDAY_STRINGS = {
   SUNDAY: "Sunday",
   MONDAY: "Monday",
   TUESDAY: "Tuesday",
@@ -32,6 +41,23 @@ const WEEKDAY_STRINGS = {
   FRIDAY: "Friday",
   SATURDAY: "Saturday",
 };
+
+export function getWeekdayIndexRange(start, end) {
+  let startIndex = WEEKDAYS[start];
+  const endIndex = WEEKDAYS[end];
+
+  const days = [startIndex];
+  while (startIndex != endIndex) {
+    startIndex = (startIndex + 1) % 7;
+    days.push(startIndex);
+  }
+
+  return days;
+}
+
+export function getWeekdayRange(start, end) {
+  return getWeekdayIndexRange(start, end).map((i) => WEEKDAY_INDEX[i]);
+}
 
 export function getRelativeDateTime(date, referenceDate) {
   return dayjsCal(dayjs(date).toISOString()).calendar(referenceDate, {
