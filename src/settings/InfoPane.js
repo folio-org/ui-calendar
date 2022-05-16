@@ -353,11 +353,8 @@ export default function InfoPane(props) {
             *&nbsp;indicates next day
           </p>
           <p className={containsFullOvernightSpans(hours) ? "" : "hidden"}>
-            &ndash;&nbsp;indicates that the service point remained open from the
-            previous day or to image.png next day
-            {
-              // TODO: make this not sound awful
-            }
+            &ndash;&nbsp;indicates that the service point was already open or
+            does not close
           </p>
         </Accordion>
         <Accordion label="Exceptional Openings">

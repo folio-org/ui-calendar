@@ -161,7 +161,7 @@ export const CALENDARS = [
   },
   {
     servicePoints: ["Service point 5"],
-    name: "24-hour Calendar",
+    name: "24-Hour Calendar",
     startDate: "2022-05-01",
     endDate: "2022-08-01",
     openings: [
