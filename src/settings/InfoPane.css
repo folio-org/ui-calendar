@@ -1,4 +1,4 @@
-.weekday-cell {
+.day-cell {
   align-items: start;
 }
 
@@ -11,8 +11,8 @@
   margin: 0;
   padding: 5px 10px;
 }
-.hours-cell p:not(:first-child) {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+.hours-cell p:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .closed {
