@@ -1,8 +1,9 @@
 import {
   Button,
+  Icon,
+  MenuSection,
   MultiColumnList,
   Pane,
-  PaneMenu,
 } from "@folio/stripes-components";
 import React, { useRef, useState } from "react";
 import ErrorBoundary from "../ErrorBoundary";
@@ -21,7 +22,7 @@ const EMPTY_ROW_INFO = {
   currentStatus: null,
 };
 
-export default function CurrentAssignmentView() {
+export default function AllCalendarView() {
   const [infoPaneStatus, setInfoPaneStatus] = useState({
     displayed: false,
     info: EMPTY_ROW_INFO,
@@ -29,42 +30,17 @@ export default function CurrentAssignmentView() {
   const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef(null);
 
-  const rows = MockConstants.SERVICE_POINT_LIST.map((servicePoint) => {
-    const calendars = MockConstants.CALENDARS.filter(
-      (calendar) =>
-        MockConstants.MOCKED_DATE_OBJ.isBetween(
-          calendar.startDate,
-          calendar.endDate,
-          "day",
-          "[]"
-        ) && calendar.servicePoints.includes(servicePoint.label)
-    );
-    if (calendars.length === 0) {
-      return {
-        servicePoint: servicePoint.label.concat(
-          servicePoint.inactive ? " (inactive)" : ""
-        ),
-        calendarName: (
-          <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
-        ),
-        startDate: "",
-        endDate: "",
-        currentStatus: "Closed",
-        calendar: null,
-      };
-    }
+  const rows = MockConstants.CALENDARS.map((calendar) => {
     return {
-      servicePoint: servicePoint.label.concat(
-        servicePoint.inactive ? " (inactive)" : ""
+      name: calendar.name,
+      startDate: calendar.startDate,
+      endDate: calendar.endDate,
+      assignments: calendar.servicePoints.length ? (
+        calendar.servicePoints.join(", ")
+      ) : (
+        <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
       ),
-      calendarName: calendars[0].name,
-      startDate: calendars[0].startDate,
-      endDate: calendars[0].endDate,
-      currentStatus: CalendarUtils.getStatus(
-        MockConstants.MOCKED_DATE_TIME_OBJ,
-        calendars[0]
-      ),
-      calendar: calendars[0],
+      calendar,
     };
   });
 
@@ -74,51 +50,45 @@ export default function CurrentAssignmentView() {
         {({ setSmaller: setSmallerNavPane }) => (
           <>
             <Pane
-              lastMenu={
-                <PaneMenu>
-                  <Button
-                    buttonStyle="primary"
-                    marginBottom0
-                    onClick={() => setShowCreateLayer(true)}
-                    buttonRef={showCreateLayerButtonRef}
-                  >
-                    New
-                  </Button>
-                </PaneMenu>
-              }
               defaultWidth={infoPaneStatus.displayed ? "20%" : "fill"}
-              paneTitle="Current calendar assignments"
+              paneTitle="All calendars"
+              actionMenu={({ onToggle }) => (
+                <>
+                  <MenuSection label="Actions">
+                    <Button buttonStyle="dropdownItem" onClick={onToggle}>
+                      <Icon size="small" icon="plus-sign">
+                        New
+                      </Icon>
+                    </Button>
+                    <Button buttonStyle="dropdownItem" onClick={onToggle}>
+                      <Icon size="small" icon="trash">
+                        Purge old calendars
+                      </Icon>
+                    </Button>
+                  </MenuSection>
+                </>
+              )}
             >
               <MultiColumnList
                 sortedColumn="servicePoint"
                 sortDirection="ascending"
                 onHeaderClick={() => ({})}
                 columnMapping={{
-                  servicePoint: "Service point",
-                  calendarName: "Calendar name",
+                  name: "Calendar name",
                   startDate: "Start date",
                   endDate: "End date",
-                  currentStatus: "Current status",
+                  assignments: "Assignments",
                 }}
                 contentData={rows}
                 rowMetadata={["calendar"]}
                 isSelected={({ item }) => {
                   return (
                     infoPaneStatus.displayed &&
-                    item.servicePoint === infoPaneStatus.info.servicePoint
+                    item.name === infoPaneStatus.info.name
                   );
                 }}
                 onRowClick={(_e, info) => {
-                  if (info.startDate === "") {
-                    // no cal assigned
-                    setSmallerNavPane(false);
-                    setInfoPaneStatus({
-                      displayed: false,
-                      info: EMPTY_ROW_INFO,
-                    });
-                  } else if (
-                    info.servicePoint === infoPaneStatus.info.servicePoint
-                  ) {
+                  if (info.name === infoPaneStatus.info.name) {
                     // toggle
                     setSmallerNavPane(!infoPaneStatus.displayed);
                     setInfoPaneStatus({

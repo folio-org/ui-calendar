@@ -4,12 +4,12 @@ import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-export const MOCKED_DATE = "2022-05-13";
+export const MOCKED_DATE = "2022-05-17";
 export const MOCKED_DATE_OBJ = dayjs
   .extend(isSameOrAfter)
   .extend(isSameOrBefore)
   .extend(isBetween)(/* .extend(devHelper) */ MOCKED_DATE);
-export const MOCKED_DATE_TIME = "2022-05-13 14:01:00";
+export const MOCKED_DATE_TIME = "2022-05-17 02:01:00";
 export const MOCKED_DATE_TIME_OBJ = dayjs
   .extend(isSameOrAfter)
   .extend(isSameOrBefore)
@@ -24,6 +24,22 @@ export const SERVICE_POINT_LIST = [
 ];
 
 export const CALENDARS = [
+  {
+    servicePoints: ["Service point 1", "Service point 3"],
+    name: "2022 Spring Hours (1,3)",
+    startDate: "2022-01-01",
+    endDate: "2022-04-30",
+    openings: [],
+    exceptions: [],
+  },
+  {
+    servicePoints: ["Service point 4", "Service point 5 (overnight)"],
+    name: "2022 Spring Hours (4,5)",
+    startDate: "2022-01-01",
+    endDate: "2022-04-30",
+    openings: [],
+    exceptions: [],
+  },
   {
     servicePoints: ["Service point 1", "Service point 3"],
     name: "2022 Summer Hours",
@@ -161,7 +177,7 @@ export const CALENDARS = [
   },
   {
     servicePoints: ["Service point 5"],
-    name: "24-Hour Calendar",
+    name: "24-Hour Summer Calendar",
     startDate: "2022-05-01",
     endDate: "2022-08-01",
     openings: [
