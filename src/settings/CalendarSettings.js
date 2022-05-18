@@ -32,7 +32,7 @@ export default function CalendarSettings(props) {
             component: CurrentAssignmentView,
           },
           {
-            route: "calendars",
+            route: "all",
             label: "All calendars",
             component: AllCalendarView,
           },
