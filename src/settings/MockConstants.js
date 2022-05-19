@@ -21,6 +21,7 @@ export const SERVICE_POINT_LIST = [
   { label: "Service point 3", inactive: false },
   { label: "Service point 4", inactive: false },
   { label: "Service point 5", inactive: false },
+  { label: "Online", inactive: false },
 ];
 
 export const CALENDARS = [
@@ -30,6 +31,21 @@ export const CALENDARS = [
     startDate: "2022-01-01",
     endDate: "2022-04-30",
     openings: [],
+    exceptions: [],
+  },
+  {
+    servicePoints: ["Online"],
+    name: "Online 24/7",
+    startDate: "2022-01-01",
+    endDate: "2022-12-31",
+    openings: [
+      {
+        startDay: "MONDAY",
+        startTime: "08:00",
+        endDay: "MONDAY",
+        endTime: "07:59",
+      },
+    ],
     exceptions: [],
   },
   {

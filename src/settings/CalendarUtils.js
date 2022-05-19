@@ -1,12 +1,14 @@
-import dayjs from "dayjs";
+import dayjsBase from "dayjs";
 import calendarPlugin from "dayjs/plugin/calendar";
 import devHelper from "dayjs/plugin/devHelper";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-const dayjsCal = dayjs
+const dayjs = dayjsBase
+  .extend(customParseFormat)
   .extend(calendarPlugin)
   // .extend(devHelper)
   .extend(isBetween)
@@ -60,7 +62,7 @@ export function getWeekdayRange(start, end) {
 }
 
 export function getRelativeDateTime(date, referenceDate) {
-  return dayjsCal(dayjs(date).toISOString()).calendar(referenceDate, {
+  return dayjs(dayjs(date).toISOString()).calendar(referenceDate, {
     sameDay: "[at] LT",
     nextDay: "[tomorrow at] LT",
     nextWeek: "dddd [at] LT",
@@ -181,7 +183,7 @@ function getCurrentNormalOpening(testDateTime, openings) {
   for (const opening of openings) {
     const startWeekday = WEEKDAYS[opening.startDay];
     const endWeekday = WEEKDAYS[opening.endDay];
-    //ok
+
     const startTimeRel = dayjs(
       `${testDateTime.format("YYYY-MM-DD")} ${opening.startTime}`
     );
@@ -221,6 +223,19 @@ function getCurrentNormalOpening(testDateTime, openings) {
     }
   }
   return null;
+}
+
+export function isOpen247(openings) {
+  if (openings.length !== 1) {
+    return false;
+  }
+  const opening = openings[0];
+  if (opening.startDay === opening.endDay) {
+    // M 00:00 to M 23:59 should NOT wrap around in this case
+    // cases like M 08:00 -> M 07:59 should wrap
+    const shifted = dayjs(opening.endTime, "HH:mm").add(1, "minute");
+    return shifted.format("HH:mm") === opening.startTime;
+  }
 }
 
 function getNextNormalOpening(testDateTime, openings) {
@@ -282,6 +297,9 @@ export function getStatus(testDateTime, calendar) {
 
   if (exceptions.length !== 0) {
     return getExceptionalStatus(testDateTime, exceptions[0]);
+  }
+  if (isOpen247(calendar.openings)) {
+    return `Open`;
   }
   return getNormalOpeningStatus(testDateTime, openings);
 }

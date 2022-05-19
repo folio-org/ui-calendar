@@ -17,7 +17,7 @@ import dayjsOrig from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React from "react";
-import { getWeekdayRange, WEEKDAY_STRINGS } from "./CalendarUtils";
+import { getWeekdayRange, isOpen247, WEEKDAY_STRINGS } from "./CalendarUtils";
 
 const dayjs = dayjsOrig.extend(customParseFormat).extend(localizedFormat);
 
@@ -121,6 +121,22 @@ function localizeTime(time) {
  */
 function localizeDate(date) {
   return dayjs(date).format("LL");
+}
+
+function get247Rows() {
+  return Object.keys(WEEKDAY_STRINGS).map((day, i) => ({
+    day: WEEKDAY_STRINGS[day],
+    startTime: (
+      <p key={i} title="The service point does not close">
+        &ndash;
+      </p>
+    ),
+    endTime: (
+      <p key={i} title="The service point does not close">
+        &ndash;
+      </p>
+    ),
+  }));
 }
 
 function generateDisplayRows(hours) {
@@ -256,7 +272,12 @@ export default function InfoPane(props) {
     hours[day].sort(openingSorter);
   });
 
-  const dataRows = generateDisplayRows(hours);
+  let dataRows;
+  if (isOpen247(calendar.openings)) {
+    dataRows = get247Rows();
+  } else {
+    dataRows = generateDisplayRows(hours);
+  }
 
   const exceptions = {
     openings: [],
@@ -349,15 +370,30 @@ export default function InfoPane(props) {
             }}
             contentData={dataRows}
           />
-          <p className={containsNextDayOvernight(hours) ? "" : "hidden"}>
+          <p
+            className={
+              !isOpen247(calendar.openings) && containsNextDayOvernight(hours)
+                ? ""
+                : "hidden"
+            }
+          >
             *&nbsp;indicates next day
           </p>
-          <p className={containsFullOvernightSpans(hours) ? "" : "hidden"}>
+          <p
+            className={
+              !isOpen247(calendar.openings) && containsFullOvernightSpans(hours)
+                ? ""
+                : "hidden"
+            }
+          >
             &ndash;&nbsp;indicates that the service point was already open or
             does not close
           </p>
+          <p className={isOpen247(calendar.openings) ? "" : "hidden"}>
+            This service point is open 24/7 and does not close
+          </p>
         </Accordion>
-        <Accordion label="Exceptions &mdash; Openings">
+        <Accordion label="Exceptions &mdash; openings">
           <MultiColumnList
             interactive={false}
             onHeaderClick={() => ({})}
@@ -383,7 +419,7 @@ export default function InfoPane(props) {
             }
           />
         </Accordion>
-        <Accordion label="Exceptions &mdash; Closures">
+        <Accordion label="Exceptions &mdash; closures">
           <MultiColumnList
             interactive={false}
             onHeaderClick={() => ({})}
