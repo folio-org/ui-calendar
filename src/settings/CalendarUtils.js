@@ -230,12 +230,22 @@ export function isOpen247(openings) {
     return false;
   }
   const opening = openings[0];
+  // same day
   if (opening.startDay === opening.endDay) {
     // M 00:00 to M 23:59 should NOT wrap around in this case
     // cases like M 08:00 -> M 07:59 should wrap
     const shifted = dayjs(opening.endTime, "HH:mm").add(1, "minute");
-    return shifted.format("HH:mm") === opening.startTime;
+    return (
+      shifted.format("HH:mm") === opening.startTime &&
+      opening.startTime !== "00:00"
+    );
   }
+  // across day boundary
+  return (
+    (WEEKDAYS[opening.endDay] + 1) % 7 === WEEKDAYS[opening.startDay] &&
+    opening.endTime === "23:59" &&
+    opening.startTime === "00:00"
+  );
 }
 
 function getNextNormalOpening(testDateTime, openings) {

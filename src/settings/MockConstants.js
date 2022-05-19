@@ -41,9 +41,9 @@ export const CALENDARS = [
     openings: [
       {
         startDay: "MONDAY",
-        startTime: "08:00",
-        endDay: "MONDAY",
-        endTime: "07:59",
+        startTime: "00:00",
+        endDay: "SUNDAY",
+        endTime: "23:59",
       },
     ],
     exceptions: [],
