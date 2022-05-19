@@ -357,7 +357,7 @@ export default function InfoPane(props) {
             does not close
           </p>
         </Accordion>
-        <Accordion label="Exceptional Openings">
+        <Accordion label="Exceptions &mdash; Openings">
           <MultiColumnList
             interactive={false}
             onHeaderClick={() => ({})}
@@ -383,7 +383,7 @@ export default function InfoPane(props) {
             }
           />
         </Accordion>
-        <Accordion label="Exceptional Closures">
+        <Accordion label="Exceptions &mdash; Closures">
           <MultiColumnList
             interactive={false}
             onHeaderClick={() => ({})}
