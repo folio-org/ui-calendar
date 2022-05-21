@@ -90,9 +90,12 @@ export default function CurrentAssignmentView() {
             currentStatus: "Current status",
           }}
           contentData={rows}
-          rowMetadata={["calendar"]}
+          rowMetadata={["servicePointId", "calendar"]}
           isSelected={({ item }) => {
-            return item.servicePointId === currentRouteId;
+            return (
+              currentRouteId !== undefined &&
+              item.servicePointId === currentRouteId
+            );
           }}
           onRowClick={(_e, info) => {
             if (
