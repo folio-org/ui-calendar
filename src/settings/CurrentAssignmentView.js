@@ -4,30 +4,21 @@ import {
   Pane,
   PaneMenu,
 } from "@folio/stripes-components";
-import React, { useRef, useState } from "react";
+import { default as React, useRef, useState } from "react";
+import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import ErrorBoundary from "../ErrorBoundary";
-import { SettingPaneSizeContext } from "./CalendarSettings";
 import * as CalendarUtils from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
 
-/** Information used for an empty row, to prevent it displaying or highlighting */
-const EMPTY_ROW_INFO = {
-  servicePoint: null,
-  calendarName: null,
-  startDate: null,
-  endDate: null,
-  currentStatus: null,
-};
-
 export default function CurrentAssignmentView() {
-  const [infoPaneStatus, setInfoPaneStatus] = useState({
-    displayed: false,
-    info: EMPTY_ROW_INFO,
-  });
   const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef(null);
+  const history = useHistory();
+  const currentRouteId = useRouteMatch(
+    "/settings/calendar/active/:servicePointId"
+  )?.params?.servicePointId;
 
   const rows = MockConstants.SERVICE_POINT_LIST.map((servicePoint) => {
     const calendars = MockConstants.CALENDARS.filter(
@@ -54,6 +45,7 @@ export default function CurrentAssignmentView() {
       };
     }
     return {
+      servicePointId: servicePoint.id,
       servicePoint: servicePoint.label.concat(
         servicePoint.inactive ? " (inactive)" : ""
       ),
@@ -70,92 +62,72 @@ export default function CurrentAssignmentView() {
 
   return (
     <ErrorBoundary>
-      <SettingPaneSizeContext.Consumer>
-        {({ setSmaller: setSmallerNavPane }) => (
-          <>
-            <Pane
-              lastMenu={
-                <PaneMenu>
-                  <Button
-                    buttonStyle="primary"
-                    marginBottom0
-                    onClick={() => setShowCreateLayer(true)}
-                    buttonRef={showCreateLayerButtonRef}
-                  >
-                    New
-                  </Button>
-                </PaneMenu>
-              }
-              defaultWidth={infoPaneStatus.displayed ? "20%" : "fill"}
-              paneTitle="Current calendar assignments"
+      <Pane
+        lastMenu={
+          <PaneMenu>
+            <Button
+              buttonStyle="primary"
+              marginBottom0
+              onClick={() => setShowCreateLayer(true)}
+              buttonRef={showCreateLayerButtonRef}
             >
-              <MultiColumnList
-                sortedColumn="servicePoint"
-                sortDirection="ascending"
-                onHeaderClick={() => ({})}
-                columnMapping={{
-                  servicePoint: "Service point",
-                  calendarName: "Calendar name",
-                  startDate: "Start date",
-                  endDate: "End date",
-                  currentStatus: "Current status",
-                }}
-                contentData={rows}
-                rowMetadata={["calendar"]}
-                isSelected={({ item }) => {
-                  return (
-                    infoPaneStatus.displayed &&
-                    item.servicePoint === infoPaneStatus.info.servicePoint
-                  );
-                }}
-                onRowClick={(_e, info) => {
-                  if (info.startDate === "") {
-                    // no cal assigned
-                    setSmallerNavPane(false);
-                    setInfoPaneStatus({
-                      displayed: false,
-                      info: EMPTY_ROW_INFO,
-                    });
-                  } else if (
-                    info.servicePoint === infoPaneStatus.info.servicePoint
-                  ) {
-                    // toggle
-                    setSmallerNavPane(!infoPaneStatus.displayed);
-                    setInfoPaneStatus({
-                      displayed: !infoPaneStatus.displayed,
-                      info,
-                    });
-                  } else {
-                    // new cal
-                    setSmallerNavPane(true);
-                    setInfoPaneStatus({
-                      displayed: true,
-                      info,
-                    });
-                  }
-                }}
-              />
-            </Pane>
+              New
+            </Button>
+          </PaneMenu>
+        }
+        defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
+        paneTitle="Current calendar assignments"
+      >
+        <MultiColumnList
+          sortedColumn="servicePoint"
+          sortDirection="ascending"
+          onHeaderClick={() => ({})}
+          columnMapping={{
+            servicePoint: "Service point",
+            calendarName: "Calendar name",
+            startDate: "Start date",
+            endDate: "End date",
+            currentStatus: "Current status",
+          }}
+          contentData={rows}
+          rowMetadata={["calendar"]}
+          isSelected={({ item }) => {
+            return item.servicePointId === currentRouteId;
+          }}
+          onRowClick={(_e, info) => {
+            if (
+              info.startDate === "" ||
+              info.servicePointId === currentRouteId
+            ) {
+              // no cal assigned or being toggled off
+              history.push(`/settings/calendar/active/`);
+            } else {
+              // new cal
+              history.push(`/settings/calendar/active/${info.servicePointId}`);
+            }
+          }}
+        />
+      </Pane>
 
-            <InfoPane
-              isDisplayed={infoPaneStatus.displayed}
-              info={infoPaneStatus.info}
-              onClose={() => {
-                setSmallerNavPane(false);
-                setInfoPaneStatus({ displayed: false, info: EMPTY_ROW_INFO });
-              }}
-            />
+      <Route path="/settings/calendar/active/:id">
+        <InfoPane
+          onClose={() => {
+            history.push(`/settings/calendar/active/`);
+          }}
+          calendar={
+            rows.filter((row) => row.servicePointId === currentRouteId)[0]
+              ?.calendar
+          }
+        />
+      </Route>
 
-            <CreateCalendarLayer
-              isOpen={showCreateLayer}
-              onClose={() => {
-                setShowCreateLayer(false);
-                showCreateLayerButtonRef.current?.focus();
-              }}
-            />
-          </>
-        )}
-      </SettingPaneSizeContext.Consumer>
+      <CreateCalendarLayer
+        isOpen={showCreateLayer}
+        onClose={() => {
+          setShowCreateLayer(false);
+          showCreateLayerButtonRef.current?.focus();
+        }}
+      />
     </ErrorBoundary>
   );
 }

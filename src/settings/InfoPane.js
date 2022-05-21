@@ -260,11 +260,11 @@ function containsFullOvernightSpans(hours) {
 }
 
 export default function InfoPane(props) {
-  if (!props.isDisplayed) {
+  const calendar = props.calendar;
+
+  if (calendar === undefined || calendar === null) {
     return null;
   }
-
-  const calendar = props.info.calendar;
 
   const hours = splitOpeningsIntoDays(calendar.openings);
 
