@@ -128,7 +128,7 @@
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
     "randomcolor": "^0.5.3",
-    "react-big-calendar": "^0.22.1",
+    "react-big-calendar": "^0.40.1",
     "react-final-form": "^6.5.9",
     "redux-form": "^8.3.7"
   },
