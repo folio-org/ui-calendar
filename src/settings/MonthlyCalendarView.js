@@ -1,22 +1,11 @@
-import {
-  Accordion,
-  AccordionSet,
-  Button,
-  Col,
-  ExpandAllButton,
-  Headline,
-  Icon,
-  List,
-  MenuSection,
-  MultiColumnList,
-  Pane,
-  Row,
-} from "@folio/stripes-components";
+import { Pane } from "@folio/stripes-components";
 import dayjsOrig from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import React from "react";
-import { getWeekdayRange, isOpen247, WEEKDAY_STRINGS } from "./CalendarUtils";
+import React, { useEffect, useState } from "react";
+import Calendar from "./Calendar";
+import { getWeekdayRange } from "./CalendarUtils";
+import { SERVICE_POINT_LIST } from "./MockConstants";
 
 const dayjs = dayjsOrig.extend(customParseFormat).extend(localizedFormat);
 
@@ -123,192 +112,36 @@ function localizeDate(date) {
 }
 
 export default function MonthlyCalendarView(props) {
-  const calendar = props.calendar;
+  const [events, setEvents] = useState(
+    Object.assign(...SERVICE_POINT_LIST.map((sp) => ({ [sp.id]: {} })))
+  );
+  const servicePoint = SERVICE_POINT_LIST.filter(
+    (sp) => sp.id === props.servicePointId
+  )[0];
 
-  if (calendar === undefined || calendar === null) {
+  if (servicePoint === undefined || servicePoint === null) {
     return null;
   }
 
-  const hours = splitOpeningsIntoDays(calendar.openings);
-
-  Object.keys(hours).forEach((day) => {
-    hours[day].sort(openingSorter);
-  });
-
-  let dataRows;
-  if (isOpen247(calendar.openings)) {
-    dataRows = get247Rows();
-  } else {
-    dataRows = generateDisplayRows(hours);
-  }
-
-  const exceptions = {
-    openings: [],
-    closures: [],
-  };
-
-  calendar.exceptions.forEach((exception) => {
-    if (exception.openings.length === 0) {
-      exceptions.closures.push(exception);
-    } else {
-      exception.openings.sort((a, b) =>
-        Math.sign(
-          dayjs(`${a.startDate} ${a.endDate}`).diff(
-            dayjs(`${b.startDate} ${b.endDate}`),
-            "m"
-          )
-        )
-      );
-      exceptions.openings.push(exception);
-    }
-  });
+  useEffect(async () => {
+    // TODO: do some fetching
+    setEvents(events);
+  }, [props.monthBasis, props.servicePointId]);
 
   return (
     <Pane
-      paneTitle={calendar.name}
+      paneTitle={servicePoint.label}
       defaultWidth="fill"
       centerContent={true}
       onClose={props.onClose}
       dismissible
-      actionMenu={({ onToggle }) => (
-        <>
-          <MenuSection label="Actions">
-            <Button buttonStyle="dropdownItem" onClick={onToggle}>
-              <Icon size="small" icon="edit">
-                Edit
-              </Icon>
-            </Button>
-            <Button buttonStyle="dropdownItem" onClick={onToggle}>
-              <Icon size="small" icon="duplicate">
-                Duplicate
-              </Icon>
-            </Button>
-            <Button buttonStyle="dropdownItem" onClick={onToggle}>
-              <Icon size="small" icon="trash">
-                Delete
-              </Icon>
-            </Button>
-          </MenuSection>
-        </>
-      )}
+      lastMenu={<div style={{ width: "24px" }} />} // properly center heading
     >
-      <Headline size="x-large" margin="xx-small">
-        {calendar.name}
-      </Headline>
-      From {localizeDate(calendar.startDate)} to{" "}
-      {localizeDate(calendar.endDate)}
-      <AccordionSet>
-        <Row end="xs">
-          <Col xs>
-            <ExpandAllButton />
-          </Col>
-        </Row>
-        <Accordion label="Service point assignments">
-          <List
-            items={calendar.servicePoints}
-            listStyle="bullets"
-            isEmptyMessage={
-              <div className="closed">
-                This calendar is not assigned to any service points.
-              </div>
-            }
-          />
-        </Accordion>
-        <Accordion label="Hours of operation">
-          <MultiColumnList
-            interactive={false}
-            onHeaderClick={() => ({})}
-            getCellClass={(defaultClass, _rowData, column) =>
-              defaultClass + (column !== "day" ? " hours-cell" : " day-cell")
-            }
-            columnMapping={{
-              day: "Day",
-              startTime: "Open",
-              endTime: "Close",
-            }}
-            columnWidths={{
-              day: "40%",
-              startTime: "30%",
-              endTime: "30%",
-            }}
-            contentData={dataRows}
-          />
-          <p
-            className={
-              !isOpen247(calendar.openings) && containsNextDayOvernight(hours)
-                ? ""
-                : "hidden"
-            }
-          >
-            *&nbsp;indicates next day
-          </p>
-          <p
-            className={
-              !isOpen247(calendar.openings) && containsFullOvernightSpans(hours)
-                ? ""
-                : "hidden"
-            }
-          >
-            &ndash;&nbsp;indicates that the service point was already open or
-            does not close
-          </p>
-          <p className={isOpen247(calendar.openings) ? "" : "hidden"}>
-            This service point is open 24/7 and does not close
-          </p>
-        </Accordion>
-        <Accordion label="Exceptions &mdash; openings">
-          <MultiColumnList
-            interactive={false}
-            onHeaderClick={() => ({})}
-            columnMapping={{
-              name: "Name",
-              start: "Start",
-              end: "End",
-            }}
-            columnWidths={{
-              name: "40%",
-              start: "30%",
-              end: "30%",
-            }}
-            getCellClass={(defaultClass, _rowData, column) =>
-              defaultClass +
-              (column !== "name" ? " hours-cell exception-cell" : " day-cell")
-            }
-            contentData={generateExceptionalOpeningRows(exceptions.openings)}
-            isEmptyMessage={
-              <div className="closed">
-                This calendar has no exceptional openings.
-              </div>
-            }
-          />
-        </Accordion>
-        <Accordion label="Exceptions &mdash; closures">
-          <MultiColumnList
-            interactive={false}
-            onHeaderClick={() => ({})}
-            columnMapping={{
-              name: "Name",
-              startDate: "Start",
-              endDate: "End",
-            }}
-            columnWidths={{
-              name: "40%",
-              startDate: "30%",
-              endDate: "30%",
-            }}
-            contentData={exceptions.closures.map((exception) => ({
-              name: exception.name,
-              startDate: exception.startDate,
-              endDate: exception.endDate,
-            }))}
-            isEmptyMessage={
-              <div className="closed">
-                This calendar has no exceptional closures.
-              </div>
-            }
-          />
-        </Accordion>
-      </AccordionSet>
+      <Calendar
+        events={events[props.servicePointId]}
+        monthBasis={props.monthBasis}
+        setMonthBasis={props.setMonthBasis}
+      />
     </Pane>
   );
 }

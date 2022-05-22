@@ -1,0 +1,66 @@
+.calendar {
+  --min-row-size: min(6rem, 10vh); // no more than 1/10 of the total view height
+
+  --border-color: #999;
+
+  // take up at least 40% of the screen
+  width: max(100%, 40vw);
+  margin-right: 15px; // ensure right margin shows within overflowed pane
+
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows:
+    4.5rem /* top row */
+    2.5rem /* weekday labels */
+    repeat(var(--num-main-cal-rows), 1fr); /* actual days, num provided by JS */
+
+  // used for borders
+  grid-gap: 1px;
+  background-color: var(--border-color);
+  border: 1px solid var(--border-color);
+
+  & > div {
+    background-color: #fff;
+  }
+}
+
+.calendarDay {
+  min-height: var(--min-row-size);
+
+  // flex things vertically from the top and left-aligned
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 2px 4px;
+
+  &.adjacentMonth {
+    background-color: #eee;
+  }
+
+  // show day label in the top right
+  & .dayLabel {
+    align-self: flex-end;
+  }
+}
+
+.weekdayLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+}
+
+.headerRow {
+  grid-column: 1 / span 7; // take a full row
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+
+  & svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
