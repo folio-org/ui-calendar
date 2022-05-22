@@ -6,7 +6,6 @@ import {
 } from "@folio/stripes-components";
 import { default as React, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import ErrorBoundary from "../ErrorBoundary";
 import * as CalendarUtils from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import InfoPane from "./InfoPane";
@@ -61,7 +60,7 @@ export default function CurrentAssignmentView() {
   });
 
   return (
-    <ErrorBoundary>
+    <>
       <Pane
         lastMenu={
           <PaneMenu>
@@ -111,7 +110,6 @@ export default function CurrentAssignmentView() {
           }}
         />
       </Pane>
-
       <Route path="/settings/calendar/active/:id">
         <InfoPane
           onClose={() => {
@@ -123,7 +121,6 @@ export default function CurrentAssignmentView() {
           }
         />
       </Route>
-
       <CreateCalendarLayer
         isOpen={showCreateLayer}
         onClose={() => {
@@ -131,6 +128,6 @@ export default function CurrentAssignmentView() {
           showCreateLayerButtonRef.current?.focus();
         }}
       />
-    </ErrorBoundary>
+    </>
   );
 }

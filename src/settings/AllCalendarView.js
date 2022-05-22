@@ -7,7 +7,6 @@ import {
 } from "@folio/stripes-components";
 import React, { useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import ErrorBoundary from "../ErrorBoundary";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
@@ -34,7 +33,7 @@ export default function AllCalendarView() {
   });
 
   return (
-    <ErrorBoundary>
+    <>
       <Pane
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         paneTitle="All calendars"
@@ -99,6 +98,6 @@ export default function AllCalendarView() {
           showCreateLayerButtonRef.current?.focus();
         }}
       />
-    </ErrorBoundary>
+    </>
   );
 }

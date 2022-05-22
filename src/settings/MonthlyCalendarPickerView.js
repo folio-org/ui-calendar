@@ -24,7 +24,7 @@ export default function MonthlyCalendarPickerView() {
   });
 
   return (
-    <ErrorBoundary>
+    <>
       <Pane
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         paneTitle="Service points"
@@ -44,6 +44,6 @@ export default function MonthlyCalendarPickerView() {
           servicePointId={currentRouteId}
         />
       </Route>
-    </ErrorBoundary>
+    </>
   );
 }
