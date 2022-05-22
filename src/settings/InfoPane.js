@@ -1,4 +1,4 @@
-import "!style-loader!css-loader!./InfoPane.css";
+import css from "./InfoPane.css";
 import {
   Accordion,
   AccordionSet,
@@ -18,6 +18,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React from "react";
 import { getWeekdayRange, isOpen247, WEEKDAY_STRINGS } from "./CalendarUtils";
+import classNames from "classnames";
 
 const dayjs = dayjsOrig.extend(customParseFormat).extend(localizedFormat);
 
@@ -148,7 +149,7 @@ function generateDisplayRows(hours) {
     };
 
     if (tuples.length === 0) {
-      times.startTime.push(<p className="closed">Closed</p>);
+      times.startTime.push(<p className={css.closed}>Closed</p>);
     }
 
     tuples.forEach(([open, close], i) => {
@@ -345,7 +346,7 @@ export default function InfoPane(props) {
             items={calendar.servicePoints}
             listStyle="bullets"
             isEmptyMessage={
-              <div className="closed">
+              <div className={css.closed}>
                 This calendar is not assigned to any service points.
               </div>
             }
@@ -356,7 +357,10 @@ export default function InfoPane(props) {
             interactive={false}
             onHeaderClick={() => ({})}
             getCellClass={(defaultClass, _rowData, column) =>
-              defaultClass + (column !== "day" ? " hours-cell" : " day-cell")
+              classNames(defaultClass, {
+                [css.hoursCell]: column !== "day",
+                [css.dayCell]: column === "day",
+              })
             }
             columnMapping={{
               day: "Day",
@@ -374,7 +378,7 @@ export default function InfoPane(props) {
             className={
               !isOpen247(calendar.openings) && containsNextDayOvernight(hours)
                 ? ""
-                : "hidden"
+                : css.hidden
             }
           >
             *&nbsp;indicates next day
@@ -383,13 +387,13 @@ export default function InfoPane(props) {
             className={
               !isOpen247(calendar.openings) && containsFullOvernightSpans(hours)
                 ? ""
-                : "hidden"
+                : css.hidden
             }
           >
             &ndash;&nbsp;indicates that the service point was already open or
             does not close
           </p>
-          <p className={isOpen247(calendar.openings) ? "" : "hidden"}>
+          <p className={isOpen247(calendar.openings) ? "" : css.hidden}>
             This service point is open 24/7 and does not close
           </p>
         </Accordion>
@@ -408,12 +412,15 @@ export default function InfoPane(props) {
               end: "30%",
             }}
             getCellClass={(defaultClass, _rowData, column) =>
-              defaultClass +
-              (column !== "name" ? " hours-cell exception-cell" : " day-cell")
+              classNames(defaultClass, {
+                [css.hoursCell]: column !== "name",
+                [css.exceptionCell]: column !== "name",
+                [css.dayCell]: column === "name",
+              })
             }
             contentData={generateExceptionalOpeningRows(exceptions.openings)}
             isEmptyMessage={
-              <div className="closed">
+              <div className={css.closed}>
                 This calendar has no exceptional openings.
               </div>
             }
@@ -439,7 +446,7 @@ export default function InfoPane(props) {
               endDate: exception.endDate,
             }))}
             isEmptyMessage={
-              <div className="closed">
+              <div className={css.closed}>
                 This calendar has no exceptional closures.
               </div>
             }

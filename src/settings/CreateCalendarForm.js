@@ -16,7 +16,7 @@ import {
 import { Field, Form } from "react-final-form";
 import ServicePointAssignmentField from "./ServicePointAssignmentField";
 
-import "!style-loader!css-loader!./CreateCalendarForm.css";
+import css from "./CreateCalendarForm.css";
 
 function WeekdayPicker() {
   return (
@@ -158,7 +158,7 @@ export default function CreateCalendarForm() {
                 interactive={false}
                 onHeaderClick={() => ({})}
                 getCellClass={(defaultClass) =>
-                  `${defaultClass} flex-align-start`
+                  `${defaultClass} ${css.flexAlignStart}`
                 }
                 columnMapping={{
                   name: "Name",
