@@ -98,7 +98,7 @@ function weekdayIsBetween(testWeekdayNumber, start, end) {
   return startIndex <= testWeekdayNumber && testWeekdayNumber <= endIndex;
 }
 
-function getDateMatches(testDate, calendar) {
+export function getDateMatches(testDate, calendar) {
   const openings = calendar.openings.filter((opening) =>
     weekdayIsBetween(testDate.day(), opening.startDay, opening.endDay)
   );

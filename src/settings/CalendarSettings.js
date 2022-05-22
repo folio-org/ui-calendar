@@ -1,5 +1,5 @@
 import { Settings } from "@folio/stripes/smart-components";
-import { ErrorBoundary } from "@folio/stripes-components";
+import ErrorBoundary from "@folio/stripes-components/lib/ErrorBoundary";
 import { FormattedMessage } from "react-intl";
 import AllCalendarView from "./AllCalendarView";
 import CurrentAssignmentView from "./CurrentAssignmentView";
