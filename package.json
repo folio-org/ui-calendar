@@ -95,7 +95,7 @@
     "@folio/eslint-config-stripes": "^3.2.1",
     "@folio/stripes": "^7.0.0",
     "@folio/stripes-cli": "^2.0.0",
-    "@folio/stripes-components": "github:folio-org/stripes-components",
+    "@folio/stripes-components": "github:folio-org/stripes-components#master",
     "@folio/stripes-core": "^8.0.0",
     "@formatjs/cli": "^4.2.21",
     "babel-eslint": "^9.0.0",
