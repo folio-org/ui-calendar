@@ -1,22 +1,26 @@
-import dayjsBase from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import calendarPlugin from "dayjs/plugin/calendar";
-import devHelper from "dayjs/plugin/devHelper";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import {
+  Calendar,
+  CalendarException,
+  CalendarExceptionOpening,
+  CalendarOpening,
+  Weekday,
+} from "../types/types";
 
-const dayjs = dayjsBase
-  .extend(customParseFormat)
-  .extend(calendarPlugin)
-  // .extend(devHelper)
-  .extend(isBetween)
-  .extend(isSameOrAfter)
-  .extend(isSameOrBefore)
-  .extend(localizedFormat);
+dayjs.extend(customParseFormat);
+dayjs.extend(calendarPlugin);
+dayjs.extend(isBetween);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(localizedFormat);
 
-export const WEEKDAYS = {
+export const WEEKDAYS: Record<Weekday, number> = {
   SUNDAY: 0,
   MONDAY: 1,
   TUESDAY: 2,
@@ -25,7 +29,7 @@ export const WEEKDAYS = {
   FRIDAY: 5,
   SATURDAY: 6,
 };
-export const WEEKDAY_INDEX = [
+export const WEEKDAY_INDEX: Weekday[] = [
   "SUNDAY",
   "MONDAY",
   "TUESDAY",
@@ -34,7 +38,7 @@ export const WEEKDAY_INDEX = [
   "FRIDAY",
   "SATURDAY",
 ];
-export const WEEKDAY_STRINGS = {
+export const WEEKDAY_STRINGS: Record<Weekday, string> = {
   SUNDAY: "Sunday",
   MONDAY: "Monday",
   TUESDAY: "Tuesday",
@@ -44,12 +48,12 @@ export const WEEKDAY_STRINGS = {
   SATURDAY: "Saturday",
 };
 
-export function getWeekdayIndexRange(start, end) {
+export function getWeekdayIndexRange(start: Weekday, end: Weekday): number[] {
   let startIndex = WEEKDAYS[start];
   const endIndex = WEEKDAYS[end];
 
   const days = [startIndex];
-  while (startIndex != endIndex) {
+  while (startIndex !== endIndex) {
     startIndex = (startIndex + 1) % 7;
     days.push(startIndex);
   }
@@ -57,11 +61,14 @@ export function getWeekdayIndexRange(start, end) {
   return days;
 }
 
-export function getWeekdayRange(start, end) {
+export function getWeekdayRange(start: Weekday, end: Weekday): Weekday[] {
   return getWeekdayIndexRange(start, end).map((i) => WEEKDAY_INDEX[i]);
 }
 
-export function getRelativeDateTime(date, referenceDate) {
+export function getRelativeDateTime(
+  date: string,
+  referenceDate: Dayjs
+): string {
   return dayjs(dayjs(date).toISOString()).calendar(referenceDate, {
     sameDay: "[at] LT",
     nextDay: "[tomorrow at] LT",
@@ -70,7 +77,11 @@ export function getRelativeDateTime(date, referenceDate) {
   });
 }
 
-export function getRelativeWeekdayTime(weekday, time, referenceDate) {
+export function getRelativeWeekdayTime(
+  weekday: Weekday,
+  time: string,
+  referenceDate: Dayjs
+): string {
   if (referenceDate.day() === WEEKDAYS[weekday]) {
     return `${time}`;
   }
@@ -80,7 +91,11 @@ export function getRelativeWeekdayTime(weekday, time, referenceDate) {
   return `${WEEKDAY_STRINGS[weekday]} at ${time}`;
 }
 
-function weekdayIsBetween(testWeekdayNumber, start, end) {
+function weekdayIsBetween(
+  testWeekdayNumber: number,
+  start: Weekday,
+  end: Weekday
+): boolean {
   let startIndex = WEEKDAYS[start];
   let endIndex = WEEKDAYS[end];
 
@@ -98,22 +113,32 @@ function weekdayIsBetween(testWeekdayNumber, start, end) {
   return startIndex <= testWeekdayNumber && testWeekdayNumber <= endIndex;
 }
 
-export function getDateMatches(testDate, calendar) {
-  const openings = calendar.openings.filter((opening) =>
-    weekdayIsBetween(testDate.day(), opening.startDay, opening.endDay)
-  );
-  const exceptions = calendar.exceptions.filter((exception) =>
-    testDate.isBetween(
-      dayjs(exception.startDate),
-      dayjs(exception.endDate),
-      "day",
-      "[]"
-    )
-  );
-  return { openings, exceptions };
+export function getDateMatches(
+  testDate: Dayjs,
+  calendar: Calendar
+): {
+  openings: CalendarOpening[];
+  exceptions: CalendarException[];
+} {
+  return {
+    openings: calendar.openings.filter((opening) =>
+      weekdayIsBetween(testDate.day(), opening.startDay, opening.endDay)
+    ),
+    exceptions: calendar.exceptions.filter((exception) =>
+      testDate.isBetween(
+        dayjs(exception.startDate),
+        dayjs(exception.endDate),
+        "day",
+        "[]"
+      )
+    ),
+  };
 }
 
-function getCurrentExceptionalOpening(testDateTime, exception) {
+function getCurrentExceptionalOpening(
+  testDateTime: Dayjs,
+  exception: CalendarException
+): CalendarExceptionOpening | null {
   for (const opening of exception.openings) {
     if (
       testDateTime.isBetween(
@@ -129,9 +154,12 @@ function getCurrentExceptionalOpening(testDateTime, exception) {
   return null;
 }
 
-function getNextExceptionalOpening(testDateTime, exception) {
-  let min = null;
-  let minDate = null;
+function getNextExceptionalOpening(
+  testDateTime: Dayjs,
+  exception: CalendarException
+): CalendarExceptionOpening | null {
+  let min: CalendarExceptionOpening | null = null;
+  let minDate: Dayjs | null = null;
   for (const opening of exception.openings) {
     if (
       testDateTime.isSame(`${opening.startDate}`, "day") &&
@@ -139,17 +167,20 @@ function getNextExceptionalOpening(testDateTime, exception) {
         `${opening.startDate} ${opening.startTime}`,
         "minute"
       ) &&
-      (min === null ||
+      (minDate === null ||
         minDate.isAfter(`${opening.startDate} ${opening.startTime}`))
     ) {
       min = opening;
-      minDate = `${opening.startDate} ${opening.startTime}`;
+      minDate = dayjs(`${opening.startDate} ${opening.startTime}`);
     }
   }
   return min;
 }
 
-function getExceptionalStatus(testDateTime, exception) {
+function getExceptionalStatus(
+  testDateTime: Dayjs,
+  exception: CalendarException
+): string {
   // fully closed exception
   if (exception.openings.length === 0) {
     return `Closed (${exception.name})`;
@@ -178,7 +209,10 @@ function getExceptionalStatus(testDateTime, exception) {
   }
 }
 
-function getCurrentNormalOpening(testDateTime, openings) {
+function getCurrentNormalOpening(
+  testDateTime: Dayjs,
+  openings: CalendarOpening[]
+): CalendarOpening | null {
   const currentWeekday = testDateTime.day();
   for (const opening of openings) {
     const startWeekday = WEEKDAYS[opening.startDay];
@@ -225,7 +259,7 @@ function getCurrentNormalOpening(testDateTime, openings) {
   return null;
 }
 
-export function isOpen247(openings) {
+export function isOpen247(openings: CalendarOpening[]): boolean {
   if (openings.length !== 1) {
     return false;
   }
@@ -248,29 +282,37 @@ export function isOpen247(openings) {
   );
 }
 
-function getNextNormalOpening(testDateTime, openings) {
-  let min = null;
-  let minDate = null;
+function getNextNormalOpening(
+  testDateTime: Dayjs,
+  openings: CalendarOpening[]
+): CalendarOpening | null {
+  let min: CalendarOpening | null = null;
+  let minDate: Dayjs | null = null;
 
   // no need to handle the potential for the next one being before the current day
   // therefore, we only check startDay = current day and minimize startDay within that subset
   for (const opening of openings) {
     if (
-      WEEKDAYS[opening.startDay] == testDateTime.day() &&
-      (min === null ||
+      WEEKDAYS[opening.startDay] === testDateTime.day() &&
+      (minDate === null ||
         minDate.isAfter(
           `${testDateTime.format("YYYY-MM-DD")} ${opening.startTime}`
         ))
     ) {
       min = opening;
-      minDate = `${testDateTime.format("YYYY-MM-DD")} ${opening.startTime}`;
+      minDate = dayjs(
+        `${testDateTime.format("YYYY-MM-DD")} ${opening.startTime}`
+      );
     }
   }
 
   return min;
 }
 
-function getNormalOpeningStatus(testDateTime, openings) {
+function getNormalOpeningStatus(
+  testDateTime: Dayjs,
+  openings: CalendarOpening[]
+): string {
   // no openings on that day
   if (openings.length === 0) {
     return `Closed`;
@@ -302,7 +344,7 @@ function getNormalOpeningStatus(testDateTime, openings) {
 }
 
 // this function will not consider things more than one day away, unless currently in an opening
-export function getStatus(testDateTime, calendar) {
+export function getStatus(testDateTime: Dayjs, calendar: Calendar): string {
   const { openings, exceptions } = getDateMatches(testDateTime, calendar);
 
   if (exceptions.length !== 0) {

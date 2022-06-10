@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { Calendar, ServicePoint } from "../types/types";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -12,7 +13,7 @@ export const MOCKED_DATE_OBJ = dayjs(MOCKED_DATE);
 export const MOCKED_DATE_TIME = "2022-05-17 02:01:00";
 export const MOCKED_DATE_TIME_OBJ = dayjs(MOCKED_DATE_TIME);
 
-export const SERVICE_POINT_LIST = [
+export const SERVICE_POINT_LIST: ServicePoint[] = [
   {
     id: "43194c57-5af8-5626-b4e5-e2ba9fa2d9a4",
     label: "Service point 1",
@@ -45,7 +46,7 @@ export const SERVICE_POINT_LIST = [
   },
 ];
 
-export const CALENDARS = [
+export const CALENDARS: Calendar[] = [
   {
     id: "d3f3354c-2986-5d31-a84c-1ef3fd613ac6",
     name: "2022 Spring Hours (1,3)",

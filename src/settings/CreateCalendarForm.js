@@ -194,38 +194,38 @@ export default function CreateCalendarForm() {
                       />
                     ),
                     startDate: (
-                      <Layout class="flex flex-direction-column">
+                      <Layout className="flex flex-direction-column">
                         <DateField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <DateField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <DateField usePortal marginBottom0 />
                       </Layout>
                     ),
                     startTime: (
-                      <Layout class="flex flex-direction-column">
+                      <Layout className="flex flex-direction-column">
                         <TimeField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <TimeField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <TimeField usePortal marginBottom0 />
                       </Layout>
                     ),
                     endDate: (
-                      <Layout class="flex flex-direction-column">
+                      <Layout className="flex flex-direction-column">
                         <DateField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <DateField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <DateField usePortal marginBottom0 />
                       </Layout>
                     ),
                     endTime: (
-                      <Layout class="flex flex-direction-column">
+                      <Layout className="flex flex-direction-column">
                         <TimeField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <TimeField usePortal marginBottom0 />
-                        <Layout class="marginTopHalf" />
+                        <Layout className="marginTopHalf" />
                         <TimeField usePortal marginBottom0 />
                       </Layout>
                     ),

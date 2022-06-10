@@ -55,14 +55,6 @@
   & .icon {
     align-self: flex-end;
     margin-top: auto;
-
-    &.opening {
-      color: #f57f17;
-    }
-
-    &.closure {
-      color: #900;
-    }
   }
 }
 

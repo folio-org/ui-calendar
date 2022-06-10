@@ -1,9 +1,16 @@
 import { MultiSelection, OptionSegment } from "@folio/stripes-components";
 import fuzzysort from "fuzzysort";
-import { useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import { Field } from "react-final-form";
+import { ServicePoint } from "../types/types";
 
-export default function ServicePointAssignmentField(props) {
+interface Props {
+  servicePoints: ServicePoint[];
+}
+
+const ServicePointAssignmentField: FunctionComponent<Props> = (
+  props: Props
+) => {
   const servicePointsForSearch = useMemo(
     () =>
       props.servicePoints.map((servicePoint) =>
@@ -18,12 +25,22 @@ export default function ServicePointAssignmentField(props) {
       component={MultiSelection}
       label="Service points"
       required
-      formatter={({ option, searchTerm }) => {
+      formatter={({
+        option,
+        searchTerm,
+      }: {
+        option: ServicePoint;
+        searchTerm: string | undefined;
+      }) => {
         if (typeof searchTerm !== "string" || searchTerm === "") {
           return <OptionSegment>{option.label}</OptionSegment>;
         }
 
         const result = fuzzysort.single(searchTerm, option.label);
+
+        // this should not happen as all elements passed to this function should have been found
+        if (result === null) return;
+
         return (
           <OptionSegment>
             {fuzzysort.highlight(result, (m, i) => (
@@ -32,12 +49,14 @@ export default function ServicePointAssignmentField(props) {
           </OptionSegment>
         );
       }}
-      filter={(filterText, list) => {
+      filter={(filterText: string | undefined, list: ServicePoint[]) => {
         if (typeof filterText !== "string" || filterText === "") {
           return { renderedItems: list, exactMatch: false };
         }
 
-        const results = fuzzysort.go(filterText, servicePointsForSearch);
+        // must spread and re-collect into a new array, as the returned array is immutable
+        const results = [...fuzzysort.go(filterText, servicePointsForSearch)];
+
         // score descending, then name ascending
         // fixes "service point 1".."service point 4" etc having undefined order
         results.sort((a, b) => {
@@ -54,7 +73,7 @@ export default function ServicePointAssignmentField(props) {
           exactMatch: false,
         };
       }}
-      itemToString={(servicePoint) => {
+      itemToString={(servicePoint: ServicePoint | undefined) => {
         if (typeof servicePoint === "object" && servicePoint !== null) {
           return servicePoint.label;
         } else {
@@ -64,4 +83,5 @@ export default function ServicePointAssignmentField(props) {
       dataOptions={props.servicePoints}
     />
   );
-}
+};
+export default ServicePointAssignmentField;

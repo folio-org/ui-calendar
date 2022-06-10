@@ -6,7 +6,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import memoizee from "memoizee";
-import React, { FunctionComponent, ReactElement } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import { CSSPropertiesWithVars } from "../types/css";
 import css from "./Calendar.css";
 
@@ -56,7 +56,7 @@ const getDateArray = memoizee((monthBasis: Dayjs): Dayjs[] => {
   return displayDates;
 });
 
-const getWeekdayLabels = memoizee((): ReactElement[] => {
+const getWeekdayLabels = memoizee((): ReactNode[] => {
   const results = [];
 
   let day = dayjs();
@@ -75,7 +75,7 @@ const getWeekdayLabels = memoizee((): ReactElement[] => {
 interface Props {
   monthBasis: Dayjs;
   setMonthBasis: React.Dispatch<Dayjs>;
-  events: Record<string, ReactElement>;
+  events: Record<string, ReactNode>;
 }
 
 const Calendar: FunctionComponent<Props> = (props: Props) => {
@@ -83,7 +83,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
 
   const displayDates = getDateArray(monthBasis).map((date: Dayjs) => {
     const dateString = date.format("YYYY-MM-DD");
-    let contents = <Loading />;
+    let contents: ReactNode = <Loading />;
     if (events.hasOwnProperty(dateString)) {
       contents = events[dateString];
     }
