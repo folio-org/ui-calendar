@@ -1,17 +1,17 @@
 module.exports = {
-  okapi: { url: "https://bama-okapi.ci.folio.org", tenant: "diku" },
+  okapi: {
+    url: "https://bama-okapi.ci.folio.org",
+    tenant: "diku",
+  },
   config: {
-    autoLogin: { username: "diku_admin", password: "admin" },
-    // logCategories: 'core,redux,connect,connect-fetch,substitute,path,mpath,mquery,action,event,perm,interface,xhr'
-    // logPrefix: 'stripes'
-    // logTimestamp: false
-    // showPerms: false
-    // showHomeLink: false
-    // listInvisiblePerms: false
-    // disableAuth: false
-    // hasAllPerms: false
+    logCategories: "core,path,action,xhr",
+    logPrefix: "--",
+    showPerms: false,
+    hasAllPerms: false,
+    languages: ["en"],
+    suppressIntlErrors: true,
   },
   modules: {
-    "@folio/users": {},
+    "@folio/calendar": {},
   },
 };

@@ -1,29 +1,29 @@
 import { Headline, IconButton, Loading } from "@folio/stripes-components";
 import classNames from "classnames";
-import dayjsOrig from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import memoizee from "memoizee";
-import React from "react";
+import React, { FunctionComponent, ReactElement } from "react";
+import { CSSPropertiesWithVars } from "../types/css";
 import css from "./Calendar.css";
 
-const dayjs = dayjsOrig
-  .extend(customParseFormat)
-  .extend(localizedFormat)
-  .extend(weekday)
-  .extend(isSameOrBefore);
+dayjs.extend(customParseFormat);
+dayjs.extend(localizedFormat);
+dayjs.extend(weekday);
+dayjs.extend(isSameOrBefore);
 
-function isSameMonthOrBefore(a, b) {
+function isSameMonthOrBefore(a: Dayjs, b: Dayjs): boolean {
   return a.isSameOrBefore(b, "month");
 }
 
-function isSameMonth(a, b) {
+function isSameMonth(a: Dayjs, b: Dayjs): boolean {
   return a.isSame(b, "month");
 }
 
-const getDateArray = memoizee((monthBasis) => {
+const getDateArray = memoizee((monthBasis: Dayjs): Dayjs[] => {
   // start
   let date = monthBasis.startOf("month");
   // if the month starts at the beginning of the week, add a full row above of the previous month
@@ -56,7 +56,7 @@ const getDateArray = memoizee((monthBasis) => {
   return displayDates;
 });
 
-const getWeekdayLabels = memoizee(() => {
+const getWeekdayLabels = memoizee((): ReactElement[] => {
   const results = [];
 
   let day = dayjs();
@@ -72,10 +72,16 @@ const getWeekdayLabels = memoizee(() => {
   return results;
 });
 
-export default function Calendar(props) {
+interface Props {
+  monthBasis: Dayjs;
+  setMonthBasis: React.Dispatch<Dayjs>;
+  events: Record<string, ReactElement>;
+}
+
+const Calendar: FunctionComponent<Props> = (props: Props) => {
   const { monthBasis, setMonthBasis, events } = props;
 
-  const displayDates = getDateArray(monthBasis).map((date) => {
+  const displayDates = getDateArray(monthBasis).map((date: Dayjs) => {
     const dateString = date.format("YYYY-MM-DD");
     let contents = <Loading />;
     if (events.hasOwnProperty(dateString)) {
@@ -100,7 +106,11 @@ export default function Calendar(props) {
   return (
     <div
       className={css.calendar}
-      style={{ "--num-main-cal-rows": displayDates.length / 7 }}
+      style={
+        {
+          "--num-main-cal-rows": displayDates.length / 7,
+        } as CSSPropertiesWithVars
+      }
     >
       <div key="header" className={css.headerRow}>
         <IconButton
@@ -119,4 +129,6 @@ export default function Calendar(props) {
       {displayDates}
     </div>
   );
-}
+};
+
+export default Calendar;

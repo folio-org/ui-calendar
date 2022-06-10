@@ -3,7 +3,7 @@ import dayjsOrig from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { useEffect, useState } from "react";
-import Calendar from "./Calendar";
+// import Calendar from "./Calendar";
 import { getWeekdayRange } from "./CalendarUtils";
 import { SERVICE_POINT_LIST } from "./MockConstants";
 import css from "./Calendar.css";
@@ -231,11 +231,11 @@ export default function MonthlyCalendarView(props) {
       dismissible
       lastMenu={<div style={{ width: "24px" }} />} // properly center heading
     >
-      <Calendar
+      {/* <Calendar
         events={events[props.servicePointId]}
         monthBasis={props.monthBasis}
         setMonthBasis={props.setMonthBasis}
-      />
+      /> */}
     </Pane>
   );
 }
