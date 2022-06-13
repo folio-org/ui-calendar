@@ -3,7 +3,12 @@ import classNames from "classnames";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import Calendar from "./Calendar";
 import css from "./Calendar.css";
 import { SERVICE_POINT_LIST } from "./MockConstants";
@@ -18,7 +23,7 @@ interface Props {
   setMonthBasis: React.Dispatch<Dayjs>;
 }
 
-export default function MonthlyCalendarView(props: Props) {
+export const MonthlyCalendarView: FunctionComponent<Props> = (props: Props) => {
   const [events, setEvents] = useState<
     Record<string, Record<string, ReactNode>>
   >(
@@ -147,4 +152,6 @@ export default function MonthlyCalendarView(props: Props) {
       />
     </Pane>
   );
-}
+};
+
+export default MonthlyCalendarView;

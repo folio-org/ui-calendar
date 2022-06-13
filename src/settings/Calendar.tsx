@@ -1,4 +1,4 @@
-import { Headline, IconButton, Loading } from "@folio/stripes-components";
+import { Headline, Icon, IconButton, Loading } from "@folio/stripes-components";
 import classNames from "classnames";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -115,6 +115,8 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
       <div key="header" className={css.headerRow}>
         <IconButton
           icon="arrow-left"
+          badgeColor="red"
+          badgeCount="foo"
           onClick={() => setMonthBasis(monthBasis.subtract(1, "month"))}
         />
         <Headline size="xx-large" margin="none">

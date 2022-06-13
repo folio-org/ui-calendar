@@ -84,4 +84,5 @@ const ServicePointAssignmentField: FunctionComponent<Props> = (
     />
   );
 };
+
 export default ServicePointAssignmentField;
