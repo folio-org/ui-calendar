@@ -3,7 +3,7 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "jsx": "react",
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "module": "es6",
     "moduleResolution": "node",
     "strict": true

@@ -4,18 +4,20 @@ import {
   Pane,
   PaneMenu,
 } from "@folio/stripes-components";
-import { default as React, useRef, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import * as CalendarUtils from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
 
-export default function CurrentAssignmentView() {
+export const CurrentAssignmentView: FunctionComponent<
+  Record<string, never>
+> = () => {
   const [showCreateLayer, setShowCreateLayer] = useState(false);
-  const showCreateLayerButtonRef = useRef(null);
+  const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
-  const currentRouteId = useRouteMatch(
+  const currentRouteId = useRouteMatch<{ servicePointId: string }>(
     "/settings/calendar/active/:servicePointId"
   )?.params?.servicePointId;
 
@@ -68,7 +70,7 @@ export default function CurrentAssignmentView() {
               buttonStyle="primary"
               marginBottom0
               onClick={() => setShowCreateLayer(true)}
-              buttonRef={showCreateLayerButtonRef}
+              ref={showCreateLayerButtonRef}
             >
               New
             </Button>
@@ -102,7 +104,7 @@ export default function CurrentAssignmentView() {
               info.servicePointId === currentRouteId
             ) {
               // no cal assigned or being toggled off
-              history.push(`/settings/calendar/active/`);
+              history.push("/settings/calendar/active/");
             } else {
               // new cal
               history.push(`/settings/calendar/active/${info.servicePointId}`);
@@ -113,7 +115,7 @@ export default function CurrentAssignmentView() {
       <Route path="/settings/calendar/active/:id">
         <InfoPane
           onClose={() => {
-            history.push(`/settings/calendar/active/`);
+            history.push("/settings/calendar/active/");
           }}
           calendar={
             rows.filter((row) => row.servicePointId === currentRouteId)[0]
@@ -130,4 +132,6 @@ export default function CurrentAssignmentView() {
       />
     </>
   );
-}
+};
+
+export default CurrentAssignmentView;

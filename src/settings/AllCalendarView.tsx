@@ -5,18 +5,20 @@ import {
   MultiColumnList,
   Pane,
 } from "@folio/stripes-components";
-import React, { useRef, useState } from "react";
+import React, { FunctionComponent, ReactNode, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
+import { Calendar } from "../types/types";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
 
-export default function AllCalendarView() {
+export const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
   const [showCreateLayer, setShowCreateLayer] = useState(false);
-  const showCreateLayerButtonRef = useRef(null);
+  const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
-  const currentRouteId = useRouteMatch("/settings/calendar/all/:calendarId")
-    ?.params?.calendarId;
+  const currentRouteId = useRouteMatch<{ calendarId: string }>(
+    "/settings/calendar/all/:calendarId"
+  )?.params?.calendarId;
 
   const rows = MockConstants.CALENDARS.map((calendar) => {
     return {
@@ -40,7 +42,11 @@ export default function AllCalendarView() {
         actionMenu={({ onToggle }) => (
           <>
             <MenuSection label="Actions">
-              <Button buttonStyle="dropdownItem" onClick={onToggle}>
+              <Button
+                buttonStyle="dropdownItem"
+                ref={showCreateLayerButtonRef}
+                onClick={onToggle}
+              >
                 <Icon size="small" icon="plus-sign">
                   New
                 </Icon>
@@ -54,7 +60,16 @@ export default function AllCalendarView() {
           </>
         )}
       >
-        <MultiColumnList
+        <MultiColumnList<
+          {
+            name: string;
+            startDate: string;
+            endDate: string;
+            assignments: ReactNode;
+            calendar: Calendar;
+          },
+          "calendar"
+        >
           sortedColumn="servicePoint"
           sortDirection="ascending"
           onHeaderClick={() => ({})}
@@ -72,7 +87,7 @@ export default function AllCalendarView() {
           onRowClick={(_e, info) => {
             if (info.calendar.id === currentRouteId) {
               // already displaying, being hidden
-              history.push(`/settings/calendar/all/`);
+              history.push("/settings/calendar/all/");
             } else {
               history.push(`/settings/calendar/all/${info.calendar.id}`);
             }
@@ -83,7 +98,7 @@ export default function AllCalendarView() {
       <Route path="/settings/calendar/all/:id">
         <InfoPane
           onClose={() => {
-            history.push(`/settings/calendar/all/`);
+            history.push("/settings/calendar/all/");
           }}
           calendar={
             MockConstants.CALENDARS.filter((c) => c.id === currentRouteId)[0]
@@ -100,4 +115,5 @@ export default function AllCalendarView() {
       />
     </>
   );
-}
+};
+export default AllCalendarView;
