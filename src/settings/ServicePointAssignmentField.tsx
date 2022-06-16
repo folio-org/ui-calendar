@@ -1,4 +1,5 @@
 import { MultiSelection, OptionSegment } from "@folio/stripes-components";
+import { MultiSelectionFieldRenderProps } from "@folio/stripes-components/types/lib/MultiSelection/MultiSelection";
 import fuzzysort from "fuzzysort";
 import React, { FunctionComponent, useMemo } from "react";
 import { Field } from "react-final-form";
@@ -16,39 +17,41 @@ const ServicePointAssignmentField: FunctionComponent<Props> = (
       props.servicePoints.map((servicePoint) =>
         fuzzysort.prepare(servicePoint.label)
       ),
-    props.servicePoints
+    [props.servicePoints]
   );
+
+  const formatter = ({
+    option,
+    searchTerm,
+  }: {
+    option: ServicePoint;
+    searchTerm: string | undefined;
+  }) => {
+    if (typeof searchTerm !== "string" || searchTerm === "") {
+      return <OptionSegment>{option.label}</OptionSegment>;
+    }
+
+    const result = fuzzysort.single(searchTerm, option.label);
+
+    // this should not happen as all elements passed to this function should have been found
+    if (result === null) return <></>;
+
+    return (
+      <OptionSegment>
+        {fuzzysort.highlight(result, (m, i) => (
+          <strong key={i}>{m}</strong>
+        ))}
+      </OptionSegment>
+    );
+  };
 
   return (
     <Field
       name="service-points"
-      component={MultiSelection}
+      component={MultiSelection<ServicePoint, MultiSelectionFieldRenderProps<ServicePoint>>}
       label="Service points"
       required
-      formatter={({
-        option,
-        searchTerm,
-      }: {
-        option: ServicePoint;
-        searchTerm: string | undefined;
-      }) => {
-        if (typeof searchTerm !== "string" || searchTerm === "") {
-          return <OptionSegment>{option.label}</OptionSegment>;
-        }
-
-        const result = fuzzysort.single(searchTerm, option.label);
-
-        // this should not happen as all elements passed to this function should have been found
-        if (result === null) return;
-
-        return (
-          <OptionSegment>
-            {fuzzysort.highlight(result, (m, i) => (
-              <strong key={i}>{m}</strong>
-            ))}
-          </OptionSegment>
-        );
-      }}
+      formatter={formatter}
       filter={(filterText: string | undefined, list: ServicePoint[]) => {
         if (typeof filterText !== "string" || filterText === "") {
           return { renderedItems: list, exactMatch: false };
