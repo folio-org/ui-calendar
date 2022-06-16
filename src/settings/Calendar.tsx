@@ -1,4 +1,4 @@
-import { Headline, Icon, IconButton, Loading } from "@folio/stripes-components";
+import { Headline, IconButton, Loading } from "@folio/stripes-components";
 import classNames from "classnames";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -84,7 +84,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
   const displayDates = getDateArray(monthBasis).map((date: Dayjs) => {
     const dateString = date.format("YYYY-MM-DD");
     let contents: ReactNode = <Loading />;
-    if (events.hasOwnProperty(dateString)) {
+    if (dateString in events) {
       contents = events[dateString];
     }
 

@@ -17,7 +17,7 @@ dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
 
 interface Props {
-  onClose: Function;
+  onClose: () => void;
   servicePointId: string;
   monthBasis: Dayjs;
   setMonthBasis: React.Dispatch<Dayjs>;

@@ -1,5 +1,10 @@
 {
-  "parser": "babel-eslint",
-  "quotes": "double",
-  "extends": "@folio/eslint-config-stripes"
+  "extends": "@folio/eslint-config-stripes",
+  "rules": {
+    "quotes": [
+      "error",
+      "double",
+      { "avoidEscape": true, "allowTemplateLiterals": false }
+    ]
+  }
 }
