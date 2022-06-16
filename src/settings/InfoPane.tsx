@@ -1,4 +1,3 @@
-import css from "./InfoPane.css";
 import {
   Accordion,
   AccordionSet,
@@ -13,14 +12,27 @@ import {
   Pane,
   Row,
 } from "@folio/stripes-components";
-import dayjsOrig from "dayjs";
+import classNames from "classnames";
+import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import React from "react";
-import { getWeekdayRange, isOpen247, WEEKDAY_STRINGS } from "./CalendarUtils";
-import classNames from "classnames";
+import React, { FunctionComponent, ReactNode } from "react";
+import {
+  Calendar,
+  CalendarException,
+  CalendarOpening,
+  Weekday,
+} from "../types/types";
+import {
+  getWeekdayRange,
+  isOpen247,
+  WEEKDAY_INDEX,
+  WEEKDAY_STRINGS,
+} from "./CalendarUtils";
+import css from "./InfoPane.css";
 
-const dayjs = dayjsOrig.extend(customParseFormat).extend(localizedFormat);
+dayjs.extend(customParseFormat);
+dayjs.extend(localizedFormat);
 
 /**
  * Used for comparison to ensure hours are properly sorted.
@@ -54,9 +66,12 @@ const NEXT_DAY_OVERNIGHT = "*";
  */
 const OVERNIGHT_THRESHOLD = "04:00";
 
-function splitOpeningsIntoDays(openings) {
+type OpenCloseTimeTuple = [string, string];
+type HoursType = Record<Weekday, OpenCloseTimeTuple[]>;
+
+function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
   // TODO: localize start of week
-  const hours = {
+  const hours: HoursType = {
     MONDAY: [],
     TUESDAY: [],
     WEDNESDAY: [],
@@ -66,7 +81,9 @@ function splitOpeningsIntoDays(openings) {
     SUNDAY: [],
   };
 
-  openings.forEach(({ startDay, startTime, endDay, endTime }) => {
+  openings.forEach((opening) => {
+    const { startDay, startTime, endDay } = opening;
+    let { endTime } = opening;
     const span = getWeekdayRange(startDay, endDay);
 
     // if the closing time should be considered overnight on the previous day,
@@ -77,7 +94,10 @@ function splitOpeningsIntoDays(openings) {
     }
 
     span.forEach((day, i) => {
-      const bounds = [NEXT_DAY_FULL_WRAPAROUND, NEXT_DAY_FULL_WRAPAROUND];
+      const bounds: OpenCloseTimeTuple = [
+        NEXT_DAY_FULL_WRAPAROUND,
+        NEXT_DAY_FULL_WRAPAROUND,
+      ];
       if (i === 0) {
         bounds[0] = startTime;
       }
@@ -95,37 +115,39 @@ function splitOpeningsIntoDays(openings) {
 /**
  * Used for sorting a series of opening tuples for a day.  These tuples may contain
  * {@code NEXT_DAY_FULL_WRAPAROUND} as appropriate
- * @param {[string, string]} a A tuple of open/close times
- * @param {[string, string]} b A tuple of open/close times
- * @returns -1, 0, or 1 depending on comparison result
+ * @param a A tuple of open/close times
+ * @param b A tuple of open/close times
+ * @return -1, 0, or 1 depending on comparison result
  */
-function openingSorter(a, b) {
+function openingSorter(a: OpenCloseTimeTuple, b: OpenCloseTimeTuple) {
   // A wrapped from previous day or B wraps to next day
-  if (a[0] === NEXT_DAY_FULL_WRAPAROUND || b[1] === NEXT_DAY_FULL_WRAPAROUND)
+  if (a[0] === NEXT_DAY_FULL_WRAPAROUND || b[1] === NEXT_DAY_FULL_WRAPAROUND) {
     return -1;
+  }
   // B wrapped from previous day or A wraps to next day
-  if (b[0] === NEXT_DAY_FULL_WRAPAROUND || a[1] === NEXT_DAY_FULL_WRAPAROUND)
+  if (b[0] === NEXT_DAY_FULL_WRAPAROUND || a[1] === NEXT_DAY_FULL_WRAPAROUND) {
     return 1;
+  }
   return a[0].localeCompare(b[0]);
 }
 
 /**
  * Format a time into the user's locale
- * @param {*} time HH:mm time
+ * @param time HH:mm time
  */
-function localizeTime(time) {
+function localizeTime(time: string) {
   return dayjs(time, "HH:mm").format("LT");
 }
 /**
  * Format a date (any format) into the user's locale
- * @param {*} date
+ * @param date
  */
-function localizeDate(date) {
+function localizeDate(date: string) {
   return dayjs(date).format("LL");
 }
 
 function get247Rows() {
-  return Object.keys(WEEKDAY_STRINGS).map((day, i) => ({
+  return WEEKDAY_INDEX.map((day, i) => ({
     day: WEEKDAY_STRINGS[day],
     startTime: (
       <p key={i} title="The service point does not close">
@@ -140,10 +162,13 @@ function get247Rows() {
   }));
 }
 
-function generateDisplayRows(hours) {
-  return Object.keys(WEEKDAY_STRINGS).map((day) => {
+function generateDisplayRows(hours: HoursType) {
+  return WEEKDAY_INDEX.map((day) => {
     const tuples = hours[day];
-    const times = {
+    const times: {
+      startTime: ReactNode[];
+      endTime: ReactNode[];
+    } = {
       startTime: [],
       endTime: [],
     };
@@ -190,9 +215,12 @@ function generateDisplayRows(hours) {
   });
 }
 
-function generateExceptionalOpeningRows(exceptions) {
+function generateExceptionalOpeningRows(exceptions: CalendarException[]) {
   return exceptions.map((exception) => {
-    const times = {
+    const times: {
+      start: ReactNode[];
+      end: ReactNode[];
+    } = {
       start: [],
       end: [],
     };
@@ -229,7 +257,7 @@ function generateExceptionalOpeningRows(exceptions) {
 /**
  * Used to detect when help text for * should be rendered.
  */
-function containsNextDayOvernight(hours) {
+function containsNextDayOvernight(hours: HoursType) {
   for (const tuples of Object.values(hours)) {
     for (const tuple of tuples) {
       if (
@@ -246,12 +274,12 @@ function containsNextDayOvernight(hours) {
 /**
  * Used to detect when help text for -- should be rendered.
  */
-function containsFullOvernightSpans(hours) {
+function containsFullOvernightSpans(hours: HoursType) {
   for (const tuples of Object.values(hours)) {
     for (const tuple of tuples) {
       if (
-        tuple[0] == NEXT_DAY_FULL_WRAPAROUND ||
-        tuple[1] == NEXT_DAY_FULL_WRAPAROUND
+        tuple[0] === NEXT_DAY_FULL_WRAPAROUND ||
+        tuple[1] === NEXT_DAY_FULL_WRAPAROUND
       ) {
         return true;
       }
@@ -260,7 +288,12 @@ function containsFullOvernightSpans(hours) {
   return false;
 }
 
-export default function InfoPane(props) {
+export interface InfoPaneProps {
+  calendar?: Calendar | null;
+  onClose?: () => void;
+}
+
+export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
   const calendar = props.calendar;
 
   if (calendar === undefined || calendar === null) {
@@ -269,7 +302,7 @@ export default function InfoPane(props) {
 
   const hours = splitOpeningsIntoDays(calendar.openings);
 
-  Object.keys(hours).forEach((day) => {
+  (Object.keys(hours) as Weekday[]).forEach((day) => {
     hours[day].sort(openingSorter);
   });
 
@@ -280,7 +313,10 @@ export default function InfoPane(props) {
     dataRows = generateDisplayRows(hours);
   }
 
-  const exceptions = {
+  const exceptions: {
+    openings: CalendarException[];
+    closures: CalendarException[];
+  } = {
     openings: [],
     closures: [],
   };
@@ -305,7 +341,7 @@ export default function InfoPane(props) {
     <Pane
       paneTitle={calendar.name}
       defaultWidth="fill"
-      centerContent={true}
+      centerContent
       onClose={props.onClose}
       dismissible
       actionMenu={({ onToggle }) => (
@@ -362,6 +398,9 @@ export default function InfoPane(props) {
                 [css.dayCell]: column === "day",
               })
             }
+            headerMetadata={{
+              day: ["foo"],
+            }}
             columnMapping={{
               day: "Day",
               startTime: "Open",
@@ -455,4 +494,6 @@ export default function InfoPane(props) {
       </AccordionSet>
     </Pane>
   );
-}
+};
+
+export default InfoPane;

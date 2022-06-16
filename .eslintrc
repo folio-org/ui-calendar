@@ -5,6 +5,8 @@
       "error",
       "double",
       { "avoidEscape": true, "allowTemplateLiterals": false }
-    ]
+    ],
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off"
   }
 }
