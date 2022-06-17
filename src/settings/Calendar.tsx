@@ -115,8 +115,6 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
       <div key="header" className={css.headerRow}>
         <IconButton
           icon="arrow-left"
-          badgeColor="red"
-          badgeCount="foo"
           onClick={() => setMonthBasis(monthBasis.subtract(1, "month"))}
         />
         <Headline size="xx-large" margin="none">

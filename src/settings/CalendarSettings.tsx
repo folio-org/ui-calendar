@@ -1,12 +1,19 @@
 import { ErrorBoundary } from "@folio/stripes-components";
-import { Settings, SettingsProps } from "@folio/stripes-smart-components";
+import { ConnectedComponent } from "@folio/stripes-connect";
+import { Settings } from "@folio/stripes-smart-components";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import AllCalendarView from "./AllCalendarView";
 import CurrentAssignmentView from "./CurrentAssignmentView";
+import MANIFEST, { CalendarProps, Resources } from "./manifest";
 import MonthlyCalendarPickerView from "./MonthlyCalendarPickerView";
 
-export const CalendarSettings = (props: Partial<SettingsProps>) => {
+export { CalendarProps as CalendarSettingsProps } from "./manifest";
+
+export const CalendarSettings: ConnectedComponent<CalendarProps, Resources> = (
+  props: CalendarProps
+) => {
+  console.log(props.resources, props.mutator);
   return (
     <ErrorBoundary>
       <Settings
@@ -35,5 +42,7 @@ export const CalendarSettings = (props: Partial<SettingsProps>) => {
     </ErrorBoundary>
   );
 };
+
+CalendarSettings.manifest = MANIFEST;
 
 export default CalendarSettings;
