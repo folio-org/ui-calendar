@@ -6,7 +6,7 @@ import {
   PaneMenu,
   Paneset,
 } from "@folio/stripes-components";
-import React from "react";
+import React, { FunctionComponent } from "react";
 import CreateCalendarForm from "./CreateCalendarForm";
 
 export interface CreateCalendarLayerProps {
@@ -14,7 +14,9 @@ export interface CreateCalendarLayerProps {
   onClose: () => void;
 }
 
-export const CreateCalendarLayer = (props: CreateCalendarLayerProps) => {
+export const CreateCalendarLayer: FunctionComponent<
+  CreateCalendarLayerProps
+> = (props: CreateCalendarLayerProps) => {
   return (
     <HotKeys keyMap={{ close: ["esc"] }} handlers={{ close: props.onClose }}>
       <Layer contentLabel="Calendar creation form" isOpen={props.isOpen}>

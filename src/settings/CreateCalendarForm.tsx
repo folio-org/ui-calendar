@@ -15,7 +15,7 @@ import {
 } from "@folio/stripes-components";
 import { DatepickerFieldRenderProps as DateFieldRenderProps } from "@folio/stripes-components/types/lib/Datepicker/Datepicker";
 import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextField/TextField";
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { Field, Form } from "react-final-form";
 import css from "./CreateCalendarForm.css";
 import { SERVICE_POINT_LIST } from "./MockConstants";
@@ -40,7 +40,7 @@ function WeekdayPicker() {
   );
 }
 
-export default function CreateCalendarForm() {
+export const CreateCalendarForm: FunctionComponent<Record<string, never>> = () => {
   const SERVICE_POINTS = SERVICE_POINT_LIST.filter(({ inactive }) => !inactive);
 
   return (
@@ -288,4 +288,6 @@ export default function CreateCalendarForm() {
       </Form>
     </form>
   );
-}
+};
+
+export default CreateCalendarForm;

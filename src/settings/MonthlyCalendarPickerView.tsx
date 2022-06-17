@@ -19,7 +19,9 @@ dayjs.extend(localizedFormat);
 dayjs.extend(weekday);
 dayjs.extend(isSameOrBefore);
 
-export const MonthlyCalendarPickerView: FunctionComponent<{}> = () => {
+export const MonthlyCalendarPickerView: FunctionComponent<
+  Record<string, never>
+> = () => {
   const [monthBasis, setMonthBasis] = useState(dayjs().startOf("month")); // start at current date
   const currentRouteId = useRouteMatch<{
     servicePointId: string;
@@ -50,7 +52,7 @@ export const MonthlyCalendarPickerView: FunctionComponent<{}> = () => {
         {currentRouteId && (
           <MonthlyCalendarView
             onClose={() => {
-              history.push(`/settings/calendar/monthly/`);
+              history.push("/settings/calendar/monthly/");
             }}
             servicePointId={currentRouteId}
             monthBasis={monthBasis}
@@ -61,3 +63,5 @@ export const MonthlyCalendarPickerView: FunctionComponent<{}> = () => {
     </>
   );
 };
+
+export default MonthlyCalendarPickerView;

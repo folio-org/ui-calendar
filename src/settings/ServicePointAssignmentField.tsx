@@ -5,12 +5,12 @@ import React, { FunctionComponent, useMemo } from "react";
 import { Field } from "react-final-form";
 import { ServicePoint } from "../types/types";
 
-interface Props {
+interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
 }
 
-const ServicePointAssignmentField: FunctionComponent<Props> = (
-  props: Props
+const ServicePointAssignmentField: FunctionComponent<ServicePointAssignmentFieldProps> = (
+  props: ServicePointAssignmentFieldProps
 ) => {
   const servicePointsForSearch = useMemo(
     () =>

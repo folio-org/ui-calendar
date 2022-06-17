@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=8.9.4"
   },
-  "main": "src/index.js",
+  "main": "src/index.tsx",
   "stripes": {
     "actsAs": [
       "settings"
@@ -97,6 +97,7 @@
     "@folio/stripes-cli": "^2.0.0",
     "@folio/stripes-components": "^10.2.0",
     "@folio/stripes-core": "^8.0.0",
+    "@folio/stripes-smart-components": "^7.2.0",
     "@formatjs/cli": "^4.2.21",
     "@types/memoizee": "^0.4.8",
     "@types/react-router-dom": "^5.2.0",
@@ -129,6 +130,7 @@
     "dayjs": "^1.11.2",
     "dom-helpers": "^5.2.1",
     "fuzzysort": "^2.0.1",
+    "history": "^4.9.0",
     "lodash": "^4.17.5",
     "memoizee": "^0.4.15",
     "postcss-loader": "^7.0.0",

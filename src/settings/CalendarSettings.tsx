@@ -1,11 +1,12 @@
-import { Settings } from "@folio/stripes/smart-components";
-import ErrorBoundary from "@folio/stripes-components/lib/ErrorBoundary";
+import { ErrorBoundary } from "@folio/stripes-components";
+import { Settings, SettingsProps } from "@folio/stripes-smart-components";
+import React from "react";
 import { FormattedMessage } from "react-intl";
 import AllCalendarView from "./AllCalendarView";
 import CurrentAssignmentView from "./CurrentAssignmentView";
 import MonthlyCalendarPickerView from "./MonthlyCalendarPickerView";
 
-export default function CalendarSettings(props) {
+export const CalendarSettings = (props: Partial<SettingsProps>) => {
   return (
     <ErrorBoundary>
       <Settings
@@ -33,4 +34,6 @@ export default function CalendarSettings(props) {
       />
     </ErrorBoundary>
   );
-}
+};
+
+export default CalendarSettings;

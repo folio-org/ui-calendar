@@ -1,9 +1,10 @@
-import React from "react";
-import { hot } from "react-hot-loader";
+import { SettingsProps } from "@folio/stripes-smart-components";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { hot } from "react-hot-loader";
 import Settings from "./settings";
 
-class CalendarRouting extends React.Component {
+class CalendarRouting extends Component<SettingsProps> {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,

@@ -16,14 +16,16 @@ import { SERVICE_POINT_LIST } from "./MockConstants";
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
 
-interface Props {
+interface MonthlyCalendarViewProps {
   onClose: () => void;
   servicePointId: string;
   monthBasis: Dayjs;
   setMonthBasis: React.Dispatch<Dayjs>;
 }
 
-export const MonthlyCalendarView: FunctionComponent<Props> = (props: Props) => {
+export const MonthlyCalendarView: FunctionComponent<
+  MonthlyCalendarViewProps
+> = (props: MonthlyCalendarViewProps) => {
   const [events, setEvents] = useState<
     Record<string, Record<string, ReactNode>>
   >(
@@ -64,7 +66,7 @@ export const MonthlyCalendarView: FunctionComponent<Props> = (props: Props) => {
           <>
             <p>7:00&nbsp;AM &ndash; 11:59&nbsp;PM</p>
             <span className={classNames(css.icon)}>
-              <Icon icon="exclamation-circle" status="warn"></Icon>
+              <Icon icon="exclamation-circle" status="warn" />
             </span>
           </>
         ),
@@ -100,7 +102,7 @@ export const MonthlyCalendarView: FunctionComponent<Props> = (props: Props) => {
           <>
             <p className={css.closed}>Closed</p>
             <span className={classNames(css.icon)}>
-              <Icon icon="exclamation-circle" status="error"></Icon>
+              <Icon icon="exclamation-circle" status="error" />
             </span>
           </>
         ),
@@ -125,22 +127,22 @@ export const MonthlyCalendarView: FunctionComponent<Props> = (props: Props) => {
     (sp) => sp.id === props.servicePointId
   )[0];
 
-  if (servicePoint === undefined || servicePoint === null) {
-    return null;
-  }
-
   useEffect(() => {
     (async () => {
       // TODO: do some fetching
       setEvents(events);
     })();
-  }, [props.monthBasis, props.servicePointId]);
+  }, [props.monthBasis, props.servicePointId, events]);
+
+  if (servicePoint === undefined || servicePoint === null) {
+    return null;
+  }
 
   return (
     <Pane
       paneTitle={servicePoint.label}
       defaultWidth="fill"
-      centerContent={true}
+      centerContent
       onClose={props.onClose}
       dismissible
       lastMenu={<div style={{ width: "24px" }} />} // properly center heading
