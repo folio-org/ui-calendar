@@ -11,17 +11,19 @@ import {
   Row,
   Select,
   TextField,
-  Timepicker as TimeField,
+  Timepicker as TimeField
 } from "@folio/stripes-components";
+import { DatepickerFieldRenderProps as DateFieldRenderProps } from "@folio/stripes-components/types/lib/Datepicker/Datepicker";
+import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextField/TextField";
+import React from "react";
 import { Field, Form } from "react-final-form";
-import ServicePointAssignmentField from "./ServicePointAssignmentField";
-
 import css from "./CreateCalendarForm.css";
+import { SERVICE_POINT_LIST } from "./MockConstants";
+import ServicePointAssignmentField from "./ServicePointAssignmentField";
 
 function WeekdayPicker() {
   return (
-    <Select
-      portal={document.getElementById("OverlayContainer")}
+    <Select<string>
       fullWidth
       marginBottom0
       dataOptions={[
@@ -39,12 +41,7 @@ function WeekdayPicker() {
 }
 
 export default function CreateCalendarForm() {
-  const SERVICE_POINTS = [
-    { label: "Service point 1" },
-    { label: "Service point 3" },
-    { label: "Service point 4" },
-    { label: "Service point 5 (overnight)" },
-  ];
+  const SERVICE_POINTS = SERVICE_POINT_LIST.filter(({ inactive }) => !inactive);
 
   return (
     <form>
@@ -60,7 +57,7 @@ export default function CreateCalendarForm() {
               <Row>
                 <Col xs={12} md={6}>
                   <Field
-                    component={TextField}
+                    component={TextField<string, TextFieldRenderProps<string>>}
                     autoFocus
                     required
                     name="name"
@@ -69,7 +66,7 @@ export default function CreateCalendarForm() {
                 </Col>
                 <Col xs={12} md={3}>
                   <Field
-                    component={DateField}
+                    component={DateField<DateFieldRenderProps>}
                     required
                     usePortal
                     name="start-date"
@@ -78,7 +75,7 @@ export default function CreateCalendarForm() {
                 </Col>
                 <Col xs={12} md={3}>
                   <Field
-                    component={DateField}
+                    component={DateField<DateFieldRenderProps>}
                     required
                     usePortal
                     name="end-date"
@@ -111,8 +108,7 @@ export default function CreateCalendarForm() {
                 contentData={[
                   ...Array(3).fill({
                     status: (
-                      <Select
-                        portal={document.getElementById("OverlayContainer")}
+                      <Select<string>
                         fullWidth
                         marginBottom0
                         dataOptions={[
@@ -134,8 +130,7 @@ export default function CreateCalendarForm() {
                   }),
                   {
                     status: (
-                      <Select
-                        portal={document.getElementById("OverlayContainer")}
+                      <Select<string>
                         fullWidth
                         marginBottom0
                         dataOptions={[{ value: "closed", label: "Closed" }]}
@@ -182,8 +177,7 @@ export default function CreateCalendarForm() {
                   {
                     name: <TextField marginBottom0 required />,
                     status: (
-                      <Select
-                        portal={document.getElementById("OverlayContainer")}
+                      <Select<string>
                         fullWidth
                         marginBottom0
                         dataOptions={[
@@ -239,8 +233,7 @@ export default function CreateCalendarForm() {
                   {
                     name: <TextField marginBottom0 required />,
                     status: (
-                      <Select
-                        portal={document.getElementById("OverlayContainer")}
+                      <Select<string>
                         fullWidth
                         marginBottom0
                         dataOptions={[
@@ -262,10 +255,9 @@ export default function CreateCalendarForm() {
                     ),
                   },
                   {
-                    name: <TextField marginBottom0 required />,
+                    name: <TextField<string> marginBottom0 required />,
                     status: (
-                      <Select
-                        portal={document.getElementById("OverlayContainer")}
+                      <Select<string>
                         fullWidth
                         marginBottom0
                         dataOptions={[

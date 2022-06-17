@@ -398,9 +398,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                 [css.dayCell]: column === "day",
               })
             }
-            headerMetadata={{
-              day: ["foo"],
-            }}
             columnMapping={{
               day: "Day",
               startTime: "Open",

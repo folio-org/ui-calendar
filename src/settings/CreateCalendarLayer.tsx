@@ -1,24 +1,28 @@
 import {
   Button,
-  HasCommand,
+  HotKeys,
   Layer,
   Pane,
   PaneMenu,
   Paneset,
 } from "@folio/stripes-components";
+import React from "react";
 import CreateCalendarForm from "./CreateCalendarForm";
 
-export default function CreateCalendarLayer(props) {
+export interface CreateCalendarLayerProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const CreateCalendarLayer = (props: CreateCalendarLayerProps) => {
   return (
-    <HasCommand
-      commands={[{ name: "cancel", handler: props.onClose, shortcut: "esc" }]}
-    >
+    <HotKeys keyMap={{ close: ["esc"] }} handlers={{ close: props.onClose }}>
       <Layer contentLabel="Calendar creation form" isOpen={props.isOpen}>
         <Paneset isRoot>
           <Pane
             paneTitle="Create new calendar"
             defaultWidth="fill"
-            centerContent={true}
+            centerContent
             onClose={props.onClose}
             dismissible
             lastMenu={
@@ -37,6 +41,7 @@ export default function CreateCalendarLayer(props) {
           </Pane>
         </Paneset>
       </Layer>
-    </HasCommand>
+    </HotKeys>
   );
-}
+};
+export default CreateCalendarLayer;
