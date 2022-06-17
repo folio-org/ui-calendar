@@ -1,13 +1,10 @@
-import { ConnectedComponentProps } from "@folio/stripes-connect";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { hot } from "react-hot-loader";
 import Settings from "./settings";
 import { CalendarSettingsProps } from "./settings/CalendarSettings";
 
-class CalendarRouting extends Component<
-  Omit<CalendarSettingsProps, keyof ConnectedComponentProps<never>>
-> {
+class CalendarRouting extends Component<CalendarSettingsProps> {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
@@ -30,7 +27,7 @@ class CalendarRouting extends Component<
   }
 
   render() {
-    const Element = this.props.stripes.connect(Settings, "ui-calendar");
+    const Element = Settings;
     if (this.props.showSettings) {
       return <Element {...this.props} />;
     }

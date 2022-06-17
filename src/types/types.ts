@@ -9,7 +9,7 @@ export type Weekday =
 
 export interface ServicePoint {
   id: string;
-  label: string;
+  name: string;
   inactive: boolean;
 }
 

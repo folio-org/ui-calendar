@@ -245,13 +245,8 @@ declare module "@folio/stripes-smart-components" {
     ResourceTypeSpec,
   } from "@folio/stripes-connect";
   import { Location } from "history";
-  import {
-    Component,
-    ComponentType,
-    ElementType,
-    ReactNode,
-    RefObject,
-  } from "react";
+  import { Component, ComponentType, ReactNode, RefObject } from "react";
+  import { Subtract } from "utility-types";
 
   export interface StripesType {
     connect: <
@@ -260,7 +255,7 @@ declare module "@folio/stripes-smart-components" {
     >(
       component: ConnectedComponent<Props, Resources>,
       moduleName?: string | { dataKey: string }
-    ) => ComponentType<Omit<Props, keyof ConnectedComponentProps<Resources>>>;
+    ) => ComponentType<Subtract<Props, ConnectedComponentProps<Resources>>>;
   }
 
   export interface SettingsProps {
@@ -269,7 +264,7 @@ declare module "@folio/stripes-smart-components" {
     pages: {
       route: string;
       label: ReactNode;
-      component: ElementType;
+      component: ComponentType<Record<string, never>>;
       perm?: string[];
     }[];
     paneTitle?: ReactNode;
@@ -277,6 +272,7 @@ declare module "@folio/stripes-smart-components" {
     location: Location;
     showSettings?: boolean;
     stripes: StripesType;
+    forceRender: number;
   }
 
   export class Settings extends Component<SettingsProps> {}

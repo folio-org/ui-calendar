@@ -1,19 +1,37 @@
 import {
   Button,
+  LoadingPane,
   MultiColumnList,
   Pane,
   PaneMenu,
 } from "@folio/stripes-components";
-import React, { FunctionComponent, useRef, useState } from "react";
+import {
+  ConnectedComponent,
+  ConnectedComponentProps,
+} from "@folio/stripes-connect";
+import React, { useEffect, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import * as CalendarUtils from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
+import DataRepository from "./DataRepository";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
+import { MANIFEST, Resources } from "./SharedData";
 
-export const CurrentAssignmentView: FunctionComponent<
-  Record<string, never>
-> = () => {
+export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
+
+export const CurrentAssignmentView: ConnectedComponent<
+  CurrentAssignmentViewProps,
+  Resources
+> = (props: CurrentAssignmentViewProps) => {
+  const [dataRepository, setDataRepository] = useState(
+    new DataRepository(props.resources, props.mutator)
+  );
+  useEffect(
+    () => setDataRepository(new DataRepository(props.resources, props.mutator)),
+    [props.resources, props.mutator]
+  );
+
   const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
@@ -21,7 +39,11 @@ export const CurrentAssignmentView: FunctionComponent<
     "/settings/calendar/active/:servicePointId"
   )?.params?.servicePointId;
 
-  const rows = MockConstants.SERVICE_POINT_LIST.map((servicePoint) => {
+  if (!dataRepository.isLoaded()) {
+    return <LoadingPane paneTitle="Current calendar assignments" />;
+  }
+
+  const rows = dataRepository.getServicePoints().map((servicePoint) => {
     const calendars = MockConstants.CALENDARS.filter(
       (calendar) =>
         MockConstants.MOCKED_DATE_OBJ.isBetween(
@@ -29,11 +51,11 @@ export const CurrentAssignmentView: FunctionComponent<
           calendar.endDate,
           "day",
           "[]"
-        ) && calendar.servicePoints.includes(servicePoint.label)
+        ) && calendar.servicePoints.includes(servicePoint.id)
     );
     if (calendars.length === 0) {
       return {
-        servicePoint: servicePoint.label.concat(
+        servicePoint: servicePoint.name.concat(
           servicePoint.inactive ? " (inactive)" : ""
         ),
         calendarName: (
@@ -47,7 +69,7 @@ export const CurrentAssignmentView: FunctionComponent<
     }
     return {
       servicePointId: servicePoint.id,
-      servicePoint: servicePoint.label.concat(
+      servicePoint: servicePoint.name.concat(
         servicePoint.inactive ? " (inactive)" : ""
       ),
       calendarName: calendars[0].name,
@@ -64,6 +86,8 @@ export const CurrentAssignmentView: FunctionComponent<
   return (
     <>
       <Pane
+        paneTitle="Current calendar assignments"
+        defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         lastMenu={
           <PaneMenu>
             <Button
@@ -76,8 +100,6 @@ export const CurrentAssignmentView: FunctionComponent<
             </Button>
           </PaneMenu>
         }
-        defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
-        paneTitle="Current calendar assignments"
       >
         <MultiColumnList
           sortedColumn="servicePoint"
@@ -133,5 +155,7 @@ export const CurrentAssignmentView: FunctionComponent<
     </>
   );
 };
+
+CurrentAssignmentView.manifest = MANIFEST;
 
 export default CurrentAssignmentView;

@@ -10,6 +10,7 @@ import {
   CalendarException,
   CalendarExceptionOpening,
   CalendarOpening,
+  ServicePoint,
   Weekday,
 } from "../types/types";
 
@@ -315,7 +316,7 @@ function getNormalOpeningStatus(
 ): string {
   // no openings on that day
   if (openings.length === 0) {
-    return `Closed`;
+    return "Closed";
   }
 
   const currentOpening = getCurrentNormalOpening(testDateTime, openings);
@@ -324,7 +325,7 @@ function getNormalOpeningStatus(
     const nextOpening = getNextNormalOpening(testDateTime, openings);
     // no future openings that day
     if (nextOpening === null) {
-      return `Closed`;
+      return "Closed";
     } else {
       // future opening found
       return `Closed, opening ${getRelativeWeekdayTime(
@@ -351,7 +352,25 @@ export function getStatus(testDateTime: Dayjs, calendar: Calendar): string {
     return getExceptionalStatus(testDateTime, exceptions[0]);
   }
   if (isOpen247(calendar.openings)) {
-    return `Open`;
+    return "Open";
   }
   return getNormalOpeningStatus(testDateTime, openings);
+}
+
+export function servicePointIdsToNames(
+  servicePoints: ServicePoint[],
+  ids: string[]
+): string[] {
+  return ids
+    .map<string | undefined>((id) => {
+      const matched = servicePoints.filter(
+        (servicePoint) => servicePoint.id === id
+      );
+      if (matched.length) {
+        return matched[0].name;
+      } else {
+        return undefined;
+      }
+    })
+    .filter<string>((name): name is string => name !== undefined);
 }

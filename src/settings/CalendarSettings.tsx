@@ -1,19 +1,16 @@
 import { ErrorBoundary } from "@folio/stripes-components";
-import { ConnectedComponent } from "@folio/stripes-connect";
-import { Settings } from "@folio/stripes-smart-components";
-import React from "react";
+import { Settings, SettingsProps } from "@folio/stripes-smart-components";
+import React, { FunctionComponent } from "react";
 import { FormattedMessage } from "react-intl";
 import AllCalendarView from "./AllCalendarView";
 import CurrentAssignmentView from "./CurrentAssignmentView";
-import MANIFEST, { CalendarProps, Resources } from "./manifest";
 import MonthlyCalendarPickerView from "./MonthlyCalendarPickerView";
 
-export { CalendarProps as CalendarSettingsProps } from "./manifest";
+export type CalendarSettingsProps = SettingsProps;
 
-export const CalendarSettings: ConnectedComponent<CalendarProps, Resources> = (
-  props: CalendarProps
+export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
+  props: CalendarSettingsProps
 ) => {
-  console.log(props.resources, props.mutator);
   return (
     <ErrorBoundary>
       <Settings
@@ -24,17 +21,23 @@ export const CalendarSettings: ConnectedComponent<CalendarProps, Resources> = (
           {
             route: "all/",
             label: "All calendars",
-            component: AllCalendarView,
+            component: props.stripes.connect(AllCalendarView, {
+              dataKey: "ui-calendar",
+            }),
           },
           {
             route: "active/",
             label: "Current assignments",
-            component: CurrentAssignmentView,
+            component: props.stripes.connect(CurrentAssignmentView, {
+              dataKey: "ui-calendar",
+            }),
           },
           {
             route: "monthly/",
             label: "Monthly view",
-            component: MonthlyCalendarPickerView,
+            component: props.stripes.connect(MonthlyCalendarPickerView, {
+              dataKey: "ui-calendar",
+            }),
           },
         ]}
         paneTitle={<FormattedMessage id="ui-calendar.settings.calendar" />}
@@ -42,7 +45,5 @@ export const CalendarSettings: ConnectedComponent<CalendarProps, Resources> = (
     </ErrorBoundary>
   );
 };
-
-CalendarSettings.manifest = MANIFEST;
 
 export default CalendarSettings;

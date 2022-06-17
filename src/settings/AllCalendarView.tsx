@@ -1,18 +1,38 @@
 import {
   Button,
   Icon,
+  LoadingPane,
   MenuSection,
   MultiColumnList,
   Pane,
 } from "@folio/stripes-components";
-import React, { FunctionComponent, ReactNode, useRef, useState } from "react";
+import {
+  ConnectedComponent,
+  ConnectedComponentProps,
+} from "@folio/stripes-connect";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import { Calendar } from "../types/types";
+import { servicePointIdsToNames } from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
+import DataRepository from "./DataRepository";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
+import { MANIFEST, Resources } from "./SharedData";
 
-export const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
+export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
+
+const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
+  props: AllCalendarViewProps
+) => {
+  const [dataRepository, setDataRepository] = useState(
+    new DataRepository(props.resources, props.mutator)
+  );
+  useEffect(
+    () => setDataRepository(new DataRepository(props.resources, props.mutator)),
+    [props.resources, props.mutator]
+  );
+
   const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
@@ -20,13 +40,21 @@ export const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
     "/settings/calendar/all/:calendarId"
   )?.params?.calendarId;
 
+  if (!dataRepository.isLoaded()) {
+    return <LoadingPane paneTitle="All calendars" />;
+  }
+
   const rows = MockConstants.CALENDARS.map((calendar) => {
+    const servicePointNames = servicePointIdsToNames(
+      dataRepository.getServicePoints(),
+      calendar.servicePoints
+    );
     return {
       name: calendar.name,
       startDate: calendar.startDate,
       endDate: calendar.endDate,
-      assignments: calendar.servicePoints.length ? (
-        calendar.servicePoints.join(", ")
+      assignments: servicePointNames.length ? (
+        servicePointNames.join(", ")
       ) : (
         <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
       ),
@@ -116,4 +144,7 @@ export const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
     </>
   );
 };
+
+AllCalendarView.manifest = MANIFEST;
+
 export default AllCalendarView;

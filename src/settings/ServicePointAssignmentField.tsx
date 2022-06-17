@@ -15,7 +15,7 @@ const ServicePointAssignmentField: FunctionComponent<ServicePointAssignmentField
   const servicePointsForSearch = useMemo(
     () =>
       props.servicePoints.map((servicePoint) =>
-        fuzzysort.prepare(servicePoint.label)
+        fuzzysort.prepare(servicePoint.name)
       ),
     [props.servicePoints]
   );
@@ -28,10 +28,10 @@ const ServicePointAssignmentField: FunctionComponent<ServicePointAssignmentField
     searchTerm: string | undefined;
   }) => {
     if (typeof searchTerm !== "string" || searchTerm === "") {
-      return <OptionSegment>{option.label}</OptionSegment>;
+      return <OptionSegment>{option.name}</OptionSegment>;
     }
 
-    const result = fuzzysort.single(searchTerm, option.label);
+    const result = fuzzysort.single(searchTerm, option.name);
 
     // this should not happen as all elements passed to this function should have been found
     if (result === null) return <></>;
@@ -78,7 +78,7 @@ const ServicePointAssignmentField: FunctionComponent<ServicePointAssignmentField
       }}
       itemToString={(servicePoint: ServicePoint | undefined) => {
         if (typeof servicePoint === "object" && servicePoint !== null) {
-          return servicePoint.label;
+          return servicePoint.name;
         } else {
           return "";
         }

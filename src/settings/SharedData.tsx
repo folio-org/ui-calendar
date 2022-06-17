@@ -3,20 +3,29 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import { SettingsProps } from "@folio/stripes-smart-components";
-import { Calendar, ServicePoint } from "../types/types";
+import { Calendar } from "../types/types";
+
+export interface ServicePointDTO {
+  id: string;
+  name: string;
+  code: string;
+  discoveryDisplayName: string;
+  staffSlips: unknown[];
+  metadata: unknown;
+}
 
 export interface CalendarProps
   extends SettingsProps,
     ConnectedComponentProps<Resources> {}
 
 export interface Resources {
-  okapi: { servicePoints: ServicePoint; calendars: Calendar };
+  okapi: { servicePoints: ServicePointDTO; calendars: Calendar };
 }
 
 const MAX_LIMIT = 2147483647;
 
 export const MANIFEST: ConnectedComponent<
-  CalendarProps,
+  ConnectedComponentProps<Resources>,
   Resources
 >["manifest"] = {
   servicePoints: {
@@ -33,12 +42,14 @@ export const MANIFEST: ConnectedComponent<
   },
   calendars: {
     type: "okapi",
-    path: "opening-hours/calendars",
-    records: "calendars",
+    path: "service-points",
+    records: "servicepoints",
+    params: {
+      query: "cql.allRecords=1",
+    },
     perRequest: MAX_LIMIT,
     limitParam: "limit",
     offsetParam: "offset",
     recordsRequired: MAX_LIMIT,
   },
 };
-export default MANIFEST;
