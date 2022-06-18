@@ -8,6 +8,8 @@
     ],
     "implicit-arrow-linebreak": "off",
     "function-paren-newline": "off",
-    "import/no-named-as-default": "off"
+    "import/no-named-as-default": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"]
   }
 }

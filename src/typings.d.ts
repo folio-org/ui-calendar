@@ -6,6 +6,18 @@ declare module "*.css" {
   export = styles;
 }
 
+declare module "@folio/stripes-core" {
+  import { Context, ReactNode } from "react";
+
+  export const CalloutContext: Context<{
+    sendCallout: (args: {
+      type?: "success" | "error" | "warning" | "info";
+      timeout?: number;
+      message: ReactNode;
+    }) => void;
+  }>;
+}
+
 declare module "@folio/stripes-connect" {
   import { Optional } from "@folio/stripes-components/types/utils";
   import { FunctionComponent } from "react";

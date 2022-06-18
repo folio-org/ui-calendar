@@ -11,6 +11,9 @@ export default class DataRepository {
     mutator: ConnectedComponentProps<Resources>["mutator"]
   ) {
     this.resources = resources;
+    this.resources.servicePoints.records.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
     this.mutator = mutator;
   }
 

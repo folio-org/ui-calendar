@@ -9,9 +9,9 @@ interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
 }
 
-const ServicePointAssignmentField: FunctionComponent<ServicePointAssignmentFieldProps> = (
-  props: ServicePointAssignmentFieldProps
-) => {
+const ServicePointAssignmentField: FunctionComponent<
+  ServicePointAssignmentFieldProps
+> = (props: ServicePointAssignmentFieldProps) => {
   const servicePointsForSearch = useMemo(
     () =>
       props.servicePoints.map((servicePoint) =>
@@ -48,7 +48,12 @@ const ServicePointAssignmentField: FunctionComponent<ServicePointAssignmentField
   return (
     <Field
       name="service-points"
-      component={MultiSelection<ServicePoint, MultiSelectionFieldRenderProps<ServicePoint>>}
+      component={
+        MultiSelection<
+          ServicePoint,
+          MultiSelectionFieldRenderProps<ServicePoint>
+        >
+      }
       label="Service points"
       required
       formatter={formatter}

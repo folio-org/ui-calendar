@@ -135,6 +135,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       </Route>
 
       <CreateCalendarLayer
+        dataRepository={dataRepository}
         isOpen={showCreateLayer}
         onClose={() => {
           setShowCreateLayer(false);

@@ -140,7 +140,7 @@ export const MonthlyCalendarView: FunctionComponent<
 
   return (
     <Pane
-      paneTitle={servicePoint.label}
+      paneTitle={servicePoint.name}
       defaultWidth="fill"
       centerContent
       onClose={props.onClose}

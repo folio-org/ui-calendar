@@ -112,6 +112,7 @@
     "postcss": "^8.4.14",
     "postcss-nesting": "^10.1.7",
     "postcss-scss": "^4.0.4",
+    "prettier": "^2.7.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.3.12",
@@ -131,16 +132,13 @@
     "classnames": "^2.3.1",
     "dayjs": "^1.11.2",
     "dom-helpers": "^5.2.1",
+    "final-form": "^4.20.7",
     "fuzzysort": "^2.0.1",
     "history": "^4.9.0",
-    "lodash": "^4.17.5",
     "memoizee": "^0.4.15",
     "postcss-loader": "^7.0.0",
     "prop-types": "^15.6.1",
-    "randomcolor": "^0.5.3",
-    "react-big-calendar": "^0.40.1",
-    "react-final-form": "^6.5.9",
-    "redux-form": "^8.3.7"
+    "react-final-form": "^6.5.9"
   },
   "peerDependencies": {
     "@folio/stripes": "^7.0.0",

@@ -146,6 +146,7 @@ export const CurrentAssignmentView: ConnectedComponent<
         />
       </Route>
       <CreateCalendarLayer
+        dataRepository={dataRepository}
         isOpen={showCreateLayer}
         onClose={() => {
           setShowCreateLayer(false);

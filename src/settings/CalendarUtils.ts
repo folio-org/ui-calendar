@@ -1,10 +1,11 @@
 import dayjs, { Dayjs } from "dayjs";
 import calendarPlugin from "dayjs/plugin/calendar";
-import localizedFormat from "dayjs/plugin/localizedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import memoizee from "memoizee";
 import {
   Calendar,
   CalendarException,
@@ -49,6 +50,24 @@ export const WEEKDAY_STRINGS: Record<Weekday, string> = {
   SATURDAY: "Saturday",
 };
 
+interface LocaleWeekdayInfo {
+  weekday: Weekday;
+  short: string;
+  long: string;
+}
+export const getLocaleWeekdays: () => LocaleWeekdayInfo[] = memoizee(() => {
+  const weekdays: LocaleWeekdayInfo[] = [];
+  for (let i = 0; i < 7; i++) {
+    const day = dayjs().weekday(i);
+    weekdays.push({
+      weekday: WEEKDAY_INDEX[day.day()],
+      short: day.format("ddd"),
+      long: day.format("dddd"),
+    });
+  }
+  return weekdays;
+});
+
 export function getWeekdayIndexRange(start: Weekday, end: Weekday): number[] {
   let startIndex = WEEKDAYS[start];
   const endIndex = WEEKDAYS[end];
@@ -64,6 +83,17 @@ export function getWeekdayIndexRange(start: Weekday, end: Weekday): number[] {
 
 export function getWeekdayRange(start: Weekday, end: Weekday): Weekday[] {
   return getWeekdayIndexRange(start, end).map((i) => WEEKDAY_INDEX[i]);
+}
+
+export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
+  if (opening.startDay === opening.endDay) {
+    // wraps around (starts after it sends, e.g. M 12:00 -> M 11:59)
+    if (opening.startTime > opening.endTime) {
+      return WEEKDAY_INDEX;
+    }
+    return [opening.startDay];
+  }
+  return getWeekdayRange(opening.startDay, opening.endDay);
 }
 
 export function getRelativeDateTime(
