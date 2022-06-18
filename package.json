@@ -40,7 +40,7 @@
         "description": "User can create,edit, view, and remove calendar events",
         "subPermissions": [
           "ui-calendar.edit",
-          "calendar.periods.item.delete"
+          "calendar.delete"
         ],
         "visible": true
       },
@@ -58,9 +58,7 @@
         "subPermissions": [
           "configuration.entries.collection.get",
           "inventory-storage.service-points.collection.get",
-          "calendar.opening-hours.collection.get",
-          "calendar.periods.collection.get",
-          "calendar.periods.item.get",
+          "calendar.view",
           "module.calendar.enabled",
           "settings.calendar.enabled"
         ],
@@ -71,10 +69,9 @@
         "displayName": "Settings (Calendar): Can create, view, and edit calendar events",
         "description": "Can edit calendar events. User cannot remove any calendar event.",
         "subPermissions": [
-          "settings.calendar.enabled",
           "ui-calendar.view",
-          "calendar.periods.item.post",
-          "calendar.periods.item.put"
+          "calendar.create",
+          "calendar.update"
         ],
         "visible": true
       }
