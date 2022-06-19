@@ -68,6 +68,16 @@ export const getLocaleWeekdays: () => LocaleWeekdayInfo[] = memoizee(() => {
   return weekdays;
 });
 
+export function overlaps(
+  start1: Dayjs,
+  end1: Dayjs,
+  start2: Dayjs,
+  end2: Dayjs
+): boolean {
+  // False if: 2 starts after 1 OR 2 ends before 1 starts
+  return !(start2.isAfter(end1) || end2.isBefore(start1));
+}
+
 export function getWeekdayIndexRange(start: Weekday, end: Weekday): number[] {
   let startIndex = WEEKDAYS[start];
   const endIndex = WEEKDAYS[end];
@@ -89,7 +99,11 @@ export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
   if (opening.startDay === opening.endDay) {
     // wraps around (starts after it sends, e.g. M 12:00 -> M 11:59)
     if (opening.startTime > opening.endTime) {
-      return WEEKDAY_INDEX;
+      return [
+        opening.startDay,
+        ...WEEKDAY_INDEX.slice(WEEKDAYS[opening.startDay] + 1),
+        ...WEEKDAY_INDEX.slice(0, WEEKDAYS[opening.startDay] + 1),
+      ];
     }
     return [opening.startDay];
   }

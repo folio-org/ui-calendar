@@ -5,13 +5,15 @@ import {
   Datepicker as DateField,
   ExpandAllButton,
   getLocaleDateFormat,
+  getLocalizedTimeFormatInfo,
   Row,
   TextField,
 } from "@folio/stripes-components";
 import { DatepickerFieldRenderProps as DateFieldRenderProps } from "@folio/stripes-components/types/lib/Datepicker/Datepicker";
 import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextField/TextField";
 import { CalloutContext } from "@folio/stripes-core";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { FormApi, SubmissionErrors } from "final-form";
 import memoizee from "memoizee";
 import React, {
@@ -24,32 +26,38 @@ import React, {
 } from "react";
 import { Field, Form } from "react-final-form";
 import { useIntl } from "react-intl";
-import { ServicePoint } from "../types/types";
+import { CalendarOpening, ServicePoint, Weekday } from "../types/types";
+import { getWeekdaySpan, overlaps } from "./CalendarUtils";
 import HoursOfOperationField, {
+  HoursOfOperationErrors,
   RowState,
   RowType,
 } from "./HoursOfOperationField";
 import { CALENDARS } from "./MockConstants";
 import ServicePointAssignmentField from "./ServicePointAssignmentField";
 
+dayjs.extend(customParseFormat);
+
 const TextFieldComponent = TextField<string, TextFieldRenderProps<string>>;
 const DateFieldComponent = DateField<DateFieldRenderProps>;
 
 export const FORM_ID = "ui-calendar-create-calendar-form";
 
-type FormValues = {
+interface FormValues {
   name: string;
   "start-date": string;
   "end-date": string;
   "service-points": ServicePoint[];
   "hours-of-operation": RowState[];
-};
+}
+
+type SimpleErrorFormValues = Omit<FormValues, "hours-of-operation">;
 
 function required(
   values: Partial<FormValues>,
-  key: keyof FormValues
+  key: keyof SimpleErrorFormValues
 ): {
-  [key in keyof FormValues]?: ReactNode;
+  [key in keyof SimpleErrorFormValues]?: ReactNode;
 } {
   if (
     !(key in values) ||
@@ -64,14 +72,23 @@ function required(
   return {};
 }
 
+function isTimeProper(
+  localeTimeFormat: string,
+  fieldValue: string,
+  realInputValue: string
+): boolean {
+  const timeObject = dayjs(realInputValue, localeTimeFormat, true);
+  return !timeObject.isValid() || timeObject.format("HH:mm") !== fieldValue;
+}
+
 // ensure manually-typed dates match the proper format
 function validateDate(
   values: Partial<FormValues>,
-  key: keyof FormValues,
+  key: keyof SimpleErrorFormValues,
   dateRef: RefObject<HTMLInputElement>,
   localeDateFormat: string
 ): Partial<{
-  [key in keyof FormValues]?: ReactNode;
+  [key in keyof SimpleErrorFormValues]?: ReactNode;
 }> {
   if (dateRef.current === null) {
     return {};
@@ -117,17 +134,196 @@ function validateDateOrder(values: Partial<FormValues>): {
   return {};
 }
 
+function validateHoursOfOperation(
+  rows: RowState[] | undefined,
+  timeFieldRefs: {
+    startTime: HTMLInputElement[];
+    endTime: HTMLInputElement[];
+  },
+  localeTimeFormat: string
+): {
+  "hours-of-operation"?: HoursOfOperationErrors;
+} {
+  if (rows === undefined) return {};
+
+  const emptyErrors: HoursOfOperationErrors["empty"] = {
+    startDay: {},
+    startTime: {},
+    endDay: {},
+    endTime: {},
+  };
+
+  rows.forEach((row, i) => {
+    if (row.startDay === undefined) {
+      emptyErrors.startDay[i] = "Please fill this in to continue";
+    }
+    if (row.endDay === undefined) {
+      emptyErrors.endDay[i] = "Please fill this in to continue";
+    }
+    if (row.type === RowType.Open) {
+      if (row.startTime === undefined || i >= timeFieldRefs.startTime.length) {
+        emptyErrors.startTime[i] = "Please fill this in to continue";
+      }
+      if (row.endTime === undefined || i >= timeFieldRefs.endTime.length) {
+        emptyErrors.endTime[i] = "Please fill this in to continue";
+      }
+    }
+  });
+
+  if (
+    Object.values(emptyErrors.startDay).length ||
+    Object.values(emptyErrors.startTime).length ||
+    Object.values(emptyErrors.endDay).length ||
+    Object.values(emptyErrors.endTime).length
+  ) {
+    return { "hours-of-operation": { empty: emptyErrors } };
+  }
+
+  const invalidTimeErrors: HoursOfOperationErrors["invalidTimes"] = {
+    startTime: {},
+    endTime: {},
+  };
+
+  rows.forEach((row, i) => {
+    if (row.type === RowType.Closed) {
+      return;
+    }
+    if (
+      isTimeProper(
+        localeTimeFormat,
+        row.startTime as string,
+        timeFieldRefs.startTime[i]?.value
+      )
+    ) {
+      invalidTimeErrors.startTime[
+        i
+      ] = `Please ender a date in the ${localeTimeFormat} format`;
+    }
+    if (
+      isTimeProper(
+        localeTimeFormat,
+        row.endTime as string,
+        timeFieldRefs.endTime[i]?.value
+      )
+    ) {
+      invalidTimeErrors.endTime[
+        i
+      ] = `Please ender a date in the ${localeTimeFormat} format`;
+    }
+  });
+
+  if (
+    Object.values(invalidTimeErrors.startTime).length ||
+    Object.values(invalidTimeErrors.endTime).length
+  ) {
+    return { "hours-of-operation": { invalidTimes: invalidTimeErrors } };
+  }
+
+  const split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]> = {
+    MONDAY: [],
+    TUESDAY: [],
+    WEDNESDAY: [],
+    THURSDAY: [],
+    FRIDAY: [],
+    SATURDAY: [],
+    SUNDAY: [],
+  };
+  const baseDay = dayjs();
+  const baseStart = baseDay.startOf("day");
+  const baseEnd = baseDay.endOf("day");
+
+  rows.forEach((row: RowState, rowIndex) => {
+    const opening: CalendarOpening = {
+      startDay: row.startDay as Weekday,
+      startTime:
+        row.type === RowType.Open ? (row.startTime as string) : "00:00",
+      endDay: row.endDay as Weekday,
+      endTime: row.type === RowType.Open ? (row.endTime as string) : "23:59",
+    };
+
+    const span = getWeekdaySpan(opening);
+    span.forEach((weekday, i) => {
+      let start = baseStart;
+      let end = baseEnd;
+
+      const startTime = opening.startTime.split(":").map(parseInt) as [
+        number,
+        number
+      ];
+      const endTime = opening.endTime.split(":").map(parseInt) as [
+        number,
+        number
+      ];
+
+      if (i === 0) {
+        start = start.hour(startTime[0]).minute(startTime[1]);
+      }
+      if (i === span.length - 1) {
+        end = end.hour(endTime[0]).minute(endTime[1]);
+      }
+
+      split[weekday].push({
+        start,
+        end,
+        row: rowIndex,
+      });
+    });
+  });
+
+  const conflicts = new Set<number>();
+
+  Object.values(split).forEach((timeRanges) => {
+    for (let i = 0; i < timeRanges.length - 1; i++) {
+      for (let j = i + 1; j < timeRanges.length; j++) {
+        if (
+          overlaps(
+            timeRanges[i].start,
+            timeRanges[i].end,
+            timeRanges[j].start,
+            timeRanges[j].end
+          )
+        ) {
+          conflicts.add(timeRanges[i].row);
+          conflicts.add(timeRanges[j].row);
+        }
+      }
+    }
+  });
+
+  if (conflicts.size) {
+    return { "hours-of-operation": { conflicts } };
+  }
+
+  return {};
+}
+
 function validate(
   localeDateFormat: string,
+  localeTimeFormat: string,
   dateRefs: {
     startDateRef: RefObject<HTMLInputElement>;
     endDateRef: RefObject<HTMLInputElement>;
   },
+  hoursOfOperationTimeFieldRefs: {
+    startTime: HTMLInputElement[];
+    endTime: HTMLInputElement[];
+  },
   values: Partial<FormValues>
-): Partial<{ [key in keyof FormValues]: ReactNode }> {
+): Partial<
+  {
+    "hours-of-operation": HoursOfOperationErrors;
+  } & {
+    [key in keyof SimpleErrorFormValues]: ReactNode;
+  }
+> {
   // in reverse order of priority, later objects will unpack on top of earlier ones
   // therefore, required should take precedence over any other errors
   return {
+    ...validateHoursOfOperation(
+      values["hours-of-operation"],
+      hoursOfOperationTimeFieldRefs,
+      localeTimeFormat
+    ),
     ...validateDateOrder(values),
     ...required(values, "name"),
     ...validateDate(
@@ -136,6 +332,7 @@ function validate(
       dateRefs.startDateRef,
       localeDateFormat
     ),
+    ...validateDate(values, "end-date", dateRefs.endDateRef, localeDateFormat),
   };
 }
 
@@ -197,13 +394,25 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
 
   const intl = useIntl();
   const localeDateFormat = getLocaleDateFormat({ intl });
+  const localeTimeFormat = getLocalizedTimeFormatInfo(intl.locale).timeFormat;
 
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
+  const hoursOfOperationTimeFieldRefs = useRef<{
+    startTime: HTMLInputElement[];
+    endTime: HTMLInputElement[];
+  }>({ startTime: [], endTime: [] });
 
   const validationFunction = useMemo(
-    () => validate.bind(this, localeDateFormat, { startDateRef, endDateRef }),
-    [localeDateFormat, startDateRef, endDateRef]
+    () =>
+      validate.bind(
+        this,
+        localeDateFormat,
+        localeTimeFormat,
+        { startDateRef, endDateRef },
+        hoursOfOperationTimeFieldRefs.current
+      ),
+    [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]
   );
 
   return (
@@ -221,11 +430,10 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           dirtyFieldsSinceLastSubmit,
           active,
           initialValues: _initialValues,
+          values,
         } = params;
 
         const initialValues = processInitialValues(_initialValues);
-
-        console.log(params);
 
         return (
           <form id={FORM_ID} onSubmit={handleSubmit}>
@@ -296,7 +504,10 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 <Field
                   name="hours-of-operation"
                   component={HoursOfOperationField}
+                  timeFieldRefs={hoursOfOperationTimeFieldRefs.current}
+                  error={errors?.["hours-of-operation"]}
                   initialValue={initialValues["hours-of-operation"]}
+                  localeTimeFormat={localeTimeFormat}
                 />
               </Accordion>
               {/* <Accordion label="Exceptions">

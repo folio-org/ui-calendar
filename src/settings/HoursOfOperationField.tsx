@@ -7,6 +7,12 @@ import {
   Timepicker as TimeField,
 } from "@folio/stripes-components";
 import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
+import { RequireExactlyOne } from "@folio/stripes-components/types/utils";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -16,7 +22,13 @@ import React, {
 import { FieldRenderProps } from "react-final-form";
 import { CalendarOpening, Weekday } from "../types/types";
 import { getLocaleWeekdays, getWeekdaySpan, WEEKDAYS } from "./CalendarUtils";
+import css from "./HoursOfOperationField.css";
 import WeekdayPicker from "./WeekdayPicker";
+
+dayjs.extend(customParseFormat);
+dayjs.extend(localizedFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface MCLContentsType {
   status: ReactNode;
@@ -25,6 +37,7 @@ interface MCLContentsType {
   endDay: ReactNode;
   endTime: ReactNode;
   actions: ReactNode;
+  isConflicted: boolean;
 }
 
 export enum RowType {
@@ -34,10 +47,10 @@ export enum RowType {
 
 export interface RowState {
   type: RowType;
-  startDay?: Weekday;
-  startTime?: string;
-  endDay?: Weekday;
-  endTime?: string;
+  startDay: Weekday | undefined;
+  startTime: string | undefined;
+  endDay: Weekday | undefined;
+  endTime: string | undefined;
 }
 
 function updateRowState(
@@ -62,10 +75,10 @@ function rowsToOpenings(providedRows: RowState[]): CalendarOpening[] {
     )
     .map(
       (row): CalendarOpening => ({
-        startDay: row.startDay,
-        startTime: row.startTime,
-        endDay: row.endDay,
-        endTime: row.endTime,
+        startDay: row.startDay as Weekday,
+        startTime: row.startTime as string,
+        endDay: row.endDay as Weekday,
+        endTime: row.endTime as string,
       })
     );
 
@@ -79,20 +92,99 @@ function rowsToOpenings(providedRows: RowState[]): CalendarOpening[] {
   return providedOpenings;
 }
 
-export type HoursOfOperationFieldProps = FieldRenderProps<RowState[]>;
+function noOp() {
+  /* no-op */
+}
+
+function getTimeField(
+  i: number,
+  row: RowState,
+  key: "startTime" | "endTime",
+  rowStateUpdater: (rowIndex: number, newState: Partial<RowState>) => void,
+  timeFieldRefs: { startTime: HTMLInputElement[]; endTime: HTMLInputElement[] },
+  props: HoursOfOperationFieldProps
+): ReactNode {
+  if (row.type === RowType.Closed) return null;
+
+  const error =
+    props.meta.touched &&
+    (props.error?.empty?.[key]?.[i] || props.error?.invalidTimes?.[key]?.[i]);
+  const onBlur = props.input.onBlur;
+  const localeTimeFormat = props.localeTimeFormat;
+
+  return (
+    <div className={css.timeFieldWrapper} title={error?.toString()}>
+      <TimeField
+        required
+        input={{
+          value: row[key] === undefined ? "" : (row[key] as string),
+          name: "",
+          onBlur: noOp,
+          onFocus: noOp,
+          onChange: (newTime: string) => {
+            rowStateUpdater(i, {
+              [key]: newTime.length ? newTime.substring(0, 5) : undefined,
+            });
+          },
+        }}
+        // always fires, compared to input.onChange
+        onChange={() => onBlur()}
+        inputRef={(el) => {
+          timeFieldRefs[key][i] = el;
+        }}
+        marginBottom0
+        usePortal
+        meta={{
+          touched: true,
+          error,
+        }}
+      />
+    </div>
+  );
+}
+
+export type HoursOfOperationErrors = RequireExactlyOne<{
+  empty?: {
+    [field in keyof Omit<RowState, "type">]: Record<number, ReactNode>;
+  };
+  invalidTimes?: {
+    [field in "startTime" | "endTime"]: Record<number, ReactNode>;
+  };
+  conflicts?: Set<number>;
+}>;
+
+export interface HoursOfOperationFieldProps
+  extends FieldRenderProps<RowState[]> {
+  timeFieldRefs: {
+    startTime: HTMLInputElement[];
+    endTime: HTMLInputElement[];
+  };
+  error?: HoursOfOperationErrors;
+  // eslint-disable-next-line react/no-unused-prop-types
+  localeTimeFormat: string;
+}
 
 export const HoursOfOperationField: FunctionComponent<
   HoursOfOperationFieldProps
 > = (props: HoursOfOperationFieldProps) => {
+  console.table(props.error);
   /** Must add at least one empty row, or MCL will not render properly */
   const [rowStates, _setRowStates] = useState<RowState[]>([
-    { type: RowType.Open },
+    {
+      type: RowType.Open,
+      startDay: undefined,
+      startTime: undefined,
+      endDay: undefined,
+      endTime: undefined,
+    },
   ]);
 
   const setRowStates = (newRowStates: RowState[]) => {
     _setRowStates(newRowStates);
     props.input.onChange(newRowStates);
   };
+
+  const timeFieldRefs = props.timeFieldRefs;
 
   // Initially sort and use values as source of rows
   useEffect(() => {
@@ -151,7 +243,9 @@ export const HoursOfOperationField: FunctionComponent<
         rows.push({
           type: RowType.Closed,
           startDay: weekdays[weekdayIndex],
+          startTime: undefined,
           endDay: weekdays[endingWeekdayIndex],
+          endTime: undefined,
         });
       }
     }
@@ -202,28 +296,17 @@ export const HoursOfOperationField: FunctionComponent<
               });
               props.input.onBlur();
             }}
+            error={props.error?.empty?.startDay?.[i]}
           />
         ),
-        startTime:
-          row.type !== RowType.Closed ? (
-            <TimeField
-              required
-              input={{
-                value: row.startTime,
-                onChange: (newTime: string) => {
-                  rowStateUpdater(i, {
-                    startTime: newTime.length
-                      ? newTime.substring(0, 5)
-                      : undefined,
-                  });
-                },
-              }}
-              // always fires, compared to input.onChange
-              onChange={() => props.input.onBlur()}
-              usePortal
-              marginBottom0
-            />
-          ) : null,
+        startTime: getTimeField(
+          i,
+          row,
+          "startTime",
+          rowStateUpdater,
+          timeFieldRefs,
+          props
+        ),
         endDay: (
           <WeekdayPicker
             value={row.endDay}
@@ -233,28 +316,17 @@ export const HoursOfOperationField: FunctionComponent<
               });
               props.input.onBlur();
             }}
+            error={props.error?.empty?.endDay?.[i]}
           />
         ),
-        endTime:
-          row.type !== RowType.Closed ? (
-            <TimeField
-              required
-              input={{
-                value: row.endTime,
-                onChange: (newTime: string) => {
-                  rowStateUpdater(i, {
-                    endTime: newTime.length
-                      ? newTime.substring(0, 5)
-                      : undefined,
-                  });
-                },
-              }}
-              // always fires, compared to input.onChange
-              onChange={() => props.input.onBlur()}
-              usePortal
-              marginBottom0
-            />
-          ) : null,
+        endTime: getTimeField(
+          i,
+          row,
+          "endTime",
+          rowStateUpdater,
+          timeFieldRefs,
+          props
+        ),
         actions: (
           <Layout className="full flex flex-direction-row centerContent">
             <IconButton
@@ -268,6 +340,7 @@ export const HoursOfOperationField: FunctionComponent<
             />
           </Layout>
         ),
+        isConflicted: !!props.error?.conflicts?.has(i),
       };
     });
 
@@ -279,6 +352,10 @@ export const HoursOfOperationField: FunctionComponent<
           const newRowStates = [...rowStates];
           newRowStates.push({
             type: RowType.Open,
+            startDay: undefined,
+            startTime: undefined,
+            endDay: undefined,
+            endTime: undefined,
           });
           setRowStates(newRowStates);
         }}
@@ -291,11 +368,13 @@ export const HoursOfOperationField: FunctionComponent<
     endDay: undefined,
     endTime: undefined,
     actions: undefined,
+    isConflicted: false,
   });
 
   return (
-    <MultiColumnList<MCLContentsType>
+    <MultiColumnList<MCLContentsType, "isConflicted">
       interactive={false}
+      rowMetadata={["isConflicted"]}
       columnMapping={{
         status: "Status",
         startDay: "Start day",
@@ -313,6 +392,7 @@ export const HoursOfOperationField: FunctionComponent<
         actions: "6%",
       }}
       contentData={contents}
+      getCellClass={(defaultClasses) => `${defaultClasses} ${css.cellWrapper}`}
     />
   );
 };
