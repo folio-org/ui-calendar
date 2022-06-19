@@ -246,14 +246,12 @@ function validateHoursOfOperation(
       let start = baseStart;
       let end = baseEnd;
 
-      const startTime = opening.startTime.split(":").map(parseInt) as [
-        number,
-        number
-      ];
-      const endTime = opening.endTime.split(":").map(parseInt) as [
-        number,
-        number
-      ];
+      const startTime = opening.startTime
+        .split(":")
+        .map((num) => parseInt(num, 10)) as [number, number];
+      const endTime = opening.endTime
+        .split(":")
+        .map((num) => parseInt(num, 10)) as [number, number];
 
       if (i === 0) {
         start = start.hour(startTime[0]).minute(startTime[1]);

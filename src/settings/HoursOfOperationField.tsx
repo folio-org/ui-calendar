@@ -1,5 +1,7 @@
 import {
   Button,
+  Headline,
+  Icon,
   IconButton,
   Layout,
   MultiColumnList,
@@ -8,11 +10,10 @@ import {
 } from "@folio/stripes-components";
 import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
 import { RequireExactlyOne } from "@folio/stripes-components/types/utils";
+import classNames from "classnames";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -27,8 +28,6 @@ import WeekdayPicker from "./WeekdayPicker";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 interface MCLContentsType {
   status: ReactNode;
@@ -109,8 +108,6 @@ function getTimeField(
   const error =
     props.meta.touched &&
     (props.error?.empty?.[key]?.[i] || props.error?.invalidTimes?.[key]?.[i]);
-  const onBlur = props.input.onBlur;
-  const localeTimeFormat = props.localeTimeFormat;
 
   return (
     <div className={css.timeFieldWrapper} title={error?.toString()}>
@@ -122,13 +119,19 @@ function getTimeField(
           onBlur: noOp,
           onFocus: noOp,
           onChange: (newTime: string) => {
+            const input = timeFieldRefs[key][i];
+            const selection = input.selectionStart;
+            input.value = dayjs(newTime, "HH:mm").format(
+              props.localeTimeFormat
+            );
+            input.setSelectionRange(selection, selection);
             rowStateUpdater(i, {
               [key]: newTime.length ? newTime.substring(0, 5) : undefined,
             });
           },
         }}
         // always fires, compared to input.onChange
-        onChange={() => onBlur()}
+        onChange={() => props.input.onBlur()}
         inputRef={(el) => {
           timeFieldRefs[key][i] = el;
         }}
@@ -160,6 +163,7 @@ export interface HoursOfOperationFieldProps
     endTime: HTMLInputElement[];
   };
   error?: HoursOfOperationErrors;
+  // used by function
   // eslint-disable-next-line react/no-unused-prop-types
   localeTimeFormat: string;
 }
@@ -371,29 +375,54 @@ export const HoursOfOperationField: FunctionComponent<
     isConflicted: false,
   });
 
+  let conflictError: ReactNode = null;
+  if (
+    props.error?.conflicts?.size !== undefined &&
+    props.error.conflicts.size > 0
+  ) {
+    conflictError = (
+      <Headline
+        margin="none"
+        className={css.conflictMessage}
+        weight="medium"
+        size="medium"
+      >
+        <Icon icon="exclamation-circle" status="error" />
+        Some openings have conflicts
+      </Headline>
+    );
+  }
+
   return (
-    <MultiColumnList<MCLContentsType, "isConflicted">
-      interactive={false}
-      rowMetadata={["isConflicted"]}
-      columnMapping={{
-        status: "Status",
-        startDay: "Start day",
-        startTime: "Start time",
-        endDay: "End day",
-        endTime: "End time",
-        actions: "Actions",
-      }}
-      columnWidths={{
-        status: "14%",
-        startDay: "20%",
-        startTime: "20%",
-        endDay: "20%",
-        endTime: "20%",
-        actions: "6%",
-      }}
-      contentData={contents}
-      getCellClass={(defaultClasses) => `${defaultClasses} ${css.cellWrapper}`}
-    />
+    <>
+      <MultiColumnList<MCLContentsType, "isConflicted">
+        interactive={false}
+        rowMetadata={["isConflicted"]}
+        columnMapping={{
+          status: "Status",
+          startDay: "Start day",
+          startTime: "Start time",
+          endDay: "End day",
+          endTime: "End time",
+          actions: "Actions",
+        }}
+        columnWidths={{
+          status: "14%",
+          startDay: "20%",
+          startTime: "20%",
+          endDay: "20%",
+          endTime: "20%",
+          actions: "6%",
+        }}
+        contentData={contents}
+        getCellClass={(defaultClasses, rowData) =>
+          classNames(defaultClasses, css.cellWrapper, {
+            [css.conflictCell]: rowData.isConflicted,
+          })
+        }
+      />
+      {conflictError}
+    </>
   );
 };
 

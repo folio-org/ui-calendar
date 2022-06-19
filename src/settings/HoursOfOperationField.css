@@ -1,3 +1,5 @@
+@import "@folio/stripes-components/lib/variables";
+
 .cellWrapper {
   align-items: start;
 }
@@ -13,4 +15,19 @@
   & > div > div > div {
     margin-bottom: 0 !important;
   }
+}
+
+.conflictMessage {
+  margin: 0.75rem;
+  display: flex;
+  align-items: center;
+  color: var(--error);
+
+  & span {
+    margin-right: 0.3rem;
+  }
+}
+
+.conflictCell {
+  background-color: var(--error-fill);
 }
