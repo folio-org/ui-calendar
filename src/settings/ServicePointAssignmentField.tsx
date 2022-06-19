@@ -55,7 +55,6 @@ const ServicePointAssignmentField: FunctionComponent<
         >
       }
       label="Service points"
-      required
       formatter={formatter}
       filter={(filterText: string | undefined, list: ServicePoint[]) => {
         if (typeof filterText !== "string" || filterText === "") {

@@ -18,10 +18,6 @@ import { CalendarOpening, Weekday } from "../types/types";
 import { getLocaleWeekdays, getWeekdaySpan, WEEKDAYS } from "./CalendarUtils";
 import WeekdayPicker from "./WeekdayPicker";
 
-export type HoursOfOperationFieldProps = FieldRenderProps<
-  Partial<CalendarOpening>[]
->;
-
 interface MCLContentsType {
   status: ReactNode;
   startDay: ReactNode;
@@ -31,12 +27,12 @@ interface MCLContentsType {
   actions: ReactNode;
 }
 
-enum RowType {
+export enum RowType {
   Open = "open",
   Closed = "closed",
 }
 
-interface RowState {
+export interface RowState {
   type: RowType;
   startDay?: Weekday;
   startTime?: string;
@@ -55,33 +51,59 @@ function updateRowState(
   setRowStates(newRowState);
 }
 
+function rowsToOpenings(providedRows: RowState[]): CalendarOpening[] {
+  const providedOpenings = providedRows
+    .filter(
+      (row): row is Required<RowState> =>
+        row.startDay !== undefined &&
+        row.startTime !== undefined &&
+        row.endDay !== undefined &&
+        row.endTime !== undefined
+    )
+    .map(
+      (row): CalendarOpening => ({
+        startDay: row.startDay,
+        startTime: row.startTime,
+        endDay: row.endDay,
+        endTime: row.endTime,
+      })
+    );
+
+  providedOpenings.sort((a, b) => {
+    if (a.startDay !== b.startDay) {
+      return WEEKDAYS[a.startDay] - WEEKDAYS[b.startDay];
+    }
+    return a.startTime.localeCompare(b.endTime);
+  });
+
+  return providedOpenings;
+}
+
+export type HoursOfOperationFieldProps = FieldRenderProps<RowState[]>;
+
 export const HoursOfOperationField: FunctionComponent<
   HoursOfOperationFieldProps
 > = (props: HoursOfOperationFieldProps) => {
-  const [openings, setOpenings] = useState(
-    Array.isArray(props.input?.value) ? props.input.value : []
-  );
   /** Must add at least one empty row, or MCL will not render properly */
-  const [rowStates, setRowStates] = useState<RowState[]>([
+  const [rowStates, _setRowStates] = useState<RowState[]>([
     { type: RowType.Open },
   ]);
 
+  const setRowStates = (newRowStates: RowState[]) => {
+    _setRowStates(newRowStates);
+    props.input.onChange(newRowStates);
+  };
+
   // Initially sort and use values as source of rows
   useEffect(() => {
+    const providedRows = [...props.input.value];
+
     // do nothing if there are no openings to render/parse
-    if (openings.length === 0) {
+    if (providedRows.length === 0) {
       return;
     }
 
-    const newOpenings = [...openings] as CalendarOpening[];
-
-    newOpenings.sort((a, b) => {
-      if (a.startDay !== b.startDay) {
-        return WEEKDAYS[a.startDay] - WEEKDAYS[b.startDay];
-      }
-      return a.startTime.localeCompare(b.endTime);
-    });
-    setOpenings(newOpenings);
+    const providedOpenings = rowsToOpenings(providedRows);
 
     // Find all weekdays
     const weekdaysTouched: Record<Weekday, boolean> = {
@@ -94,7 +116,7 @@ export const HoursOfOperationField: FunctionComponent<
       SATURDAY: false,
     };
 
-    newOpenings.flatMap(getWeekdaySpan).forEach((weekday) => {
+    providedOpenings.flatMap(getWeekdaySpan).forEach((weekday) => {
       weekdaysTouched[weekday] = true;
     });
 
@@ -105,13 +127,13 @@ export const HoursOfOperationField: FunctionComponent<
     for (let weekdayIndex = 0; weekdayIndex < weekdays.length; weekdayIndex++) {
       if (weekdaysTouched[weekdays[weekdayIndex]]) {
         while (
-          openingIndex < openings.length &&
-          openings[openingIndex].startDay === weekdays[weekdayIndex]
+          openingIndex < providedOpenings.length &&
+          providedOpenings[openingIndex].startDay === weekdays[weekdayIndex]
         ) {
           rows.push({
             type: RowType.Open,
 
-            ...openings[openingIndex],
+            ...providedOpenings[openingIndex],
           });
           openingIndex++;
         }
@@ -145,6 +167,7 @@ export const HoursOfOperationField: FunctionComponent<
       return {
         status: (
           <Select<RowType>
+            required
             fullWidth
             marginBottom0
             dataOptions={[
@@ -166,6 +189,7 @@ export const HoursOfOperationField: FunctionComponent<
                 newProps.endTime = undefined;
               }
               rowStateUpdater(i, newProps);
+              props.input.onBlur();
             }}
           />
         ),
@@ -176,12 +200,14 @@ export const HoursOfOperationField: FunctionComponent<
               rowStateUpdater(i, {
                 startDay: newWeekday,
               });
+              props.input.onBlur();
             }}
           />
         ),
         startTime:
           row.type !== RowType.Closed ? (
             <TimeField
+              required
               input={{
                 value: row.startTime,
                 onChange: (newTime: string) => {
@@ -192,6 +218,8 @@ export const HoursOfOperationField: FunctionComponent<
                   });
                 },
               }}
+              // always fires, compared to input.onChange
+              onChange={() => props.input.onBlur()}
               usePortal
               marginBottom0
             />
@@ -203,12 +231,14 @@ export const HoursOfOperationField: FunctionComponent<
               rowStateUpdater(i, {
                 endDay: newWeekday,
               });
+              props.input.onBlur();
             }}
           />
         ),
         endTime:
           row.type !== RowType.Closed ? (
             <TimeField
+              required
               input={{
                 value: row.endTime,
                 onChange: (newTime: string) => {
@@ -219,6 +249,8 @@ export const HoursOfOperationField: FunctionComponent<
                   });
                 },
               }}
+              // always fires, compared to input.onChange
+              onChange={() => props.input.onBlur()}
               usePortal
               marginBottom0
             />
@@ -231,6 +263,7 @@ export const HoursOfOperationField: FunctionComponent<
                 const newRowStates = [...rowStates];
                 newRowStates.splice(i, 1);
                 setRowStates(newRowStates);
+                props.input.onBlur();
               }}
             />
           </Layout>
@@ -279,66 +312,7 @@ export const HoursOfOperationField: FunctionComponent<
         endTime: "20%",
         actions: "6%",
       }}
-      contentData={
-        contents // contents
-        // [
-        //   ...Array(3).fill({
-        //     status: (
-        //       <Select<string>
-        //         fullWidth
-        //         marginBottom0
-        //         dataOptions={[
-        //           {
-        //             value: "",
-        //             label: "",
-        //           },
-        //           {
-        //             value: "open",
-        //             label: "Open",
-        //           },
-        //           {
-        //             value: "closed",
-        //             label: "Closed",
-        //           },
-        //         ]}
-        //       />
-        //     ),
-        //     startDay: <WeekdayPicker />,
-        //     startTime: <TimeField usePortal marginBottom0 />,
-        //     endDay: <WeekdayPicker />,
-        //     endTime: <TimeField usePortal marginBottom0 />,
-        //     actions: (
-        //       <Layout className="full flex flex-direction-row centerContent">
-        //         <IconButton icon="trash" />
-        //       </Layout>
-        //     ),
-        //   }),
-        //   {
-        //     status: (
-        //       <Select<string>
-        //         fullWidth
-        //         marginBottom0
-        //         dataOptions={[
-        //           {
-        //             value: "closed",
-        //             label: "Closed",
-        //           },
-        //         ]}
-        //       />
-        //     ),
-        //     startDay: <WeekdayPicker />,
-        //     endDay: <WeekdayPicker />,
-        //     actions: (
-        //       <Layout className="full flex flex-direction-row centerContent">
-        //         <IconButton icon="trash" />
-        //       </Layout>
-        //     ),
-        //   },
-        //   {
-        //     status: <Button marginBottom0>Add row</Button>,
-        //   },
-        // ]
-      }
+      contentData={contents}
     />
   );
 };

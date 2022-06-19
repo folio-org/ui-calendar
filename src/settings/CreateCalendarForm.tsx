@@ -4,17 +4,31 @@ import {
   Col,
   Datepicker as DateField,
   ExpandAllButton,
+  getLocaleDateFormat,
   Row,
   TextField,
 } from "@folio/stripes-components";
 import { DatepickerFieldRenderProps as DateFieldRenderProps } from "@folio/stripes-components/types/lib/Datepicker/Datepicker";
 import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextField/TextField";
 import { CalloutContext } from "@folio/stripes-core";
-import { FormApi, SubmissionErrors, ValidationErrors } from "final-form";
-import React, { FunctionComponent, useContext } from "react";
+import dayjs from "dayjs";
+import { FormApi, SubmissionErrors } from "final-form";
+import memoizee from "memoizee";
+import React, {
+  FunctionComponent,
+  ReactNode,
+  RefObject,
+  useContext,
+  useMemo,
+  useRef,
+} from "react";
 import { Field, Form } from "react-final-form";
-import { CalendarOpening, ServicePoint } from "../types/types";
-import HoursOfOperationField from "./HoursOfOperationField";
+import { useIntl } from "react-intl";
+import { ServicePoint } from "../types/types";
+import HoursOfOperationField, {
+  RowState,
+  RowType,
+} from "./HoursOfOperationField";
 import { CALENDARS } from "./MockConstants";
 import ServicePointAssignmentField from "./ServicePointAssignmentField";
 
@@ -22,6 +36,108 @@ const TextFieldComponent = TextField<string, TextFieldRenderProps<string>>;
 const DateFieldComponent = DateField<DateFieldRenderProps>;
 
 export const FORM_ID = "ui-calendar-create-calendar-form";
+
+type FormValues = {
+  name: string;
+  "start-date": string;
+  "end-date": string;
+  "service-points": ServicePoint[];
+  "hours-of-operation": RowState[];
+};
+
+function required(
+  values: Partial<FormValues>,
+  key: keyof FormValues
+): {
+  [key in keyof FormValues]?: ReactNode;
+} {
+  if (
+    !(key in values) ||
+    values[key] === undefined ||
+    (typeof values[key] === "string" && values[key] === "") ||
+    (Array.isArray(values[key]) && (values[key] as unknown[]).length === 0)
+  ) {
+    return {
+      [key]: "Please fill this in to continue",
+    };
+  }
+  return {};
+}
+
+// ensure manually-typed dates match the proper format
+function validateDate(
+  values: Partial<FormValues>,
+  key: keyof FormValues,
+  dateRef: RefObject<HTMLInputElement>,
+  localeDateFormat: string
+): Partial<{
+  [key in keyof FormValues]?: ReactNode;
+}> {
+  if (dateRef.current === null) {
+    return {};
+  }
+
+  if (
+    dateRef.current.value === "" &&
+    (!(key in values) || typeof values[key] !== "string")
+  ) {
+    return {
+      [key]: "Please fill this in to continue",
+    };
+  }
+
+  const dateValue = values[key] as string;
+  const inputValue = dateRef.current.value;
+
+  if (dayjs(dateValue).format(localeDateFormat) !== inputValue) {
+    return {
+      [key]: `Please ender a date in the ${localeDateFormat} format`,
+    };
+  }
+
+  return {};
+}
+
+// ensure start-date and end-date are in the proper order
+// if improper, renders an error on `end-date`
+function validateDateOrder(values: Partial<FormValues>): {
+  "end-date"?: ReactNode;
+} {
+  if (
+    typeof values["start-date"] === "string" &&
+    values["start-date"] !== "" &&
+    typeof values["end-date"] === "string" &&
+    values["end-date"] !== "" &&
+    values["end-date"] < values["start-date"]
+  ) {
+    return {
+      "end-date": "End date must not be before the start date",
+    };
+  }
+  return {};
+}
+
+function validate(
+  localeDateFormat: string,
+  dateRefs: {
+    startDateRef: RefObject<HTMLInputElement>;
+    endDateRef: RefObject<HTMLInputElement>;
+  },
+  values: Partial<FormValues>
+): Partial<{ [key in keyof FormValues]: ReactNode }> {
+  // in reverse order of priority, later objects will unpack on top of earlier ones
+  // therefore, required should take precedence over any other errors
+  return {
+    ...validateDateOrder(values),
+    ...required(values, "name"),
+    ...validateDate(
+      values,
+      "start-date",
+      dateRefs.startDateRef,
+      localeDateFormat
+    ),
+  };
+}
 
 export interface CreateCalendarFormProps {
   closeParentLayer: () => void;
@@ -32,10 +148,6 @@ export interface CreateCalendarFormProps {
 export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   props: CreateCalendarFormProps
 ) => {
-  type FormValues = {
-    name: string;
-  };
-
   const calloutContext = useContext(CalloutContext);
 
   const onSubmit = (
@@ -57,7 +169,10 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
 
     return new Promise((resolve) =>
       setTimeout(() => {
-        calloutContext.sendCallout({ message: "HEWWO", type: "error" });
+        calloutContext.sendCallout({
+          message: "Test Callout error",
+          type: "error",
+        });
         props.setIsSubmitting(false);
         if (form.getState().errors?.aaaaaaaa !== undefined) {
           props.closeParentLayer();
@@ -70,27 +185,48 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     // return new Promise<void>((reject) => reject());
   };
 
+  // TODO: not this
+  const processInitialValues = memoizee(
+    (initialValues: Partial<FormValues>): Partial<FormValues> => ({
+      ...initialValues,
+      "hours-of-operation": CALENDARS[3].openings.map(
+        (opening): RowState => ({ type: RowType.Open, ...opening })
+      ),
+    })
+  );
+
+  const intl = useIntl();
+  const localeDateFormat = getLocaleDateFormat({ intl });
+
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
+
+  const validationFunction = useMemo(
+    () => validate.bind(this, localeDateFormat, { startDateRef, endDateRef }),
+    [localeDateFormat, startDateRef, endDateRef]
+  );
+
   return (
     <Form<FormValues>
       // submitting={foo}
       onSubmit={onSubmit}
-      validate={(values) => {
-        const errors: ValidationErrors = {};
-        if (values.name?.trim() === "" || values.name === "foo") {
-          errors.name = "AAAA";
-        }
-        return errors;
-      }}
+      validate={validationFunction}
       validateOnBlur
-      render={(foo) => {
+      render={(params) => {
         const {
           handleSubmit,
           errors,
           submitErrors,
+          touched,
           dirtyFieldsSinceLastSubmit,
-          visited,
-        } = foo;
-        console.dir(foo);
+          active,
+          initialValues: _initialValues,
+        } = params;
+
+        const initialValues = processInitialValues(_initialValues);
+
+        console.log(params);
+
         return (
           <form id={FORM_ID} onSubmit={handleSubmit}>
             <AccordionSet>
@@ -104,32 +240,51 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   <Col xs={12} md={6}>
                     <Field
                       component={TextFieldComponent}
+                      backendDateStandard="YYYY-MM-DD"
                       autoFocus
                       required
                       name="name"
                       label="Calendar name"
                       error={
-                        !dirtyFieldsSinceLastSubmit?.name &&
-                        (submitErrors?.name || (visited?.name && errors?.name))
+                        (!dirtyFieldsSinceLastSubmit?.name &&
+                          submitErrors?.name) ||
+                        (touched?.name && active !== "name" && errors?.name)
                       }
                     />
                   </Col>
                   <Col xs={12} md={3}>
                     <Field
                       component={DateFieldComponent}
+                      inputRef={startDateRef}
+                      backendDateStandard="YYYY-MM-DD"
                       required
                       usePortal
                       name="start-date"
                       label="Start date"
+                      error={
+                        (!dirtyFieldsSinceLastSubmit?.["start-date"] &&
+                          submitErrors?.["start-date"]) ||
+                        (touched?.["start-date"] &&
+                          active !== "start-date" &&
+                          errors?.["start-date"])
+                      }
                     />
                   </Col>
                   <Col xs={12} md={3}>
                     <Field
                       component={DateFieldComponent}
+                      inputRef={endDateRef}
                       required
                       usePortal
                       name="end-date"
                       label="End date"
+                      error={
+                        (!dirtyFieldsSinceLastSubmit?.["end-date"] &&
+                          submitErrors?.["end-date"]) ||
+                        (touched?.["end-date"] &&
+                          active !== "end-date" &&
+                          errors?.["end-date"])
+                      }
                     />
                   </Col>
                 </Row>
@@ -139,11 +294,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
               </Accordion>
               <Accordion label="Hours of operation">
                 <Field
-                  name="hoursOfOperation"
+                  name="hours-of-operation"
                   component={HoursOfOperationField}
-                  initialValue={
-                    CALENDARS[3].openings as Partial<CalendarOpening>[]
-                  } // TODO: not this
+                  initialValue={initialValues["hours-of-operation"]}
                 />
               </Accordion>
               {/* <Accordion label="Exceptions">

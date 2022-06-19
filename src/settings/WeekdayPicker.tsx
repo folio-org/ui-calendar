@@ -6,7 +6,7 @@ import { getLocaleWeekdays } from "./CalendarUtils";
 
 export interface WeekdayPickerProps {
   value: Weekday | undefined;
-  onChange: (newValue: Weekday) => void;
+  onChange?: (newValue: Weekday) => void;
 }
 
 export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
@@ -30,6 +30,7 @@ export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
 
   return (
     <Select<Weekday | undefined>
+      required
       fullWidth
       marginBottom0
       dataOptions={options}
