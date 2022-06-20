@@ -28,13 +28,14 @@ import { Field, Form } from "react-final-form";
 import { useIntl } from "react-intl";
 import { CalendarOpening, ServicePoint, Weekday } from "../types/types";
 import { getWeekdaySpan, overlaps } from "./CalendarUtils";
-import HoursOfOperationField, {
+import HoursOfOperationField from "./fields/HoursOfOperationField";
+import {
   HoursOfOperationErrors,
-  RowState,
-  RowType,
-} from "./HoursOfOperationField";
+  HoursOfOperationRowState,
+} from "./fields/HoursOfOperationFieldTypes";
 import { CALENDARS } from "./MockConstants";
-import ServicePointAssignmentField from "./ServicePointAssignmentField";
+import ServicePointAssignmentField from "./fields/ServicePointAssignmentField";
+import RowType from "./fields/RowType";
 
 dayjs.extend(customParseFormat);
 
@@ -48,7 +49,7 @@ interface FormValues {
   "start-date": string;
   "end-date": string;
   "service-points": ServicePoint[];
-  "hours-of-operation": RowState[];
+  "hours-of-operation": HoursOfOperationRowState[];
 }
 
 type SimpleErrorFormValues = Omit<FormValues, "hours-of-operation">;
@@ -135,10 +136,10 @@ function validateDateOrder(values: Partial<FormValues>): {
 }
 
 function validateHoursOfOperation(
-  rows: RowState[] | undefined,
+  rows: HoursOfOperationRowState[] | undefined,
   timeFieldRefs: {
-    startTime: HTMLInputElement[];
-    endTime: HTMLInputElement[];
+    startTime: Record<number, HTMLInputElement>;
+    endTime: Record<number, HTMLInputElement>;
   },
   localeTimeFormat: string
 ): {
@@ -153,19 +154,19 @@ function validateHoursOfOperation(
     endTime: {},
   };
 
-  rows.forEach((row, i) => {
+  rows.forEach((row) => {
     if (row.startDay === undefined) {
-      emptyErrors.startDay[i] = "Please fill this in to continue";
+      emptyErrors.startDay[row.i] = "Please fill this in to continue";
     }
     if (row.endDay === undefined) {
-      emptyErrors.endDay[i] = "Please fill this in to continue";
+      emptyErrors.endDay[row.i] = "Please fill this in to continue";
     }
     if (row.type === RowType.Open) {
-      if (row.startTime === undefined || i >= timeFieldRefs.startTime.length) {
-        emptyErrors.startTime[i] = "Please fill this in to continue";
+      if (row.startTime === undefined || !(row.i in timeFieldRefs.startTime)) {
+        emptyErrors.startTime[row.i] = "Please fill this in to continue";
       }
-      if (row.endTime === undefined || i >= timeFieldRefs.endTime.length) {
-        emptyErrors.endTime[i] = "Please fill this in to continue";
+      if (row.endTime === undefined || !(row.i in timeFieldRefs.endTime)) {
+        emptyErrors.endTime[row.i] = "Please fill this in to continue";
       }
     }
   });
@@ -184,7 +185,7 @@ function validateHoursOfOperation(
     endTime: {},
   };
 
-  rows.forEach((row, i) => {
+  rows.forEach((row) => {
     if (row.type === RowType.Closed) {
       return;
     }
@@ -192,22 +193,22 @@ function validateHoursOfOperation(
       isTimeProper(
         localeTimeFormat,
         row.startTime as string,
-        timeFieldRefs.startTime[i]?.value
+        timeFieldRefs.startTime[row.i]?.value
       )
     ) {
       invalidTimeErrors.startTime[
-        i
+        row.i
       ] = `Please ender a date in the ${localeTimeFormat} format`;
     }
     if (
       isTimeProper(
         localeTimeFormat,
         row.endTime as string,
-        timeFieldRefs.endTime[i]?.value
+        timeFieldRefs.endTime[row.i]?.value
       )
     ) {
       invalidTimeErrors.endTime[
-        i
+        row.i
       ] = `Please ender a date in the ${localeTimeFormat} format`;
     }
   });
@@ -232,7 +233,7 @@ function validateHoursOfOperation(
   const baseStart = baseDay.startOf("day");
   const baseEnd = baseDay.endOf("day");
 
-  rows.forEach((row: RowState, rowIndex) => {
+  rows.forEach((row: HoursOfOperationRowState, rowIndex) => {
     const opening: CalendarOpening = {
       startDay: row.startDay as Weekday,
       startTime:
@@ -242,7 +243,7 @@ function validateHoursOfOperation(
     };
 
     const span = getWeekdaySpan(opening);
-    span.forEach((weekday, i) => {
+    span.forEach((weekday) => {
       let start = baseStart;
       let end = baseEnd;
 
@@ -253,10 +254,10 @@ function validateHoursOfOperation(
         .split(":")
         .map((num) => parseInt(num, 10)) as [number, number];
 
-      if (i === 0) {
+      if (row.i === 0) {
         start = start.hour(startTime[0]).minute(startTime[1]);
       }
-      if (i === span.length - 1) {
+      if (row.i === span.length - 1) {
         end = end.hour(endTime[0]).minute(endTime[1]);
       }
 
@@ -303,8 +304,8 @@ function validate(
     endDateRef: RefObject<HTMLInputElement>;
   },
   hoursOfOperationTimeFieldRefs: {
-    startTime: HTMLInputElement[];
-    endTime: HTMLInputElement[];
+    startTime: Record<number, HTMLInputElement>;
+    endTime: Record<number, HTMLInputElement>;
   },
   values: Partial<FormValues>
 ): Partial<
@@ -385,7 +386,11 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     (initialValues: Partial<FormValues>): Partial<FormValues> => ({
       ...initialValues,
       "hours-of-operation": CALENDARS[3].openings.map(
-        (opening): RowState => ({ type: RowType.Open, ...opening })
+        (opening, i): HoursOfOperationRowState => ({
+          type: RowType.Open,
+          i: -1 - i, // ensure `i` is negative as not to conflict
+          ...opening,
+        })
       ),
     })
   );
@@ -397,8 +402,8 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
   const hoursOfOperationTimeFieldRefs = useRef<{
-    startTime: HTMLInputElement[];
-    endTime: HTMLInputElement[];
+    startTime: Record<number, HTMLInputElement>;
+    endTime: Record<number, HTMLInputElement>;
   }>({ startTime: [], endTime: [] });
 
   const validationFunction = useMemo(
@@ -428,7 +433,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           dirtyFieldsSinceLastSubmit,
           active,
           initialValues: _initialValues,
-          values,
         } = params;
 
         const initialValues = processInitialValues(_initialValues);

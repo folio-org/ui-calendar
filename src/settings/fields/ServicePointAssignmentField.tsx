@@ -3,7 +3,7 @@ import { MultiSelectionFieldRenderProps } from "@folio/stripes-components/types/
 import fuzzysort from "fuzzysort";
 import React, { FunctionComponent, useMemo } from "react";
 import { Field } from "react-final-form";
-import { ServicePoint } from "../types/types";
+import { ServicePoint } from "../../types/types";
 
 interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
