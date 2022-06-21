@@ -195,7 +195,7 @@ export const HoursOfOperationField: FunctionComponent<
             value={row.type}
             onBlur={props.input.onBlur}
             onChange={(newData: Partial<HoursOfOperationRowState>) =>
-              updateRowState(rowStates, setRowStates, row.i, newData)
+              updateRowState(rowStates, setRowStates, realIndex, newData)
             }
           />
         ),
@@ -203,7 +203,7 @@ export const HoursOfOperationField: FunctionComponent<
           <WeekdayPicker
             value={row.startDay}
             onChange={(newWeekday) => {
-              updateRowState(rowStates, setRowStates, row.i, {
+              updateRowState(rowStates, setRowStates, realIndex, {
                 startDay: newWeekday,
               });
               props.input.onBlur();
@@ -226,7 +226,7 @@ export const HoursOfOperationField: FunctionComponent<
             }
             onBlur={props.input.onBlur}
             onChange={(newValue) =>
-              updateRowState(rowStates, setRowStates, row.i, {
+              updateRowState(rowStates, setRowStates, realIndex, {
                 startTime: newValue,
               })
             }
@@ -236,7 +236,7 @@ export const HoursOfOperationField: FunctionComponent<
           <WeekdayPicker
             value={row.endDay}
             onChange={(newWeekday) => {
-              updateRowState(rowStates, setRowStates, row.i, {
+              updateRowState(rowStates, setRowStates, realIndex, {
                 endDay: newWeekday,
               });
               props.input.onBlur();
@@ -259,7 +259,7 @@ export const HoursOfOperationField: FunctionComponent<
             }
             onBlur={props.input.onBlur}
             onChange={(newValue) =>
-              updateRowState(rowStates, setRowStates, row.i, {
+              updateRowState(rowStates, setRowStates, realIndex, {
                 endTime: newValue,
               })
             }

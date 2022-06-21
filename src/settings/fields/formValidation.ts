@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { ReactNode, RefObject } from "react";
 import { CalendarOpening, ServicePoint, Weekday } from "../../types/types";
 import { getWeekdaySpan, overlaps } from "../CalendarUtils";
+import { ExceptionRowState } from "./ExceptionFieldTypes";
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
@@ -14,6 +15,7 @@ export interface FormValues {
   "end-date": string;
   "service-points": ServicePoint[];
   "hours-of-operation": HoursOfOperationRowState[];
+  exceptions: ExceptionRowState[];
 }
 
 export interface TimeFieldRefs {
@@ -214,7 +216,7 @@ function splitRowsIntoWeekdays(
   const baseStart = baseDay.startOf("day");
   const baseEnd = baseDay.endOf("day");
 
-  rows.forEach((_row: HoursOfOperationRowState, rowIndex) => {
+  rows.forEach((_row: HoursOfOperationRowState) => {
     const row: HoursOfOperationRowState = { ..._row };
 
     if (row.type === RowType.Closed) {
@@ -250,7 +252,7 @@ function splitRowsIntoWeekdays(
       split[weekday].push({
         start,
         end,
-        row: rowIndex,
+        row: row.i,
       });
     });
   });
