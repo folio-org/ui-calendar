@@ -8,7 +8,7 @@
     "SATURDAY": "Sobota",
     "SUNDAY": "Neděle",
     "settings.remove": "Odstranit",
-    "settings.add": "Přidat",
+    "settings.add": "Přidejte",
     "settings.opening": "Otevřeno",
     "settings.allDay": "Celý den",
     "settings.day": "Den",
@@ -77,7 +77,7 @@
     "copy": "Copy Previous",
     "meta.title": "Calendar",
     "allDayOpening": "All day opening",
-    "code": "Code",
+    "code": "Kód",
     "settings.locations.discoveryDisplayName": "Zobrazovaný název objevování",
     "modifyRegularLibraryValidityPeriod": "Modify: Regular Library Hours Validity Period",
     "fillIn": "Please fill this in to continue",
@@ -120,5 +120,5 @@
     "permission.all": "Nastavení (Kalendář): Může vytvářet, zobrazovat, upravovat a odstraňovat události kalendáře",
     "permission.view": "Settings (Calendar): Can view calendar events",
     "permission.edit": "Settings (Calendar): Can create, view, and edit calendar events",
-    "noServicePoints": "Žádné položky k zobrazení"
+    "noServicePoints": "Žádné jednotky k zobrazení"
 }
