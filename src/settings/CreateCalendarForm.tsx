@@ -100,10 +100,19 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
 
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
-  const hoursOfOperationTimeFieldRefs = useRef<{
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  }>({ startTime: [], endTime: [] });
+  const timeFieldRefs = useRef<{
+    hoursOfOperation: {
+      startTime: Record<number, HTMLInputElement>;
+      endTime: Record<number, HTMLInputElement>;
+    };
+    exceptions: {
+      startTime: Record<number, Record<number, HTMLInputElement>>;
+      endTime: Record<number, Record<number, HTMLInputElement>>;
+    };
+  }>({
+    hoursOfOperation: { startTime: [], endTime: [] },
+    exceptions: { startTime: [], endTime: [] },
+  });
 
   const validationFunction = useMemo(
     () =>
@@ -112,7 +121,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
         localeDateFormat,
         localeTimeFormat,
         { startDateRef, endDateRef },
-        hoursOfOperationTimeFieldRefs.current
+        timeFieldRefs.current
       ),
     [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]
   );
@@ -149,7 +158,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   <Col xs={12} md={6}>
                     <Field
                       component={TextFieldComponent}
-                      backendDateStandard="YYYY-MM-DD"
                       autoFocus
                       required
                       name="name"
@@ -183,6 +191,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                     <Field
                       component={DateFieldComponent}
                       inputRef={endDateRef}
+                      backendDateStandard="YYYY-MM-DD"
                       required
                       usePortal
                       name="end-date"
@@ -205,7 +214,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 <Field
                   name="hours-of-operation"
                   component={HoursOfOperationField}
-                  timeFieldRefs={hoursOfOperationTimeFieldRefs.current}
+                  timeFieldRefs={timeFieldRefs.current.hoursOfOperation}
                   error={errors?.["hours-of-operation"]}
                   initialValue={initialValues["hours-of-operation"]}
                   localeTimeFormat={localeTimeFormat}

@@ -20,13 +20,14 @@ import React, {
 import { FieldRenderProps } from "react-final-form";
 import { CalendarOpening, Weekday } from "../../types/types";
 import { getLocaleWeekdays, getWeekdaySpan, WEEKDAYS } from "../CalendarUtils";
+import { TimeFieldRefs } from "./formValidation";
 import css from "./HoursOfOperationField.css";
-import HoursOfOperationFieldRowFormatter from "./HoursOfOperationFieldRowFormatter";
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
   MCLContentsType,
 } from "./HoursOfOperationFieldTypes";
+import MCLRowFormatter from "./MCLRowFormatter";
 import OpenClosedSelect from "./OpenClosedSelect";
 import RowType from "./RowType";
 import TimeField from "./TimeField";
@@ -78,10 +79,7 @@ function rowsToOpenings(
 
 export interface HoursOfOperationFieldProps
   extends FieldRenderProps<HoursOfOperationRowState[]> {
-  timeFieldRefs: {
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  };
+  timeFieldRefs: TimeFieldRefs["hoursOfOperation"];
   error?: HoursOfOperationErrors;
   // used by time field function
   // eslint-disable-next-line react/no-unused-prop-types
@@ -191,7 +189,7 @@ export const HoursOfOperationField: FunctionComponent<
   const contents: MultiColumnListProps<MCLContentsType, never>["contentData"] =
     rowStates.map((row, realIndex) => {
       return {
-        i: row.i,
+        rowState: row,
         status: (
           <OpenClosedSelect
             value={row.type}
@@ -215,18 +213,23 @@ export const HoursOfOperationField: FunctionComponent<
         ),
         startTime: (
           <TimeField
-            i={row.i}
-            row={row}
-            rowKey="startTime"
-            rowStateUpdater={(
-              rowIndex: number,
-              newState: Partial<HoursOfOperationRowState>
-            ) => updateRowState(rowStates, setRowStates, rowIndex, newState)}
-            timeFieldRefs={timeFieldRefs}
+            display={row.type === RowType.Open}
+            value={row.startTime}
             localeTimeFormat={props.localeTimeFormat}
-            input={props.input}
-            error={props.error}
-            meta={props.meta}
+            inputRef={(el) => {
+              timeFieldRefs.startTime[row.i] = el;
+            }}
+            error={
+              props.meta.touched &&
+              (props.error?.empty?.startTime?.[row.i] ||
+                props.error?.invalidTimes?.startTime?.[row.i])
+            }
+            onBlur={props.input.onBlur}
+            onChange={(newValue) =>
+              updateRowState(rowStates, setRowStates, row.i, {
+                startTime: newValue,
+              })
+            }
           />
         ),
         endDay: (
@@ -243,18 +246,23 @@ export const HoursOfOperationField: FunctionComponent<
         ),
         endTime: (
           <TimeField
-            i={row.i}
-            row={row}
-            rowKey="endTime"
-            rowStateUpdater={(
-              rowIndex: number,
-              newState: Partial<HoursOfOperationRowState>
-            ) => updateRowState(rowStates, setRowStates, rowIndex, newState)}
-            timeFieldRefs={timeFieldRefs}
+            display={row.type === RowType.Open}
+            value={row.endTime}
             localeTimeFormat={props.localeTimeFormat}
-            input={props.input}
-            error={props.error}
-            meta={props.meta}
+            inputRef={(el) => {
+              timeFieldRefs.endTime[row.i] = el;
+            }}
+            error={
+              props.meta.touched &&
+              (props.error?.empty?.endTime?.[row.i] ||
+                props.error?.invalidTimes?.endTime?.[row.i])
+            }
+            onBlur={props.input.onBlur}
+            onChange={(newValue) =>
+              updateRowState(rowStates, setRowStates, row.i, {
+                endTime: newValue,
+              })
+            }
           />
         ),
         actions: (
@@ -277,7 +285,14 @@ export const HoursOfOperationField: FunctionComponent<
     });
 
   contents.push({
-    i: -1,
+    rowState: {
+      i: -1,
+      type: RowType.Open,
+      startDay: undefined,
+      startTime: undefined,
+      endDay: undefined,
+      endTime: undefined,
+    },
     status: (
       <Button
         marginBottom0
@@ -327,9 +342,9 @@ export const HoursOfOperationField: FunctionComponent<
 
   return (
     <>
-      <MultiColumnList<MCLContentsType, "isConflicted" | "i">
+      <MultiColumnList<MCLContentsType, "isConflicted" | "rowState">
         interactive={false}
-        rowMetadata={["isConflicted", "i"]}
+        rowMetadata={["isConflicted", "rowState"]}
         columnMapping={{
           status: "Status",
           startDay: "Start day",
@@ -352,7 +367,7 @@ export const HoursOfOperationField: FunctionComponent<
             [css.conflictCell]: rowData.isConflicted,
           })
         }
-        rowFormatter={HoursOfOperationFieldRowFormatter}
+        rowFormatter={MCLRowFormatter<MCLContentsType>}
       />
       {conflictError}
     </>

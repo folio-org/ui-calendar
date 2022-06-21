@@ -4,7 +4,7 @@ import { Weekday } from "../../types/types";
 import RowType from "./RowType";
 
 export interface MCLContentsType {
-  i: number;
+  rowState: HoursOfOperationRowState;
   status: ReactNode;
   startDay: ReactNode;
   startTime: ReactNode;

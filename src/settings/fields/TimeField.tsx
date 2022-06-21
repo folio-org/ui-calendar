@@ -1,70 +1,61 @@
 import { Timepicker } from "@folio/stripes-components";
 import dayjs from "dayjs";
-import React from "react";
-import { FieldRenderProps } from "react-final-form";
+import React, { ReactNode, useState } from "react";
 import css from "./HoursOfOperationField.css";
-import { HoursOfOperationRowState } from "./HoursOfOperationFieldTypes";
-import RowType from "./RowType";
 
 function noOp() {
   /* no-op */
 }
 
-export interface TimeFieldProps<RowState extends HoursOfOperationRowState>
-  extends FieldRenderProps<RowState[]> {
-  i: number;
-  row: RowState;
-  rowKey: "startTime" | "endTime";
-  rowStateUpdater: (
-    rowIndex: number,
-    newState: Partial<HoursOfOperationRowState>
-  ) => void;
-  timeFieldRefs: {
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  };
+export interface TimeFieldProps {
+  display: boolean;
+  value: string | undefined;
+  inputRef: (el: HTMLInputElement) => void;
   localeTimeFormat: string;
+  error: ReactNode;
+  onBlur: () => void;
+  onChange: (newValue: string | undefined) => void;
 }
 
-export default function TimeField<RowState extends HoursOfOperationRowState>({
-  i,
-  row,
-  rowKey,
-  rowStateUpdater,
-  timeFieldRefs,
+export default function TimeField({
+  value,
+  display,
+  inputRef,
   localeTimeFormat,
+  error,
+  onBlur,
   ...props
-}: TimeFieldProps<RowState>) {
-  if (row.type === RowType.Closed) return null;
+}: TimeFieldProps) {
+  const [internalRef, setInternalRef] = useState<HTMLInputElement | null>(null);
 
-  const error =
-    props.meta.touched &&
-    (props.error?.empty?.[rowKey]?.[i] ||
-      props.error?.invalidTimes?.[rowKey]?.[i]);
+  if (!display) return null;
 
   return (
     <div className={css.timeFieldWrapper} title={error?.toString()}>
       <Timepicker
         required
         input={{
-          value: row[rowKey] === undefined ? "" : (row[rowKey] as string),
+          value: value === undefined ? "" : (value as string),
           name: "",
           onBlur: noOp,
           onFocus: noOp,
           onChange: (newTime: string) => {
-            const input = timeFieldRefs[rowKey][i];
-            const selection = input.selectionStart;
-            input.value = dayjs(newTime, "HH:mm").format(localeTimeFormat);
-            input.setSelectionRange(selection, selection);
-            rowStateUpdater(i, {
-              [rowKey]: newTime.length ? newTime.substring(0, 5) : undefined,
-            });
+            const input = internalRef;
+            if (input !== null) {
+              const selection = input.selectionStart;
+              input.value = dayjs(newTime, "HH:mm").format(localeTimeFormat);
+              input.setSelectionRange(selection, selection);
+            }
+            props.onChange(
+              newTime.length ? newTime.substring(0, 5) : undefined
+            );
           },
         }}
         // always fires, compared to input.onChange
-        onChange={() => props.input.onBlur()}
-        inputRef={(el) => {
-          timeFieldRefs[rowKey][i] = el;
+        onChange={() => onBlur()}
+        inputRef={(r) => {
+          setInternalRef(r);
+          inputRef(r);
         }}
         marginBottom0
         usePortal

@@ -16,6 +16,17 @@ export interface FormValues {
   "hours-of-operation": HoursOfOperationRowState[];
 }
 
+export interface TimeFieldRefs {
+  hoursOfOperation: {
+    startTime: Record<number, HTMLInputElement>;
+    endTime: Record<number, HTMLInputElement>;
+  };
+  exceptions: {
+    startTime: Record<number, Record<number, HTMLInputElement>>;
+    endTime: Record<number, Record<number, HTMLInputElement>>;
+  };
+}
+
 export type SimpleErrorFormValues = Omit<FormValues, "hours-of-operation">;
 
 function required(
@@ -44,6 +55,7 @@ function isTimeProper(
   const timeObject = dayjs(realInputValue, localeTimeFormat, true);
   return !timeObject.isValid() || timeObject.format("HH:mm") !== fieldValue;
 }
+
 // ensure manually-typed dates match the proper format
 function validateDate(
   values: Partial<FormValues>,
@@ -99,10 +111,7 @@ function validateDateOrder(values: Partial<FormValues>): {
 
 function validateHoursOfOperationEmpty(
   rows: HoursOfOperationRowState[],
-  timeFieldRefs: {
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  }
+  timeFieldRefs: TimeFieldRefs["hoursOfOperation"]
 ): HoursOfOperationErrors | undefined {
   const emptyErrors: HoursOfOperationErrors["empty"] = {
     startDay: {},
@@ -143,10 +152,7 @@ function validateHoursOfOperationEmpty(
 
 function validateHoursOfOperationTimes(
   rows: HoursOfOperationRowState[],
-  timeFieldRefs: {
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  },
+  timeFieldRefs: TimeFieldRefs["hoursOfOperation"],
   localeTimeFormat: string
 ): HoursOfOperationErrors | undefined {
   const invalidTimeErrors: HoursOfOperationErrors["invalidTimes"] = {
@@ -284,10 +290,7 @@ function validateHoursOfOperationOverlaps(
 
 function validateHoursOfOperation(
   rows: HoursOfOperationRowState[] | undefined,
-  timeFieldRefs: {
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  },
+  timeFieldRefs: TimeFieldRefs["hoursOfOperation"],
   localeTimeFormat: string
 ): {
   "hours-of-operation"?: HoursOfOperationErrors;
@@ -324,10 +327,7 @@ export default function validate(
     startDateRef: RefObject<HTMLInputElement>;
     endDateRef: RefObject<HTMLInputElement>;
   },
-  hoursOfOperationTimeFieldRefs: {
-    startTime: Record<number, HTMLInputElement>;
-    endTime: Record<number, HTMLInputElement>;
-  },
+  timeFieldRefs: TimeFieldRefs,
   values: Partial<FormValues>
 ): Partial<
   {
@@ -341,7 +341,7 @@ export default function validate(
   return {
     ...validateHoursOfOperation(
       values["hours-of-operation"],
-      hoursOfOperationTimeFieldRefs,
+      timeFieldRefs.hoursOfOperation,
       localeTimeFormat
     ),
     ...validateDateOrder(values),
