@@ -1,7 +1,7 @@
 import { Timepicker } from "@folio/stripes-components";
 import dayjs from "dayjs";
 import React, { ReactNode, useState } from "react";
-import css from "./HoursOfOperationField.css";
+import css from "./TimeField.css";
 
 function noOp() {
   /* no-op */
@@ -59,6 +59,7 @@ export default function TimeField({
         }}
         marginBottom0
         usePortal
+        placement="auto"
         meta={{
           touched: true,
           error,

@@ -1,12 +1,11 @@
 import { Select } from "@folio/stripes-components";
 import React from "react";
-import { HoursOfOperationRowState } from "./HoursOfOperationFieldTypes";
 import RowType from "./RowType";
 
 export interface OpenClosedSelectProps {
   value: RowType;
   onBlur: () => void;
-  onChange: (newData: Partial<HoursOfOperationRowState>) => void;
+  onChange: (newData: { type: RowType }) => void;
 }
 
 export default function OpenClosedSelect({
@@ -32,13 +31,9 @@ export default function OpenClosedSelect({
       value={value}
       onInput={(e) => {
         const newType = (e.target as HTMLSelectElement).value as RowType;
-        const newProps: Partial<HoursOfOperationRowState> = {
+        const newProps: { type: RowType } = {
           type: newType,
         };
-        if (newType === RowType.Closed) {
-          newProps.startTime = undefined;
-          newProps.endTime = undefined;
-        }
         onChange(newProps);
         onBlur();
       }}

@@ -4,19 +4,6 @@
   align-items: start;
 }
 
-.timeFieldWrapper {
-  width: 100%;
-
-  & [role="alert"] div {
-    display: none;
-    margin-bottom: 0 !important;
-  }
-
-  & > div > div > div {
-    margin-bottom: 0 !important;
-  }
-}
-
 .conflictMessage {
   margin: 0.75rem;
   display: flex;
@@ -28,6 +15,15 @@
   }
 }
 
+.fieldListWrapper {
+  gap: 8px;
+}
+
 .conflictCell {
   background-color: var(--error-fill);
+}
+
+.disabledIconButton {
+  color: #ccc;
+  pointer-events: none;
 }

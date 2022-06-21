@@ -18,13 +18,15 @@ export interface FormValues {
   exceptions: ExceptionRowState[];
 }
 
-export interface TimeFieldRefs {
+export interface InnerFieldRefs {
   hoursOfOperation: {
     startTime: Record<number, HTMLInputElement>;
     endTime: Record<number, HTMLInputElement>;
   };
   exceptions: {
+    startDate: Record<number, Record<number, HTMLInputElement>>;
     startTime: Record<number, Record<number, HTMLInputElement>>;
+    endDate: Record<number, Record<number, HTMLInputElement>>;
     endTime: Record<number, Record<number, HTMLInputElement>>;
   };
 }
@@ -113,7 +115,7 @@ function validateDateOrder(values: Partial<FormValues>): {
 
 function validateHoursOfOperationEmpty(
   rows: HoursOfOperationRowState[],
-  timeFieldRefs: TimeFieldRefs["hoursOfOperation"]
+  timeFieldRefs: InnerFieldRefs["hoursOfOperation"]
 ): HoursOfOperationErrors | undefined {
   const emptyErrors: HoursOfOperationErrors["empty"] = {
     startDay: {},
@@ -154,7 +156,7 @@ function validateHoursOfOperationEmpty(
 
 function validateHoursOfOperationTimes(
   rows: HoursOfOperationRowState[],
-  timeFieldRefs: TimeFieldRefs["hoursOfOperation"],
+  timeFieldRefs: InnerFieldRefs["hoursOfOperation"],
   localeTimeFormat: string
 ): HoursOfOperationErrors | undefined {
   const invalidTimeErrors: HoursOfOperationErrors["invalidTimes"] = {
@@ -292,7 +294,7 @@ function validateHoursOfOperationOverlaps(
 
 function validateHoursOfOperation(
   rows: HoursOfOperationRowState[] | undefined,
-  timeFieldRefs: TimeFieldRefs["hoursOfOperation"],
+  timeFieldRefs: InnerFieldRefs["hoursOfOperation"],
   localeTimeFormat: string
 ): {
   "hours-of-operation"?: HoursOfOperationErrors;
@@ -329,7 +331,7 @@ export default function validate(
     startDateRef: RefObject<HTMLInputElement>;
     endDateRef: RefObject<HTMLInputElement>;
   },
-  timeFieldRefs: TimeFieldRefs,
+  timeFieldRefs: InnerFieldRefs,
   values: Partial<FormValues>
 ): Partial<
   {

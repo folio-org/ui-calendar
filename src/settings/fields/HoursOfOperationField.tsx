@@ -20,8 +20,8 @@ import React, {
 import { FieldRenderProps } from "react-final-form";
 import { CalendarOpening, Weekday } from "../../types/types";
 import { getLocaleWeekdays, getWeekdaySpan, WEEKDAYS } from "../CalendarUtils";
-import { TimeFieldRefs } from "./formValidation";
-import css from "./HoursOfOperationField.css";
+import { InnerFieldRefs } from "./formValidation";
+import css from "./HoursAndExceptionFields.css";
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
@@ -79,7 +79,7 @@ function rowsToOpenings(
 
 export interface HoursOfOperationFieldProps
   extends FieldRenderProps<HoursOfOperationRowState[]> {
-  timeFieldRefs: TimeFieldRefs["hoursOfOperation"];
+  timeFieldRefs: InnerFieldRefs["hoursOfOperation"];
   error?: HoursOfOperationErrors;
   // used by time field function
   // eslint-disable-next-line react/no-unused-prop-types
@@ -194,9 +194,13 @@ export const HoursOfOperationField: FunctionComponent<
           <OpenClosedSelect
             value={row.type}
             onBlur={props.input.onBlur}
-            onChange={(newData: Partial<HoursOfOperationRowState>) =>
-              updateRowState(rowStates, setRowStates, realIndex, newData)
-            }
+            onChange={(newData: Partial<HoursOfOperationRowState>) => {
+              if (newData.type === RowType.Closed) {
+                newData.startTime = undefined;
+                newData.endTime = undefined;
+              }
+              updateRowState(rowStates, setRowStates, realIndex, newData);
+            }}
           />
         ),
         startDay: (
@@ -266,7 +270,7 @@ export const HoursOfOperationField: FunctionComponent<
           />
         ),
         actions: (
-          <Layout className="full flex flex-direction-row centerContent">
+          <Layout className="full flex centerContent">
             <IconButton
               icon="trash"
               onClick={() => {

@@ -1,0 +1,440 @@
+import {
+  Button,
+  Datepicker as DateField,
+  Headline,
+  Icon,
+  IconButton,
+  Layout,
+  MultiColumnList,
+  TextField,
+} from "@folio/stripes-components";
+import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
+import classNames from "classnames";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import minMax from "dayjs/plugin/minMax";
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import { FieldRenderProps } from "react-final-form";
+import { ExceptionRowState, MCLContentsType } from "./ExceptionFieldTypes";
+import { InnerFieldRefs } from "./formValidation";
+import css from "./HoursAndExceptionFields.css";
+import HoursOfOperationFieldRowFormatter from "./MCLRowFormatter";
+import OpenClosedSelect from "./OpenClosedSelect";
+import RowType from "./RowType";
+import TimeField from "./TimeField";
+
+dayjs.extend(customParseFormat);
+dayjs.extend(localizedFormat);
+dayjs.extend(minMax);
+
+function updateRowState(
+  rowStates: ExceptionRowState[],
+  setRowStates: React.Dispatch<ExceptionRowState[]>,
+  rowIndex: number,
+  newState: Partial<ExceptionRowState>
+) {
+  const newRowState = [...rowStates];
+  newRowState[rowIndex] = { ...newRowState[rowIndex], ...newState };
+  setRowStates(newRowState);
+}
+
+function updateInnerRowState(
+  rowStates: ExceptionRowState[],
+  setRowStates: React.Dispatch<ExceptionRowState[]>,
+  outerRowIndex: number,
+  innerRowIndex: number,
+  newState: Partial<ExceptionRowState["rows"][0]>
+) {
+  const newRowList = [...rowStates[outerRowIndex].rows];
+  newRowList[innerRowIndex] = {
+    ...newRowList[innerRowIndex],
+    ...newState,
+  };
+  updateRowState(rowStates, setRowStates, outerRowIndex, { rows: newRowList });
+}
+
+export interface ExceptionFieldProps
+  extends FieldRenderProps<ExceptionRowState[]> {
+  fieldRefs: InnerFieldRefs["exceptions"];
+  // error?: ;
+  // used by time field function
+  // eslint-disable-next-line react/no-unused-prop-types
+  localeTimeFormat: string;
+}
+
+export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
+  props: ExceptionFieldProps
+) => {
+  /** Must add at least one empty row, or MCL will not render properly */
+  const [rowStates, _setRowStates] = useState<ExceptionRowState[]>([
+    {
+      i: -1,
+      lastRowI: 0,
+      name: "",
+      type: RowType.Open,
+      rows: [
+        {
+          i: 0,
+          startDate: undefined,
+          startTime: undefined,
+          endDate: undefined,
+          endTime: undefined,
+        },
+      ],
+    },
+  ]);
+
+  const setRowStates = (newRowStates: ExceptionRowState[]) => {
+    _setRowStates(newRowStates);
+    props.input.onChange(newRowStates);
+  };
+
+  const fieldRefs = props.fieldRefs;
+
+  const _currentCountState = useState(0);
+  let currentCount = _currentCountState[0];
+  const setCurrentCount = _currentCountState[1];
+
+  // Initially sort and use values as source of rows
+  useEffect(() => {
+    const rows = [...props.input.value];
+
+    // do nothing if there are no openings to render/parse
+    if (rows.length === 0) {
+      return;
+    }
+
+    rows.sort((a, b) => {
+      // start date is enough for equality as overlap on the same day is disallowed
+      const aMin = dayjs.min(a.rows.map(({ startDate }) => dayjs(startDate)));
+      const bMin = dayjs.min(b.rows.map(({ startDate }) => dayjs(startDate)));
+      // don't care about == as that's an issue regardless, so order can be undefined there
+      return aMin.isBefore(bMin) ? -1 : 1;
+    });
+
+    setRowStates(rows);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const contents: MultiColumnListProps<MCLContentsType, never>["contentData"] =
+    rowStates.map((row, realIndex) => {
+      console.log(fieldRefs);
+      if (!(row.i in fieldRefs.startDate)) {
+        fieldRefs.startDate[row.i] = {};
+        fieldRefs.startTime[row.i] = {};
+        fieldRefs.endDate[row.i] = {};
+        fieldRefs.endTime[row.i] = {};
+      }
+      const dateTimeFields = row.rows.map((innerRow, innerRealIndex) => ({
+        startDate: (
+          <DateField
+            backendDateStandard="YYYY-MM-DD"
+            marginBottom0
+            required
+            usePortal
+            placement="auto"
+            value={innerRow.startDate}
+            inputRef={(el) => {
+              fieldRefs.startDate[row.i][innerRow.i] = el;
+            }}
+            onBlur={() => props.input.onBlur()}
+            onChange={(_e, _formattedString, dateString) =>
+              updateInnerRowState(
+                rowStates,
+                setRowStates,
+                realIndex,
+                innerRealIndex,
+                { startDate: dateString }
+              )
+            }
+          />
+        ),
+        startTime: (
+          <TimeField
+            display={row.type === RowType.Open}
+            value={innerRow.startTime}
+            localeTimeFormat={props.localeTimeFormat}
+            inputRef={(el) => {
+              fieldRefs.startTime[row.i][innerRow.i] = el;
+            }}
+            error={undefined}
+            onBlur={props.input.onBlur}
+            onChange={(newValue) =>
+              updateInnerRowState(
+                rowStates,
+                setRowStates,
+                realIndex,
+                innerRealIndex,
+                { startTime: newValue }
+              )
+            }
+          />
+        ),
+        endDate: (
+          <DateField
+            backendDateStandard="YYYY-MM-DD"
+            marginBottom0
+            required
+            usePortal
+            placement="auto"
+            value={innerRow.endDate}
+            inputRef={(el) => {
+              fieldRefs.endDate[row.i][innerRow.i] = el;
+            }}
+            onBlur={() => props.input.onBlur()}
+            onChange={(_e, _formattedString, dateString) =>
+              updateInnerRowState(
+                rowStates,
+                setRowStates,
+                realIndex,
+                innerRealIndex,
+                { endDate: dateString }
+              )
+            }
+          />
+        ),
+        endTime: (
+          <TimeField
+            display={row.type === RowType.Open}
+            value={innerRow.endTime}
+            localeTimeFormat={props.localeTimeFormat}
+            inputRef={(el) => {
+              fieldRefs.endTime[row.i][innerRow.i] = el;
+            }}
+            error={undefined}
+            onBlur={props.input.onBlur}
+            onChange={(newValue) =>
+              updateInnerRowState(
+                rowStates,
+                setRowStates,
+                realIndex,
+                innerRealIndex,
+                { endTime: newValue }
+              )
+            }
+          />
+        ),
+      }));
+      return {
+        rowState: row,
+        name: (
+          <TextField
+            marginBottom0
+            required
+            fullWidth
+            value={row.name}
+            onBlur={() => props.input.onBlur()}
+            onChange={(e) =>
+              updateRowState(rowStates, setRowStates, realIndex, {
+                name: e.target.value,
+              })
+            }
+          />
+        ),
+        status: (
+          <OpenClosedSelect
+            value={row.type}
+            onBlur={props.input.onBlur}
+            onChange={(newData: Partial<ExceptionRowState>) => {
+              if (newData.type === RowType.Closed) {
+                const minDate = dayjs.min(
+                  row.rows.map(({ startDate }) => dayjs(startDate))
+                );
+                const maxDate = dayjs.max(
+                  row.rows.map(({ startDate }) => dayjs(startDate))
+                );
+                newData.rows = [
+                  {
+                    i: row.lastRowI + 1,
+                    startDate:
+                      minDate === null
+                        ? undefined
+                        : minDate.format("YYYY-MM-DD"),
+                    startTime: undefined,
+                    endDate:
+                      maxDate === null
+                        ? undefined
+                        : maxDate.format("YYYY-MM-DD"),
+                    endTime: undefined,
+                  },
+                ];
+              }
+              updateRowState(rowStates, setRowStates, realIndex, newData);
+            }}
+          />
+        ),
+        startDate: (
+          <Layout
+            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+          >
+            {dateTimeFields.map((r) => r.startDate)}
+          </Layout>
+        ),
+        startTime: (
+          <Layout
+            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+          >
+            {dateTimeFields.map((r) => r.startTime)}
+          </Layout>
+        ),
+        endDate: (
+          <Layout
+            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+          >
+            {dateTimeFields.map((r) => r.endDate)}
+          </Layout>
+        ),
+        endTime: (
+          <Layout
+            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+          >
+            {dateTimeFields.map((r) => r.endTime)}
+          </Layout>
+        ),
+        actions: (
+          <Layout className="full flex centerContent">
+            <IconButton
+              icon="plus-sign"
+              aria-disabled={row.type === RowType.Closed}
+              className={classNames({
+                [css.disabledIconButton]: row.type === RowType.Closed,
+              })}
+              onClick={() => {
+                if (row.type === RowType.Closed) return;
+                const newRows = [
+                  ...row.rows,
+                  {
+                    i: row.lastRowI + 1,
+                    startDate: undefined,
+                    startTime: undefined,
+                    endDate: undefined,
+                    endTime: undefined,
+                  },
+                ];
+                updateRowState(rowStates, setRowStates, realIndex, {
+                  rows: newRows,
+                  lastRowI: row.lastRowI + 1,
+                });
+              }}
+            />
+            <IconButton
+              icon="trash"
+              onClick={() => {
+                const newRowStates = [...rowStates];
+                newRowStates.splice(realIndex, 1);
+                setRowStates(newRowStates);
+                props.input.onBlur();
+              }}
+            />
+          </Layout>
+        ),
+        isConflicted: false,
+      };
+    });
+
+  contents.push({
+    rowState: {
+      i: -1,
+      name: "",
+      type: RowType.Open,
+      lastRowI: 0,
+      rows: [],
+    },
+    name: (
+      <Button
+        marginBottom0
+        onClick={() => {
+          const newRowStates = [...rowStates];
+          newRowStates.push({
+            i: currentCount,
+            type: RowType.Open,
+            name: "",
+            lastRowI: 0,
+            rows: [
+              {
+                i: 0,
+                startDate: undefined,
+                startTime: undefined,
+                endDate: undefined,
+                endTime: undefined,
+              },
+            ],
+          });
+          currentCount++;
+          setCurrentCount(currentCount);
+          setRowStates(newRowStates);
+        }}
+      >
+        Add row
+      </Button>
+    ),
+    status: undefined,
+    startDate: undefined,
+    startTime: undefined,
+    endDate: undefined,
+    endTime: undefined,
+    actions: undefined,
+    isConflicted: false,
+  });
+
+  // let conflictError: ReactNode = null;
+  // if (
+  //   props.error?.conflicts?.size !== undefined &&
+  //   props.error.conflicts.size > 0
+  // ) {
+  //   conflictError = (
+  //     <Headline
+  //       margin="none"
+  //       className={css.conflictMessage}
+  //       weight="medium"
+  //       size="medium"
+  //     >
+  //       <Icon icon="exclamation-circle" status="error" />
+  //       Some openings have conflicts
+  //     </Headline>
+  //   );
+  // }
+
+  return (
+    <>
+      <MultiColumnList<MCLContentsType, "isConflicted" | "rowState">
+        interactive={false}
+        rowMetadata={["isConflicted", "rowState"]}
+        columnMapping={{
+          name: "Name",
+          status: "Status",
+          startDate: "Start date",
+          startTime: "Start time",
+          endDate: "End date",
+          endTime: "End time",
+          actions: "Actions",
+        }}
+        columnWidths={{
+          name: "22%",
+          status: "12%",
+          startDate: "15%",
+          startTime: "15%",
+          endDate: "15%",
+          endTime: "15%",
+          actions: "6%",
+        }}
+        contentData={contents}
+        getCellClass={(defaultClasses, rowData) =>
+          classNames(defaultClasses, css.cellWrapper, {
+            [css.conflictCell]: rowData.isConflicted,
+          })
+        }
+        rowFormatter={HoursOfOperationFieldRowFormatter}
+      />
+      {/* conflictError */}
+    </>
+  );
+};
+
+export default ExceptionField;

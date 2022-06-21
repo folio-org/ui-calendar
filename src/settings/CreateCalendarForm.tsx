@@ -20,7 +20,9 @@ import React, { FunctionComponent, useContext, useMemo, useRef } from "react";
 import { Field, Form } from "react-final-form";
 import { useIntl } from "react-intl";
 import { ServicePoint } from "../types/types";
-import validate, { FormValues } from "./fields/formValidation";
+import ExceptionField from "./fields/ExceptionField";
+import { ExceptionRowState } from "./fields/ExceptionFieldTypes";
+import validate, { FormValues, InnerFieldRefs } from "./fields/formValidation";
 import HoursOfOperationField from "./fields/HoursOfOperationField";
 import { HoursOfOperationRowState } from "./fields/HoursOfOperationFieldTypes";
 import RowType from "./fields/RowType";
@@ -91,6 +93,34 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           ...opening,
         })
       ),
+      exceptions: CALENDARS[3].exceptions.map(
+        (exception, i): ExceptionRowState => {
+          const result: ExceptionRowState = {
+            i: -1 - i, // ensure `i` is negative as not to conflict
+            type:
+              exception.openings.length === 0 ? RowType.Closed : RowType.Open,
+            name: exception.name,
+            lastRowI: 0,
+            rows: [],
+          };
+
+          if (result.type === RowType.Open) {
+            exception.openings.forEach((opening, j) =>
+              result.rows.push({ i: -1 - j, ...opening })
+            );
+          } else {
+            result.rows.push({
+              i: -1,
+              startDate: exception.startDate,
+              startTime: undefined,
+              endDate: exception.endDate,
+              endTime: undefined,
+            });
+          }
+
+          return result;
+        }
+      ),
     })
   );
 
@@ -100,18 +130,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
 
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
-  const timeFieldRefs = useRef<{
-    hoursOfOperation: {
-      startTime: Record<number, HTMLInputElement>;
-      endTime: Record<number, HTMLInputElement>;
-    };
-    exceptions: {
-      startTime: Record<number, Record<number, HTMLInputElement>>;
-      endTime: Record<number, Record<number, HTMLInputElement>>;
-    };
-  }>({
-    hoursOfOperation: { startTime: [], endTime: [] },
-    exceptions: { startTime: [], endTime: [] },
+  const innerFieldRefs = useRef<InnerFieldRefs>({
+    hoursOfOperation: { startTime: {}, endTime: {} },
+    exceptions: { startDate: {}, startTime: {}, endDate: {}, endTime: {} },
   });
 
   const validationFunction = useMemo(
@@ -121,7 +142,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
         localeDateFormat,
         localeTimeFormat,
         { startDateRef, endDateRef },
-        timeFieldRefs.current
+        innerFieldRefs.current
       ),
     [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]
   );
@@ -141,7 +162,14 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           dirtyFieldsSinceLastSubmit,
           active,
           initialValues: _initialValues,
+          values,
         } = params;
+
+        console.table(
+          values
+          // form,
+          // callback,
+        );
 
         const initialValues = processInitialValues(_initialValues);
 
@@ -214,178 +242,22 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 <Field
                   name="hours-of-operation"
                   component={HoursOfOperationField}
-                  timeFieldRefs={timeFieldRefs.current.hoursOfOperation}
+                  timeFieldRefs={innerFieldRefs.current.hoursOfOperation}
                   error={errors?.["hours-of-operation"]}
                   initialValue={initialValues["hours-of-operation"]}
                   localeTimeFormat={localeTimeFormat}
                 />
               </Accordion>
-              {/* <Accordion label="Exceptions">
-                <MultiColumnList
-                  interactive={false}
-                  onHeaderClick={() => ({})}
-                  getCellClass={(defaultClass) =>
-                    `${defaultClass} ${css.flexAlignStart}`
-                  }
-                  columnMapping={{
-                    name: "Name",
-                    status: "Status",
-                    startDate: "Start date",
-                    startTime: "Start time",
-                    endDate: "End date",
-                    endTime: "End time",
-                    actions: "Actions",
-                  }}
-                  columnWidths={{
-                    name: "22%",
-                    status: "12%",
-                    startDate: "15%",
-                    startTime: "15%",
-                    endDate: "15%",
-                    endTime: "15%",
-                    actions: "6%",
-                  }}
-                  contentData={[
-                    {
-                      name: <TextField marginBottom0 required />,
-                      status: (
-                        <Select<string>
-                          fullWidth
-                          marginBottom0
-                          dataOptions={[
-                            {
-                              value: "",
-                              label: "",
-                            },
-                            {
-                              value: "open",
-                              label: "Open",
-                            },
-                            {
-                              value: "closed",
-                              label: "Closed",
-                            },
-                          ]}
-                        />
-                      ),
-                      startDate: (
-                        <Layout className="flex flex-direction-column">
-                          <DateField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <DateField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <DateField usePortal marginBottom0 />
-                        </Layout>
-                      ),
-                      startTime: (
-                        <Layout className="flex flex-direction-column">
-                          <TimeField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <TimeField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <TimeField usePortal marginBottom0 />
-                        </Layout>
-                      ),
-                      endDate: (
-                        <Layout className="flex flex-direction-column">
-                          <DateField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <DateField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <DateField usePortal marginBottom0 />
-                        </Layout>
-                      ),
-                      endTime: (
-                        <Layout className="flex flex-direction-column">
-                          <TimeField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <TimeField usePortal marginBottom0 />
-                          <Layout className="marginTopHalf" />
-                          <TimeField usePortal marginBottom0 />
-                        </Layout>
-                      ),
-                      actions: (
-                        <Layout className="full flex flex-direction-row centerContent">
-                          <IconButton icon="plus-sign" />
-                          <IconButton icon="trash" />
-                        </Layout>
-                      ),
-                    },
-                    {
-                      name: <TextField marginBottom0 required />,
-                      status: (
-                        <Select<string>
-                          fullWidth
-                          marginBottom0
-                          dataOptions={[
-                            {
-                              value: "",
-                              label: "",
-                            },
-                            {
-                              value: "open",
-                              label: "Open",
-                            },
-                            {
-                              value: "closed",
-                              label: "Closed",
-                            },
-                          ]}
-                        />
-                      ),
-                      startDate: <DateField usePortal marginBottom0 />,
-                      startTime: <TimeField usePortal marginBottom0 />,
-                      endDate: <DateField usePortal marginBottom0 />,
-                      endTime: <TimeField usePortal marginBottom0 />,
-                      actions: (
-                        <Layout className="full flex flex-direction-row centerContent">
-                          <IconButton icon="plus-sign" />
-                          <IconButton icon="trash" />
-                        </Layout>
-                      ),
-                    },
-                    {
-                      name: <TextField<string> marginBottom0 required />,
-                      status: (
-                        <Select<string>
-                          fullWidth
-                          marginBottom0
-                          dataOptions={[
-                            {
-                              value: "",
-                              label: "",
-                            },
-                            {
-                              value: "open",
-                              label: "Open",
-                            },
-                            {
-                              value: "closed",
-                              label: "Closed",
-                            },
-                          ]}
-                        />
-                      ),
-                      startDate: <DateField usePortal marginBottom0 />,
-                      endDate: <DateField usePortal marginBottom0 />,
-                      actions: (
-                        <Layout className="full flex flex-direction-row centerContent">
-                          <IconButton
-                            icon="plus-sign"
-                            style={{
-                              color: "#bbb",
-                            }}
-                          />
-                          <IconButton icon="trash" />
-                        </Layout>
-                      ),
-                    },
-                    {
-                      name: <Button marginBottom0>Add row</Button>,
-                    },
-                  ]}
+              <Accordion label="Exceptions">
+                <Field
+                  name="exceptions"
+                  component={ExceptionField}
+                  fieldRefs={innerFieldRefs.current.exceptions}
+                  // error={errors?.["hours-of-operation"]}
+                  initialValue={initialValues.exceptions}
+                  localeTimeFormat={localeTimeFormat}
                 />
-              </Accordion> */}
+              </Accordion>
             </AccordionSet>
           </form>
         );

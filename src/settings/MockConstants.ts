@@ -150,13 +150,25 @@ export const CALENDARS: Calendar[] = [
       {
         name: "Community Event (Longer Hours)",
         startDate: "2022-05-13",
-        endDate: "2022-05-13",
+        endDate: "2022-05-15",
         openings: [
           {
             startDate: "2022-05-13",
             startTime: "07:00",
             endDate: "2022-05-13",
             endTime: "23:59",
+          },
+          {
+            startDate: "2022-05-14",
+            startTime: "05:00",
+            endDate: "2022-05-14",
+            endTime: "21:59",
+          },
+          {
+            startDate: "2022-05-15",
+            startTime: "06:00",
+            endDate: "2022-05-15",
+            endTime: "22:59",
           },
         ],
       },
