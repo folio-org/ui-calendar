@@ -552,6 +552,30 @@ export function validateExceptionInterOverlaps(
   return undefined;
 }
 
+export function getExceptionRowIntraOverlap(
+  row: ExceptionRowState
+): Set<number> {
+  const overlappingRows = new Set<number>();
+
+  for (let i = 0; i < row.rows.length - 1; i++) {
+    for (let j = i + 1; j < row.rows.length; j++) {
+      if (
+        overlaps(
+          dayjs(`${row.rows[i].startDate} ${row.rows[i].startTime}`),
+          dayjs(`${row.rows[i].endDate} ${row.rows[i].endTime}`),
+          dayjs(`${row.rows[j].startDate} ${row.rows[j].startTime}`),
+          dayjs(`${row.rows[j].endDate} ${row.rows[j].endTime}`)
+        )
+      ) {
+        overlappingRows.add(row.rows[i].i);
+        overlappingRows.add(row.rows[j].i);
+      }
+    }
+  }
+
+  return overlappingRows;
+}
+
 export function validateExceptionIntraOverlaps(
   rows: ExceptionRowState[]
 ): ExceptionFieldErrors | undefined {
@@ -561,24 +585,14 @@ export function validateExceptionIntraOverlaps(
   rows.forEach((row) => {
     if (row.type === RowType.Closed) return;
 
-    for (let i = 0; i < row.rows.length - 1; i++) {
-      for (let j = i + 1; j < row.rows.length; j++) {
-        if (
-          overlaps(
-            dayjs(`${row.rows[i].startDate} ${row.rows[i].startTime}`),
-            dayjs(`${row.rows[i].endDate} ${row.rows[i].endTime}`),
-            dayjs(`${row.rows[j].startDate} ${row.rows[j].startTime}`),
-            dayjs(`${row.rows[j].endDate} ${row.rows[j].endTime}`)
-          )
-        ) {
-          if (!(row.i in intraConflicts)) {
-            intraConflicts[row.i] = {};
-          }
-          intraConflicts[row.i][row.rows[i].i] = true;
-          intraConflicts[row.i][row.rows[j].i] = true;
-          hasError = true;
-        }
-      }
+    const innerOverlaps = getExceptionRowIntraOverlap(row);
+    if (innerOverlaps.size) {
+      intraConflicts[row.i] = {};
+      hasError = true;
+
+      innerOverlaps.forEach((innerI) => {
+        intraConflicts[row.i][innerI] = true;
+      });
     }
   });
 
