@@ -68,9 +68,174 @@ export interface ExceptionFieldProps
   extends FieldRenderProps<ExceptionRowState[]> {
   fieldRefs: InnerFieldRefs["exceptions"];
   error?: ExceptionFieldErrors;
-  // used by time field function
+  // used in getDateTimeFields
   // eslint-disable-next-line react/no-unused-prop-types
   localeTimeFormat: string;
+  submitAttempted: boolean;
+}
+
+function getDateTimeFields({
+  props,
+  row,
+  innerRow,
+  realIndex,
+  innerRowRealIndex,
+  fieldRefs,
+  isDirty,
+  rowStates,
+  setRowStates,
+}: {
+  props: ExceptionFieldProps;
+  row: ExceptionRowState;
+  innerRow: ExceptionRowState["rows"][0];
+  realIndex: number;
+  innerRowRealIndex: number;
+  fieldRefs: InnerFieldRefs["exceptions"];
+  isDirty: boolean;
+  rowStates: ExceptionRowState[];
+  setRowStates: (newRowStates: ExceptionRowState[]) => void;
+}): {
+  startDate: ReactNode;
+  startTime: ReactNode;
+  endDate: ReactNode;
+  endTime: ReactNode;
+} {
+  return {
+    startDate: (
+      <DateField
+        key={`sd-${innerRow.i}`}
+        className={classNames(
+          {
+            [css.conflictCell]:
+              props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+          },
+          cssHiddenErrorField.hiddenErrorFieldWrapper
+        )}
+        backendDateStandard="YYYY-MM-DD"
+        marginBottom0
+        required
+        usePortal
+        placement="auto"
+        value={innerRow.startDate}
+        inputRef={(el) => {
+          fieldRefs.startDate[row.i][innerRow.i] = el;
+        }}
+        error={
+          isDirty &&
+          (props.error?.empty?.startDate?.[row.i]?.[innerRow.i] ||
+            props.error?.invalid?.startDate?.[row.i]?.[innerRow.i])
+        }
+        onBlur={() => props.input.onBlur()}
+        onChange={(_e, _formattedString, dateString) => {
+          updateInnerRowState(
+            rowStates,
+            setRowStates,
+            realIndex,
+            innerRowRealIndex,
+            { startDate: dateString }
+          );
+          props.input.onBlur();
+        }}
+      />
+    ),
+    startTime: (
+      <TimeField
+        key={`st-${innerRow.i}`}
+        className={classNames({
+          [css.conflictCell]:
+            props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+        })}
+        display={row.type === RowType.Open}
+        value={innerRow.startTime}
+        localeTimeFormat={props.localeTimeFormat}
+        inputRef={(el) => {
+          fieldRefs.startTime[row.i][innerRow.i] = el;
+        }}
+        error={
+          isDirty &&
+          (props.error?.empty?.startTime?.[row.i]?.[innerRow.i] ||
+            props.error?.invalid?.startTime?.[row.i]?.[innerRow.i])
+        }
+        onBlur={props.input.onBlur}
+        onChange={(newValue) =>
+          updateInnerRowState(
+            rowStates,
+            setRowStates,
+            realIndex,
+            innerRowRealIndex,
+            { startTime: newValue }
+          )
+        }
+      />
+    ),
+    endDate: (
+      <DateField
+        key={`ed-${innerRow.i}`}
+        className={classNames(
+          {
+            [css.conflictCell]:
+              props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+          },
+          cssHiddenErrorField.hiddenErrorFieldWrapper
+        )}
+        backendDateStandard="YYYY-MM-DD"
+        marginBottom0
+        required
+        usePortal
+        placement="auto"
+        value={innerRow.endDate}
+        inputRef={(el) => {
+          fieldRefs.endDate[row.i][innerRow.i] = el;
+        }}
+        error={
+          isDirty &&
+          (props.error?.empty?.endDate?.[row.i]?.[innerRow.i] ||
+            props.error?.invalid?.endDate?.[row.i]?.[innerRow.i])
+        }
+        onBlur={() => props.input.onBlur()}
+        onChange={(_e, _formattedString, dateString) => {
+          updateInnerRowState(
+            rowStates,
+            setRowStates,
+            realIndex,
+            innerRowRealIndex,
+            { endDate: dateString }
+          );
+          props.input.onBlur();
+        }}
+      />
+    ),
+    endTime: (
+      <TimeField
+        key={`et-${innerRow.i}`}
+        className={classNames({
+          [css.conflictCell]:
+            props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+        })}
+        display={row.type === RowType.Open}
+        value={innerRow.endTime}
+        localeTimeFormat={props.localeTimeFormat}
+        inputRef={(el) => {
+          fieldRefs.endTime[row.i][innerRow.i] = el;
+        }}
+        error={
+          isDirty &&
+          (props.error?.empty?.endTime?.[row.i]?.[innerRow.i] ||
+            props.error?.invalid?.endTime?.[row.i]?.[innerRow.i])
+        }
+        onBlur={props.input.onBlur}
+        onChange={(newValue) =>
+          updateInnerRowState(
+            rowStates,
+            setRowStates,
+            realIndex,
+            innerRowRealIndex,
+            { endTime: newValue }
+          )
+        }
+      />
+    ),
+  };
 }
 
 export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
@@ -127,151 +292,30 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // controls whether empty/invalid error messages should be shown
+  const isDirty = !!(props.submitAttempted || props.meta.touched);
+
   const contents: MultiColumnListProps<MCLContentsType, never>["contentData"] =
     rowStates.map((row, realIndex) => {
-      console.log(props.error);
       if (!(row.i in fieldRefs.startDate)) {
         fieldRefs.startDate[row.i] = {};
         fieldRefs.startTime[row.i] = {};
         fieldRefs.endDate[row.i] = {};
         fieldRefs.endTime[row.i] = {};
       }
-      const dateTimeFields = row.rows.map((innerRow, innerRealIndex) => ({
-        startDate: (
-          <DateField
-            key={`sd-${innerRow.i}`}
-            className={classNames(
-              {
-                [css.conflictCell]:
-                  props.error?.intraConflicts?.[row.i]?.[innerRow.i],
-              },
-              cssHiddenErrorField.hiddenErrorFieldWrapper
-            )}
-            backendDateStandard="YYYY-MM-DD"
-            marginBottom0
-            required
-            usePortal
-            placement="auto"
-            value={innerRow.startDate}
-            inputRef={(el) => {
-              fieldRefs.startDate[row.i][innerRow.i] = el;
-            }}
-            error={
-              props.meta.touched &&
-              (props.error?.empty?.startDate?.[row.i]?.[innerRow.i] ||
-                props.error?.invalid?.startDate?.[row.i]?.[innerRow.i])
-            }
-            onBlur={() => props.input.onBlur()}
-            onChange={(_e, _formattedString, dateString) => {
-              updateInnerRowState(
-                rowStates,
-                setRowStates,
-                realIndex,
-                innerRealIndex,
-                { startDate: dateString }
-              );
-              props.input.onBlur();
-            }}
-          />
-        ),
-        startTime: (
-          <TimeField
-            key={`st-${innerRow.i}`}
-            className={classNames({
-              [css.conflictCell]:
-                props.error?.intraConflicts?.[row.i]?.[innerRow.i],
-            })}
-            display={row.type === RowType.Open}
-            value={innerRow.startTime}
-            localeTimeFormat={props.localeTimeFormat}
-            inputRef={(el) => {
-              fieldRefs.startTime[row.i][innerRow.i] = el;
-            }}
-            error={
-              props.meta.touched &&
-              (props.error?.empty?.startTime?.[row.i]?.[innerRow.i] ||
-                props.error?.invalid?.startTime?.[row.i]?.[innerRow.i])
-            }
-            onBlur={props.input.onBlur}
-            onChange={(newValue) =>
-              updateInnerRowState(
-                rowStates,
-                setRowStates,
-                realIndex,
-                innerRealIndex,
-                { startTime: newValue }
-              )
-            }
-          />
-        ),
-        endDate: (
-          <DateField
-            key={`ed-${innerRow.i}`}
-            className={classNames(
-              {
-                [css.conflictCell]:
-                  props.error?.intraConflicts?.[row.i]?.[innerRow.i],
-              },
-              cssHiddenErrorField.hiddenErrorFieldWrapper
-            )}
-            backendDateStandard="YYYY-MM-DD"
-            marginBottom0
-            required
-            usePortal
-            placement="auto"
-            value={innerRow.endDate}
-            inputRef={(el) => {
-              fieldRefs.endDate[row.i][innerRow.i] = el;
-            }}
-            error={
-              props.meta.touched &&
-              (props.error?.empty?.endDate?.[row.i]?.[innerRow.i] ||
-                props.error?.invalid?.endDate?.[row.i]?.[innerRow.i])
-            }
-            onBlur={() => props.input.onBlur()}
-            onChange={(_e, _formattedString, dateString) => {
-              updateInnerRowState(
-                rowStates,
-                setRowStates,
-                realIndex,
-                innerRealIndex,
-                { endDate: dateString }
-              );
-              props.input.onBlur();
-            }}
-          />
-        ),
-        endTime: (
-          <TimeField
-            key={`et-${innerRow.i}`}
-            className={classNames({
-              [css.conflictCell]:
-                props.error?.intraConflicts?.[row.i]?.[innerRow.i],
-            })}
-            display={row.type === RowType.Open}
-            value={innerRow.endTime}
-            localeTimeFormat={props.localeTimeFormat}
-            inputRef={(el) => {
-              fieldRefs.endTime[row.i][innerRow.i] = el;
-            }}
-            error={
-              props.meta.touched &&
-              (props.error?.empty?.endTime?.[row.i]?.[innerRow.i] ||
-                props.error?.invalid?.endTime?.[row.i]?.[innerRow.i])
-            }
-            onBlur={props.input.onBlur}
-            onChange={(newValue) =>
-              updateInnerRowState(
-                rowStates,
-                setRowStates,
-                realIndex,
-                innerRealIndex,
-                { endTime: newValue }
-              )
-            }
-          />
-        ),
-      }));
+      const dateTimeFields = row.rows.map((innerRow, innerRowRealIndex) =>
+        getDateTimeFields({
+          props,
+          row,
+          innerRow,
+          realIndex,
+          innerRowRealIndex,
+          fieldRefs,
+          isDirty,
+          rowStates,
+          setRowStates,
+        })
+      );
       return {
         rowState: row,
         name: (

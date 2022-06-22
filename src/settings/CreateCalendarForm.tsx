@@ -38,6 +38,7 @@ export const FORM_ID = "ui-calendar-create-calendar-form";
 
 export interface CreateCalendarFormProps {
   closeParentLayer: () => void;
+  submitAttempted: boolean;
   setIsSubmitting: (isSaving: boolean) => void;
   servicePoints: ServicePoint[];
 }
@@ -193,7 +194,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       error={
                         (!dirtyFieldsSinceLastSubmit?.name &&
                           submitErrors?.name) ||
-                        (touched?.name && active !== "name" && errors?.name)
+                        ((props.submitAttempted || touched?.name) && active !== "name" && errors?.name)
                       }
                     />
                   </Col>
@@ -209,7 +210,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       error={
                         (!dirtyFieldsSinceLastSubmit?.["start-date"] &&
                           submitErrors?.["start-date"]) ||
-                        (touched?.["start-date"] &&
+                        ((props.submitAttempted || touched?.["start-date"]) &&
                           active !== "start-date" &&
                           errors?.["start-date"])
                       }
@@ -227,7 +228,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       error={
                         (!dirtyFieldsSinceLastSubmit?.["end-date"] &&
                           submitErrors?.["end-date"]) ||
-                        (touched?.["end-date"] &&
+                        ((props.submitAttempted || touched?.["end-date"]) &&
                           active !== "end-date" &&
                           errors?.["end-date"])
                       }
@@ -246,6 +247,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   error={errors?.["hours-of-operation"]}
                   initialValue={initialValues["hours-of-operation"]}
                   localeTimeFormat={localeTimeFormat}
+                  submitAttempted={props.submitAttempted}
                 />
               </Accordion>
               <Accordion label="Exceptions">
@@ -256,6 +258,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   error={errors?.exceptions}
                   initialValue={initialValues.exceptions}
                   localeTimeFormat={localeTimeFormat}
+                  submitAttempted={props.submitAttempted}
                 />
               </Accordion>
             </AccordionSet>

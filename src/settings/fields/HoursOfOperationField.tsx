@@ -81,9 +81,8 @@ export interface HoursOfOperationFieldProps
   extends FieldRenderProps<HoursOfOperationRowState[]> {
   timeFieldRefs: InnerFieldRefs["hoursOfOperation"];
   error?: HoursOfOperationErrors;
-  // used by time field function
-  // eslint-disable-next-line react/no-unused-prop-types
   localeTimeFormat: string;
+  submitAttempted: boolean;
 }
 
 export const HoursOfOperationField: FunctionComponent<
@@ -212,7 +211,7 @@ export const HoursOfOperationField: FunctionComponent<
               });
               props.input.onBlur();
             }}
-            error={props.error?.empty?.startDay?.[row.i]}
+            error={(props.submitAttempted || props.meta.touched) && props.error?.empty?.startDay?.[row.i]}
           />
         ),
         startTime: (
@@ -224,7 +223,7 @@ export const HoursOfOperationField: FunctionComponent<
               timeFieldRefs.startTime[row.i] = el;
             }}
             error={
-              props.meta.touched &&
+              (props.submitAttempted || props.meta.touched) &&
               (props.error?.empty?.startTime?.[row.i] ||
                 props.error?.invalidTimes?.startTime?.[row.i])
             }
@@ -245,7 +244,7 @@ export const HoursOfOperationField: FunctionComponent<
               });
               props.input.onBlur();
             }}
-            error={props.error?.empty?.endDay?.[row.i]}
+            error={(props.submitAttempted || props.meta.touched) && props.error?.empty?.endDay?.[row.i]}
           />
         ),
         endTime: (
@@ -257,7 +256,7 @@ export const HoursOfOperationField: FunctionComponent<
               timeFieldRefs.endTime[row.i] = el;
             }}
             error={
-              props.meta.touched &&
+              (props.submitAttempted || props.meta.touched) &&
               (props.error?.empty?.endTime?.[row.i] ||
                 props.error?.invalidTimes?.endTime?.[row.i])
             }

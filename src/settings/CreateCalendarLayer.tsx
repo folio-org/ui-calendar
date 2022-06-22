@@ -4,7 +4,7 @@ import {
   Loading,
   LoadingPane,
   Pane,
-  PaneMenu,
+  PaneFooter,
   Paneset,
 } from "@folio/stripes-components";
 import React, { FunctionComponent, useEffect, useState } from "react";
@@ -23,6 +23,7 @@ export const CreateCalendarLayer: FunctionComponent<
   let pane = <LoadingPane />;
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
   /** Reset if the layer is closed or opened */
   useEffect(() => setIsSubmitting(false), [props.isOpen]);
@@ -35,23 +36,28 @@ export const CreateCalendarLayer: FunctionComponent<
         centerContent
         onClose={props.onClose}
         dismissible
-        lastMenu={
-          <PaneMenu>
-            <Button
-              disabled={isSubmitting}
-              buttonStyle="primary"
-              marginBottom0
-              type="submit"
-              form={FORM_ID}
-            >
-              {isSubmitting ? <Loading /> : "Save"}
-            </Button>
-          </PaneMenu>
+        footer={
+          <PaneFooter
+            renderStart={<Button onClick={props.onClose}>Cancel</Button>}
+            renderEnd={
+              <Button
+                disabled={isSubmitting}
+                buttonStyle="primary"
+                marginBottom0
+                type="submit"
+                form={FORM_ID}
+                onClick={() => setSubmitAttempted(true)}
+              >
+                {isSubmitting ? <Loading /> : "Save & close"}
+              </Button>
+            }
+          />
         }
       >
         <CreateCalendarForm
           closeParentLayer={props.onClose}
           setIsSubmitting={setIsSubmitting}
+          submitAttempted={submitAttempted}
           servicePoints={props.dataRepository.getServicePoints()}
         />
       </Pane>
