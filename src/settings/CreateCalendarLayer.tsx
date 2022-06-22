@@ -58,6 +58,7 @@ export const CreateCalendarLayer: FunctionComponent<
           closeParentLayer={props.onClose}
           setIsSubmitting={setIsSubmitting}
           submitAttempted={submitAttempted}
+          dataRepository={props.dataRepository}
           servicePoints={props.dataRepository.getServicePoints()}
         />
       </Pane>

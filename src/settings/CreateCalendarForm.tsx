@@ -19,7 +19,8 @@ import memoizee from "memoizee";
 import React, { FunctionComponent, useContext, useMemo, useRef } from "react";
 import { Field, Form } from "react-final-form";
 import { useIntl } from "react-intl";
-import { ServicePoint } from "../types/types";
+import { Calendar, ServicePoint, Weekday } from "../types/types";
+import DataRepository from "./DataRepository";
 import ExceptionField from "./fields/ExceptionField";
 import { ExceptionRowState } from "./fields/ExceptionFieldTypes";
 import validate, { FormValues, InnerFieldRefs } from "./fields/formValidation";
@@ -39,6 +40,7 @@ export const FORM_ID = "ui-calendar-create-calendar-form";
 export interface CreateCalendarFormProps {
   closeParentLayer: () => void;
   submitAttempted: boolean;
+  dataRepository: DataRepository;
   setIsSubmitting: (isSaving: boolean) => void;
   servicePoints: ServicePoint[];
 }
@@ -57,13 +59,69 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       return undefined;
     }
 
-    console.table({
-      values,
-      form,
-      callback,
+    props.setIsSubmitting(true);
+
+    console.log(values);
+    console.log(form);
+
+    const newCalendar: Calendar = {
+      id: null,
+      name: values.name,
+      startDate: values["start-date"],
+      endDate: values["end-date"],
+      servicePoints: [],
+      openings: [],
+      exceptions: [],
+    };
+
+    values["service-points"].forEach((servicePoint) =>
+      newCalendar.servicePoints.push(servicePoint.id)
+    );
+
+    values["hours-of-operation"].forEach((opening) => {
+      if (opening.type === RowType.Closed) return;
+
+      newCalendar.openings.push({
+        startDay: opening.startDay as Weekday,
+        startTime: opening.startTime as string,
+        endDay: opening.endDay as Weekday,
+        endTime: opening.endTime as string,
+      });
     });
 
-    props.setIsSubmitting(true);
+    values.exceptions.forEach((exception) => {
+      if (exception.type === RowType.Closed) {
+        newCalendar.exceptions.push({
+          name: exception.name,
+          startDate: exception.rows[0].startDate as string,
+          endDate: exception.rows[0].endDate as string,
+          openings: [],
+        });
+      } else {
+        const minDate = dayjs
+          .min(exception.rows.map(({ startDate }) => dayjs(startDate)))
+          .format("YYYY-MM-DD");
+        const maxDate = dayjs
+          .min(exception.rows.map(({ endDate }) => dayjs(endDate)))
+          .format("YYYY-MM-DD");
+
+        newCalendar.exceptions.push({
+          name: exception.name,
+          startDate: minDate,
+          endDate: maxDate,
+          openings: exception.rows.map((row) => ({
+            startDate: row.startDate as string,
+            startTime: row.startTime as string,
+            endDate: row.endDate as string,
+            endTime: row.endTime as string,
+          })),
+        });
+      }
+    });
+
+    console.log(newCalendar);
+
+    props.setIsSubmitting(false);
 
     return new Promise((resolve) =>
       setTimeout(() => {
@@ -79,8 +137,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
         resolve({ name: "foo" });
       }, 500)
     );
-    // props.closeParentLayer();
-    // return new Promise<void>((reject) => reject());
   };
 
   // TODO: not this
@@ -163,14 +219,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           dirtyFieldsSinceLastSubmit,
           active,
           initialValues: _initialValues,
-          values,
         } = params;
-
-        console.table(
-          values
-          // form,
-          // callback,
-        );
 
         const initialValues = processInitialValues(_initialValues);
 
@@ -194,7 +243,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       error={
                         (!dirtyFieldsSinceLastSubmit?.name &&
                           submitErrors?.name) ||
-                        ((props.submitAttempted || touched?.name) && active !== "name" && errors?.name)
+                        ((props.submitAttempted || touched?.name) &&
+                          active !== "name" &&
+                          errors?.name)
                       }
                     />
                   </Col>
