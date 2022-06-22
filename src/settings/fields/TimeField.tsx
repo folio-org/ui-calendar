@@ -1,7 +1,8 @@
 import { Timepicker } from "@folio/stripes-components";
+import classNames from "classnames";
 import dayjs from "dayjs";
 import React, { ReactNode, useState } from "react";
-import css from "./TimeField.css";
+import css from "./hiddenErrorField.css";
 
 function noOp() {
   /* no-op */
@@ -15,6 +16,7 @@ export interface TimeFieldProps {
   error: ReactNode;
   onBlur: () => void;
   onChange: (newValue: string | undefined) => void;
+  className?: string;
 }
 
 export default function TimeField({
@@ -24,6 +26,7 @@ export default function TimeField({
   localeTimeFormat,
   error,
   onBlur,
+  className,
   ...props
 }: TimeFieldProps) {
   const [internalRef, setInternalRef] = useState<HTMLInputElement | null>(null);
@@ -31,11 +34,14 @@ export default function TimeField({
   if (!display) return null;
 
   return (
-    <div className={css.timeFieldWrapper} title={error?.toString()}>
+    <div
+      className={classNames(css.hiddenErrorFieldWrapper, className)}
+      title={error?.toString()}
+    >
       <Timepicker
         required
         input={{
-          value: value === undefined ? "" : (value as string),
+          value: value === undefined ? "" : value,
           name: "",
           onBlur: noOp,
           onFocus: noOp,

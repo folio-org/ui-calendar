@@ -253,7 +253,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   name="exceptions"
                   component={ExceptionField}
                   fieldRefs={innerFieldRefs.current.exceptions}
-                  // error={errors?.["hours-of-operation"]}
+                  error={errors?.exceptions}
                   initialValue={initialValues.exceptions}
                   localeTimeFormat={localeTimeFormat}
                 />

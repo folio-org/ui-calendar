@@ -1,3 +1,4 @@
+import { RequireExactlyOne } from "@folio/stripes-components/types/utils";
 import { ReactNode } from "react";
 import RowType from "./RowType";
 
@@ -26,3 +27,22 @@ export interface ExceptionRowState {
     endTime: string | undefined;
   }[];
 }
+
+export type ExceptionFieldErrors = RequireExactlyOne<{
+  empty?: {
+    name: Record<number, ReactNode>;
+  } & {
+    [field in keyof Omit<ExceptionRowState["rows"][0], "i">]: Record<
+      number,
+      Record<number, ReactNode>
+    >;
+  };
+  invalid?: {
+    [field in keyof Omit<ExceptionRowState["rows"][0], "i">]: Record<
+      number,
+      Record<number, ReactNode>
+    >;
+  };
+  interConflicts?: Set<number>;
+  intraConflicts?: Record<number, Record<number, true>>;
+}>;

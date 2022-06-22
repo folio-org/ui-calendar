@@ -339,7 +339,7 @@ export const HoursOfOperationField: FunctionComponent<
         size="medium"
       >
         <Icon icon="exclamation-circle" status="error" />
-        Some openings have conflicts
+        Some openings conflict with each other
       </Headline>
     );
   }

@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { ReactNode, RefObject } from "react";
 import { CalendarOpening, ServicePoint, Weekday } from "../../types/types";
 import { getWeekdaySpan, overlaps } from "../CalendarUtils";
-import { ExceptionRowState } from "./ExceptionFieldTypes";
+import { ExceptionFieldErrors, ExceptionRowState } from "./ExceptionFieldTypes";
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
@@ -31,7 +31,10 @@ export interface InnerFieldRefs {
   };
 }
 
-export type SimpleErrorFormValues = Omit<FormValues, "hours-of-operation">;
+export type SimpleErrorFormValues = Omit<
+  FormValues,
+  "hours-of-operation" | "exceptions"
+>;
 
 function required(
   values: Partial<FormValues>,
@@ -42,7 +45,8 @@ function required(
   if (
     !(key in values) ||
     values[key] === undefined ||
-    (typeof values[key] === "string" && values[key] === "") ||
+    (typeof values[key] === "string" &&
+      (values[key] as string).trim() === "") ||
     (Array.isArray(values[key]) && (values[key] as unknown[]).length === 0)
   ) {
     return {
@@ -324,6 +328,304 @@ function validateHoursOfOperation(
   };
 }
 
+export function validateExceptionInnerRowEmpty(
+  row: ExceptionRowState,
+  innerRow: ExceptionRowState["rows"][0],
+  innerFieldRefs: InnerFieldRefs["exceptions"],
+  emptyErrors: NonNullable<ExceptionFieldErrors["empty"]>,
+  _hasError: boolean
+): boolean {
+  let hasError = _hasError;
+  if (
+    innerRow.startDate === undefined ||
+    innerRow.startDate === "" ||
+    !(innerFieldRefs.startDate?.[row.i]?.[innerRow.i] instanceof HTMLElement)
+  ) {
+    emptyErrors.startDate[row.i][innerRow.i] =
+      "Please fill this in to continue";
+    hasError = true;
+  }
+  if (
+    innerRow.endDate === undefined ||
+    innerRow.endDate === "" ||
+    !(innerFieldRefs.endDate?.[row.i]?.[innerRow.i] instanceof HTMLElement)
+  ) {
+    emptyErrors.endDate[row.i][innerRow.i] = "Please fill this in to continue";
+    hasError = true;
+  }
+  if (row.type === RowType.Open) {
+    if (
+      innerRow.startTime === undefined ||
+      !(innerFieldRefs.startTime?.[row.i]?.[innerRow.i] instanceof HTMLElement)
+    ) {
+      emptyErrors.startTime[row.i][innerRow.i] =
+        "Please fill this in to continue";
+      hasError = true;
+    }
+    if (
+      innerRow.endTime === undefined ||
+      !(innerFieldRefs.endTime?.[row.i]?.[innerRow.i] instanceof HTMLElement)
+    ) {
+      emptyErrors.endTime[row.i][innerRow.i] =
+        "Please fill this in to continue";
+      hasError = true;
+    }
+  }
+  return hasError;
+}
+
+export function validateExceptionsEmpty(
+  rows: ExceptionRowState[],
+  innerFieldRefs: InnerFieldRefs["exceptions"]
+): ExceptionFieldErrors | undefined {
+  const emptyErrors: ExceptionFieldErrors["empty"] = {
+    name: {},
+    startDate: {},
+    startTime: {},
+    endDate: {},
+    endTime: {},
+  };
+
+  let hasError = false;
+
+  rows.forEach((row) => {
+    if (row.name === undefined || row.name.trim() === "") {
+      emptyErrors.name[row.i] = "Please fill this in to continue";
+      hasError = true;
+    }
+    emptyErrors.startDate[row.i] = {};
+    emptyErrors.startTime[row.i] = {};
+    emptyErrors.endDate[row.i] = {};
+    emptyErrors.endTime[row.i] = {};
+    row.rows.forEach((innerRow) => {
+      hasError = validateExceptionInnerRowEmpty(
+        row,
+        innerRow,
+        innerFieldRefs,
+        emptyErrors,
+        hasError
+      );
+    });
+  });
+
+  if (hasError) {
+    return { empty: emptyErrors };
+  }
+
+  return undefined;
+}
+
+export function validateExceptionInnerRowDatesAndTimes(
+  row: ExceptionRowState,
+  innerRow: ExceptionRowState["rows"][0],
+  innerFieldRefs: InnerFieldRefs["exceptions"],
+  invalidErrors: NonNullable<ExceptionFieldErrors["invalid"]>,
+  localeDateFormat: string,
+  localeTimeFormat: string,
+  _hasError: boolean
+) {
+  let hasError = _hasError;
+  if (
+    dayjs(innerRow.startDate).format(localeDateFormat) !==
+    innerFieldRefs.startDate?.[row.i]?.[innerRow.i]?.value
+  ) {
+    invalidErrors.startDate[row.i][
+      innerRow.i
+    ] = `Please ender a date in the ${localeDateFormat} format`;
+    hasError = true;
+  }
+  if (
+    dayjs(innerRow.endDate).format(localeDateFormat) !==
+    innerFieldRefs.endDate?.[row.i]?.[innerRow.i]?.value
+  ) {
+    invalidErrors.endDate[row.i][
+      innerRow.i
+    ] = `Please ender a date in the ${localeDateFormat} format`;
+    hasError = true;
+  }
+  if (row.type === RowType.Open) {
+    if (
+      isTimeProper(
+        localeTimeFormat,
+        innerRow.startTime as string,
+        innerFieldRefs.startTime?.[row.i]?.[innerRow.i]?.value
+      )
+    ) {
+      invalidErrors.startTime[row.i][
+        innerRow.i
+      ] = `Please ender a time in the ${localeTimeFormat} format`;
+      hasError = true;
+    }
+    if (
+      isTimeProper(
+        localeTimeFormat,
+        innerRow.endTime as string,
+        innerFieldRefs.endTime?.[row.i]?.[innerRow.i]?.value
+      )
+    ) {
+      invalidErrors.endTime[row.i][
+        innerRow.i
+      ] = `Please ender a time in the ${localeTimeFormat} format`;
+      hasError = true;
+    }
+  }
+  return hasError;
+}
+
+export function validateExceptionsDatesAndTimes(
+  rows: ExceptionRowState[],
+  innerFieldRefs: InnerFieldRefs["exceptions"],
+  localeDateFormat: string,
+  localeTimeFormat: string
+): ExceptionFieldErrors | undefined {
+  const invalidErrors: ExceptionFieldErrors["invalid"] = {
+    startDate: {},
+    startTime: {},
+    endDate: {},
+    endTime: {},
+  };
+
+  let hasError = false;
+
+  rows.forEach((row) => {
+    invalidErrors.startDate[row.i] = {};
+    invalidErrors.startTime[row.i] = {};
+    invalidErrors.endDate[row.i] = {};
+    invalidErrors.endTime[row.i] = {};
+    row.rows.forEach((innerRow) => {
+      hasError = validateExceptionInnerRowDatesAndTimes(
+        row,
+        innerRow,
+        innerFieldRefs,
+        invalidErrors,
+        localeDateFormat,
+        localeTimeFormat,
+        hasError
+      );
+    });
+  });
+
+  if (hasError) {
+    return { invalid: invalidErrors };
+  }
+
+  return undefined;
+}
+
+export function validateExceptionInterOverlaps(
+  rows: ExceptionRowState[]
+): ExceptionFieldErrors | undefined {
+  const interConflicts: ExceptionFieldErrors["interConflicts"] =
+    new Set<number>();
+
+  const rowMinMaxes: { i: number; startDate: Dayjs; endDate: Dayjs }[] =
+    rows.map((row) => ({
+      i: row.i,
+      startDate: dayjs
+        .min(row.rows.map(({ startDate }) => dayjs(startDate)))
+        .startOf("day"),
+      endDate: dayjs
+        .min(row.rows.map(({ endDate }) => dayjs(endDate)))
+        .endOf("day"),
+    }));
+
+  for (let i = 0; i < rowMinMaxes.length - 1; i++) {
+    for (let j = i + 1; j < rowMinMaxes.length; j++) {
+      if (
+        overlaps(
+          rowMinMaxes[i].startDate,
+          rowMinMaxes[i].endDate,
+          rowMinMaxes[j].startDate,
+          rowMinMaxes[j].endDate
+        )
+      ) {
+        interConflicts.add(rowMinMaxes[i].i);
+        interConflicts.add(rowMinMaxes[j].i);
+      }
+    }
+  }
+
+  if (interConflicts.size) {
+    return { interConflicts };
+  }
+
+  return undefined;
+}
+
+export function validateExceptionIntraOverlaps(
+  rows: ExceptionRowState[]
+): ExceptionFieldErrors | undefined {
+  const intraConflicts: ExceptionFieldErrors["intraConflicts"] = {};
+  let hasError = false;
+
+  rows.forEach((row) => {
+    if (row.type === RowType.Closed) return;
+
+    for (let i = 0; i < row.rows.length - 1; i++) {
+      for (let j = i + 1; j < row.rows.length; j++) {
+        if (
+          overlaps(
+            dayjs(`${row.rows[i].startDate} ${row.rows[i].startTime}`),
+            dayjs(`${row.rows[i].endDate} ${row.rows[i].endTime}`),
+            dayjs(`${row.rows[j].startDate} ${row.rows[j].startTime}`),
+            dayjs(`${row.rows[j].endDate} ${row.rows[j].endTime}`)
+          )
+        ) {
+          if (!(row.i in intraConflicts)) {
+            intraConflicts[row.i] = {};
+          }
+          intraConflicts[row.i][row.rows[i].i] = true;
+          intraConflicts[row.i][row.rows[j].i] = true;
+          hasError = true;
+        }
+      }
+    }
+  });
+
+  if (hasError) {
+    return { intraConflicts };
+  }
+
+  return undefined;
+}
+
+export function validateExceptions(
+  rows: ExceptionRowState[] | undefined,
+  innerFieldRefs: InnerFieldRefs["exceptions"],
+  localeDateFormat: string,
+  localeTimeFormat: string
+): { exceptions?: ExceptionFieldErrors } {
+  if (rows === undefined) {
+    return {};
+  }
+
+  const emptyErrors = validateExceptionsEmpty(rows, innerFieldRefs);
+  if (emptyErrors !== undefined) {
+    return { exceptions: emptyErrors };
+  }
+
+  const invalidErrors = validateExceptionsDatesAndTimes(
+    rows,
+    innerFieldRefs,
+    localeDateFormat,
+    localeTimeFormat
+  );
+  if (invalidErrors !== undefined) {
+    return { exceptions: invalidErrors };
+  }
+
+  const interOverlaps = validateExceptionInterOverlaps(rows);
+  if (interOverlaps !== undefined) {
+    return { exceptions: interOverlaps };
+  }
+
+  return {
+    // can be undefined but that is acceptable here
+    // as no other cases to check
+    exceptions: validateExceptionIntraOverlaps(rows),
+  };
+}
+
 export default function validate(
   localeDateFormat: string,
   localeTimeFormat: string,
@@ -331,11 +633,12 @@ export default function validate(
     startDateRef: RefObject<HTMLInputElement>;
     endDateRef: RefObject<HTMLInputElement>;
   },
-  timeFieldRefs: InnerFieldRefs,
+  innerFieldRefs: InnerFieldRefs,
   values: Partial<FormValues>
 ): Partial<
   {
     "hours-of-operation": HoursOfOperationErrors;
+    exceptions: ExceptionFieldErrors;
   } & {
     [key in keyof SimpleErrorFormValues]: ReactNode;
   }
@@ -345,7 +648,13 @@ export default function validate(
   return {
     ...validateHoursOfOperation(
       values["hours-of-operation"],
-      timeFieldRefs.hoursOfOperation,
+      innerFieldRefs.hoursOfOperation,
+      localeTimeFormat
+    ),
+    ...validateExceptions(
+      values.exceptions,
+      innerFieldRefs.exceptions,
+      localeDateFormat,
       localeTimeFormat
     ),
     ...validateDateOrder(values),

@@ -1,4 +1,4 @@
-.timeFieldWrapper {
+.hiddenErrorFieldWrapper {
   width: 100%;
 
   & [role="alert"] div {
