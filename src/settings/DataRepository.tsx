@@ -46,4 +46,8 @@ export default class DataRepository {
     }
     return this.resources.calendars.records;
   }
+
+  createCalendar(calendar: Calendar) {
+    return this.mutator.calendars.POST(calendar);
+  }
 }

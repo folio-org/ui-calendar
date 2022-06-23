@@ -525,7 +525,7 @@ export function validateExceptionInterOverlaps(
         .min(row.rows.map(({ startDate }) => dayjs(startDate)))
         .startOf("day"),
       endDate: dayjs
-        .min(row.rows.map(({ endDate }) => dayjs(endDate)))
+        .max(row.rows.map(({ endDate }) => dayjs(endDate)))
         .endOf("day"),
     }));
 

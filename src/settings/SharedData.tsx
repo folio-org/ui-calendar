@@ -48,5 +48,6 @@ export const MANIFEST: ConnectedComponent<
     limitParam: "limit",
     offsetParam: "offset",
     recordsRequired: MAX_LIMIT,
+    throwErrors: false,
   },
 };

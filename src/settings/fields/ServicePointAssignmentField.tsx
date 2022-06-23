@@ -1,12 +1,13 @@
 import { MultiSelection, OptionSegment } from "@folio/stripes-components";
 import { MultiSelectionFieldRenderProps } from "@folio/stripes-components/types/lib/MultiSelection/MultiSelection";
 import fuzzysort from "fuzzysort";
-import React, { FunctionComponent, useMemo } from "react";
+import React, { FunctionComponent, ReactNode, useMemo } from "react";
 import { Field } from "react-final-form";
 import { ServicePoint } from "../../types/types";
 
 interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
+  error: ReactNode | undefined;
 }
 
 const ServicePointAssignmentField: FunctionComponent<
@@ -88,6 +89,7 @@ const ServicePointAssignmentField: FunctionComponent<
         }
       }}
       dataOptions={props.servicePoints}
+      error={props.error}
     />
   );
 };
