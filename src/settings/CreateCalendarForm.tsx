@@ -17,7 +17,6 @@ import { CalloutContext } from "@folio/stripes-core";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { FormApi, FORM_ERROR, SubmissionErrors } from "final-form";
-import memoizee from "memoizee";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -43,7 +42,6 @@ import HoursOfOperationField from "./fields/HoursOfOperationField";
 import { HoursOfOperationRowState } from "./fields/HoursOfOperationFieldTypes";
 import RowType from "./fields/RowType";
 import ServicePointAssignmentField from "./fields/ServicePointAssignmentField";
-import { CALENDARS } from "./MockConstants";
 
 dayjs.extend(customParseFormat);
 
@@ -209,47 +207,46 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     }
   };
 
-  // TODO: not this
-  const processInitialValues = memoizee(
-    (initialValues: Partial<FormValues>): Partial<FormValues> => ({
-      ...initialValues,
-      "hours-of-operation": CALENDARS[3].normalHours.map(
-        (opening, i): HoursOfOperationRowState => ({
-          type: RowType.Open,
-          i: -1 - i, // ensure `i` is negative as not to conflict
-          ...opening,
-        })
-      ),
-      exceptions: CALENDARS[3].exceptions.map(
-        (exception, i): ExceptionRowState => {
-          const result: ExceptionRowState = {
-            i: -1 - i, // ensure `i` is negative as not to conflict
-            type:
-              exception.openings.length === 0 ? RowType.Closed : RowType.Open,
-            name: exception.name,
-            lastRowI: 0,
-            rows: [],
-          };
+  // const processInitialValues = memoizee(
+  //   (initialValues: Partial<FormValues>): Partial<FormValues> => ({
+  //     ...initialValues,
+  //     "hours-of-operation": CALENDARS[3].normalHours.map(
+  //       (opening, i): HoursOfOperationRowState => ({
+  //         type: RowType.Open,
+  //         i: -1 - i, // ensure `i` is negative as not to conflict
+  //         ...opening,
+  //       })
+  //     ),
+  //     exceptions: CALENDARS[3].exceptions.map(
+  //       (exception, i): ExceptionRowState => {
+  //         const result: ExceptionRowState = {
+  //           i: -1 - i, // ensure `i` is negative as not to conflict
+  //           type:
+  //             exception.openings.length === 0 ? RowType.Closed : RowType.Open,
+  //           name: exception.name,
+  //           lastRowI: 0,
+  //           rows: [],
+  //         };
 
-          if (result.type === RowType.Open) {
-            exception.openings.forEach((opening, j) =>
-              result.rows.push({ i: -1 - j, ...opening })
-            );
-          } else {
-            result.rows.push({
-              i: -1,
-              startDate: exception.startDate,
-              startTime: undefined,
-              endDate: exception.endDate,
-              endTime: undefined,
-            });
-          }
+  //         if (result.type === RowType.Open) {
+  //           exception.openings.forEach((opening, j) =>
+  //             result.rows.push({ i: -1 - j, ...opening })
+  //           );
+  //         } else {
+  //           result.rows.push({
+  //             i: -1,
+  //             startDate: exception.startDate,
+  //             startTime: undefined,
+  //             endDate: exception.endDate,
+  //             endTime: undefined,
+  //           });
+  //         }
 
-          return result;
-        }
-      ),
-    })
-  );
+  //         return result;
+  //       }
+  //     ),
+  //   })
+  // );
 
   const intl = useIntl();
   const localeDateFormat = getLocaleDateFormat({ intl });
@@ -291,7 +288,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           initialValues: _initialValues,
         } = params;
 
-        const initialValues = processInitialValues(_initialValues);
+        // const initialValues = processInitialValues(_initialValues);
 
         let topErrorMessage = <></>;
         if (submitErrors?.[FORM_ERROR]) {
@@ -386,7 +383,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   component={HoursOfOperationField}
                   timeFieldRefs={innerFieldRefs.current.hoursOfOperation}
                   error={errors?.["hours-of-operation"]}
-                  initialValue={initialValues["hours-of-operation"]}
+                  // initialValue={[] as HoursOfOperationRowState[]}
                   localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                 />
@@ -397,7 +394,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   component={ExceptionField}
                   fieldRefs={innerFieldRefs.current.exceptions}
                   error={errors?.exceptions}
-                  initialValue={initialValues.exceptions}
+                  // initialValue={[] as ExceptionRowState[]}
                   localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                 />
