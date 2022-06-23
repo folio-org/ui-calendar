@@ -1,10 +1,4 @@
-import {
-  Button,
-  LoadingPane,
-  MultiColumnList,
-  Pane,
-  PaneMenu,
-} from "@folio/stripes-components";
+import { Button, LoadingPane, Pane, PaneMenu } from "@folio/stripes-components";
 import {
   ConnectedComponent,
   ConnectedComponentProps,
@@ -17,6 +11,7 @@ import DataRepository from "./DataRepository";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "./MockConstants";
 import { MANIFEST, Resources } from "./SharedData";
+import SortableMultiColumnList from "./SortableMultiColumnList";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 
@@ -103,10 +98,9 @@ export const CurrentAssignmentView: ConnectedComponent<
           </PaneMenu>
         }
       >
-        <MultiColumnList
+        <SortableMultiColumnList
           sortedColumn="servicePoint"
           sortDirection="ascending"
-          onHeaderClick={() => ({})}
           columnMapping={{
             servicePoint: "Service point",
             calendarName: "Calendar name",

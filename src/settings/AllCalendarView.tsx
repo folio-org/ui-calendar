@@ -99,7 +99,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
           },
           "calendar"
         >
-          sortedColumn="name"
+          sortedColumn="startDate"
           sortDirection="ascending"
           columnMapping={{
             name: "Calendar name",
