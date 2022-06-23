@@ -44,15 +44,17 @@ export const CurrentAssignmentView: ConnectedComponent<
   }
 
   const rows = dataRepository.getServicePoints().map((servicePoint) => {
-    const calendars = MockConstants.CALENDARS.filter(
-      (calendar) =>
-        MockConstants.MOCKED_DATE_OBJ.isBetween(
-          calendar.startDate,
-          calendar.endDate,
-          "day",
-          "[]"
-        ) && calendar.assignments.includes(servicePoint.id)
-    );
+    const calendars = dataRepository
+      .getCalendars()
+      .filter(
+        (calendar) =>
+          MockConstants.MOCKED_DATE_OBJ.isBetween(
+            calendar.startDate,
+            calendar.endDate,
+            "day",
+            "[]"
+          ) && calendar.assignments.includes(servicePoint.id)
+      );
     if (calendars.length === 0) {
       return {
         servicePoint: servicePoint.name.concat(
@@ -73,8 +75,8 @@ export const CurrentAssignmentView: ConnectedComponent<
         servicePoint.inactive ? " (inactive)" : ""
       ),
       calendarName: calendars[0].name,
-      startDate: calendars[0].startDate,
-      endDate: calendars[0].endDate,
+      startDate: CalendarUtils.getLocalizedDate(calendars[0].startDate),
+      endDate: CalendarUtils.getLocalizedDate(calendars[0].endDate),
       currentStatus: CalendarUtils.getStatus(
         MockConstants.MOCKED_DATE_TIME_OBJ,
         calendars[0]
