@@ -124,18 +124,22 @@ export function getRelativeDateTime(
   });
 }
 
+export function getLocalizedTime(time: string): string {
+  return dayjs(time, "HH:mm").format("LT");
+}
+
 export function getRelativeWeekdayTime(
   weekday: Weekday,
   time: string,
   referenceDate: Dayjs
 ): string {
   if (referenceDate.day() === WEEKDAYS[weekday]) {
-    return `${time}`;
+    return `${getLocalizedTime(time)}`;
   }
   if ((referenceDate.day() + 1) % 7 === WEEKDAYS[weekday]) {
-    return `tomorrow at ${time}`;
+    return `tomorrow at ${getLocalizedTime(time)}`;
   }
-  return `${WEEKDAY_STRINGS[weekday]} at ${time}`;
+  return `${WEEKDAY_STRINGS[weekday]} at ${getLocalizedTime(time)}`;
 }
 
 function weekdayIsBetween(
