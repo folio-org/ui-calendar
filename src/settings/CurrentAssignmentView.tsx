@@ -51,7 +51,7 @@ export const CurrentAssignmentView: ConnectedComponent<
           calendar.endDate,
           "day",
           "[]"
-        ) && calendar.servicePoints.includes(servicePoint.id)
+        ) && calendar.assignments.includes(servicePoint.id)
     );
     if (calendars.length === 0) {
       return {

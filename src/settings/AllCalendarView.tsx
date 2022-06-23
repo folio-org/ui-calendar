@@ -47,7 +47,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   const rows = MockConstants.CALENDARS.map((calendar) => {
     const servicePointNames = servicePointIdsToNames(
       dataRepository.getServicePoints(),
-      calendar.servicePoints
+      calendar.assignments
     );
     return {
       name: calendar.name,

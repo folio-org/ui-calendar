@@ -37,9 +37,9 @@ export interface CalendarException {
 export interface Calendar {
   id: string | null;
   name: string;
-  servicePoints: string[];
+  assignments: string[];
   startDate: string;
   endDate: string;
-  openings: CalendarOpening[];
+  normalHours: CalendarOpening[];
   exceptions: CalendarException[];
 }

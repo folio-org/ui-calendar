@@ -70,19 +70,19 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       name: values.name,
       startDate: values["start-date"],
       endDate: values["end-date"],
-      servicePoints: [],
-      openings: [],
+      assignments: [],
+      normalHours: [],
       exceptions: [],
     };
 
     values["service-points"].forEach((servicePoint) =>
-      newCalendar.servicePoints.push(servicePoint.id)
+      newCalendar.assignments.push(servicePoint.id)
     );
 
     values["hours-of-operation"].forEach((opening) => {
       if (opening.type === RowType.Closed) return;
 
-      newCalendar.openings.push({
+      newCalendar.normalHours.push({
         startDay: opening.startDay as Weekday,
         startTime: opening.startTime as string,
         endDay: opening.endDay as Weekday,
@@ -144,7 +144,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   const processInitialValues = memoizee(
     (initialValues: Partial<FormValues>): Partial<FormValues> => ({
       ...initialValues,
-      "hours-of-operation": CALENDARS[3].openings.map(
+      "hours-of-operation": CALENDARS[3].normalHours.map(
         (opening, i): HoursOfOperationRowState => ({
           type: RowType.Open,
           i: -1 - i, // ensure `i` is negative as not to conflict

@@ -300,14 +300,14 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
     return null;
   }
 
-  const hours = splitOpeningsIntoDays(calendar.openings);
+  const hours = splitOpeningsIntoDays(calendar.normalHours);
 
   (Object.keys(hours) as Weekday[]).forEach((day) => {
     hours[day].sort(openingSorter);
   });
 
   let dataRows;
-  if (isOpen247(calendar.openings)) {
+  if (isOpen247(calendar.normalHours)) {
     dataRows = get247Rows();
   } else {
     dataRows = generateDisplayRows(hours);
@@ -379,7 +379,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         </Row>
         <Accordion label="Service point assignments">
           <List
-            items={calendar.servicePoints}
+            items={calendar.assignments}
             listStyle="bullets"
             isEmptyMessage={
               <div className={css.closed}>
@@ -412,7 +412,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
           />
           <p
             className={
-              !isOpen247(calendar.openings) && containsNextDayOvernight(hours)
+              !isOpen247(calendar.normalHours) &&
+              containsNextDayOvernight(hours)
                 ? ""
                 : css.hidden
             }
@@ -421,7 +422,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
           </p>
           <p
             className={
-              !isOpen247(calendar.openings) && containsFullOvernightSpans(hours)
+              !isOpen247(calendar.normalHours) &&
+              containsFullOvernightSpans(hours)
                 ? ""
                 : css.hidden
             }
@@ -429,7 +431,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
             &ndash;&nbsp;indicates that the service point was already open or
             does not close
           </p>
-          <p className={isOpen247(calendar.openings) ? "" : css.hidden}>
+          <p className={isOpen247(calendar.normalHours) ? "" : css.hidden}>
             This service point is open 24/7 and does not close
           </p>
         </Accordion>

@@ -168,7 +168,7 @@ export function getDateMatches(
   exceptions: CalendarException[];
 } {
   return {
-    openings: calendar.openings.filter((opening) =>
+    openings: calendar.normalHours.filter((opening) =>
       weekdayIsBetween(testDate.day(), opening.startDay, opening.endDay)
     ),
     exceptions: calendar.exceptions.filter((exception) =>
@@ -397,7 +397,7 @@ export function getStatus(testDateTime: Dayjs, calendar: Calendar): string {
   if (exceptions.length !== 0) {
     return getExceptionalStatus(testDateTime, exceptions[0]);
   }
-  if (isOpen247(calendar.openings)) {
+  if (isOpen247(calendar.normalHours)) {
     return "Open";
   }
   return getNormalOpeningStatus(testDateTime, openings);
