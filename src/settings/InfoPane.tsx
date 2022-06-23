@@ -24,11 +24,14 @@ import {
   Weekday,
 } from "../types/types";
 import {
+  getLocalizedDate,
+  getLocalizedTime,
   getWeekdayRange,
   isOpen247,
   WEEKDAY_INDEX,
   WEEKDAY_STRINGS,
 } from "./CalendarUtils";
+import DataRepository from "./DataRepository";
 import css from "./InfoPane.css";
 
 dayjs.extend(customParseFormat);
@@ -231,16 +234,16 @@ function generateExceptionalOpeningRows(exceptions: CalendarException[]) {
         const end = dayjs(`${endDate} ${endTime}`);
         times.start.push(
           <p key={i}>
-            {start.format("LL")}
+            {getLocalizedDate(start)}
             <br />
-            {start.format("LT")}
+            {getLocalizedTime(start)}
           </p>
         );
         times.end.push(
           <p key={i}>
-            {end.format("LL")}
+            {getLocalizedDate(end)}
             <br />
-            {end.format("LT")}
+            {getLocalizedTime(end)}
           </p>
         );
       }
@@ -291,6 +294,7 @@ function containsFullOvernightSpans(hours: HoursType) {
 export interface InfoPaneProps {
   calendar?: Calendar | null;
   onClose?: () => void;
+  dataRepository: DataRepository;
 }
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
@@ -379,7 +383,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         </Row>
         <Accordion label="Service point assignments">
           <List
-            items={calendar.assignments}
+            items={props.dataRepository.getServicePointNames(
+              calendar.assignments
+            )}
             listStyle="bullets"
             isEmptyMessage={
               <div className={css.closed}>
@@ -480,8 +486,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
             }}
             contentData={exceptions.closures.map((exception) => ({
               name: exception.name,
-              startDate: exception.startDate,
-              endDate: exception.endDate,
+              startDate: getLocalizedDate(exception.startDate),
+              endDate: getLocalizedDate(exception.endDate),
             }))}
             isEmptyMessage={
               <div className={css.closed}>

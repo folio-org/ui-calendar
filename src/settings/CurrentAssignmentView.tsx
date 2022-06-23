@@ -145,6 +145,7 @@ export const CurrentAssignmentView: ConnectedComponent<
             rows.filter((row) => row.servicePointId === currentRouteId)[0]
               ?.calendar
           }
+          dataRepository={dataRepository}
         />
       </Route>
       <CreateCalendarLayer

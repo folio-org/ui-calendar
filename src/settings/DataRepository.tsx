@@ -1,6 +1,15 @@
 import { ConnectedComponentProps } from "@folio/stripes-connect";
+import memoizee from "memoizee";
 import { Calendar, ServicePoint } from "../types/types";
 import { Resources } from "./SharedData";
+
+const getServicePointMap = memoizee((servicePoints: ServicePoint[]) => {
+  const map: Record<string, string> = {};
+  servicePoints.forEach((sp) => {
+    map[sp.id] = sp.name;
+  });
+  return map;
+});
 
 export default class DataRepository {
   private resources: ConnectedComponentProps<Resources>["resources"];
@@ -34,6 +43,11 @@ export default class DataRepository {
       name: dto.name,
       inactive: false,
     }));
+  }
+
+  getServicePointNames(ids: string[]): string[] {
+    const map = getServicePointMap(this.getServicePoints());
+    return ids.map((id) => map[id]).filter((name) => name);
   }
 
   areCalendarsLoaded(): boolean {

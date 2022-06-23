@@ -124,8 +124,12 @@ export function getRelativeDateTime(
   });
 }
 
-export function getLocalizedTime(time: string): string {
+export function getLocalizedTime(time: string | Dayjs): string {
   return dayjs(time, "HH:mm").format("LT");
+}
+
+export function getLocalizedDate(date: string | Dayjs): string {
+  return dayjs(date, "YYYY-MM-DD").format("L");
 }
 
 export function getRelativeWeekdayTime(

@@ -152,12 +152,8 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
             });
             submissionErrors["service-points"] =
               "Service points " +
-              error.data.conflictingServicePointIds
-                .map(
-                  (id) =>
-                    props.servicePoints.filter((sp) => sp.id === id)?.[0]?.name
-                )
-                .filter((name) => name)
+              props.dataRepository
+                .getServicePointNames(error.data.conflictingServicePointIds)
                 .join(", ") +
               " have overlaps.  " +
               error.message;
