@@ -83,11 +83,11 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       exceptions: [],
     };
 
-    values["service-points"].forEach((servicePoint) =>
+    values["service-points"]?.forEach((servicePoint) =>
       newCalendar.assignments.push(servicePoint.id)
     );
 
-    values["hours-of-operation"].forEach((opening) => {
+    values["hours-of-operation"]?.forEach((opening) => {
       if (opening.type === RowType.Closed) return;
 
       newCalendar.normalHours.push({
@@ -98,7 +98,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       });
     });
 
-    values.exceptions.forEach((exception) => {
+    values.exceptions?.forEach((exception) => {
       if (exception.type === RowType.Closed) {
         newCalendar.exceptions.push({
           name: exception.name,
