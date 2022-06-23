@@ -410,21 +410,3 @@ export function getStatus(testDateTime: Dayjs, calendar: Calendar): string {
   }
   return getNormalOpeningStatus(testDateTime, openings);
 }
-
-export function servicePointIdsToNames(
-  servicePoints: ServicePoint[],
-  ids: string[]
-): string[] {
-  return ids
-    .map<string | undefined>((id) => {
-      const matched = servicePoints.filter(
-        (servicePoint) => servicePoint.id === id
-      );
-      if (matched.length) {
-        return matched[0].name;
-      } else {
-        return undefined;
-      }
-    })
-    .filter<string>((name): name is string => name !== undefined);
-}

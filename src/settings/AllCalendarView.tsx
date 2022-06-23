@@ -13,11 +13,10 @@ import {
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import { Calendar } from "../types/types";
-import { servicePointIdsToNames } from "./CalendarUtils";
+import { getLocalizedDate } from "./CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
 import DataRepository from "./DataRepository";
 import InfoPane from "./InfoPane";
-import * as MockConstants from "./MockConstants";
 import { MANIFEST, Resources } from "./SharedData";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
@@ -44,15 +43,14 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
     return <LoadingPane paneTitle="All calendars" />;
   }
 
-  const rows = MockConstants.CALENDARS.map((calendar) => {
-    const servicePointNames = servicePointIdsToNames(
-      dataRepository.getServicePoints(),
+  const rows = dataRepository.getCalendars().map((calendar) => {
+    const servicePointNames = dataRepository.getServicePointNames(
       calendar.assignments
     );
     return {
       name: calendar.name,
-      startDate: calendar.startDate,
-      endDate: calendar.endDate,
+      startDate: getLocalizedDate(calendar.startDate),
+      endDate: getLocalizedDate(calendar.endDate),
       assignments: servicePointNames.length ? (
         servicePointNames.join(", ")
       ) : (
@@ -73,7 +71,10 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
               <Button
                 buttonStyle="dropdownItem"
                 ref={showCreateLayerButtonRef}
-                onClick={onToggle}
+                onClick={() => {
+                  onToggle();
+                  setShowCreateLayer(true);
+                }}
               >
                 <Icon size="small" icon="plus-sign">
                   New
@@ -129,8 +130,11 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
             history.push("/settings/calendar/all/");
           }}
           calendar={
-            MockConstants.CALENDARS.filter((c) => c.id === currentRouteId)[0]
+            dataRepository
+              .getCalendars()
+              .filter((c) => c.id === currentRouteId)[0]
           }
+          dataRepository={dataRepository}
         />
       </Route>
 
