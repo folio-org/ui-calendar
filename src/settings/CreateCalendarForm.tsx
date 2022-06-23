@@ -43,6 +43,7 @@ export interface CreateCalendarFormProps {
   dataRepository: DataRepository;
   setIsSubmitting: (isSaving: boolean) => void;
   servicePoints: ServicePoint[];
+  dataRepository: DataRepository;
 }
 
 export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (

@@ -42,11 +42,8 @@ export const MANIFEST: ConnectedComponent<
   },
   calendars: {
     type: "okapi",
-    path: "service-points",
-    records: "servicepoints",
-    params: {
-      query: "cql.allRecords=1",
-    },
+    path: "opening-hours/calendars",
+    records: "calendars",
     perRequest: MAX_LIMIT,
     limitParam: "limit",
     offsetParam: "offset",
