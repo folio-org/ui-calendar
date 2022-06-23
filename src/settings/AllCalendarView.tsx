@@ -3,7 +3,6 @@ import {
   Icon,
   LoadingPane,
   MenuSection,
-  MultiColumnList,
   Pane,
 } from "@folio/stripes-components";
 import {
@@ -18,6 +17,7 @@ import CreateCalendarLayer from "./CreateCalendarLayer";
 import DataRepository from "./DataRepository";
 import InfoPane from "./InfoPane";
 import { MANIFEST, Resources } from "./SharedData";
+import SortableMultiColumnList from "./SortableMultiColumnList";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 
@@ -89,7 +89,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
           </>
         )}
       >
-        <MultiColumnList<
+        <SortableMultiColumnList<
           {
             name: string;
             startDate: string;
@@ -99,9 +99,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
           },
           "calendar"
         >
-          sortedColumn="servicePoint"
+          sortedColumn="name"
           sortDirection="ascending"
-          onHeaderClick={() => ({})}
           columnMapping={{
             name: "Calendar name",
             startDate: "Start date",
