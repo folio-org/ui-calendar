@@ -1,8 +1,9 @@
 # Change history for ui-calendar
 
-## IN PROGRESS
+## [7.2.0] (https://github.com/folio-org/ui-calendar/tree/v7.1.1) (2022-06-25)
 
 * Refactor away from `react-intl-safe-html`. Refs UICAL-142.
+* Update NodeJS to v16 in GitHub Actions. Refs UICAL-202.
 
 ## [7.1.1] (https://github.com/folio-org/ui-calendar/tree/v7.1.1) (2022-03-13)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.1.0...v7.1.1)
