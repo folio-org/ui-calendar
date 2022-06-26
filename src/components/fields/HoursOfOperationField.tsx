@@ -19,7 +19,11 @@ import React, {
 } from "react";
 import { FieldRenderProps } from "react-final-form";
 import { CalendarOpening, Weekday } from "../../types/types";
-import { getLocaleWeekdays, getWeekdaySpan, WEEKDAYS } from "../CalendarUtils";
+import {
+  getLocaleWeekdays,
+  getWeekdaySpan,
+  WEEKDAYS,
+} from "../../data/CalendarUtils";
 import { InnerFieldRefs } from "./formValidation";
 import css from "./HoursAndExceptionFields.css";
 import {
@@ -211,7 +215,10 @@ export const HoursOfOperationField: FunctionComponent<
               });
               props.input.onBlur();
             }}
-            error={(props.submitAttempted || props.meta.touched) && props.error?.empty?.startDay?.[row.i]}
+            error={
+              (props.submitAttempted || props.meta.touched) &&
+              props.error?.empty?.startDay?.[row.i]
+            }
           />
         ),
         startTime: (
@@ -244,7 +251,10 @@ export const HoursOfOperationField: FunctionComponent<
               });
               props.input.onBlur();
             }}
-            error={(props.submitAttempted || props.meta.touched) && props.error?.empty?.endDay?.[row.i]}
+            error={
+              (props.submitAttempted || props.meta.touched) &&
+              props.error?.empty?.endDay?.[row.i]
+            }
           />
         ),
         endTime: (

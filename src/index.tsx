@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { hot } from "react-hot-loader";
-import Settings from "./settings";
-import { CalendarSettingsProps } from "./settings/CalendarSettings";
+import Settings from "./views";
+import { CalendarSettingsProps } from "./views/CalendarSettings";
 
 class CalendarRouting extends Component<CalendarSettingsProps> {
   static propTypes = {

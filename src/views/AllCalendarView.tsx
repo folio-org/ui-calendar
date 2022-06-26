@@ -12,12 +12,12 @@ import {
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import { Calendar } from "../types/types";
-import { getLocalizedDate } from "./CalendarUtils";
+import { getLocalizedDate } from "../data/CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
-import DataRepository from "./DataRepository";
-import InfoPane from "./InfoPane";
-import { MANIFEST, Resources } from "./SharedData";
-import SortableMultiColumnList from "./SortableMultiColumnList";
+import DataRepository from "../data/DataRepository";
+import InfoPane from "../panes/InfoPane";
+import { MANIFEST, Resources } from "../data/SharedData";
+import SortableMultiColumnList from "../components/SortableMultiColumnList";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 

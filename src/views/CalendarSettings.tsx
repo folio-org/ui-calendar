@@ -3,7 +3,7 @@ import { Settings, SettingsProps } from "@folio/stripes-smart-components";
 import React, { FunctionComponent } from "react";
 import { FormattedMessage } from "react-intl";
 import AllCalendarView from "./AllCalendarView";
-import CurrentAssignmentView from "./CurrentAssignmentView";
+import CurrentAssignmentView from "../panes/CurrentAssignmentView";
 import MonthlyCalendarPickerView from "./MonthlyCalendarPickerView";
 
 export type CalendarSettingsProps = SettingsProps;

@@ -2,7 +2,7 @@ import { Select } from "@folio/stripes-components";
 import { OptionType } from "@folio/stripes-components/types/lib/Select/Select";
 import React, { FunctionComponent, ReactNode, useMemo } from "react";
 import { Weekday } from "../../types/types";
-import { getLocaleWeekdays } from "../CalendarUtils";
+import { getLocaleWeekdays } from "../../data/CalendarUtils";
 import css from "./WeekdayPicker.css";
 
 export interface WeekdayPickerProps {

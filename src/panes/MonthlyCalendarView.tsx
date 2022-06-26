@@ -9,9 +9,9 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Calendar from "./Calendar";
-import css from "./Calendar.css";
-import { SERVICE_POINT_LIST } from "./MockConstants";
+import Calendar from "../components/Calendar";
+import css from "../components/Calendar.css";
+import { SERVICE_POINT_LIST } from "../data/MockConstants";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);

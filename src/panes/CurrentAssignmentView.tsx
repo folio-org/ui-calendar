@@ -5,13 +5,13 @@ import {
 } from "@folio/stripes-connect";
 import React, { useEffect, useRef, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import * as CalendarUtils from "./CalendarUtils";
-import CreateCalendarLayer from "./CreateCalendarLayer";
-import DataRepository from "./DataRepository";
+import * as CalendarUtils from "../data/CalendarUtils";
+import CreateCalendarLayer from "../views/CreateCalendarLayer";
+import DataRepository from "../data/DataRepository";
 import InfoPane from "./InfoPane";
-import * as MockConstants from "./MockConstants";
-import { MANIFEST, Resources } from "./SharedData";
-import SortableMultiColumnList from "./SortableMultiColumnList";
+import * as MockConstants from "../data/MockConstants";
+import { MANIFEST, Resources } from "../data/SharedData";
+import SortableMultiColumnList from "../components/SortableMultiColumnList";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 

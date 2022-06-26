@@ -33,15 +33,18 @@ import {
   ServicePoint,
   Weekday,
 } from "../types/types";
-import DataRepository from "./DataRepository";
-import ExceptionField from "./fields/ExceptionField";
-import { ExceptionRowState } from "./fields/ExceptionFieldTypes";
-import validate, { FormValues, InnerFieldRefs } from "./fields/formValidation";
-import css from "./fields/HoursAndExceptionFields.css";
-import HoursOfOperationField from "./fields/HoursOfOperationField";
-import { HoursOfOperationRowState } from "./fields/HoursOfOperationFieldTypes";
-import RowType from "./fields/RowType";
-import ServicePointAssignmentField from "./fields/ServicePointAssignmentField";
+import DataRepository from "../data/DataRepository";
+import ExceptionField from "../components/fields/ExceptionField";
+import { ExceptionRowState } from "../components/fields/ExceptionFieldTypes";
+import validate, {
+  FormValues,
+  InnerFieldRefs,
+} from "../components/fields/formValidation";
+import css from "../components/fields/HoursAndExceptionFields.css";
+import HoursOfOperationField from "../components/fields/HoursOfOperationField";
+import { HoursOfOperationRowState } from "../components/fields/HoursOfOperationFieldTypes";
+import RowType from "../components/fields/RowType";
+import ServicePointAssignmentField from "../components/fields/ServicePointAssignmentField";
 
 dayjs.extend(customParseFormat);
 

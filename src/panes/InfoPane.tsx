@@ -30,8 +30,8 @@ import {
   isOpen247,
   WEEKDAY_INDEX,
   WEEKDAY_STRINGS,
-} from "./CalendarUtils";
-import DataRepository from "./DataRepository";
+} from "../data/CalendarUtils";
+import DataRepository from "../data/DataRepository";
 import css from "./InfoPane.css";
 
 dayjs.extend(customParseFormat);

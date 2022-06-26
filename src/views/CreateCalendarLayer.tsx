@@ -8,8 +8,8 @@ import {
   Paneset,
 } from "@folio/stripes-components";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import CreateCalendarForm, { FORM_ID } from "./CreateCalendarForm";
-import DataRepository from "./DataRepository";
+import CreateCalendarForm, { FORM_ID } from "../forms/CalendarForm";
+import DataRepository from "../data/DataRepository";
 
 export interface CreateCalendarLayerProps {
   dataRepository: DataRepository;

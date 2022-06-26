@@ -16,10 +16,10 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import React, { useEffect, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import DataRepository from "./DataRepository";
-import { SERVICE_POINT_LIST } from "./MockConstants";
-import MonthlyCalendarView from "./MonthlyCalendarView";
-import { MANIFEST, Resources } from "./SharedData";
+import DataRepository from "../data/DataRepository";
+import { SERVICE_POINT_LIST } from "../data/MockConstants";
+import MonthlyCalendarView from "../panes/MonthlyCalendarView";
+import { MANIFEST, Resources } from "../data/SharedData";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
