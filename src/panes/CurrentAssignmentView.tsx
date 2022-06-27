@@ -135,6 +135,7 @@ export const CurrentAssignmentView: ConnectedComponent<
           <CreateCalendarLayer
             dataRepository={dataRepository}
             onClose={() => {
+              history.push("/settings/calendar/active/");
               showCreateLayerButtonRef.current?.focus();
             }}
           />

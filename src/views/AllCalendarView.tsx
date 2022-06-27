@@ -43,7 +43,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   }
 
   const rows = dataRepository.getCalendars().map((calendar) => {
-    const servicePointNames = dataRepository.getServicePointNames(
+    const servicePointNames = dataRepository.getServicePointNamesFromIds(
       calendar.assignments
     );
     return {
