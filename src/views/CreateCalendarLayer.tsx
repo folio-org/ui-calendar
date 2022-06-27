@@ -10,10 +10,10 @@ import {
 import React, { FunctionComponent, useEffect, useState } from "react";
 import CreateCalendarForm, { FORM_ID } from "../forms/CalendarForm";
 import DataRepository from "../data/DataRepository";
+import { Calendar } from "../types/types";
 
 export interface CreateCalendarLayerProps {
   dataRepository: DataRepository;
-  isOpen: boolean;
   onClose: () => void;
 }
 
@@ -26,7 +26,7 @@ export const CreateCalendarLayer: FunctionComponent<
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
   /** Reset if the layer is closed or opened */
-  useEffect(() => setIsSubmitting(false), [props.isOpen]);
+  useEffect(() => setIsSubmitting(false), []);
 
   if (props.dataRepository.isLoaded()) {
     pane = (
@@ -60,13 +60,16 @@ export const CreateCalendarLayer: FunctionComponent<
           submitAttempted={submitAttempted}
           dataRepository={props.dataRepository}
           servicePoints={props.dataRepository.getServicePoints()}
+          submitter={(calendar: Calendar): Promise<Calendar> => {
+            return props.dataRepository.createCalendar(calendar);
+          }}
         />
       </Pane>
     );
   }
 
   return (
-    <Layer contentLabel="Calendar creation form" isOpen={props.isOpen}>
+    <Layer contentLabel="Calendar creation form" isOpen>
       <Paneset isRoot>{pane}</Paneset>
     </Layer>
   );

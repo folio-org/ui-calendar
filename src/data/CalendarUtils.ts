@@ -12,7 +12,6 @@ import {
   CalendarException,
   CalendarExceptionOpening,
   CalendarOpening,
-  ServicePoint,
   Weekday,
 } from "../types/types";
 

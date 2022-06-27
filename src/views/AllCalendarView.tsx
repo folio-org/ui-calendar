@@ -10,7 +10,7 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Route, useHistory, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../data/CalendarUtils";
 import CreateCalendarLayer from "./CreateCalendarLayer";
@@ -32,7 +32,6 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
     [props.resources, props.mutator]
   );
 
-  const [showCreateLayer, setShowCreateLayer] = useState(false);
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
   const currentRouteId = useRouteMatch<{ calendarId: string }>(
@@ -71,10 +70,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
               <Button
                 buttonStyle="dropdownItem"
                 ref={showCreateLayerButtonRef}
-                onClick={() => {
-                  onToggle();
-                  setShowCreateLayer(true);
-                }}
+                onClick={onToggle}
+                to="/settings/calendar/all/create"
               >
                 <Icon size="small" icon="plus-sign">
                   New
@@ -123,28 +120,30 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
         />
       </Pane>
 
-      <Route path="/settings/calendar/all/:id">
-        <InfoPane
-          onClose={() => {
-            history.push("/settings/calendar/all/");
-          }}
-          calendar={
-            dataRepository
-              .getCalendars()
-              .filter((c) => c.id === currentRouteId)[0]
-          }
-          dataRepository={dataRepository}
-        />
-      </Route>
-
-      <CreateCalendarLayer
-        dataRepository={dataRepository}
-        isOpen={showCreateLayer}
-        onClose={() => {
-          setShowCreateLayer(false);
-          showCreateLayerButtonRef.current?.focus();
-        }}
-      />
+      <Switch>
+        <Route path="/settings/calendar/all/create">
+          <CreateCalendarLayer
+            dataRepository={dataRepository}
+            onClose={() => {
+              history.push("/settings/calendar/all/");
+              showCreateLayerButtonRef.current?.focus();
+            }}
+          />
+        </Route>
+        <Route path="/settings/calendar/all/:id">
+          <InfoPane
+            onClose={() => {
+              history.push("/settings/calendar/all/");
+            }}
+            calendar={
+              dataRepository
+                .getCalendars()
+                .filter((c) => c.id === currentRouteId)[0]
+            }
+            dataRepository={dataRepository}
+          />
+        </Route>
+      </Switch>
     </>
   );
 };

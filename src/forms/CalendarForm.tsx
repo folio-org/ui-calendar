@@ -59,6 +59,7 @@ export interface CreateCalendarFormProps {
   dataRepository: DataRepository;
   setIsSubmitting: (isSaving: boolean) => void;
   servicePoints: ServicePoint[];
+  submitter: (calendar: Calendar) => Promise<Calendar>;
 }
 
 export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
@@ -132,7 +133,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     });
 
     try {
-      await props.dataRepository.createCalendar(newCalendar);
+      await props.submitter(newCalendar);
 
       props.setIsSubmitting(false);
       props.closeParentLayer();
