@@ -234,7 +234,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
 
   return (
     <Form<FormValues>
-      // submitting={foo}
       onSubmit={onSubmit}
       validate={validationFunction}
       validateOnBlur

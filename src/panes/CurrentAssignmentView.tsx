@@ -4,7 +4,13 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import React, { useEffect, useRef, useState } from "react";
-import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import {
+  Route,
+  RouteComponentProps,
+  Switch,
+  useHistory,
+  useRouteMatch,
+} from "react-router-dom";
 import * as CalendarUtils from "../data/CalendarUtils";
 import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
 import DataRepository from "../data/DataRepository";
@@ -12,6 +18,7 @@ import InfoPane from "./InfoPane";
 import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
+import { Calendar } from "../types/types";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 
@@ -131,17 +138,39 @@ export const CurrentAssignmentView: ConnectedComponent<
       </Pane>
 
       <Switch>
-        <Route path="/settings/calendar/active/create">
-          <CreateEditCalendarLayer
-            dataRepository={dataRepository}
-            onClose={() => {
-              history.push("/settings/calendar/active/");
-              showCreateLayerButtonRef.current?.focus();
-            }}
-          />
-        </Route>
+        <Route
+          path="/settings/calendar/active/create"
+          render={({ location }: RouteComponentProps<{ source?: string }>) => (
+            <CreateEditCalendarLayer
+              dataRepository={dataRepository}
+              initialValue={dataRepository.getCalendar(
+                new URLSearchParams(location.search).get("source")
+              )}
+              onClose={() => {
+                history.push("/settings/calendar/active/");
+                showCreateLayerButtonRef.current?.focus();
+              }}
+            />
+          )}
+        />
+        <Route
+          path="/settings/calendar/active/edit/:id"
+          render={({ match }: RouteComponentProps<{ id: string }>) => (
+            <CreateEditCalendarLayer
+              dataRepository={dataRepository}
+              initialValue={dataRepository.getCalendar(match.params.id)}
+              isEdit
+              onClose={() => {
+                history.push(`/settings/calendar/active/${match.params.id}`);
+                showCreateLayerButtonRef.current?.focus();
+              }}
+            />
+          )}
+        />
         <Route path="/settings/calendar/active/:id">
           <InfoPane
+            editBasePath="/settings/calendar/active/edit"
+            creationBasePath="/settings/calendar/active/create"
             onClose={() => {
               history.push("/settings/calendar/active/");
             }}

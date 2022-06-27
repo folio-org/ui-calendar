@@ -73,7 +73,19 @@ export default class DataRepository {
     return this.resources.calendars.records;
   }
 
+  getCalendar(id: string | null | undefined): Calendar | undefined {
+    if (id === undefined || id === null) return undefined;
+    return this.getCalendars().filter((calendar) => calendar.id === id)[0];
+  }
+
   createCalendar(calendar: Calendar) {
     return this.mutator.calendars.POST(calendar);
+  }
+
+  updateCalendar(
+    currentCalendar: Calendar,
+    newCalendar: Calendar
+  ): Promise<Calendar> {
+    return this.mutator.calendars.PUT(newCalendar);
   }
 }

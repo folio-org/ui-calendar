@@ -14,8 +14,25 @@ import { Calendar } from "../types/types";
 
 export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;
-  initialValues?: Calendar;
   onClose: () => void;
+  initialValue?: Calendar;
+  isEdit?: boolean;
+}
+
+enum OpType {
+  CREATE_NEW,
+  EDIT,
+  DUPLICATE,
+}
+
+function getOpType(initialValue?: Calendar, isEdit?: boolean): OpType {
+  if (initialValue === undefined) {
+    return OpType.CREATE_NEW;
+  }
+  if (isEdit) {
+    return OpType.EDIT;
+  }
+  return OpType.DUPLICATE;
 }
 
 export const CreateEditCalendarLayer: FunctionComponent<
@@ -30,9 +47,11 @@ export const CreateEditCalendarLayer: FunctionComponent<
   useEffect(() => setIsSubmitting(false), []);
 
   if (props.dataRepository.isLoaded()) {
+    const opType = getOpType(props.initialValue, props.isEdit);
+
     pane = (
       <Pane
-        paneTitle="Create new calendar"
+        paneTitle={opType === OpType.EDIT ? "Edit" : "Create new calendar"}
         defaultWidth="fill"
         centerContent
         onClose={props.onClose}
@@ -61,9 +80,16 @@ export const CreateEditCalendarLayer: FunctionComponent<
           submitAttempted={submitAttempted}
           dataRepository={props.dataRepository}
           servicePoints={props.dataRepository.getServicePoints()}
-          initialValues={props.initialValues}
+          initialValues={props.initialValue}
           submitter={(calendar: Calendar): Promise<Calendar> => {
-            return props.dataRepository.createCalendar(calendar);
+            if (opType === OpType.EDIT) {
+              return props.dataRepository.updateCalendar(
+                props.initialValue as Calendar,
+                calendar
+              );
+            } else {
+              return props.dataRepository.createCalendar(calendar);
+            }
           }}
         />
       </Pane>

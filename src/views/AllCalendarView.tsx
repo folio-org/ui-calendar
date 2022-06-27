@@ -10,7 +10,13 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import {
+  Route,
+  RouteComponentProps,
+  Switch,
+  useHistory,
+  useRouteMatch,
+} from "react-router-dom";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../data/CalendarUtils";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
@@ -121,17 +127,39 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       </Pane>
 
       <Switch>
-        <Route path="/settings/calendar/all/create">
-          <CreateEditCalendarLayer
-            dataRepository={dataRepository}
-            onClose={() => {
-              history.push("/settings/calendar/all/");
-              showCreateLayerButtonRef.current?.focus();
-            }}
-          />
-        </Route>
+        <Route
+          path="/settings/calendar/all/create"
+          render={({ location }: RouteComponentProps<{ source?: string }>) => (
+            <CreateEditCalendarLayer
+              dataRepository={dataRepository}
+              initialValue={dataRepository.getCalendar(
+                new URLSearchParams(location.search).get("source")
+              )}
+              onClose={() => {
+                history.push("/settings/calendar/all/");
+                showCreateLayerButtonRef.current?.focus();
+              }}
+            />
+          )}
+        />
+        <Route
+          path="/settings/calendar/all/edit/:id"
+          render={({ match }: RouteComponentProps<{ id: string }>) => (
+            <CreateEditCalendarLayer
+              dataRepository={dataRepository}
+              initialValue={dataRepository.getCalendar(match.params.id)}
+              isEdit
+              onClose={() => {
+                history.push(`/settings/calendar/all/${match.params.id}`);
+                showCreateLayerButtonRef.current?.focus();
+              }}
+            />
+          )}
+        />
         <Route path="/settings/calendar/all/:id">
           <InfoPane
+            editBasePath="/settings/calendar/all/edit"
+            creationBasePath="/settings/calendar/all/create"
             onClose={() => {
               history.push("/settings/calendar/all/");
             }}

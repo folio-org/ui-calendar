@@ -292,6 +292,8 @@ function containsFullOvernightSpans(hours: HoursType) {
 }
 
 export interface InfoPaneProps {
+  creationBasePath: string;
+  editBasePath: string;
   calendar?: Calendar | null;
   onClose?: () => void;
   dataRepository: DataRepository;
@@ -351,12 +353,27 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
       actionMenu={({ onToggle }) => (
         <>
           <MenuSection label="Actions">
-            <Button buttonStyle="dropdownItem" onClick={onToggle}>
+            <Button
+              buttonStyle="dropdownItem"
+              onClick={onToggle}
+              to={{
+                pathname: `${props.editBasePath}/${calendar.id}`,
+              }}
+            >
               <Icon size="small" icon="edit">
                 Edit
               </Icon>
             </Button>
-            <Button buttonStyle="dropdownItem" onClick={onToggle}>
+            <Button
+              buttonStyle="dropdownItem"
+              onClick={onToggle}
+              to={{
+                pathname: props.creationBasePath,
+                search: new URLSearchParams({
+                  source: calendar.id as string,
+                }).toString(),
+              }}
+            >
               <Icon size="small" icon="duplicate">
                 Duplicate
               </Icon>
