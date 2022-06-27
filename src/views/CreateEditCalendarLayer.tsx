@@ -8,18 +8,19 @@ import {
   Paneset,
 } from "@folio/stripes-components";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import CreateCalendarForm, { FORM_ID } from "../forms/CalendarForm";
 import DataRepository from "../data/DataRepository";
+import CalendarForm, { FORM_ID } from "../forms/CalendarForm";
 import { Calendar } from "../types/types";
 
-export interface CreateCalendarLayerProps {
+export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;
+  initialValues?: Calendar;
   onClose: () => void;
 }
 
-export const CreateCalendarLayer: FunctionComponent<
-  CreateCalendarLayerProps
-> = (props: CreateCalendarLayerProps) => {
+export const CreateEditCalendarLayer: FunctionComponent<
+  CreateEditCalendarLayerProps
+> = (props: CreateEditCalendarLayerProps) => {
   let pane = <LoadingPane />;
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -54,12 +55,13 @@ export const CreateCalendarLayer: FunctionComponent<
           />
         }
       >
-        <CreateCalendarForm
+        <CalendarForm
           closeParentLayer={props.onClose}
           setIsSubmitting={setIsSubmitting}
           submitAttempted={submitAttempted}
           dataRepository={props.dataRepository}
           servicePoints={props.dataRepository.getServicePoints()}
+          initialValues={props.initialValues}
           submitter={(calendar: Calendar): Promise<Calendar> => {
             return props.dataRepository.createCalendar(calendar);
           }}
@@ -74,4 +76,4 @@ export const CreateCalendarLayer: FunctionComponent<
     </Layer>
   );
 };
-export default CreateCalendarLayer;
+export default CreateEditCalendarLayer;

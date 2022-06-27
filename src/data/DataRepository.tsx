@@ -3,13 +3,15 @@ import memoizee from "memoizee";
 import { Calendar, ServicePoint } from "../types/types";
 import { Resources } from "./SharedData";
 
-const getServicePointMap = memoizee((servicePoints: ServicePoint[]) => {
-  const map: Record<string, string> = {};
-  servicePoints.forEach((sp) => {
-    map[sp.id] = sp.name;
-  });
-  return map;
-});
+const getServicePointMap = memoizee(
+  (servicePoints: ServicePoint[]): Record<string, ServicePoint> => {
+    const map: Record<string, ServicePoint> = {};
+    servicePoints.forEach((sp) => {
+      map[sp.id] = sp;
+    });
+    return map;
+  }
+);
 
 export default class DataRepository {
   private resources: ConnectedComponentProps<Resources>["resources"];
@@ -45,9 +47,19 @@ export default class DataRepository {
     }));
   }
 
-  getServicePointNames(ids: string[]): string[] {
+  getServicePointsFromIds(ids: string[]): ServicePoint[] {
     const map = getServicePointMap(this.getServicePoints());
-    return ids.map((id) => map[id]).filter((name) => name);
+    return ids
+      .map((id): ServicePoint | undefined => map[id])
+      .filter((sp): sp is ServicePoint => sp !== undefined);
+  }
+
+  getServicePointNamesFromIds(ids: string[]): string[] {
+    const map = getServicePointMap(this.getServicePoints());
+    return ids
+      .map((id): ServicePoint | undefined => map[id])
+      .filter((sp): sp is ServicePoint => sp !== undefined)
+      .map((sp) => sp.name);
   }
 
   areCalendarsLoaded(): boolean {

@@ -26,6 +26,16 @@ import React, {
 } from "react";
 import { Field, Form } from "react-final-form";
 import { useIntl } from "react-intl";
+import ExceptionField from "../components/fields/ExceptionField";
+import validate, {
+  FormValues,
+  InnerFieldRefs,
+} from "../components/fields/formValidation";
+import css from "../components/fields/HoursAndExceptionFields.css";
+import HoursOfOperationField from "../components/fields/HoursOfOperationField";
+import RowType from "../components/fields/RowType";
+import ServicePointAssignmentField from "../components/fields/ServicePointAssignmentField";
+import DataRepository from "../data/DataRepository";
 import {
   Calendar,
   ErrorCode,
@@ -33,18 +43,7 @@ import {
   ServicePoint,
   Weekday,
 } from "../types/types";
-import DataRepository from "../data/DataRepository";
-import ExceptionField from "../components/fields/ExceptionField";
-import { ExceptionRowState } from "../components/fields/ExceptionFieldTypes";
-import validate, {
-  FormValues,
-  InnerFieldRefs,
-} from "../components/fields/formValidation";
-import css from "../components/fields/HoursAndExceptionFields.css";
-import HoursOfOperationField from "../components/fields/HoursOfOperationField";
-import { HoursOfOperationRowState } from "../components/fields/HoursOfOperationFieldTypes";
-import RowType from "../components/fields/RowType";
-import ServicePointAssignmentField from "../components/fields/ServicePointAssignmentField";
+import calendarToInitialValues from "./calendarToInitialValues";
 
 dayjs.extend(customParseFormat);
 
@@ -60,6 +59,7 @@ export interface CreateCalendarFormProps {
   setIsSubmitting: (isSaving: boolean) => void;
   servicePoints: ServicePoint[];
   submitter: (calendar: Calendar) => Promise<Calendar>;
+  initialValues?: Calendar;
 }
 
 export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
@@ -157,7 +157,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
             submissionErrors["service-points"] =
               "Service points " +
               props.dataRepository
-                .getServicePointNames(error.data.conflictingServicePointIds)
+                .getServicePointNamesFromIds(
+                  error.data.conflictingServicePointIds
+                )
                 .join(", ") +
               " have overlaps.  " +
               error.message;
@@ -207,47 +209,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     }
   };
 
-  // const processInitialValues = memoizee(
-  //   (initialValues: Partial<FormValues>): Partial<FormValues> => ({
-  //     ...initialValues,
-  //     "hours-of-operation": CALENDARS[3].normalHours.map(
-  //       (opening, i): HoursOfOperationRowState => ({
-  //         type: RowType.Open,
-  //         i: -1 - i, // ensure `i` is negative as not to conflict
-  //         ...opening,
-  //       })
-  //     ),
-  //     exceptions: CALENDARS[3].exceptions.map(
-  //       (exception, i): ExceptionRowState => {
-  //         const result: ExceptionRowState = {
-  //           i: -1 - i, // ensure `i` is negative as not to conflict
-  //           type:
-  //             exception.openings.length === 0 ? RowType.Closed : RowType.Open,
-  //           name: exception.name,
-  //           lastRowI: 0,
-  //           rows: [],
-  //         };
-
-  //         if (result.type === RowType.Open) {
-  //           exception.openings.forEach((opening, j) =>
-  //             result.rows.push({ i: -1 - j, ...opening })
-  //           );
-  //         } else {
-  //           result.rows.push({
-  //             i: -1,
-  //             startDate: exception.startDate,
-  //             startTime: undefined,
-  //             endDate: exception.endDate,
-  //             endTime: undefined,
-  //           });
-  //         }
-
-  //         return result;
-  //       }
-  //     ),
-  //   })
-  // );
-
   const intl = useIntl();
   const localeDateFormat = getLocaleDateFormat({ intl });
   const localeTimeFormat = getLocalizedTimeFormatInfo(intl.locale).timeFormat;
@@ -277,6 +238,10 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       onSubmit={onSubmit}
       validate={validationFunction}
       validateOnBlur
+      initialValues={calendarToInitialValues(
+        props.dataRepository,
+        props.initialValues
+      )}
       render={(params) => {
         const {
           handleSubmit,
@@ -285,10 +250,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           touched,
           dirtyFieldsSinceLastSubmit,
           active,
-          initialValues: _initialValues,
         } = params;
-
-        // const initialValues = processInitialValues(_initialValues);
 
         let topErrorMessage = <></>;
         if (submitErrors?.[FORM_ERROR]) {
@@ -383,7 +345,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   component={HoursOfOperationField}
                   timeFieldRefs={innerFieldRefs.current.hoursOfOperation}
                   error={errors?.["hours-of-operation"]}
-                  // initialValue={[] as HoursOfOperationRowState[]}
                   localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                 />
@@ -394,7 +355,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   component={ExceptionField}
                   fieldRefs={innerFieldRefs.current.exceptions}
                   error={errors?.exceptions}
-                  // initialValue={[] as ExceptionRowState[]}
                   localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                 />

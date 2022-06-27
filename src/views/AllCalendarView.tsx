@@ -13,7 +13,7 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../data/CalendarUtils";
-import CreateCalendarLayer from "./CreateCalendarLayer";
+import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
 import DataRepository from "../data/DataRepository";
 import InfoPane from "../panes/InfoPane";
 import { MANIFEST, Resources } from "../data/SharedData";
@@ -122,7 +122,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
 
       <Switch>
         <Route path="/settings/calendar/all/create">
-          <CreateCalendarLayer
+          <CreateEditCalendarLayer
             dataRepository={dataRepository}
             onClose={() => {
               history.push("/settings/calendar/all/");

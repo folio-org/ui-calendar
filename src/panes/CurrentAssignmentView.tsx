@@ -6,7 +6,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import * as CalendarUtils from "../data/CalendarUtils";
-import CreateCalendarLayer from "../views/CreateCalendarLayer";
+import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
 import DataRepository from "../data/DataRepository";
 import InfoPane from "./InfoPane";
 import * as MockConstants from "../data/MockConstants";
@@ -132,7 +132,7 @@ export const CurrentAssignmentView: ConnectedComponent<
 
       <Switch>
         <Route path="/settings/calendar/active/create">
-          <CreateCalendarLayer
+          <CreateEditCalendarLayer
             dataRepository={dataRepository}
             onClose={() => {
               history.push("/settings/calendar/active/");

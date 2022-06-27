@@ -383,7 +383,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         </Row>
         <Accordion label="Service point assignments">
           <List
-            items={props.dataRepository.getServicePointNames(
+            items={props.dataRepository.getServicePointNamesFromIds(
               calendar.assignments
             )}
             listStyle="bullets"
