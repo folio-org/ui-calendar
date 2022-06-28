@@ -85,4 +85,8 @@ export default class DataRepository {
   updateCalendar(newCalendar: Calendar): Promise<Calendar> {
     return this.mutator.calendars.PUT(newCalendar);
   }
+
+  deleteCalendar(calendar: Calendar): Promise<void> {
+    return this.mutator.calendars.DELETE(calendar);
+  }
 }

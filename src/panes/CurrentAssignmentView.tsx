@@ -11,14 +11,13 @@ import {
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
+import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import * as CalendarUtils from "../data/CalendarUtils";
-import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
 import DataRepository from "../data/DataRepository";
-import InfoPane from "./InfoPane";
 import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
-import SortableMultiColumnList from "../components/SortableMultiColumnList";
-import { Calendar } from "../types/types";
+import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
+import InfoPane from "./InfoPane";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 

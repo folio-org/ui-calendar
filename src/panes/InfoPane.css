@@ -1,3 +1,9 @@
+@import "@folio/stripes-components/lib/variables";
+
+.deleteButton {
+  color: var(--danger);
+}
+
 .dayCell {
   align-items: start;
 }
