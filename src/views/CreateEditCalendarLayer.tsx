@@ -83,10 +83,11 @@ export const CreateEditCalendarLayer: FunctionComponent<
           initialValues={props.initialValue}
           submitter={(calendar: Calendar): Promise<Calendar> => {
             if (opType === OpType.EDIT) {
-              return props.dataRepository.updateCalendar(
-                props.initialValue as Calendar,
-                calendar
-              );
+              const newCalendar = {
+                ...calendar,
+                id: props.initialValue?.id as string,
+              };
+              return props.dataRepository.updateCalendar(newCalendar);
             } else {
               return props.dataRepository.createCalendar(calendar);
             }

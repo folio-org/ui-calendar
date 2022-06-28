@@ -26,6 +26,10 @@ declare module "@folio/stripes-connect" {
     type?: "local";
   }
   interface RestResourceConfiguration<Props> {
+    /** the base URL of the service that persists the data */
+    root: string;
+    /** Relative resource path, below the root */
+    path: string;
     /** Query parameters to always add to the URL */
     params?: Record<string, string>;
     /** A parameter to control the number of items to request at a time */
@@ -79,10 +83,6 @@ declare module "@folio/stripes-connect" {
   interface RestResourceManifest<Props>
     extends RestResourceConfiguration<Props> {
     type: "rest";
-    /** the base URL of the service that persists the data */
-    root: string;
-    /** Relative resource path, below the root */
-    path: string;
     GET?: Partial<RestResourceConfiguration<Props>>;
     POST?: Partial<RestResourceConfiguration<Props>>;
     PUT?: Partial<RestResourceConfiguration<Props>>;
@@ -96,7 +96,7 @@ declare module "@folio/stripes-connect" {
 
   export interface ResourceTypeSpec {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    local?: Record<string, Record<string, unknown>>;
+    local?: Record<string, unknown>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rest?: Record<string, any>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -203,16 +203,16 @@ declare module "@folio/stripes-connect" {
           newData: Partial<Resources["local"][resource]>
         ) => MutatorResponse<
           resource,
-          Partial<Resources["local"][resource]>,
+          Resources["local"][resource],
           "@@stripes-connect/LOCAL_UPDATE"
         >;
         /** Replace the current resource with the provided resource */
         replace: (
-          newData: Partial<Resources["local"][resource]>
+          newData: Resources["local"][resource]
         ) => MutatorResponse<
           resource,
-          Partial<Resources["local"][resource]>,
-          "@@stripes-connect/LOCAL_UPDATE"
+          Resources["local"][resource],
+          "@@stripes-connect/LOCAL_REPLACE"
         >;
       };
     } & {

@@ -243,21 +243,21 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
 ) => {
   /** Must add at least one empty row, or MCL will not render properly */
   const [rowStates, _setRowStates] = useState<ExceptionRowState[]>([
-    {
-      i: -1,
-      lastRowI: 0,
-      name: "",
-      type: RowType.Open,
-      rows: [
-        {
-          i: 0,
-          startDate: undefined,
-          startTime: undefined,
-          endDate: undefined,
-          endTime: undefined,
-        },
-      ],
-    },
+    // {
+    //   i: -1,
+    //   lastRowI: 0,
+    //   name: "",
+    //   type: RowType.Open,
+    //   rows: [
+    //     {
+    //       i: 0,
+    //       startDate: undefined,
+    //       startTime: undefined,
+    //       endDate: undefined,
+    //       endTime: undefined,
+    //     },
+    //   ],
+    // },
   ]);
 
   const setRowStates = (newRowStates: ExceptionRowState[]) => {

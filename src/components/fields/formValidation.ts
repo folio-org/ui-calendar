@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import { ReactNode, RefObject } from "react";
-import { CalendarOpening, ServicePoint, Weekday } from "../../types/types";
 import { getWeekdaySpan, overlaps } from "../../data/CalendarUtils";
+import { CalendarOpening, ServicePoint, Weekday } from "../../types/types";
 import { ExceptionFieldErrors, ExceptionRowState } from "./ExceptionFieldTypes";
 import {
   HoursOfOperationErrors,
@@ -60,8 +60,27 @@ function isTimeProper(
   fieldValue: string,
   realInputValue: string
 ): boolean {
-  const timeObject = dayjs(realInputValue, localeTimeFormat, true);
-  return !timeObject.isValid() || timeObject.format("HH:mm") !== fieldValue;
+  if (realInputValue === undefined) {
+    return true;
+  }
+
+  let timeObject = dayjs(realInputValue, localeTimeFormat, true);
+  if (!timeObject.isValid()) {
+    // the picker has a tendency to remove leading zeroes
+    timeObject = dayjs(
+      realInputValue,
+      localeTimeFormat.replace("HH", "H").replace("hh", "h"),
+      true
+    );
+  }
+
+  return (
+    timeObject.isValid() &&
+    (timeObject.format("HH:mm") === fieldValue ||
+      timeObject.format("HH:mm:ss") === fieldValue ||
+      timeObject.format("H:mm") === fieldValue ||
+      timeObject.format("H:mm:ss") === fieldValue)
+  );
 }
 
 // ensure manually-typed dates match the proper format
@@ -91,7 +110,7 @@ function validateDate(
 
   if (dayjs(dateValue).format(localeDateFormat) !== inputValue) {
     return {
-      [key]: `Please ender a date in the ${localeDateFormat} format`,
+      [key]: `Please enter a date in the ${localeDateFormat} format`,
     };
   }
 
@@ -99,7 +118,7 @@ function validateDate(
 }
 
 // ensure start-date and end-date are in the proper order
-// if improper, renders an error on `end-date`
+// if improper, renters an error on `end-date`
 function validateDateOrder(values: Partial<FormValues>): {
   "end-date"?: ReactNode;
 } {
@@ -118,8 +137,7 @@ function validateDateOrder(values: Partial<FormValues>): {
 }
 
 function validateHoursOfOperationEmpty(
-  rows: HoursOfOperationRowState[],
-  timeFieldRefs: InnerFieldRefs["hoursOfOperation"]
+  rows: HoursOfOperationRowState[]
 ): HoursOfOperationErrors | undefined {
   const emptyErrors: HoursOfOperationErrors["empty"] = {
     startDay: {},
@@ -140,11 +158,11 @@ function validateHoursOfOperationEmpty(
       hasError = true;
     }
     if (row.type === RowType.Open) {
-      if (row.startTime === undefined || !(row.i in timeFieldRefs.startTime)) {
+      if (row.startTime === undefined) {
         emptyErrors.startTime[row.i] = "Please fill this in to continue";
         hasError = true;
       }
-      if (row.endTime === undefined || !(row.i in timeFieldRefs.endTime)) {
+      if (row.endTime === undefined) {
         emptyErrors.endTime[row.i] = "Please fill this in to continue";
         hasError = true;
       }
@@ -173,26 +191,26 @@ function validateHoursOfOperationTimes(
       return;
     }
     if (
-      isTimeProper(
+      !isTimeProper(
         localeTimeFormat,
         row.startTime as string,
-        timeFieldRefs.startTime[row.i]?.value
+        timeFieldRefs.startTime?.[row.i]?.value
       )
     ) {
       invalidTimeErrors.startTime[
         row.i
-      ] = `Please ender a date in the ${localeTimeFormat} format`;
+      ] = `Please enter a time in the ${localeTimeFormat} format`;
     }
     if (
-      isTimeProper(
+      !isTimeProper(
         localeTimeFormat,
         row.endTime as string,
-        timeFieldRefs.endTime[row.i]?.value
+        timeFieldRefs.endTime?.[row.i]?.value
       )
     ) {
       invalidTimeErrors.endTime[
         row.i
-      ] = `Please ender a date in the ${localeTimeFormat} format`;
+      ] = `Please enter a time in the ${localeTimeFormat} format`;
     }
   });
 
@@ -305,7 +323,7 @@ function validateHoursOfOperation(
 } {
   if (rows === undefined) return {};
 
-  const emptyError = validateHoursOfOperationEmpty(rows, timeFieldRefs);
+  const emptyError = validateHoursOfOperationEmpty(rows);
   if (emptyError !== undefined) {
     return { "hours-of-operation": emptyError };
   }
@@ -354,18 +372,12 @@ export function validateExceptionInnerRowEmpty(
     hasError = true;
   }
   if (row.type === RowType.Open) {
-    if (
-      innerRow.startTime === undefined ||
-      !(innerFieldRefs.startTime?.[row.i]?.[innerRow.i] instanceof HTMLElement)
-    ) {
+    if (innerRow.startTime === undefined) {
       emptyErrors.startTime[row.i][innerRow.i] =
         "Please fill this in to continue";
       hasError = true;
     }
-    if (
-      innerRow.endTime === undefined ||
-      !(innerFieldRefs.endTime?.[row.i]?.[innerRow.i] instanceof HTMLElement)
-    ) {
+    if (innerRow.endTime === undefined) {
       emptyErrors.endTime[row.i][innerRow.i] =
         "Please fill this in to continue";
       hasError = true;
@@ -431,7 +443,7 @@ export function validateExceptionInnerRowDatesAndTimes(
   ) {
     invalidErrors.startDate[row.i][
       innerRow.i
-    ] = `Please ender a date in the ${localeDateFormat} format`;
+    ] = `Please enter a date in the ${localeDateFormat} format`;
     hasError = true;
   }
   if (
@@ -440,12 +452,12 @@ export function validateExceptionInnerRowDatesAndTimes(
   ) {
     invalidErrors.endDate[row.i][
       innerRow.i
-    ] = `Please ender a date in the ${localeDateFormat} format`;
+    ] = `Please enter a date in the ${localeDateFormat} format`;
     hasError = true;
   }
   if (row.type === RowType.Open) {
     if (
-      isTimeProper(
+      !isTimeProper(
         localeTimeFormat,
         innerRow.startTime as string,
         innerFieldRefs.startTime?.[row.i]?.[innerRow.i]?.value
@@ -453,11 +465,11 @@ export function validateExceptionInnerRowDatesAndTimes(
     ) {
       invalidErrors.startTime[row.i][
         innerRow.i
-      ] = `Please ender a time in the ${localeTimeFormat} format`;
+      ] = `Please enter a time in the ${localeTimeFormat} format`;
       hasError = true;
     }
     if (
-      isTimeProper(
+      !isTimeProper(
         localeTimeFormat,
         innerRow.endTime as string,
         innerFieldRefs.endTime?.[row.i]?.[innerRow.i]?.value
@@ -465,7 +477,7 @@ export function validateExceptionInnerRowDatesAndTimes(
     ) {
       invalidErrors.endTime[row.i][
         innerRow.i
-      ] = `Please ender a time in the ${localeTimeFormat} format`;
+      ] = `Please enter a time in the ${localeTimeFormat} format`;
       hasError = true;
     }
   }

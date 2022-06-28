@@ -132,20 +132,17 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       }
     });
 
+    const submissionErrors: Partial<
+      Record<keyof FormValues | typeof FORM_ERROR, ReactNode>
+    > = {};
+
     try {
       await props.submitter(newCalendar);
 
-      props.setIsSubmitting(false);
       props.closeParentLayer();
-
-      return {};
     } catch (e: unknown) {
       const response = e as Response;
       const errors = (await response.json()) as ErrorResponse;
-
-      const submissionErrors: Partial<
-        Record<keyof FormValues | typeof FORM_ERROR, ReactNode>
-      > = {};
 
       errors.errors.forEach((error) => {
         switch (error.code) {
@@ -203,10 +200,11 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
             submissionErrors[FORM_ERROR] = error.message;
         }
       });
-
-      props.setIsSubmitting(false);
-      return submissionErrors;
     }
+
+    props.setIsSubmitting(false);
+
+    return submissionErrors;
   };
 
   const intl = useIntl();
@@ -249,7 +247,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           touched,
           dirtyFieldsSinceLastSubmit,
           active,
+          initialValues,
         } = params;
+        console.log(params);
 
         let topErrorMessage = <></>;
         if (submitErrors?.[FORM_ERROR]) {
@@ -332,10 +332,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 </Row>
                 <ServicePointAssignmentField
                   servicePoints={props.servicePoints}
-                  error={
-                    !dirtyFieldsSinceLastSubmit?.["service-points"] &&
-                    submitErrors?.["service-points"]
-                  }
+                  error={submitErrors?.["service-points"]}
                 />
               </Accordion>
               <Accordion label="Hours of operation">

@@ -82,10 +82,7 @@ export default class DataRepository {
     return this.mutator.calendars.POST(calendar);
   }
 
-  updateCalendar(
-    currentCalendar: Calendar,
-    newCalendar: Calendar
-  ): Promise<Calendar> {
+  updateCalendar(newCalendar: Calendar): Promise<Calendar> {
     return this.mutator.calendars.PUT(newCalendar);
   }
 }
