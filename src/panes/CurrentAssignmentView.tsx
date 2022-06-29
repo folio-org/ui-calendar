@@ -3,7 +3,7 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   Route,
   RouteComponentProps,
@@ -13,9 +13,9 @@ import {
 } from "react-router-dom";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import * as CalendarUtils from "../data/CalendarUtils";
-import DataRepository from "../data/DataRepository";
 import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
+import useDataRepository from "../data/useDataRepository";
 import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
 import InfoPane from "./InfoPane";
 
@@ -25,13 +25,7 @@ export const CurrentAssignmentView: ConnectedComponent<
   CurrentAssignmentViewProps,
   Resources
 > = (props: CurrentAssignmentViewProps) => {
-  const [dataRepository, setDataRepository] = useState(
-    new DataRepository(props.resources, props.mutator)
-  );
-  useEffect(
-    () => setDataRepository(new DataRepository(props.resources, props.mutator)),
-    [props.resources, props.mutator]
-  );
+  const dataRepository = useDataRepository(props.resources, props.mutator);
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();

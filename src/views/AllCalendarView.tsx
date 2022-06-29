@@ -9,7 +9,7 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useRef } from "react";
 import {
   Route,
   RouteComponentProps,
@@ -17,26 +17,20 @@ import {
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
-import { Calendar } from "../types/types";
-import { getLocalizedDate } from "../data/CalendarUtils";
-import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
-import DataRepository from "../data/DataRepository";
-import InfoPane from "../panes/InfoPane";
-import { MANIFEST, Resources } from "../data/SharedData";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
+import { getLocalizedDate } from "../data/CalendarUtils";
+import { MANIFEST, Resources } from "../data/SharedData";
+import useDataRepository from "../data/useDataRepository";
+import InfoPane from "../panes/InfoPane";
+import { Calendar } from "../types/types";
+import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 
 const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   props: AllCalendarViewProps
 ) => {
-  const [dataRepository, setDataRepository] = useState(
-    new DataRepository(props.resources, props.mutator)
-  );
-  useEffect(
-    () => setDataRepository(new DataRepository(props.resources, props.mutator)),
-    [props.resources, props.mutator]
-  );
+  const dataRepository = useDataRepository(props.resources, props.mutator);
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();

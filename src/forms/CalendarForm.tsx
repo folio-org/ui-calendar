@@ -247,9 +247,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
           touched,
           dirtyFieldsSinceLastSubmit,
           active,
-          initialValues,
         } = params;
-        console.log(params);
 
         let topErrorMessage = <></>;
         if (submitErrors?.[FORM_ERROR]) {
