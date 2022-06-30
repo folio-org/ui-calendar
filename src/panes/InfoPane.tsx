@@ -274,6 +274,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         </AccordionSet>
       </Pane>
       <Modal
+        dismissible
+        onClose={() => setShowDeleteModal(false)}
         open={showDeleteModal}
         label="Confirm deletion"
         aria-label="Confirm deletion"
@@ -281,6 +283,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         footer={
           <ModalFooter>
             <Button
+              buttonStyle="danger"
               disabled={deleteModalSubmitting}
               onClick={async () => {
                 setDeleteModalSubmitting(true);
@@ -291,7 +294,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                   // eslint-disable-next-line no-console
                   console.error(e);
                   // eslint-disable-next-line no-alert
-                  alert(e);
+                  alert((e as Response).text());
                 } finally {
                   setShowDeleteModal(false);
                   setDeleteModalSubmitting(false);

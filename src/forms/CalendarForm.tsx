@@ -53,7 +53,7 @@ const DateFieldComponent = DateField<DateFieldRenderProps>;
 export const FORM_ID = "ui-calendar-create-calendar-form";
 
 export interface CreateCalendarFormProps {
-  closeParentLayer: () => void;
+  closeParentLayer: (id?: string) => void;
   submitAttempted: boolean;
   dataRepository: DataRepository;
   setIsSubmitting: (isSaving: boolean) => void;
@@ -137,9 +137,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     > = {};
 
     try {
-      await props.submitter(newCalendar);
+      const cal = await props.submitter(newCalendar);
 
-      props.closeParentLayer();
+      props.closeParentLayer(cal.id as string);
     } catch (e: unknown) {
       const response = e as Response;
       const errors = (await response.json()) as ErrorResponse;
@@ -341,6 +341,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   error={errors?.["hours-of-operation"]}
                   localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
+                  isNewCalendar={props.initialValues === undefined}
                 />
               </Accordion>
               <Accordion label="Exceptions">

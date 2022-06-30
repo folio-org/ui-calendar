@@ -7,14 +7,14 @@ import {
   PaneFooter,
   Paneset,
 } from "@folio/stripes-components";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import DataRepository from "../data/DataRepository";
 import CalendarForm, { FORM_ID } from "../forms/CalendarForm";
 import { Calendar } from "../types/types";
 
 export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;
-  onClose: () => void;
+  onClose: (id?: string) => void;
   initialValue?: Calendar;
   isEdit?: boolean;
 }
@@ -43,9 +43,6 @@ export const CreateEditCalendarLayer: FunctionComponent<
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
-  /** Reset if the layer is closed or opened */
-  useEffect(() => setIsSubmitting(false), []);
-
   if (props.dataRepository.isLoaded()) {
     const opType = getOpType(props.initialValue, props.isEdit);
 
@@ -58,7 +55,9 @@ export const CreateEditCalendarLayer: FunctionComponent<
         dismissible
         footer={
           <PaneFooter
-            renderStart={<Button onClick={props.onClose}>Cancel</Button>}
+            renderStart={
+              <Button onClick={() => props.onClose()}>Cancel</Button>
+            }
             renderEnd={
               <Button
                 disabled={isSubmitting}

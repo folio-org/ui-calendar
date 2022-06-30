@@ -100,6 +100,7 @@ export const CurrentAssignmentView: ConnectedComponent<
         <SortableMultiColumnList
           sortedColumn="servicePoint"
           sortDirection="ascending"
+          dateColumns={["startDate", "endDate"]}
           columnMapping={{
             servicePoint: "Service point",
             calendarName: "Calendar name",
@@ -139,8 +140,8 @@ export const CurrentAssignmentView: ConnectedComponent<
               initialValue={dataRepository.getCalendar(
                 new URLSearchParams(location.search).get("source")
               )}
-              onClose={() => {
-                history.push("/settings/calendar/active/");
+              onClose={(id = "") => {
+                history.push(`/settings/calendar/active/${id}`);
                 showCreateLayerButtonRef.current?.focus();
               }}
             />

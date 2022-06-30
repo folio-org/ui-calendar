@@ -87,6 +87,7 @@ export interface HoursOfOperationFieldProps
   error?: HoursOfOperationErrors;
   localeTimeFormat: string;
   submitAttempted: boolean;
+  isNewCalendar: boolean;
 }
 
 export const HoursOfOperationField: FunctionComponent<
@@ -120,7 +121,7 @@ export const HoursOfOperationField: FunctionComponent<
     const providedRows = [...props.input.value];
 
     // do nothing if there are no openings to render/parse
-    if (providedRows.length === 0) {
+    if (props.isNewCalendar) {
       return;
     }
 

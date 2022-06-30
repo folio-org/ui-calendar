@@ -129,8 +129,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
               initialValue={dataRepository.getCalendar(
                 new URLSearchParams(location.search).get("source")
               )}
-              onClose={() => {
-                history.push("/settings/calendar/all/");
+              onClose={(id = "") => {
+                history.push(`/settings/calendar/all/${id}`);
                 showCreateLayerButtonRef.current?.focus();
               }}
             />
