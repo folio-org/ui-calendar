@@ -76,6 +76,18 @@ export function dayjsCompare(a: Dayjs, b: Dayjs): number {
   return 0;
 }
 
+export function getDateRange(start: Dayjs, end: Dayjs): Dayjs[] {
+  let current = start;
+  const result = [];
+
+  do {
+    result.push(current);
+    current = current.add(1, "day");
+  } while (current.isSameOrBefore(end));
+
+  return result;
+}
+
 export function overlaps(
   start1: Dayjs,
   end1: Dayjs,

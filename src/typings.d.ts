@@ -21,23 +21,32 @@ declare module "@folio/stripes-core" {
 declare module "@folio/stripes-connect" {
   import { Optional } from "@folio/stripes-components/types/utils";
   import { FunctionComponent } from "react";
+  import { RouteComponentProps } from "react-router-dom";
 
   interface LocalResourceManifest {
     type?: "local";
   }
+  type FunctionalPathOrParam<Props> = (
+    queryParams: Record<string, string>,
+    pathParams: Record<string, string>,
+    resources: ConnectedComponentProps<Props>["resources"],
+    logger: { log: typeof console.log },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    props: Props & RouteComponentProps
+  ) => string | null;
   interface RestResourceConfiguration<Props> {
     /** the base URL of the service that persists the data */
     root: string;
     /** Relative resource path, below the root */
-    path: string;
+    path: string | FunctionalPathOrParam<Props>;
     /** Query parameters to always add to the URL */
-    params?: Record<string, string>;
+    params?: Record<string, string | FunctionalPathOrParam<Props>>;
     /** A parameter to control the number of items to request at a time */
     limitParam?: string;
     /** A parameter to control the number of items to skip */
     offsetParam?: string;
     /** Custom headers to send with each request */
-    headers?: Record<string, string>;
+    headers?: Record<string, string | FunctionalPathOrParam<Props>>;
     /**
      * The key within the returned object that contains the actual data
      * @example

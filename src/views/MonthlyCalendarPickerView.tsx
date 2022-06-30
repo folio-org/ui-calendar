@@ -1,4 +1,6 @@
 import {
+  Icon,
+  Loading,
   LoadingPane,
   NavList,
   NavListItem,
@@ -9,22 +11,71 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
-import dayjs from "dayjs";
+import classNames from "classnames";
+import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
-import React, { useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import { SERVICE_POINT_LIST } from "../data/MockConstants";
+import { getDateRange, getLocalizedTime } from "../data/CalendarUtils";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import MonthlyCalendarView from "../panes/MonthlyCalendarView";
+import { DailyOpeningInfo } from "../types/types";
+import css from "../components/Calendar.css";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
 dayjs.extend(weekday);
 dayjs.extend(isSameOrBefore);
+
+function dailyOpeningToCalendarDisplay(
+  openingInfo: DailyOpeningInfo
+): ReactNode {
+  let exception: ReactNode = null;
+  let status: ReactNode = (
+    <p className={css.closed} key={-1}>
+      Closed
+    </p>
+  );
+  if (openingInfo.open) {
+    status = openingInfo.openings.map((opening, i) => (
+      <p key={i}>
+        {getLocalizedTime(opening.startTime)} &ndash;{" "}
+        {getLocalizedTime(opening.endTime)}
+      </p>
+    ));
+  }
+  if (openingInfo.exceptional) {
+    if (openingInfo.open) {
+      exception = (
+        <span
+          className={classNames(css.icon)}
+          title={openingInfo.exceptionName}
+        >
+          <Icon icon="exclamation-circle" status="warn" />
+        </span>
+      );
+    } else {
+      exception = (
+        <span
+          className={classNames(css.icon)}
+          title={openingInfo.exceptionName}
+        >
+          <Icon icon="exclamation-circle" status="error" />
+        </span>
+      );
+    }
+  }
+  return (
+    <>
+      {status}
+      {exception}
+    </>
+  );
+}
 
 export type MonthlyCalendarPickerViewProps = ConnectedComponentProps<Resources>;
 
@@ -33,20 +84,59 @@ const MonthlyCalendarPickerView: ConnectedComponent<
   Resources
 > = (props: MonthlyCalendarPickerViewProps) => {
   const dataRepository = useDataRepository(props.resources, props.mutator);
+  const [events, setEvents] = useState<
+    Record<string, Record<string, ReactNode>>
+  >({});
+  const history = useHistory();
 
-  const [monthBasis, setMonthBasis] = useState(dayjs().startOf("month")); // start at current date
   const currentRouteId = useRouteMatch<{
     servicePointId: string;
   }>("/settings/calendar/monthly/:servicePointId")?.params?.servicePointId;
-  const history = useHistory();
+
+  useEffect(() => {
+    if (currentRouteId !== undefined && !(currentRouteId in events)) {
+      const newEvents = { ...events, [currentRouteId]: {} };
+      setEvents(newEvents);
+    }
+    // we do not care about events changing, we only want to ensure that the SP has an entry
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRouteId]);
+
+  const requestEvents = useCallback(
+    async (startDate: Dayjs, endDate: Dayjs, servicePointId: string) => {
+      if (servicePointId === currentRouteId) {
+        const loadingEvents = { ...events };
+        if (!(servicePointId in loadingEvents)) {
+          loadingEvents[servicePointId] = {};
+        }
+        getDateRange(startDate, endDate).forEach((date) => {
+          loadingEvents[servicePointId][date.format("YYYY-MM-DD")] = (
+            <Loading />
+          );
+        });
+        // prevents further calls of this function while these events are being loaded
+        setEvents(loadingEvents);
+
+        const dateRange = await dataRepository.getDateRange(startDate, endDate);
+
+        const newEvents = { ...loadingEvents };
+        dateRange.forEach((openingInfo) => {
+          newEvents[servicePointId][openingInfo.date] =
+            dailyOpeningToCalendarDisplay(openingInfo);
+        });
+        setEvents(newEvents);
+      }
+    },
+    [dataRepository, currentRouteId, events]
+  );
 
   if (!dataRepository.isLoaded()) {
     return <LoadingPane paneTitle="Service points" />;
   }
 
-  const listItems = SERVICE_POINT_LIST.map((sp, i) => {
+  const listItems = dataRepository.getServicePoints().map((sp, i) => {
     return (
-      <NavListItem key={i} to={sp.id} onClick={() => setMonthBasis(dayjs())}>
+      <NavListItem key={i} to={sp.id}>
         {sp.name.concat(sp.inactive ? " (inactive)" : "")}
       </NavListItem>
     );
@@ -65,16 +155,14 @@ const MonthlyCalendarPickerView: ConnectedComponent<
         </NavList>
       </Pane>
       <Route path="/settings/calendar/monthly/:servicePointId">
-        {currentRouteId && (
-          <MonthlyCalendarView
-            onClose={() => {
-              history.push("/settings/calendar/monthly/");
-            }}
-            servicePointId={currentRouteId}
-            monthBasis={monthBasis}
-            setMonthBasis={setMonthBasis}
-          />
-        )}
+        <MonthlyCalendarView
+          onClose={() => {
+            history.push("/settings/calendar/monthly/");
+          }}
+          servicePoint={dataRepository.getServicePointsFromId(currentRouteId)}
+          events={events[currentRouteId ?? ""]}
+          requestEvents={requestEvents}
+        />
       </Route>
     </>
   );

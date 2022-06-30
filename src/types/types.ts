@@ -127,3 +127,12 @@ export interface ErrorResponse {
   status: number;
   errors: Error[];
 }
+
+export interface DailyOpeningInfo {
+  date: string;
+  allDay: boolean;
+  open: boolean;
+  exceptional: boolean;
+  exceptionName?: string;
+  openings: { startTime: string; endTime: string }[];
+}

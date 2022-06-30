@@ -23,7 +23,7 @@ function isSameMonth(a: Dayjs, b: Dayjs): boolean {
   return a.isSame(b, "month");
 }
 
-const getDateArray = memoizee((monthBasis: Dayjs): Dayjs[] => {
+export const getDateArray = memoizee((monthBasis: Dayjs): Dayjs[] => {
   // start
   let date = monthBasis.startOf("month");
   // if the month starts at the beginning of the week, add a full row above of the previous month

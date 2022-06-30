@@ -1,7 +1,8 @@
 import { ConnectedComponentProps } from "@folio/stripes-connect";
+import { Dayjs } from "dayjs";
 import memoizee from "memoizee";
-import { Calendar, ServicePoint } from "../types/types";
-import { Resources } from "./SharedData";
+import { Calendar, DailyOpeningInfo, ServicePoint } from "../types/types";
+import { MAX_LIMIT, Resources } from "./SharedData";
 
 const getServicePointMap = memoizee(
   (servicePoints: ServicePoint[]): Record<string, ServicePoint> => {
@@ -54,6 +55,12 @@ export default class DataRepository {
       .filter((sp): sp is ServicePoint => sp !== undefined);
   }
 
+  getServicePointsFromId(id?: string): ServicePoint | undefined {
+    if (id === undefined) return undefined;
+    const map = getServicePointMap(this.getServicePoints());
+    return map[id];
+  }
+
   getServicePointNamesFromIds(ids: string[]): string[] {
     const map = getServicePointMap(this.getServicePoints());
     return ids
@@ -97,5 +104,19 @@ export default class DataRepository {
     const calendar = { id: joinedCalendarIds } as Calendar;
 
     return this.mutator.calendars.DELETE(calendar);
+  }
+
+  getDateRange(startDate: Dayjs, endDate: Dayjs): Promise<DailyOpeningInfo[]> {
+    if (this.mutator.dates.GET === undefined) {
+      return Promise.resolve([]);
+    }
+    return this.mutator.dates.GET({
+      params: {
+        limit: MAX_LIMIT.toString(),
+        includeClosed: "true",
+        startDate: startDate.format("YYYY-MM-DD"),
+        endDate: endDate.format("YYYY-MM-DD"),
+      },
+    });
   }
 }
