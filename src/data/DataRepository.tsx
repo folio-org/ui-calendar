@@ -89,4 +89,13 @@ export default class DataRepository {
   deleteCalendar(calendar: Calendar): Promise<void> {
     return this.mutator.calendars.DELETE(calendar);
   }
+
+  deleteCalendars(calendars: Calendar[]): Promise<void> {
+    // tricks stripes-connect into sending API request with comma-delimited path variable
+    // stripes-connect only looks at `id` on calendar so other properties are not needed
+    const joinedCalendarIds = calendars.map((c) => c.id).join(",");
+    const calendar = { id: joinedCalendarIds } as Calendar;
+
+    return this.mutator.calendars.DELETE(calendar);
+  }
 }

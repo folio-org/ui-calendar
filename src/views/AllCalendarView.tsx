@@ -9,7 +9,7 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import {
   Route,
   RouteComponentProps,
@@ -21,6 +21,7 @@ import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import { getLocalizedDate } from "../data/CalendarUtils";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
+import PurgeModal from "../forms/PurgeModal";
 import InfoPane from "../panes/InfoPane";
 import { Calendar } from "../types/types";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
@@ -31,6 +32,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   props: AllCalendarViewProps
 ) => {
   const dataRepository = useDataRepository(props.resources, props.mutator);
+  const [showPurgeModal, setShowPurgeModal] = useState<boolean>(false);
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
@@ -77,7 +79,13 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                   New
                 </Icon>
               </Button>
-              <Button buttonStyle="dropdownItem" onClick={onToggle}>
+              <Button
+                buttonStyle="dropdownItem"
+                onClick={() => {
+                  onToggle();
+                  setShowPurgeModal(true);
+                }}
+              >
                 <Icon size="small" icon="trash">
                   Purge old calendars
                 </Icon>
@@ -98,6 +106,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
         >
           sortedColumn="startDate"
           sortDirection="ascending"
+          dateColumns={["startDate", "endDate"]}
           columnMapping={{
             name: "Calendar name",
             startDate: "Start date",
@@ -166,6 +175,12 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
           />
         </Route>
       </Switch>
+
+      <PurgeModal
+        dataRepository={dataRepository}
+        open={showPurgeModal}
+        onClose={() => setShowPurgeModal(false)}
+      />
     </>
   );
 };
