@@ -56,6 +56,7 @@ interface LocaleWeekdayInfo {
   short: string;
   long: string;
 }
+
 export const getLocaleWeekdays: () => LocaleWeekdayInfo[] = memoizee(() => {
   const weekdays: LocaleWeekdayInfo[] = [];
   for (let i = 0; i < 7; i++) {
@@ -68,6 +69,12 @@ export const getLocaleWeekdays: () => LocaleWeekdayInfo[] = memoizee(() => {
   }
   return weekdays;
 });
+
+export function dayjsCompare(a: Dayjs, b: Dayjs): number {
+  if (a.isBefore(b)) return -1;
+  if (a.isAfter(b)) return 1;
+  return 0;
+}
 
 export function overlaps(
   start1: Dayjs,

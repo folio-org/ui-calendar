@@ -1,6 +1,8 @@
 import { MultiColumnList } from "@folio/stripes-components";
 import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
+import dayjs from "dayjs";
 import React, { ReactElement, ReactNode, useMemo, useState } from "react";
+import { dayjsCompare } from "../data/CalendarUtils";
 
 export enum SortDirection {
   ASCENDING = "ascending",
@@ -34,21 +36,32 @@ function getInitialSort<SortableDataShape>(
   ];
 }
 
-export type SortableMultiColumnListProps<
+export interface SortableMultiColumnListProps<
   DataShape,
   OmittedColumns extends string = ""
-> = Omit<MultiColumnListProps<DataShape, OmittedColumns>, "onHeaderClick">;
+> extends Omit<
+    MultiColumnListProps<DataShape, OmittedColumns>,
+    "onHeaderClick"
+  > {
+  dateColumns?: Exclude<keyof DataShape & string, OmittedColumns>[];
+}
 
 function sortBy<
   T extends { [k in K]: object | string | ReactNode },
   K extends string
->(data: T[], key: K, direction: SortDirection): void {
+>(data: T[], key: K, direction: SortDirection, dateColumns: K[] = []): void {
   data.sort((a, b) => {
     if (a?.[key] === undefined || a[key] === null) {
       return direction === SortDirection.ASCENDING ? -1 : 1;
     }
     if (b?.[key] === undefined || b[key] === null) {
       return direction === SortDirection.ASCENDING ? 1 : -1;
+    }
+    if (dateColumns?.includes(key)) {
+      return (
+        (direction === SortDirection.ASCENDING ? 1 : -1) *
+        dayjsCompare(dayjs(a[key] as string), dayjs(b[key] as string))
+      );
     }
     return (
       (direction === SortDirection.ASCENDING ? 1 : -1) *
@@ -68,7 +81,8 @@ export default function SortableMultiColumnList<
   },
   OmittedColumns extends string = ""
 >(props: SortableMultiColumnListProps<DataShape, OmittedColumns>) {
-  const { sortedColumn, sortDirection, contentData, ...rest } = props;
+  const { sortedColumn, sortDirection, contentData, dateColumns, ...rest } =
+    props;
 
   // first element is the primary sort, optional secondary
   const [sort, setSort] = useState<SortInfo<Omit<DataShape, OmittedColumns>>[]>(
@@ -85,11 +99,12 @@ export default function SortableMultiColumnList<
           sortBy<DataShape, Exclude<keyof DataShape & string, OmittedColumns>>(
             newData,
             sorting.key as Exclude<keyof DataShape & string, OmittedColumns>,
-            sorting.direction
+            sorting.direction,
+            dateColumns
           )
         );
       return newData;
-    }, [contentData, sort]);
+    }, [contentData, sort, dateColumns]);
 
   const sortProps = useMemo<
     Pick<
