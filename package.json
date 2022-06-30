@@ -126,7 +126,7 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^3.1.0",
-    "@folio/stripes-connect": "^7.1.10000034",
+    "@folio/stripes-connect": "^7.1.0",
     "classnames": "^2.3.1",
     "dayjs": "^1.11.2",
     "dom-helpers": "^5.2.1",
