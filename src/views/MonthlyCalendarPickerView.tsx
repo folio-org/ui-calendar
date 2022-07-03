@@ -41,12 +41,19 @@ function dailyOpeningToCalendarDisplay(
     </p>
   );
   if (openingInfo.open) {
-    status = openingInfo.openings.map((opening, i) => (
-      <p key={i}>
-        {getLocalizedTime(opening.startTime)} &ndash;{" "}
-        {getLocalizedTime(opening.endTime)}
-      </p>
-    ));
+    if (openingInfo.allDay) {
+      status = <p>All day</p>;
+    } else {
+      openingInfo.openings.sort((a, b) =>
+        a.startTime.localeCompare(b.startTime)
+      );
+      status = openingInfo.openings.map((opening, i) => (
+        <p key={i}>
+          {getLocalizedTime(opening.startTime)} &ndash;{" "}
+          {getLocalizedTime(opening.endTime)}
+        </p>
+      ));
+    }
   }
   if (openingInfo.exceptional) {
     if (openingInfo.open) {
@@ -118,6 +125,8 @@ const MonthlyCalendarPickerView: ConnectedComponent<
         setEvents(loadingEvents);
 
         const dateRange = await dataRepository.getDateRange(startDate, endDate);
+
+        if (dateRange === null) return;
 
         const newEvents = { ...loadingEvents };
         dateRange.forEach((openingInfo) => {

@@ -343,15 +343,15 @@ export function isOpen247(openings: CalendarOpening[]): boolean {
     // cases like M 08:00 -> M 07:59 should wrap
     const shifted = dayjs(opening.endTime, "HH:mm").add(1, "minute");
     return (
-      shifted.format("HH:mm") === opening.startTime &&
-      opening.startTime !== "00:00"
+      shifted.format("HH:mm") === opening.startTime.substring(0, 5) &&
+      opening.startTime.substring(0, 5) !== "00:00"
     );
   }
   // across day boundary
   return (
     (WEEKDAYS[opening.endDay] + 1) % 7 === WEEKDAYS[opening.startDay] &&
-    opening.endTime === "23:59" &&
-    opening.startTime === "00:00"
+    opening.endTime.substring(0, 5) === "23:59" &&
+    opening.startTime.substring(0, 5) === "00:00"
   );
 }
 

@@ -86,14 +86,17 @@ export default class DataRepository {
   }
 
   createCalendar(calendar: Calendar) {
+    this.mutator.dates.reset?.();
     return this.mutator.calendars.POST(calendar);
   }
 
   updateCalendar(newCalendar: Calendar): Promise<Calendar> {
+    this.mutator.dates.reset?.();
     return this.mutator.calendars.PUT(newCalendar);
   }
 
   deleteCalendar(calendar: Calendar): Promise<void> {
+    this.mutator.dates.reset?.();
     return this.mutator.calendars.DELETE(calendar);
   }
 
@@ -103,6 +106,7 @@ export default class DataRepository {
     const joinedCalendarIds = calendars.map((c) => c.id).join(",");
     const calendar = { id: joinedCalendarIds } as Calendar;
 
+    this.mutator.dates.reset?.();
     return this.mutator.calendars.DELETE(calendar);
   }
 
