@@ -18,13 +18,14 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
+import { IntlShape, useIntl } from "react-intl";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import { getDateRange, getLocalizedTime } from "../data/CalendarUtils";
+import css from "../components/Calendar.css";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import MonthlyCalendarView from "../panes/MonthlyCalendarView";
 import { DailyOpeningInfo } from "../types/types";
-import css from "../components/Calendar.css";
+import { getDateRange, getLocalizedTime } from "../utils/DateUtils";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -32,6 +33,7 @@ dayjs.extend(weekday);
 dayjs.extend(isSameOrBefore);
 
 function dailyOpeningToCalendarDisplay(
+  intl: IntlShape,
   openingInfo: DailyOpeningInfo
 ): ReactNode {
   let exception: ReactNode = null;
@@ -49,8 +51,8 @@ function dailyOpeningToCalendarDisplay(
       );
       status = openingInfo.openings.map((opening, i) => (
         <p key={i}>
-          {getLocalizedTime(opening.startTime)} &ndash;{" "}
-          {getLocalizedTime(opening.endTime)}
+          {getLocalizedTime(intl, opening.startTime)} &ndash;{" "}
+          {getLocalizedTime(intl, opening.endTime)}
         </p>
       ));
     }
@@ -90,6 +92,7 @@ const MonthlyCalendarPickerView: ConnectedComponent<
   MonthlyCalendarPickerViewProps,
   Resources
 > = (props: MonthlyCalendarPickerViewProps) => {
+  const intl = useIntl();
   const dataRepository = useDataRepository(props.resources, props.mutator);
   const [events, setEvents] = useState<
     Record<string, Record<string, ReactNode>>
@@ -131,12 +134,12 @@ const MonthlyCalendarPickerView: ConnectedComponent<
         const newEvents = { ...loadingEvents };
         dateRange.forEach((openingInfo) => {
           newEvents[servicePointId][openingInfo.date] =
-            dailyOpeningToCalendarDisplay(openingInfo);
+            dailyOpeningToCalendarDisplay(intl, openingInfo);
         });
         setEvents(newEvents);
       }
     },
-    [dataRepository, currentRouteId, events]
+    [dataRepository, currentRouteId, events, intl]
   );
 
   if (!dataRepository.isLoaded()) {

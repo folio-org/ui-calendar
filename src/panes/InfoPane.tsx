@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { FunctionComponent, useState } from "react";
-import { getLocalizedDate, isOpen247 } from "../data/CalendarUtils";
+import { useIntl } from "react-intl";
 import DataRepository from "../data/DataRepository";
 import {
   containsFullOvernightSpans,
@@ -30,8 +30,10 @@ import {
   get247Rows,
   openingSorter,
   splitOpeningsIntoDays,
-} from "../data/InfoPaneUtils";
+} from "../utils/InfoPaneUtils";
 import { Calendar, CalendarException, Weekday } from "../types/types";
+import { isOpen247 } from "../utils/CalendarUtils";
+import { getLocalizedDate } from "../utils/DateUtils";
 import css from "./InfoPane.css";
 
 dayjs.extend(customParseFormat);
@@ -46,6 +48,7 @@ export interface InfoPaneProps {
 }
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
+  const intl = useIntl();
   const calendar = props.calendar;
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [deleteModalSubmitting, setDeleteModalSubmitting] =
@@ -63,9 +66,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
 
   let dataRows;
   if (isOpen247(calendar.normalHours)) {
-    dataRows = get247Rows();
+    dataRows = get247Rows(intl);
   } else {
-    dataRows = generateDisplayRows(hours);
+    dataRows = generateDisplayRows(intl, hours);
   }
 
   const exceptions: {
@@ -148,8 +151,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         <Headline size="x-large" margin="xx-small">
           {calendar.name}
         </Headline>
-        From {getLocalizedDate(calendar.startDate)} to{" "}
-        {getLocalizedDate(calendar.endDate)}
+        From {getLocalizedDate(intl, calendar.startDate)} to{" "}
+        {getLocalizedDate(intl, calendar.endDate)}
         <AccordionSet>
           <Row end="xs">
             <Col xs>
@@ -237,7 +240,10 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                   [css.dayCell]: column === "name",
                 })
               }
-              contentData={generateExceptionalOpeningRows(exceptions.openings)}
+              contentData={generateExceptionalOpeningRows(
+                intl,
+                exceptions.openings
+              )}
               isEmptyMessage={
                 <div className={css.closed}>
                   This calendar has no exceptional openings.
@@ -261,8 +267,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
               }}
               contentData={exceptions.closures.map((exception) => ({
                 name: exception.name,
-                startDate: getLocalizedDate(exception.startDate),
-                endDate: getLocalizedDate(exception.endDate),
+                startDate: getLocalizedDate(intl, exception.startDate),
+                endDate: getLocalizedDate(intl, exception.endDate),
               }))}
               isEmptyMessage={
                 <div className={css.closed}>

@@ -2,7 +2,7 @@ import { MultiColumnList } from "@folio/stripes-components";
 import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
 import dayjs from "dayjs";
 import React, { ReactElement, ReactNode, useMemo, useState } from "react";
-import { dayjsCompare } from "../data/CalendarUtils";
+import { dayjsCompare } from "../utils/DateUtils";
 
 export enum SortDirection {
   ASCENDING = "ascending",

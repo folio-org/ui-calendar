@@ -7,6 +7,8 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import memoizee from "memoizee";
 import React, { FunctionComponent, ReactNode } from "react";
+import { FormattedDate, IntlShape, useIntl } from "react-intl";
+import { getLocaleWeekdays } from "../utils/WeekdayUtils";
 import { CSSPropertiesWithVars } from "../types/css";
 import css from "./Calendar.css";
 
@@ -56,20 +58,12 @@ export const getDateArray = memoizee((monthBasis: Dayjs): Dayjs[] => {
   return displayDates;
 });
 
-const getWeekdayLabels = memoizee((): ReactNode[] => {
-  const results = [];
-
-  let day = dayjs();
-  for (let i = 0; i < 7; i++) {
-    day = day.weekday(i);
-    results.push(
-      <div key={i} className={css.weekdayLabel}>
-        <span>{day.format("ddd")}</span>
-      </div>
-    );
-  }
-
-  return results;
+const getWeekdayLabels = memoizee((intl: IntlShape): ReactNode[] => {
+  return getLocaleWeekdays(intl).map((w, i) => (
+    <div key={i} className={css.weekdayLabel}>
+      <span>{w.short}</span>
+    </div>
+  ));
 });
 
 interface Props {
@@ -80,6 +74,7 @@ interface Props {
 
 const Calendar: FunctionComponent<Props> = (props: Props) => {
   const { monthBasis, setMonthBasis, events } = props;
+  const intl = useIntl();
 
   const displayDates = getDateArray(monthBasis).map((date: Dayjs) => {
     const dateString = date.format("YYYY-MM-DD");
@@ -96,7 +91,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
         )}
       >
         <span key={dateString} className={css.dayLabel}>
-          {date.format("D")}
+          <FormattedDate value={date.toDate()} day="numeric" />
         </span>
         {contents}
       </div>
@@ -118,14 +113,18 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
           onClick={() => setMonthBasis(monthBasis.subtract(1, "month"))}
         />
         <Headline size="xx-large" margin="none">
-          {monthBasis.format("MMMM YYYY")}
+          <FormattedDate
+            value={monthBasis.toDate()}
+            month="long"
+            year="numeric"
+          />
         </Headline>
         <IconButton
           icon="arrow-right"
           onClick={() => setMonthBasis(monthBasis.add(1, "month"))}
         />
       </div>
-      {getWeekdayLabels()}
+      {getWeekdayLabels(intl)}
       {displayDates}
     </div>
   );

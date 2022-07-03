@@ -12,12 +12,14 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
-import * as CalendarUtils from "../data/CalendarUtils";
 import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
+import getStatus from "../utils/getCurrentStatus";
+import { getLocalizedDate } from "../utils/DateUtils";
 import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
 import InfoPane from "./InfoPane";
+import { FormattedMessage, useIntl } from "react-intl";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 
@@ -25,6 +27,7 @@ export const CurrentAssignmentView: ConnectedComponent<
   CurrentAssignmentViewProps,
   Resources
 > = (props: CurrentAssignmentViewProps) => {
+  const intl = useIntl();
   const dataRepository = useDataRepository(props.resources, props.mutator);
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
@@ -59,7 +62,9 @@ export const CurrentAssignmentView: ConnectedComponent<
         ),
         startDate: "",
         endDate: "",
-        currentStatus: "Closed",
+        currentStatus: (
+          <FormattedMessage id="ui-calendar.currentStatus.closed" />
+        ),
         calendar: null,
       };
     }
@@ -69,9 +74,10 @@ export const CurrentAssignmentView: ConnectedComponent<
         servicePoint.inactive ? " (inactive)" : ""
       ),
       calendarName: calendars[0].name,
-      startDate: CalendarUtils.getLocalizedDate(calendars[0].startDate),
-      endDate: CalendarUtils.getLocalizedDate(calendars[0].endDate),
-      currentStatus: CalendarUtils.getStatus(
+      startDate: getLocalizedDate(intl, calendars[0].startDate),
+      endDate: getLocalizedDate(intl, calendars[0].endDate),
+      currentStatus: getStatus(
+        intl,
         MockConstants.MOCKED_DATE_TIME_OBJ,
         calendars[0]
       ),

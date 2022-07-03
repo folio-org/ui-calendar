@@ -18,12 +18,12 @@ import React, {
   useState,
 } from "react";
 import { FieldRenderProps } from "react-final-form";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import {
   getLocaleWeekdays,
   getWeekdaySpan,
   WEEKDAYS,
-} from "../../data/CalendarUtils";
+} from "../../utils/WeekdayUtils";
 import { CalendarOpening, Weekday } from "../../types/types";
 import { InnerFieldRefs } from "./formValidation";
 import css from "./HoursAndExceptionFields.css";
@@ -94,6 +94,8 @@ export interface HoursOfOperationFieldProps
 export const HoursOfOperationField: FunctionComponent<
   HoursOfOperationFieldProps
 > = (props: HoursOfOperationFieldProps) => {
+  const intl = useIntl();
+
   /** Must add at least one empty row, or MCL will not render properly */
   const [rowStates, _setRowStates] = useState<HoursOfOperationRowState[]>([
     {
@@ -145,7 +147,7 @@ export const HoursOfOperationField: FunctionComponent<
 
     const rows: HoursOfOperationRowState[] = [];
 
-    const weekdays = getLocaleWeekdays().map((weekday) => weekday.weekday);
+    const weekdays = getLocaleWeekdays(intl).map((weekday) => weekday.weekday);
     let openingIndex = 0;
     for (let weekdayIndex = 0; weekdayIndex < weekdays.length; weekdayIndex++) {
       if (weekdaysTouched[weekdays[weekdayIndex]]) {

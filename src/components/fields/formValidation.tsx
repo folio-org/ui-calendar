@@ -1,8 +1,9 @@
 import dayjs, { Dayjs } from "dayjs";
 import React, { ReactNode, RefObject } from "react";
 import { FormattedMessage } from "react-intl";
-import { getWeekdaySpan, overlaps } from "../../data/CalendarUtils";
 import { CalendarOpening, ServicePoint, Weekday } from "../../types/types";
+import { overlaps } from "../../utils/DateUtils";
+import { getWeekdaySpan } from "../../utils/WeekdayUtils";
 import { ExceptionFieldErrors, ExceptionRowState } from "./ExceptionFieldTypes";
 import {
   HoursOfOperationErrors,

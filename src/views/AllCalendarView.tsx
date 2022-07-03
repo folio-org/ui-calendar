@@ -10,6 +10,7 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import React, { ReactNode, useRef, useState } from "react";
+import { useIntl } from "react-intl";
 import {
   Route,
   RouteComponentProps,
@@ -18,12 +19,12 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
-import { getLocalizedDate } from "../data/CalendarUtils";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import PurgeModal from "../forms/PurgeModal";
 import InfoPane from "../panes/InfoPane";
 import { Calendar } from "../types/types";
+import { getLocalizedDate } from "../utils/DateUtils";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
@@ -31,6 +32,7 @@ export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   props: AllCalendarViewProps
 ) => {
+  const intl = useIntl();
   const dataRepository = useDataRepository(props.resources, props.mutator);
   const [showPurgeModal, setShowPurgeModal] = useState<boolean>(false);
 
@@ -50,8 +52,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
     );
     return {
       name: calendar.name,
-      startDate: getLocalizedDate(calendar.startDate),
-      endDate: getLocalizedDate(calendar.endDate),
+      startDate: getLocalizedDate(intl, calendar.startDate),
+      endDate: getLocalizedDate(intl, calendar.endDate),
       assignments: servicePointNames.length ? (
         servicePointNames.join(", ")
       ) : (

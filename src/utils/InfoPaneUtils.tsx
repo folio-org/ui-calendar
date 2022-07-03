@@ -2,15 +2,16 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { ReactNode } from "react";
+import { IntlShape } from "react-intl";
+import css from "../panes/InfoPane.css";
 import { CalendarException, CalendarOpening, Weekday } from "../types/types";
+import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
 import {
-  getLocalizedDate,
-  getLocalizedTime,
+  getLocaleWeekday,
+  getLocaleWeekdays,
   getWeekdayRange,
   WEEKDAY_INDEX,
-  WEEKDAY_STRINGS,
-} from "./CalendarUtils";
-import css from "../panes/InfoPane.css";
+} from "./WeekdayUtils";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -112,9 +113,9 @@ export function openingSorter(a: OpenCloseTimeTuple, b: OpenCloseTimeTuple) {
   return a[0].localeCompare(b[0]);
 }
 
-export function get247Rows() {
-  return WEEKDAY_INDEX.map((day, i) => ({
-    day: WEEKDAY_STRINGS[day],
+export function get247Rows(intl: IntlShape) {
+  return getLocaleWeekdays(intl).map((weekday, i) => ({
+    day: weekday.long,
     startTime: (
       <p key={i} title="The service point does not close">
         &ndash;
@@ -128,7 +129,7 @@ export function get247Rows() {
   }));
 }
 
-export function generateDisplayRows(hours: HoursType) {
+export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
   return WEEKDAY_INDEX.map((day) => {
     const tuples = hours[day];
     const times: {
@@ -154,7 +155,7 @@ export function generateDisplayRows(hours: HoursType) {
           </p>
         );
       } else {
-        times.startTime.push(<p key={i}>{getLocalizedTime(open)}</p>);
+        times.startTime.push(<p key={i}>{getLocalizedTime(intl, open)}</p>);
       }
       if (close === NEXT_DAY_FULL_WRAPAROUND) {
         times.endTime.push(
@@ -165,16 +166,17 @@ export function generateDisplayRows(hours: HoursType) {
       } else if (close.endsWith(NEXT_DAY_OVERNIGHT)) {
         times.endTime.push(
           <p key={i} title="Closes on the next day">
-            {getLocalizedTime(close.replace(NEXT_DAY_OVERNIGHT, ""))}&nbsp;*
+            {getLocalizedTime(intl, close.replace(NEXT_DAY_OVERNIGHT, ""))}
+            &nbsp;*
           </p>
         );
       } else {
-        times.endTime.push(<p key={i}>{getLocalizedTime(close)}</p>);
+        times.endTime.push(<p key={i}>{getLocalizedTime(intl, close)}</p>);
       }
     });
 
     return {
-      day: WEEKDAY_STRINGS[day],
+      day: getLocaleWeekday(intl, day).long,
       startTime: <>{times.startTime}</>,
       endTime: <>{times.endTime}</>,
     };
@@ -182,6 +184,7 @@ export function generateDisplayRows(hours: HoursType) {
 }
 
 export function generateExceptionalOpeningRows(
+  intl: IntlShape,
   exceptions: CalendarException[]
 ) {
   return exceptions.map((exception) => {
@@ -199,16 +202,16 @@ export function generateExceptionalOpeningRows(
         const end = dayjs(`${endDate} ${endTime}`);
         times.start.push(
           <p key={i}>
-            {getLocalizedDate(start)}
+            {getLocalizedDate(intl, start)}
             <br />
-            {getLocalizedTime(start)}
+            {getLocalizedTime(intl, start)}
           </p>
         );
         times.end.push(
           <p key={i}>
-            {getLocalizedDate(end)}
+            {getLocalizedDate(intl, end)}
             <br />
-            {getLocalizedTime(end)}
+            {getLocalizedTime(intl, end)}
           </p>
         );
       }

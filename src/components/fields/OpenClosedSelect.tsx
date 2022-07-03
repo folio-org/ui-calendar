@@ -1,6 +1,6 @@
 import { Select } from "@folio/stripes-components";
 import React from "react";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import RowType from "./RowType";
 
 export interface OpenClosedSelectProps {
@@ -14,6 +14,8 @@ export default function OpenClosedSelect({
   onBlur,
   onChange,
 }: OpenClosedSelectProps) {
+  const intl = useIntl();
+
   return (
     <Select<RowType>
       required
@@ -22,15 +24,15 @@ export default function OpenClosedSelect({
       dataOptions={[
         {
           value: RowType.Open,
-          label: (
-            <FormattedMessage id="ui-calendar.calendarForm.openClosedSelect.open" />
-          ),
+          label: intl.formatMessage({
+            id: "ui-calendar.calendarForm.openClosedSelect.open",
+          }),
         },
         {
           value: RowType.Closed,
-          label: (
-            <FormattedMessage id="ui-calendar.calendarForm.openClosedSelect.closed" />
-          ),
+          label: intl.formatMessage({
+            id: "ui-calendar.calendarForm.openClosedSelect.closed",
+          }),
         },
       ]}
       value={value}
