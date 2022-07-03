@@ -1,5 +1,6 @@
 import { Select } from "@folio/stripes-components";
 import React from "react";
+import { FormattedMessage } from "react-intl";
 import RowType from "./RowType";
 
 export interface OpenClosedSelectProps {
@@ -21,11 +22,15 @@ export default function OpenClosedSelect({
       dataOptions={[
         {
           value: RowType.Open,
-          label: "Open",
+          label: (
+            <FormattedMessage id="ui-calendar.calendarForm.openClosedSelect.open" />
+          ),
         },
         {
           value: RowType.Closed,
-          label: "Closed",
+          label: (
+            <FormattedMessage id="ui-calendar.calendarForm.openClosedSelect.closed" />
+          ),
         },
       ]}
       value={value}

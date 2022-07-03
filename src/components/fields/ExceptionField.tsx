@@ -21,14 +21,15 @@ import React, {
   useState,
 } from "react";
 import { FieldRenderProps } from "react-final-form";
+import { FormattedMessage } from "react-intl";
 import {
   ExceptionFieldErrors,
   ExceptionRowState,
   MCLContentsType,
 } from "./ExceptionFieldTypes";
 import { InnerFieldRefs } from "./formValidation";
-import css from "./HoursAndExceptionFields.css";
 import cssHiddenErrorField from "./hiddenErrorField.css";
+import css from "./HoursAndExceptionFields.css";
 import HoursOfOperationFieldRowFormatter from "./MCLRowFormatter";
 import OpenClosedSelect from "./OpenClosedSelect";
 import RowType from "./RowType";
@@ -242,23 +243,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
   props: ExceptionFieldProps
 ) => {
   /** Must add at least one empty row, or MCL will not render properly */
-  const [rowStates, _setRowStates] = useState<ExceptionRowState[]>([
-    // {
-    //   i: -1,
-    //   lastRowI: 0,
-    //   name: "",
-    //   type: RowType.Open,
-    //   rows: [
-    //     {
-    //       i: 0,
-    //       startDate: undefined,
-    //       startTime: undefined,
-    //       endDate: undefined,
-    //       endTime: undefined,
-    //     },
-    //   ],
-    // },
-  ]);
+  const [rowStates, _setRowStates] = useState<ExceptionRowState[]>([]);
 
   const setRowStates = (newRowStates: ExceptionRowState[]) => {
     _setRowStates(newRowStates);
@@ -468,7 +453,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           setRowStates(newRowStates);
         }}
       >
-        Add row
+        <FormattedMessage id="ui-calendar.calendarForm.addRowButton" />
       </Button>
     ),
     status: undefined,
@@ -493,7 +478,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
         size="medium"
       >
         <Icon icon="exclamation-circle" status="error" />
-        Some exceptions have conflicts with each other
+        <FormattedMessage id="ui-calendar.calendarForm.error.exceptionConflictError" />
       </Headline>
     );
   }
@@ -504,13 +489,27 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
         interactive={false}
         rowMetadata={["isConflicted", "rowState"]}
         columnMapping={{
-          name: "Name",
-          status: "Status",
-          startDate: "Start date",
-          startTime: "Start time",
-          endDate: "End date",
-          endTime: "End time",
-          actions: "Actions",
+          name: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.name" />
+          ),
+          status: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.status" />
+          ),
+          startDate: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.startDate" />
+          ),
+          startTime: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.startTime" />
+          ),
+          endDate: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.endDate" />
+          ),
+          endTime: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.endTime" />
+          ),
+          actions: (
+            <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.actions" />
+          ),
         }}
         columnWidths={{
           name: "22%",

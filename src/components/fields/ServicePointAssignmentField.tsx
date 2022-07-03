@@ -3,6 +3,7 @@ import { MultiSelectionFieldRenderProps } from "@folio/stripes-components/types/
 import fuzzysort from "fuzzysort";
 import React, { FunctionComponent, ReactNode, useMemo } from "react";
 import { Field } from "react-final-form";
+import { FormattedMessage } from "react-intl";
 import { ServicePoint } from "../../types/types";
 
 interface ServicePointAssignmentFieldProps {
@@ -55,7 +56,9 @@ const ServicePointAssignmentField: FunctionComponent<
           MultiSelectionFieldRenderProps<ServicePoint>
         >
       }
-      label="Service points"
+      label={
+        <FormattedMessage id="ui-calendar.calendarForm.servicePointField.label" />
+      }
       formatter={formatter}
       filter={(filterText: string | undefined, list: ServicePoint[]) => {
         if (typeof filterText !== "string" || filterText === "") {

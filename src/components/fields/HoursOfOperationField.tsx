@@ -18,12 +18,13 @@ import React, {
   useState,
 } from "react";
 import { FieldRenderProps } from "react-final-form";
-import { CalendarOpening, Weekday } from "../../types/types";
+import { FormattedMessage } from "react-intl";
 import {
   getLocaleWeekdays,
   getWeekdaySpan,
   WEEKDAYS,
 } from "../../data/CalendarUtils";
+import { CalendarOpening, Weekday } from "../../types/types";
 import { InnerFieldRefs } from "./formValidation";
 import css from "./HoursAndExceptionFields.css";
 import {
@@ -325,7 +326,7 @@ export const HoursOfOperationField: FunctionComponent<
           setRowStates(newRowStates);
         }}
       >
-        Add row
+        <FormattedMessage id="ui-calendar.calendarForm.addRowButton" />
       </Button>
     ),
     startDay: undefined,
@@ -349,7 +350,7 @@ export const HoursOfOperationField: FunctionComponent<
         size="medium"
       >
         <Icon icon="exclamation-circle" status="error" />
-        Some openings conflict with each other
+        <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
       </Headline>
     );
   }
@@ -360,12 +361,24 @@ export const HoursOfOperationField: FunctionComponent<
         interactive={false}
         rowMetadata={["isConflicted", "rowState"]}
         columnMapping={{
-          status: "Status",
-          startDay: "Start day",
-          startTime: "Start time",
-          endDay: "End day",
-          endTime: "End time",
-          actions: "Actions",
+          status: (
+            <FormattedMessage id="ui-calendar.calendarForm.openings.column.status" />
+          ),
+          startDay: (
+            <FormattedMessage id="ui-calendar.calendarForm.openings.column.startDay" />
+          ),
+          startTime: (
+            <FormattedMessage id="ui-calendar.calendarForm.openings.column.startTime" />
+          ),
+          endDay: (
+            <FormattedMessage id="ui-calendar.calendarForm.openings.column.endDay" />
+          ),
+          endTime: (
+            <FormattedMessage id="ui-calendar.calendarForm.openings.column.endTime" />
+          ),
+          actions: (
+            <FormattedMessage id="ui-calendar.calendarForm.openings.column.actions" />
+          ),
         }}
         columnWidths={{
           status: "14%",

@@ -1,5 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
-import { ReactNode, RefObject } from "react";
+import React, { ReactNode, RefObject } from "react";
+import { FormattedMessage } from "react-intl";
 import { getWeekdaySpan, overlaps } from "../../data/CalendarUtils";
 import { CalendarOpening, ServicePoint, Weekday } from "../../types/types";
 import { ExceptionFieldErrors, ExceptionRowState } from "./ExceptionFieldTypes";
@@ -50,7 +51,7 @@ function required(
     (Array.isArray(values[key]) && (values[key] as unknown[]).length === 0)
   ) {
     return {
-      [key]: "Please fill this in to continue",
+      [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />,
     };
   }
   return {};
@@ -101,7 +102,7 @@ function validateDate(
     (!(key in values) || typeof values[key] !== "string")
   ) {
     return {
-      [key]: "Please fill this in to continue",
+      [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />,
     };
   }
 
@@ -110,7 +111,12 @@ function validateDate(
 
   if (dayjs(dateValue).format(localeDateFormat) !== inputValue) {
     return {
-      [key]: `Please enter a date in the ${localeDateFormat} format`,
+      [key]: (
+        <FormattedMessage
+          id="ui-calendar.calendarForm.error.dateFormat"
+          values={{ localeDateFormat }}
+        />
+      ),
     };
   }
 
@@ -130,7 +136,7 @@ function validateDateOrder(values: Partial<FormValues>): {
     values["end-date"] < values["start-date"]
   ) {
     return {
-      "end-date": "End date must not be before the start date",
+      "end-date": <FormattedMessage id="calendarForm.error.dateOrder" />,
     };
   }
   return {};
@@ -150,20 +156,28 @@ function validateHoursOfOperationEmpty(
 
   rows.forEach((row) => {
     if (row.startDay === undefined) {
-      emptyErrors.startDay[row.i] = "Please fill this in to continue";
+      emptyErrors.startDay[row.i] = (
+        <FormattedMessage id="stripes-core.label.missingRequiredField" />
+      );
       hasError = true;
     }
     if (row.endDay === undefined) {
-      emptyErrors.endDay[row.i] = "Please fill this in to continue";
+      emptyErrors.endDay[row.i] = (
+        <FormattedMessage id="stripes-core.label.missingRequiredField" />
+      );
       hasError = true;
     }
     if (row.type === RowType.Open) {
       if (row.startTime === undefined) {
-        emptyErrors.startTime[row.i] = "Please fill this in to continue";
+        emptyErrors.startTime[row.i] = (
+          <FormattedMessage id="stripes-core.label.missingRequiredField" />
+        );
         hasError = true;
       }
       if (row.endTime === undefined) {
-        emptyErrors.endTime[row.i] = "Please fill this in to continue";
+        emptyErrors.endTime[row.i] = (
+          <FormattedMessage id="stripes-core.label.missingRequiredField" />
+        );
         hasError = true;
       }
     }
@@ -197,9 +211,12 @@ function validateHoursOfOperationTimes(
         timeFieldRefs.startTime?.[row.i]?.value
       )
     ) {
-      invalidTimeErrors.startTime[
-        row.i
-      ] = `Please enter a time in the ${localeTimeFormat} format`;
+      invalidTimeErrors.startTime[row.i] = (
+        <FormattedMessage
+          id="ui-calendar.calendarForm.error.timeFormat"
+          values={{ localeTimeFormat }}
+        />
+      );
     }
     if (
       !isTimeProper(
@@ -208,9 +225,12 @@ function validateHoursOfOperationTimes(
         timeFieldRefs.endTime?.[row.i]?.value
       )
     ) {
-      invalidTimeErrors.endTime[
-        row.i
-      ] = `Please enter a time in the ${localeTimeFormat} format`;
+      invalidTimeErrors.endTime[row.i] = (
+        <FormattedMessage
+          id="ui-calendar.calendarForm.error.timeFormat"
+          values={{ localeTimeFormat }}
+        />
+      );
     }
   });
 
@@ -359,8 +379,9 @@ export function validateExceptionInnerRowEmpty(
     innerRow.startDate === "" ||
     !(innerFieldRefs.startDate?.[row.i]?.[innerRow.i] instanceof HTMLElement)
   ) {
-    emptyErrors.startDate[row.i][innerRow.i] =
-      "Please fill this in to continue";
+    emptyErrors.startDate[row.i][innerRow.i] = (
+      <FormattedMessage id="stripes-core.label.missingRequiredField" />
+    );
     hasError = true;
   }
   if (
@@ -368,18 +389,22 @@ export function validateExceptionInnerRowEmpty(
     innerRow.endDate === "" ||
     !(innerFieldRefs.endDate?.[row.i]?.[innerRow.i] instanceof HTMLElement)
   ) {
-    emptyErrors.endDate[row.i][innerRow.i] = "Please fill this in to continue";
+    emptyErrors.endDate[row.i][innerRow.i] = (
+      <FormattedMessage id="stripes-core.label.missingRequiredField" />
+    );
     hasError = true;
   }
   if (row.type === RowType.Open) {
     if (innerRow.startTime === undefined) {
-      emptyErrors.startTime[row.i][innerRow.i] =
-        "Please fill this in to continue";
+      emptyErrors.startTime[row.i][innerRow.i] = (
+        <FormattedMessage id="stripes-core.label.missingRequiredField" />
+      );
       hasError = true;
     }
     if (innerRow.endTime === undefined) {
-      emptyErrors.endTime[row.i][innerRow.i] =
-        "Please fill this in to continue";
+      emptyErrors.endTime[row.i][innerRow.i] = (
+        <FormattedMessage id="stripes-core.label.missingRequiredField" />
+      );
       hasError = true;
     }
   }
@@ -402,7 +427,9 @@ export function validateExceptionsEmpty(
 
   rows.forEach((row) => {
     if (row.name === undefined || row.name.trim() === "") {
-      emptyErrors.name[row.i] = "Please fill this in to continue";
+      emptyErrors.name[row.i] = (
+        <FormattedMessage id="stripes-core.label.missingRequiredField" />
+      );
       hasError = true;
     }
     emptyErrors.startDate[row.i] = {};
@@ -441,18 +468,33 @@ export function validateExceptionInnerRowDatesAndTimes(
     dayjs(innerRow.startDate).format(localeDateFormat) !==
     innerFieldRefs.startDate?.[row.i]?.[innerRow.i]?.value
   ) {
-    invalidErrors.startDate[row.i][
-      innerRow.i
-    ] = `Please enter a date in the ${localeDateFormat} format`;
+    invalidErrors.startDate[row.i][innerRow.i] = (
+      <FormattedMessage
+        id="ui-calendar.calendarForm.error.dateFormat"
+        values={{ localeDateFormat }}
+      />
+    );
     hasError = true;
   }
   if (
     dayjs(innerRow.endDate).format(localeDateFormat) !==
     innerFieldRefs.endDate?.[row.i]?.[innerRow.i]?.value
   ) {
-    invalidErrors.endDate[row.i][
-      innerRow.i
-    ] = `Please enter a date in the ${localeDateFormat} format`;
+    invalidErrors.endDate[row.i][innerRow.i] = (
+      <FormattedMessage
+        id="ui-calendar.calendarForm.error.dateFormat"
+        values={{ localeDateFormat }}
+      />
+    );
+    hasError = true;
+  }
+  if (dayjs(innerRow.startDate).isAfter(innerRow.endDate)) {
+    invalidErrors.startDate[row.i][innerRow.i] = (
+      <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
+    );
+    invalidErrors.endDate[row.i][innerRow.i] = (
+      <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
+    );
     hasError = true;
   }
   if (row.type === RowType.Open) {
@@ -463,9 +505,12 @@ export function validateExceptionInnerRowDatesAndTimes(
         innerFieldRefs.startTime?.[row.i]?.[innerRow.i]?.value
       )
     ) {
-      invalidErrors.startTime[row.i][
-        innerRow.i
-      ] = `Please enter a time in the ${localeTimeFormat} format`;
+      invalidErrors.startTime[row.i][innerRow.i] = (
+        <FormattedMessage
+          id="ui-calendar.calendarForm.error.timeFormat"
+          values={{ localeTimeFormat }}
+        />
+      );
       hasError = true;
     }
     if (
@@ -475,9 +520,25 @@ export function validateExceptionInnerRowDatesAndTimes(
         innerFieldRefs.endTime?.[row.i]?.[innerRow.i]?.value
       )
     ) {
-      invalidErrors.endTime[row.i][
-        innerRow.i
-      ] = `Please enter a time in the ${localeTimeFormat} format`;
+      invalidErrors.endTime[row.i][innerRow.i] = (
+        <FormattedMessage
+          id="ui-calendar.calendarForm.error.timeFormat"
+          values={{ localeTimeFormat }}
+        />
+      );
+      hasError = true;
+    }
+    if (
+      dayjs(`${innerRow.startDate} ${innerRow.startTime}`).isAfter(
+        `${innerRow.endDate} ${innerRow.endTime}`
+      )
+    ) {
+      invalidErrors.startTime[row.i][innerRow.i] = (
+        <FormattedMessage id="ui-calendar.calendarForm.error.timeOrder" />
+      );
+      invalidErrors.endTime[row.i][innerRow.i] = (
+        <FormattedMessage id="ui-calendar.calendarForm.error.timeOrder" />
+      );
       hasError = true;
     }
   }

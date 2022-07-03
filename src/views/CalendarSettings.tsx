@@ -40,7 +40,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
             }),
           },
         ]}
-        paneTitle={<FormattedMessage id="ui-calendar.settings.calendar" />}
+        paneTitle={<FormattedMessage id="ui-calendar.meta.title" />}
       />
     </ErrorBoundary>
   );
