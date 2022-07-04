@@ -6,12 +6,7 @@ import { IntlShape } from "react-intl";
 import css from "../panes/InfoPane.css";
 import { CalendarException, CalendarOpening, Weekday } from "../types/types";
 import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
-import {
-  getLocaleWeekday,
-  getLocaleWeekdays,
-  getWeekdayRange,
-  WEEKDAY_INDEX,
-} from "./WeekdayUtils";
+import { getLocaleWeekdays, getWeekdayRange } from "./WeekdayUtils";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -51,8 +46,11 @@ export const OVERNIGHT_THRESHOLD = "04:00";
 export type OpenCloseTimeTuple = [string, string];
 export type HoursType = Record<Weekday, OpenCloseTimeTuple[]>;
 
+/**
+ * Split an array of openings into a record of weekdays mapped to arrays of
+ * `OpenCloseTimeTuple`s
+ */
 export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
-  // TODO: localize start of week
   const hours: HoursType = {
     MONDAY: [],
     TUESDAY: [],
@@ -129,9 +127,10 @@ export function get247Rows(intl: IntlShape) {
   }));
 }
 
+/** Generate rows to display, based on hours from `splitOpeningsIntoDays` */
 export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
-  return WEEKDAY_INDEX.map((day) => {
-    const tuples = hours[day];
+  return getLocaleWeekdays(intl).map((weekday) => {
+    const tuples = hours[weekday.weekday];
     const times: {
       startTime: ReactNode[];
       endTime: ReactNode[];
@@ -176,13 +175,14 @@ export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
     });
 
     return {
-      day: getLocaleWeekday(intl, day).long,
+      day: weekday.long,
       startTime: <>{times.startTime}</>,
       endTime: <>{times.endTime}</>,
     };
   });
 }
 
+/** Display rows for exceptional information */
 export function generateExceptionalOpeningRows(
   intl: IntlShape,
   exceptions: CalendarException[]

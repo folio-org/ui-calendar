@@ -47,6 +47,11 @@ export function overlaps(
   return !(start2.isAfter(end1) || end2.isBefore(start1));
 }
 
+/**
+ * Determine how close a given date is to a reference date.  Should only be
+ * used when the date is >= the reference; will return `"sameDay"`, `"nextDay"`,
+ * `"nextWeek"`, or `"sameElse"` (for more than a week away).
+ */
 export function getRelativeDateTimeProximity(
   date: string,
   referenceDate: Dayjs
@@ -59,6 +64,7 @@ export function getRelativeDateTimeProximity(
   }) as "sameDay" | "nextDay" | "nextWeek" | "sameElse";
 }
 
+/** Localize time with `react-intl` */
 export function getLocalizedTime(
   intl: IntlShape,
   time: string | Dayjs
@@ -66,6 +72,7 @@ export function getLocalizedTime(
   return intl.formatTime(dayjs(time, "HH:mm").toDate());
 }
 
+/** Localize date with `react-intl` */
 export function getLocalizedDate(
   intl: IntlShape,
   date: string | Dayjs

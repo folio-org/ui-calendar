@@ -68,16 +68,6 @@ export const WEEKDAY_INDEX: Weekday[] = [
   "SATURDAY",
 ];
 
-export const WEEKDAY_STRINGS: Record<Weekday, string> = {
-  SUNDAY: "DO NOT USE",
-  MONDAY: "DO NOT USE",
-  TUESDAY: "DO NOT USE",
-  WEDNESDAY: "DO NOT USE",
-  THURSDAY: "DO NOT USE",
-  FRIDAY: "DO NOT USE",
-  SATURDAY: "DO NOT USE",
-};
-
 /** Information about a weekday in the current locale */
 interface LocaleWeekdayInfo {
   weekday: Weekday;
@@ -100,14 +90,6 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
     }
     return weekdays;
   });
-
-export const getLocaleWeekday: (
-  intl: IntlShape,
-  day: Weekday
-) => LocaleWeekdayInfo = memoizee(
-  (intl: IntlShape, day: Weekday) =>
-    getLocaleWeekdays(intl).filter((weekday) => weekday.weekday === day)[0]
-);
 
 /** Get a range of weekdays between two, inclusive */
 export function getWeekdayRange(start: Weekday, end: Weekday): Weekday[] {
@@ -139,6 +121,7 @@ export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
   return getWeekdayRange(opening.startDay, opening.endDay);
 }
 
+/** Determine how close a weekday is relative to a given reference date */
 export function getRelativeWeekdayStatus(
   intl: IntlShape,
   weekday: Weekday,
