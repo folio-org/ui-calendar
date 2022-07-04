@@ -19,6 +19,7 @@ import React, {
   useState,
 } from "react";
 import { Field, Form } from "react-final-form";
+import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../data/DataRepository";
 import { Calendar } from "../types/types";
 import css from "./PurgeModal.css";
@@ -31,10 +32,18 @@ enum AgeCriteria {
 }
 
 const AgeCriteriaLabels: Record<AgeCriteria, ReactNode> = {
-  [AgeCriteria.MONTHS_3]: "more than 3 months ago",
-  [AgeCriteria.MONTHS_6]: "more than 6 months ago",
-  [AgeCriteria.YEAR_1]: "more than 1 year ago",
-  [AgeCriteria.YEARS_2]: "more than 2 years ago",
+  [AgeCriteria.MONTHS_3]: (
+    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.months3" />
+  ),
+  [AgeCriteria.MONTHS_6]: (
+    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.months6" />
+  ),
+  [AgeCriteria.YEAR_1]: (
+    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.year1" />
+  ),
+  [AgeCriteria.YEARS_2]: (
+    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.years2" />
+  ),
 };
 
 const AgeCriteriaMonths: Record<AgeCriteria, number> = {
@@ -50,8 +59,12 @@ enum AssignmentCriteria {
 }
 
 const AssignmentCriteriaLabels: Record<AssignmentCriteria, ReactNode> = {
-  [AssignmentCriteria.NONE]: "not assigned to any service points",
-  [AssignmentCriteria.ANY]: "assigned or not assigned to service points",
+  [AssignmentCriteria.NONE]: (
+    <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.none" />
+  ),
+  [AssignmentCriteria.ANY]: (
+    <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.any" />
+  ),
 };
 
 interface FormValues {
@@ -91,6 +104,7 @@ export interface PurgeModalProps {
 export const PurgeModal: FunctionComponent<PurgeModalProps> = (
   props: PurgeModalProps
 ) => {
+  const intl = useIntl();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   // reset submitting on mount/unmount
   useEffect(() => setIsSubmitting(false), []);
@@ -100,8 +114,8 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
       dismissible
       open={props.open}
       onClose={props.onClose}
-      label="Purge old calendars"
-      aria-label="Purge old calendars"
+      label={<FormattedMessage id="ui-calendar.purgeModal.label" />}
+      aria-label={intl.formatMessage({ id: "ui-calendar.purgeModal.label" })}
       size="small"
       footer={
         <ModalFooter>
@@ -111,9 +125,15 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
             form={FORM_ID}
             type="submit"
           >
-            {isSubmitting ? <Loading /> : "Delete"}
+            {isSubmitting ? (
+              <Loading />
+            ) : (
+              <FormattedMessage id="stripes-core.button.delete" />
+            )}
           </Button>
-          <Button onClick={props.onClose}>Cancel</Button>
+          <Button onClick={props.onClose}>
+            <FormattedMessage id="stripes-core.button.cancel" />
+          </Button>
         </ModalFooter>
       }
     >
@@ -165,7 +185,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   Select<AgeCriteria, SelectFieldRenderProps<AgeCriteria>>
                 }
                 required
-                label="Purge calendars that ended..."
+                label={
+                  <FormattedMessage id="ui-calendar.purgeModal.criteria.age.prompt" />
+                }
                 fullWidth
                 marginBottom0
                 dataOptions={Object.entries(AgeCriteriaLabels).map(
@@ -184,7 +206,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   >
                 }
                 required
-                label="And were..."
+                label={
+                  <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.prompt" />
+                }
                 fullWidth
                 marginBottom0
                 dataOptions={Object.entries(AssignmentCriteriaLabels).map(
@@ -196,7 +220,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
               />
               <AccordionSet>
                 <Accordion
-                  label="Calendars to be deleted"
+                  label={
+                    <FormattedMessage id="ui-calendar.purgeModal.deletionList.label" />
+                  }
                   closedByDefault
                   headerProps={{
                     displayWhenClosed: (
@@ -212,7 +238,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                     listStyle="bullets"
                     isEmptyMessage={
                       <div className={css.noneToDelete}>
-                        No calendars match the provided criteria
+                        <FormattedMessage id="ui-calendar.purgeModal.deletionList.empty" />
                       </div>
                     }
                   />

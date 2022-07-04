@@ -6,6 +6,7 @@ import DataRepository from "../data/DataRepository";
 import { Calendar } from "../types/types";
 import { FormValues } from "./CalendarForm/types";
 
+/** Convert a given calendar to a set of form values, to initialize edit/duplicate forms */
 export const calendarToInitialValues = memoizee(
   (
     dataRepository: DataRepository,

@@ -60,5 +60,17 @@
 
   "list.twoSeparator": " and ",
   "list.threeOrMoreSeparator": ", ",
-  "list.threeOrMoreLastSeparator": ", and "
+  "list.threeOrMoreLastSeparator": ", and ",
+
+  "purgeModal.label": "Purge old calendars",
+  "purgeModal.criteria.age.prompt": "Purge calendars that ended...",
+  "purgeModal.criteria.age.months3": "more than 3 months ago",
+  "purgeModal.criteria.age.months6": "more than 6 months ago",
+  "purgeModal.criteria.age.year1": "more than 1 year ago",
+  "purgeModal.criteria.age.years2": "more than 2 years ago",
+  "purgeModal.criteria.assignment.prompt": "And were...",
+  "purgeModal.criteria.assignment.none": "not assigned to any service points",
+  "purgeModal.criteria.assignment.any": "assigned or not assigned to service points",
+  "purgeModal.deletionList.label": "Calendars to be deleted",
+  "purgeModal.deletionList.empty": "No calendars match the provided criteria"
 }
