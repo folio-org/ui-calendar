@@ -4,6 +4,7 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import React, { useRef } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import {
   Route,
   RouteComponentProps,
@@ -15,11 +16,10 @@ import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
-import getStatus from "../utils/getCurrentStatus";
 import { getLocalizedDate } from "../utils/DateUtils";
+import getStatus from "../utils/getCurrentStatus";
 import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
 import InfoPane from "./InfoPane";
-import { FormattedMessage, useIntl } from "react-intl";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 

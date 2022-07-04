@@ -16,34 +16,26 @@ import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextFi
 import { CalloutContext } from "@folio/stripes-core";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { FormApi, FORM_ERROR, SubmissionErrors } from "final-form";
+import { FormApi, FORM_ERROR } from "final-form";
 import React, {
   FunctionComponent,
-  ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useRef,
 } from "react";
 import { Field, Form } from "react-final-form";
-import { useIntl } from "react-intl";
-import ExceptionField from "../components/fields/ExceptionField";
-import validate, {
-  FormValues,
-  InnerFieldRefs,
-} from "../components/fields/formValidation";
-import css from "../components/fields/HoursAndExceptionFields.css";
-import HoursOfOperationField from "../components/fields/HoursOfOperationField";
-import RowType from "../components/fields/RowType";
-import ServicePointAssignmentField from "../components/fields/ServicePointAssignmentField";
-import DataRepository from "../data/DataRepository";
-import {
-  Calendar,
-  ErrorCode,
-  ErrorResponse,
-  ServicePoint,
-  Weekday,
-} from "../types/types";
-import calendarToInitialValues from "./calendarToInitialValues";
+import { FormattedMessage, useIntl } from "react-intl";
+import ExceptionField from "../../components/fields/ExceptionField";
+import css from "../../components/fields/HoursAndExceptionFields.css";
+import HoursOfOperationField from "../../components/fields/HoursOfOperationField";
+import ServicePointAssignmentField from "../../components/fields/ServicePointAssignmentField";
+import DataRepository from "../../data/DataRepository";
+import { Calendar } from "../../types/types";
+import calendarToInitialValues from "../calendarToInitialValues";
+import onSubmit from "./onSubmit";
+import { FormValues, InnerFieldRefs } from "./types";
+import validate from "./validation/validate";
 
 dayjs.extend(customParseFormat);
 
@@ -57,7 +49,6 @@ export interface CreateCalendarFormProps {
   submitAttempted: boolean;
   dataRepository: DataRepository;
   setIsSubmitting: (isSaving: boolean) => void;
-  servicePoints: ServicePoint[];
   submitter: (calendar: Calendar) => Promise<Calendar>;
   initialValues?: Calendar;
 }
@@ -66,148 +57,25 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   props: CreateCalendarFormProps
 ) => {
   const calloutContext = useContext(CalloutContext);
-
-  const onSubmit = async (
-    values: FormValues,
-    form: FormApi<FormValues>
-  ): Promise<SubmissionErrors> => {
-    if (form.getState().hasValidationErrors) {
-      return undefined;
-    }
-
-    props.setIsSubmitting(true);
-
-    const newCalendar: Calendar = {
-      id: null,
-      name: values.name,
-      startDate: values["start-date"],
-      endDate: values["end-date"],
-      assignments: [],
-      normalHours: [],
-      exceptions: [],
-    };
-
-    values["service-points"]?.forEach((servicePoint) =>
-      newCalendar.assignments.push(servicePoint.id)
-    );
-
-    values["hours-of-operation"]?.forEach((opening) => {
-      if (opening.type === RowType.Closed) return;
-
-      newCalendar.normalHours.push({
-        startDay: opening.startDay as Weekday,
-        startTime: opening.startTime as string,
-        endDay: opening.endDay as Weekday,
-        endTime: opening.endTime as string,
-      });
-    });
-
-    values.exceptions?.forEach((exception) => {
-      if (exception.type === RowType.Closed) {
-        newCalendar.exceptions.push({
-          name: exception.name,
-          startDate: exception.rows[0].startDate as string,
-          endDate: exception.rows[0].endDate as string,
-          openings: [],
-        });
-      } else {
-        const minDate = dayjs
-          .min(exception.rows.map(({ startDate }) => dayjs(startDate)))
-          .format("YYYY-MM-DD");
-        const maxDate = dayjs
-          .max(exception.rows.map(({ endDate }) => dayjs(endDate)))
-          .format("YYYY-MM-DD");
-
-        newCalendar.exceptions.push({
-          name: exception.name,
-          startDate: minDate,
-          endDate: maxDate,
-          openings: exception.rows.map((row) => ({
-            startDate: row.startDate as string,
-            startTime: row.startTime as string,
-            endDate: row.endDate as string,
-            endTime: row.endTime as string,
-          })),
-        });
-      }
-    });
-
-    const submissionErrors: Partial<
-      Record<keyof FormValues | typeof FORM_ERROR, ReactNode>
-    > = {};
-
-    try {
-      const cal = await props.submitter(newCalendar);
-
-      props.closeParentLayer(cal.id as string);
-    } catch (e: unknown) {
-      const response = e as Response;
-      const errors = (await response.json()) as ErrorResponse;
-
-      errors.errors.forEach((error) => {
-        switch (error.code) {
-          case ErrorCode.CALENDAR_DATE_OVERLAP:
-            calloutContext.sendCallout({
-              message: error.message,
-              type: "error",
-            });
-            submissionErrors["service-points"] =
-              "Service points " +
-              props.dataRepository
-                .getServicePointNamesFromIds(
-                  error.data.conflictingServicePointIds
-                )
-                .join(", ") +
-              " have overlaps.  " +
-              error.message;
-            break;
-
-          case ErrorCode.CALENDAR_NO_NAME:
-          case ErrorCode.CALENDAR_INVALID_DATE_RANGE:
-          case ErrorCode.CALENDAR_INVALID_NORMAL_OPENINGS:
-          case ErrorCode.CALENDAR_INVALID_EXCEPTIONS:
-          case ErrorCode.CALENDAR_INVALID_EXCEPTION_DATE_ORDER:
-          case ErrorCode.CALENDAR_INVALID_EXCEPTION_DATE_BOUNDARY:
-          case ErrorCode.CALENDAR_INVALID_EXCEPTION_NAME:
-          case ErrorCode.CALENDAR_INVALID_EXCEPTION_OPENINGS:
-            // eslint-disable-next-line no-alert
-            alert(error.message);
-            // eslint-disable-next-line no-console
-            console.error(
-              "The following error should have been caught by form validation!",
-              error
-            );
-            submissionErrors[FORM_ERROR] = (
-              <>
-                {error.message}
-                <br />
-                If you see this, please report this error.
-              </>
-            );
-            break;
-          case ErrorCode.INTERNAL_SERVER_ERROR:
-          case ErrorCode.INVALID_REQUEST:
-          case ErrorCode.INVALID_PARAMETER:
-          case ErrorCode.CALENDAR_NOT_FOUND: // not applicable
-          case ErrorCode.CALENDAR_INVALID_EXCEPTION_OPENING_BOUNDARY: // bounds are auto-generated
-          default:
-            // eslint-disable-next-line no-alert
-            alert("An internal server error occurred: " + error.message);
-            calloutContext.sendCallout({
-              message: "Internal server error",
-              type: "error",
-            });
-            submissionErrors[FORM_ERROR] = error.message;
-        }
-      });
-    }
-
-    props.setIsSubmitting(false);
-
-    return submissionErrors;
-  };
-
   const intl = useIntl();
+
+  const onSubmitCallback = useCallback(
+    (values: FormValues, form: FormApi<FormValues>) =>
+      onSubmit(
+        {
+          closeParentLayer: props.closeParentLayer,
+          dataRepository: props.dataRepository,
+          setIsSubmitting: props.setIsSubmitting,
+          submitter: props.submitter,
+        },
+        calloutContext,
+        intl,
+        values,
+        form
+      ),
+    [props, calloutContext, intl]
+  );
+
   const localeDateFormat = getLocaleDateFormat({ intl });
   const localeTimeFormat = getLocalizedTimeFormatInfo(intl.locale).timeFormat;
 
@@ -232,7 +100,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
 
   return (
     <Form<FormValues>
-      onSubmit={onSubmit}
+      onSubmit={onSubmitCallback}
       validate={validationFunction}
       validateOnBlur
       initialValues={calendarToInitialValues(
@@ -273,7 +141,11 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   <ExpandAllButton />
                 </Col>
               </Row>
-              <Accordion label="General information">
+              <Accordion
+                label={
+                  <FormattedMessage id="ui-calendar.calendarForm.category.general" />
+                }
+              >
                 <Row>
                   <Col xs={12} md={6}>
                     <Field
@@ -281,7 +153,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       autoFocus
                       required
                       name="name"
-                      label="Calendar name"
+                      label={
+                        <FormattedMessage id="ui-calendar.calendarForm.field.name" />
+                      }
                       error={
                         (!dirtyFieldsSinceLastSubmit?.name &&
                           submitErrors?.name) ||
@@ -299,7 +173,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       required
                       usePortal
                       name="start-date"
-                      label="Start date"
+                      label={
+                        <FormattedMessage id="ui-calendar.calendarForm.field.startDate" />
+                      }
                       error={
                         (!dirtyFieldsSinceLastSubmit?.["start-date"] &&
                           submitErrors?.["start-date"]) ||
@@ -317,7 +193,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                       required
                       usePortal
                       name="end-date"
-                      label="End date"
+                      label={
+                        <FormattedMessage id="ui-calendar.calendarForm.field.endDate" />
+                      }
                       error={
                         (!dirtyFieldsSinceLastSubmit?.["end-date"] &&
                           submitErrors?.["end-date"]) ||
@@ -329,11 +207,15 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   </Col>
                 </Row>
                 <ServicePointAssignmentField
-                  servicePoints={props.servicePoints}
+                  servicePoints={props.dataRepository.getServicePoints()}
                   error={submitErrors?.["service-points"]}
                 />
               </Accordion>
-              <Accordion label="Hours of operation">
+              <Accordion
+                label={
+                  <FormattedMessage id="ui-calendar.calendarForm.category.hoursOfOperation" />
+                }
+              >
                 <Field
                   name="hours-of-operation"
                   component={HoursOfOperationField}
@@ -344,7 +226,11 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   isNewCalendar={props.initialValues === undefined}
                 />
               </Accordion>
-              <Accordion label="Exceptions">
+              <Accordion
+                label={
+                  <FormattedMessage id="ui-calendar.calendarForm.category.exceptions" />
+                }
+              >
                 <Field
                   name="exceptions"
                   component={ExceptionField}

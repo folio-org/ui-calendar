@@ -22,12 +22,12 @@ import React, {
 } from "react";
 import { FieldRenderProps } from "react-final-form";
 import { FormattedMessage } from "react-intl";
+import { InnerFieldRefs } from "../../forms/CalendarForm/types";
 import {
   ExceptionFieldErrors,
   ExceptionRowState,
   MCLContentsType,
 } from "./ExceptionFieldTypes";
-import { InnerFieldRefs } from "./formValidation";
 import cssHiddenErrorField from "./hiddenErrorField.css";
 import css from "./HoursAndExceptionFields.css";
 import HoursOfOperationFieldRowFormatter from "./MCLRowFormatter";

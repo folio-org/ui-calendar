@@ -1,6 +1,13 @@
 {
   "meta.title": "Calendar",
 
+  "calendarForm.category.general": "General information",
+  "calendarForm.category.hoursOfOperation": "Hours of operation",
+  "calendarForm.category.exceptions": "Exceptions",
+  "calendarForm.field.name": "Calendar name",
+  "calendarForm.field.startDate": "Start date",
+  "calendarForm.field.endDate": "End date",
+  "calendarForm.field.servicePoints": "Service points",
   "calendarForm.addRowButton": "Add row",
   "calendarForm.openings.column.status": "Status",
   "calendarForm.openings.column.startDay": "Start day",
@@ -17,13 +24,14 @@
   "calendarForm.exceptions.column.actions": "Actions",
   "calendarForm.openClosedSelect.open": "Open",
   "calendarForm.openClosedSelect.closed": "Closed",
-  "calendarForm.servicePointField.label": "Service points",
   "calendarForm.error.dateFormat": "Please enter a date in the {localeDateFormat} format",
   "calendarForm.error.dateOrder": "End date must not be before the start date",
   "calendarForm.error.timeFormat": "Please enter a time in the {localeTimeFormat} format",
   "calendarForm.error.timeOrder": "End date/time must not be before the start date/time",
   "calendarForm.error.openingConflictError": "Some openings have conflicts with each other",
   "calendarForm.error.exceptionConflictError": "Some exceptions have conflicts with each other",
+  "calendarForm.error.internalServerError": "Internal server error",
+  "calendarForm.error.servicePointConflict": "Service points {list} have overlaps.",
 
   "currentStatus.open": "Open",
   "currentStatus.open.sameDay": "Open until {nextTime}",
@@ -48,5 +56,9 @@
   "currentStatus.closed.exceptional.nextDay": "Closed ({exceptionName}) until tomorrow at {nextTime}",
   "currentStatus.closed.exceptional.nextWeek": "Closed ({exceptionName}) until {nextWeekday} at {nextTime}",
   "currentStatus.closed.exceptional.sameElse": "Closed ({exceptionName}) until {nextDate} at {nextTime}",
-  "currentStatus.closed.exceptional.otherWeekday": "Closed ({exceptionName}) until {nextWeekday} at {nextTime}"
+  "currentStatus.closed.exceptional.otherWeekday": "Closed ({exceptionName}) until {nextWeekday} at {nextTime}",
+
+  "list.twoSeparator": " and ",
+  "list.threeOrMoreSeparator": ", ",
+  "list.threeOrMoreLastSeparator": ", and "
 }

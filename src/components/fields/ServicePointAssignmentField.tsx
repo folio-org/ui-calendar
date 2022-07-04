@@ -57,7 +57,7 @@ const ServicePointAssignmentField: FunctionComponent<
         >
       }
       label={
-        <FormattedMessage id="ui-calendar.calendarForm.servicePointField.label" />
+        <FormattedMessage id="ui-calendar.calendarForm.field.servicePoints" />
       }
       formatter={formatter}
       filter={(filterText: string | undefined, list: ServicePoint[]) => {

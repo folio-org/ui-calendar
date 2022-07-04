@@ -9,7 +9,7 @@ import {
 } from "@folio/stripes-components";
 import React, { FunctionComponent, useState } from "react";
 import DataRepository from "../data/DataRepository";
-import CalendarForm, { FORM_ID } from "../forms/CalendarForm";
+import CalendarForm, { FORM_ID } from "../forms/CalendarForm/CalendarForm";
 import { Calendar } from "../types/types";
 
 export interface CreateEditCalendarLayerProps {
@@ -78,7 +78,6 @@ export const CreateEditCalendarLayer: FunctionComponent<
           setIsSubmitting={setIsSubmitting}
           submitAttempted={submitAttempted}
           dataRepository={props.dataRepository}
-          servicePoints={props.dataRepository.getServicePoints()}
           initialValues={props.initialValue}
           submitter={(calendar: Calendar): Promise<Calendar> => {
             if (opType === OpType.EDIT) {

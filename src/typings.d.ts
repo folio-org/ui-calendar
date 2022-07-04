@@ -9,13 +9,15 @@ declare module "*.css" {
 declare module "@folio/stripes-core" {
   import { Context, ReactNode } from "react";
 
-  export const CalloutContext: Context<{
+  export type CalloutContextType = {
     sendCallout: (args: {
       type?: "success" | "error" | "warning" | "info";
       timeout?: number;
       message: ReactNode;
     }) => void;
-  }>;
+  };
+
+  export const CalloutContext: Context<CalloutContextType>;
 }
 
 declare module "@folio/stripes-connect" {

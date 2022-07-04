@@ -19,13 +19,13 @@ import React, {
 } from "react";
 import { FieldRenderProps } from "react-final-form";
 import { FormattedMessage, useIntl } from "react-intl";
+import { InnerFieldRefs } from "../../forms/CalendarForm/types";
+import { CalendarOpening, Weekday } from "../../types/types";
 import {
   getLocaleWeekdays,
   getWeekdaySpan,
   WEEKDAYS,
 } from "../../utils/WeekdayUtils";
-import { CalendarOpening, Weekday } from "../../types/types";
-import { InnerFieldRefs } from "./formValidation";
 import css from "./HoursAndExceptionFields.css";
 import {
   HoursOfOperationErrors,
