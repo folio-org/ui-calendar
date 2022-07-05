@@ -185,8 +185,9 @@ export function getCurrentStatusNonFormatted(
 /**
  * Gets the current status, as a translated string.
  * Available formats:
- * ui-calendar.currentStatus.(open|closed).[exceptional].
- * [sameDay | nextDay | nextWeek | sameElse | otherWeekday]
+ * ui-calendar.currentStatus.(open | closed)
+ * .(noNext | sameDay | nextDay | nextWeek | sameElse | otherWeekday)
+ * [.exceptional]
  *
  * Note: sameElse is for exception events more than a week out
  * Available values:
@@ -211,12 +212,14 @@ export default function getCurrentStatus(
     translationKey += ".closed";
   }
 
-  if (status.exceptional) {
-    translationKey += ".exceptional";
-  }
-
   if (status.nextEvent !== undefined) {
     translationKey += "." + status.nextEvent.proximity;
+  } else {
+    translationKey += ".noNext";
+  }
+
+  if (status.exceptional) {
+    translationKey += ".exceptional";
   }
 
   return (
