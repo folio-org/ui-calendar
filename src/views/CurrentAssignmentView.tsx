@@ -122,7 +122,7 @@ export const CurrentAssignmentView: ConnectedComponent<
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.servicePoint" />
             ),
             calendarName: (
-              <FormattedMessage id="ui-calendar.currentAssignmentView.column.calendarName" />
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.name" />
             ),
             startDate: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.startDate" />
