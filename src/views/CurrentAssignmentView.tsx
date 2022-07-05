@@ -37,7 +37,13 @@ export const CurrentAssignmentView: ConnectedComponent<
   )?.params?.servicePointId;
 
   if (!dataRepository.isLoaded()) {
-    return <LoadingPane paneTitle="Current calendar assignments" />;
+    return (
+      <LoadingPane
+        paneTitle={
+          <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
+        }
+      />
+    );
   }
 
   const rows = dataRepository.getServicePoints().map((servicePoint) => {
@@ -58,7 +64,9 @@ export const CurrentAssignmentView: ConnectedComponent<
           servicePoint.inactive ? " (inactive)" : ""
         ),
         calendarName: (
-          <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
+          <div style={{ fontStyle: "italic", color: "grey" }}>
+            <FormattedMessage id="ui-calendar.currentAssignmentView.noCalendar" />
+          </div>
         ),
         startDate: "",
         endDate: "",
@@ -88,7 +96,9 @@ export const CurrentAssignmentView: ConnectedComponent<
   return (
     <>
       <Pane
-        paneTitle="Current calendar assignments"
+        paneTitle={
+          <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
+        }
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         lastMenu={
           <PaneMenu>
@@ -98,7 +108,7 @@ export const CurrentAssignmentView: ConnectedComponent<
               ref={showCreateLayerButtonRef}
               to="/settings/calendar/active/create"
             >
-              New
+              <FormattedMessage id="ui-calendar.currentAssignmentView.actions.new" />
             </Button>
           </PaneMenu>
         }
@@ -108,11 +118,21 @@ export const CurrentAssignmentView: ConnectedComponent<
           sortDirection="ascending"
           dateColumns={["startDate", "endDate"]}
           columnMapping={{
-            servicePoint: "Service point",
-            calendarName: "Calendar name",
-            startDate: "Start date",
-            endDate: "End date",
-            currentStatus: "Current status",
+            servicePoint: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.servicePoint" />
+            ),
+            calendarName: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.calendarName" />
+            ),
+            startDate: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.startDate" />
+            ),
+            endDate: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.endDate" />
+            ),
+            currentStatus: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.currentStatus" />
+            ),
           }}
           contentData={rows}
           rowMetadata={["servicePointId", "calendar"]}

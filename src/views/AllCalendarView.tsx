@@ -10,7 +10,7 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import React, { ReactNode, useRef, useState } from "react";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import {
   Route,
   RouteComponentProps,
@@ -26,6 +26,7 @@ import InfoPane from "./panes/InfoPane";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../utils/DateUtils";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
+import { formatList } from "../utils/I18nUtils";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 
@@ -55,9 +56,11 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       startDate: getLocalizedDate(intl, calendar.startDate),
       endDate: getLocalizedDate(intl, calendar.endDate),
       assignments: servicePointNames.length ? (
-        servicePointNames.join(", ")
+        formatList(intl, servicePointNames)
       ) : (
-        <div style={{ fontStyle: "italic", color: "grey" }}>None</div>
+        <div style={{ fontStyle: "italic", color: "grey" }}>
+          <FormattedMessage id="ui-calendar.allCalendarView.noAssignments" />
+        </div>
       ),
       calendar,
     };
@@ -67,10 +70,14 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
     <>
       <Pane
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
-        paneTitle="All calendars"
+        paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}
         actionMenu={({ onToggle }) => (
           <>
-            <MenuSection label="Actions">
+            <MenuSection
+              label={
+                <FormattedMessage id="ui-calendar.allCalendarView.actions.label" />
+              }
+            >
               <Button
                 buttonStyle="dropdownItem"
                 ref={showCreateLayerButtonRef}
@@ -78,7 +85,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                 to="/settings/calendar/all/create"
               >
                 <Icon size="small" icon="plus-sign">
-                  New
+                  <FormattedMessage id="ui-calendar.allCalendarView.actions.new" />
                 </Icon>
               </Button>
               <Button
@@ -89,7 +96,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                 }}
               >
                 <Icon size="small" icon="trash">
-                  Purge old calendars
+                  <FormattedMessage id="ui-calendar.allCalendarView.actions.purge" />
                 </Icon>
               </Button>
             </MenuSection>
@@ -110,10 +117,18 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
           sortDirection="ascending"
           dateColumns={["startDate", "endDate"]}
           columnMapping={{
-            name: "Calendar name",
-            startDate: "Start date",
-            endDate: "End date",
-            assignments: "Assignments",
+            name: (
+              <FormattedMessage id="ui-calendar.allCalendarView.column.name" />
+            ),
+            startDate: (
+              <FormattedMessage id="ui-calendar.allCalendarView.column.startDate" />
+            ),
+            endDate: (
+              <FormattedMessage id="ui-calendar.allCalendarView.column.endDate" />
+            ),
+            assignments: (
+              <FormattedMessage id="ui-calendar.allCalendarView.column.assignments" />
+            ),
           }}
           contentData={rows}
           rowMetadata={["calendar"]}

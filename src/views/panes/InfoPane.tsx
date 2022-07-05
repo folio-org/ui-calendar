@@ -6,6 +6,7 @@ import {
   ExpandAllButton,
   Headline,
   Icon,
+  KeyValue,
   List,
   Loading,
   MenuSection,
@@ -20,8 +21,11 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { FunctionComponent, useState } from "react";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../../data/DataRepository";
+import { Calendar, CalendarException, Weekday } from "../../types/types";
+import { isOpen247 } from "../../utils/CalendarUtils";
+import { getLocalizedDate } from "../../utils/DateUtils";
 import {
   containsFullOvernightSpans,
   containsNextDayOvernight,
@@ -31,9 +35,6 @@ import {
   openingSorter,
   splitOpeningsIntoDays,
 } from "../../utils/InfoPaneUtils";
-import { Calendar, CalendarException, Weekday } from "../../types/types";
-import { isOpen247 } from "../../utils/CalendarUtils";
-import { getLocalizedDate } from "../../utils/DateUtils";
 import css from "./InfoPane.css";
 
 dayjs.extend(customParseFormat);
@@ -105,14 +106,18 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         dismissible
         actionMenu={({ onToggle }) => (
           <>
-            <MenuSection label="Actions">
+            <MenuSection
+              label={
+                <FormattedMessage id="ui-calendar.infoPane.actions.label" />
+              }
+            >
               <Button
                 buttonStyle="dropdownItem"
                 onClick={onToggle}
                 to={`${props.editBasePath}/${calendar.id}`}
               >
                 <Icon size="small" icon="edit">
-                  Edit
+                  <FormattedMessage id="stripes-core.button.edit" />
                 </Icon>
               </Button>
               <Button
@@ -126,7 +131,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                 }}
               >
                 <Icon size="small" icon="duplicate">
-                  Duplicate
+                  <FormattedMessage id="stripes-core.button.duplicate" />
                 </Icon>
               </Button>
               <Button
@@ -141,7 +146,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                   icon="trash"
                   iconRootClass={css.deleteButton}
                 >
-                  Delete
+                  <FormattedMessage id="stripes-core.button.delete" />
                 </Icon>
               </Button>
             </MenuSection>
@@ -151,15 +156,35 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         <Headline size="x-large" margin="xx-small">
           {calendar.name}
         </Headline>
-        From {getLocalizedDate(intl, calendar.startDate)} to{" "}
-        {getLocalizedDate(intl, calendar.endDate)}
+
+        <Row>
+          <Col xs={12} sm>
+            <KeyValue
+              label={<FormattedMessage id="ui-calendar.infoPane.startDate" />}
+            >
+              {getLocalizedDate(intl, calendar.startDate)}
+            </KeyValue>
+          </Col>
+          <Col xs={12} sm>
+            <KeyValue
+              label={<FormattedMessage id="ui-calendar.infoPane.endDate" />}
+            >
+              {getLocalizedDate(intl, calendar.endDate)}
+            </KeyValue>
+          </Col>
+        </Row>
+
         <AccordionSet>
           <Row end="xs">
             <Col xs>
               <ExpandAllButton />
             </Col>
           </Row>
-          <Accordion label="Service point assignments">
+          <Accordion
+            label={
+              <FormattedMessage id="ui-calendar.infoPane.accordion.assignments" />
+            }
+          >
             <List
               items={props.dataRepository.getServicePointNamesFromIds(
                 calendar.assignments
@@ -167,12 +192,16 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
               listStyle="bullets"
               isEmptyMessage={
                 <div className={css.closed}>
-                  This calendar is not assigned to any service points.
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.assignments.empty" />
                 </div>
               }
             />
           </Accordion>
-          <Accordion label="Hours of operation">
+          <Accordion
+            label={
+              <FormattedMessage id="ui-calendar.infoPane.accordion.hours" />
+            }
+          >
             <MultiColumnList
               interactive={false}
               onHeaderClick={() => ({})}
@@ -183,9 +212,15 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                 })
               }
               columnMapping={{
-                day: "Day",
-                startTime: "Open",
-                endTime: "Close",
+                day: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.day" />
+                ),
+                startTime: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.open" />
+                ),
+                endTime: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.close" />
+                ),
               }}
               columnWidths={{
                 day: "40%",
@@ -202,7 +237,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                   : css.hidden
               }
             >
-              *&nbsp;indicates next day
+              <FormattedMessage id="ui-calendar.infoPane.nextDayHelpText" />
             </p>
             <p
               className={
@@ -212,21 +247,30 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                   : css.hidden
               }
             >
-              &ndash;&nbsp;indicates that the service point was already open or
-              does not close
+              <FormattedMessage id="ui-calendar.infoPane.overnightHelpText" />
             </p>
             <p className={isOpen247(calendar.normalHours) ? "" : css.hidden}>
-              This service point is open 24/7 and does not close
+              <FormattedMessage id="ui-calendar.infoPane.247HelpText" />
             </p>
           </Accordion>
-          <Accordion label="Exceptions &mdash; openings">
+          <Accordion
+            label={
+              <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.openings" />
+            }
+          >
             <MultiColumnList
               interactive={false}
               onHeaderClick={() => ({})}
               columnMapping={{
-                name: "Name",
-                start: "Start",
-                end: "End",
+                name: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.name" />
+                ),
+                start: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.start" />
+                ),
+                end: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.end" />
+                ),
               }}
               columnWidths={{
                 name: "40%",
@@ -246,19 +290,29 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
               )}
               isEmptyMessage={
                 <div className={css.closed}>
-                  This calendar has no exceptional openings.
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.openings.empty" />
                 </div>
               }
             />
           </Accordion>
-          <Accordion label="Exceptions &mdash; closures">
+          <Accordion
+            label={
+              <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.closures" />
+            }
+          >
             <MultiColumnList
               interactive={false}
               onHeaderClick={() => ({})}
               columnMapping={{
-                name: "Name",
-                startDate: "Start",
-                endDate: "End",
+                name: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.name" />
+                ),
+                startDate: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.start" />
+                ),
+                endDate: (
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.end" />
+                ),
               }}
               columnWidths={{
                 name: "40%",
@@ -272,7 +326,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
               }))}
               isEmptyMessage={
                 <div className={css.closed}>
-                  This calendar has no exceptional closures.
+                  <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.closures.empty" />
                 </div>
               }
             />
@@ -283,8 +337,12 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         dismissible
         onClose={() => setShowDeleteModal(false)}
         open={showDeleteModal}
-        label="Confirm deletion"
-        aria-label="Confirm deletion"
+        label={
+          <FormattedMessage id="ui-calendar.infoPane.deletionModal.label" />
+        }
+        aria-label={intl.formatMessage({
+          id: "ui-calendar.infoPane.deletionModal.label",
+        })}
         size="small"
         footer={
           <ModalFooter>
@@ -307,13 +365,22 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                 }
               }}
             >
-              {deleteModalSubmitting ? <Loading /> : "Delete"}
+              {deleteModalSubmitting ? (
+                <Loading />
+              ) : (
+                <FormattedMessage id="stripes-core.button.delete" />
+              )}
             </Button>
-            <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
+            <Button onClick={() => setShowDeleteModal(false)}>
+              <FormattedMessage id="stripes-core.button.cancel" />
+            </Button>
           </ModalFooter>
         }
       >
-        {`Are you sure you would like to delete the calendar "${calendar.name}"?`}
+        <FormattedMessage
+          id="ui-calendar.infoPane.deletionModal.contents"
+          values={{ name: calendar.name }}
+        />
       </Modal>
     </>
   );

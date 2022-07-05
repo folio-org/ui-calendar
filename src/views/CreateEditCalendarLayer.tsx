@@ -8,6 +8,7 @@ import {
   Paneset,
 } from "@folio/stripes-components";
 import React, { FunctionComponent, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../data/DataRepository";
 import CalendarForm, { FORM_ID } from "../forms/CalendarForm/CalendarForm";
 import { Calendar } from "../types/types";
@@ -38,17 +39,24 @@ function getOpType(initialValue?: Calendar, isEdit?: boolean): OpType {
 export const CreateEditCalendarLayer: FunctionComponent<
   CreateEditCalendarLayerProps
 > = (props: CreateEditCalendarLayerProps) => {
-  let pane = <LoadingPane />;
-
+  const intl = useIntl();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
+
+  let pane = <LoadingPane />;
 
   if (props.dataRepository.isLoaded()) {
     const opType = getOpType(props.initialValue, props.isEdit);
 
     pane = (
       <Pane
-        paneTitle={opType === OpType.EDIT ? "Edit" : "Create new calendar"}
+        paneTitle={
+          getOpType(props.initialValue, props.isEdit) === OpType.EDIT ? (
+            <FormattedMessage id="ui-calendar.calendarForm.title.edit" />
+          ) : (
+            <FormattedMessage id="ui-calendar.calendarForm.title.create" />
+          )
+        }
         defaultWidth="fill"
         centerContent
         onClose={props.onClose}
@@ -56,7 +64,9 @@ export const CreateEditCalendarLayer: FunctionComponent<
         footer={
           <PaneFooter
             renderStart={
-              <Button onClick={() => props.onClose()}>Cancel</Button>
+              <Button onClick={() => props.onClose()}>
+                <FormattedMessage id="stripes-core.button.cancel" />
+              </Button>
             }
             renderEnd={
               <Button
@@ -67,7 +77,11 @@ export const CreateEditCalendarLayer: FunctionComponent<
                 form={FORM_ID}
                 onClick={() => setSubmitAttempted(true)}
               >
-                {isSubmitting ? <Loading /> : "Save & close"}
+                {isSubmitting ? (
+                  <Loading />
+                ) : (
+                  <FormattedMessage id="stripes-core.button.saveAndClose" />
+                )}
               </Button>
             }
           />
@@ -96,7 +110,15 @@ export const CreateEditCalendarLayer: FunctionComponent<
   }
 
   return (
-    <Layer contentLabel="Calendar creation form" isOpen>
+    <Layer
+      contentLabel={intl.formatMessage({
+        id:
+          getOpType(props.initialValue, props.isEdit) === OpType.EDIT
+            ? "ui-calendar.calendarForm.title.edit"
+            : "ui-calendar.calendarForm.title.create",
+      })}
+      isOpen
+    >
       <Paneset isRoot>{pane}</Paneset>
     </Layer>
   );

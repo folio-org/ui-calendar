@@ -20,21 +20,25 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
         pages={[
           {
             route: "all/",
-            label: "All calendars",
+            label: <FormattedMessage id="ui-calendar.allCalendarView.title" />,
             component: props.stripes.connect(AllCalendarView, {
               dataKey: "ui-calendar",
             }),
           },
           {
             route: "active/",
-            label: "Current assignments",
+            label: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
+            ),
             component: props.stripes.connect(CurrentAssignmentView, {
               dataKey: "ui-calendar",
             }),
           },
           {
             route: "monthly/",
-            label: "Monthly view",
+            label: (
+              <FormattedMessage id="ui-calendar.monthlyCalendarView.title" />
+            ),
             component: props.stripes.connect(MonthlyCalendarPickerView, {
               dataKey: "ui-calendar",
             }),

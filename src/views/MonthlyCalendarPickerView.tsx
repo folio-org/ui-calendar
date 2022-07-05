@@ -18,7 +18,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
-import { IntlShape, useIntl } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import css from "../components/Calendar.css";
 import { MANIFEST, Resources } from "../data/SharedData";
@@ -39,20 +39,29 @@ function dailyOpeningToCalendarDisplay(
   let exception: ReactNode = null;
   let status: ReactNode = (
     <p className={css.closed} key={-1}>
-      Closed
+      <FormattedMessage id="ui-calendar.monthlyCalendarView.day.closed" />
     </p>
   );
   if (openingInfo.open) {
     if (openingInfo.allDay) {
-      status = <p>All day</p>;
+      status = (
+        <p>
+          <FormattedMessage id="ui-calendar.monthlyCalendarView.day.allDay" />
+        </p>
+      );
     } else {
       openingInfo.openings.sort((a, b) =>
         a.startTime.localeCompare(b.startTime)
       );
       status = openingInfo.openings.map((opening, i) => (
         <p key={i}>
-          {getLocalizedTime(intl, opening.startTime)} &ndash;{" "}
-          {getLocalizedTime(intl, opening.endTime)}
+          <FormattedMessage
+            id="ui-calendar.monthlyCalendarView.day.timeRange"
+            values={{
+              startTime: getLocalizedTime(intl, opening.startTime),
+              endTime: getLocalizedTime(intl, opening.endTime),
+            }}
+          />
         </p>
       ));
     }
@@ -143,7 +152,13 @@ const MonthlyCalendarPickerView: ConnectedComponent<
   );
 
   if (!dataRepository.isLoaded()) {
-    return <LoadingPane paneTitle="Service points" />;
+    return (
+      <LoadingPane
+        paneTitle={
+          <FormattedMessage id="ui-calendar.monthlyCalendarView.title" />
+        }
+      />
+    );
   }
 
   const listItems = dataRepository.getServicePoints().map((sp, i) => {
@@ -158,7 +173,9 @@ const MonthlyCalendarPickerView: ConnectedComponent<
     <>
       <Pane
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
-        paneTitle="Service points"
+        paneTitle={
+          <FormattedMessage id="ui-calendar.monthlyCalendarView.title" />
+        }
       >
         <NavList>
           <NavListSection activeLink={currentRouteId}>
