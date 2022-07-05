@@ -122,7 +122,7 @@
   "currentAssignmentView.column.endDate": "End date",
   "currentAssignmentView.column.currentStatus": "Current status",
 
-  "monthlyCalendarView.title": "Service points",
+  "monthlyCalendarView.title": "Monthly calendar view",
   "monthlyCalendarView.day.allDay": "All day",
   "monthlyCalendarView.day.closed": "Closed",
   "monthlyCalendarView.day.timeRange": "{startTime} &ndash; {endTime}"
