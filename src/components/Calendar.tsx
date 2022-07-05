@@ -7,9 +7,13 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekday from "dayjs/plugin/weekday";
 import memoizee from "memoizee";
 import React, { FunctionComponent, ReactNode } from "react";
-import { FormattedDate, IntlShape, useIntl } from "react-intl";
-import { getLocaleWeekdays } from "../utils/WeekdayUtils";
+import { FormattedDate, useIntl } from "react-intl";
 import { CSSPropertiesWithVars } from "../types/css";
+import {
+  LocaleWeekdayInfo,
+  useLocaleWeekdays,
+  WEEKDAYS,
+} from "../utils/WeekdayUtils";
 import css from "./Calendar.css";
 
 dayjs.extend(customParseFormat);
@@ -25,46 +29,53 @@ function isSameMonth(a: Dayjs, b: Dayjs): boolean {
   return a.isSame(b, "month");
 }
 
-export const getDateArray = memoizee((monthBasis: Dayjs): Dayjs[] => {
-  // start
-  let date = monthBasis.startOf("month");
-  // if the month starts at the beginning of the week, add a full row above of the previous month
-  if (date.weekday() === 0) {
-    date = date.subtract(1, "week");
-  }
-  // ensure startDate starts at the beginning of a week
-  date = date.subtract(date.weekday(), "days");
-
-  // at this point, date must be in a month before `month`.
-
-  // generate this month to the next
-  const displayDates = [];
-  let week = [];
-  do {
-    week.push(date);
-    date = date.add(1, "day");
-    if (week.length === 7) {
-      displayDates.push(...week);
-      week = [];
+export const getDateArray = memoizee(
+  (monthBasis: Dayjs, localeWeekdays: LocaleWeekdayInfo[]): Dayjs[] => {
+    // start
+    let date = monthBasis.startOf("month");
+    // if the month starts at the beginning of the week, add a full row above of the previous month
+    if (date.weekday() === 0) {
+      date = date.subtract(1, "week");
     }
-  } while (isSameMonthOrBefore(date, monthBasis));
 
-  while (week.length < 7) {
-    week.push(date);
-    date = date.add(1, "day");
+    const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
+
+    // ensure startDate starts at the beginning of a week
+    date = date.subtract((date.day() - firstWeekday + 7) % 7, "days");
+
+    // at this point, date must be in a month before `month`.
+
+    // generate this month to the next
+    const displayDates = [];
+    let week = [];
+    do {
+      week.push(date);
+      date = date.add(1, "day");
+      if (week.length === 7) {
+        displayDates.push(...week);
+        week = [];
+      }
+    } while (isSameMonthOrBefore(date, monthBasis));
+
+    while (week.length < 7) {
+      week.push(date);
+      date = date.add(1, "day");
+    }
+    displayDates.push(...week);
+
+    return displayDates;
   }
-  displayDates.push(...week);
+);
 
-  return displayDates;
-});
-
-const getWeekdayLabels = memoizee((intl: IntlShape): ReactNode[] => {
-  return getLocaleWeekdays(intl).map((w, i) => (
-    <div key={i} className={css.weekdayLabel}>
-      <span>{w.short}</span>
-    </div>
-  ));
-});
+const getWeekdayLabels = memoizee(
+  (localeWeekdays: LocaleWeekdayInfo[]): ReactNode[] => {
+    return localeWeekdays.map((w, i) => (
+      <div key={i} className={css.weekdayLabel}>
+        <span>{w.short}</span>
+      </div>
+    ));
+  }
+);
 
 interface Props {
   monthBasis: Dayjs;
@@ -75,28 +86,31 @@ interface Props {
 const Calendar: FunctionComponent<Props> = (props: Props) => {
   const { monthBasis, setMonthBasis, events } = props;
   const intl = useIntl();
+  const localeWeekdays = useLocaleWeekdays(intl);
 
-  const displayDates = getDateArray(monthBasis).map((date: Dayjs) => {
-    const dateString = date.format("YYYY-MM-DD");
-    let contents: ReactNode = <Loading />;
-    if (dateString in events) {
-      contents = events[dateString];
+  const displayDates = getDateArray(monthBasis, localeWeekdays).map(
+    (date: Dayjs) => {
+      const dateString = date.format("YYYY-MM-DD");
+      let contents: ReactNode = <Loading />;
+      if (dateString in events) {
+        contents = events[dateString];
+      }
+
+      return (
+        <div
+          className={classNames(
+            isSameMonth(date, monthBasis) ? "" : css.adjacentMonth,
+            css.calendarDay
+          )}
+        >
+          <span key={dateString} className={css.dayLabel}>
+            <FormattedDate value={date.toDate()} day="numeric" />
+          </span>
+          {contents}
+        </div>
+      );
     }
-
-    return (
-      <div
-        className={classNames(
-          isSameMonth(date, monthBasis) ? "" : css.adjacentMonth,
-          css.calendarDay
-        )}
-      >
-        <span key={dateString} className={css.dayLabel}>
-          <FormattedDate value={date.toDate()} day="numeric" />
-        </span>
-        {contents}
-      </div>
-    );
-  });
+  );
 
   return (
     <div
@@ -124,7 +138,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
           onClick={() => setMonthBasis(monthBasis.add(1, "month"))}
         />
       </div>
-      {getWeekdayLabels(intl)}
+      {getWeekdayLabels(localeWeekdays)}
       {displayDates}
     </div>
   );

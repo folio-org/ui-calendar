@@ -35,6 +35,7 @@ import {
   openingSorter,
   splitOpeningsIntoDays,
 } from "../../utils/InfoPaneUtils";
+import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
 import css from "./InfoPane.css";
 
 dayjs.extend(customParseFormat);
@@ -50,6 +51,7 @@ export interface InfoPaneProps {
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
   const intl = useIntl();
+  const localeWeekdays = useLocaleWeekdays(intl);
   const calendar = props.calendar;
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [deleteModalSubmitting, setDeleteModalSubmitting] =
@@ -67,9 +69,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
 
   let dataRows;
   if (isOpen247(calendar.normalHours)) {
-    dataRows = get247Rows(intl);
+    dataRows = get247Rows(localeWeekdays);
   } else {
-    dataRows = generateDisplayRows(intl, hours);
+    dataRows = generateDisplayRows(intl, localeWeekdays, hours);
   }
 
   const exceptions: {

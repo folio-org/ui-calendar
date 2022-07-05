@@ -22,8 +22,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { InnerFieldRefs } from "../../forms/CalendarForm/types";
 import { CalendarOpening, Weekday } from "../../types/types";
 import {
-  getLocaleWeekdays,
   getWeekdaySpan,
+  LocaleWeekdayInfo,
+  useLocaleWeekdays,
   WEEKDAYS,
 } from "../../utils/WeekdayUtils";
 import css from "./HoursAndExceptionFields.css";
@@ -53,7 +54,8 @@ function updateRowState(
 }
 
 function rowsToOpenings(
-  providedRows: HoursOfOperationRowState[]
+  providedRows: HoursOfOperationRowState[],
+  localeWeekdays: LocaleWeekdayInfo[]
 ): CalendarOpening[] {
   const providedOpenings = providedRows
     .filter(
@@ -72,9 +74,14 @@ function rowsToOpenings(
       })
     );
 
+  const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
+
   providedOpenings.sort((a, b) => {
     if (a.startDay !== b.startDay) {
-      return WEEKDAYS[a.startDay] - WEEKDAYS[b.startDay];
+      return (
+        ((WEEKDAYS[a.startDay] - firstWeekday + 7) % 7) -
+        ((WEEKDAYS[b.startDay] - firstWeekday + 7) % 7)
+      );
     }
     return a.startTime.localeCompare(b.endTime);
   });
@@ -95,6 +102,7 @@ export const HoursOfOperationField: FunctionComponent<
   HoursOfOperationFieldProps
 > = (props: HoursOfOperationFieldProps) => {
   const intl = useIntl();
+  const localeWeekdays = useLocaleWeekdays(intl);
 
   /** Must add at least one empty row, or MCL will not render properly */
   const [rowStates, _setRowStates] = useState<HoursOfOperationRowState[]>([
@@ -128,7 +136,7 @@ export const HoursOfOperationField: FunctionComponent<
       return;
     }
 
-    const providedOpenings = rowsToOpenings(providedRows);
+    const providedOpenings = rowsToOpenings(providedRows, localeWeekdays);
 
     // Find all weekdays
     const weekdaysTouched: Record<Weekday, boolean> = {
@@ -147,7 +155,7 @@ export const HoursOfOperationField: FunctionComponent<
 
     const rows: HoursOfOperationRowState[] = [];
 
-    const weekdays = getLocaleWeekdays(intl).map((weekday) => weekday.weekday);
+    const weekdays = localeWeekdays.map((weekday) => weekday.weekday);
     let openingIndex = 0;
     for (let weekdayIndex = 0; weekdayIndex < weekdays.length; weekdayIndex++) {
       if (weekdaysTouched[weekdays[weekdayIndex]]) {
@@ -191,7 +199,7 @@ export const HoursOfOperationField: FunctionComponent<
 
     setRowStates(rows);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [localeWeekdays]);
 
   const contents: MultiColumnListProps<MCLContentsType, never>["contentData"] =
     rowStates.map((row, realIndex) => {

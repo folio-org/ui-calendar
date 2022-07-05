@@ -2,11 +2,11 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { ReactNode } from "react";
-import { IntlShape } from "react-intl";
-import css from "../views/panes/InfoPane.css";
+import { FormattedMessage, IntlShape } from "react-intl";
 import { CalendarException, CalendarOpening, Weekday } from "../types/types";
+import css from "../views/panes/InfoPane.css";
 import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
-import { getLocaleWeekdays, getWeekdayRange } from "./WeekdayUtils";
+import { getWeekdayRange, LocaleWeekdayInfo } from "./WeekdayUtils";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -111,8 +111,8 @@ export function openingSorter(a: OpenCloseTimeTuple, b: OpenCloseTimeTuple) {
   return a[0].localeCompare(b[0]);
 }
 
-export function get247Rows(intl: IntlShape) {
-  return getLocaleWeekdays(intl).map((weekday, i) => ({
+export function get247Rows(localeWeekdays: LocaleWeekdayInfo[]) {
+  return localeWeekdays.map((weekday, i) => ({
     day: weekday.long,
     startTime: (
       <p key={i} title="The service point does not close">
@@ -128,8 +128,12 @@ export function get247Rows(intl: IntlShape) {
 }
 
 /** Generate rows to display, based on hours from `splitOpeningsIntoDays` */
-export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
-  return getLocaleWeekdays(intl).map((weekday) => {
+export function generateDisplayRows(
+  intl: IntlShape,
+  localeWeekdays: LocaleWeekdayInfo[],
+  hours: HoursType
+) {
+  return localeWeekdays.map((weekday) => {
     const tuples = hours[weekday.weekday];
     const times: {
       startTime: ReactNode[];
@@ -140,7 +144,11 @@ export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
     };
 
     if (tuples.length === 0) {
-      times.startTime.push(<p className={css.closed}>Closed</p>);
+      times.startTime.push(
+        <p className={css.closed}>
+          <FormattedMessage id="ui-calendar.infoPane.display.closed" />
+        </p>
+      );
     }
 
     tuples.forEach(([open, close], i) => {
@@ -148,7 +156,9 @@ export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
         times.startTime.push(
           <p
             key={i}
-            title="The service point does not close on the previous night"
+            title={intl.formatMessage({
+              id: "ui-calendar.infoPane.display.wrappedOpening",
+            })}
           >
             &ndash;
           </p>
@@ -158,15 +168,33 @@ export function generateDisplayRows(intl: IntlShape, hours: HoursType) {
       }
       if (close === NEXT_DAY_FULL_WRAPAROUND) {
         times.endTime.push(
-          <p key={i} title="The service point does not close on this night">
+          // TODO: FIX
+          <p
+            key={i}
+            title={intl.formatMessage({
+              id: "ui-calendar.infoPane.display.wrappedClosed",
+            })}
+          >
             &ndash;
           </p>
         );
       } else if (close.endsWith(NEXT_DAY_OVERNIGHT)) {
         times.endTime.push(
-          <p key={i} title="Closes on the next day">
-            {getLocalizedTime(intl, close.replace(NEXT_DAY_OVERNIGHT, ""))}
-            &nbsp;*
+          <p
+            key={i}
+            title={intl.formatMessage({
+              id: "ui-calendar.infoPane.display.closesAfterMidnight",
+            })}
+          >
+            <FormattedMessage
+              id="ui-calendar.infoPane.display.closesAfterMidnightTime"
+              values={{
+                time: getLocalizedTime(
+                  intl,
+                  close.replace(NEXT_DAY_OVERNIGHT, "")
+                ),
+              }}
+            />
           </p>
         );
       } else {

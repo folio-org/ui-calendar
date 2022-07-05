@@ -97,6 +97,11 @@
   "infoPane.accordion.exceptions.end": "Close",
   "infoPane.deletionModal.label": "Confirm deletion",
   "infoPane.deletionModal.contents": "Are you sure you would like to delete the calendar “{name}”?",
+  "infoPane.display.closed": "Closed",
+  "infoPane.display.wrappedOpening": "The service point does not close on the previous night",
+  "infoPane.display.wrappedClosed": "The service point does not close on this night",
+  "infoPane.display.closesAfterMidnight": "Closes on the next day",
+  "infoPane.display.closesAfterMidnightTime": "{time} *",
 
   "allCalendarView.title": "All calendars",
   "allCalendarView.actions.label": "Actions",

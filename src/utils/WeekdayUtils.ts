@@ -4,9 +4,11 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import localeData from "dayjs/plugin/localeData";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import weekdayPlugin from "dayjs/plugin/weekday";
 import memoizee from "memoizee";
+import { useEffect, useState } from "react";
 import { IntlShape } from "react-intl";
 import { CalendarOpening, Weekday } from "../types/types";
 import { getLocalizedTime } from "./DateUtils";
@@ -16,6 +18,7 @@ dayjs.extend(calendarPlugin);
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
+dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
 dayjs.extend(weekdayPlugin);
 
@@ -69,19 +72,33 @@ export const WEEKDAY_INDEX: Weekday[] = [
 ];
 
 /** Information about a weekday in the current locale */
-interface LocaleWeekdayInfo {
+export interface LocaleWeekdayInfo {
   weekday: Weekday;
   short: string;
   long: string;
 }
 
 /** Get information for the days of the week, for the current locale */
-export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
-  memoizee((intl: IntlShape) => {
+const getLocaleWeekdays: (intl: IntlShape) => Promise<LocaleWeekdayInfo[]> =
+  memoizee(async (intl: IntlShape) => {
+    let locale = intl.locale.toLowerCase();
+    try {
+      await import(`dayjs/locale/${locale}.js`);
+    } catch (_e) {
+      try {
+        locale = locale.split("-")[0];
+        await import(`dayjs/locale/${locale}.js`);
+      } catch (__e) {
+        locale = "en";
+      }
+    }
+
+    const firstDay = dayjs(undefined, { locale }).localeData().firstDayOfWeek();
+
     const weekdays: LocaleWeekdayInfo[] = [];
     for (let i = 0; i < 7; i++) {
       // TODO: ensure this is integrated properly
-      const day = dayjs().weekday(i);
+      const day = dayjs(undefined, { locale }).day((firstDay + i) % 7);
       weekdays.push({
         weekday: WEEKDAY_INDEX[day.day()],
         short: intl.formatDate(day.toDate(), { weekday: "short" }),
@@ -90,6 +107,22 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
     }
     return weekdays;
   });
+
+export function useLocaleWeekdays(intl: IntlShape): LocaleWeekdayInfo[] {
+  const [localeWeekdays, setLocaleWeekdays] = useState<LocaleWeekdayInfo[]>(
+    WEEKDAY_INDEX.map((weekday) => ({
+      weekday,
+      short: "Loading",
+      long: "Loading",
+    }))
+  );
+
+  useEffect(() => {
+    (async () => setLocaleWeekdays(await getLocaleWeekdays(intl)))();
+  });
+
+  return localeWeekdays;
+}
 
 /** Get a range of weekdays between two, inclusive */
 export function getWeekdayRange(start: Weekday, end: Weekday): Weekday[] {

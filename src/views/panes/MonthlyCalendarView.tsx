@@ -8,8 +8,10 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { useIntl } from "react-intl";
 import Calendar, { getDateArray } from "../../components/Calendar";
 import { ServicePoint } from "../../types/types";
+import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -34,13 +36,14 @@ export const MonthlyCalendarView: FunctionComponent<
   requestEvents,
 }: MonthlyCalendarViewProps) => {
   const [monthBasis, setMonthBasis] = useState(dayjs().startOf("month")); // start at current date
+  const localeWeekdays = useLocaleWeekdays(useIntl());
 
   useEffect(() => {
     (async () => {
       if (servicePoint === undefined) {
         return;
       }
-      const dateArray = getDateArray(monthBasis);
+      const dateArray = getDateArray(monthBasis, localeWeekdays);
       if (events === undefined) {
         requestEvents(
           dateArray[0],
@@ -63,7 +66,7 @@ export const MonthlyCalendarView: FunctionComponent<
         servicePoint?.id
       );
     })();
-  }, [monthBasis, servicePoint, events, requestEvents]);
+  }, [monthBasis, servicePoint, events, requestEvents, localeWeekdays]);
 
   if (servicePoint === undefined) {
     return null;
