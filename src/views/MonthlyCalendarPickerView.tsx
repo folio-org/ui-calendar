@@ -23,7 +23,7 @@ import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import css from "../components/Calendar.css";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
-import MonthlyCalendarView from "../panes/MonthlyCalendarView";
+import MonthlyCalendarView from "./panes/MonthlyCalendarView";
 import { DailyOpeningInfo } from "../types/types";
 import { getDateRange, getLocalizedTime } from "../utils/DateUtils";
 

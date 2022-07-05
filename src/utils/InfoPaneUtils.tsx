@@ -3,7 +3,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { ReactNode } from "react";
 import { IntlShape } from "react-intl";
-import css from "../panes/InfoPane.css";
+import css from "../views/panes/InfoPane.css";
 import { CalendarException, CalendarOpening, Weekday } from "../types/types";
 import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
 import { getLocaleWeekdays, getWeekdayRange } from "./WeekdayUtils";

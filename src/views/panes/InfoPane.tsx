@@ -21,7 +21,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { FunctionComponent, useState } from "react";
 import { useIntl } from "react-intl";
-import DataRepository from "../data/DataRepository";
+import DataRepository from "../../data/DataRepository";
 import {
   containsFullOvernightSpans,
   containsNextDayOvernight,
@@ -30,10 +30,10 @@ import {
   get247Rows,
   openingSorter,
   splitOpeningsIntoDays,
-} from "../utils/InfoPaneUtils";
-import { Calendar, CalendarException, Weekday } from "../types/types";
-import { isOpen247 } from "../utils/CalendarUtils";
-import { getLocalizedDate } from "../utils/DateUtils";
+} from "../../utils/InfoPaneUtils";
+import { Calendar, CalendarException, Weekday } from "../../types/types";
+import { isOpen247 } from "../../utils/CalendarUtils";
+import { getLocalizedDate } from "../../utils/DateUtils";
 import css from "./InfoPane.css";
 
 dayjs.extend(customParseFormat);

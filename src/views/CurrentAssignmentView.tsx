@@ -18,8 +18,8 @@ import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import { getLocalizedDate } from "../utils/DateUtils";
 import getStatus from "../utils/getCurrentStatus";
-import CreateEditCalendarLayer from "../views/CreateEditCalendarLayer";
-import InfoPane from "./InfoPane";
+import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
+import InfoPane from "./panes/InfoPane";
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 

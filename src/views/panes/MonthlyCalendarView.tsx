@@ -8,8 +8,8 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Calendar, { getDateArray } from "../components/Calendar";
-import { ServicePoint } from "../types/types";
+import Calendar, { getDateArray } from "../../components/Calendar";
+import { ServicePoint } from "../../types/types";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);

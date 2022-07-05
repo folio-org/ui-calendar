@@ -22,7 +22,7 @@ import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import PurgeModal from "../forms/PurgeModal";
-import InfoPane from "../panes/InfoPane";
+import InfoPane from "./panes/InfoPane";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../utils/DateUtils";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
