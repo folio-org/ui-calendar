@@ -85,12 +85,8 @@
   "infoPane.accordion.hours.day": "Day",
   "infoPane.accordion.hours.open": "Open",
   "infoPane.accordion.hours.close": "Close",
-  "infoPane.nextDayHelpText": "*\u00a0indicates next day",
-  "infoPane.overnightHelpText": "\u2013\u00a0indicates that the service point was already open or does not close",
   "infoPane.247HelpText": "This calendar is open 24/7 and does not close",
-  "infoPane.accordion.exceptions.openings": "Exceptions \u2014 openings",
   "infoPane.accordion.exceptions.openings.empty": "This calendar has no exceptional openings.",
-  "infoPane.accordion.exceptions.closures": "Exceptions \u2014 closures",
   "infoPane.accordion.exceptions.closures.empty": "This calendar has no exceptional closures.",
   "infoPane.accordion.exceptions.name": "Day",
   "infoPane.accordion.exceptions.start": "Start",
@@ -101,7 +97,6 @@
   "infoPane.display.wrappedOpening": "The service point does not close on the previous night",
   "infoPane.display.wrappedClosed": "The service point does not close on this night",
   "infoPane.display.closesAfterMidnight": "Closes on the next day",
-  "infoPane.display.closesAfterMidnightTime": "{time}\u00a0*",
 
   "allCalendarView.title": "All calendars",
   "allCalendarView.actions.label": "Actions",
@@ -124,6 +119,5 @@
 
   "monthlyCalendarView.title": "Monthly calendar view",
   "monthlyCalendarView.day.allDay": "All day",
-  "monthlyCalendarView.day.closed": "Closed",
-  "monthlyCalendarView.day.timeRange": "{startTime} \u2013 {endTime}"
+  "monthlyCalendarView.day.closed": "Closed"
 }
