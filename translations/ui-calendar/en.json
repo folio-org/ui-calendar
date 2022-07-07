@@ -60,10 +60,6 @@
   "currentStatus.closed.exceptional.sameElse": "Closed ({exceptionName}) until {nextDate} at {nextTime}",
   "currentStatus.closed.exceptional.otherWeekday": "Closed ({exceptionName}) until {nextWeekday} at {nextTime}",
 
-  "list.twoSeparator": " and ",
-  "list.threeOrMoreSeparator": ", ",
-  "list.threeOrMoreLastSeparator": ", and ",
-
   "purgeModal.label": "Purge old calendars",
   "purgeModal.criteria.age.prompt": "Purge calendars that ended...",
   "purgeModal.criteria.age.months3": "more than 3 months ago",
