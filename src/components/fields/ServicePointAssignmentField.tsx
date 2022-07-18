@@ -26,14 +26,14 @@ const ServicePointAssignmentField: FunctionComponent<
     option,
     searchTerm,
   }: {
-    option: ServicePoint;
+    option: { label: string };
     searchTerm: string | undefined;
   }) => {
     if (typeof searchTerm !== "string" || searchTerm === "") {
-      return <OptionSegment>{option.name}</OptionSegment>;
+      return <OptionSegment>{option.label}</OptionSegment>;
     }
 
-    const result = fuzzysort.single(searchTerm, option.name);
+    const result = fuzzysort.single(searchTerm, option.label);
 
     // this should not happen as all elements passed to this function should have been found
     if (result === null) return <></>;
