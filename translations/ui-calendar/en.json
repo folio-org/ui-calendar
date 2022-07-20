@@ -121,5 +121,10 @@
   "monthlyCalendarView.title": "Monthly calendar view",
   "monthlyCalendarView.day.allDay": "All day",
   "monthlyCalendarView.day.closed": "Closed",
-  "monthlyCalendarView.day.timeRange": "{startTime} \u2013 {endTime}"
+  "monthlyCalendarView.day.timeRange": "{startTime} \u2013 {endTime}",
+
+  "permission.view": "[TEST TEST TEST] Settings (Calendar): Can view existing calendars",
+  "permission.create": "[TEST TEST TEST] Settings (Calendar): Can create and assign new calendars",
+  "permission.update": "[TEST TEST TEST] Settings (Calendar): Can edit and reassign existing calendars",
+  "permission.delete": "[TEST TEST TEST] Settings (Calendar): Can delete existing calendars"
 }

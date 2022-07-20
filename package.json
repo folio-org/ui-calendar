@@ -32,46 +32,57 @@
     "permissionSets": [
       {
         "permissionName": "module.calendar.enabled",
-        "displayName": "UI: Calendar module is enabled"
-      },
-      {
-        "permissionName": "ui-calendar.all",
-        "displayName": "Settings (Calendar): Can create, view, edit, and remove calendar events",
-        "description": "User can create,edit, view, and remove calendar events",
-        "subPermissions": [
-          "ui-calendar.edit",
-          "calendar.delete"
-        ],
-        "visible": true
+        "displayName": "UI: Calendar module is enabled",
+        "visible": false
       },
       {
         "permissionName": "settings.calendar.enabled",
-        "displayName": "Settings (Calendar): display list of settings pages",
+        "displayName": "Settings (Calendar): Display calendar in the settings list",
         "subPermissions": [
           "settings.enabled"
-        ]
+        ],
+        "visible": false
       },
       {
         "permissionName": "ui-calendar.view",
-        "displayName": "Settings (Calendar): Can view calendar events",
-        "description": "Can view calendar events",
+        "displayName": "Settings (Calendar): Can view existing calendars",
+        "description": "User can view existing calendars",
         "subPermissions": [
-          "configuration.entries.collection.get",
-          "inventory-storage.service-points.collection.get",
-          "calendar.view",
           "module.calendar.enabled",
-          "settings.calendar.enabled"
+          "settings.calendar.enabled",
+          "calendar.view",
+          "configuration.entries.collection.get",
+          "inventory-storage.service-points.collection.get"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-calendar.edit",
-        "displayName": "Settings (Calendar): Can create, view, and edit calendar events",
-        "description": "Can edit calendar events. User cannot remove any calendar event.",
+        "permissionName": "ui-calendar.create",
+        "displayName": "Settings (Calendar): Can create and assign new calendars",
+        "description": "User can create and assign new calendars",
         "subPermissions": [
           "ui-calendar.view",
-          "calendar.create",
-          "calendar.update"
+          "calendar.create"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-calendar.update",
+        "displayName": "Settings (Calendar): Can edit and reassign existing calendars",
+        "description": "User can edit and reassign existing calendars",
+        "subPermissions": [
+          "ui-calendar.view",
+          "calendar.edit"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-calendar.delete",
+        "displayName": "Settings (Calendar): Can delete existing calendars",
+        "description": "User can delete existing calendars",
+        "subPermissions": [
+          "ui-calendar.view",
+          "calendar.delete"
         ],
         "visible": true
       }
