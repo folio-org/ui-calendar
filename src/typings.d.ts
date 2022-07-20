@@ -8,6 +8,7 @@ declare module "*.css" {
 
 declare module "@folio/stripes-core" {
   import { Context, ReactNode } from "react";
+  import { FunctionComponent } from "react";
 
   export type CalloutContextType = {
     sendCallout: (args: {
@@ -16,8 +17,12 @@ declare module "@folio/stripes-core" {
       message: ReactNode;
     }) => void;
   };
-
   export const CalloutContext: Context<CalloutContextType>;
+
+  export const IfPermission: FunctionComponent<{
+    perm: string;
+    children: ReactNode | ((props: { hasPermission: boolean }) => ReactNode);
+  }>;
 }
 
 declare module "@folio/stripes-connect" {
@@ -288,7 +293,7 @@ declare module "@folio/stripes-smart-components" {
       route: string;
       label: ReactNode;
       component: ComponentType<Record<string, never>>;
-      perm?: string[];
+      perm?: string;
     }[];
     paneTitle?: ReactNode;
     paneTitleRef?: RefObject<HTMLDivElement>;

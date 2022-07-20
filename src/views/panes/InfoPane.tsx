@@ -16,13 +16,16 @@ import {
   Pane,
   Row,
 } from "@folio/stripes-components";
+import { IfPermission } from "@folio/stripes-core";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { FunctionComponent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+import IfPermissionOr from "../../components/IfPermissionOr";
 import DataRepository from "../../data/DataRepository";
+import permissions from "../../types/permissions";
 import { Calendar, CalendarException, Weekday } from "../../types/types";
 import { isOpen247 } from "../../utils/CalendarUtils";
 import { getLocalizedDate } from "../../utils/DateUtils";
@@ -107,52 +110,60 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         onClose={props.onClose}
         dismissible
         actionMenu={({ onToggle }) => (
-          <>
+          <IfPermissionOr
+            perms={[permissions.UPDATE, permissions.CREATE, permissions.DELETE]}
+          >
             <MenuSection
               label={
                 <FormattedMessage id="ui-calendar.infoPane.actions.label" />
               }
             >
-              <Button
-                buttonStyle="dropdownItem"
-                onClick={onToggle}
-                to={`${props.editBasePath}/${calendar.id}`}
-              >
-                <Icon size="small" icon="edit">
-                  <FormattedMessage id="stripes-core.button.edit" />
-                </Icon>
-              </Button>
-              <Button
-                buttonStyle="dropdownItem"
-                onClick={onToggle}
-                to={{
-                  pathname: props.creationBasePath,
-                  search: new URLSearchParams({
-                    source: calendar.id as string,
-                  }).toString(),
-                }}
-              >
-                <Icon size="small" icon="duplicate">
-                  <FormattedMessage id="stripes-core.button.duplicate" />
-                </Icon>
-              </Button>
-              <Button
-                buttonStyle="dropdownItem"
-                onClick={() => {
-                  onToggle();
-                  setShowDeleteModal(true);
-                }}
-              >
-                <Icon
-                  size="small"
-                  icon="trash"
-                  iconRootClass={css.deleteButton}
+              <IfPermission perm={permissions.UPDATE}>
+                <Button
+                  buttonStyle="dropdownItem"
+                  onClick={onToggle}
+                  to={`${props.editBasePath}/${calendar.id}`}
                 >
-                  <FormattedMessage id="stripes-core.button.delete" />
-                </Icon>
-              </Button>
+                  <Icon size="small" icon="edit">
+                    <FormattedMessage id="stripes-core.button.edit" />
+                  </Icon>
+                </Button>
+              </IfPermission>
+              <IfPermission perm={permissions.CREATE}>
+                <Button
+                  buttonStyle="dropdownItem"
+                  onClick={onToggle}
+                  to={{
+                    pathname: props.creationBasePath,
+                    search: new URLSearchParams({
+                      source: calendar.id as string,
+                    }).toString(),
+                  }}
+                >
+                  <Icon size="small" icon="duplicate">
+                    <FormattedMessage id="stripes-core.button.duplicate" />
+                  </Icon>
+                </Button>
+              </IfPermission>
+              <IfPermission perm={permissions.DELETE}>
+                <Button
+                  buttonStyle="dropdownItem"
+                  onClick={() => {
+                    onToggle();
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  <Icon
+                    size="small"
+                    icon="trash"
+                    iconRootClass={css.deleteButton}
+                  >
+                    <FormattedMessage id="stripes-core.button.delete" />
+                  </Icon>
+                </Button>
+              </IfPermission>
             </MenuSection>
-          </>
+          </IfPermissionOr>
         )}
       >
         <Headline size="x-large" margin="xx-small">

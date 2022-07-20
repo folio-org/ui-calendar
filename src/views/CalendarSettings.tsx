@@ -15,8 +15,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
     <ErrorBoundary>
       <Settings
         {...props}
-        // TODO: this does not do anything as the size is cached and not updated from here
-        navPaneWidth="30%" // 30% is FOLIO default but too big for three panes
+        navPaneWidth="30%"
         pages={[
           {
             route: "all/",
@@ -24,6 +23,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
             component: props.stripes.connect(AllCalendarView, {
               dataKey: "ui-calendar",
             }),
+            perm: "ui-calendar.view",
           },
           {
             route: "active/",
@@ -33,6 +33,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
             component: props.stripes.connect(CurrentAssignmentView, {
               dataKey: "ui-calendar",
             }),
+            perm: "ui-calendar.view",
           },
           {
             route: "monthly/",
@@ -42,6 +43,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
             component: props.stripes.connect(MonthlyCalendarPickerView, {
               dataKey: "ui-calendar",
             }),
+            perm: "ui-calendar.view",
           },
         ]}
         paneTitle={<FormattedMessage id="ui-calendar.meta.title" />}
