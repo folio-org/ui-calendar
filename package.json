@@ -1,7 +1,7 @@
 {
   "name": "@folio/calendar",
-  "version": "7.1.1",
-  "description": "Opening hours",
+  "version": "8.0.0",
+  "description": "Calendar settings",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
     "registry": "https://repository.folio.org/repository/npm-folio/"

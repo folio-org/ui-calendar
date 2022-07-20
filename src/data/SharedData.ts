@@ -47,7 +47,7 @@ export const MANIFEST: ConnectedComponent<
   },
   calendars: {
     type: "okapi",
-    path: "opening-hours/calendars",
+    path: "calendar/calendars",
     records: "calendars",
     perRequest: MAX_LIMIT,
     limitParam: "limit",
@@ -65,7 +65,7 @@ export const MANIFEST: ConnectedComponent<
       })?.params?.servicePointId;
 
       if (currentRouteId !== undefined) {
-        return `opening-hours/dates/${currentRouteId}/all-openings`;
+        return `calendar/dates/${currentRouteId}/all-openings`;
       }
 
       return null;
