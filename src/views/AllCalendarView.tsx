@@ -154,12 +154,10 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       </Pane>
 
       <Switch>
-        <IfPermission perm={permissions.CREATE}>
-          <Route
-            path="/settings/calendar/all/create"
-            render={({
-              location,
-            }: RouteComponentProps<{ source?: string }>) => (
+        <Route
+          path="/settings/calendar/all/create"
+          render={({ location }: RouteComponentProps<{ source?: string }>) => (
+            <IfPermission perm={permissions.CREATE}>
               <CreateEditCalendarLayer
                 dataRepository={dataRepository}
                 initialValue={dataRepository.getCalendar(
@@ -170,13 +168,13 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                   showCreateLayerButtonRef.current?.focus();
                 }}
               />
-            )}
-          />
-        </IfPermission>
-        <IfPermission perm={permissions.UPDATE}>
-          <Route
-            path="/settings/calendar/all/edit/:id"
-            render={({ match }: RouteComponentProps<{ id: string }>) => (
+            </IfPermission>
+          )}
+        />
+        <Route
+          path="/settings/calendar/all/edit/:id"
+          render={({ match }: RouteComponentProps<{ id: string }>) => (
+            <IfPermission perm={permissions.UPDATE}>
               <CreateEditCalendarLayer
                 dataRepository={dataRepository}
                 initialValue={dataRepository.getCalendar(match.params.id)}
@@ -186,9 +184,9 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                   showCreateLayerButtonRef.current?.focus();
                 }}
               />
-            )}
-          />
-        </IfPermission>
+            </IfPermission>
+          )}
+        />
         <Route path="/settings/calendar/all/:id">
           <InfoPane
             editBasePath="/settings/calendar/all/edit"
