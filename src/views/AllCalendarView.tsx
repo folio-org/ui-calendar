@@ -9,6 +9,7 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
+import { IfPermission } from "@folio/stripes-core";
 import React, { ReactNode, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
@@ -18,15 +19,17 @@ import {
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
+import IfPermissionOr from "../components/IfPermissionOr";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import PurgeModal from "../forms/PurgeModal";
-import InfoPane from "./panes/InfoPane";
+import permissions from "../types/permissions";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../utils/DateUtils";
-import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
 import { formatList } from "../utils/I18nUtils";
+import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
+import InfoPane from "./panes/InfoPane";
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 
@@ -72,35 +75,39 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}
         actionMenu={({ onToggle }) => (
-          <>
+          <IfPermissionOr perms={[permissions.CREATE, permissions.DELETE]}>
             <MenuSection
               label={
                 <FormattedMessage id="ui-calendar.allCalendarView.actions.label" />
               }
             >
-              <Button
-                buttonStyle="dropdownItem"
-                ref={showCreateLayerButtonRef}
-                onClick={onToggle}
-                to="/settings/calendar/all/create"
-              >
-                <Icon size="small" icon="plus-sign">
-                  <FormattedMessage id="ui-calendar.allCalendarView.actions.new" />
-                </Icon>
-              </Button>
-              <Button
-                buttonStyle="dropdownItem"
-                onClick={() => {
-                  onToggle();
-                  setShowPurgeModal(true);
-                }}
-              >
-                <Icon size="small" icon="trash">
-                  <FormattedMessage id="ui-calendar.allCalendarView.actions.purge" />
-                </Icon>
-              </Button>
+              <IfPermission perm={permissions.CREATE}>
+                <Button
+                  buttonStyle="dropdownItem"
+                  ref={showCreateLayerButtonRef}
+                  onClick={onToggle}
+                  to="/settings/calendar/all/create"
+                >
+                  <Icon size="small" icon="plus-sign">
+                    <FormattedMessage id="ui-calendar.allCalendarView.actions.new" />
+                  </Icon>
+                </Button>
+              </IfPermission>
+              <IfPermission perm={permissions.DELETE}>
+                <Button
+                  buttonStyle="dropdownItem"
+                  onClick={() => {
+                    onToggle();
+                    setShowPurgeModal(true);
+                  }}
+                >
+                  <Icon size="small" icon="trash">
+                    <FormattedMessage id="ui-calendar.allCalendarView.actions.purge" />
+                  </Icon>
+                </Button>
+              </IfPermission>
             </MenuSection>
-          </>
+          </IfPermissionOr>
         )}
       >
         <SortableMultiColumnList<
@@ -147,35 +154,41 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       </Pane>
 
       <Switch>
-        <Route
-          path="/settings/calendar/all/create"
-          render={({ location }: RouteComponentProps<{ source?: string }>) => (
-            <CreateEditCalendarLayer
-              dataRepository={dataRepository}
-              initialValue={dataRepository.getCalendar(
-                new URLSearchParams(location.search).get("source")
-              )}
-              onClose={(id = "") => {
-                history.push(`/settings/calendar/all/${id}`);
-                showCreateLayerButtonRef.current?.focus();
-              }}
-            />
-          )}
-        />
-        <Route
-          path="/settings/calendar/all/edit/:id"
-          render={({ match }: RouteComponentProps<{ id: string }>) => (
-            <CreateEditCalendarLayer
-              dataRepository={dataRepository}
-              initialValue={dataRepository.getCalendar(match.params.id)}
-              isEdit
-              onClose={() => {
-                history.push(`/settings/calendar/all/${match.params.id}`);
-                showCreateLayerButtonRef.current?.focus();
-              }}
-            />
-          )}
-        />
+        <IfPermission perm={permissions.CREATE}>
+          <Route
+            path="/settings/calendar/all/create"
+            render={({
+              location,
+            }: RouteComponentProps<{ source?: string }>) => (
+              <CreateEditCalendarLayer
+                dataRepository={dataRepository}
+                initialValue={dataRepository.getCalendar(
+                  new URLSearchParams(location.search).get("source")
+                )}
+                onClose={(id = "") => {
+                  history.push(`/settings/calendar/all/${id}`);
+                  showCreateLayerButtonRef.current?.focus();
+                }}
+              />
+            )}
+          />
+        </IfPermission>
+        <IfPermission perm={permissions.UPDATE}>
+          <Route
+            path="/settings/calendar/all/edit/:id"
+            render={({ match }: RouteComponentProps<{ id: string }>) => (
+              <CreateEditCalendarLayer
+                dataRepository={dataRepository}
+                initialValue={dataRepository.getCalendar(match.params.id)}
+                isEdit
+                onClose={() => {
+                  history.push(`/settings/calendar/all/${match.params.id}`);
+                  showCreateLayerButtonRef.current?.focus();
+                }}
+              />
+            )}
+          />
+        </IfPermission>
         <Route path="/settings/calendar/all/:id">
           <InfoPane
             editBasePath="/settings/calendar/all/edit"

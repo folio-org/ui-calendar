@@ -3,6 +3,7 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
+import { IfPermission } from "@folio/stripes-core";
 import React, { useRef } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
@@ -16,6 +17,7 @@ import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
+import permissions from "../types/permissions";
 import { getLocalizedDate } from "../utils/DateUtils";
 import getStatus from "../utils/getCurrentStatus";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
@@ -101,16 +103,18 @@ export const CurrentAssignmentView: ConnectedComponent<
         }
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         lastMenu={
-          <PaneMenu>
-            <Button
-              buttonStyle="primary"
-              marginBottom0
-              ref={showCreateLayerButtonRef}
-              to="/settings/calendar/active/create"
-            >
-              <FormattedMessage id="ui-calendar.currentAssignmentView.actions.new" />
-            </Button>
-          </PaneMenu>
+          <IfPermission perm={permissions.CREATE}>
+            <PaneMenu>
+              <Button
+                buttonStyle="primary"
+                marginBottom0
+                ref={showCreateLayerButtonRef}
+                to="/settings/calendar/active/create"
+              >
+                <FormattedMessage id="ui-calendar.currentAssignmentView.actions.new" />
+              </Button>
+            </PaneMenu>
+          </IfPermission>
         }
       >
         <SortableMultiColumnList
@@ -158,35 +162,41 @@ export const CurrentAssignmentView: ConnectedComponent<
       </Pane>
 
       <Switch>
-        <Route
-          path="/settings/calendar/active/create"
-          render={({ location }: RouteComponentProps<{ source?: string }>) => (
-            <CreateEditCalendarLayer
-              dataRepository={dataRepository}
-              initialValue={dataRepository.getCalendar(
-                new URLSearchParams(location.search).get("source")
-              )}
-              onClose={(id = "") => {
-                history.push(`/settings/calendar/active/${id}`);
-                showCreateLayerButtonRef.current?.focus();
-              }}
-            />
-          )}
-        />
-        <Route
-          path="/settings/calendar/active/edit/:id"
-          render={({ match }: RouteComponentProps<{ id: string }>) => (
-            <CreateEditCalendarLayer
-              dataRepository={dataRepository}
-              initialValue={dataRepository.getCalendar(match.params.id)}
-              isEdit
-              onClose={() => {
-                history.push(`/settings/calendar/active/${match.params.id}`);
-                showCreateLayerButtonRef.current?.focus();
-              }}
-            />
-          )}
-        />
+        <IfPermission perm={permissions.CREATE}>
+          <Route
+            path="/settings/calendar/active/create"
+            render={({
+              location,
+            }: RouteComponentProps<{ source?: string }>) => (
+              <CreateEditCalendarLayer
+                dataRepository={dataRepository}
+                initialValue={dataRepository.getCalendar(
+                  new URLSearchParams(location.search).get("source")
+                )}
+                onClose={(id = "") => {
+                  history.push(`/settings/calendar/active/${id}`);
+                  showCreateLayerButtonRef.current?.focus();
+                }}
+              />
+            )}
+          />
+        </IfPermission>
+        <IfPermission perm={permissions.UPDATE}>
+          <Route
+            path="/settings/calendar/active/edit/:id"
+            render={({ match }: RouteComponentProps<{ id: string }>) => (
+              <CreateEditCalendarLayer
+                dataRepository={dataRepository}
+                initialValue={dataRepository.getCalendar(match.params.id)}
+                isEdit
+                onClose={() => {
+                  history.push(`/settings/calendar/active/${match.params.id}`);
+                  showCreateLayerButtonRef.current?.focus();
+                }}
+              />
+            )}
+          />
+        </IfPermission>
         <Route path="/settings/calendar/active/:id">
           <InfoPane
             editBasePath="/settings/calendar/active/edit"
