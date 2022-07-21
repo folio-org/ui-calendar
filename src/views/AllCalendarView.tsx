@@ -9,7 +9,7 @@ import {
   ConnectedComponent,
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
-import { IfPermission } from "@folio/stripes-core";
+import { IfPermission, useStripes } from "@folio/stripes-core";
 import React, { ReactNode, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
@@ -19,7 +19,6 @@ import {
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
-import IfPermissionOr from "../components/IfPermissionOr";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
@@ -28,6 +27,7 @@ import permissions from "../types/permissions";
 import { Calendar } from "../types/types";
 import { getLocalizedDate } from "../utils/DateUtils";
 import { formatList } from "../utils/I18nUtils";
+import ifPermissionOr from "../utils/ifPermissionOr";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
 import InfoPane from "./panes/InfoPane";
 
@@ -37,6 +37,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   props: AllCalendarViewProps
 ) => {
   const intl = useIntl();
+  const stripes = useStripes();
   const dataRepository = useDataRepository(props.resources, props.mutator);
   const [showPurgeModal, setShowPurgeModal] = useState<boolean>(false);
 
@@ -74,8 +75,10 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       <Pane
         defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
         paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}
-        actionMenu={({ onToggle }) => (
-          <IfPermissionOr perms={[permissions.CREATE, permissions.DELETE]}>
+        actionMenu={({ onToggle }) =>
+          ifPermissionOr(
+            stripes,
+            [permissions.CREATE, permissions.DELETE],
             <MenuSection
               label={
                 <FormattedMessage id="ui-calendar.allCalendarView.actions.label" />
@@ -107,8 +110,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                 </Button>
               </IfPermission>
             </MenuSection>
-          </IfPermissionOr>
-        )}
+          )
+        }
       >
         <SortableMultiColumnList<
           {

@@ -16,19 +16,19 @@ import {
   Pane,
   Row,
 } from "@folio/stripes-components";
-import { IfPermission } from "@folio/stripes-core";
+import { IfPermission, useStripes } from "@folio/stripes-core";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { FunctionComponent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import IfPermissionOr from "../../components/IfPermissionOr";
 import DataRepository from "../../data/DataRepository";
 import permissions from "../../types/permissions";
 import { Calendar, CalendarException, Weekday } from "../../types/types";
 import { isOpen247 } from "../../utils/CalendarUtils";
 import { getLocalizedDate } from "../../utils/DateUtils";
+import ifPermissionOr from "../../utils/ifPermissionOr";
 import {
   containsFullOvernightSpans,
   containsNextDayOvernight,
@@ -54,6 +54,7 @@ export interface InfoPaneProps {
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
   const intl = useIntl();
+  const stripes = useStripes();
   const localeWeekdays = useLocaleWeekdays(intl);
   const calendar = props.calendar;
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -109,10 +110,10 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
         centerContent
         onClose={props.onClose}
         dismissible
-        actionMenu={({ onToggle }) => (
-          <IfPermissionOr
-            perms={[permissions.UPDATE, permissions.CREATE, permissions.DELETE]}
-          >
+        actionMenu={({ onToggle }) =>
+          ifPermissionOr(
+            stripes,
+            [permissions.UPDATE, permissions.CREATE, permissions.DELETE],
             <MenuSection
               label={
                 <FormattedMessage id="ui-calendar.infoPane.actions.label" />
@@ -163,8 +164,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
                 </Button>
               </IfPermission>
             </MenuSection>
-          </IfPermissionOr>
-        )}
+          )
+        }
       >
         <Headline size="x-large" margin="xx-small">
           {calendar.name}

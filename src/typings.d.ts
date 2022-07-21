@@ -7,8 +7,8 @@ declare module "*.css" {
 }
 
 declare module "@folio/stripes-core" {
-  import { Context, ReactNode } from "react";
-  import { FunctionComponent } from "react";
+  import { StripesType } from "@folio/stripes-smart-components";
+  import { Context, FunctionComponent, ReactNode } from "react";
 
   export type CalloutContextType = {
     sendCallout: (args: {
@@ -18,6 +18,8 @@ declare module "@folio/stripes-core" {
     }) => void;
   };
   export const CalloutContext: Context<CalloutContextType>;
+
+  export function useStripes(): StripesType;
 
   export const IfPermission: FunctionComponent<{
     perm: string;
@@ -284,6 +286,7 @@ declare module "@folio/stripes-smart-components" {
       component: ConnectedComponent<Props, Resources>,
       moduleName?: string | { dataKey: string }
     ) => ComponentType<Subtract<Props, ConnectedComponentProps<Resources>>>;
+    hasPerm: (perm: string) => boolean;
   }
 
   export interface SettingsProps {
