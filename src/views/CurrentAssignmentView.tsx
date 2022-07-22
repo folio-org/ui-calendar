@@ -73,7 +73,7 @@ export const CurrentAssignmentView: ConnectedComponent<
         startDate: "",
         endDate: "",
         currentStatus: (
-          <FormattedMessage id="ui-calendar.currentStatus.closed" />
+          <FormattedMessage id="ui-calendar.currentStatus.closed.noNext" />
         ),
         calendar: null,
       };
