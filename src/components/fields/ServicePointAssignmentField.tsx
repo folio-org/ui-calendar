@@ -26,20 +26,27 @@ const ServicePointAssignmentField: FunctionComponent<
     option,
     searchTerm,
   }: {
-    option: { label: string };
+    option: { label: string } | ServicePoint;
     searchTerm: string | undefined;
   }) => {
-    if (typeof searchTerm !== "string" || searchTerm === "") {
-      return <OptionSegment>{option.label}</OptionSegment>;
+    let text;
+    if ("label" in option) {
+      text = option.label;
+    } else {
+      text = option.name;
     }
 
-    const result = fuzzysort.single(searchTerm, option.label);
+    if (typeof searchTerm !== "string" || searchTerm === "") {
+      return <OptionSegment>{text}</OptionSegment>;
+    }
+
+    const result = fuzzysort.single(searchTerm, text);
 
     // this should not happen as all elements passed to this function should have been found
-    if (result === null) return <></>;
+    if (result === null) return null;
 
     return (
-      <OptionSegment>
+      <OptionSegment key={text}>
         {fuzzysort.highlight(result, (m, i) => (
           <strong key={i}>{m}</strong>
         ))}
@@ -81,7 +88,7 @@ const ServicePointAssignmentField: FunctionComponent<
           renderedItems: results.map((result) => ({
             label: result.target,
           })),
-          exactMatch: false,
+          exactMatch: !!list.filter((sp) => sp.name === filterText).length,
         };
       }}
       itemToString={(servicePoint: ServicePoint | undefined) => {
