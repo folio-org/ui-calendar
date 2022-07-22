@@ -4,6 +4,7 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import { IfPermission } from "@folio/stripes-core";
+import dayjs from "dayjs";
 import React, { useRef } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
@@ -14,7 +15,6 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import SortableMultiColumnList from "../components/SortableMultiColumnList";
-import * as MockConstants from "../data/MockConstants";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import permissions from "../types/permissions";
@@ -53,7 +53,7 @@ export const CurrentAssignmentView: ConnectedComponent<
       .getCalendars()
       .filter(
         (calendar) =>
-          MockConstants.MOCKED_DATE_OBJ.isBetween(
+          dayjs().isBetween(
             calendar.startDate,
             calendar.endDate,
             "day",
@@ -86,11 +86,7 @@ export const CurrentAssignmentView: ConnectedComponent<
       calendarName: calendars[0].name,
       startDate: getLocalizedDate(intl, calendars[0].startDate),
       endDate: getLocalizedDate(intl, calendars[0].endDate),
-      currentStatus: getStatus(
-        intl,
-        MockConstants.MOCKED_DATE_TIME_OBJ,
-        calendars[0]
-      ),
+      currentStatus: getStatus(intl, dayjs(), calendars[0]),
       calendar: calendars[0],
     };
   });

@@ -5,6 +5,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import utc from "dayjs/plugin/utc";
 import weekdayPlugin from "dayjs/plugin/weekday";
 import { IntlShape } from "react-intl";
 
@@ -15,6 +16,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(localizedFormat);
 dayjs.extend(weekdayPlugin);
+dayjs.extend(utc);
 
 /** Compare two dayjs objects */
 export function dayjsCompare(a: Dayjs, b: Dayjs): number {
@@ -69,7 +71,7 @@ export function getLocalizedTime(
   intl: IntlShape,
   time: string | Dayjs
 ): string {
-  return intl.formatTime(dayjs(time, "HH:mm").toDate());
+  return intl.formatTime(dayjs(time, "HH:mm").utc(true).toDate());
 }
 
 /** Localize date with `react-intl` */
