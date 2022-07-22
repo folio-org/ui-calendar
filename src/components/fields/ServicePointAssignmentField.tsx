@@ -1,7 +1,7 @@
 import { MultiSelection, OptionSegment } from "@folio/stripes-components";
 import { MultiSelectionFieldRenderProps } from "@folio/stripes-components/types/lib/MultiSelection/MultiSelection";
 import fuzzysort from "fuzzysort";
-import React, { FunctionComponent, ReactNode, useMemo } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import { Field } from "react-final-form";
 import { FormattedMessage } from "react-intl";
 import { ServicePoint } from "../../types/types";
@@ -14,39 +14,24 @@ interface ServicePointAssignmentFieldProps {
 const ServicePointAssignmentField: FunctionComponent<
   ServicePointAssignmentFieldProps
 > = (props: ServicePointAssignmentFieldProps) => {
-  const servicePointsForSearch = useMemo(
-    () =>
-      props.servicePoints.map((servicePoint) =>
-        fuzzysort.prepare(servicePoint.name)
-      ),
-    [props.servicePoints]
-  );
-
   const formatter = ({
     option,
     searchTerm,
   }: {
-    option: { label: string } | ServicePoint;
+    option: ServicePoint;
     searchTerm: string | undefined;
   }) => {
-    let text;
-    if ("label" in option) {
-      text = option.label;
-    } else {
-      text = option.name;
-    }
-
     if (typeof searchTerm !== "string" || searchTerm === "") {
-      return <OptionSegment>{text}</OptionSegment>;
+      return <OptionSegment>{option.name}</OptionSegment>;
     }
 
-    const result = fuzzysort.single(searchTerm, text);
+    const result = fuzzysort.single(searchTerm, option.name);
 
     // this should not happen as all elements passed to this function should have been found
     if (result === null) return null;
 
     return (
-      <OptionSegment key={text}>
+      <OptionSegment key={option.id}>
         {fuzzysort.highlight(result, (m, i) => (
           <strong key={i}>{m}</strong>
         ))}
@@ -73,7 +58,9 @@ const ServicePointAssignmentField: FunctionComponent<
         }
 
         // must spread and re-collect into a new array, as the returned array is immutable
-        const results = [...fuzzysort.go(filterText, servicePointsForSearch)];
+        const results = [
+          ...fuzzysort.go(filterText, props.servicePoints, { key: "name" }),
+        ];
 
         // score descending, then name ascending
         // fixes "service point 1".."service point 4" etc having undefined order
@@ -85,9 +72,8 @@ const ServicePointAssignmentField: FunctionComponent<
         });
 
         return {
-          renderedItems: results.map((result) => ({
-            label: result.target,
-          })),
+          // retrieve the original service point
+          renderedItems: results.map((result) => result.obj),
           exactMatch: !!list.filter((sp) => sp.name === filterText).length,
         };
       }}
