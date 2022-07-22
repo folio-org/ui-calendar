@@ -12,12 +12,7 @@ import {
 import { SelectFieldRenderProps } from "@folio/stripes-components/types/lib/Select/Select";
 import dayjs from "dayjs";
 import memoizee from "memoizee";
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Field, Form } from "react-final-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../data/DataRepository";
@@ -31,19 +26,11 @@ enum AgeCriteria {
   YEARS_2 = "YEARS_2",
 }
 
-const AgeCriteriaLabels: Record<AgeCriteria, ReactNode> = {
-  [AgeCriteria.MONTHS_3]: (
-    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.months3" />
-  ),
-  [AgeCriteria.MONTHS_6]: (
-    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.months6" />
-  ),
-  [AgeCriteria.YEAR_1]: (
-    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.year1" />
-  ),
-  [AgeCriteria.YEARS_2]: (
-    <FormattedMessage id="ui-calendar.purgeModal.criteria.age.years2" />
-  ),
+const AgeCriteriaLabels: Record<AgeCriteria, string> = {
+  [AgeCriteria.MONTHS_3]: "ui-calendar.purgeModal.criteria.age.months3",
+  [AgeCriteria.MONTHS_6]: "ui-calendar.purgeModal.criteria.age.months6",
+  [AgeCriteria.YEAR_1]: "ui-calendar.purgeModal.criteria.age.year1",
+  [AgeCriteria.YEARS_2]: "ui-calendar.purgeModal.criteria.age.years2",
 };
 
 const AgeCriteriaMonths: Record<AgeCriteria, number> = {
@@ -58,18 +45,14 @@ enum AssignmentCriteria {
   ANY = "ANY",
 }
 
-const AssignmentCriteriaLabels: Record<AssignmentCriteria, ReactNode> = {
-  [AssignmentCriteria.NONE]: (
-    <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.none" />
-  ),
-  [AssignmentCriteria.ANY]: (
-    <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.any" />
-  ),
+const AssignmentCriteriaLabels: Record<AssignmentCriteria, string> = {
+  [AssignmentCriteria.NONE]: "ui-calendar.purgeModal.criteria.assignment.none",
+  [AssignmentCriteria.ANY]: "ui-calendar.purgeModal.criteria.assignment.any",
 };
 
 interface FormValues {
-  ageCriteria: AgeCriteria;
-  assignmentCriteria: AssignmentCriteria;
+  ageCriteria: AgeCriteria | undefined;
+  assignmentCriteria: AssignmentCriteria | undefined;
 }
 
 export const FORM_ID = "ui-calendar-purge-old-calendar-form";
@@ -77,9 +60,13 @@ export const FORM_ID = "ui-calendar-purge-old-calendar-form";
 const getCalendarsToPurge = memoizee(
   (
     calendars: Calendar[],
-    ageCriteria: AgeCriteria = AgeCriteria.MONTHS_3,
-    assignmentCriteria: AssignmentCriteria = AssignmentCriteria.NONE
+    ageCriteria: AgeCriteria | undefined = undefined,
+    assignmentCriteria: AssignmentCriteria | undefined = undefined
   ) => {
+    if (ageCriteria === undefined || assignmentCriteria === undefined) {
+      return [];
+    }
+
     const endBefore = dayjs().subtract(
       AgeCriteriaMonths[ageCriteria],
       "months"
@@ -139,8 +126,8 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
     >
       <Form<FormValues>
         initialValues={{
-          ageCriteria: AgeCriteria.MONTHS_3,
-          assignmentCriteria: AssignmentCriteria.NONE,
+          ageCriteria: undefined,
+          assignmentCriteria: undefined,
         }}
         onSubmit={async (values) => {
           setIsSubmitting(true);
@@ -153,6 +140,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
 
           if (toPurge.length === 0) {
             props.onClose();
+            setIsSubmitting(false);
             return;
           }
 
@@ -182,27 +170,32 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
               <Field
                 name="ageCriteria"
                 component={
-                  Select<AgeCriteria, SelectFieldRenderProps<AgeCriteria>>
+                  Select<
+                    AgeCriteria | undefined,
+                    SelectFieldRenderProps<AgeCriteria | undefined>
+                  >
                 }
                 required
                 label={
                   <FormattedMessage id="ui-calendar.purgeModal.criteria.age.prompt" />
                 }
                 fullWidth
-                marginBottom0
-                dataOptions={Object.entries(AgeCriteriaLabels).map(
-                  ([value, label]) => ({
-                    value: value as AgeCriteria,
-                    label,
-                  })
-                )}
+                dataOptions={[
+                  { value: undefined, label: "" },
+                  ...Object.entries(AgeCriteriaLabels).map(
+                    ([value, label]) => ({
+                      value: value as AgeCriteria,
+                      label: intl.formatMessage({ id: label }),
+                    })
+                  ),
+                ]}
               />
               <Field
                 name="assignmentCriteria"
                 component={
                   Select<
-                    AssignmentCriteria,
-                    SelectFieldRenderProps<AssignmentCriteria>
+                    AssignmentCriteria | undefined,
+                    SelectFieldRenderProps<AssignmentCriteria | undefined>
                   >
                 }
                 required
@@ -210,13 +203,15 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.prompt" />
                 }
                 fullWidth
-                marginBottom0
-                dataOptions={Object.entries(AssignmentCriteriaLabels).map(
-                  ([value, label]) => ({
-                    value: value as AssignmentCriteria,
-                    label,
-                  })
-                )}
+                dataOptions={[
+                  { value: undefined, label: "" },
+                  ...Object.entries(AssignmentCriteriaLabels).map(
+                    ([value, label]) => ({
+                      value: value as AssignmentCriteria,
+                      label: intl.formatMessage({ id: label }),
+                    })
+                  ),
+                ]}
               />
               <AccordionSet>
                 <Accordion
