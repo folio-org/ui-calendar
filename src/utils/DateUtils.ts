@@ -71,7 +71,14 @@ export function getLocalizedTime(
   intl: IntlShape,
   time: string | Dayjs
 ): string {
-  return intl.formatTime(dayjs(time, "HH:mm").utc(true).toDate());
+  const obj = dayjs(time, "HH:mm");
+  if (
+    (obj.hour() === 23 && obj.minute() === 59) ||
+    (obj.hour() === 0 && obj.minute() === 0)
+  ) {
+    return intl.formatMessage({ id: "ui-calendar.midnight" });
+  }
+  return intl.formatTime(obj.utc(true).toDate());
 }
 
 /** Localize date with `react-intl` */

@@ -1,6 +1,8 @@
 {
   "meta.title": "Calendar",
 
+  "midnight": "Midnight",
+
   "calendarForm.title.create": "New calendar",
   "calendarForm.title.edit": "Edit calendar",
   "calendarForm.category.general": "General information",
