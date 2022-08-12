@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=8.9.4"
   },
-  "main": "src/index.tsx",
+  "main": "src/main/index.tsx",
   "stripes": {
     "actsAs": [
       "settings"
@@ -91,7 +91,8 @@
   "scripts": {
     "start": "stripes serve",
     "lint": "eslint .",
-    "test": "stripes test karma",
+    "test": "jest",
+    "coverage": "jest --coverage",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-calendar ./translations/ui-calendar/compiled"
   },
@@ -130,6 +131,8 @@
     "@folio/react-intl-safe-html": "^3.1.0",
     "@folio/stripes-components": "^10.2.0",
     "@folio/stripes-connect": "^7.1.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@types/jest": "^28.1.6",
     "@types/memoizee": "^0.4.8",
     "@types/react-router-dom": "^5.2.0",
     "classnames": "^2.3.1",
@@ -138,12 +141,14 @@
     "final-form": "^4.20.7",
     "fuzzysort": "^2.0.1",
     "history": "^4.9.0",
+    "jest": "^28.1.3",
     "memoizee": "^0.4.15",
     "postcss-loader": "^7.0.0",
     "postcss-nesting": "^10.1.7",
     "postcss-scss": "^4.0.4",
     "prop-types": "^15.6.1",
-    "react-final-form": "^6.5.9"
+    "react-final-form": "^6.5.9",
+    "ts-jest": "^28.0.7"
   },
   "peerDependencies": {
     "@folio/stripes": "^7.0.0",

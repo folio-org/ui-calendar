@@ -11,5 +11,11 @@
     "import/no-named-as-default": "off",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/test/**/*", "test/**/*"],
+      "env": { "jest": true }
+    }
+  ]
 }
