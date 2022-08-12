@@ -1,7 +1,6 @@
 import { cleanup, render } from "@testing-library/react";
 import React, { FunctionComponent } from "react";
 import { IntlContext, IntlShape } from "react-intl";
-import { getLocalizedDate, getLocalizedTime } from "../../main/utils/DateUtils";
 import { formatList } from "../../main/utils/I18nUtils";
 import withIntlConfiguration from "../config/util/withIntlConfiguration";
 

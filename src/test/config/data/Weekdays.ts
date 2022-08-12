@@ -7,13 +7,3 @@ export const Wednesday = WEEKDAY_INDEX[3];
 export const Thursday = WEEKDAY_INDEX[4];
 export const Friday = WEEKDAY_INDEX[5];
 export const Saturday = WEEKDAY_INDEX[6];
-
-export default {
-  Sunday,
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-};

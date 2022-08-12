@@ -138,7 +138,11 @@ export function getWeekdayRange(start: Weekday, end: Weekday): Weekday[] {
   return days;
 }
 
-/** Get all weekdays covered by a calendar's opening */
+/**
+ * Get all weekdays covered by a calendar's opening.  Openings that wrap around onto the
+ * same day (e.g. M 12:00 - M 11:59) will include that weekday on both sides
+ * (e.g. MTWRFSNM)
+ */
 export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
   if (opening.startDay === opening.endDay) {
     // wraps around (starts after it sends, e.g. M 12:00 -> M 11:59)
@@ -154,7 +158,11 @@ export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
   return getWeekdayRange(opening.startDay, opening.endDay);
 }
 
-/** Determine how close a weekday is relative to a given reference date */
+/**
+ * Determine how close a weekday is relative to a given reference date.
+ * For weekdays more than a day away, the weekday will be returned in the payload
+ * for additional formatting.  It is not included for sameDay/nextDay
+ */
 export function getRelativeWeekdayStatus(
   intl: IntlShape,
   weekday: Weekday,
