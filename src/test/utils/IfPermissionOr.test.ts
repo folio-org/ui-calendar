@@ -9,13 +9,13 @@ test("IfPermissionOr properly matches permissions", () => {
     hasPerm: jest.fn((p) => perms.indexOf(p) !== -1),
   } as unknown as StripesType;
 
-  expect(ifPermissionOr(stripes, ["a"], testNode)).toBe(null);
+  expect(ifPermissionOr(stripes, ["a"], testNode)).toBeNull();
 
   perms = ["a"];
 
   expect(ifPermissionOr(stripes, ["a"], testNode)).toBe(testNode);
   expect(ifPermissionOr(stripes, ["a", "b"], testNode)).toBe(testNode);
-  expect(ifPermissionOr(stripes, ["b", "c"], testNode)).toBe(null);
+  expect(ifPermissionOr(stripes, ["b", "c"], testNode)).toBeNull();
 
   perms = ["a", "b"];
 
