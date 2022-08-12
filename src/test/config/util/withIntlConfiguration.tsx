@@ -21,7 +21,11 @@ const translationSets = [
   },
 ];
 
-function withIntlConfiguration(children: ReactNode): ReactNode {
+function withIntlConfiguration(
+  children: ReactNode,
+  locale = "en-US",
+  timeZone = "UTC"
+): JSX.Element {
   const allTranslations: Record<string, string> = {};
 
   translationSets.forEach((set) => {
@@ -32,7 +36,11 @@ function withIntlConfiguration(children: ReactNode): ReactNode {
   });
 
   return (
-    <IntlProvider locale="en-US" messages={allTranslations}>
+    <IntlProvider
+      locale={locale}
+      timeZone={timeZone}
+      messages={allTranslations}
+    >
       {children}
     </IntlProvider>
   );

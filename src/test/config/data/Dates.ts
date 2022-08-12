@@ -18,6 +18,8 @@ export const MAY_5 = dayjs("2000-05-05");
 export const MAY_6 = dayjs("2000-05-06");
 /** Sunday */
 export const MAY_7 = dayjs("2000-05-07");
+/** Monday */
+export const MAY_8 = dayjs("2000-05-08");
 /** Sunday */
 export const MAY_14 = dayjs("2000-05-14");
 /** Thursday */

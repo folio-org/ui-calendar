@@ -55,14 +55,14 @@ export function overlaps(
  * `"nextWeek"`, or `"sameElse"` (for more than a week away).
  */
 export function getRelativeDateTimeProximity(
-  date: string,
+  date: Dayjs | string,
   referenceDate: Dayjs
 ): "sameDay" | "nextDay" | "nextWeek" | "sameElse" {
   return dayjs(dayjs(date).toISOString()).calendar(referenceDate, {
-    sameDay: "sameDay", // "[at] LT",
-    nextDay: "nextDay", // "[tomorrow at] LT",
-    nextWeek: "nextWeek", // "dddd [at] LT",
-    sameElse: "sameElse", // "L",
+    sameDay: "[sameDay]", // "[at] LT",
+    nextDay: "[nextDay]", // "[tomorrow at] LT",
+    nextWeek: "[nextWeek]", // "dddd [at] LT",
+    sameElse: "[sameElse]", // "L",
   }) as "sameDay" | "nextDay" | "nextWeek" | "sameElse";
 }
 
