@@ -227,13 +227,3 @@ export const SUMMER_SP_4_245: Calendar = {
   ],
   exceptions: [],
 };
-
-export default [
-  SPRING_SP_1_2,
-  SPRING_UNASSIGNED,
-  ALL_YEAR_SP_ONLINE_247,
-  SPRING_SP_3_4,
-  SUMMER_SP_1_2,
-  SUMMER_SP_3,
-  SUMMER_SP_4_245,
-];

@@ -25,7 +25,7 @@ import React, { FunctionComponent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../../data/DataRepository";
 import permissions from "../../types/permissions";
-import { Calendar, CalendarException, Weekday } from "../../types/types";
+import { Calendar, CalendarException } from "../../types/types";
 import { isOpen247 } from "../../utils/CalendarUtils";
 import { getLocalizedDate } from "../../utils/DateUtils";
 import ifPermissionOr from "../../utils/ifPermissionOr";
@@ -35,7 +35,6 @@ import {
   generateDisplayRows,
   generateExceptionalOpeningRows,
   get247Rows,
-  openingSorter,
   splitOpeningsIntoDays,
 } from "../../utils/InfoPaneUtils";
 import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
@@ -67,13 +66,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
 
   const hours = splitOpeningsIntoDays(calendar.normalHours);
 
-  (Object.keys(hours) as Weekday[]).forEach((day) => {
-    hours[day].sort(openingSorter);
-  });
-
   let dataRows;
   if (isOpen247(calendar.normalHours)) {
-    dataRows = get247Rows(localeWeekdays);
+    dataRows = get247Rows(intl, localeWeekdays);
   } else {
     dataRows = generateDisplayRows(intl, localeWeekdays, hours);
   }

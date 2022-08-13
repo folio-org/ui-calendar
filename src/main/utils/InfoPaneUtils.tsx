@@ -6,7 +6,7 @@ import { FormattedMessage, IntlShape } from "react-intl";
 import { CalendarException, CalendarOpening, Weekday } from "../types/types";
 import css from "../views/panes/InfoPane.css";
 import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
-import { getWeekdayRange, LocaleWeekdayInfo } from "./WeekdayUtils";
+import { getWeekdaySpan, LocaleWeekdayInfo } from "./WeekdayUtils";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -47,6 +47,25 @@ export type OpenCloseTimeTuple = [string, string];
 export type HoursType = Record<Weekday, OpenCloseTimeTuple[]>;
 
 /**
+ * Used for sorting a series of opening tuples for a day.  These tuples may contain
+ * {@code NEXT_DAY_FULL_WRAPAROUND} as appropriate
+ * @param a A tuple of open/close times
+ * @param b A tuple of open/close times
+ * @return -1, 0, or 1 depending on comparison result
+ */
+export function openingSorter(a: OpenCloseTimeTuple, b: OpenCloseTimeTuple) {
+  // A wrapped from previous day or B wraps to next day
+  if (a[0] === NEXT_DAY_FULL_WRAPAROUND || b[1] === NEXT_DAY_FULL_WRAPAROUND) {
+    return -1;
+  }
+  // B wrapped from previous day or A wraps to next day
+  if (b[0] === NEXT_DAY_FULL_WRAPAROUND || a[1] === NEXT_DAY_FULL_WRAPAROUND) {
+    return 1;
+  }
+  return a[0].localeCompare(b[0]);
+}
+
+/**
  * Split an array of openings into a record of weekdays mapped to arrays of
  * `OpenCloseTimeTuple`s
  */
@@ -62,9 +81,9 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
   };
 
   openings.forEach((opening) => {
-    const { startDay, startTime, endDay } = opening;
+    const { startTime } = opening;
     let { endTime } = opening;
-    const span = getWeekdayRange(startDay, endDay);
+    const span = getWeekdaySpan(opening);
 
     // if the closing time should be considered overnight on the previous day,
     // rather than a full additional day of opening
@@ -89,38 +108,32 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
     });
   });
 
+  (Object.keys(hours) as Weekday[]).forEach((day) => {
+    hours[day].sort(openingSorter);
+  });
+
   return hours;
 }
 
-/**
- * Used for sorting a series of opening tuples for a day.  These tuples may contain
- * {@code NEXT_DAY_FULL_WRAPAROUND} as appropriate
- * @param a A tuple of open/close times
- * @param b A tuple of open/close times
- * @return -1, 0, or 1 depending on comparison result
- */
-export function openingSorter(a: OpenCloseTimeTuple, b: OpenCloseTimeTuple) {
-  // A wrapped from previous day or B wraps to next day
-  if (a[0] === NEXT_DAY_FULL_WRAPAROUND || b[1] === NEXT_DAY_FULL_WRAPAROUND) {
-    return -1;
-  }
-  // B wrapped from previous day or A wraps to next day
-  if (b[0] === NEXT_DAY_FULL_WRAPAROUND || a[1] === NEXT_DAY_FULL_WRAPAROUND) {
-    return 1;
-  }
-  return a[0].localeCompare(b[0]);
-}
-
-export function get247Rows(localeWeekdays: LocaleWeekdayInfo[]) {
+export function get247Rows(
+  intl: IntlShape,
+  localeWeekdays: LocaleWeekdayInfo[]
+) {
   return localeWeekdays.map((weekday, i) => ({
     day: weekday.long,
     startTime: (
-      <p key={i} title="The service point does not close">
+      <p
+        key={i}
+        title={intl.formatMessage({ id: "ui-calendar.infoPane.247HelpText" })}
+      >
         &ndash;
       </p>
     ),
     endTime: (
-      <p key={i} title="The service point does not close">
+      <p
+        key={i}
+        title={intl.formatMessage({ id: "ui-calendar.infoPane.247HelpText" })}
+      >
         &ndash;
       </p>
     ),
@@ -133,7 +146,7 @@ export function generateDisplayRows(
   localeWeekdays: LocaleWeekdayInfo[],
   hours: HoursType
 ) {
-  return localeWeekdays.map((weekday) => {
+  return localeWeekdays.map((weekday, weekdayNum) => {
     const tuples = hours[weekday.weekday];
     const times: {
       startTime: ReactNode[];
@@ -145,7 +158,7 @@ export function generateDisplayRows(
 
     if (tuples.length === 0) {
       times.startTime.push(
-        <p className={css.closed}>
+        <p className={css.closed} key={weekdayNum}>
           <FormattedMessage id="ui-calendar.infoPane.display.closed" />
         </p>
       );
@@ -168,7 +181,6 @@ export function generateDisplayRows(
       }
       if (close === NEXT_DAY_FULL_WRAPAROUND) {
         times.endTime.push(
-          // TODO: FIX
           <p
             key={i}
             title={intl.formatMessage({
