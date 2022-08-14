@@ -30,13 +30,9 @@ beforeAll(() => {
 });
 
 test("Localization time formatting methods return the expected results for en-us", () => {
-  expect(getLocalizedTime(intlEn, "00:00")).toBe("Midnight");
-  expect(getLocalizedTime(intlEn, "23:59")).toBe("Midnight");
   expect(getLocalizedTime(intlEn, dayjs("00:00", "HH:mm"))).toBe("Midnight");
   expect(getLocalizedTime(intlEn, dayjs("23:59", "HH:mm"))).toBe("Midnight");
 
-  expect(getLocalizedTime(intlEn, "08:00")).toBe("3:00 AM");
-  expect(getLocalizedTime(intlEn, "20:00")).toBe("3:00 PM");
   expect(getLocalizedTime(intlEn, dayjs("08:00", "HH:mm"))).toBe("3:00 AM");
   expect(getLocalizedTime(intlEn, dayjs("20:00", "HH:mm"))).toBe("3:00 PM");
 });
