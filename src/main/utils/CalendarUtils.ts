@@ -74,7 +74,6 @@ export function getNextExceptionalOpening(
   let minDate: Dayjs | null = null;
   for (const opening of exception.openings) {
     if (
-      testDateTime.isSame(`${opening.startDate}`, "day") &&
       testDateTime.isBefore(
         `${opening.startDate} ${opening.startTime}`,
         "minute"

@@ -2,15 +2,8 @@ import "@testing-library/jest-dom";
 import { cleanup, render } from "@testing-library/react";
 import React, { FunctionComponent, ReactNode } from "react";
 import { IntlContext, IntlShape } from "react-intl";
-import {
-  generateDisplayRows,
-  generateExceptionalOpeningRows,
-  get247Rows,
-  splitOpeningsIntoDays,
-} from "../../main/utils/InfoPaneUtils";
-import { LocaleWeekdayInfo } from "../../main/utils/WeekdayUtils";
+import { generateExceptionalOpeningRows } from "../../main/utils/InfoPaneUtils";
 import * as Calendars from "../config/data/Calendars";
-import * as Weekdays from "../config/data/Weekdays";
 import withIntlConfiguration from "../config/util/withIntlConfiguration";
 
 let intl: IntlShape;

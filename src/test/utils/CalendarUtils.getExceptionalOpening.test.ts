@@ -78,19 +78,27 @@ test("Opening exceptions return the expected current exceptions", () => {
 });
 
 test("Opening exceptions return the expected next exceptions", () => {
-  expect(getNextExceptionalOpening(Dates.JAN_1, OPEN_EXCEPTION)).toBeNull();
+  expect(getNextExceptionalOpening(Dates.JAN_1, OPEN_EXCEPTION)).toBe(
+    OPEN_EXCEPTION.openings[0]
+  );
   expect(getNextExceptionalOpening(MAY_13_00_00, OPEN_EXCEPTION)).toBe(
     OPEN_EXCEPTION.openings[0]
   );
   expect(getNextExceptionalOpening(MAY_13_12_00, OPEN_EXCEPTION)).toBe(
     OPEN_EXCEPTION.openings[1]
   );
-  // nothing else on the same day
-  expect(getNextExceptionalOpening(MAY_13_14_00, OPEN_EXCEPTION)).toBeNull();
-  expect(getNextExceptionalOpening(MAY_13_23_59, OPEN_EXCEPTION)).toBeNull();
-  // nothing on day
-  expect(getNextExceptionalOpening(MAY_14_00_00, OPEN_EXCEPTION)).toBeNull();
-  expect(getNextExceptionalOpening(MAY_14_12_00, OPEN_EXCEPTION)).toBeNull();
+  expect(getNextExceptionalOpening(MAY_13_14_00, OPEN_EXCEPTION)).toBe(
+    OPEN_EXCEPTION.openings[2]
+  );
+  expect(getNextExceptionalOpening(MAY_13_23_59, OPEN_EXCEPTION)).toBe(
+    OPEN_EXCEPTION.openings[2]
+  );
+  expect(getNextExceptionalOpening(MAY_14_00_00, OPEN_EXCEPTION)).toBe(
+    OPEN_EXCEPTION.openings[2]
+  );
+  expect(getNextExceptionalOpening(MAY_14_12_00, OPEN_EXCEPTION)).toBe(
+    OPEN_EXCEPTION.openings[2]
+  );
   // already in the only one this day
   expect(getNextExceptionalOpening(MAY_15_12_00, OPEN_EXCEPTION)).toBeNull();
   expect(getNextExceptionalOpening(Dates.DEC_1, OPEN_EXCEPTION)).toBeNull();

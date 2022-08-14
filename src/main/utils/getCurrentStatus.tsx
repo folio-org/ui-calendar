@@ -22,6 +22,7 @@ import {
 } from "./DateUtils";
 import {
   getRelativeWeekdayStatus,
+  LocaleWeekdayInfo,
   RelativeWeekdayStatus,
   WEEKDAY_INDEX,
 } from "./WeekdayUtils";
@@ -101,13 +102,11 @@ function getExceptionalStatus(
           `${currentOpening.endDate} ${currentOpening.endTime}`,
           testDateTime
         ),
-        date: getLocalizedDate(intl, currentOpening.startDate),
-        time: getLocalizedTime(intl, currentOpening.startTime),
+        date: getLocalizedDate(intl, currentOpening.endDate),
+        time: getLocalizedTime(intl, currentOpening.endTime),
         weekday:
           WEEKDAY_INDEX[
-            dayjs(
-              `${currentOpening.startDate} ${currentOpening.startTime}`
-            ).day()
+            dayjs(`${currentOpening.endDate} ${currentOpening.endTime}`).day()
           ],
       },
     };
@@ -199,6 +198,7 @@ export function getCurrentStatusNonFormatted(
 // this function will not consider things more than one day away, unless currently in an opening
 export default function getCurrentStatus(
   intl: IntlShape,
+  localeWeekdays: LocaleWeekdayInfo[],
   testDateTime: Dayjs,
   calendar: Calendar
 ): ReactNode {
@@ -222,12 +222,22 @@ export default function getCurrentStatus(
     translationKey += ".noNext";
   }
 
+  const nextWeekday = status.nextEvent?.weekday;
+  let nextWeekdayString = "";
+  if (nextWeekday !== undefined) {
+    localeWeekdays.forEach(({ weekday, long }) => {
+      if (weekday === nextWeekday) {
+        nextWeekdayString = long;
+      }
+    });
+  }
+
   return (
     <FormattedMessage
       id={translationKey}
       values={{
         exceptionName: status.exceptionName,
-        nextWeekday: status.nextEvent?.weekday,
+        nextWeekday: nextWeekdayString,
         nextDate: status.nextEvent?.date,
         nextTime: status.nextEvent?.time,
       }}
