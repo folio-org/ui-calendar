@@ -29,15 +29,7 @@ beforeAll(() => {
   cleanup();
 });
 
-test("Localization time formatting methods return the expected results for en-us", () => {
-  expect(getLocalizedTime(intlEn, dayjs("00:00", "HH:mm"))).toBe("Midnight");
-  expect(getLocalizedTime(intlEn, dayjs("23:59", "HH:mm"))).toBe("Midnight");
-
-  expect(getLocalizedTime(intlEn, dayjs("08:00", "HH:mm"))).toBe("3:00 AM");
-  expect(getLocalizedTime(intlEn, dayjs("20:00", "HH:mm"))).toBe("3:00 PM");
-});
-
-test("Localization time formatting methods return the expected results for fr-fr", () => {
+test("Localization time formatting methods return the expected results", () => {
   // all translations use "Midnight" in mocking
   expect(
     getLocalizedTime(intlFr, dayjs("00:00", "HH:mm").tz("CET", true))
