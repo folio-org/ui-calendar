@@ -14,7 +14,7 @@ module.exports = {
   testMatch: ["**/src/test/**/?(*.)test.{js,jsx,ts,tsx}"],
   testPathIgnorePatterns: ["/node_modules/"],
 
-  reporters: ["default"],
+  reporters: ["default", "jest-junit"],
 
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "./artifacts/coverage-jest/",
