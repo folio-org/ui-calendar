@@ -20,7 +20,7 @@ beforeAll(() => {
   const TestComponent: FunctionComponent<Record<string, never>> = () => (
     <IntlContext.Consumer>{intlCapturer}</IntlContext.Consumer>
   );
-  render(withIntlConfiguration(<TestComponent />, "en-US"));
+  render(withIntlConfiguration(<TestComponent />, "en-US", "EST"));
 
   expect(intlCapturer.mock.calls).toHaveLength(1);
   intlEn = intlCapturer.mock.calls[0][0];
