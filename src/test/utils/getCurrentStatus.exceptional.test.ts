@@ -65,7 +65,7 @@ test("Closed exceptions return as such", () => {
 
 test("Opening exception closing more than week from now returns appropriate status", () => {
   // closing a long time away
-  const closingLongAwayCalendar = {
+  const closingLongAwayCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -110,7 +110,7 @@ test("Opening exception closing more than week from now returns appropriate stat
 
 test("Opening exception closing next week returns appropriate status", () => {
   // closing within the next week
-  const closingNextWeekCalendar = {
+  const closingNextWeekCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -155,7 +155,7 @@ test("Opening exception closing next week returns appropriate status", () => {
 
 test("Opening exception closing tomorrow returns appropriate status", () => {
   // closing tomorrow
-  const closingTomorrowCalendar = {
+  const closingTomorrowCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -200,7 +200,7 @@ test("Opening exception closing tomorrow returns appropriate status", () => {
 
 test("Opening exception closing the same day returns appropriate status", () => {
   // closing tonight
-  const closingTonightCalendar = {
+  const closingTonightCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -244,7 +244,7 @@ test("Opening exception closing the same day returns appropriate status", () => 
 });
 
 test("Open exceptions with no more openings return closed with no next", () => {
-  const closedHereafter = {
+  const closedHereafter: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -277,7 +277,7 @@ test("Open exceptions with no more openings return closed with no next", () => {
 
 test("Closed exception opening more than week from now returns appropriate status", () => {
   // closing a long time away
-  const openingLongAwayCalendar = {
+  const openingLongAwayCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -322,7 +322,7 @@ test("Closed exception opening more than week from now returns appropriate statu
 
 test("Closed exception opening next week returns appropriate status", () => {
   // closing within the next week
-  const openingNextWeekCalendar = {
+  const openingNextWeekCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -367,7 +367,7 @@ test("Closed exception opening next week returns appropriate status", () => {
 
 test("Closed exception opening tomorrow returns appropriate status", () => {
   // closing tomorrow
-  const openingTomorrowCalendar = {
+  const openingTomorrowCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -412,7 +412,7 @@ test("Closed exception opening tomorrow returns appropriate status", () => {
 
 test("Closed exception opening the same day returns appropriate status", () => {
   // closing tonight
-  const closingTonightCalendar = {
+  const openingTonightCalendar: Calendar = {
     ...calendarTemplate,
     exceptions: [
       {
@@ -431,7 +431,7 @@ test("Closed exception opening the same day returns appropriate status", () => {
     ],
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, closingTonightCalendar)
+    getCurrentStatusNonFormatted(intl, Dates.MAY_1, openingTonightCalendar)
   ).toStrictEqual({
     open: false,
     exceptional: true,
@@ -449,7 +449,7 @@ test("Closed exception opening the same day returns appropriate status", () => {
         intl,
         localeWeekdays,
         Dates.MAY_1,
-        closingTonightCalendar
+        openingTonightCalendar
       )
     ).textContent
   ).toBe("Closed (Sample exception) until ||02:00||");
