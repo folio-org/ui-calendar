@@ -7,7 +7,7 @@ import { FormValues, SimpleErrorFormValues } from "../types";
 export function isTimeProper(
   localeTimeFormat: string,
   fieldValue: string, // from onchange/similar
-  realInputValue: string // from ref
+  realInputValue: string | undefined // from ref
 ): boolean {
   if (realInputValue === undefined) {
     return true;
