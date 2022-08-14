@@ -1,5 +1,6 @@
 {
   "extends": "@folio/eslint-config-stripes",
+  "plugins": ["regex"],
   "rules": {
     "quotes": [
       "error",
@@ -10,7 +11,9 @@
     "function-paren-newline": "off",
     "import/no-named-as-default": "off",
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"]
+    "@typescript-eslint/no-shadow": ["error"],
+    // ensure we use our wrapper
+    "regex/invalid": ["error", ["import [^t][^y][^p][^e][^ ].* from .dayjs"]]
   },
   "overrides": [
     {

@@ -10,10 +10,6 @@ import {
 } from "@folio/stripes-components";
 import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
 import classNames from "classnames";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import minMax from "dayjs/plugin/minMax";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -23,6 +19,7 @@ import React, {
 import { FieldRenderProps } from "react-final-form";
 import { FormattedMessage } from "react-intl";
 import { InnerFieldRefs } from "../../forms/CalendarForm/types";
+import dayjs from "../../utils/dayjs";
 import {
   ExceptionFieldErrors,
   ExceptionRowState,
@@ -34,10 +31,6 @@ import HoursOfOperationFieldRowFormatter from "./MCLRowFormatter";
 import OpenClosedSelect from "./OpenClosedSelect";
 import RowType from "./RowType";
 import TimeField from "./TimeField";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
-dayjs.extend(minMax);
 
 function updateRowState(
   rowStates: ExceptionRowState[],

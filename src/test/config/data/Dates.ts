@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from "../../../main/utils/dayjs";
 
 /** Saturday */
 export const JAN_1 = dayjs("2000-01-01");

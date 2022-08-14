@@ -1,7 +1,5 @@
 import { Pane } from "@folio/stripes-components";
-import dayjs, { Dayjs } from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localizedFormat from "dayjs/plugin/localizedFormat";
+import type { Dayjs } from "dayjs";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -11,10 +9,8 @@ import React, {
 import { useIntl } from "react-intl";
 import Calendar, { getDateArray } from "../../components/Calendar";
 import { ServicePoint } from "../../types/types";
+import dayjs from "../../utils/dayjs";
 import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
 
 interface MonthlyCalendarViewProps {
   onClose: () => void;

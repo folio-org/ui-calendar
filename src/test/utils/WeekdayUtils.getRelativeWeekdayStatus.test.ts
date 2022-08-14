@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
 import { IntlShape } from "react-intl";
+import dayjs from "../../main/utils/dayjs";
 import { getRelativeWeekdayStatus } from "../../main/utils/WeekdayUtils";
 import * as Weekdays from "../config/data/Weekdays";
 

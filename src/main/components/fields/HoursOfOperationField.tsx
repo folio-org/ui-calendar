@@ -8,9 +8,6 @@ import {
 } from "@folio/stripes-components";
 import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
 import classNames from "classnames";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -38,9 +35,6 @@ import OpenClosedSelect from "./OpenClosedSelect";
 import RowType from "./RowType";
 import TimeField from "./TimeField";
 import WeekdayPicker from "./WeekdayPicker";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
 
 function updateRowState(
   rowStates: HoursOfOperationRowState[],

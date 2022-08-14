@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from "../../main/utils/dayjs";
 import { weekdayIsBetween } from "../../main/utils/WeekdayUtils";
 import * as Weekdays from "../config/data/Weekdays";
 

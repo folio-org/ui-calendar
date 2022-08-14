@@ -1,11 +1,11 @@
 import { CalloutContextType } from "@folio/stripes-core";
-import dayjs from "dayjs";
 import { FormApi, FORM_ERROR, SubmissionErrors } from "final-form";
 import React, { ReactNode } from "react";
 import { FormattedMessage, IntlShape } from "react-intl";
 import RowType from "../../components/fields/RowType";
 import DataRepository from "../../data/DataRepository";
 import { Calendar, ErrorCode, ErrorResponse, Weekday } from "../../types/types";
+import dayjs from "../../utils/dayjs";
 import { formatList } from "../../utils/I18nUtils";
 import { FormValues } from "./types";
 

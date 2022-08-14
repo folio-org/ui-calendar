@@ -1,10 +1,6 @@
 import { Headline, IconButton, Loading } from "@folio/stripes-components";
 import classNames from "classnames";
-import dayjs, { Dayjs } from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import weekday from "dayjs/plugin/weekday";
+import type { Dayjs } from "dayjs";
 import memoizee from "memoizee";
 import React, { FunctionComponent, ReactNode } from "react";
 import { FormattedDate, useIntl } from "react-intl";
@@ -15,11 +11,6 @@ import {
   WEEKDAYS,
 } from "../utils/WeekdayUtils";
 import css from "./Calendar.css";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
-dayjs.extend(weekday);
-dayjs.extend(isSameOrBefore);
 
 function isSameMonthOrBefore(a: Dayjs, b: Dayjs): boolean {
   return a.isSameOrBefore(b, "month");

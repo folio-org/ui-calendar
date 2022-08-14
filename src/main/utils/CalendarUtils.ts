@@ -1,26 +1,12 @@
-import dayjs, { Dayjs } from "dayjs";
-import calendarPlugin from "dayjs/plugin/calendar";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isBetween from "dayjs/plugin/isBetween";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import weekdayPlugin from "dayjs/plugin/weekday";
+import type { Dayjs } from "dayjs";
 import {
   Calendar,
   CalendarException,
   CalendarExceptionOpening,
   CalendarOpening,
 } from "../types/types";
+import dayjs from "./dayjs";
 import { weekdayIsBetween, WEEKDAYS } from "./WeekdayUtils";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(calendarPlugin);
-dayjs.extend(isBetween);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
-dayjs.extend(localizedFormat);
-dayjs.extend(weekdayPlugin);
 
 /** Get all openings and exceptions which apply to this date */
 export function getDateMatches(

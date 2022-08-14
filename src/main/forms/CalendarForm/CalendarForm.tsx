@@ -14,8 +14,6 @@ import {
 import { DatepickerFieldRenderProps as DateFieldRenderProps } from "@folio/stripes-components/types/lib/Datepicker/Datepicker";
 import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextField/TextField";
 import { CalloutContext } from "@folio/stripes-core";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import { FormApi, FORM_ERROR } from "final-form";
 import React, {
   FunctionComponent,
@@ -36,8 +34,6 @@ import calendarToInitialValues from "../calendarToInitialValues";
 import onSubmit from "./onSubmit";
 import { FormValues, InnerFieldRefs } from "./types";
 import validate from "./validation/validate";
-
-dayjs.extend(customParseFormat);
 
 const TextFieldComponent = TextField<string, TextFieldRenderProps<string>>;
 const DateFieldComponent = DateField<DateFieldRenderProps>;

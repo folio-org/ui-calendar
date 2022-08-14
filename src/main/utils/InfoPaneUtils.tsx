@@ -1,15 +1,10 @@
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { ReactNode } from "react";
 import { FormattedMessage, IntlShape } from "react-intl";
 import { CalendarException, CalendarOpening, Weekday } from "../types/types";
 import css from "../views/panes/InfoPane.css";
 import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
+import dayjs from "./dayjs";
 import { getWeekdaySpan, LocaleWeekdayInfo } from "./WeekdayUtils";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
 
 /**
  * Used for comparison to ensure hours are properly sorted.

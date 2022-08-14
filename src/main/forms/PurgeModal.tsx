@@ -10,13 +10,13 @@ import {
   Select,
 } from "@folio/stripes-components";
 import { SelectFieldRenderProps } from "@folio/stripes-components/types/lib/Select/Select";
-import dayjs from "dayjs";
 import memoizee from "memoizee";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Field, Form } from "react-final-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../data/DataRepository";
 import { Calendar } from "../types/types";
+import dayjs from "../utils/dayjs";
 import css from "./PurgeModal.css";
 
 enum AgeCriteria {

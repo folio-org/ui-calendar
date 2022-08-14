@@ -1,5 +1,5 @@
 import { ConnectedComponentProps } from "@folio/stripes-connect";
-import { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 import memoizee from "memoizee";
 import { Calendar, DailyOpeningInfo, ServicePoint } from "../types/types";
 import { MAX_LIMIT, Resources } from "./SharedData";

@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 import React, { ReactNode } from "react";
 import { FormattedMessage, IntlShape } from "react-intl";
 import {
@@ -20,6 +20,7 @@ import {
   getLocalizedTime,
   getRelativeDateTimeProximity,
 } from "./DateUtils";
+import dayjs from "./dayjs";
 import {
   getRelativeWeekdayStatus,
   LocaleWeekdayInfo,

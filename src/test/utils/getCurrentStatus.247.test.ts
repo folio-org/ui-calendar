@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import { render as _render } from "@testing-library/react";
-import dayjs from "dayjs";
 import { ReactNode } from "react";
 import { IntlShape } from "react-intl";
+import dayjs from "../../main/utils/dayjs";
 import getCurrentStatus, {
   getCurrentStatusNonFormatted,
 } from "../../main/utils/getCurrentStatus";

@@ -12,25 +12,16 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import classNames from "classnames";
-import dayjs, { Dayjs } from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import weekday from "dayjs/plugin/weekday";
+import type { Dayjs } from "dayjs";
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { Route, useHistory, useRouteMatch } from "react-router-dom";
 import css from "../components/Calendar.css";
 import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
-import MonthlyCalendarView from "./panes/MonthlyCalendarView";
 import { DailyOpeningInfo } from "../types/types";
 import { getDateRange, getLocalizedTime } from "../utils/DateUtils";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
-dayjs.extend(weekday);
-dayjs.extend(isSameOrBefore);
+import MonthlyCalendarView from "./panes/MonthlyCalendarView";
 
 function dailyOpeningToCalendarDisplay(
   intl: IntlShape,

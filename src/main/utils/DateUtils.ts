@@ -1,22 +1,6 @@
-import dayjs, { Dayjs } from "dayjs";
-import calendarPlugin from "dayjs/plugin/calendar";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isBetween from "dayjs/plugin/isBetween";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import utc from "dayjs/plugin/utc";
-import weekdayPlugin from "dayjs/plugin/weekday";
+import type { Dayjs } from "dayjs";
 import { IntlShape } from "react-intl";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(calendarPlugin);
-dayjs.extend(isBetween);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
-dayjs.extend(localizedFormat);
-dayjs.extend(weekdayPlugin);
-dayjs.extend(utc);
+import dayjs from "./dayjs";
 
 /** Compare two dayjs objects */
 export function dayjsCompare(a: Dayjs, b: Dayjs): number {

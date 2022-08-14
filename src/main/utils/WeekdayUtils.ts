@@ -1,26 +1,10 @@
-import dayjs, { Dayjs } from "dayjs";
-import calendarPlugin from "dayjs/plugin/calendar";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isBetween from "dayjs/plugin/isBetween";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import localeData from "dayjs/plugin/localeData";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import weekdayPlugin from "dayjs/plugin/weekday";
+import type { Dayjs } from "dayjs";
 import memoizee from "memoizee";
 import { useEffect, useState } from "react";
 import { IntlShape } from "react-intl";
 import { CalendarOpening, Weekday } from "../types/types";
 import { getLocalizedTime } from "./DateUtils";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(calendarPlugin);
-dayjs.extend(isBetween);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
-dayjs.extend(localeData);
-dayjs.extend(localizedFormat);
-dayjs.extend(weekdayPlugin);
+import dayjs from "./dayjs";
 
 export type RelativeWeekdayStatus =
   | {

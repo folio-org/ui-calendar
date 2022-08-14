@@ -1,10 +1,7 @@
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import { getNextNormalOpening } from "../../main/utils/CalendarUtils";
+import dayjs from "../../main/utils/dayjs";
 import * as Calendars from "../config/data/Calendars";
 import * as Weekdays from "../config/data/Weekdays";
-
-dayjs.extend(customParseFormat);
 
 const SUNDAY_00_00 = dayjs("00:00", "HH:mm").day(0);
 const SUNDAY_12_00 = dayjs("12:00", "HH:mm").day(0);

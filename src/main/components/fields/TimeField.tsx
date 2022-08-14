@@ -1,7 +1,7 @@
 import { Timepicker } from "@folio/stripes-components";
 import classNames from "classnames";
-import dayjs from "dayjs";
 import React, { ReactNode, useState } from "react";
+import dayjs from "../../utils/dayjs";
 import css from "./hiddenErrorField.css";
 
 function noOp() {

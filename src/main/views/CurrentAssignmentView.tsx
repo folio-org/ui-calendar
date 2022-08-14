@@ -4,7 +4,6 @@ import {
   ConnectedComponentProps,
 } from "@folio/stripes-connect";
 import { IfPermission } from "@folio/stripes-core";
-import dayjs from "dayjs";
 import React, { useRef } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
@@ -19,7 +18,9 @@ import { MANIFEST, Resources } from "../data/SharedData";
 import useDataRepository from "../data/useDataRepository";
 import permissions from "../types/permissions";
 import { getLocalizedDate } from "../utils/DateUtils";
+import dayjs from "../utils/dayjs";
 import getStatus from "../utils/getCurrentStatus";
+import { useLocaleWeekdays } from "../utils/WeekdayUtils";
 import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
 import InfoPane from "./panes/InfoPane";
 
@@ -30,6 +31,7 @@ export const CurrentAssignmentView: ConnectedComponent<
   Resources
 > = (props: CurrentAssignmentViewProps) => {
   const intl = useIntl();
+  const localeWeekdays = useLocaleWeekdays(intl);
   const dataRepository = useDataRepository(props.resources, props.mutator);
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
@@ -86,7 +88,7 @@ export const CurrentAssignmentView: ConnectedComponent<
       calendarName: calendars[0].name,
       startDate: getLocalizedDate(intl, calendars[0].startDate),
       endDate: getLocalizedDate(intl, calendars[0].endDate),
-      currentStatus: getStatus(intl, dayjs(), calendars[0]),
+      currentStatus: getStatus(intl, localeWeekdays, dayjs(), calendars[0]),
       calendar: calendars[0],
     };
   });

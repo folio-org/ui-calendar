@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
 import {
   getCurrentExceptionalOpening,
   getNextExceptionalOpening,
 } from "../../main/utils/CalendarUtils";
+import dayjs from "../../main/utils/dayjs";
 import * as Calendars from "../config/data/Calendars";
 import * as Dates from "../config/data/Dates";
 

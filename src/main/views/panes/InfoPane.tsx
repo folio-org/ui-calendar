@@ -18,9 +18,6 @@ import {
 } from "@folio/stripes-components";
 import { IfPermission, useStripes } from "@folio/stripes-core";
 import classNames from "classnames";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, { FunctionComponent, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import DataRepository from "../../data/DataRepository";
@@ -28,6 +25,7 @@ import permissions from "../../types/permissions";
 import { Calendar, CalendarException } from "../../types/types";
 import { isOpen247 } from "../../utils/CalendarUtils";
 import { getLocalizedDate } from "../../utils/DateUtils";
+import dayjs from "../../utils/dayjs";
 import ifPermissionOr from "../../utils/ifPermissionOr";
 import {
   containsFullOvernightSpans,
@@ -39,9 +37,6 @@ import {
 } from "../../utils/InfoPaneUtils";
 import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
 import css from "./InfoPane.css";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
 
 export interface InfoPaneProps {
   creationBasePath: string;

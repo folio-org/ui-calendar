@@ -60,6 +60,9 @@ jobs:
       - name: Run yarn list
         run: yarn list --pattern @folio
 
+      - name: Run yarn list
+        run: yarn list
+
       - name: Run yarn lint
         run: yarn lint
         continue-on-error: true

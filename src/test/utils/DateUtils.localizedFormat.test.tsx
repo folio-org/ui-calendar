@@ -1,15 +1,10 @@
 import { cleanup, render } from "@testing-library/react";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import utc from "dayjs/plugin/utc";
 import React, { FunctionComponent } from "react";
 import { IntlContext, IntlShape } from "react-intl";
 import { getLocalizedDate, getLocalizedTime } from "../../main/utils/DateUtils";
+import dayjs from "../../main/utils/dayjs";
 import * as Dates from "../config/data/Dates";
 import withIntlConfiguration from "../config/util/withIntlConfiguration";
-
-dayjs.extend(customParseFormat);
-dayjs.extend(utc);
 
 let intlEn: IntlShape;
 let intlFr: IntlShape;

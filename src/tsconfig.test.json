@@ -8,6 +8,5 @@
     "moduleResolution": "node",
     "strict": true,
     "resolveJsonModule": true
-  },
-  "exclude": ["./test/**/*"]
+  }
 }
