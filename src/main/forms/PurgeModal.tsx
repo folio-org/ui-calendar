@@ -229,7 +229,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   }}
                 >
                   <List
-                    items={toPurge.map((c) => c.name as string)}
+                    items={toPurge.map((c) => c.name)}
                     listStyle="bullets"
                     isEmptyMessage={
                       <div className={css.noneToDelete}>

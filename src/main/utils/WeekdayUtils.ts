@@ -81,7 +81,6 @@ const getLocaleWeekdays: (intl: IntlShape) => Promise<LocaleWeekdayInfo[]> =
 
     const weekdays: LocaleWeekdayInfo[] = [];
     for (let i = 0; i < 7; i++) {
-      // TODO: ensure this is integrated properly
       const day = dayjs(undefined, { locale }).day((firstDay + i) % 7);
       weekdays.push({
         weekday: WEEKDAY_INDEX[day.day()],
