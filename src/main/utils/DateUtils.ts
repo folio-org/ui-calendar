@@ -42,7 +42,7 @@ export function getRelativeDateTimeProximity(
   date: Dayjs | string,
   referenceDate: Dayjs
 ): "sameDay" | "nextDay" | "nextWeek" | "sameElse" {
-  return dayjs(dayjs(date).toISOString()).calendar(referenceDate, {
+  return dayjs(dayjs(date).utc(true).toISOString()).calendar(referenceDate, {
     sameDay: "[sameDay]", // "[at] LT",
     nextDay: "[nextDay]", // "[tomorrow at] LT",
     nextWeek: "[nextWeek]", // "dddd [at] LT",
@@ -57,8 +57,9 @@ export function getLocalizedTime(
 ): string {
   const obj = dayjs(time, "HH:mm");
   if (
-    (obj.hour() === 23 && obj.minute() === 59) ||
-    (obj.hour() === 0 && obj.minute() === 0)
+    (obj.tz(intl.timeZone).hour() === 23 &&
+      obj.tz(intl.timeZone).minute() === 59) ||
+    (obj.tz(intl.timeZone).hour() === 0 && obj.tz(intl.timeZone).minute() === 0)
   ) {
     return intl.formatMessage({ id: "ui-calendar.midnight" });
   }
@@ -70,5 +71,5 @@ export function getLocalizedDate(
   intl: IntlShape,
   date: string | Dayjs
 ): string {
-  return intl.formatDate(dayjs(date, "YYYY-MM-DD").toDate());
+  return intl.formatDate(dayjs.tz(date, intl.timeZone).toDate());
 }

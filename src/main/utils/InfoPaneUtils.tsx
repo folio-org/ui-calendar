@@ -233,8 +233,11 @@ export function generateExceptionalOpeningRows(
 
     exception.openings.forEach(
       ({ startDate, startTime, endDate, endTime }, i) => {
-        const start = dayjs(`${startDate} ${startTime}`);
-        const end = dayjs(`${endDate} ${endTime}`);
+        const start = dayjs(`${startDate} ${startTime}`).tz(
+          intl.timeZone,
+          true
+        );
+        const end = dayjs(`${endDate} ${endTime}`).tz(intl.timeZone, true);
         times.start.push(
           <p key={i}>
             {getLocalizedDate(intl, start)}

@@ -126,10 +126,10 @@ export function getCurrentNormalOpening(
 
     const startTimeRel = dayjs(
       `${testDateTime.format("YYYY-MM-DD")} ${opening.startTime}`
-    );
+    ).utc(true);
     const endTimeRel = dayjs(
       `${testDateTime.format("YYYY-MM-DD")} ${opening.endTime}`
-    );
+    ).utc(true);
 
     // single-day interval
     if (
@@ -137,7 +137,7 @@ export function getCurrentNormalOpening(
       isInSingleDayNormalOpening(
         startWeekday,
         currentWeekday,
-        testDateTime,
+        testDateTime.utc(true),
         startTimeRel,
         endTimeRel
       )

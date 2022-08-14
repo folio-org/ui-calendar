@@ -322,7 +322,7 @@ test("Closed after last opening returns appropriate status", () => {
   expect(
     getCurrentStatusNonFormatted(
       intl,
-      Dates.MAY_1.hour(23),
+      Dates.MAY_1.hour(23).utc(true),
       openingTonightCalendar
     )
   ).toStrictEqual({

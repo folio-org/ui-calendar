@@ -138,7 +138,6 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^3.1.0",
-    "@folio/stripes-components": "^10.2.0",
     "@folio/stripes-connect": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@types/jest": "^28.1.6",

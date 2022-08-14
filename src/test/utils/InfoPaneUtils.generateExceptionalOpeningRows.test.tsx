@@ -45,7 +45,7 @@ test("An opening exception displays correctly", () => {
     [
       "Community Event (Longer Hours)",
       "5/13/20007:00 AM5/14/20005:00 AM5/15/20006:00 AM",
-      "5/14/2000Midnight5/15/20009:59 PM5/16/200010:59 PM",
+      "5/13/2000Midnight5/14/20009:59 PM5/15/200010:59 PM",
     ],
   ]);
 });
