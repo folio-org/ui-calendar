@@ -6,8 +6,8 @@ import { FormValues, SimpleErrorFormValues } from "../types";
 /** Ensure a time's format is correct */
 export function isTimeProper(
   localeTimeFormat: string,
-  fieldValue: string,
-  realInputValue: string
+  fieldValue: string, // from onchange/similar
+  realInputValue: string // from ref
 ): boolean {
   if (realInputValue === undefined) {
     return true;
@@ -86,7 +86,9 @@ export function validateDateOrder(values: Partial<FormValues>): {
     values["end-date"] < values["start-date"]
   ) {
     return {
-      "end-date": <FormattedMessage id="calendarForm.error.dateOrder" />,
+      "end-date": (
+        <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
+      ),
     };
   }
   return {};

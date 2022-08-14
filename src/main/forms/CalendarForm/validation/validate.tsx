@@ -19,7 +19,8 @@ function required(
     values[key] === undefined ||
     (typeof values[key] === "string" &&
       (values[key] as string).trim() === "") ||
-    (Array.isArray(values[key]) && (values[key] as unknown[]).length === 0)
+    (Array.isArray(values[key]) &&
+      (values[key] as unknown[]).filter((a) => a).length === 0)
   ) {
     return {
       [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />,
