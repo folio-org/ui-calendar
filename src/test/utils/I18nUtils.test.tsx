@@ -13,13 +13,13 @@ beforeAll(() => {
   const TestComponent: FunctionComponent<Record<string, never>> = () => (
     <IntlContext.Consumer>{intlCapturer}</IntlContext.Consumer>
   );
-  render(withIntlConfiguration(<TestComponent />, "en-US", "EST"));
+  render(withIntlConfiguration(<TestComponent />, "en-US"));
 
   expect(intlCapturer.mock.calls).toHaveLength(1);
   intlEn = intlCapturer.mock.calls[0][0];
 
   intlCapturer.mockClear();
-  render(withIntlConfiguration(<TestComponent />, "fr-FR", "CET"));
+  render(withIntlConfiguration(<TestComponent />, "fr-FR"));
 
   expect(intlCapturer.mock.calls).toHaveLength(1);
   intlFr = intlCapturer.mock.calls[0][0];
