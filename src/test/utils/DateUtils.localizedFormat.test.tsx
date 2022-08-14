@@ -60,6 +60,8 @@ test("Localization time formatting methods return the expected results for fr-fr
 });
 
 test("Localization date formatting methods return the expected results for en-us", () => {
+  console.log(Dates.MAY_14.format());
+  console.log(intlEn);
   expect(getLocalizedDate(intlEn, Dates.MAY_14)).toBe("5/14/2000");
   expect(getLocalizedDate(intlEn, "2000-05-14")).toBe("5/14/2000");
 });
