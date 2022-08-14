@@ -97,7 +97,7 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-calendar ./translations/ui-calendar/compiled"
   },
   "devDependencies": {
-    "@folio/eslint-config-stripes": "git://github.com/ualibweb/eslint-config-stripes#esconf-19-typescript",
+    "@folio/eslint-config-stripes": "github:ualibweb/eslint-config-stripes#esconf-19-typescript",
     "@folio/stripes": "^7.0.0",
     "@folio/stripes-cli": "^2.0.0",
     "@folio/stripes-core": "^8.0.0",
