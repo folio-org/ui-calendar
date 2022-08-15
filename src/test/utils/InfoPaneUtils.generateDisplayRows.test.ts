@@ -1,7 +1,6 @@
-import "@testing-library/jest-dom";
 import { cleanup, render } from "@testing-library/react";
-import React, { FunctionComponent, ReactNode } from "react";
-import { IntlContext, IntlShape } from "react-intl";
+import { ReactNode } from "react";
+import { IntlShape } from "react-intl";
 import {
   generateDisplayRows,
   get247Rows,
@@ -10,6 +9,7 @@ import {
 import { LocaleWeekdayInfo } from "../../main/utils/WeekdayUtils";
 import * as Calendars from "../config/data/Calendars";
 import * as Weekdays from "../config/data/Weekdays";
+import getIntl from "../config/util/getIntl";
 import withIntlConfiguration from "../config/util/withIntlConfiguration";
 
 const EN_DASH = "\u{2013}";
@@ -18,17 +18,7 @@ const NBSP = "\u{00a0}";
 let intl: IntlShape;
 
 beforeAll(() => {
-  const intlCapturer = jest.fn();
-
-  const TestComponent: FunctionComponent<Record<string, never>> = () => (
-    <IntlContext.Consumer>{intlCapturer}</IntlContext.Consumer>
-  );
-  render(withIntlConfiguration(<TestComponent />, "en-US", "UTC"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intl = intlCapturer.mock.calls[0][0];
-
-  cleanup();
+  intl = getIntl("en-US", "UTC");
 });
 
 // random order to ensure display preferences are respected

@@ -1,6 +1,5 @@
-import { render } from "@testing-library/react";
 import validate from "../../../../main/forms/CalendarForm/validation/validate";
-import withIntlConfiguration from "../../../config/util/withIntlConfiguration";
+import expectRender from "../../../config/util/expectRender";
 
 const EMPTY_VALIDATE_PARAMETERS = [
   "",
@@ -69,7 +68,5 @@ test("Required error has the expected translation", () => {
   const validationResult = validate(...EMPTY_VALIDATE_PARAMETERS, {});
   expect(validationResult).toHaveProperty("name");
 
-  expect(
-    render(withIntlConfiguration(validationResult.name)).container
-  ).toHaveTextContent("Please fill this in to continue");
+  expectRender(validationResult.name).toBe("Please fill this in to continue");
 });

@@ -1,15 +1,7 @@
-import { render } from "@testing-library/react";
-import { ReactNode } from "react";
 import { validateDate } from "../../../../main/forms/CalendarForm/validation/validateDateTime";
-import withIntlConfiguration from "../../../config/util/withIntlConfiguration";
+import expectRender from "../../../config/util/expectRender";
 
 const localeDateFormat = "MM/DD/YYYY";
-
-function checkErrorMessage(error: ReactNode, expected: string) {
-  expect(render(withIntlConfiguration(error)).container.textContent).toBe(
-    expected
-  );
-}
 
 test("Missing ref results in no error (caught elsewhere)", () => {
   expect(
@@ -23,15 +15,13 @@ test("Missing or empty value results in missing error", () => {
 
   let validationResult = validateDate({}, "start-date", ref, localeDateFormat);
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please fill this in to continue"
   );
 
   validationResult = validateDate({}, "start-date", ref, localeDateFormat);
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please fill this in to continue"
   );
 
@@ -42,8 +32,7 @@ test("Missing or empty value results in missing error", () => {
     localeDateFormat
   );
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please fill this in to continue"
   );
 });
@@ -74,8 +63,7 @@ test("Improper inputs results in no error", () => {
     localeDateFormat
   );
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please enter a date in the MM/DD/YYYY format"
   );
 
@@ -86,8 +74,7 @@ test("Improper inputs results in no error", () => {
     localeDateFormat
   );
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please enter a date in the MM/DD/YYYY format"
   );
 
@@ -99,8 +86,7 @@ test("Improper inputs results in no error", () => {
     localeDateFormat
   );
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please enter a date in the MM/DD/YYYY format"
   );
 
@@ -113,8 +99,7 @@ test("Improper inputs results in no error", () => {
     localeDateFormat
   );
   expect(validationResult).toHaveProperty("start-date");
-  checkErrorMessage(
-    validationResult["start-date"],
+  expectRender(validationResult["start-date"]).toBe(
     "Please enter a date in the MM/DD/YYYY format"
   );
 });

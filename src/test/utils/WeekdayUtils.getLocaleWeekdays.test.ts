@@ -1,13 +1,11 @@
-import { cleanup, render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
-import React, { FunctionComponent } from "react";
-import { IntlContext, IntlShape } from "react-intl";
+import { IntlShape } from "react-intl";
 import {
   getLocaleWeekdays,
   useLocaleWeekdays,
 } from "../../main/utils/WeekdayUtils";
 import * as Weekdays from "../config/data/Weekdays";
-import withIntlConfiguration from "../config/util/withIntlConfiguration";
+import getIntl from "../config/util/getIntl";
 
 // United States
 let intlEn: IntlShape;
@@ -17,29 +15,9 @@ let intlFr: IntlShape;
 let intlAr: IntlShape;
 
 beforeAll(() => {
-  const intlCapturer = jest.fn();
-
-  const TestComponent: FunctionComponent<Record<string, never>> = () => (
-    <IntlContext.Consumer>{intlCapturer}</IntlContext.Consumer>
-  );
-  render(withIntlConfiguration(<TestComponent />, "en-US", "EST"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intlEn = intlCapturer.mock.calls[0][0];
-
-  intlCapturer.mockClear();
-  render(withIntlConfiguration(<TestComponent />, "fr-FR", "CET"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intlFr = intlCapturer.mock.calls[0][0];
-
-  intlCapturer.mockClear();
-  render(withIntlConfiguration(<TestComponent />, "ar-DZ", "CET"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intlAr = intlCapturer.mock.calls[0][0];
-
-  cleanup();
+  intlEn = getIntl("en-US", "EST");
+  intlFr = getIntl("fr-FR", "CET");
+  intlAr = getIntl("ar-DZ", "CET");
 });
 
 test("Locale weekdays are properly retrieved", () => {

@@ -1,6 +1,3 @@
-import "@testing-library/jest-dom";
-import { render as _render } from "@testing-library/react";
-import { ReactNode } from "react";
 import { IntlShape } from "react-intl";
 import dayjs from "../../main/utils/dayjs";
 import getCurrentStatus, {
@@ -10,7 +7,7 @@ import { LocaleWeekdayInfo } from "../../main/utils/WeekdayUtils";
 import * as Calendars from "../config/data/Calendars";
 import * as Dates from "../config/data/Dates";
 import * as Weekdays from "../config/data/Weekdays";
-import withIntlConfiguration from "../config/util/withIntlConfiguration";
+import expectRender from "../config/util/expectRender";
 
 const intl = {
   formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format("HH:mm")}||`),
@@ -28,10 +25,6 @@ const localeWeekdays: LocaleWeekdayInfo[] = [
   { weekday: Weekdays.Saturday, short: "XXXXX", long: "||Saturday||" },
 ];
 
-function render(el: ReactNode): HTMLElement {
-  return _render(withIntlConfiguration(el)).container;
-}
-
 test("24/7 calendars return as expected", () => {
   expect(
     getCurrentStatusNonFormatted(
@@ -43,14 +36,12 @@ test("24/7 calendars return as expected", () => {
     open: true,
     exceptional: false,
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.JUN_1,
-        Calendars.ALL_YEAR_SP_ONLINE_247
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.JUN_1,
+      Calendars.ALL_YEAR_SP_ONLINE_247
+    )
   ).toBe("Open");
 });

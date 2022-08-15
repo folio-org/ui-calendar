@@ -1,25 +1,16 @@
 import "@testing-library/jest-dom";
 import { cleanup, render } from "@testing-library/react";
-import React, { FunctionComponent, ReactNode } from "react";
-import { IntlContext, IntlShape } from "react-intl";
+import { ReactNode } from "react";
+import { IntlShape } from "react-intl";
 import { generateExceptionalOpeningRows } from "../../main/utils/InfoPaneUtils";
 import * as Calendars from "../config/data/Calendars";
+import getIntl from "../config/util/getIntl";
 import withIntlConfiguration from "../config/util/withIntlConfiguration";
 
 let intl: IntlShape;
 
 beforeAll(() => {
-  const intlCapturer = jest.fn();
-
-  const TestComponent: FunctionComponent<Record<string, never>> = () => (
-    <IntlContext.Consumer>{intlCapturer}</IntlContext.Consumer>
-  );
-  render(withIntlConfiguration(<TestComponent />, "en-US", "UTC"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intl = intlCapturer.mock.calls[0][0];
-
-  cleanup();
+  intl = getIntl("en-US", "UTC");
 });
 
 function renderToTextContent(elements: ReactNode[][]): (string | null)[][] {

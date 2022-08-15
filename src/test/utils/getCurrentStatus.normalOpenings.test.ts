@@ -1,6 +1,3 @@
-import "@testing-library/jest-dom";
-import { render as _render } from "@testing-library/react";
-import { ReactNode } from "react";
 import { IntlShape } from "react-intl";
 import { Calendar } from "../../main/types/types";
 import dayjs from "../../main/utils/dayjs";
@@ -10,7 +7,7 @@ import getCurrentStatus, {
 import { LocaleWeekdayInfo } from "../../main/utils/WeekdayUtils";
 import * as Dates from "../config/data/Dates";
 import * as Weekdays from "../config/data/Weekdays";
-import withIntlConfiguration from "../config/util/withIntlConfiguration";
+import expectRender from "../config/util/expectRender";
 
 const intl = {
   formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format("HH:mm")}||`),
@@ -38,10 +35,6 @@ const calendarTemplate: Calendar = {
   exceptions: [],
 };
 
-function render(el: ReactNode): HTMLElement {
-  return _render(withIntlConfiguration(el)).container;
-}
-
 test("No normal openings returns appropriate closure info", () => {
   const noNormalOpeningCalendar = calendarTemplate;
   expect(
@@ -50,15 +43,8 @@ test("No normal openings returns appropriate closure info", () => {
     open: false,
     exceptional: false,
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.JUN_1,
-        noNormalOpeningCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.JUN_1, noNormalOpeningCalendar)
   ).toBe("Closed");
 });
 
@@ -84,15 +70,13 @@ test("No normal openings on the day returns appropriate closure info", () => {
     open: false,
     exceptional: false,
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        noNormalOpeningsOnMondayCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1,
+      noNormalOpeningsOnMondayCalendar
+    )
   ).toBe("Closed");
 });
 
@@ -121,15 +105,8 @@ test("Opening closing more than a day from now returns appropriate status", () =
       time: "||22:00||",
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        closingLongAwayCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, closingLongAwayCalendar)
   ).toBe("Open until ||Saturday|| at ||22:00||");
 });
 
@@ -158,15 +135,8 @@ test("Opening closing tomorrow returns appropriate status", () => {
       time: "||22:00||",
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        closingTomorrowCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, closingTomorrowCalendar)
   ).toBe("Open until tomorrow at ||22:00||");
 });
 
@@ -195,15 +165,8 @@ test("Opening closing the same day returns appropriate status", () => {
       time: "||22:00||",
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        closingTonightCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, closingTonightCalendar)
   ).toBe("Open until ||22:00||");
 });
 
@@ -226,15 +189,8 @@ test("Closed opening more than a day away returns appropriate status", () => {
     open: false,
     exceptional: false,
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingNextWeekCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingNextWeekCalendar)
   ).toBe("Closed");
 });
 
@@ -257,15 +213,8 @@ test("Closed opening tomorrow returns appropriate status", () => {
     open: false,
     exceptional: false,
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingTomorrowCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingTomorrowCalendar)
   ).toBe("Closed");
 });
 
@@ -294,15 +243,8 @@ test("Closed opening the same day returns appropriate status", () => {
       time: "||05:00||",
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingTonightCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingTonightCalendar)
   ).toBe("Closed until ||05:00||");
 });
 
@@ -329,14 +271,12 @@ test("Closed after last opening returns appropriate status", () => {
     open: false,
     exceptional: false,
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1.hour(23),
-        openingTonightCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1.hour(23),
+      openingTonightCalendar
+    )
   ).toBe("Closed");
 });

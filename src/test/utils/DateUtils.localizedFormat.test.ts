@@ -1,32 +1,15 @@
-import { cleanup, render } from "@testing-library/react";
-import React, { FunctionComponent } from "react";
-import { IntlContext, IntlShape } from "react-intl";
+import { IntlShape } from "react-intl";
 import { getLocalizedDate, getLocalizedTime } from "../../main/utils/DateUtils";
 import dayjs from "../../main/utils/dayjs";
 import * as Dates from "../config/data/Dates";
-import withIntlConfiguration from "../config/util/withIntlConfiguration";
+import getIntl from "../config/util/getIntl";
 
 let intlEn: IntlShape;
 let intlFr: IntlShape;
 
 beforeAll(() => {
-  const intlCapturer = jest.fn();
-
-  const TestComponent: FunctionComponent<Record<string, never>> = () => (
-    <IntlContext.Consumer>{intlCapturer}</IntlContext.Consumer>
-  );
-  render(withIntlConfiguration(<TestComponent />, "en-US", "EST"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intlEn = intlCapturer.mock.calls[0][0];
-
-  intlCapturer.mockClear();
-  render(withIntlConfiguration(<TestComponent />, "fr-FR", "CET"));
-
-  expect(intlCapturer.mock.calls).toHaveLength(1);
-  intlFr = intlCapturer.mock.calls[0][0];
-
-  cleanup();
+  intlEn = getIntl("en-US", "EST");
+  intlFr = getIntl("fr-FR", "CET");
 });
 
 test("Localization time formatting methods return the expected results", () => {

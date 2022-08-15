@@ -1,6 +1,3 @@
-import "@testing-library/jest-dom";
-import { render as _render } from "@testing-library/react";
-import { ReactNode } from "react";
 import { IntlShape } from "react-intl";
 import { Calendar } from "../../main/types/types";
 import dayjs from "../../main/utils/dayjs";
@@ -11,7 +8,7 @@ import { LocaleWeekdayInfo } from "../../main/utils/WeekdayUtils";
 import * as Calendars from "../config/data/Calendars";
 import * as Dates from "../config/data/Dates";
 import * as Weekdays from "../config/data/Weekdays";
-import withIntlConfiguration from "../config/util/withIntlConfiguration";
+import expectRender from "../config/util/expectRender";
 
 const intl = {
   formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format("HH:mm")}||`),
@@ -39,10 +36,6 @@ const calendarTemplate: Calendar = {
   exceptions: [],
 };
 
-function render(el: ReactNode): HTMLElement {
-  return _render(withIntlConfiguration(el)).container;
-}
-
 test("Closed exceptions return as such", () => {
   expect(
     getCurrentStatusNonFormatted(intl, Dates.JUN_1, Calendars.SUMMER_SP_1_2)
@@ -51,15 +44,8 @@ test("Closed exceptions return as such", () => {
     exceptional: true,
     exceptionName: "Sample Holiday",
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.JUN_1,
-        Calendars.SUMMER_SP_1_2
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.JUN_1, Calendars.SUMMER_SP_1_2)
   ).toBe("Closed (Sample Holiday)");
 });
 
@@ -96,15 +82,13 @@ test("Opening exception closing more than week from now returns appropriate stat
       weekday: Weekdays.Wednesday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_14,
-        closingLongAwayCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_14,
+      closingLongAwayCalendar
+    )
   ).toBe("Open (Sample exception) until ||2000-05-31|| at ||22:00||");
 });
 
@@ -141,15 +125,13 @@ test("Opening exception closing next week returns appropriate status", () => {
       weekday: Weekdays.Friday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_14,
-        closingNextWeekCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_14,
+      closingNextWeekCalendar
+    )
   ).toBe("Open (Sample exception) until ||Friday|| at ||22:00||");
 });
 
@@ -186,15 +168,13 @@ test("Opening exception closing tomorrow returns appropriate status", () => {
       weekday: Weekdays.Monday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_14,
-        closingTomorrowCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_14,
+      closingTomorrowCalendar
+    )
   ).toBe("Open (Sample exception) until tomorrow at ||22:00||");
 });
 
@@ -231,15 +211,8 @@ test("Opening exception closing the same day returns appropriate status", () => 
       weekday: Weekdays.Sunday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_14,
-        closingTonightCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_14, closingTonightCalendar)
   ).toBe("Open (Sample exception) until ||22:00||");
 });
 
@@ -269,9 +242,8 @@ test("Open exceptions with no more openings return closed with no next", () => {
     exceptional: true,
     exceptionName: "Sample exception",
   });
-  expect(
-    render(getCurrentStatus(intl, localeWeekdays, Dates.JUN_1, closedHereafter))
-      .textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.JUN_1, closedHereafter)
   ).toBe("Closed (Sample exception)");
 });
 
@@ -308,15 +280,8 @@ test("Closed exception opening more than week from now returns appropriate statu
       weekday: Weekdays.Sunday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingLongAwayCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingLongAwayCalendar)
   ).toBe("Closed (Sample exception) until ||2000-05-14|| at ||02:00||");
 });
 
@@ -353,15 +318,8 @@ test("Closed exception opening next week returns appropriate status", () => {
       weekday: Weekdays.Friday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingNextWeekCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingNextWeekCalendar)
   ).toBe("Closed (Sample exception) until ||Friday|| at ||02:00||");
 });
 
@@ -398,15 +356,8 @@ test("Closed exception opening tomorrow returns appropriate status", () => {
       weekday: Weekdays.Tuesday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingTomorrowCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingTomorrowCalendar)
   ).toBe("Closed (Sample exception) until tomorrow at ||02:00||");
 });
 
@@ -443,14 +394,7 @@ test("Closed exception opening the same day returns appropriate status", () => {
       weekday: Weekdays.Monday,
     },
   });
-  expect(
-    render(
-      getCurrentStatus(
-        intl,
-        localeWeekdays,
-        Dates.MAY_1,
-        openingTonightCalendar
-      )
-    ).textContent
+  expectRender(
+    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingTonightCalendar)
   ).toBe("Closed (Sample exception) until ||02:00||");
 });

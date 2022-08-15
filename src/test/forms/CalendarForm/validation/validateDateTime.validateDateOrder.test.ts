@@ -1,6 +1,5 @@
-import { render } from "@testing-library/react";
 import { validateDateOrder } from "../../../../main/forms/CalendarForm/validation/validateDateTime";
-import withIntlConfiguration from "../../../config/util/withIntlConfiguration";
+import expectRender from "../../../config/util/expectRender";
 
 test("Missing values results in no error (caught elsewhere)", () => {
   expect(validateDateOrder({})).toStrictEqual({});
@@ -37,7 +36,7 @@ test("Error message contains proper translation", () => {
   });
   expect(validationResult).toHaveProperty("end-date");
 
-  expect(
-    render(withIntlConfiguration(validationResult["end-date"])).container
-  ).toHaveTextContent("End date must not be before the start date");
+  expectRender(validationResult["end-date"]).toBe(
+    "End date must not be before the start date"
+  );
 });
