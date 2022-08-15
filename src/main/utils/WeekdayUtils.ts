@@ -122,7 +122,7 @@ export function getWeekdayRange(start: Weekday, end: Weekday): Weekday[] {
 /**
  * Get all weekdays covered by a calendar's opening.  Openings that wrap around onto the
  * same day (e.g. M 12:00 - M 11:59) will include that weekday on both sides
- * (e.g. MTWRFSNM)
+ * (e.g. M T W R F S N M)
  */
 export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
   if (opening.startDay === opening.endDay) {
