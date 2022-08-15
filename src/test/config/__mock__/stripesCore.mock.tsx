@@ -11,7 +11,7 @@ jest.mock(
   "@folio/stripes/core",
   () => {
     const STRIPES = {
-      actionNames: [],
+      actionNames: [] as any[],
       clone: () => ({ ...STRIPES }),
       connect: () => ({}),
       config: {},
@@ -48,7 +48,7 @@ jest.mock(
         },
       },
       withOkapi: true,
-    };
+    } as unknown as StripesType;
 
     return {
       ...jest.requireActual("@folio/stripes/core"),
@@ -97,8 +97,8 @@ jest.mock(
           return (
             <Component
               {...rest}
-              mutator={fakeMutator}
-              resources={fakeResources}
+              mutator={fakeMutator as any}
+              resources={fakeResources as any}
             />
           );
         },
