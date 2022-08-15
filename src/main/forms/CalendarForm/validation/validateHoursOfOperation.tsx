@@ -14,7 +14,7 @@ import { InnerFieldRefs } from "../types";
 import { isTimeProper } from "./validateDateTime";
 
 /** Ensure normal openings have filled in times/days */
-function validateHoursOfOperationEmpty(
+export function validateHoursOfOperationEmpty(
   rows: HoursOfOperationRowState[]
 ): HoursOfOperationErrors | undefined {
   const emptyErrors: HoursOfOperationErrors["empty"] = {
@@ -63,7 +63,7 @@ function validateHoursOfOperationEmpty(
 }
 
 /** Ensure times are valid */
-function validateHoursOfOperationTimes(
+export function validateHoursOfOperationTimes(
   rows: HoursOfOperationRowState[],
   timeFieldRefs: InnerFieldRefs["hoursOfOperation"],
   localeTimeFormat: string
@@ -118,7 +118,7 @@ function validateHoursOfOperationTimes(
 }
 
 /** Split rows into weekday ranges */
-function splitRowsIntoWeekdays(
+export function splitRowsIntoWeekdays(
   rows: HoursOfOperationRowState[]
 ): Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]> {
   const split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]> = {
@@ -179,7 +179,7 @@ function splitRowsIntoWeekdays(
 }
 
 /** Check for hours of operation overlaps */
-function validateHoursOfOperationOverlaps(
+export function validateHoursOfOperationOverlaps(
   split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]>
 ): HoursOfOperationErrors | undefined {
   const conflicts = new Set<number>();
