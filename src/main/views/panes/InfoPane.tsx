@@ -46,7 +46,9 @@ export interface InfoPaneProps {
   dataRepository: DataRepository;
 }
 
-export const InfoPane: FunctionComponent<InfoPaneProps> = (props) => {
+export const InfoPane: FunctionComponent<InfoPaneProps> = (
+  props: InfoPaneProps
+) => {
   const intl = useIntl();
   const stripes = useStripes();
   const localeWeekdays = useLocaleWeekdays(intl);
