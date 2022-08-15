@@ -8,6 +8,7 @@ module.exports = {
   transform: {
     "^.+\\.(t|j)sx?$": "ts-jest",
   },
+  transformIgnorePatterns: ["node_modules/(?!@folio)"],
 
   moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json"],
 
