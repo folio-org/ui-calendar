@@ -6,6 +6,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 import { FormattedDate, useIntl } from "react-intl";
 import { CSSPropertiesWithVars } from "../types/css";
 import {
+  getFirstDayOfWeek,
   LocaleWeekdayInfo,
   useLocaleWeekdays,
   WEEKDAYS,
@@ -21,11 +22,15 @@ function isSameMonth(a: Dayjs, b: Dayjs): boolean {
 }
 
 export const getDateArray = memoizee(
-  (monthBasis: Dayjs, localeWeekdays: LocaleWeekdayInfo[]): Dayjs[] => {
+  (
+    locale: string,
+    monthBasis: Dayjs,
+    localeWeekdays: LocaleWeekdayInfo[]
+  ): Dayjs[] => {
     // start
     let date = monthBasis.startOf("month");
     // if the month starts at the beginning of the week, add a full row above of the previous month
-    if (date.weekday() === 0) {
+    if (date.weekday() === getFirstDayOfWeek(locale)) {
       date = date.subtract(1, "week");
     }
 
@@ -79,29 +84,31 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 
-  const displayDates = getDateArray(monthBasis, localeWeekdays).map(
-    (date: Dayjs) => {
-      const dateString = date.format("YYYY-MM-DD");
-      let contents: ReactNode = <Loading />;
-      if (dateString in events) {
-        contents = events[dateString];
-      }
-
-      return (
-        <div
-          className={classNames(
-            isSameMonth(date, monthBasis) ? "" : css.adjacentMonth,
-            css.calendarDay
-          )}
-        >
-          <span key={dateString} className={css.dayLabel}>
-            <FormattedDate value={date.toDate()} day="numeric" />
-          </span>
-          {contents}
-        </div>
-      );
+  const displayDates = getDateArray(
+    intl.locale,
+    monthBasis,
+    localeWeekdays
+  ).map((date: Dayjs) => {
+    const dateString = date.format("YYYY-MM-DD");
+    let contents: ReactNode = <Loading />;
+    if (dateString in events) {
+      contents = events[dateString];
     }
-  );
+
+    return (
+      <div
+        className={classNames(
+          isSameMonth(date, monthBasis) ? "" : css.adjacentMonth,
+          css.calendarDay
+        )}
+      >
+        <span key={dateString} className={css.dayLabel}>
+          <FormattedDate value={date.toDate()} day="numeric" />
+        </span>
+        {contents}
+      </div>
+    );
+  });
 
   return (
     <div

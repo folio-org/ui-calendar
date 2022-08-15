@@ -32,14 +32,15 @@ export const MonthlyCalendarView: FunctionComponent<
   requestEvents,
 }: MonthlyCalendarViewProps) => {
   const [monthBasis, setMonthBasis] = useState(dayjs().startOf("month")); // start at current date
-  const localeWeekdays = useLocaleWeekdays(useIntl());
+  const intl = useIntl();
+  const localeWeekdays = useLocaleWeekdays(intl);
 
   useEffect(() => {
     (async () => {
       if (servicePoint === undefined) {
         return;
       }
-      const dateArray = getDateArray(monthBasis, localeWeekdays);
+      const dateArray = getDateArray(intl.locale, monthBasis, localeWeekdays);
       if (events === undefined) {
         requestEvents(
           dateArray[0],
@@ -62,7 +63,7 @@ export const MonthlyCalendarView: FunctionComponent<
         servicePoint?.id
       );
     })();
-  }, [monthBasis, servicePoint, events, requestEvents, localeWeekdays]);
+  }, [monthBasis, servicePoint, events, requestEvents, localeWeekdays, intl]);
 
   if (servicePoint === undefined) {
     return null;
