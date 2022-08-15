@@ -308,3 +308,12 @@ declare module "@folio/stripes-smart-components" {
 
   export class Settings extends Component<SettingsProps> {}
 }
+
+declare module "@folio/stripes-components/lib/Datepicker/staticFirstWeekDay" {
+  const staticData: Record<
+    "sat" | "sun" | "mon" | "tue" | "wed" | "thu" | "fri",
+    string[]
+  >;
+
+  export default staticData;
+}
