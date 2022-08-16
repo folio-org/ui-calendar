@@ -91,7 +91,9 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
 
     const weekdays: LocaleWeekdayInfo[] = [];
     for (let i = 0; i < 7; i++) {
-      const day = dayjs().day((firstDay + i) % 7);
+      const day = dayjs()
+        .startOf("day")
+        .day((firstDay + i) % 7);
       weekdays.push({
         weekday: WEEKDAY_INDEX[day.day()],
         short: intl.formatDate(day.toDate(), { weekday: "short" }),
