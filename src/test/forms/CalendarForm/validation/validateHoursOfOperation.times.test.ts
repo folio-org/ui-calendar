@@ -34,9 +34,6 @@ test("Otherwise invalid closed rows results in valid (checked elsewhere, no time
 });
 
 test("Invalid row causes proper invalid time errors", () => {
-  const sampleInput = document.createElement("input");
-  sampleInput.value = "invalid";
-
   const validationResult = validateHoursOfOperationTimes(
     [
       {
@@ -49,13 +46,55 @@ test("Invalid row causes proper invalid time errors", () => {
       },
     ],
     {
-      startTime: { 0: sampleInput },
-      endTime: { 0: sampleInput },
+      startTime: { 0: { value: "Invalid" } as HTMLInputElement },
+      endTime: { 0: { value: "Invalid" } as HTMLInputElement },
     },
     localeTimeFormat12
   );
   expect(validationResult).toHaveProperty("invalidTimes.startTime.0");
   expect(validationResult).toHaveProperty("invalidTimes.endTime.0");
+});
+
+test("Missing refs cause no invalid time errors", () => {
+  const validationResult = validateHoursOfOperationTimes(
+    [
+      {
+        i: 0,
+        type: RowType.Open,
+        startDay: undefined,
+        startTime: "09:00",
+        endDay: undefined,
+        endTime: "23:00",
+      },
+    ],
+    {
+      startTime: {},
+      endTime: {},
+    },
+    localeTimeFormat12
+  );
+  expect(validationResult).toBeUndefined();
+});
+
+test("Invalid refs cause no invalid time errors", () => {
+  const validationResult = validateHoursOfOperationTimes(
+    [
+      {
+        i: 0,
+        type: RowType.Open,
+        startDay: undefined,
+        startTime: "09:00",
+        endDay: undefined,
+        endTime: "23:00",
+      },
+    ],
+    {
+      startTime: { 0: {} as HTMLInputElement },
+      endTime: { 0: {} as HTMLInputElement },
+    },
+    localeTimeFormat12
+  );
+  expect(validationResult).toBeUndefined();
 });
 
 test("Mixed validity rows causes proper invalid time errors", () => {
