@@ -81,7 +81,7 @@ export function validateHoursOfOperationTimes(
       !isTimeProper(
         localeTimeFormat,
         row.startTime as string,
-        timeFieldRefs.startTime?.[row.i]?.value
+        timeFieldRefs.startTime[row.i]?.value
       )
     ) {
       invalidTimeErrors.startTime[row.i] = (
@@ -95,7 +95,7 @@ export function validateHoursOfOperationTimes(
       !isTimeProper(
         localeTimeFormat,
         row.endTime as string,
-        timeFieldRefs.endTime?.[row.i]?.value
+        timeFieldRefs.endTime[row.i]?.value
       )
     ) {
       invalidTimeErrors.endTime[row.i] = (
