@@ -105,7 +105,7 @@ export default async function onSubmit(
           submissionErrors["service-points"] = (
             <>
               <FormattedMessage
-                id="calendarForm.error.servicePointConflict"
+                id="ui-calendar.calendarForm.error.servicePointConflict"
                 values={{
                   list: formatList(
                     intl,
