@@ -58,7 +58,7 @@ function validateExceptionInnerRowEmpty(
 }
 
 /** Validate that exception rows as a whole are not empty */
-function validateExceptionsEmpty(
+export function validateExceptionsEmpty(
   rows: ExceptionRowState[],
   innerFieldRefs: InnerFieldRefs["exceptions"]
 ): ExceptionFieldErrors | undefined {
@@ -194,7 +194,7 @@ function validateExceptionInnerRowDatesAndTimes(
 }
 
 /** Validate all inner dates/times within each overall row */
-function validateExceptionsDatesAndTimes(
+export function validateExceptionsDatesAndTimes(
   rows: ExceptionRowState[],
   innerFieldRefs: InnerFieldRefs["exceptions"],
   localeDateFormat: string,
@@ -235,7 +235,7 @@ function validateExceptionsDatesAndTimes(
 }
 
 /** Check overlaps between exception rows */
-function validateExceptionInterOverlaps(
+export function validateExceptionInterOverlaps(
   rows: ExceptionRowState[]
 ): ExceptionFieldErrors | undefined {
   const interConflicts: ExceptionFieldErrors["interConflicts"] =
@@ -276,7 +276,9 @@ function validateExceptionInterOverlaps(
 }
 
 /** Check overlaps between inner exception rows */
-function getExceptionRowIntraOverlap(row: ExceptionRowState): Set<number> {
+export function getExceptionRowIntraOverlap(
+  row: ExceptionRowState
+): Set<number> {
   const overlappingRows = new Set<number>();
 
   for (let i = 0; i < row.rows.length - 1; i++) {
@@ -299,7 +301,7 @@ function getExceptionRowIntraOverlap(row: ExceptionRowState): Set<number> {
 }
 
 /** Validate overlaps between inside exception rows */
-function validateExceptionIntraOverlaps(
+export function validateExceptionIntraOverlaps(
   rows: ExceptionRowState[]
 ): ExceptionFieldErrors | undefined {
   const intraConflicts: ExceptionFieldErrors["intraConflicts"] = {};
