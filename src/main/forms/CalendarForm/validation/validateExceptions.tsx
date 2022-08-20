@@ -23,7 +23,7 @@ function validateExceptionInnerRowEmpty(
   if (
     innerRow.startDate === undefined ||
     innerRow.startDate === "" ||
-    innerFieldRefs.startDate?.[row.i]?.[innerRow.i]?.value === undefined
+    innerFieldRefs.startDate[row.i]?.[innerRow.i]?.value === undefined
   ) {
     emptyErrors.startDate[row.i][innerRow.i] = (
       <FormattedMessage id="stripes-core.label.missingRequiredField" />
@@ -33,7 +33,7 @@ function validateExceptionInnerRowEmpty(
   if (
     innerRow.endDate === undefined ||
     innerRow.endDate === "" ||
-    innerFieldRefs.endDate?.[row.i]?.[innerRow.i]?.value === undefined
+    innerFieldRefs.endDate[row.i]?.[innerRow.i]?.value === undefined
   ) {
     emptyErrors.endDate[row.i][innerRow.i] = (
       <FormattedMessage id="stripes-core.label.missingRequiredField" />
@@ -114,7 +114,7 @@ function validateExceptionInnerRowDatesAndTimes(
   let hasError = _hasError;
   if (
     dayjs(innerRow.startDate).format(localeDateFormat) !==
-    innerFieldRefs.startDate?.[row.i]?.[innerRow.i]?.value
+    innerFieldRefs.startDate[row.i]?.[innerRow.i]?.value
   ) {
     invalidErrors.startDate[row.i][innerRow.i] = (
       <FormattedMessage
@@ -126,7 +126,7 @@ function validateExceptionInnerRowDatesAndTimes(
   }
   if (
     dayjs(innerRow.endDate).format(localeDateFormat) !==
-    innerFieldRefs.endDate?.[row.i]?.[innerRow.i]?.value
+    innerFieldRefs.endDate[row.i]?.[innerRow.i]?.value
   ) {
     invalidErrors.endDate[row.i][innerRow.i] = (
       <FormattedMessage
@@ -150,7 +150,7 @@ function validateExceptionInnerRowDatesAndTimes(
       !isTimeProper(
         localeTimeFormat,
         innerRow.startTime as string,
-        innerFieldRefs.startTime?.[row.i]?.[innerRow.i]?.value
+        innerFieldRefs.startTime[row.i]?.[innerRow.i]?.value
       )
     ) {
       invalidErrors.startTime[row.i][innerRow.i] = (
@@ -165,7 +165,7 @@ function validateExceptionInnerRowDatesAndTimes(
       !isTimeProper(
         localeTimeFormat,
         innerRow.endTime as string,
-        innerFieldRefs.endTime?.[row.i]?.[innerRow.i]?.value
+        innerFieldRefs.endTime[row.i]?.[innerRow.i]?.value
       )
     ) {
       invalidErrors.endTime[row.i][innerRow.i] = (
