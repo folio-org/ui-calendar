@@ -23,7 +23,7 @@ function validateExceptionInnerRowEmpty(
   if (
     innerRow.startDate === undefined ||
     innerRow.startDate === "" ||
-    !(innerFieldRefs.startDate?.[row.i]?.[innerRow.i] instanceof HTMLElement)
+    innerFieldRefs.startDate?.[row.i]?.[innerRow.i]?.value === undefined
   ) {
     emptyErrors.startDate[row.i][innerRow.i] = (
       <FormattedMessage id="stripes-core.label.missingRequiredField" />
@@ -33,7 +33,7 @@ function validateExceptionInnerRowEmpty(
   if (
     innerRow.endDate === undefined ||
     innerRow.endDate === "" ||
-    !(innerFieldRefs.endDate?.[row.i]?.[innerRow.i] instanceof HTMLElement)
+    innerFieldRefs.endDate?.[row.i]?.[innerRow.i]?.value === undefined
   ) {
     emptyErrors.endDate[row.i][innerRow.i] = (
       <FormattedMessage id="stripes-core.label.missingRequiredField" />
