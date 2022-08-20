@@ -245,6 +245,21 @@ test("Bad ref inner opening row dates are properly reported", () => {
   const validationResult = validateExceptionsEmpty(
     [
       {
+        i: 1,
+        lastRowI: 3,
+        type: RowType.Open,
+        name: " ",
+        rows: [
+          {
+            i: 3,
+            startDate: "2000-01-01",
+            startTime: "00:00",
+            endDate: "2000-01-01",
+            endTime: "09:00",
+          },
+        ],
+      },
+      {
         i: 2,
         lastRowI: 3,
         type: RowType.Open,
@@ -259,22 +274,45 @@ test("Bad ref inner opening row dates are properly reported", () => {
           },
         ],
       },
+      {
+        i: 3,
+        lastRowI: 0,
+        type: RowType.Open,
+        name: "",
+        rows: [
+          {
+            i: 0,
+            startDate: "2000-01-01",
+            startTime: "00:00",
+            endDate: "2000-01-01",
+            endTime: "09:00",
+          },
+        ],
+      },
     ],
     {
-      startDate: {},
-      startTime: {},
-      endDate: {},
-      endTime: {},
+      startDate: { 2: {}, 3: { 0: {} as HTMLInputElement } },
+      startTime: { 2: {}, 3: { 0: {} as HTMLInputElement } },
+      endDate: { 2: {}, 3: { 0: {} as HTMLInputElement } },
+      endTime: { 2: {}, 3: { 0: {} as HTMLInputElement } },
     }
   );
+  expect(validationResult).toHaveProperty("empty.startDate.1.3");
+  expect(validationResult).not.toHaveProperty("empty.startTime.1.3");
+  expect(validationResult).toHaveProperty("empty.endDate.1.3");
+  expect(validationResult).not.toHaveProperty("empty.endTime.1.3");
+
   expect(validationResult).toHaveProperty("empty.startDate.2.3");
   expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
   expect(validationResult).toHaveProperty("empty.endDate.2.3");
   expect(validationResult).not.toHaveProperty("empty.endTime.2.3");
+
+  expect(validationResult).toHaveProperty("empty.startDate.3.0");
+  expect(validationResult).not.toHaveProperty("empty.startTime.3.0");
+  expect(validationResult).toHaveProperty("empty.endDate.3.0");
+  expect(validationResult).not.toHaveProperty("empty.endTime.3.0");
+
   expectRender(validationResult?.empty?.startDate[2][3]).toBe(
-    "Please fill this in to continue"
-  );
-  expectRender(validationResult?.empty?.endDate[2][3]).toBe(
     "Please fill this in to continue"
   );
 });
