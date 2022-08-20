@@ -145,7 +145,6 @@ test("Bad ref inner closure rows are properly reported", () => {
     ],
     { startDate: {}, startTime: {}, endDate: {}, endTime: {} }
   );
-  console.log(validationResult);
   expect(validationResult).toHaveProperty("empty.startDate.2.3");
   expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
   expect(validationResult).toHaveProperty("empty.endDate.2.3");
