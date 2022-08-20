@@ -158,7 +158,7 @@ test("Bad ref inner closure rows are properly reported", () => {
 });
 
 test("Undefined inner opening rows are properly reported", () => {
-  const validationResult = validateExceptionsEmpty(
+  let validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
@@ -196,6 +196,36 @@ test("Undefined inner opening rows are properly reported", () => {
   expectRender(validationResult?.empty?.endTime[2][3]).toBe(
     "Please fill this in to continue"
   );
+
+  validationResult = validateExceptionsEmpty(
+    [
+      {
+        i: 2,
+        lastRowI: 3,
+        type: RowType.Open,
+        name: " ",
+        rows: [
+          {
+            i: 3,
+            startDate: undefined,
+            startTime: undefined,
+            endDate: "foo",
+            endTime: undefined,
+          },
+        ],
+      },
+    ],
+    {
+      startDate: {},
+      startTime: {},
+      endDate: { 2: { 3: document.createElement("input") } },
+      endTime: {},
+    }
+  );
+  expect(validationResult).toHaveProperty("empty.startDate.2.3");
+  expect(validationResult).toHaveProperty("empty.startTime.2.3");
+  expect(validationResult).not.toHaveProperty("empty.endDate.2.3");
+  expect(validationResult).toHaveProperty("empty.endTime.2.3");
 });
 
 test("Empty string open date rows are properly reported", () => {
