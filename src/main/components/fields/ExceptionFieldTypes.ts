@@ -44,5 +44,5 @@ export type ExceptionFieldErrors = RequireExactlyOne<{
     >;
   };
   interConflicts?: Set<number>;
-  intraConflicts?: Record<number, Record<number, true>>;
+  intraConflicts?: Record<number, Set<number>>;
 }>;

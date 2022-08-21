@@ -312,11 +312,11 @@ export function validateExceptionIntraOverlaps(
 
     const innerOverlaps = getExceptionRowIntraOverlap(row);
     if (innerOverlaps.size) {
-      intraConflicts[row.i] = {};
+      intraConflicts[row.i] = new Set<number>();
       hasError = true;
 
       innerOverlaps.forEach((innerI) => {
-        intraConflicts[row.i][innerI] = true;
+        intraConflicts[row.i].add(innerI);
       });
     }
   });

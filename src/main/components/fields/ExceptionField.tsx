@@ -100,8 +100,9 @@ function getDateTimeFields({
         key={`sd-${innerRow.i}`}
         className={classNames(
           {
-            [css.conflictCell]:
-              props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+            [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+              innerRow.i
+            ),
           },
           cssHiddenErrorField.hiddenErrorFieldWrapper
         )}
@@ -136,8 +137,9 @@ function getDateTimeFields({
       <TimeField
         key={`st-${innerRow.i}`}
         className={classNames({
-          [css.conflictCell]:
-            props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+          [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+            innerRow.i
+          ),
         })}
         display={row.type === RowType.Open}
         value={innerRow.startTime}
@@ -167,8 +169,9 @@ function getDateTimeFields({
         key={`ed-${innerRow.i}`}
         className={classNames(
           {
-            [css.conflictCell]:
-              props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+            [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+              innerRow.i
+            ),
           },
           cssHiddenErrorField.hiddenErrorFieldWrapper
         )}
@@ -203,8 +206,9 @@ function getDateTimeFields({
       <TimeField
         key={`et-${innerRow.i}`}
         className={classNames({
-          [css.conflictCell]:
-            props.error?.intraConflicts?.[row.i]?.[innerRow.i],
+          [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+            innerRow.i
+          ),
         })}
         display={row.type === RowType.Open}
         value={innerRow.endTime}
