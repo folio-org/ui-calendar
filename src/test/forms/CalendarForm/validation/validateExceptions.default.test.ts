@@ -1,10 +1,10 @@
-import RowType from "../../../../main/components/fields/RowType";
-import validateExceptions from "../../../../main/forms/CalendarForm/validation/validateExceptions";
+import RowType from '../../../../main/components/fields/RowType';
+import validateExceptions from '../../../../main/forms/CalendarForm/validation/validateExceptions';
 
-const localeDateFormat = "MM/DD/YYYY";
-const localeTimeFormat12 = "hh:mm A";
+const localeDateFormat = 'MM/DD/YYYY';
+const localeTimeFormat12 = 'hh:mm A';
 
-test("No rows/undefined rows is a valid state", () => {
+test('No rows/undefined rows is a valid state', () => {
   // both of these forms indicate no error
   expect(
     validateExceptions(
@@ -13,7 +13,7 @@ test("No rows/undefined rows is a valid state", () => {
       localeDateFormat,
       localeTimeFormat12
     )
-  ).toHaveProperty("exceptions", undefined);
+  ).toHaveProperty('exceptions', undefined);
   expect(
     validateExceptions(
       undefined,
@@ -24,7 +24,7 @@ test("No rows/undefined rows is a valid state", () => {
   ).toStrictEqual({});
 });
 
-test("Empty errors are reported alone", () => {
+test('Empty errors are reported alone', () => {
   expect(
     validateExceptions(
       [
@@ -32,13 +32,13 @@ test("Empty errors are reported alone", () => {
           i: 2,
           lastRowI: 3,
           type: RowType.Closed,
-          name: " ",
+          name: ' ',
           rows: [
             {
               i: 3,
-              startDate: "",
+              startDate: '',
               startTime: undefined,
-              endDate: "",
+              endDate: '',
               endTime: undefined,
             },
           ],
@@ -48,56 +48,56 @@ test("Empty errors are reported alone", () => {
       localeDateFormat,
       localeTimeFormat12
     )
-  ).toHaveProperty("exceptions.empty.startDate.2.3");
+  ).toHaveProperty('exceptions.empty.startDate.2.3');
 });
 
-test("Invalid errors are reported appropriately", () => {
+test('Invalid errors are reported appropriately', () => {
   expect(
     validateExceptions(
       [
         {
           i: 0,
           lastRowI: 0,
-          name: "Foo",
+          name: 'Foo',
           type: RowType.Closed,
           rows: [
             {
               i: 0,
-              startDate: "2000-01-02",
+              startDate: '2000-01-02',
               startTime: undefined,
-              endDate: "2000-01-01",
+              endDate: '2000-01-01',
               endTime: undefined,
             },
           ],
         },
       ],
       {
-        startDate: { 0: { 0: { value: "01/02/2000" } as HTMLInputElement } },
+        startDate: { 0: { 0: { value: '01/02/2000' } as HTMLInputElement } },
         startTime: {},
-        endDate: { 0: { 0: { value: "01/01/2000" } as HTMLInputElement } },
+        endDate: { 0: { 0: { value: '01/01/2000' } as HTMLInputElement } },
         endTime: {},
       },
       localeDateFormat,
       localeTimeFormat12
     )
-  ).toHaveProperty("exceptions.invalid.startDate.0.0");
+  ).toHaveProperty('exceptions.invalid.startDate.0.0');
 });
 
-test("Inter-row overlaps are reported appropriately", () => {
+test('Inter-row overlaps are reported appropriately', () => {
   expect(
     validateExceptions(
       [
         {
           i: 1,
           lastRowI: 0,
-          name: "Foo",
+          name: 'Foo',
           type: RowType.Closed,
           rows: [
             {
               i: 0,
-              startDate: "2000-01-01",
+              startDate: '2000-01-01',
               startTime: undefined,
-              endDate: "2000-01-05",
+              endDate: '2000-01-05',
               endTime: undefined,
             },
           ],
@@ -105,14 +105,14 @@ test("Inter-row overlaps are reported appropriately", () => {
         {
           i: 2,
           lastRowI: 0,
-          name: "Foo",
+          name: 'Foo',
           type: RowType.Closed,
           rows: [
             {
               i: 0,
-              startDate: "2000-01-05",
+              startDate: '2000-01-05',
               startTime: undefined,
-              endDate: "2000-01-08",
+              endDate: '2000-01-08',
               endTime: undefined,
             },
           ],
@@ -120,45 +120,45 @@ test("Inter-row overlaps are reported appropriately", () => {
       ],
       {
         startDate: {
-          1: { 0: { value: "01/01/2000" } as HTMLInputElement },
-          2: { 0: { value: "01/05/2000" } as HTMLInputElement },
+          1: { 0: { value: '01/01/2000' } as HTMLInputElement },
+          2: { 0: { value: '01/05/2000' } as HTMLInputElement },
         },
         startTime: {},
         endDate: {
-          1: { 0: { value: "01/05/2000" } as HTMLInputElement },
-          2: { 0: { value: "01/08/2000" } as HTMLInputElement },
+          1: { 0: { value: '01/05/2000' } as HTMLInputElement },
+          2: { 0: { value: '01/08/2000' } as HTMLInputElement },
         },
         endTime: {},
       },
       localeDateFormat,
       localeTimeFormat12
     )
-  ).toHaveProperty("exceptions.interConflicts", new Set([1, 2]));
+  ).toHaveProperty('exceptions.interConflicts', new Set([1, 2]));
 });
 
-test("Intra-row overlaps are reported appropriately", () => {
+test('Intra-row overlaps are reported appropriately', () => {
   expect(
     validateExceptions(
       [
         {
           i: 1,
           lastRowI: 0,
-          name: "Foo",
+          name: 'Foo',
           type: RowType.Open,
           rows: [
             {
               i: 0,
-              startDate: "2000-01-01",
-              startTime: "00:00",
-              endDate: "2000-01-05",
-              endTime: "13:00",
+              startDate: '2000-01-01',
+              startTime: '00:00',
+              endDate: '2000-01-05',
+              endTime: '13:00',
             },
             {
               i: 1,
-              startDate: "2000-01-05",
-              startTime: "00:00",
-              endDate: "2000-01-08",
-              endTime: "23:00",
+              startDate: '2000-01-05',
+              startTime: '00:00',
+              endDate: '2000-01-08',
+              endTime: '23:00',
             },
           ],
         },
@@ -166,15 +166,15 @@ test("Intra-row overlaps are reported appropriately", () => {
       {
         startDate: {
           1: {
-            0: { value: "01/01/2000" } as HTMLInputElement,
-            1: { value: "01/05/2000" } as HTMLInputElement,
+            0: { value: '01/01/2000' } as HTMLInputElement,
+            1: { value: '01/05/2000' } as HTMLInputElement,
           },
         },
         startTime: {},
         endDate: {
           1: {
-            0: { value: "01/05/2000" } as HTMLInputElement,
-            1: { value: "01/08/2000" } as HTMLInputElement,
+            0: { value: '01/05/2000' } as HTMLInputElement,
+            1: { value: '01/08/2000' } as HTMLInputElement,
           },
         },
         endTime: {},
@@ -182,32 +182,32 @@ test("Intra-row overlaps are reported appropriately", () => {
       localeDateFormat,
       localeTimeFormat12
     )
-  ).toHaveProperty("exceptions.intraConflicts.1", new Set([0, 1]));
+  ).toHaveProperty('exceptions.intraConflicts.1', new Set([0, 1]));
 });
 
-test("Valid states are reported appropriately", () => {
+test('Valid states are reported appropriately', () => {
   expect(
     validateExceptions(
       [
         {
           i: 1,
           lastRowI: 0,
-          name: "Foo",
+          name: 'Foo',
           type: RowType.Open,
           rows: [
             {
               i: 0,
-              startDate: "2000-01-01",
-              startTime: "00:00",
-              endDate: "2000-01-04",
-              endTime: "13:00",
+              startDate: '2000-01-01',
+              startTime: '00:00',
+              endDate: '2000-01-04',
+              endTime: '13:00',
             },
             {
               i: 1,
-              startDate: "2000-01-05",
-              startTime: "00:00",
-              endDate: "2000-01-08",
-              endTime: "23:00",
+              startDate: '2000-01-05',
+              startTime: '00:00',
+              endDate: '2000-01-08',
+              endTime: '23:00',
             },
           ],
         },
@@ -215,15 +215,15 @@ test("Valid states are reported appropriately", () => {
       {
         startDate: {
           1: {
-            0: { value: "01/01/2000" } as HTMLInputElement,
-            1: { value: "01/05/2000" } as HTMLInputElement,
+            0: { value: '01/01/2000' } as HTMLInputElement,
+            1: { value: '01/05/2000' } as HTMLInputElement,
           },
         },
         startTime: {},
         endDate: {
           1: {
-            0: { value: "01/04/2000" } as HTMLInputElement,
-            1: { value: "01/08/2000" } as HTMLInputElement,
+            0: { value: '01/04/2000' } as HTMLInputElement,
+            1: { value: '01/08/2000' } as HTMLInputElement,
           },
         },
         endTime: {},
@@ -231,5 +231,5 @@ test("Valid states are reported appropriately", () => {
       localeDateFormat,
       localeTimeFormat12
     )
-  ).toHaveProperty("exceptions", undefined);
+  ).toHaveProperty('exceptions', undefined);
 });

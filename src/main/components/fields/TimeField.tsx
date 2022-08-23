@@ -1,8 +1,8 @@
-import { Timepicker } from "@folio/stripes-components";
-import classNames from "classnames";
-import React, { ReactNode, useState } from "react";
-import dayjs from "../../utils/dayjs";
-import css from "./hiddenErrorField.css";
+import { Timepicker } from '@folio/stripes-components';
+import classNames from 'classnames';
+import React, { ReactNode, useState } from 'react';
+import dayjs from '../../utils/dayjs';
+import css from './hiddenErrorField.css';
 
 function noOp() {
   /* no-op */
@@ -41,15 +41,15 @@ export default function TimeField({
       <Timepicker
         required
         input={{
-          value: value === undefined ? "" : value,
-          name: "",
+          value: value === undefined ? '' : value,
+          name: '',
           onBlur: noOp,
           onFocus: noOp,
           onChange: (newTime: string) => {
             const input = internalRef;
             if (input !== null) {
               const selection = input.selectionStart;
-              input.value = dayjs(newTime, "HH:mm").format(localeTimeFormat);
+              input.value = dayjs(newTime, 'HH:mm').format(localeTimeFormat);
               input.setSelectionRange(selection, selection);
             }
             props.onChange(

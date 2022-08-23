@@ -1,31 +1,31 @@
-import { getNextNormalOpening } from "../../main/utils/CalendarUtils";
-import dayjs from "../../main/utils/dayjs";
-import * as Calendars from "../config/data/Calendars";
-import * as Weekdays from "../config/data/Weekdays";
+import { getNextNormalOpening } from '../../main/utils/CalendarUtils';
+import dayjs from '../../main/utils/dayjs';
+import * as Calendars from '../config/data/Calendars';
+import * as Weekdays from '../config/data/Weekdays';
 
-const SUNDAY_00_00 = dayjs("00:00", "HH:mm").day(0);
-const SUNDAY_12_00 = dayjs("12:00", "HH:mm").day(0);
-const SUNDAY_23_59 = dayjs("23:59", "HH:mm").day(0);
-const MONDAY_00_00 = dayjs("00:00", "HH:mm").day(1);
-const MONDAY_12_00 = dayjs("12:00", "HH:mm").day(1);
-const MONDAY_23_59 = dayjs("23:59", "HH:mm").day(1);
-const TUESDAY_00_00 = dayjs("00:00", "HH:mm").day(2);
-const TUESDAY_12_00 = dayjs("12:00", "HH:mm").day(2);
-const TUESDAY_23_59 = dayjs("23:59", "HH:mm").day(2);
-const WEDNESDAY_00_00 = dayjs("00:00", "HH:mm").day(3);
-const WEDNESDAY_12_00 = dayjs("12:00", "HH:mm").day(3);
-const WEDNESDAY_23_59 = dayjs("23:59", "HH:mm").day(3);
-const THURSDAY_00_00 = dayjs("00:00", "HH:mm").day(4);
-const THURSDAY_12_00 = dayjs("12:00", "HH:mm").day(4);
-const THURSDAY_23_59 = dayjs("23:59", "HH:mm").day(4);
-const FRIDAY_00_00 = dayjs("00:00", "HH:mm").day(5);
-const FRIDAY_12_00 = dayjs("12:00", "HH:mm").day(5);
-const FRIDAY_23_59 = dayjs("23:59", "HH:mm").day(5);
-const SATURDAY_00_00 = dayjs("00:00", "HH:mm").day(6);
-const SATURDAY_12_00 = dayjs("12:00", "HH:mm").day(6);
-const SATURDAY_23_59 = dayjs("23:59", "HH:mm").day(6);
+const SUNDAY_00_00 = dayjs('00:00', 'HH:mm').day(0);
+const SUNDAY_12_00 = dayjs('12:00', 'HH:mm').day(0);
+const SUNDAY_23_59 = dayjs('23:59', 'HH:mm').day(0);
+const MONDAY_00_00 = dayjs('00:00', 'HH:mm').day(1);
+const MONDAY_12_00 = dayjs('12:00', 'HH:mm').day(1);
+const MONDAY_23_59 = dayjs('23:59', 'HH:mm').day(1);
+const TUESDAY_00_00 = dayjs('00:00', 'HH:mm').day(2);
+const TUESDAY_12_00 = dayjs('12:00', 'HH:mm').day(2);
+const TUESDAY_23_59 = dayjs('23:59', 'HH:mm').day(2);
+const WEDNESDAY_00_00 = dayjs('00:00', 'HH:mm').day(3);
+const WEDNESDAY_12_00 = dayjs('12:00', 'HH:mm').day(3);
+const WEDNESDAY_23_59 = dayjs('23:59', 'HH:mm').day(3);
+const THURSDAY_00_00 = dayjs('00:00', 'HH:mm').day(4);
+const THURSDAY_12_00 = dayjs('12:00', 'HH:mm').day(4);
+const THURSDAY_23_59 = dayjs('23:59', 'HH:mm').day(4);
+const FRIDAY_00_00 = dayjs('00:00', 'HH:mm').day(5);
+const FRIDAY_12_00 = dayjs('12:00', 'HH:mm').day(5);
+const FRIDAY_23_59 = dayjs('23:59', 'HH:mm').day(5);
+const SATURDAY_00_00 = dayjs('00:00', 'HH:mm').day(6);
+const SATURDAY_12_00 = dayjs('12:00', 'HH:mm').day(6);
+const SATURDAY_23_59 = dayjs('23:59', 'HH:mm').day(6);
 
-test("No normal openings return no current openings", () => {
+test('No normal openings return no current openings', () => {
   expect(getNextNormalOpening(SUNDAY_00_00, [])).toBeNull();
   expect(getNextNormalOpening(SUNDAY_12_00, [])).toBeNull();
   expect(getNextNormalOpening(SUNDAY_23_59, [])).toBeNull();
@@ -49,7 +49,7 @@ test("No normal openings return no current openings", () => {
   expect(getNextNormalOpening(SATURDAY_23_59, [])).toBeNull();
 });
 
-test("Complex normal openings return appropriate current openings", () => {
+test('Complex normal openings return appropriate current openings', () => {
   const OPENINGS = Calendars.SUMMER_SP_1_2.normalHours;
   expect(getNextNormalOpening(SUNDAY_00_00, OPENINGS)).toBeNull();
   expect(getNextNormalOpening(SUNDAY_12_00, OPENINGS)).toBeNull();
@@ -74,13 +74,13 @@ test("Complex normal openings return appropriate current openings", () => {
   expect(getNextNormalOpening(SATURDAY_23_59, OPENINGS)).toBeNull();
 });
 
-test("Long range normal openings return appropriate current openings", () => {
+test('Long range normal openings return appropriate current openings', () => {
   const OPENINGS = [
     {
       startDay: Weekdays.Monday,
-      startTime: "07:00",
+      startTime: '07:00',
       endDay: Weekdays.Friday,
-      endTime: "23:00",
+      endTime: '23:00',
     },
   ];
   expect(getNextNormalOpening(SUNDAY_00_00, OPENINGS)).toBeNull();
@@ -106,13 +106,13 @@ test("Long range normal openings return appropriate current openings", () => {
   expect(getNextNormalOpening(SATURDAY_23_59, OPENINGS)).toBeNull();
 });
 
-test("Long range wrapping normal openings return appropriate current openings", () => {
+test('Long range wrapping normal openings return appropriate current openings', () => {
   const OPENINGS = [
     {
       startDay: Weekdays.Thursday,
-      startTime: "07:00",
+      startTime: '07:00',
       endDay: Weekdays.Tuesday,
-      endTime: "23:00",
+      endTime: '23:00',
     },
   ];
   expect(getNextNormalOpening(SUNDAY_00_00, OPENINGS)).toBeNull();
@@ -138,13 +138,13 @@ test("Long range wrapping normal openings return appropriate current openings", 
   expect(getNextNormalOpening(SATURDAY_23_59, OPENINGS)).toBeNull();
 });
 
-test("247 on day boundary normal openings return appropriate current openings", () => {
+test('247 on day boundary normal openings return appropriate current openings', () => {
   const OPENINGS = [
     {
       startDay: Weekdays.Sunday,
-      startTime: "00:00",
+      startTime: '00:00',
       endDay: Weekdays.Saturday,
-      endTime: "23:59",
+      endTime: '23:59',
     },
   ];
   expect(getNextNormalOpening(SUNDAY_00_00, OPENINGS)).toBeNull();
@@ -170,13 +170,13 @@ test("247 on day boundary normal openings return appropriate current openings", 
   expect(getNextNormalOpening(SATURDAY_23_59, OPENINGS)).toBeNull();
 });
 
-test("247 on mid-day boundary normal openings return appropriate current openings", () => {
+test('247 on mid-day boundary normal openings return appropriate current openings', () => {
   const OPENINGS = [
     {
       startDay: Weekdays.Sunday,
-      startTime: "12:00",
+      startTime: '12:00',
       endDay: Weekdays.Sunday,
-      endTime: "11:59",
+      endTime: '11:59',
     },
   ];
 
@@ -206,13 +206,13 @@ test("247 on mid-day boundary normal openings return appropriate current opening
   expect(getNextNormalOpening(SATURDAY_23_59, OPENINGS)).toBeNull();
 });
 
-test("247-ish with mid-day gap normal openings return appropriate current openings", () => {
+test('247-ish with mid-day gap normal openings return appropriate current openings', () => {
   const OPENINGS = [
     {
       startDay: Weekdays.Sunday,
-      startTime: "23:00",
+      startTime: '23:00',
       endDay: Weekdays.Sunday,
-      endTime: "07:59",
+      endTime: '07:59',
     },
   ];
 

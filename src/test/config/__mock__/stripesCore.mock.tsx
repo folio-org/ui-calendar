@@ -3,28 +3,28 @@
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from "@folio/stripes-connect";
-import { StripesType } from "@folio/stripes-smart-components";
-import React, { ComponentType, ReactNode } from "react";
+} from '@folio/stripes-connect';
+import { StripesType } from '@folio/stripes-smart-components';
+import React, { ComponentType, ReactNode } from 'react';
 
 jest.mock(
-  "@folio/stripes/core",
+  '@folio/stripes/core',
   () => {
     const STRIPES = {
       actionNames: [] as any[],
       clone: () => ({ ...STRIPES }),
       connect: () => ({}),
       config: {},
-      currency: "USD",
+      currency: 'USD',
       hasInterface: () => true,
       hasPerm: jest.fn().mockReturnValue(true),
-      locale: "en-US",
+      locale: 'en-US',
       logger: {
         log: () => ({}),
       },
       okapi: {
-        tenant: "diku",
-        url: "https://folio-testing-okapi.dev.folio.org",
+        tenant: 'diku',
+        url: 'https://folio-testing-okapi.dev.folio.org',
       },
       plugins: {},
       setBindings: () => ({}),
@@ -39,19 +39,19 @@ jest.mock(
         subscribe: () => ({}),
         replaceReducer: () => ({}),
       },
-      timezone: "UTC",
+      timezone: 'UTC',
       user: {
         perms: {},
         user: {
-          id: "b1add99d-530b-5912-94f3-4091b4d87e2c",
-          username: "diku_admin",
+          id: 'b1add99d-530b-5912-94f3-4091b4d87e2c',
+          username: 'diku_admin',
         },
       },
       withOkapi: true,
     } as unknown as StripesType;
 
     return {
-      ...jest.requireActual("@folio/stripes/core"),
+      ...jest.requireActual('@folio/stripes/core'),
       stripesConnect:
         (Component: ConnectedComponent<ConnectedComponentProps<any>, any>) =>
         ({
@@ -77,7 +77,7 @@ jest.mock(
               };
 
               return acc;
-            }, {} as ConnectedComponentProps<{ rest: any }>["mutator"]);
+            }, {} as ConnectedComponentProps<{ rest: any }>['mutator']);
 
           const fakeResources =
             resources ||
@@ -92,7 +92,7 @@ jest.mock(
               };
 
               return acc;
-            }, {} as ConnectedComponentProps<{ rest: any }>["resources"]);
+            }, {} as ConnectedComponentProps<{ rest: any }>['resources']);
 
           return (
             <Component
@@ -105,7 +105,7 @@ jest.mock(
 
       useOkapiKy: jest.fn(),
 
-      useNamespace: jest.fn().mockReturnValue(["module-namespace"]),
+      useNamespace: jest.fn().mockReturnValue(['module-namespace']),
 
       useStripes: () => STRIPES,
 

@@ -1,42 +1,42 @@
-const { join } = require("path");
+const { join } = require('path');
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom',
 
-  preset: "ts-jest",
+  preset: 'ts-jest',
   transform: {
-    "^.+\\.(t|j)sx?$": "ts-jest",
+    '^.+\\.(t|j)sx?$': 'ts-jest',
   },
-  transformIgnorePatterns: ["node_modules/(?!@folio)"],
+  transformIgnorePatterns: ['node_modules/(?!@folio)'],
 
-  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json"],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
 
-  testMatch: ["**/src/test/**/?(*.)test.{js,jsx,ts,tsx}"],
-  testPathIgnorePatterns: ["/node_modules/"],
+  testMatch: ['**/src/test/**/?(*.)test.{js,jsx,ts,tsx}'],
+  testPathIgnorePatterns: ['/node_modules/'],
 
-  reporters: ["default", "jest-junit"],
+  reporters: ['default', 'jest-junit'],
 
-  coverageReporters: ["lcov", "text"],
-  coverageDirectory: "./artifacts/coverage-jest/",
+  coverageReporters: ['lcov', 'text'],
+  coverageDirectory: './artifacts/coverage-jest/',
   collectCoverageFrom: [
-    "src/main/**/*.{ts,tsx}",
-    "!test/**",
-    "!**/node_modules/**",
+    'src/main/**/*.{ts,tsx}',
+    '!test/**',
+    '!**/node_modules/**',
   ],
 
-  setupFiles: [join(__dirname, "./src/test/config/setupTests.ts")],
-  setupFilesAfterEnv: [join(__dirname, "./src/test/config/jest.setup.ts")],
+  setupFiles: [join(__dirname, './src/test/config/setupTests.ts')],
+  setupFilesAfterEnv: [join(__dirname, './src/test/config/jest.setup.ts')],
 
   moduleNameMapper: {
-    "^.+\\.(css)$": "identity-obj-proxy",
+    '^.+\\.(css)$': 'identity-obj-proxy',
   },
 
   slowTestThreshold: 10,
 
   globals: {
-    "ts-jest": {
-      tsconfig: "src/tsconfig.test.json",
+    'ts-jest': {
+      tsconfig: 'src/tsconfig.test.json',
     },
   },
 };

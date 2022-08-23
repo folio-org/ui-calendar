@@ -8,29 +8,29 @@ import {
   Modal,
   ModalFooter,
   Select,
-} from "@folio/stripes-components";
-import { SelectFieldRenderProps } from "@folio/stripes-components/types/lib/Select/Select";
-import memoizee from "memoizee";
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Field, Form } from "react-final-form";
-import { FormattedMessage, useIntl } from "react-intl";
-import DataRepository from "../data/DataRepository";
-import { Calendar } from "../types/types";
-import dayjs from "../utils/dayjs";
-import css from "./PurgeModal.css";
+} from '@folio/stripes-components';
+import { SelectFieldRenderProps } from '@folio/stripes-components/types/lib/Select/Select';
+import memoizee from 'memoizee';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { Field, Form } from 'react-final-form';
+import { FormattedMessage, useIntl } from 'react-intl';
+import DataRepository from '../data/DataRepository';
+import { Calendar } from '../types/types';
+import dayjs from '../utils/dayjs';
+import css from './PurgeModal.css';
 
 enum AgeCriteria {
-  MONTHS_3 = "MONTHS_3",
-  MONTHS_6 = "MONTHS_6",
-  YEAR_1 = "YEAR_1",
-  YEARS_2 = "YEARS_2",
+  MONTHS_3 = 'MONTHS_3',
+  MONTHS_6 = 'MONTHS_6',
+  YEAR_1 = 'YEAR_1',
+  YEARS_2 = 'YEARS_2',
 }
 
 const AgeCriteriaLabels: Record<AgeCriteria, string> = {
-  [AgeCriteria.MONTHS_3]: "ui-calendar.purgeModal.criteria.age.months3",
-  [AgeCriteria.MONTHS_6]: "ui-calendar.purgeModal.criteria.age.months6",
-  [AgeCriteria.YEAR_1]: "ui-calendar.purgeModal.criteria.age.year1",
-  [AgeCriteria.YEARS_2]: "ui-calendar.purgeModal.criteria.age.years2",
+  [AgeCriteria.MONTHS_3]: 'ui-calendar.purgeModal.criteria.age.months3',
+  [AgeCriteria.MONTHS_6]: 'ui-calendar.purgeModal.criteria.age.months6',
+  [AgeCriteria.YEAR_1]: 'ui-calendar.purgeModal.criteria.age.year1',
+  [AgeCriteria.YEARS_2]: 'ui-calendar.purgeModal.criteria.age.years2',
 };
 
 const AgeCriteriaMonths: Record<AgeCriteria, number> = {
@@ -41,13 +41,13 @@ const AgeCriteriaMonths: Record<AgeCriteria, number> = {
 };
 
 enum AssignmentCriteria {
-  NONE = "NONE",
-  ANY = "ANY",
+  NONE = 'NONE',
+  ANY = 'ANY',
 }
 
 const AssignmentCriteriaLabels: Record<AssignmentCriteria, string> = {
-  [AssignmentCriteria.NONE]: "ui-calendar.purgeModal.criteria.assignment.none",
-  [AssignmentCriteria.ANY]: "ui-calendar.purgeModal.criteria.assignment.any",
+  [AssignmentCriteria.NONE]: 'ui-calendar.purgeModal.criteria.assignment.none',
+  [AssignmentCriteria.ANY]: 'ui-calendar.purgeModal.criteria.assignment.any',
 };
 
 interface FormValues {
@@ -55,7 +55,7 @@ interface FormValues {
   assignmentCriteria: AssignmentCriteria | undefined;
 }
 
-export const FORM_ID = "ui-calendar-purge-old-calendar-form";
+export const FORM_ID = 'ui-calendar-purge-old-calendar-form';
 
 const getCalendarsToPurge = memoizee(
   (
@@ -69,7 +69,7 @@ const getCalendarsToPurge = memoizee(
 
     const endBefore = dayjs().subtract(
       AgeCriteriaMonths[ageCriteria],
-      "months"
+      'months'
     );
 
     return calendars
@@ -102,7 +102,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
       open={props.open}
       onClose={props.onClose}
       label={<FormattedMessage id="ui-calendar.purgeModal.label" />}
-      aria-label={intl.formatMessage({ id: "ui-calendar.purgeModal.label" })}
+      aria-label={intl.formatMessage({ id: 'ui-calendar.purgeModal.label' })}
       size="small"
       footer={
         <ModalFooter>
@@ -181,7 +181,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                 }
                 fullWidth
                 dataOptions={[
-                  { value: undefined, label: "" },
+                  { value: undefined, label: '' },
                   ...Object.entries(AgeCriteriaLabels).map(
                     ([value, label]) => ({
                       value: value as AgeCriteria,
@@ -204,7 +204,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                 }
                 fullWidth
                 dataOptions={[
-                  { value: undefined, label: "" },
+                  { value: undefined, label: '' },
                   ...Object.entries(AssignmentCriteriaLabels).map(
                     ([value, label]) => ({
                       value: value as AssignmentCriteria,

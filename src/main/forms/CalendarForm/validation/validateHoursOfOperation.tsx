@@ -1,23 +1,23 @@
-import type { Dayjs } from "dayjs";
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import type { Dayjs } from 'dayjs';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
-} from "../../../components/fields/HoursOfOperationFieldTypes";
-import RowType from "../../../components/fields/RowType";
-import { CalendarOpening, Weekday } from "../../../types/types";
-import { overlaps } from "../../../utils/DateUtils";
-import dayjs from "../../../utils/dayjs";
-import { getWeekdaySpan } from "../../../utils/WeekdayUtils";
-import { InnerFieldRefs } from "../types";
-import { isTimeProper } from "./validateDateTime";
+} from '../../../components/fields/HoursOfOperationFieldTypes';
+import RowType from '../../../components/fields/RowType';
+import { CalendarOpening, Weekday } from '../../../types/types';
+import { overlaps } from '../../../utils/DateUtils';
+import dayjs from '../../../utils/dayjs';
+import { getWeekdaySpan } from '../../../utils/WeekdayUtils';
+import { InnerFieldRefs } from '../types';
+import { isTimeProper } from './validateDateTime';
 
 /** Ensure normal openings have filled in times/days */
 export function validateHoursOfOperationEmpty(
   rows: HoursOfOperationRowState[]
 ): HoursOfOperationErrors | undefined {
-  const emptyErrors: HoursOfOperationErrors["empty"] = {
+  const emptyErrors: HoursOfOperationErrors['empty'] = {
     startDay: {},
     startTime: {},
     endDay: {},
@@ -65,10 +65,10 @@ export function validateHoursOfOperationEmpty(
 /** Ensure times are valid */
 export function validateHoursOfOperationTimes(
   rows: HoursOfOperationRowState[],
-  timeFieldRefs: InnerFieldRefs["hoursOfOperation"],
+  timeFieldRefs: InnerFieldRefs['hoursOfOperation'],
   localeTimeFormat: string
 ): HoursOfOperationErrors | undefined {
-  const invalidTimeErrors: HoursOfOperationErrors["invalidTimes"] = {
+  const invalidTimeErrors: HoursOfOperationErrors['invalidTimes'] = {
     startTime: {},
     endTime: {},
   };
@@ -131,15 +131,15 @@ export function splitRowsIntoWeekdays(
     SUNDAY: [],
   };
   const baseDay = dayjs();
-  const baseStart = baseDay.startOf("day");
-  const baseEnd = baseDay.endOf("day");
+  const baseStart = baseDay.startOf('day');
+  const baseEnd = baseDay.endOf('day');
 
   rows.forEach((_row: HoursOfOperationRowState) => {
     const row: HoursOfOperationRowState = { ..._row };
 
     if (row.type === RowType.Closed) {
-      row.startTime = "00:00";
-      row.endTime = "23:59";
+      row.startTime = '00:00';
+      row.endTime = '23:59';
     }
     const opening: CalendarOpening = {
       startDay: row.startDay as Weekday,
@@ -154,10 +154,10 @@ export function splitRowsIntoWeekdays(
       let end = baseEnd;
 
       const startTime = opening.startTime
-        .split(":")
+        .split(':')
         .map((num) => parseInt(num, 10)) as [number, number];
       const endTime = opening.endTime
-        .split(":")
+        .split(':')
         .map((num) => parseInt(num, 10)) as [number, number];
 
       if (i === 0) {
@@ -212,16 +212,16 @@ export function validateHoursOfOperationOverlaps(
 /** Validate all parts of hours of operation */
 export default function validateHoursOfOperation(
   rows: HoursOfOperationRowState[] | undefined,
-  timeFieldRefs: InnerFieldRefs["hoursOfOperation"],
+  timeFieldRefs: InnerFieldRefs['hoursOfOperation'],
   localeTimeFormat: string
 ): {
-  "hours-of-operation"?: HoursOfOperationErrors;
+  'hours-of-operation'?: HoursOfOperationErrors;
 } {
   if (rows === undefined) return {};
 
   const emptyError = validateHoursOfOperationEmpty(rows);
   if (emptyError !== undefined) {
-    return { "hours-of-operation": emptyError };
+    return { 'hours-of-operation': emptyError };
   }
 
   const timeError = validateHoursOfOperationTimes(
@@ -230,7 +230,7 @@ export default function validateHoursOfOperation(
     localeTimeFormat
   );
   if (timeError !== undefined) {
-    return { "hours-of-operation": timeError };
+    return { 'hours-of-operation': timeError };
   }
 
   const split = splitRowsIntoWeekdays(rows);
@@ -238,6 +238,6 @@ export default function validateHoursOfOperation(
   return {
     // can be undefined but that is acceptable here
     // as no other cases to check
-    "hours-of-operation": validateHoursOfOperationOverlaps(split),
+    'hours-of-operation': validateHoursOfOperationOverlaps(split),
   };
 }

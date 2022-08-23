@@ -1,11 +1,11 @@
 export type Weekday =
-  | "SUNDAY"
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "SATURDAY";
+  | 'SUNDAY'
+  | 'MONDAY'
+  | 'TUESDAY'
+  | 'WEDNESDAY'
+  | 'THURSDAY'
+  | 'FRIDAY'
+  | 'SATURDAY';
 
 export interface ServicePoint {
   id: string;
@@ -45,20 +45,20 @@ export interface Calendar {
 }
 
 export enum ErrorCode {
-  INTERNAL_SERVER_ERROR = "internalServerError",
-  INVALID_REQUEST = "invalidRequest",
-  INVALID_PARAMETER = "invalidParameter",
-  CALENDAR_NO_NAME = "calendarNoName",
-  CALENDAR_INVALID_DATE_RANGE = "calendarInvalidDateRange",
-  CALENDAR_INVALID_EXCEPTION_NAME = "calendarInvalidExceptionName",
-  CALENDAR_INVALID_EXCEPTION_OPENINGS = "calendarInvalidExceptionOpenings",
-  CALENDAR_INVALID_EXCEPTION_OPENING_BOUNDARY = "calendarInvalidExceptionOpeningBoundary",
-  CALENDAR_DATE_OVERLAP = "calendarDateOverlap",
-  CALENDAR_NOT_FOUND = "calendarNotFound",
-  CALENDAR_INVALID_NORMAL_OPENINGS = "calendarInvalidNormalOpenings",
-  CALENDAR_INVALID_EXCEPTIONS = "calendarInvalidExceptions",
-  CALENDAR_INVALID_EXCEPTION_DATE_ORDER = "calendarInvalidExceptionDateOrder",
-  CALENDAR_INVALID_EXCEPTION_DATE_BOUNDARY = "calendarInvalidExceptionDateBoundary",
+  INTERNAL_SERVER_ERROR = 'internalServerError',
+  INVALID_REQUEST = 'invalidRequest',
+  INVALID_PARAMETER = 'invalidParameter',
+  CALENDAR_NO_NAME = 'calendarNoName',
+  CALENDAR_INVALID_DATE_RANGE = 'calendarInvalidDateRange',
+  CALENDAR_INVALID_EXCEPTION_NAME = 'calendarInvalidExceptionName',
+  CALENDAR_INVALID_EXCEPTION_OPENINGS = 'calendarInvalidExceptionOpenings',
+  CALENDAR_INVALID_EXCEPTION_OPENING_BOUNDARY = 'calendarInvalidExceptionOpeningBoundary',
+  CALENDAR_DATE_OVERLAP = 'calendarDateOverlap',
+  CALENDAR_NOT_FOUND = 'calendarNotFound',
+  CALENDAR_INVALID_NORMAL_OPENINGS = 'calendarInvalidNormalOpenings',
+  CALENDAR_INVALID_EXCEPTIONS = 'calendarInvalidExceptions',
+  CALENDAR_INVALID_EXCEPTION_DATE_ORDER = 'calendarInvalidExceptionDateOrder',
+  CALENDAR_INVALID_EXCEPTION_DATE_BOUNDARY = 'calendarInvalidExceptionDateBoundary',
 }
 
 interface ErrorWithNoData {

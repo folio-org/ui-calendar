@@ -1,28 +1,28 @@
-import { Button, LoadingPane, Pane, PaneMenu } from "@folio/stripes-components";
+import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes-components';
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from "@folio/stripes-connect";
-import { IfPermission } from "@folio/stripes-core";
-import React, { useRef } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+} from '@folio/stripes-connect';
+import { IfPermission } from '@folio/stripes-core';
+import React, { useRef } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import {
   Route,
   RouteComponentProps,
   Switch,
   useHistory,
   useRouteMatch,
-} from "react-router-dom";
-import SortableMultiColumnList from "../components/SortableMultiColumnList";
-import { MANIFEST, Resources } from "../data/SharedData";
-import useDataRepository from "../data/useDataRepository";
-import permissions from "../types/permissions";
-import { getLocalizedDate } from "../utils/DateUtils";
-import dayjs from "../utils/dayjs";
-import getStatus from "../utils/getCurrentStatus";
-import { useLocaleWeekdays } from "../utils/WeekdayUtils";
-import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
-import InfoPane from "./panes/InfoPane";
+} from 'react-router-dom';
+import SortableMultiColumnList from '../components/SortableMultiColumnList';
+import { MANIFEST, Resources } from '../data/SharedData';
+import useDataRepository from '../data/useDataRepository';
+import permissions from '../types/permissions';
+import { getLocalizedDate } from '../utils/DateUtils';
+import dayjs from '../utils/dayjs';
+import getStatus from '../utils/getCurrentStatus';
+import { useLocaleWeekdays } from '../utils/WeekdayUtils';
+import CreateEditCalendarLayer from './CreateEditCalendarLayer';
+import InfoPane from './panes/InfoPane';
 
 export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
 
@@ -37,7 +37,7 @@ export const CurrentAssignmentView: ConnectedComponent<
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
   const currentRouteId = useRouteMatch<{ servicePointId: string }>(
-    "/settings/calendar/active/:servicePointId"
+    '/settings/calendar/active/:servicePointId'
   )?.params?.servicePointId;
 
   if (!dataRepository.isLoaded()) {
@@ -58,22 +58,22 @@ export const CurrentAssignmentView: ConnectedComponent<
           dayjs().isBetween(
             calendar.startDate,
             calendar.endDate,
-            "day",
-            "[]"
+            'day',
+            '[]'
           ) && calendar.assignments.includes(servicePoint.id)
       );
     if (calendars.length === 0) {
       return {
         servicePoint: servicePoint.name.concat(
-          servicePoint.inactive ? " (inactive)" : ""
+          servicePoint.inactive ? ' (inactive)' : ''
         ),
         calendarName: (
-          <div style={{ fontStyle: "italic", color: "grey" }}>
+          <div style={{ fontStyle: 'italic', color: 'grey' }}>
             <FormattedMessage id="ui-calendar.currentAssignmentView.noCalendar" />
           </div>
         ),
-        startDate: "",
-        endDate: "",
+        startDate: '',
+        endDate: '',
         currentStatus: (
           <FormattedMessage id="ui-calendar.currentStatus.closed.noNext" />
         ),
@@ -83,7 +83,7 @@ export const CurrentAssignmentView: ConnectedComponent<
     return {
       servicePointId: servicePoint.id,
       servicePoint: servicePoint.name.concat(
-        servicePoint.inactive ? " (inactive)" : ""
+        servicePoint.inactive ? ' (inactive)' : ''
       ),
       calendarName: calendars[0].name,
       startDate: getLocalizedDate(intl, calendars[0].startDate),
@@ -99,7 +99,7 @@ export const CurrentAssignmentView: ConnectedComponent<
         paneTitle={
           <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
         }
-        defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
+        defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         lastMenu={
           <IfPermission perm={permissions.CREATE}>
             <PaneMenu>
@@ -118,7 +118,7 @@ export const CurrentAssignmentView: ConnectedComponent<
         <SortableMultiColumnList
           sortedColumn="servicePoint"
           sortDirection="ascending"
-          dateColumns={["startDate", "endDate"]}
+          dateColumns={['startDate', 'endDate']}
           columnMapping={{
             servicePoint: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.servicePoint" />
@@ -137,7 +137,7 @@ export const CurrentAssignmentView: ConnectedComponent<
             ),
           }}
           contentData={rows}
-          rowMetadata={["servicePointId", "calendar"]}
+          rowMetadata={['servicePointId', 'calendar']}
           isSelected={({ item }) => {
             return (
               currentRouteId !== undefined &&
@@ -146,11 +146,11 @@ export const CurrentAssignmentView: ConnectedComponent<
           }}
           onRowClick={(_e, info) => {
             if (
-              info.startDate === "" ||
+              info.startDate === '' ||
               info.servicePointId === currentRouteId
             ) {
               // no cal assigned or being toggled off
-              history.push("/settings/calendar/active/");
+              history.push('/settings/calendar/active/');
             } else {
               // new cal
               history.push(`/settings/calendar/active/${info.servicePointId}`);
@@ -167,9 +167,9 @@ export const CurrentAssignmentView: ConnectedComponent<
               <CreateEditCalendarLayer
                 dataRepository={dataRepository}
                 initialValue={dataRepository.getCalendar(
-                  new URLSearchParams(location.search).get("source")
+                  new URLSearchParams(location.search).get('source')
                 )}
-                onClose={(id = "") => {
+                onClose={(id = '') => {
                   history.push(`/settings/calendar/active/${id}`);
                   showCreateLayerButtonRef.current?.focus();
                 }}
@@ -198,7 +198,7 @@ export const CurrentAssignmentView: ConnectedComponent<
             editBasePath="/settings/calendar/active/edit"
             creationBasePath="/settings/calendar/active/create"
             onClose={() => {
-              history.push("/settings/calendar/active/");
+              history.push('/settings/calendar/active/');
             }}
             calendar={
               rows.filter((row) => row.servicePointId === currentRouteId)[0]

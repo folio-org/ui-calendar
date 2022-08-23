@@ -1,21 +1,21 @@
-import staticFirstWeekDay from "@folio/stripes-components/lib/Datepicker/staticFirstWeekDay";
-import type { Dayjs } from "dayjs";
-import memoizee from "memoizee";
-import { useMemo } from "react";
-import { IntlShape } from "react-intl";
-import { CalendarOpening, Weekday } from "../types/types";
-import { getLocalizedTime } from "./DateUtils";
-import dayjs from "./dayjs";
+import staticFirstWeekDay from '@folio/stripes-components/lib/Datepicker/staticFirstWeekDay';
+import type { Dayjs } from 'dayjs';
+import memoizee from 'memoizee';
+import { useMemo } from 'react';
+import { IntlShape } from 'react-intl';
+import { CalendarOpening, Weekday } from '../types/types';
+import { getLocalizedTime } from './DateUtils';
+import dayjs from './dayjs';
 
 export type RelativeWeekdayStatus =
   | {
-      proximity: "sameDay" | "nextDay";
+      proximity: 'sameDay' | 'nextDay';
       weekday: undefined;
       date: undefined;
       time: string;
     }
   | {
-      proximity: "otherWeekday";
+      proximity: 'otherWeekday';
       weekday: Weekday;
       date: undefined;
       time: string;
@@ -47,13 +47,13 @@ export const WEEKDAYS: Record<Weekday, number> = {
  * Additionally, the values here will correspond to {@link WEEKDAY_INDEX}
  */
 export const WEEKDAY_INDEX: Weekday[] = [
-  "SUNDAY",
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
+  'SUNDAY',
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY',
 ];
 
 /** Information about a weekday in the current locale */
@@ -65,7 +65,7 @@ export interface LocaleWeekdayInfo {
 
 export const getFirstDayOfWeek: (locale: string) => number = memoizee(
   (locale: string) => {
-    const region = locale.split("-")[1]?.toUpperCase() ?? "US";
+    const region = locale.split('-')[1]?.toUpperCase() ?? 'US';
     const weekdayLookup = {
       sun: 0,
       mon: 1,
@@ -92,13 +92,13 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
     const weekdays: LocaleWeekdayInfo[] = [];
     for (let i = 0; i < 7; i++) {
       const day = dayjs()
-        .startOf("day")
+        .startOf('day')
         .tz(intl.timeZone, true)
         .day((firstDay + i) % 7);
       weekdays.push({
         weekday: WEEKDAY_INDEX[day.day()],
-        short: intl.formatDate(day.toDate(), { weekday: "short" }),
-        long: intl.formatDate(day.toDate(), { weekday: "long" }),
+        short: intl.formatDate(day.toDate(), { weekday: 'short' }),
+        long: intl.formatDate(day.toDate(), { weekday: 'long' }),
       });
     }
     return weekdays;
@@ -155,7 +155,7 @@ export function getRelativeWeekdayStatus(
 ): RelativeWeekdayStatus {
   if (referenceDate.day() === WEEKDAYS[weekday]) {
     return {
-      proximity: "sameDay",
+      proximity: 'sameDay',
       weekday: undefined,
       date: undefined,
       time: getLocalizedTime(intl, time),
@@ -163,14 +163,14 @@ export function getRelativeWeekdayStatus(
   }
   if ((referenceDate.day() + 1) % 7 === WEEKDAYS[weekday]) {
     return {
-      proximity: "nextDay",
+      proximity: 'nextDay',
       weekday: undefined,
       date: undefined,
       time: getLocalizedTime(intl, time),
     };
   }
   return {
-    proximity: "otherWeekday",
+    proximity: 'otherWeekday',
     weekday,
     date: undefined,
     time: getLocalizedTime(intl, time),

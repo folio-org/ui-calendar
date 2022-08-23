@@ -1,28 +1,28 @@
-import type { Dayjs } from "dayjs";
-import React from "react";
-import { FormattedMessage } from "react-intl";
+import type { Dayjs } from 'dayjs';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import {
   ExceptionFieldErrors,
   ExceptionRowState,
-} from "../../../components/fields/ExceptionFieldTypes";
-import RowType from "../../../components/fields/RowType";
-import { overlaps } from "../../../utils/DateUtils";
-import dayjs from "../../../utils/dayjs";
-import { InnerFieldRefs } from "../types";
-import { isTimeProper } from "./validateDateTime";
+} from '../../../components/fields/ExceptionFieldTypes';
+import RowType from '../../../components/fields/RowType';
+import { overlaps } from '../../../utils/DateUtils';
+import dayjs from '../../../utils/dayjs';
+import { InnerFieldRefs } from '../types';
+import { isTimeProper } from './validateDateTime';
 
 /** Validate that inner exception rows are not empty */
 function validateExceptionInnerRowEmpty(
   row: ExceptionRowState,
-  innerRow: ExceptionRowState["rows"][0],
-  innerFieldRefs: InnerFieldRefs["exceptions"],
-  emptyErrors: NonNullable<ExceptionFieldErrors["empty"]>,
+  innerRow: ExceptionRowState['rows'][0],
+  innerFieldRefs: InnerFieldRefs['exceptions'],
+  emptyErrors: NonNullable<ExceptionFieldErrors['empty']>,
   _hasError: boolean
 ): boolean {
   let hasError = _hasError;
   if (
     innerRow.startDate === undefined ||
-    innerRow.startDate === "" ||
+    innerRow.startDate === '' ||
     innerFieldRefs.startDate[row.i]?.[innerRow.i]?.value === undefined
   ) {
     emptyErrors.startDate[row.i][innerRow.i] = (
@@ -32,7 +32,7 @@ function validateExceptionInnerRowEmpty(
   }
   if (
     innerRow.endDate === undefined ||
-    innerRow.endDate === "" ||
+    innerRow.endDate === '' ||
     innerFieldRefs.endDate[row.i]?.[innerRow.i]?.value === undefined
   ) {
     emptyErrors.endDate[row.i][innerRow.i] = (
@@ -60,9 +60,9 @@ function validateExceptionInnerRowEmpty(
 /** Validate that exception rows as a whole are not empty */
 export function validateExceptionsEmpty(
   rows: ExceptionRowState[],
-  innerFieldRefs: InnerFieldRefs["exceptions"]
+  innerFieldRefs: InnerFieldRefs['exceptions']
 ): ExceptionFieldErrors | undefined {
-  const emptyErrors: ExceptionFieldErrors["empty"] = {
+  const emptyErrors: ExceptionFieldErrors['empty'] = {
     name: {},
     startDate: {},
     startTime: {},
@@ -73,7 +73,7 @@ export function validateExceptionsEmpty(
   let hasError = false;
 
   rows.forEach((row) => {
-    if (row.name === undefined || row.name.trim() === "") {
+    if (row.name === undefined || row.name.trim() === '') {
       emptyErrors.name[row.i] = (
         <FormattedMessage id="stripes-core.label.missingRequiredField" />
       );
@@ -104,9 +104,9 @@ export function validateExceptionsEmpty(
 /** Validate that inner exception rows have proper dates/times */
 function validateExceptionInnerRowDatesAndTimes(
   row: ExceptionRowState,
-  innerRow: ExceptionRowState["rows"][0],
-  innerFieldRefs: InnerFieldRefs["exceptions"],
-  invalidErrors: NonNullable<ExceptionFieldErrors["invalid"]>,
+  innerRow: ExceptionRowState['rows'][0],
+  innerFieldRefs: InnerFieldRefs['exceptions'],
+  invalidErrors: NonNullable<ExceptionFieldErrors['invalid']>,
   localeDateFormat: string,
   localeTimeFormat: string,
   _hasError: boolean
@@ -196,11 +196,11 @@ function validateExceptionInnerRowDatesAndTimes(
 /** Validate all inner dates/times within each overall row */
 export function validateExceptionsDatesAndTimes(
   rows: ExceptionRowState[],
-  innerFieldRefs: InnerFieldRefs["exceptions"],
+  innerFieldRefs: InnerFieldRefs['exceptions'],
   localeDateFormat: string,
   localeTimeFormat: string
 ): ExceptionFieldErrors | undefined {
-  const invalidErrors: ExceptionFieldErrors["invalid"] = {
+  const invalidErrors: ExceptionFieldErrors['invalid'] = {
     startDate: {},
     startTime: {},
     endDate: {},
@@ -238,7 +238,7 @@ export function validateExceptionsDatesAndTimes(
 export function validateExceptionInterOverlaps(
   rows: ExceptionRowState[]
 ): ExceptionFieldErrors | undefined {
-  const interConflicts: ExceptionFieldErrors["interConflicts"] =
+  const interConflicts: ExceptionFieldErrors['interConflicts'] =
     new Set<number>();
 
   const rowMinMaxes: { i: number; startDate: Dayjs; endDate: Dayjs }[] =
@@ -246,10 +246,10 @@ export function validateExceptionInterOverlaps(
       i: row.i,
       startDate: dayjs
         .min(row.rows.map(({ startDate }) => dayjs(startDate)))
-        .startOf("day"),
+        .startOf('day'),
       endDate: dayjs
         .max(row.rows.map(({ endDate }) => dayjs(endDate)))
-        .endOf("day"),
+        .endOf('day'),
     }));
 
   for (let i = 0; i < rowMinMaxes.length - 1; i++) {
@@ -304,7 +304,7 @@ export function getExceptionRowIntraOverlap(
 export function validateExceptionIntraOverlaps(
   rows: ExceptionRowState[]
 ): ExceptionFieldErrors | undefined {
-  const intraConflicts: ExceptionFieldErrors["intraConflicts"] = {};
+  const intraConflicts: ExceptionFieldErrors['intraConflicts'] = {};
   let hasError = false;
 
   rows.forEach((row) => {
@@ -330,7 +330,7 @@ export function validateExceptionIntraOverlaps(
 /** Validate all parts of exceptions */
 export default function validateExceptions(
   rows: ExceptionRowState[] | undefined,
-  innerFieldRefs: InnerFieldRefs["exceptions"],
+  innerFieldRefs: InnerFieldRefs['exceptions'],
   localeDateFormat: string,
   localeTimeFormat: string
 ): { exceptions?: ExceptionFieldErrors } {

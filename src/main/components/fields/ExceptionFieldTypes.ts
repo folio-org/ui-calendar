@@ -1,6 +1,6 @@
-import { RequireExactlyOne } from "@folio/stripes-components/types/utils";
-import { ReactNode } from "react";
-import RowType from "./RowType";
+import { RequireExactlyOne } from '@folio/stripes-components/types/utils';
+import { ReactNode } from 'react';
+import RowType from './RowType';
 
 export interface MCLContentsType {
   rowState: ExceptionRowState;
@@ -32,13 +32,13 @@ export type ExceptionFieldErrors = RequireExactlyOne<{
   empty?: {
     name: Record<number, ReactNode>;
   } & {
-    [field in keyof Omit<ExceptionRowState["rows"][0], "i">]: Record<
+    [field in keyof Omit<ExceptionRowState['rows'][0], 'i'>]: Record<
       number,
       Record<number, ReactNode>
     >;
   };
   invalid?: {
-    [field in keyof Omit<ExceptionRowState["rows"][0], "i">]: Record<
+    [field in keyof Omit<ExceptionRowState['rows'][0], 'i'>]: Record<
       number,
       Record<number, ReactNode>
     >;

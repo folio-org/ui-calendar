@@ -1,24 +1,24 @@
-import { Headline, IconButton, Loading } from "@folio/stripes-components";
-import classNames from "classnames";
-import type { Dayjs } from "dayjs";
-import memoizee from "memoizee";
-import React, { FunctionComponent, ReactNode } from "react";
-import { FormattedDate, useIntl } from "react-intl";
-import { CSSPropertiesWithVars } from "../types/css";
+import { Headline, IconButton, Loading } from '@folio/stripes-components';
+import classNames from 'classnames';
+import type { Dayjs } from 'dayjs';
+import memoizee from 'memoizee';
+import React, { FunctionComponent, ReactNode } from 'react';
+import { FormattedDate, useIntl } from 'react-intl';
+import { CSSPropertiesWithVars } from '../types/css';
 import {
   getFirstDayOfWeek,
   LocaleWeekdayInfo,
   useLocaleWeekdays,
   WEEKDAYS,
-} from "../utils/WeekdayUtils";
-import css from "./Calendar.css";
+} from '../utils/WeekdayUtils';
+import css from './Calendar.css';
 
 function isSameMonthOrBefore(a: Dayjs, b: Dayjs): boolean {
-  return a.isSameOrBefore(b, "month");
+  return a.isSameOrBefore(b, 'month');
 }
 
 function isSameMonth(a: Dayjs, b: Dayjs): boolean {
-  return a.isSame(b, "month");
+  return a.isSame(b, 'month');
 }
 
 export const getDateArray = memoizee(
@@ -28,16 +28,16 @@ export const getDateArray = memoizee(
     localeWeekdays: LocaleWeekdayInfo[]
   ): Dayjs[] => {
     // start
-    let date = monthBasis.startOf("month");
+    let date = monthBasis.startOf('month');
     // if the month starts at the beginning of the week, add a full row above of the previous month
     if (date.weekday() === getFirstDayOfWeek(locale)) {
-      date = date.subtract(1, "week");
+      date = date.subtract(1, 'week');
     }
 
     const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
 
     // ensure startDate starts at the beginning of a week
-    date = date.subtract((date.day() - firstWeekday + 7) % 7, "days");
+    date = date.subtract((date.day() - firstWeekday + 7) % 7, 'days');
 
     // at this point, date must be in a month before `month`.
 
@@ -46,7 +46,7 @@ export const getDateArray = memoizee(
     let week = [];
     do {
       week.push(date);
-      date = date.add(1, "day");
+      date = date.add(1, 'day');
       if (week.length === 7) {
         displayDates.push(...week);
         week = [];
@@ -55,7 +55,7 @@ export const getDateArray = memoizee(
 
     while (week.length < 7) {
       week.push(date);
-      date = date.add(1, "day");
+      date = date.add(1, 'day');
     }
     displayDates.push(...week);
 
@@ -89,7 +89,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
     monthBasis,
     localeWeekdays
   ).map((date: Dayjs) => {
-    const dateString = date.format("YYYY-MM-DD");
+    const dateString = date.format('YYYY-MM-DD');
     let contents: ReactNode = <Loading />;
     if (dateString in events) {
       contents = events[dateString];
@@ -98,7 +98,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
     return (
       <div
         className={classNames(
-          isSameMonth(date, monthBasis) ? "" : css.adjacentMonth,
+          isSameMonth(date, monthBasis) ? '' : css.adjacentMonth,
           css.calendarDay
         )}
       >
@@ -115,14 +115,14 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
       className={css.calendar}
       style={
         {
-          "--num-main-cal-rows": displayDates.length / 7,
+          '--num-main-cal-rows': displayDates.length / 7,
         } as CSSPropertiesWithVars
       }
     >
       <div key="header" className={css.headerRow}>
         <IconButton
           icon="arrow-left"
-          onClick={() => setMonthBasis(monthBasis.subtract(1, "month"))}
+          onClick={() => setMonthBasis(monthBasis.subtract(1, 'month'))}
         />
         <Headline size="xx-large" margin="none">
           <FormattedDate
@@ -133,7 +133,7 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
         </Headline>
         <IconButton
           icon="arrow-right"
-          onClick={() => setMonthBasis(monthBasis.add(1, "month"))}
+          onClick={() => setMonthBasis(monthBasis.add(1, 'month'))}
         />
       </div>
       {getWeekdayLabels(localeWeekdays)}

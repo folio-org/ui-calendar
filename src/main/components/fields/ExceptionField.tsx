@@ -7,30 +7,30 @@ import {
   Layout,
   MultiColumnList,
   TextField,
-} from "@folio/stripes-components";
-import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
-import classNames from "classnames";
+} from '@folio/stripes-components';
+import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
+import classNames from 'classnames';
 import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
   useState,
-} from "react";
-import { FieldRenderProps } from "react-final-form";
-import { FormattedMessage } from "react-intl";
-import { InnerFieldRefs } from "../../forms/CalendarForm/types";
-import dayjs from "../../utils/dayjs";
+} from 'react';
+import { FieldRenderProps } from 'react-final-form';
+import { FormattedMessage } from 'react-intl';
+import { InnerFieldRefs } from '../../forms/CalendarForm/types';
+import dayjs from '../../utils/dayjs';
 import {
   ExceptionFieldErrors,
   ExceptionRowState,
   MCLContentsType,
-} from "./ExceptionFieldTypes";
-import cssHiddenErrorField from "./hiddenErrorField.css";
-import css from "./HoursAndExceptionFields.css";
-import HoursOfOperationFieldRowFormatter from "./MCLRowFormatter";
-import OpenClosedSelect from "./OpenClosedSelect";
-import RowType from "./RowType";
-import TimeField from "./TimeField";
+} from './ExceptionFieldTypes';
+import cssHiddenErrorField from './hiddenErrorField.css';
+import css from './HoursAndExceptionFields.css';
+import HoursOfOperationFieldRowFormatter from './MCLRowFormatter';
+import OpenClosedSelect from './OpenClosedSelect';
+import RowType from './RowType';
+import TimeField from './TimeField';
 
 function updateRowState(
   rowStates: ExceptionRowState[],
@@ -48,7 +48,7 @@ function updateInnerRowState(
   setRowStates: React.Dispatch<ExceptionRowState[]>,
   outerRowIndex: number,
   innerRowIndex: number,
-  newState: Partial<ExceptionRowState["rows"][0]>
+  newState: Partial<ExceptionRowState['rows'][0]>
 ) {
   const newRowList = [...rowStates[outerRowIndex].rows];
   newRowList[innerRowIndex] = {
@@ -60,7 +60,7 @@ function updateInnerRowState(
 
 export interface ExceptionFieldProps
   extends FieldRenderProps<ExceptionRowState[]> {
-  fieldRefs: InnerFieldRefs["exceptions"];
+  fieldRefs: InnerFieldRefs['exceptions'];
   error?: ExceptionFieldErrors;
   // used in getDateTimeFields
   // eslint-disable-next-line react/no-unused-prop-types
@@ -81,10 +81,10 @@ function getDateTimeFields({
 }: {
   props: ExceptionFieldProps;
   row: ExceptionRowState;
-  innerRow: ExceptionRowState["rows"][0];
+  innerRow: ExceptionRowState['rows'][0];
   realIndex: number;
   innerRowRealIndex: number;
-  fieldRefs: InnerFieldRefs["exceptions"];
+  fieldRefs: InnerFieldRefs['exceptions'];
   isDirty: boolean;
   rowStates: ExceptionRowState[];
   setRowStates: (newRowStates: ExceptionRowState[]) => void;
@@ -277,7 +277,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
   // controls whether empty/invalid error messages should be shown
   const isDirty = !!(props.submitAttempted || props.meta.touched);
 
-  const contents: MultiColumnListProps<MCLContentsType, never>["contentData"] =
+  const contents: MultiColumnListProps<MCLContentsType, never>['contentData'] =
     rowStates.map((row, realIndex) => {
       if (!(row.i in fieldRefs.startDate)) {
         fieldRefs.startDate[row.i] = {};
@@ -334,12 +334,12 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
                     startDate:
                       minDate === null
                         ? undefined
-                        : minDate.format("YYYY-MM-DD"),
+                        : minDate.format('YYYY-MM-DD'),
                     startTime: undefined,
                     endDate:
                       maxDate === null
                         ? undefined
-                        : maxDate.format("YYYY-MM-DD"),
+                        : maxDate.format('YYYY-MM-DD'),
                     endTime: undefined,
                   },
                 ];
@@ -420,7 +420,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
   contents.push({
     rowState: {
       i: -1,
-      name: "",
+      name: '',
       type: RowType.Open,
       lastRowI: 0,
       rows: [],
@@ -433,7 +433,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           newRowStates.push({
             i: currentCount,
             type: RowType.Open,
-            name: "",
+            name: '',
             lastRowI: 0,
             rows: [
               {
@@ -482,9 +482,9 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
 
   return (
     <>
-      <MultiColumnList<MCLContentsType, "isConflicted" | "rowState">
+      <MultiColumnList<MCLContentsType, 'isConflicted' | 'rowState'>
         interactive={false}
-        rowMetadata={["isConflicted", "rowState"]}
+        rowMetadata={['isConflicted', 'rowState']}
         columnMapping={{
           name: (
             <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.name" />
@@ -509,13 +509,13 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           ),
         }}
         columnWidths={{
-          name: "22%",
-          status: "12%",
-          startDate: "15%",
-          startTime: "15%",
-          endDate: "15%",
-          endTime: "15%",
-          actions: "6%",
+          name: '22%',
+          status: '12%',
+          startDate: '15%',
+          startTime: '15%',
+          endDate: '15%',
+          endTime: '15%',
+          actions: '6%',
         }}
         contentData={contents}
         getCellClass={(defaultClasses, rowData) =>

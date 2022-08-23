@@ -1,6 +1,6 @@
-import dayjs from "../../main/utils/dayjs";
-import { weekdayIsBetween } from "../../main/utils/WeekdayUtils";
-import * as Weekdays from "../config/data/Weekdays";
+import dayjs from '../../main/utils/dayjs';
+import { weekdayIsBetween } from '../../main/utils/WeekdayUtils';
+import * as Weekdays from '../config/data/Weekdays';
 
 const SUNDAY = dayjs().day(0);
 const MONDAY = dayjs().day(1);
@@ -10,7 +10,7 @@ const THURSDAY = dayjs().day(4);
 const FRIDAY = dayjs().day(5);
 const SATURDAY = dayjs().day(6);
 
-test("Single weekday range contains only one weekday", () => {
+test('Single weekday range contains only one weekday', () => {
   expect(
     weekdayIsBetween(SUNDAY, Weekdays.Sunday, Weekdays.Sunday)
   ).toBeTruthy();
@@ -56,7 +56,7 @@ test("Single weekday range contains only one weekday", () => {
   ).toBeFalsy();
 });
 
-test("Multi-weekday ranges contains all applicable weekdays", () => {
+test('Multi-weekday ranges contains all applicable weekdays', () => {
   expect(
     weekdayIsBetween(SUNDAY, Weekdays.Sunday, Weekdays.Friday)
   ).toBeTruthy();
@@ -102,7 +102,7 @@ test("Multi-weekday ranges contains all applicable weekdays", () => {
   ).toBeTruthy();
 });
 
-test("Weeklong range contains the appropriate weekday", () => {
+test('Weeklong range contains the appropriate weekday', () => {
   expect(
     weekdayIsBetween(SUNDAY, Weekdays.Sunday, Weekdays.Saturday)
   ).toBeTruthy();

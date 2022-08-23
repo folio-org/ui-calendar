@@ -1,5 +1,5 @@
 export enum RowType {
-  Open = "open",
-  Closed = "closed",
+  Open = 'open',
+  Closed = 'closed',
 }
 export default RowType;

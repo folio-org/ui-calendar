@@ -1,8 +1,8 @@
-import { getDateMatches } from "../../main/utils/CalendarUtils";
-import * as Calendars from "../config/data/Calendars";
-import * as Dates from "../config/data/Dates";
+import { getDateMatches } from '../../main/utils/CalendarUtils';
+import * as Calendars from '../config/data/Calendars';
+import * as Dates from '../config/data/Dates';
 
-test("24/7 calendars get expected openings", () => {
+test('24/7 calendars get expected openings', () => {
   expect(
     getDateMatches(Dates.JAN_1, Calendars.ALL_YEAR_SP_ONLINE_247)
   ).toStrictEqual({
@@ -17,7 +17,7 @@ test("24/7 calendars get expected openings", () => {
   });
 });
 
-test("Empty calendars get expected openings", () => {
+test('Empty calendars get expected openings', () => {
   expect(getDateMatches(Dates.JAN_1, Calendars.SPRING_SP_1_2)).toStrictEqual({
     openings: [],
     exceptions: [],
@@ -28,7 +28,7 @@ test("Empty calendars get expected openings", () => {
   });
 });
 
-test("Expected normal openings are returned", () => {
+test('Expected normal openings are returned', () => {
   const openings = Calendars.SUMMER_SP_1_2.normalHours;
 
   // Monday
@@ -68,7 +68,7 @@ test("Expected normal openings are returned", () => {
   });
 });
 
-test("Expected exceptions are returned", () => {
+test('Expected exceptions are returned', () => {
   // Sunday
   expect(getDateMatches(Dates.MAY_14, Calendars.SUMMER_SP_1_2)).toStrictEqual({
     openings: [],

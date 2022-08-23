@@ -1,10 +1,10 @@
-import RowType from "../../../../main/components/fields/RowType";
-import validateHoursOfOperation from "../../../../main/forms/CalendarForm/validation/validateHoursOfOperation";
-import * as Weekdays from "../../../config/data/Weekdays";
+import RowType from '../../../../main/components/fields/RowType';
+import validateHoursOfOperation from '../../../../main/forms/CalendarForm/validation/validateHoursOfOperation';
+import * as Weekdays from '../../../config/data/Weekdays';
 
-const localeTimeFormat12 = "hh:mm A";
+const localeTimeFormat12 = 'hh:mm A';
 
-test("No rows is valid", () => {
+test('No rows is valid', () => {
   // either version is valid
   expect(
     validateHoursOfOperation(
@@ -12,7 +12,7 @@ test("No rows is valid", () => {
       { startTime: {}, endTime: {} },
       localeTimeFormat12
     )
-  ).toStrictEqual({ "hours-of-operation": undefined });
+  ).toStrictEqual({ 'hours-of-operation': undefined });
   expect(
     validateHoursOfOperation(
       undefined,
@@ -22,7 +22,7 @@ test("No rows is valid", () => {
   ).toStrictEqual({});
 });
 
-test("Empty errors are reported", () => {
+test('Empty errors are reported', () => {
   expect(
     validateHoursOfOperation(
       [
@@ -38,10 +38,10 @@ test("Empty errors are reported", () => {
       { startTime: {}, endTime: {} },
       localeTimeFormat12
     )
-  ).toHaveProperty("hours-of-operation.empty");
+  ).toHaveProperty('hours-of-operation.empty');
 });
 
-test("Invalid time errors are reported", () => {
+test('Invalid time errors are reported', () => {
   expect(
     validateHoursOfOperation(
       [
@@ -49,27 +49,27 @@ test("Invalid time errors are reported", () => {
           i: 2,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: "09:00",
+          startTime: '09:00',
           endDay: Weekdays.Tuesday,
-          endTime: "09:00",
+          endTime: '09:00',
         },
       ],
       {
         startTime: {
-          0: { value: "12:00 PM" },
-          1: { value: "invalid" },
+          0: { value: '12:00 PM' },
+          1: { value: 'invalid' },
         } as unknown as Record<number, HTMLInputElement>,
         endTime: {
-          1: { value: "1:00 PM" },
-          2: { value: "8:00 AM" },
+          1: { value: '1:00 PM' },
+          2: { value: '8:00 AM' },
         } as unknown as Record<number, HTMLInputElement>,
       },
       localeTimeFormat12
     )
-  ).toHaveProperty("hours-of-operation.invalidTimes");
+  ).toHaveProperty('hours-of-operation.invalidTimes');
 });
 
-test("Empty has precedence over invalid time errors", () => {
+test('Empty has precedence over invalid time errors', () => {
   expect(
     validateHoursOfOperation(
       [
@@ -77,27 +77,27 @@ test("Empty has precedence over invalid time errors", () => {
           i: 2,
           type: RowType.Open,
           startDay: undefined,
-          startTime: "09:00",
+          startTime: '09:00',
           endDay: undefined,
-          endTime: "09:00",
+          endTime: '09:00',
         },
       ],
       {
         startTime: {
-          0: { value: "12:00 PM" },
-          1: { value: "invalid" },
+          0: { value: '12:00 PM' },
+          1: { value: 'invalid' },
         } as unknown as Record<number, HTMLInputElement>,
         endTime: {
-          1: { value: "1:00 PM" },
-          2: { value: "8:00 AM" },
+          1: { value: '1:00 PM' },
+          2: { value: '8:00 AM' },
         } as unknown as Record<number, HTMLInputElement>,
       },
       localeTimeFormat12
     )
-  ).toHaveProperty("hours-of-operation.empty");
+  ).toHaveProperty('hours-of-operation.empty');
 });
 
-test("Conflicts are reported", () => {
+test('Conflicts are reported', () => {
   expect(
     validateHoursOfOperation(
       [
@@ -124,5 +124,5 @@ test("Conflicts are reported", () => {
       },
       localeTimeFormat12
     )
-  ).toHaveProperty("hours-of-operation.conflicts");
+  ).toHaveProperty('hours-of-operation.conflicts');
 });

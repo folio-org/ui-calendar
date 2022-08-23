@@ -6,12 +6,12 @@ import {
   Pane,
   PaneFooter,
   Paneset,
-} from "@folio/stripes-components";
-import React, { FunctionComponent, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
-import DataRepository from "../data/DataRepository";
-import CalendarForm, { FORM_ID } from "../forms/CalendarForm/CalendarForm";
-import { Calendar } from "../types/types";
+} from '@folio/stripes-components';
+import React, { FunctionComponent, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import DataRepository from '../data/DataRepository';
+import CalendarForm, { FORM_ID } from '../forms/CalendarForm/CalendarForm';
+import { Calendar } from '../types/types';
 
 export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;
@@ -114,8 +114,8 @@ export const CreateEditCalendarLayer: FunctionComponent<
       contentLabel={intl.formatMessage({
         id:
           getOpType(props.initialValue, props.isEdit) === OpType.EDIT
-            ? "ui-calendar.calendarForm.title.edit"
-            : "ui-calendar.calendarForm.title.create",
+            ? 'ui-calendar.calendarForm.title.edit'
+            : 'ui-calendar.calendarForm.title.create',
       })}
       isOpen
     >

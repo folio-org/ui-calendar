@@ -16,17 +16,17 @@ on: [push, pull_request]
 jobs:
   github-actions-ci:
     env:
-      YARN_TEST_OPTIONS: "--coverage"
-      SQ_ROOT_DIR: "./src"
-      COMPILE_TRANSLATION_FILES: "true"
-      PUBLISH_MOD_DESCRIPTOR: "true"
-      FOLIO_NPM_REGISTRY: "https://repository.folio.org/repository/npm-folioci/"
-      FOLIO_MD_REGISTRY: "https://folio-registry.dev.folio.org"
-      NODEJS_VERSION: "16"
-      JEST_JUNIT_OUTPUT_DIR: "artifacts/jest-junit"
-      JEST_COVERAGE_REPORT_DIR: "artifacts/coverage-jest/lcov-report/"
-      SQ_LCOV_REPORT: "artifacts/coverage-jest/lcov.info"
-      SQ_EXCLUSIONS: "**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*-spec.js,**/karma.conf.js,**/jest.config.js"
+      YARN_TEST_OPTIONS: '--coverage'
+      SQ_ROOT_DIR: './src'
+      COMPILE_TRANSLATION_FILES: 'true'
+      PUBLISH_MOD_DESCRIPTOR: 'true'
+      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
+      FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
+      NODEJS_VERSION: '16'
+      JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
+      JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
+      SQ_LCOV_REPORT: 'artifacts/coverage-jest/lcov.info'
+      SQ_EXCLUSIONS: '**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*-spec.js,**/karma.conf.js,**/jest.config.js'
 
     runs-on: ubuntu-latest
     steps:
@@ -84,7 +84,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ github.token }}
-          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
+          files: '${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml'
           check_name: Jest Unit Test Results
           comment_mode: always
           comment_title: Jest Unit Test Statistics
@@ -168,8 +168,8 @@ jobs:
         uses: fjogeleit/http-request-action@master
         with:
           url: ${{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules
-          method: "POST"
-          contentType: "application/json; charset=utf-8"
+          method: 'POST'
+          contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
           data: ${{ steps.moduleDescriptor.outputs.content }}
           username: ${{ secrets.FOLIO_REGISTRY_USERNAME }}

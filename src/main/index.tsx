@@ -1,7 +1,7 @@
-import { SettingsProps } from "@folio/stripes-smart-components";
-import React, { FunctionComponent } from "react";
-import { hot } from "react-hot-loader";
-import Settings from "./views";
+import { SettingsProps } from '@folio/stripes-smart-components';
+import React, { FunctionComponent } from 'react';
+import { hot } from 'react-hot-loader';
+import Settings from './views';
 
 const CalendarRouting: FunctionComponent<SettingsProps> = (props) => {
   if (props.showSettings) {

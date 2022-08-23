@@ -1,5 +1,5 @@
-import { StripesType } from "@folio/stripes-smart-components";
-import { ReactNode } from "react";
+import { StripesType } from '@folio/stripes-smart-components';
+import { ReactNode } from 'react';
 
 export default function ifPermissionOr(
   stripes: StripesType,

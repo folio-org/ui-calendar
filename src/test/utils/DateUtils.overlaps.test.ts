@@ -1,7 +1,7 @@
-import { overlaps } from "../../main/utils/DateUtils";
-import * as Dates from "../config/data/Dates";
+import { overlaps } from '../../main/utils/DateUtils';
+import * as Dates from '../config/data/Dates';
 
-test("Distinct multi-day ranges do not overlap", () => {
+test('Distinct multi-day ranges do not overlap', () => {
   expect(overlaps(Dates.JAN_1, Dates.FEB_1, Dates.MAY_1, Dates.DEC_1)).toBe(
     false
   );
@@ -17,7 +17,7 @@ test("Distinct multi-day ranges do not overlap", () => {
   );
 });
 
-test("Distinct single-day ranges do not overlap", () => {
+test('Distinct single-day ranges do not overlap', () => {
   expect(overlaps(Dates.JAN_1, Dates.JAN_1, Dates.DEC_1, Dates.DEC_1)).toBe(
     false
   );
@@ -33,7 +33,7 @@ test("Distinct single-day ranges do not overlap", () => {
   );
 });
 
-test("Distinct single-day overlaps", () => {
+test('Distinct single-day overlaps', () => {
   expect(overlaps(Dates.JAN_1, Dates.DEC_1, Dates.MAY_1, Dates.MAY_1)).toBe(
     true
   );
@@ -60,7 +60,7 @@ test("Distinct single-day overlaps", () => {
   );
 });
 
-test("Overlapping multi-day ranges overlap", () => {
+test('Overlapping multi-day ranges overlap', () => {
   // parameters are A,B,C,D
 
   // identical AB=CD (-A=C-B=D-)

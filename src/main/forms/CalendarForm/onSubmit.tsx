@@ -1,13 +1,13 @@
-import { CalloutContextType } from "@folio/stripes-core";
-import { FormApi, FORM_ERROR, SubmissionErrors } from "final-form";
-import React, { ReactNode } from "react";
-import { FormattedMessage, IntlShape } from "react-intl";
-import RowType from "../../components/fields/RowType";
-import DataRepository from "../../data/DataRepository";
-import { Calendar, ErrorCode, ErrorResponse, Weekday } from "../../types/types";
-import dayjs from "../../utils/dayjs";
-import { formatList } from "../../utils/I18nUtils";
-import { FormValues } from "./types";
+import { CalloutContextType } from '@folio/stripes-core';
+import { FormApi, FORM_ERROR, SubmissionErrors } from 'final-form';
+import React, { ReactNode } from 'react';
+import { FormattedMessage, IntlShape } from 'react-intl';
+import RowType from '../../components/fields/RowType';
+import DataRepository from '../../data/DataRepository';
+import { Calendar, ErrorCode, ErrorResponse, Weekday } from '../../types/types';
+import dayjs from '../../utils/dayjs';
+import { formatList } from '../../utils/I18nUtils';
+import { FormValues } from './types';
 
 export default async function onSubmit(
   props: {
@@ -31,18 +31,18 @@ export default async function onSubmit(
   const newCalendar: Calendar = {
     id: null,
     name: values.name,
-    startDate: values["start-date"],
-    endDate: values["end-date"],
+    startDate: values['start-date'],
+    endDate: values['end-date'],
     assignments: [],
     normalHours: [],
     exceptions: [],
   };
 
-  values["service-points"]?.forEach((servicePoint) =>
+  values['service-points']?.forEach((servicePoint) =>
     newCalendar.assignments.push(servicePoint.id)
   );
 
-  values["hours-of-operation"]?.forEach((opening) => {
+  values['hours-of-operation']?.forEach((opening) => {
     if (opening.type === RowType.Closed) return;
 
     newCalendar.normalHours.push({
@@ -64,10 +64,10 @@ export default async function onSubmit(
     } else {
       const minDate = dayjs
         .min(exception.rows.map(({ startDate }) => dayjs(startDate)))
-        .format("YYYY-MM-DD");
+        .format('YYYY-MM-DD');
       const maxDate = dayjs
         .max(exception.rows.map(({ endDate }) => dayjs(endDate)))
-        .format("YYYY-MM-DD");
+        .format('YYYY-MM-DD');
 
       newCalendar.exceptions.push({
         name: exception.name,
@@ -100,9 +100,9 @@ export default async function onSubmit(
         case ErrorCode.CALENDAR_DATE_OVERLAP:
           calloutContext.sendCallout({
             message: error.message,
-            type: "error",
+            type: 'error',
           });
-          submissionErrors["service-points"] = (
+          submissionErrors['service-points'] = (
             <>
               <FormattedMessage
                 id="ui-calendar.calendarForm.error.servicePointConflict"
@@ -132,7 +132,7 @@ export default async function onSubmit(
           alert(error.message);
           // eslint-disable-next-line no-console
           console.error(
-            "The following error should have been caught by form validation!",
+            'The following error should have been caught by form validation!',
             error
           );
           submissionErrors[FORM_ERROR] = <>{error.message}</>;
@@ -149,7 +149,7 @@ export default async function onSubmit(
             message: (
               <FormattedMessage id="ui-calendar.calendarForm.error.internalServerError" />
             ),
-            type: "error",
+            type: 'error',
           });
           submissionErrors[FORM_ERROR] = error.message;
       }

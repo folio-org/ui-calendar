@@ -1,1 +1,1 @@
-import "./__mock__/stripesCore.mock";
+import './__mock__/stripesCore.mock';

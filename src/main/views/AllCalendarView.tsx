@@ -4,32 +4,32 @@ import {
   LoadingPane,
   MenuSection,
   Pane,
-} from "@folio/stripes-components";
+} from '@folio/stripes-components';
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from "@folio/stripes-connect";
-import { IfPermission, useStripes } from "@folio/stripes-core";
-import React, { ReactNode, useRef, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+} from '@folio/stripes-connect';
+import { IfPermission, useStripes } from '@folio/stripes-core';
+import React, { ReactNode, useRef, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import {
   Route,
   RouteComponentProps,
   Switch,
   useHistory,
   useRouteMatch,
-} from "react-router-dom";
-import SortableMultiColumnList from "../components/SortableMultiColumnList";
-import { MANIFEST, Resources } from "../data/SharedData";
-import useDataRepository from "../data/useDataRepository";
-import PurgeModal from "../forms/PurgeModal";
-import permissions from "../types/permissions";
-import { Calendar } from "../types/types";
-import { getLocalizedDate } from "../utils/DateUtils";
-import { formatList } from "../utils/I18nUtils";
-import ifPermissionOr from "../utils/ifPermissionOr";
-import CreateEditCalendarLayer from "./CreateEditCalendarLayer";
-import InfoPane from "./panes/InfoPane";
+} from 'react-router-dom';
+import SortableMultiColumnList from '../components/SortableMultiColumnList';
+import { MANIFEST, Resources } from '../data/SharedData';
+import useDataRepository from '../data/useDataRepository';
+import PurgeModal from '../forms/PurgeModal';
+import permissions from '../types/permissions';
+import { Calendar } from '../types/types';
+import { getLocalizedDate } from '../utils/DateUtils';
+import { formatList } from '../utils/I18nUtils';
+import ifPermissionOr from '../utils/ifPermissionOr';
+import CreateEditCalendarLayer from './CreateEditCalendarLayer';
+import InfoPane from './panes/InfoPane';
 
 export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
 
@@ -44,7 +44,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
   const currentRouteId = useRouteMatch<{ calendarId: string }>(
-    "/settings/calendar/all/:calendarId"
+    '/settings/calendar/all/:calendarId'
   )?.params?.calendarId;
 
   if (!dataRepository.isLoaded()) {
@@ -62,7 +62,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       assignments: servicePointNames.length ? (
         formatList(intl, servicePointNames)
       ) : (
-        <div style={{ fontStyle: "italic", color: "grey" }}>
+        <div style={{ fontStyle: 'italic', color: 'grey' }}>
           <FormattedMessage id="ui-calendar.allCalendarView.noAssignments" />
         </div>
       ),
@@ -73,7 +73,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
   return (
     <>
       <Pane
-        defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
+        defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}
         actionMenu={({ onToggle }) =>
           ifPermissionOr(
@@ -121,11 +121,11 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
             assignments: ReactNode;
             calendar: Calendar;
           },
-          "calendar"
+          'calendar'
         >
           sortedColumn="startDate"
           sortDirection="ascending"
-          dateColumns={["startDate", "endDate"]}
+          dateColumns={['startDate', 'endDate']}
           columnMapping={{
             name: (
               <FormattedMessage id="ui-calendar.allCalendarView.column.name" />
@@ -141,14 +141,14 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
             ),
           }}
           contentData={rows}
-          rowMetadata={["calendar"]}
+          rowMetadata={['calendar']}
           isSelected={({ item }) => {
             return item.calendar.id === currentRouteId;
           }}
           onRowClick={(_e, info) => {
             if (info.calendar.id === currentRouteId) {
               // already displaying, being hidden
-              history.push("/settings/calendar/all/");
+              history.push('/settings/calendar/all/');
             } else {
               history.push(`/settings/calendar/all/${info.calendar.id}`);
             }
@@ -164,9 +164,9 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
               <CreateEditCalendarLayer
                 dataRepository={dataRepository}
                 initialValue={dataRepository.getCalendar(
-                  new URLSearchParams(location.search).get("source")
+                  new URLSearchParams(location.search).get('source')
                 )}
-                onClose={(id = "") => {
+                onClose={(id = '') => {
                   history.push(`/settings/calendar/all/${id}`);
                   showCreateLayerButtonRef.current?.focus();
                 }}
@@ -195,7 +195,7 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
             editBasePath="/settings/calendar/all/edit"
             creationBasePath="/settings/calendar/all/create"
             onClose={() => {
-              history.push("/settings/calendar/all/");
+              history.push('/settings/calendar/all/');
             }}
             calendar={
               dataRepository

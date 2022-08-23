@@ -1,7 +1,7 @@
-import { RequireExactlyOne } from "@folio/stripes-components/types/utils";
-import { ReactNode } from "react";
-import { Weekday } from "../../types/types";
-import RowType from "./RowType";
+import { RequireExactlyOne } from '@folio/stripes-components/types/utils';
+import { ReactNode } from 'react';
+import { Weekday } from '../../types/types';
+import RowType from './RowType';
 
 export interface MCLContentsType {
   rowState: HoursOfOperationRowState;
@@ -25,13 +25,13 @@ export interface HoursOfOperationRowState {
 
 export type HoursOfOperationErrors = RequireExactlyOne<{
   empty?: {
-    [field in keyof Omit<HoursOfOperationRowState, "i" | "type">]: Record<
+    [field in keyof Omit<HoursOfOperationRowState, 'i' | 'type'>]: Record<
       number,
       ReactNode
     >;
   };
   invalidTimes?: {
-    [field in "startTime" | "endTime"]: Record<number, ReactNode>;
+    [field in 'startTime' | 'endTime']: Record<number, ReactNode>;
   };
   conflicts?: Set<number>;
 }>;

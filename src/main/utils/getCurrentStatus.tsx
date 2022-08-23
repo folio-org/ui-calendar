@@ -1,12 +1,12 @@
-import type { Dayjs } from "dayjs";
-import React, { ReactNode } from "react";
-import { FormattedMessage, IntlShape } from "react-intl";
+import type { Dayjs } from 'dayjs';
+import React, { ReactNode } from 'react';
+import { FormattedMessage, IntlShape } from 'react-intl';
 import {
   Calendar,
   CalendarException,
   CalendarOpening,
   Weekday,
-} from "../types/types";
+} from '../types/types';
 import {
   getCurrentExceptionalOpening,
   getCurrentNormalOpening,
@@ -14,19 +14,19 @@ import {
   getNextExceptionalOpening,
   getNextNormalOpening,
   isOpen247,
-} from "./CalendarUtils";
+} from './CalendarUtils';
 import {
   getLocalizedDate,
   getLocalizedTime,
   getRelativeDateTimeProximity,
-} from "./DateUtils";
-import dayjs from "./dayjs";
+} from './DateUtils';
+import dayjs from './dayjs';
 import {
   getRelativeWeekdayStatus,
   LocaleWeekdayInfo,
   RelativeWeekdayStatus,
   WEEKDAY_INDEX,
-} from "./WeekdayUtils";
+} from './WeekdayUtils';
 
 type Status =
   | {
@@ -34,7 +34,7 @@ type Status =
       exceptional: true;
       exceptionName: string;
       nextEvent?: {
-        proximity: "sameDay" | "nextDay" | "nextWeek" | "sameElse";
+        proximity: 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse';
         weekday: Weekday;
         date: string;
         time: string;
@@ -205,26 +205,26 @@ export default function getCurrentStatus(
 ): ReactNode {
   const status = getCurrentStatusNonFormatted(intl, testDateTime, calendar);
 
-  let translationKey = "ui-calendar.currentStatus";
+  let translationKey = 'ui-calendar.currentStatus';
 
   if (status.open) {
-    translationKey += ".open";
+    translationKey += '.open';
   } else {
-    translationKey += ".closed";
+    translationKey += '.closed';
   }
 
   if (status.exceptional) {
-    translationKey += ".exceptional";
+    translationKey += '.exceptional';
   }
 
   if (status.nextEvent !== undefined) {
-    translationKey += "." + status.nextEvent.proximity;
+    translationKey += '.' + status.nextEvent.proximity;
   } else {
-    translationKey += ".noNext";
+    translationKey += '.noNext';
   }
 
   const nextWeekday = status.nextEvent?.weekday;
-  let nextWeekdayString = "";
+  let nextWeekdayString = '';
   if (nextWeekday !== undefined) {
     localeWeekdays.forEach(({ weekday, long }) => {
       if (weekday === nextWeekday) {

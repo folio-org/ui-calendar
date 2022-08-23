@@ -1,6 +1,6 @@
-import type { Dayjs } from "dayjs";
-import { IntlShape } from "react-intl";
-import dayjs from "./dayjs";
+import type { Dayjs } from 'dayjs';
+import { IntlShape } from 'react-intl';
+import dayjs from './dayjs';
 
 /** Compare two dayjs objects */
 export function dayjsCompare(a: Dayjs, b: Dayjs): number {
@@ -16,7 +16,7 @@ export function getDateRange(start: Dayjs, end: Dayjs): Dayjs[] {
 
   do {
     result.push(current);
-    current = current.add(1, "day");
+    current = current.add(1, 'day');
   } while (current.isSameOrBefore(end));
 
   return result;
@@ -41,13 +41,13 @@ export function overlaps(
 export function getRelativeDateTimeProximity(
   date: Dayjs | string,
   referenceDate: Dayjs
-): "sameDay" | "nextDay" | "nextWeek" | "sameElse" {
+): 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse' {
   return dayjs(dayjs(date).utc(true).toISOString()).calendar(referenceDate, {
-    sameDay: "[sameDay]", // "[at] LT",
-    nextDay: "[nextDay]", // "[tomorrow at] LT",
-    nextWeek: "[nextWeek]", // "dddd [at] LT",
-    sameElse: "[sameElse]", // "L",
-  }) as "sameDay" | "nextDay" | "nextWeek" | "sameElse";
+    sameDay: '[sameDay]', // "[at] LT",
+    nextDay: '[nextDay]', // "[tomorrow at] LT",
+    nextWeek: '[nextWeek]', // "dddd [at] LT",
+    sameElse: '[sameElse]', // "L",
+  }) as 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse';
 }
 
 /** Localize time with `react-intl` */
@@ -55,13 +55,13 @@ export function getLocalizedTime(
   intl: IntlShape,
   time: string | Dayjs
 ): string {
-  const obj = dayjs(time, "HH:mm");
+  const obj = dayjs(time, 'HH:mm');
   if (
     (obj.tz(intl.timeZone).hour() === 23 &&
       obj.tz(intl.timeZone).minute() === 59) ||
     (obj.tz(intl.timeZone).hour() === 0 && obj.tz(intl.timeZone).minute() === 0)
   ) {
-    return intl.formatMessage({ id: "ui-calendar.midnight" });
+    return intl.formatMessage({ id: 'ui-calendar.midnight' });
   }
   return intl.formatTime(obj.utc(true).toDate());
 }

@@ -1,7 +1,7 @@
-import { Select } from "@folio/stripes-components";
-import React from "react";
-import { useIntl } from "react-intl";
-import RowType from "./RowType";
+import { Select } from '@folio/stripes-components';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import RowType from './RowType';
 
 export interface OpenClosedSelectProps {
   value: RowType;
@@ -25,13 +25,13 @@ export default function OpenClosedSelect({
         {
           value: RowType.Open,
           label: intl.formatMessage({
-            id: "ui-calendar.calendarForm.openClosedSelect.open",
+            id: 'ui-calendar.calendarForm.openClosedSelect.open',
           }),
         },
         {
           value: RowType.Closed,
           label: intl.formatMessage({
-            id: "ui-calendar.calendarForm.openClosedSelect.closed",
+            id: 'ui-calendar.calendarForm.openClosedSelect.closed',
           }),
         },
       ]}

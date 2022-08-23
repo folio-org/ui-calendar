@@ -1,18 +1,18 @@
 /* eslint-disable import/no-duplicates */
 
 // allow TypeScript to permit importing CSS files
-declare module "*.css" {
+declare module '*.css' {
   const styles: { [className: string]: string };
   export = styles;
 }
 
-declare module "@folio/stripes-core" {
-  import { StripesType } from "@folio/stripes-smart-components";
-  import { Context, FunctionComponent, ReactNode } from "react";
+declare module '@folio/stripes-core' {
+  import { StripesType } from '@folio/stripes-smart-components';
+  import { Context, FunctionComponent, ReactNode } from 'react';
 
   export type CalloutContextType = {
     sendCallout: (args: {
-      type?: "success" | "error" | "warning" | "info";
+      type?: 'success' | 'error' | 'warning' | 'info';
       timeout?: number;
       message: ReactNode;
     }) => void;
@@ -27,18 +27,18 @@ declare module "@folio/stripes-core" {
   }>;
 }
 
-declare module "@folio/stripes-connect" {
-  import { Optional } from "@folio/stripes-components/types/utils";
-  import { FunctionComponent } from "react";
-  import { RouteComponentProps } from "react-router-dom";
+declare module '@folio/stripes-connect' {
+  import { Optional } from '@folio/stripes-components/types/utils';
+  import { FunctionComponent } from 'react';
+  import { RouteComponentProps } from 'react-router-dom';
 
   interface LocalResourceManifest {
-    type?: "local";
+    type?: 'local';
   }
   type FunctionalPathOrParam<Props> = (
     queryParams: Record<string, string>,
     pathParams: Record<string, string>,
-    resources: ConnectedComponentProps<Props>["resources"],
+    resources: ConnectedComponentProps<Props>['resources'],
     logger: { log: typeof console.log },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     props: Props & RouteComponentProps
@@ -100,7 +100,7 @@ declare module "@folio/stripes-connect" {
   }
   interface RestResourceManifest<Props>
     extends RestResourceConfiguration<Props> {
-    type: "rest";
+    type: 'rest';
     GET?: Partial<RestResourceConfiguration<Props>>;
     POST?: Partial<RestResourceConfiguration<Props>>;
     PUT?: Partial<RestResourceConfiguration<Props>>;
@@ -108,8 +108,8 @@ declare module "@folio/stripes-connect" {
     PATCH?: Partial<RestResourceConfiguration<Props>>;
   }
   interface OkapiResourceManifest<Props>
-    extends Omit<Optional<RestResourceManifest<Props>, "root">, "type"> {
-    type: "okapi";
+    extends Omit<Optional<RestResourceManifest<Props>, 'root'>, 'type'> {
+    type: 'okapi';
   }
 
   export interface ResourceTypeSpec {
@@ -126,11 +126,11 @@ declare module "@folio/stripes-connect" {
     Resources extends ResourceTypeSpec
   > extends FunctionComponent<Props> {
     manifest: {
-      [resource in keyof Resources["local"]]: LocalResourceManifest;
+      [resource in keyof Resources['local']]: LocalResourceManifest;
     } & {
-      [resource in keyof Resources["rest"]]: RestResourceManifest<Props>;
+      [resource in keyof Resources['rest']]: RestResourceManifest<Props>;
     } & {
-      [resource in keyof Resources["okapi"]]: OkapiResourceManifest<Props>;
+      [resource in keyof Resources['okapi']]: OkapiResourceManifest<Props>;
     };
   }
 
@@ -144,8 +144,8 @@ declare module "@folio/stripes-connect" {
   }
 
   export type LocalResourceMutationType =
-    | "@@stripes-connect/LOCAL_UPDATE"
-    | "@@stripes-connect/LOCAL_REPLACE";
+    | '@@stripes-connect/LOCAL_UPDATE'
+    | '@@stripes-connect/LOCAL_REPLACE';
 
   interface MutatorResponse<
     ResourceName,
@@ -159,9 +159,9 @@ declare module "@folio/stripes-connect" {
 
   export interface ConnectedComponentProps<Resources extends ResourceTypeSpec> {
     resources: {
-      [resource in keyof Resources["local"]]: Resources["local"][resource];
+      [resource in keyof Resources['local']]: Resources['local'][resource];
     } & {
-      [resource in keyof (Resources["okapi"] & Resources["rest"])]: {
+      [resource in keyof (Resources['okapi'] & Resources['rest'])]: {
         /** The `dataKey` used when this component was connected, if any */
         dataKey?: string;
         /** If the last request failed */
@@ -179,7 +179,7 @@ declare module "@folio/stripes-connect" {
           /** The name of the resource */
           resource: resource;
           /** The type of mutation */
-          type: "DELETE" | "POST" | "PUT";
+          type: 'DELETE' | 'POST' | 'PUT';
         }[];
         /** If the initial records have loaded */
         hasLoaded: boolean;
@@ -198,15 +198,15 @@ declare module "@folio/stripes-connect" {
         /** Seems to be an empty array */
         pendingMutations: never[];
         /** The fetched records */
-        records: (Resources["okapi"] & Resources["rest"])[resource][];
+        records: (Resources['okapi'] & Resources['rest'])[resource][];
         /** The name of the resource */
         resource?: resource;
         /** Completed mutations */
         successfulMutations: {
           /** The type of mutation */
-          type: "DELETE" | "POST" | "PUT";
+          type: 'DELETE' | 'POST' | 'PUT';
           /** The record the mutation applied to */
-          record: Partial<(Resources["okapi"] & Resources["rest"])[resource]>;
+          record: Partial<(Resources['okapi'] & Resources['rest'])[resource]>;
         }[];
         /** If error messages are thrown and alerted directly */
         throwErrors?: boolean;
@@ -215,26 +215,26 @@ declare module "@folio/stripes-connect" {
       };
     };
     mutator: {
-      [resource in keyof Resources["local"]]: {
+      [resource in keyof Resources['local']]: {
         /** Merge the provided object into the current resource, Object.assign style */
         update: (
-          newData: Partial<Resources["local"][resource]>
+          newData: Partial<Resources['local'][resource]>
         ) => MutatorResponse<
           resource,
-          Resources["local"][resource],
-          "@@stripes-connect/LOCAL_UPDATE"
+          Resources['local'][resource],
+          '@@stripes-connect/LOCAL_UPDATE'
         >;
         /** Replace the current resource with the provided resource */
         replace: (
-          newData: Resources["local"][resource]
+          newData: Resources['local'][resource]
         ) => MutatorResponse<
           resource,
-          Resources["local"][resource],
-          "@@stripes-connect/LOCAL_REPLACE"
+          Resources['local'][resource],
+          '@@stripes-connect/LOCAL_REPLACE'
         >;
       };
     } & {
-      [resource in keyof (Resources["rest"] & Resources["okapi"])]: {
+      [resource in keyof (Resources['rest'] & Resources['okapi'])]: {
         /** Attempt to cancel the requests; requires `abortable` be enabled */
         cancel: () => void;
         /** Reset the internal cache, only available if `accumulate` is enabled */
@@ -245,21 +245,21 @@ declare module "@folio/stripes-connect" {
          * the existing `resources`.
          */
         GET?: (args?: {
-          params?: RestResourceConfiguration<never>["params"];
-        }) => Promise<(Resources["rest"] & Resources["okapi"])[resource][]>;
+          params?: RestResourceConfiguration<never>['params'];
+        }) => Promise<(Resources['rest'] & Resources['okapi'])[resource][]>;
         /** Sends a POST request */
         POST: (
-          data: (Resources["rest"] & Resources["okapi"])[resource],
+          data: (Resources['rest'] & Resources['okapi'])[resource],
           options?: { silent?: boolean }
-        ) => Promise<(Resources["rest"] & Resources["okapi"])[resource]>;
+        ) => Promise<(Resources['rest'] & Resources['okapi'])[resource]>;
         /** Sends a PUT request */
         PUT: (
-          data: (Resources["rest"] & Resources["okapi"])[resource],
+          data: (Resources['rest'] & Resources['okapi'])[resource],
           options?: { silent?: boolean }
-        ) => Promise<(Resources["rest"] & Resources["okapi"])[resource]>;
+        ) => Promise<(Resources['rest'] & Resources['okapi'])[resource]>;
         /** Sends a DELETE request */
         DELETE: (
-          data: Partial<(Resources["rest"] & Resources["okapi"])[resource]>,
+          data: Partial<(Resources['rest'] & Resources['okapi'])[resource]>,
           options?: { silent?: boolean }
         ) => Promise<void>;
       };
@@ -267,16 +267,16 @@ declare module "@folio/stripes-connect" {
   }
 }
 
-declare module "@folio/stripes-smart-components" {
-  import { PaneProps } from "@folio/stripes-components/types/lib/Pane/Pane";
+declare module '@folio/stripes-smart-components' {
+  import { PaneProps } from '@folio/stripes-components/types/lib/Pane/Pane';
   import {
     ConnectedComponent,
     ConnectedComponentProps,
     ResourceTypeSpec,
-  } from "@folio/stripes-connect";
-  import { Location } from "history";
-  import { Component, ComponentType, ReactNode, RefObject } from "react";
-  import { Subtract } from "utility-types";
+  } from '@folio/stripes-connect';
+  import { Location } from 'history';
+  import { Component, ComponentType, ReactNode, RefObject } from 'react';
+  import { Subtract } from 'utility-types';
 
   export interface StripesType {
     connect: <
@@ -291,7 +291,7 @@ declare module "@folio/stripes-smart-components" {
 
   export interface SettingsProps {
     additionalRoutes?: ReactNode[];
-    navPaneWidth?: PaneProps["defaultWidth"];
+    navPaneWidth?: PaneProps['defaultWidth'];
     pages: {
       route: string;
       label: ReactNode;
@@ -309,9 +309,9 @@ declare module "@folio/stripes-smart-components" {
   export class Settings extends Component<SettingsProps> {}
 }
 
-declare module "@folio/stripes-components/lib/Datepicker/staticFirstWeekDay" {
+declare module '@folio/stripes-components/lib/Datepicker/staticFirstWeekDay' {
   const staticData: Record<
-    "sat" | "sun" | "mon" | "tue" | "wed" | "thu" | "fri",
+    'sat' | 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri',
     string[]
   >;
 

@@ -1,8 +1,8 @@
-import { ConnectedComponentProps } from "@folio/stripes-connect";
-import type { Dayjs } from "dayjs";
-import memoizee from "memoizee";
-import { Calendar, DailyOpeningInfo, ServicePoint } from "../types/types";
-import { MAX_LIMIT, Resources } from "./SharedData";
+import { ConnectedComponentProps } from '@folio/stripes-connect';
+import type { Dayjs } from 'dayjs';
+import memoizee from 'memoizee';
+import { Calendar, DailyOpeningInfo, ServicePoint } from '../types/types';
+import { MAX_LIMIT, Resources } from './SharedData';
 
 const getServicePointMap = memoizee(
   (servicePoints: ServicePoint[]): Record<string, ServicePoint> => {
@@ -15,12 +15,12 @@ const getServicePointMap = memoizee(
 );
 
 export default class DataRepository {
-  private resources: ConnectedComponentProps<Resources>["resources"];
-  private mutator: ConnectedComponentProps<Resources>["mutator"];
+  private resources: ConnectedComponentProps<Resources>['resources'];
+  private mutator: ConnectedComponentProps<Resources>['mutator'];
 
   constructor(
-    resources: ConnectedComponentProps<Resources>["resources"],
-    mutator: ConnectedComponentProps<Resources>["mutator"]
+    resources: ConnectedComponentProps<Resources>['resources'],
+    mutator: ConnectedComponentProps<Resources>['mutator']
   ) {
     this.resources = resources;
     this.resources.servicePoints.records.sort((a, b) =>
@@ -112,7 +112,7 @@ export default class DataRepository {
   deleteCalendars(calendars: Calendar[]): Promise<void> {
     // tricks stripes-connect into sending API request with comma-delimited path variable
     // stripes-connect only looks at `id` on calendar so other properties are not needed
-    const joinedCalendarIds = calendars.map((c) => c.id).join(",");
+    const joinedCalendarIds = calendars.map((c) => c.id).join(',');
     const calendar = { id: joinedCalendarIds } as Calendar;
 
     this.mutator.dates.reset?.();
@@ -130,9 +130,9 @@ export default class DataRepository {
     return this.mutator.dates.GET({
       params: {
         limit: MAX_LIMIT.toString(),
-        includeClosed: "true",
-        startDate: startDate.format("YYYY-MM-DD"),
-        endDate: endDate.format("YYYY-MM-DD"),
+        includeClosed: 'true',
+        startDate: startDate.format('YYYY-MM-DD'),
+        endDate: endDate.format('YYYY-MM-DD'),
       },
     });
   }

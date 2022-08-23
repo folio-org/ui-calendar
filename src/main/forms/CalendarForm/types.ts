@@ -1,13 +1,13 @@
-import { ServicePoint } from "../../types/types";
-import { ExceptionRowState } from "../../components/fields/ExceptionFieldTypes";
-import { HoursOfOperationRowState } from "../../components/fields/HoursOfOperationFieldTypes";
+import { ServicePoint } from '../../types/types';
+import { ExceptionRowState } from '../../components/fields/ExceptionFieldTypes';
+import { HoursOfOperationRowState } from '../../components/fields/HoursOfOperationFieldTypes';
 
 export interface FormValues {
   name: string;
-  "start-date": string;
-  "end-date": string;
-  "service-points": ServicePoint[];
-  "hours-of-operation": HoursOfOperationRowState[];
+  'start-date': string;
+  'end-date': string;
+  'service-points': ServicePoint[];
+  'hours-of-operation': HoursOfOperationRowState[];
   exceptions: ExceptionRowState[];
 }
 
@@ -26,5 +26,5 @@ export interface InnerFieldRefs {
 
 export type SimpleErrorFormValues = Omit<
   FormValues,
-  "hours-of-operation" | "exceptions"
+  'hours-of-operation' | 'exceptions'
 >;

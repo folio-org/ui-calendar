@@ -15,18 +15,18 @@ import {
   MultiColumnList,
   Pane,
   Row,
-} from "@folio/stripes-components";
-import { IfPermission, useStripes } from "@folio/stripes-core";
-import classNames from "classnames";
-import React, { FunctionComponent, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
-import DataRepository from "../../data/DataRepository";
-import permissions from "../../types/permissions";
-import { Calendar, CalendarException } from "../../types/types";
-import { isOpen247 } from "../../utils/CalendarUtils";
-import { getLocalizedDate } from "../../utils/DateUtils";
-import dayjs from "../../utils/dayjs";
-import ifPermissionOr from "../../utils/ifPermissionOr";
+} from '@folio/stripes-components';
+import { IfPermission, useStripes } from '@folio/stripes-core';
+import classNames from 'classnames';
+import React, { FunctionComponent, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import DataRepository from '../../data/DataRepository';
+import permissions from '../../types/permissions';
+import { Calendar, CalendarException } from '../../types/types';
+import { isOpen247 } from '../../utils/CalendarUtils';
+import { getLocalizedDate } from '../../utils/DateUtils';
+import dayjs from '../../utils/dayjs';
+import ifPermissionOr from '../../utils/ifPermissionOr';
 import {
   containsFullOvernightSpans,
   containsNextDayOvernight,
@@ -34,9 +34,9 @@ import {
   generateExceptionalOpeningRows,
   get247Rows,
   splitOpeningsIntoDays,
-} from "../../utils/InfoPaneUtils";
-import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
-import css from "./InfoPane.css";
+} from '../../utils/InfoPaneUtils';
+import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
+import css from './InfoPane.css';
 
 export interface InfoPaneProps {
   creationBasePath: string;
@@ -86,7 +86,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         Math.sign(
           dayjs(`${a.startDate} ${a.endDate}`).diff(
             dayjs(`${b.startDate} ${b.endDate}`),
-            "m"
+            'm'
           )
         )
       );
@@ -213,8 +213,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               onHeaderClick={() => ({})}
               getCellClass={(defaultClass, _rowData, column) =>
                 classNames(defaultClass, {
-                  [css.hoursCell]: column !== "day",
-                  [css.dayCell]: column === "day",
+                  [css.hoursCell]: column !== 'day',
+                  [css.dayCell]: column === 'day',
                 })
               }
               columnMapping={{
@@ -229,9 +229,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
               }}
               columnWidths={{
-                day: "40%",
-                startTime: "30%",
-                endTime: "30%",
+                day: '40%',
+                startTime: '30%',
+                endTime: '30%',
               }}
               contentData={dataRows}
             />
@@ -239,7 +239,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               className={
                 !isOpen247(calendar.normalHours) &&
                 containsNextDayOvernight(hours)
-                  ? ""
+                  ? ''
                   : css.hidden
               }
             >
@@ -249,13 +249,13 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               className={
                 !isOpen247(calendar.normalHours) &&
                 containsFullOvernightSpans(hours)
-                  ? ""
+                  ? ''
                   : css.hidden
               }
             >
               <FormattedMessage id="ui-calendar.infoPane.overnightHelpText" />
             </p>
-            <p className={isOpen247(calendar.normalHours) ? "" : css.hidden}>
+            <p className={isOpen247(calendar.normalHours) ? '' : css.hidden}>
               <FormattedMessage id="ui-calendar.infoPane.247HelpText" />
             </p>
           </Accordion>
@@ -279,15 +279,15 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
               }}
               columnWidths={{
-                name: "40%",
-                start: "30%",
-                end: "30%",
+                name: '40%',
+                start: '30%',
+                end: '30%',
               }}
               getCellClass={(defaultClass, _rowData, column) =>
                 classNames(defaultClass, {
-                  [css.hoursCell]: column !== "name",
-                  [css.exceptionCell]: column !== "name",
-                  [css.dayCell]: column === "name",
+                  [css.hoursCell]: column !== 'name',
+                  [css.exceptionCell]: column !== 'name',
+                  [css.dayCell]: column === 'name',
                 })
               }
               contentData={generateExceptionalOpeningRows(
@@ -321,9 +321,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
               }}
               columnWidths={{
-                name: "40%",
-                startDate: "30%",
-                endDate: "30%",
+                name: '40%',
+                startDate: '30%',
+                endDate: '30%',
               }}
               contentData={exceptions.closures.map((exception) => ({
                 name: exception.name,
@@ -347,7 +347,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           <FormattedMessage id="ui-calendar.infoPane.deletionModal.label" />
         }
         aria-label={intl.formatMessage({
-          id: "ui-calendar.infoPane.deletionModal.label",
+          id: 'ui-calendar.infoPane.deletionModal.label',
         })}
         size="small"
         footer={

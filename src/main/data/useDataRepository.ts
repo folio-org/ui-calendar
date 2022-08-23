@@ -1,7 +1,7 @@
-import { ConnectedComponentProps } from "@folio/stripes-connect";
-import { useEffect, useState } from "react";
-import DataRepository from "./DataRepository";
-import { Resources } from "./SharedData";
+import { ConnectedComponentProps } from '@folio/stripes-connect';
+import { useEffect, useState } from 'react';
+import DataRepository from './DataRepository';
+import { Resources } from './SharedData';
 
 /**
  * Hook to include a data repository in the given component.  The data
@@ -9,8 +9,8 @@ import { Resources } from "./SharedData";
  * become available
  */
 export default function useDataRepository(
-  resources: ConnectedComponentProps<Resources>["resources"],
-  mutator: ConnectedComponentProps<Resources>["mutator"]
+  resources: ConnectedComponentProps<Resources>['resources'],
+  mutator: ConnectedComponentProps<Resources>['mutator']
 ): DataRepository {
   const [dataRepository, setDataRepository] = useState(
     new DataRepository(resources, mutator)

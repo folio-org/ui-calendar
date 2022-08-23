@@ -6,22 +6,22 @@ import {
   NavListItem,
   NavListSection,
   Pane,
-} from "@folio/stripes-components";
+} from '@folio/stripes-components';
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from "@folio/stripes-connect";
-import classNames from "classnames";
-import type { Dayjs } from "dayjs";
-import React, { ReactNode, useCallback, useEffect, useState } from "react";
-import { FormattedMessage, IntlShape, useIntl } from "react-intl";
-import { Route, useHistory, useRouteMatch } from "react-router-dom";
-import css from "../components/Calendar.css";
-import { MANIFEST, Resources } from "../data/SharedData";
-import useDataRepository from "../data/useDataRepository";
-import { DailyOpeningInfo } from "../types/types";
-import { getDateRange, getLocalizedTime } from "../utils/DateUtils";
-import MonthlyCalendarView from "./panes/MonthlyCalendarView";
+} from '@folio/stripes-connect';
+import classNames from 'classnames';
+import type { Dayjs } from 'dayjs';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { Route, useHistory, useRouteMatch } from 'react-router-dom';
+import css from '../components/Calendar.css';
+import { MANIFEST, Resources } from '../data/SharedData';
+import useDataRepository from '../data/useDataRepository';
+import { DailyOpeningInfo } from '../types/types';
+import { getDateRange, getLocalizedTime } from '../utils/DateUtils';
+import MonthlyCalendarView from './panes/MonthlyCalendarView';
 
 function dailyOpeningToCalendarDisplay(
   intl: IntlShape,
@@ -101,7 +101,7 @@ const MonthlyCalendarPickerView: ConnectedComponent<
 
   const currentRouteId = useRouteMatch<{
     servicePointId: string;
-  }>("/settings/calendar/monthly/:servicePointId")?.params?.servicePointId;
+  }>('/settings/calendar/monthly/:servicePointId')?.params?.servicePointId;
 
   useEffect(() => {
     if (currentRouteId !== undefined && !(currentRouteId in events)) {
@@ -120,7 +120,7 @@ const MonthlyCalendarPickerView: ConnectedComponent<
           loadingEvents[servicePointId] = {};
         }
         getDateRange(startDate, endDate).forEach((date) => {
-          loadingEvents[servicePointId][date.format("YYYY-MM-DD")] = (
+          loadingEvents[servicePointId][date.format('YYYY-MM-DD')] = (
             <Loading />
           );
         });
@@ -155,7 +155,7 @@ const MonthlyCalendarPickerView: ConnectedComponent<
   const listItems = dataRepository.getServicePoints().map((sp, i) => {
     return (
       <NavListItem key={i} to={sp.id}>
-        {sp.name.concat(sp.inactive ? " (inactive)" : "")}
+        {sp.name.concat(sp.inactive ? ' (inactive)' : '')}
       </NavListItem>
     );
   });
@@ -163,7 +163,7 @@ const MonthlyCalendarPickerView: ConnectedComponent<
   return (
     <>
       <Pane
-        defaultWidth={currentRouteId === undefined ? "fill" : "20%"}
+        defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={
           <FormattedMessage id="ui-calendar.monthlyCalendarView.title" />
         }
@@ -177,10 +177,10 @@ const MonthlyCalendarPickerView: ConnectedComponent<
       <Route path="/settings/calendar/monthly/:servicePointId">
         <MonthlyCalendarView
           onClose={() => {
-            history.push("/settings/calendar/monthly/");
+            history.push('/settings/calendar/monthly/');
           }}
           servicePoint={dataRepository.getServicePointsFromId(currentRouteId)}
-          events={events[currentRouteId ?? ""]}
+          events={events[currentRouteId ?? '']}
           requestEvents={requestEvents}
         />
       </Route>

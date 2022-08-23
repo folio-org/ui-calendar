@@ -1,16 +1,16 @@
-import { Pane } from "@folio/stripes-components";
-import type { Dayjs } from "dayjs";
+import { Pane } from '@folio/stripes-components';
+import type { Dayjs } from 'dayjs';
 import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
   useState,
-} from "react";
-import { useIntl } from "react-intl";
-import Calendar, { getDateArray } from "../../components/Calendar";
-import { ServicePoint } from "../../types/types";
-import dayjs from "../../utils/dayjs";
-import { useLocaleWeekdays } from "../../utils/WeekdayUtils";
+} from 'react';
+import { useIntl } from 'react-intl';
+import Calendar, { getDateArray } from '../../components/Calendar';
+import { ServicePoint } from '../../types/types';
+import dayjs from '../../utils/dayjs';
+import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 
 interface MonthlyCalendarViewProps {
   onClose: () => void;
@@ -31,7 +31,7 @@ export const MonthlyCalendarView: FunctionComponent<
   events,
   requestEvents,
 }: MonthlyCalendarViewProps) => {
-  const [monthBasis, setMonthBasis] = useState(dayjs().startOf("month")); // start at current date
+  const [monthBasis, setMonthBasis] = useState(dayjs().startOf('month')); // start at current date
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 
@@ -51,7 +51,7 @@ export const MonthlyCalendarView: FunctionComponent<
       }
 
       const missingDates = dateArray.map(
-        (date) => !(date.format("YYYY-MM-DD") in events)
+        (date) => !(date.format('YYYY-MM-DD') in events)
       );
       const rangeStartIndex = missingDates.indexOf(true);
       // none missing
@@ -76,7 +76,7 @@ export const MonthlyCalendarView: FunctionComponent<
       centerContent
       onClose={onClose}
       dismissible
-      lastMenu={<div style={{ width: "24px" }} />} // properly center heading
+      lastMenu={<div style={{ width: '24px' }} />} // properly center heading
     >
       <Calendar
         events={events ?? {}}

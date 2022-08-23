@@ -1,7 +1,7 @@
-import React, { ReactNode, RefObject } from "react";
-import { FormattedMessage } from "react-intl";
-import dayjs from "../../../utils/dayjs";
-import { FormValues, SimpleErrorFormValues } from "../types";
+import React, { ReactNode, RefObject } from 'react';
+import { FormattedMessage } from 'react-intl';
+import dayjs from '../../../utils/dayjs';
+import { FormValues, SimpleErrorFormValues } from '../types';
 
 /** Ensure a time's format is correct */
 export function isTimeProper(
@@ -18,17 +18,17 @@ export function isTimeProper(
     // the picker has a tendency to remove leading zeroes
     timeObject = dayjs(
       realInputValue,
-      localeTimeFormat.replace("HH", "H").replace("hh", "h"),
+      localeTimeFormat.replace('HH', 'H').replace('hh', 'h'),
       true
     );
   }
 
   return (
     timeObject.isValid() &&
-    (timeObject.format("HH:mm") === fieldValue ||
-      timeObject.format("HH:mm:ss") === fieldValue ||
-      timeObject.format("H:mm") === fieldValue ||
-      timeObject.format("H:mm:ss") === fieldValue)
+    (timeObject.format('HH:mm') === fieldValue ||
+      timeObject.format('HH:mm:ss') === fieldValue ||
+      timeObject.format('H:mm') === fieldValue ||
+      timeObject.format('H:mm:ss') === fieldValue)
   );
 }
 
@@ -46,8 +46,8 @@ export function validateDate(
   }
 
   if (
-    dateRef.current.value === "" &&
-    (!(key in values) || typeof values[key] !== "string")
+    dateRef.current.value === '' &&
+    (!(key in values) || typeof values[key] !== 'string')
   ) {
     return {
       [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />,
@@ -76,17 +76,17 @@ export function validateDate(
  * if improper, renters an error on `end-date`
  */
 export function validateDateOrder(values: Partial<FormValues>): {
-  "end-date"?: ReactNode;
+  'end-date'?: ReactNode;
 } {
   if (
-    typeof values["start-date"] === "string" &&
-    values["start-date"] !== "" &&
-    typeof values["end-date"] === "string" &&
-    values["end-date"] !== "" &&
-    values["end-date"] < values["start-date"]
+    typeof values['start-date'] === 'string' &&
+    values['start-date'] !== '' &&
+    typeof values['end-date'] === 'string' &&
+    values['end-date'] !== '' &&
+    values['end-date'] < values['start-date']
   ) {
     return {
-      "end-date": (
+      'end-date': (
         <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
       ),
     };

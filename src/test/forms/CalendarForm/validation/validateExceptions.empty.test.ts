@@ -1,8 +1,8 @@
-import RowType from "../../../../main/components/fields/RowType";
-import { validateExceptionsEmpty } from "../../../../main/forms/CalendarForm/validation/validateExceptions";
-import expectRender from "../../../config/util/expectRender";
+import RowType from '../../../../main/components/fields/RowType';
+import { validateExceptionsEmpty } from '../../../../main/forms/CalendarForm/validation/validateExceptions';
+import expectRender from '../../../config/util/expectRender';
 
-test("No rows is a valid state", () => {
+test('No rows is a valid state', () => {
   expect(
     validateExceptionsEmpty([], {
       startDate: {},
@@ -18,7 +18,7 @@ test("No rows is a valid state", () => {
           i: 0,
           lastRowI: 0,
           type: RowType.Closed,
-          name: "Foo",
+          name: 'Foo',
           rows: [],
         },
       ],
@@ -27,7 +27,7 @@ test("No rows is a valid state", () => {
   ).toBeUndefined();
 });
 
-test("Missing names are properly reported", () => {
+test('Missing names are properly reported', () => {
   expect(
     validateExceptionsEmpty(
       [
@@ -35,13 +35,13 @@ test("Missing names are properly reported", () => {
           i: 0,
           lastRowI: 0,
           type: RowType.Closed,
-          name: " ",
+          name: ' ',
           rows: [],
         },
       ],
       { startDate: {}, startTime: {}, endDate: {}, endTime: {} }
     )
-  ).toHaveProperty("empty.name.0");
+  ).toHaveProperty('empty.name.0');
   expectRender(
     validateExceptionsEmpty(
       [
@@ -49,23 +49,23 @@ test("Missing names are properly reported", () => {
           i: 0,
           lastRowI: 0,
           type: RowType.Closed,
-          name: " ",
+          name: ' ',
           rows: [],
         },
       ],
       { startDate: {}, startTime: {}, endDate: {}, endTime: {} }
     )?.empty?.name[0]
-  ).toBe("Please fill this in to continue");
+  ).toBe('Please fill this in to continue');
 });
 
-test("Undefined inner closure rows are properly reported", () => {
+test('Undefined inner closure rows are properly reported', () => {
   const validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
         lastRowI: 3,
         type: RowType.Closed,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
@@ -79,32 +79,32 @@ test("Undefined inner closure rows are properly reported", () => {
     ],
     { startDate: {}, startTime: {}, endDate: {}, endTime: {} }
   );
-  expect(validationResult).toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.endTime.2.3');
   expectRender(validationResult?.empty?.startDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
 });
 
-test("Empty string inner closure rows are properly reported", () => {
+test('Empty string inner closure rows are properly reported', () => {
   const validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
         lastRowI: 3,
         type: RowType.Closed,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
-            startDate: "",
+            startDate: '',
             startTime: undefined,
-            endDate: "",
+            endDate: '',
             endTime: undefined,
           },
         ],
@@ -112,32 +112,32 @@ test("Empty string inner closure rows are properly reported", () => {
     ],
     { startDate: {}, startTime: {}, endDate: {}, endTime: {} }
   );
-  expect(validationResult).toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.endTime.2.3');
   expectRender(validationResult?.empty?.startDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
 });
 
-test("Bad ref inner closure rows are properly reported", () => {
+test('Bad ref inner closure rows are properly reported', () => {
   const validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
         lastRowI: 3,
         type: RowType.Closed,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
-            startDate: "2000-01-01",
+            startDate: '2000-01-01',
             startTime: undefined,
-            endDate: "2000-01-01",
+            endDate: '2000-01-01',
             endTime: undefined,
           },
         ],
@@ -145,30 +145,30 @@ test("Bad ref inner closure rows are properly reported", () => {
     ],
     { startDate: {}, startTime: {}, endDate: {}, endTime: {} }
   );
-  expect(validationResult).toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.endTime.2.3');
   expectRender(validationResult?.empty?.startDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
 });
 
-test("Undefined inner opening rows are properly reported", () => {
+test('Undefined inner opening rows are properly reported', () => {
   let validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
         lastRowI: 3,
         type: RowType.Open,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
-            startDate: "foo",
+            startDate: 'foo',
             startTime: undefined,
             endDate: undefined,
             endTime: undefined,
@@ -177,24 +177,24 @@ test("Undefined inner opening rows are properly reported", () => {
       },
     ],
     {
-      startDate: { 2: { 3: document.createElement("input") } },
+      startDate: { 2: { 3: document.createElement('input') } },
       startTime: {},
       endDate: {},
       endTime: {},
     }
   );
-  expect(validationResult).not.toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).not.toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).toHaveProperty('empty.endTime.2.3');
   expectRender(validationResult?.empty?.startTime[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endTime[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
 
   validationResult = validateExceptionsEmpty(
@@ -203,13 +203,13 @@ test("Undefined inner opening rows are properly reported", () => {
         i: 2,
         lastRowI: 3,
         type: RowType.Open,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
             startDate: undefined,
             startTime: undefined,
-            endDate: "foo",
+            endDate: 'foo',
             endTime: undefined,
           },
         ],
@@ -218,30 +218,30 @@ test("Undefined inner opening rows are properly reported", () => {
     {
       startDate: {},
       startTime: {},
-      endDate: { 2: { 3: document.createElement("input") } },
+      endDate: { 2: { 3: document.createElement('input') } },
       endTime: {},
     }
   );
-  expect(validationResult).toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).not.toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).not.toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).toHaveProperty('empty.endTime.2.3');
 });
 
-test("Empty string open date rows are properly reported", () => {
+test('Empty string open date rows are properly reported', () => {
   const validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
         lastRowI: 3,
         type: RowType.Open,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
-            startDate: "",
-            startTime: "valid",
-            endDate: "",
+            startDate: '',
+            startTime: 'valid',
+            endDate: '',
             endTime: undefined,
           },
         ],
@@ -250,42 +250,42 @@ test("Empty string open date rows are properly reported", () => {
     {
       startDate: {},
       startTime: {
-        2: { 3: document.createElement("input") },
+        2: { 3: document.createElement('input') },
       },
       endDate: {},
       endTime: {},
     }
   );
-  expect(validationResult).toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).toHaveProperty('empty.endTime.2.3');
   expectRender(validationResult?.empty?.startDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endTime[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
 });
 
-test("Bad ref inner opening row dates are properly reported", () => {
+test('Bad ref inner opening row dates are properly reported', () => {
   const validationResult = validateExceptionsEmpty(
     [
       {
         i: 2,
         lastRowI: 3,
         type: RowType.Open,
-        name: " ",
+        name: ' ',
         rows: [
           {
             i: 3,
-            startDate: "2000-01-01",
-            startTime: "00:00",
-            endDate: "2000-01-01",
-            endTime: "09:00",
+            startDate: '2000-01-01',
+            startTime: '00:00',
+            endDate: '2000-01-01',
+            endTime: '09:00',
           },
         ],
       },
@@ -297,14 +297,14 @@ test("Bad ref inner opening row dates are properly reported", () => {
       endTime: {},
     }
   );
-  expect(validationResult).toHaveProperty("empty.startDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.startTime.2.3");
-  expect(validationResult).toHaveProperty("empty.endDate.2.3");
-  expect(validationResult).not.toHaveProperty("empty.endTime.2.3");
+  expect(validationResult).toHaveProperty('empty.startDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.startTime.2.3');
+  expect(validationResult).toHaveProperty('empty.endDate.2.3');
+  expect(validationResult).not.toHaveProperty('empty.endTime.2.3');
   expectRender(validationResult?.empty?.startDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
   expectRender(validationResult?.empty?.endDate[2][3]).toBe(
-    "Please fill this in to continue"
+    'Please fill this in to continue'
   );
 });

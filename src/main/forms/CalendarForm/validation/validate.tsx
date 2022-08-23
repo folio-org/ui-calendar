@@ -1,11 +1,11 @@
-import React, { ReactNode, RefObject } from "react";
-import { FormattedMessage } from "react-intl";
-import { ExceptionFieldErrors } from "../../../components/fields/ExceptionFieldTypes";
-import { HoursOfOperationErrors } from "../../../components/fields/HoursOfOperationFieldTypes";
-import { validateDateOrder, validateDate } from "./validateDateTime";
-import { FormValues, InnerFieldRefs, SimpleErrorFormValues } from "../types";
-import validateHoursOfOperation from "./validateHoursOfOperation";
-import validateExceptions from "./validateExceptions";
+import React, { ReactNode, RefObject } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { ExceptionFieldErrors } from '../../../components/fields/ExceptionFieldTypes';
+import { HoursOfOperationErrors } from '../../../components/fields/HoursOfOperationFieldTypes';
+import { validateDateOrder, validateDate } from './validateDateTime';
+import { FormValues, InnerFieldRefs, SimpleErrorFormValues } from '../types';
+import validateHoursOfOperation from './validateHoursOfOperation';
+import validateExceptions from './validateExceptions';
 
 /** Require a given key */
 function required(
@@ -17,8 +17,8 @@ function required(
   if (
     !(key in values) ||
     values[key] === undefined ||
-    (typeof values[key] === "string" &&
-      (values[key] as string).trim() === "") ||
+    (typeof values[key] === 'string' &&
+      (values[key] as string).trim() === '') ||
     (Array.isArray(values[key]) &&
       (values[key] as unknown[]).filter((a) => a).length === 0)
   ) {
@@ -41,7 +41,7 @@ export default function validate(
   values: Partial<FormValues>
 ): Partial<
   {
-    "hours-of-operation": HoursOfOperationErrors;
+    'hours-of-operation': HoursOfOperationErrors;
     exceptions: ExceptionFieldErrors;
   } & {
     [key in keyof SimpleErrorFormValues]: ReactNode;
@@ -51,7 +51,7 @@ export default function validate(
   // therefore, required should take precedence over any other errors
   return {
     ...validateHoursOfOperation(
-      values["hours-of-operation"],
+      values['hours-of-operation'],
       innerFieldRefs.hoursOfOperation,
       localeTimeFormat
     ),
@@ -62,13 +62,13 @@ export default function validate(
       localeTimeFormat
     ),
     ...validateDateOrder(values),
-    ...required(values, "name"),
+    ...required(values, 'name'),
     ...validateDate(
       values,
-      "start-date",
+      'start-date',
       dateRefs.startDateRef,
       localeDateFormat
     ),
-    ...validateDate(values, "end-date", dateRefs.endDateRef, localeDateFormat),
+    ...validateDate(values, 'end-date', dateRefs.endDateRef, localeDateFormat),
   };
 }

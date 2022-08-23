@@ -1,7 +1,7 @@
-import { IntlShape } from "react-intl";
-import dayjs from "../../main/utils/dayjs";
-import { getRelativeWeekdayStatus } from "../../main/utils/WeekdayUtils";
-import * as Weekdays from "../config/data/Weekdays";
+import { IntlShape } from 'react-intl';
+import dayjs from '../../main/utils/dayjs';
+import { getRelativeWeekdayStatus } from '../../main/utils/WeekdayUtils';
+import * as Weekdays from '../config/data/Weekdays';
 
 const SUNDAY = dayjs().day(0);
 const MONDAY = dayjs().day(1);
@@ -11,8 +11,8 @@ const THURSDAY = dayjs().day(4);
 const FRIDAY = dayjs().day(5);
 const SATURDAY = dayjs().day(6);
 
-test("Relative weekdays compared against Sunday return appropriate proximity and formatting info", () => {
-  const testTime = "";
+test('Relative weekdays compared against Sunday return appropriate proximity and formatting info', () => {
+  const testTime = '';
   const testIntl = {
     formatTime: jest.fn(() => testTime),
   } as unknown as IntlShape;
@@ -20,7 +20,7 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "sameDay",
+    proximity: 'sameDay',
     weekday: undefined,
     date: undefined,
     time: testTime,
@@ -28,7 +28,7 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Monday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "nextDay",
+    proximity: 'nextDay',
     weekday: undefined,
     date: undefined,
     time: testTime,
@@ -36,7 +36,7 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Tuesday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "otherWeekday",
+    proximity: 'otherWeekday',
     weekday: Weekdays.Tuesday,
     date: undefined,
     time: testTime,
@@ -44,7 +44,7 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Wednesday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "otherWeekday",
+    proximity: 'otherWeekday',
     weekday: Weekdays.Wednesday,
     date: undefined,
     time: testTime,
@@ -52,7 +52,7 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "otherWeekday",
+    proximity: 'otherWeekday',
     weekday: Weekdays.Thursday,
     date: undefined,
     time: testTime,
@@ -60,7 +60,7 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Friday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "otherWeekday",
+    proximity: 'otherWeekday',
     weekday: Weekdays.Friday,
     date: undefined,
     time: testTime,
@@ -68,61 +68,61 @@ test("Relative weekdays compared against Sunday return appropriate proximity and
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Saturday, testTime, SUNDAY)
   ).toStrictEqual({
-    proximity: "otherWeekday",
+    proximity: 'otherWeekday',
     weekday: Weekdays.Saturday,
     date: undefined,
     time: testTime,
   });
 });
 
-test("Weekdays compared against other weekdays return appropriate proximity", () => {
-  const testTime = "";
+test('Weekdays compared against other weekdays return appropriate proximity', () => {
+  const testTime = '';
   const testIntl = {
     formatTime: jest.fn(() => testTime),
   } as unknown as IntlShape;
 
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, SUNDAY)
-  ).toHaveProperty("proximity", "sameDay");
+  ).toHaveProperty('proximity', 'sameDay');
   // Sunday is 6 days from Monday
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, MONDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, TUESDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, WEDNESDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, THURSDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, FRIDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Sunday, testTime, SATURDAY)
-  ).toHaveProperty("proximity", "nextDay");
+  ).toHaveProperty('proximity', 'nextDay');
 
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, SUNDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, MONDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, TUESDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, WEDNESDAY)
-  ).toHaveProperty("proximity", "nextDay");
+  ).toHaveProperty('proximity', 'nextDay');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, THURSDAY)
-  ).toHaveProperty("proximity", "sameDay");
+  ).toHaveProperty('proximity', 'sameDay');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, FRIDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, SATURDAY)
-  ).toHaveProperty("proximity", "otherWeekday");
+  ).toHaveProperty('proximity', 'otherWeekday');
 });

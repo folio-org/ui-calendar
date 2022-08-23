@@ -5,36 +5,36 @@ import {
   IconButton,
   Layout,
   MultiColumnList,
-} from "@folio/stripes-components";
-import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
-import classNames from "classnames";
+} from '@folio/stripes-components';
+import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
+import classNames from 'classnames';
 import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
   useState,
-} from "react";
-import { FieldRenderProps } from "react-final-form";
-import { FormattedMessage, useIntl } from "react-intl";
-import { InnerFieldRefs } from "../../forms/CalendarForm/types";
-import { CalendarOpening, Weekday } from "../../types/types";
+} from 'react';
+import { FieldRenderProps } from 'react-final-form';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { InnerFieldRefs } from '../../forms/CalendarForm/types';
+import { CalendarOpening, Weekday } from '../../types/types';
 import {
   getWeekdaySpan,
   LocaleWeekdayInfo,
   useLocaleWeekdays,
   WEEKDAYS,
-} from "../../utils/WeekdayUtils";
-import css from "./HoursAndExceptionFields.css";
+} from '../../utils/WeekdayUtils';
+import css from './HoursAndExceptionFields.css';
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
   MCLContentsType,
-} from "./HoursOfOperationFieldTypes";
-import MCLRowFormatter from "./MCLRowFormatter";
-import OpenClosedSelect from "./OpenClosedSelect";
-import RowType from "./RowType";
-import TimeField from "./TimeField";
-import WeekdayPicker from "./WeekdayPicker";
+} from './HoursOfOperationFieldTypes';
+import MCLRowFormatter from './MCLRowFormatter';
+import OpenClosedSelect from './OpenClosedSelect';
+import RowType from './RowType';
+import TimeField from './TimeField';
+import WeekdayPicker from './WeekdayPicker';
 
 function updateRowState(
   rowStates: HoursOfOperationRowState[],
@@ -85,7 +85,7 @@ function rowsToOpenings(
 
 export interface HoursOfOperationFieldProps
   extends FieldRenderProps<HoursOfOperationRowState[]> {
-  timeFieldRefs: InnerFieldRefs["hoursOfOperation"];
+  timeFieldRefs: InnerFieldRefs['hoursOfOperation'];
   error?: HoursOfOperationErrors;
   localeTimeFormat: string;
   submitAttempted: boolean;
@@ -195,7 +195,7 @@ export const HoursOfOperationField: FunctionComponent<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localeWeekdays]);
 
-  const contents: MultiColumnListProps<MCLContentsType, never>["contentData"] =
+  const contents: MultiColumnListProps<MCLContentsType, never>['contentData'] =
     rowStates.map((row, realIndex) => {
       return {
         rowState: row,
@@ -361,9 +361,9 @@ export const HoursOfOperationField: FunctionComponent<
 
   return (
     <>
-      <MultiColumnList<MCLContentsType, "isConflicted" | "rowState">
+      <MultiColumnList<MCLContentsType, 'isConflicted' | 'rowState'>
         interactive={false}
-        rowMetadata={["isConflicted", "rowState"]}
+        rowMetadata={['isConflicted', 'rowState']}
         columnMapping={{
           status: (
             <FormattedMessage id="ui-calendar.calendarForm.openings.column.status" />
@@ -385,12 +385,12 @@ export const HoursOfOperationField: FunctionComponent<
           ),
         }}
         columnWidths={{
-          status: "14%",
-          startDay: "20%",
-          startTime: "20%",
-          endDay: "20%",
-          endTime: "20%",
-          actions: "6%",
+          status: '14%',
+          startDay: '20%',
+          startTime: '20%',
+          endDay: '20%',
+          endTime: '20%',
+          actions: '6%',
         }}
         contentData={contents}
         getCellClass={(defaultClasses, rowData) =>

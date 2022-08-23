@@ -1,7 +1,7 @@
-import { getWeekdayRange } from "../../main/utils/WeekdayUtils";
-import * as Weekdays from "../config/data/Weekdays";
+import { getWeekdayRange } from '../../main/utils/WeekdayUtils';
+import * as Weekdays from '../config/data/Weekdays';
 
-test("Weekday ranges are calculated properly", () => {
+test('Weekday ranges are calculated properly', () => {
   expect(getWeekdayRange(Weekdays.Sunday, Weekdays.Sunday)).toStrictEqual([
     Weekdays.Sunday,
   ]);

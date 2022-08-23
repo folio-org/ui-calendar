@@ -1,24 +1,24 @@
-import React, { ReactNode } from "react";
-import { FormattedMessage, IntlShape } from "react-intl";
-import { CalendarException, CalendarOpening, Weekday } from "../types/types";
-import css from "../views/panes/InfoPane.css";
-import { getLocalizedDate, getLocalizedTime } from "./DateUtils";
-import dayjs from "./dayjs";
-import { getWeekdaySpan, LocaleWeekdayInfo } from "./WeekdayUtils";
+import React, { ReactNode } from 'react';
+import { FormattedMessage, IntlShape } from 'react-intl';
+import { CalendarException, CalendarOpening, Weekday } from '../types/types';
+import css from '../views/panes/InfoPane.css';
+import { getLocalizedDate, getLocalizedTime } from './DateUtils';
+import dayjs from './dayjs';
+import { getWeekdaySpan, LocaleWeekdayInfo } from './WeekdayUtils';
 
 /**
  * Used for comparison to ensure hours are properly sorted.
  * Used for when an opening spans multiple days; this will fully replace an opening or closing
  * for a given day
  */
-export const NEXT_DAY_FULL_WRAPAROUND = "-";
+export const NEXT_DAY_FULL_WRAPAROUND = '-';
 
 /**
  * Used for when an opening spans part of a night (as determined by {@code OVERNIGHT_THRESHOLD}),
  * such as if something is open until 1AM.  Instead of a full replacement, this is appended
  * to an end time (will be parsed out in rendering).
  */
-export const NEXT_DAY_OVERNIGHT = "*";
+export const NEXT_DAY_OVERNIGHT = '*';
 
 /**
  * The time at which a closure is considered the next day, rather than the current day
@@ -36,7 +36,7 @@ export const NEXT_DAY_OVERNIGHT = "*";
  * The idea of this is to reduce confusion with instances where, for example, a library
  * is frequently open until 1am the next morning.
  */
-export const OVERNIGHT_THRESHOLD = "04:00";
+export const OVERNIGHT_THRESHOLD = '04:00';
 
 export type OpenCloseTimeTuple = [string, string];
 export type HoursType = Record<Weekday, OpenCloseTimeTuple[]>;
@@ -119,7 +119,7 @@ export function get247Rows(
     startTime: (
       <p
         key={i}
-        title={intl.formatMessage({ id: "ui-calendar.infoPane.247HelpText" })}
+        title={intl.formatMessage({ id: 'ui-calendar.infoPane.247HelpText' })}
       >
         &ndash;
       </p>
@@ -127,7 +127,7 @@ export function get247Rows(
     endTime: (
       <p
         key={i}
-        title={intl.formatMessage({ id: "ui-calendar.infoPane.247HelpText" })}
+        title={intl.formatMessage({ id: 'ui-calendar.infoPane.247HelpText' })}
       >
         &ndash;
       </p>
@@ -165,7 +165,7 @@ export function generateDisplayRows(
           <p
             key={i}
             title={intl.formatMessage({
-              id: "ui-calendar.infoPane.display.wrappedOpening",
+              id: 'ui-calendar.infoPane.display.wrappedOpening',
             })}
           >
             &ndash;
@@ -179,7 +179,7 @@ export function generateDisplayRows(
           <p
             key={i}
             title={intl.formatMessage({
-              id: "ui-calendar.infoPane.display.wrappedClosed",
+              id: 'ui-calendar.infoPane.display.wrappedClosed',
             })}
           >
             &ndash;
@@ -190,7 +190,7 @@ export function generateDisplayRows(
           <p
             key={i}
             title={intl.formatMessage({
-              id: "ui-calendar.infoPane.display.closesAfterMidnight",
+              id: 'ui-calendar.infoPane.display.closesAfterMidnight',
             })}
           >
             <FormattedMessage
@@ -198,7 +198,7 @@ export function generateDisplayRows(
               values={{
                 time: getLocalizedTime(
                   intl,
-                  close.replace(NEXT_DAY_OVERNIGHT, "")
+                  close.replace(NEXT_DAY_OVERNIGHT, '')
                 ),
               }}
             />

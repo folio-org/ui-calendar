@@ -1,10 +1,10 @@
-import memoizee from "memoizee";
-import { ExceptionRowState } from "../components/fields/ExceptionFieldTypes";
-import { HoursOfOperationRowState } from "../components/fields/HoursOfOperationFieldTypes";
-import RowType from "../components/fields/RowType";
-import DataRepository from "../data/DataRepository";
-import { Calendar } from "../types/types";
-import { FormValues } from "./CalendarForm/types";
+import memoizee from 'memoizee';
+import { ExceptionRowState } from '../components/fields/ExceptionFieldTypes';
+import { HoursOfOperationRowState } from '../components/fields/HoursOfOperationFieldTypes';
+import RowType from '../components/fields/RowType';
+import DataRepository from '../data/DataRepository';
+import { Calendar } from '../types/types';
+import { FormValues } from './CalendarForm/types';
 
 /** Convert a given calendar to a set of form values, to initialize edit/duplicate forms */
 export const calendarToInitialValues = memoizee(
@@ -15,12 +15,12 @@ export const calendarToInitialValues = memoizee(
     if (calendar === undefined) return {};
     return {
       name: calendar.name,
-      "start-date": calendar.startDate,
-      "end-date": calendar.endDate,
-      "service-points": dataRepository.getServicePointsFromIds(
+      'start-date': calendar.startDate,
+      'end-date': calendar.endDate,
+      'service-points': dataRepository.getServicePointsFromIds(
         calendar.assignments
       ),
-      "hours-of-operation": calendar.normalHours.map(
+      'hours-of-operation': calendar.normalHours.map(
         (opening, i): HoursOfOperationRowState => ({
           type: RowType.Open,
           i: -1 - i, // ensure `i` is negative as not to conflict

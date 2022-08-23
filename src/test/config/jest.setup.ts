@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom";
-import dayjs from "../../main/utils/dayjs";
+import '@testing-library/jest-dom';
+import dayjs from '../../main/utils/dayjs';
 
-dayjs.tz.setDefault("UTC");
+dayjs.tz.setDefault('UTC');

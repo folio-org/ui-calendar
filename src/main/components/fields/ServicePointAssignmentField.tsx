@@ -1,10 +1,10 @@
-import { MultiSelection, OptionSegment } from "@folio/stripes-components";
-import { MultiSelectionFieldRenderProps } from "@folio/stripes-components/types/lib/MultiSelection/MultiSelection";
-import fuzzysort from "fuzzysort";
-import React, { FunctionComponent, ReactNode } from "react";
-import { Field } from "react-final-form";
-import { FormattedMessage } from "react-intl";
-import { ServicePoint } from "../../types/types";
+import { MultiSelection, OptionSegment } from '@folio/stripes-components';
+import { MultiSelectionFieldRenderProps } from '@folio/stripes-components/types/lib/MultiSelection/MultiSelection';
+import fuzzysort from 'fuzzysort';
+import React, { FunctionComponent, ReactNode } from 'react';
+import { Field } from 'react-final-form';
+import { FormattedMessage } from 'react-intl';
+import { ServicePoint } from '../../types/types';
 
 interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
@@ -21,7 +21,7 @@ const ServicePointAssignmentField: FunctionComponent<
     option: ServicePoint;
     searchTerm: string | undefined;
   }) => {
-    if (typeof searchTerm !== "string" || searchTerm === "") {
+    if (typeof searchTerm !== 'string' || searchTerm === '') {
       return <OptionSegment>{option.name}</OptionSegment>;
     }
 
@@ -53,13 +53,13 @@ const ServicePointAssignmentField: FunctionComponent<
       }
       formatter={formatter}
       filter={(filterText: string | undefined, list: ServicePoint[]) => {
-        if (typeof filterText !== "string" || filterText === "") {
+        if (typeof filterText !== 'string' || filterText === '') {
           return { renderedItems: list, exactMatch: false };
         }
 
         // must spread and re-collect into a new array, as the returned array is immutable
         const results = [
-          ...fuzzysort.go(filterText, props.servicePoints, { key: "name" }),
+          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' }),
         ];
 
         // score descending, then name ascending
@@ -78,10 +78,10 @@ const ServicePointAssignmentField: FunctionComponent<
         };
       }}
       itemToString={(servicePoint: ServicePoint | undefined) => {
-        if (typeof servicePoint === "object" && servicePoint !== null) {
+        if (typeof servicePoint === 'object' && servicePoint !== null) {
           return servicePoint.name;
         } else {
-          return "";
+          return '';
         }
       }}
       dataOptions={props.servicePoints}

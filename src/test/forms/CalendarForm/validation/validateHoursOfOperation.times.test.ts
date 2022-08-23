@@ -1,10 +1,10 @@
-import RowType from "../../../../main/components/fields/RowType";
-import { validateHoursOfOperationTimes } from "../../../../main/forms/CalendarForm/validation/validateHoursOfOperation";
-import expectRender from "../../../config/util/expectRender";
+import RowType from '../../../../main/components/fields/RowType';
+import { validateHoursOfOperationTimes } from '../../../../main/forms/CalendarForm/validation/validateHoursOfOperation';
+import expectRender from '../../../config/util/expectRender';
 
-const localeTimeFormat12 = "hh:mm A";
+const localeTimeFormat12 = 'hh:mm A';
 
-test("No rows is a valid state", () => {
+test('No rows is a valid state', () => {
   expect(
     validateHoursOfOperationTimes(
       [],
@@ -14,7 +14,7 @@ test("No rows is a valid state", () => {
   ).toBeUndefined();
 });
 
-test("Otherwise invalid closed rows results in valid (checked elsewhere, no times to validate here)", () => {
+test('Otherwise invalid closed rows results in valid (checked elsewhere, no times to validate here)', () => {
   expect(
     validateHoursOfOperationTimes(
       [
@@ -33,7 +33,7 @@ test("Otherwise invalid closed rows results in valid (checked elsewhere, no time
   ).toBeUndefined();
 });
 
-test("Invalid row causes proper invalid time errors", () => {
+test('Invalid row causes proper invalid time errors', () => {
   const validationResult = validateHoursOfOperationTimes(
     [
       {
@@ -46,25 +46,25 @@ test("Invalid row causes proper invalid time errors", () => {
       },
     ],
     {
-      startTime: { 0: { value: "Invalid" } as HTMLInputElement },
-      endTime: { 0: { value: "Invalid" } as HTMLInputElement },
+      startTime: { 0: { value: 'Invalid' } as HTMLInputElement },
+      endTime: { 0: { value: 'Invalid' } as HTMLInputElement },
     },
     localeTimeFormat12
   );
-  expect(validationResult).toHaveProperty("invalidTimes.startTime.0");
-  expect(validationResult).toHaveProperty("invalidTimes.endTime.0");
+  expect(validationResult).toHaveProperty('invalidTimes.startTime.0');
+  expect(validationResult).toHaveProperty('invalidTimes.endTime.0');
 });
 
-test("Missing refs cause no invalid time errors", () => {
+test('Missing refs cause no invalid time errors', () => {
   const validationResult = validateHoursOfOperationTimes(
     [
       {
         i: 0,
         type: RowType.Open,
         startDay: undefined,
-        startTime: "09:00",
+        startTime: '09:00',
         endDay: undefined,
-        endTime: "23:00",
+        endTime: '23:00',
       },
     ],
     {
@@ -76,16 +76,16 @@ test("Missing refs cause no invalid time errors", () => {
   expect(validationResult).toBeUndefined();
 });
 
-test("Invalid refs cause no invalid time errors", () => {
+test('Invalid refs cause no invalid time errors', () => {
   const validationResult = validateHoursOfOperationTimes(
     [
       {
         i: 0,
         type: RowType.Open,
         startDay: undefined,
-        startTime: "09:00",
+        startTime: '09:00',
         endDay: undefined,
-        endTime: "23:00",
+        endTime: '23:00',
       },
     ],
     {
@@ -97,14 +97,14 @@ test("Invalid refs cause no invalid time errors", () => {
   expect(validationResult).toBeUndefined();
 });
 
-test("Mixed validity rows causes proper invalid time errors", () => {
+test('Mixed validity rows causes proper invalid time errors', () => {
   const validationResult = validateHoursOfOperationTimes(
     [
       {
         i: 0,
         type: RowType.Open,
         startDay: undefined,
-        startTime: "12:00",
+        startTime: '12:00',
         endDay: undefined,
         endTime: undefined,
       },
@@ -112,42 +112,42 @@ test("Mixed validity rows causes proper invalid time errors", () => {
         i: 1,
         type: RowType.Open,
         startDay: undefined,
-        startTime: "13:00",
+        startTime: '13:00',
         endDay: undefined,
-        endTime: "13:00",
+        endTime: '13:00',
       },
       {
         i: 2,
         type: RowType.Open,
         startDay: undefined,
-        startTime: "09:00",
+        startTime: '09:00',
         endDay: undefined,
-        endTime: "09:00",
+        endTime: '09:00',
       },
     ],
     {
       startTime: {
-        0: { value: "12:00 PM" },
-        1: { value: "invalid" },
+        0: { value: '12:00 PM' },
+        1: { value: 'invalid' },
       } as unknown as Record<number, HTMLInputElement>,
       endTime: {
-        1: { value: "1:00 PM" },
-        2: { value: "8:00 AM" },
+        1: { value: '1:00 PM' },
+        2: { value: '8:00 AM' },
       } as unknown as Record<number, HTMLInputElement>,
     },
     localeTimeFormat12
   );
-  expect(validationResult).not.toHaveProperty("invalidTimes.startTime.0");
-  expect(validationResult).not.toHaveProperty("invalidTimes.endTime.0");
-  expect(validationResult).toHaveProperty("invalidTimes.startTime.1");
-  expect(validationResult).not.toHaveProperty("invalidTimes.endTime.1");
-  expect(validationResult).not.toHaveProperty("invalidTimes.startTime.2");
-  expect(validationResult).toHaveProperty("invalidTimes.endTime.2");
+  expect(validationResult).not.toHaveProperty('invalidTimes.startTime.0');
+  expect(validationResult).not.toHaveProperty('invalidTimes.endTime.0');
+  expect(validationResult).toHaveProperty('invalidTimes.startTime.1');
+  expect(validationResult).not.toHaveProperty('invalidTimes.endTime.1');
+  expect(validationResult).not.toHaveProperty('invalidTimes.startTime.2');
+  expect(validationResult).toHaveProperty('invalidTimes.endTime.2');
 });
 
-test("Error messages have the proper text", () => {
-  const sampleInput = document.createElement("input");
-  sampleInput.value = "invalid";
+test('Error messages have the proper text', () => {
+  const sampleInput = document.createElement('input');
+  sampleInput.value = 'invalid';
 
   const validationResult = validateHoursOfOperationTimes(
     [
@@ -166,13 +166,13 @@ test("Error messages have the proper text", () => {
     },
     localeTimeFormat12
   );
-  expect(validationResult).toHaveProperty("invalidTimes.startTime.0");
-  expect(validationResult).toHaveProperty("invalidTimes.endTime.0");
+  expect(validationResult).toHaveProperty('invalidTimes.startTime.0');
+  expect(validationResult).toHaveProperty('invalidTimes.endTime.0');
 
   expectRender(validationResult?.invalidTimes?.startTime[0]).toBe(
-    "Please enter a time in the hh:mm A format"
+    'Please enter a time in the hh:mm A format'
   );
   expectRender(validationResult?.invalidTimes?.endTime[0]).toBe(
-    "Please enter a time in the hh:mm A format"
+    'Please enter a time in the hh:mm A format'
   );
 });

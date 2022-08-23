@@ -1,5 +1,5 @@
-import { MultiColumnListRowFormatterProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
-import React from "react";
+import { MultiColumnListRowFormatterProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
+import React from 'react';
 
 export default function MCLRowFormatter<
   MCLContentsType extends { rowState: { i: number } }

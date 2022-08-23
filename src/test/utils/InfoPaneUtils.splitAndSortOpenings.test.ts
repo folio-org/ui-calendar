@@ -1,8 +1,8 @@
-import { splitOpeningsIntoDays } from "../../main/utils/InfoPaneUtils";
-import * as Calendars from "../config/data/Calendars";
-import * as Weekdays from "../config/data/Weekdays";
+import { splitOpeningsIntoDays } from '../../main/utils/InfoPaneUtils';
+import * as Calendars from '../config/data/Calendars';
+import * as Weekdays from '../config/data/Weekdays';
 
-test("Openings are split properly", () => {
+test('Openings are split properly', () => {
   expect(splitOpeningsIntoDays([])).toStrictEqual({
     MONDAY: [],
     TUESDAY: [],
@@ -16,13 +16,13 @@ test("Openings are split properly", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "00:00",
+        startTime: '00:00',
         endDay: Weekdays.Monday,
-        endTime: "13:00",
+        endTime: '13:00',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["00:00", "13:00"]],
+    MONDAY: [['00:00', '13:00']],
     TUESDAY: [],
     WEDNESDAY: [],
     THURSDAY: [],
@@ -34,14 +34,14 @@ test("Openings are split properly", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "00:00",
+        startTime: '00:00',
         endDay: Weekdays.Tuesday,
-        endTime: "13:00",
+        endTime: '13:00',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["00:00", "-"]],
-    TUESDAY: [["-", "13:00"]],
+    MONDAY: [['00:00', '-']],
+    TUESDAY: [['-', '13:00']],
     WEDNESDAY: [],
     THURSDAY: [],
     FRIDAY: [],
@@ -52,42 +52,42 @@ test("Openings are split properly", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Thursday,
-        startTime: "02:00",
+        startTime: '02:00',
         endDay: Weekdays.Tuesday,
-        endTime: "13:00",
+        endTime: '13:00',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["-", "-"]],
-    TUESDAY: [["-", "13:00"]],
+    MONDAY: [['-', '-']],
+    TUESDAY: [['-', '13:00']],
     WEDNESDAY: [],
-    THURSDAY: [["02:00", "-"]],
-    FRIDAY: [["-", "-"]],
-    SATURDAY: [["-", "-"]],
-    SUNDAY: [["-", "-"]],
+    THURSDAY: [['02:00', '-']],
+    FRIDAY: [['-', '-']],
+    SATURDAY: [['-', '-']],
+    SUNDAY: [['-', '-']],
   });
 });
 
-test("Openings are sorted properly", () => {
+test('Openings are sorted properly', () => {
   expect(
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "20:00",
+        startTime: '20:00',
         endDay: Weekdays.Monday,
-        endTime: "23:00",
+        endTime: '23:00',
       },
       {
         startDay: Weekdays.Monday,
-        startTime: "08:00",
+        startTime: '08:00',
         endDay: Weekdays.Monday,
-        endTime: "10:00",
+        endTime: '10:00',
       },
     ])
   ).toStrictEqual({
     MONDAY: [
-      ["08:00", "10:00"],
-      ["20:00", "23:00"],
+      ['08:00', '10:00'],
+      ['20:00', '23:00'],
     ],
     TUESDAY: [],
     WEDNESDAY: [],
@@ -100,21 +100,21 @@ test("Openings are sorted properly", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "08:00",
+        startTime: '08:00',
         endDay: Weekdays.Monday,
-        endTime: "10:00",
+        endTime: '10:00',
       },
       {
         startDay: Weekdays.Monday,
-        startTime: "20:00",
+        startTime: '20:00',
         endDay: Weekdays.Monday,
-        endTime: "23:00",
+        endTime: '23:00',
       },
     ])
   ).toStrictEqual({
     MONDAY: [
-      ["08:00", "10:00"],
-      ["20:00", "23:00"],
+      ['08:00', '10:00'],
+      ['20:00', '23:00'],
     ],
     TUESDAY: [],
     WEDNESDAY: [],
@@ -128,29 +128,29 @@ test("Openings are sorted properly", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Tuesday,
-        startTime: "18:00",
+        startTime: '18:00',
         endDay: Weekdays.Tuesday,
-        endTime: "19:00",
+        endTime: '19:00',
       },
       {
         startDay: Weekdays.Monday,
-        startTime: "20:00",
+        startTime: '20:00',
         endDay: Weekdays.Tuesday,
-        endTime: "02:00",
+        endTime: '02:00',
       },
       {
         startDay: Weekdays.Monday,
-        startTime: "02:00",
+        startTime: '02:00',
         endDay: Weekdays.Monday,
-        endTime: "04:00",
+        endTime: '04:00',
       },
     ])
   ).toStrictEqual({
     MONDAY: [
-      ["02:00", "04:00"],
-      ["20:00", "02:00*"],
+      ['02:00', '04:00'],
+      ['20:00', '02:00*'],
     ],
-    TUESDAY: [["18:00", "19:00"]],
+    TUESDAY: [['18:00', '19:00']],
     WEDNESDAY: [],
     THURSDAY: [],
     FRIDAY: [],
@@ -161,66 +161,29 @@ test("Openings are sorted properly", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "20:00",
+        startTime: '20:00',
         endDay: Weekdays.Tuesday,
-        endTime: "02:00",
+        endTime: '02:00',
       },
       {
         startDay: Weekdays.Tuesday,
-        startTime: "18:00",
+        startTime: '18:00',
         endDay: Weekdays.Tuesday,
-        endTime: "19:00",
+        endTime: '19:00',
       },
       {
         startDay: Weekdays.Monday,
-        startTime: "02:00",
+        startTime: '02:00',
         endDay: Weekdays.Monday,
-        endTime: "04:00",
+        endTime: '04:00',
       },
     ])
   ).toStrictEqual({
     MONDAY: [
-      ["02:00", "04:00"],
-      ["20:00", "02:00*"],
+      ['02:00', '04:00'],
+      ['20:00', '02:00*'],
     ],
-    TUESDAY: [["18:00", "19:00"]],
-    WEDNESDAY: [],
-    THURSDAY: [],
-    FRIDAY: [],
-    SATURDAY: [],
-    SUNDAY: [],
-  });
-
-  expect(
-    splitOpeningsIntoDays([
-      {
-        startDay: Weekdays.Monday,
-        startTime: "08:00",
-        endDay: Weekdays.Monday,
-        endTime: "16:00",
-      },
-      {
-        startDay: Weekdays.Monday,
-        startTime: "20:00",
-        endDay: Weekdays.Tuesday,
-        endTime: "08:00",
-      },
-      {
-        startDay: Weekdays.Tuesday,
-        startTime: "09:00",
-        endDay: Weekdays.Tuesday,
-        endTime: "19:00",
-      },
-    ])
-  ).toStrictEqual({
-    MONDAY: [
-      ["08:00", "16:00"],
-      ["20:00", "-"],
-    ],
-    TUESDAY: [
-      ["-", "08:00"],
-      ["09:00", "19:00"],
-    ],
+    TUESDAY: [['18:00', '19:00']],
     WEDNESDAY: [],
     THURSDAY: [],
     FRIDAY: [],
@@ -231,32 +194,69 @@ test("Openings are sorted properly", () => {
   expect(
     splitOpeningsIntoDays([
       {
-        startDay: Weekdays.Tuesday,
-        startTime: "09:00",
-        endDay: Weekdays.Tuesday,
-        endTime: "19:00",
-      },
-      {
         startDay: Weekdays.Monday,
-        startTime: "20:00",
-        endDay: Weekdays.Tuesday,
-        endTime: "08:00",
-      },
-      {
-        startDay: Weekdays.Monday,
-        startTime: "08:00",
+        startTime: '08:00',
         endDay: Weekdays.Monday,
-        endTime: "16:00",
+        endTime: '16:00',
+      },
+      {
+        startDay: Weekdays.Monday,
+        startTime: '20:00',
+        endDay: Weekdays.Tuesday,
+        endTime: '08:00',
+      },
+      {
+        startDay: Weekdays.Tuesday,
+        startTime: '09:00',
+        endDay: Weekdays.Tuesday,
+        endTime: '19:00',
       },
     ])
   ).toStrictEqual({
     MONDAY: [
-      ["08:00", "16:00"],
-      ["20:00", "-"],
+      ['08:00', '16:00'],
+      ['20:00', '-'],
     ],
     TUESDAY: [
-      ["-", "08:00"],
-      ["09:00", "19:00"],
+      ['-', '08:00'],
+      ['09:00', '19:00'],
+    ],
+    WEDNESDAY: [],
+    THURSDAY: [],
+    FRIDAY: [],
+    SATURDAY: [],
+    SUNDAY: [],
+  });
+
+  expect(
+    splitOpeningsIntoDays([
+      {
+        startDay: Weekdays.Tuesday,
+        startTime: '09:00',
+        endDay: Weekdays.Tuesday,
+        endTime: '19:00',
+      },
+      {
+        startDay: Weekdays.Monday,
+        startTime: '20:00',
+        endDay: Weekdays.Tuesday,
+        endTime: '08:00',
+      },
+      {
+        startDay: Weekdays.Monday,
+        startTime: '08:00',
+        endDay: Weekdays.Monday,
+        endTime: '16:00',
+      },
+    ])
+  ).toStrictEqual({
+    MONDAY: [
+      ['08:00', '16:00'],
+      ['20:00', '-'],
+    ],
+    TUESDAY: [
+      ['-', '08:00'],
+      ['09:00', '19:00'],
     ],
     WEDNESDAY: [],
     THURSDAY: [],
@@ -266,84 +266,84 @@ test("Openings are sorted properly", () => {
   });
 });
 
-test("Weeklong openings are split properly", () => {
+test('Weeklong openings are split properly', () => {
   expect(
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Thursday,
-        startTime: "00:00",
+        startTime: '00:00',
         endDay: Weekdays.Wednesday,
-        endTime: "23:59",
+        endTime: '23:59',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["-", "-"]],
-    TUESDAY: [["-", "-"]],
-    WEDNESDAY: [["-", "23:59"]],
-    THURSDAY: [["00:00", "-"]],
-    FRIDAY: [["-", "-"]],
-    SATURDAY: [["-", "-"]],
-    SUNDAY: [["-", "-"]],
+    MONDAY: [['-', '-']],
+    TUESDAY: [['-', '-']],
+    WEDNESDAY: [['-', '23:59']],
+    THURSDAY: [['00:00', '-']],
+    FRIDAY: [['-', '-']],
+    SATURDAY: [['-', '-']],
+    SUNDAY: [['-', '-']],
   });
 
   expect(
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Thursday,
-        startTime: "12:00",
+        startTime: '12:00',
         endDay: Weekdays.Thursday,
-        endTime: "11:59",
+        endTime: '11:59',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["-", "-"]],
-    TUESDAY: [["-", "-"]],
-    WEDNESDAY: [["-", "-"]],
+    MONDAY: [['-', '-']],
+    TUESDAY: [['-', '-']],
+    WEDNESDAY: [['-', '-']],
     THURSDAY: [
-      ["-", "11:59"],
-      ["12:00", "-"],
+      ['-', '11:59'],
+      ['12:00', '-'],
     ],
-    FRIDAY: [["-", "-"]],
-    SATURDAY: [["-", "-"]],
-    SUNDAY: [["-", "-"]],
+    FRIDAY: [['-', '-']],
+    SATURDAY: [['-', '-']],
+    SUNDAY: [['-', '-']],
   });
 
   expect(
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Thursday,
-        startTime: "22:00",
+        startTime: '22:00',
         endDay: Weekdays.Thursday,
-        endTime: "08:00",
+        endTime: '08:00',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["-", "-"]],
-    TUESDAY: [["-", "-"]],
-    WEDNESDAY: [["-", "-"]],
+    MONDAY: [['-', '-']],
+    TUESDAY: [['-', '-']],
+    WEDNESDAY: [['-', '-']],
     THURSDAY: [
-      ["-", "08:00"],
-      ["22:00", "-"],
+      ['-', '08:00'],
+      ['22:00', '-'],
     ],
-    FRIDAY: [["-", "-"]],
-    SATURDAY: [["-", "-"]],
-    SUNDAY: [["-", "-"]],
+    FRIDAY: [['-', '-']],
+    SATURDAY: [['-', '-']],
+    SUNDAY: [['-', '-']],
   });
 });
 
-test("Next day mornings are properly denoted", () => {
+test('Next day mornings are properly denoted', () => {
   // should not be changed
   expect(
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "00:00",
+        startTime: '00:00',
         endDay: Weekdays.Monday,
-        endTime: "02:00",
+        endTime: '02:00',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["00:00", "02:00"]],
+    MONDAY: [['00:00', '02:00']],
     TUESDAY: [],
     WEDNESDAY: [],
     THURSDAY: [],
@@ -356,13 +356,13 @@ test("Next day mornings are properly denoted", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Monday,
-        startTime: "00:00",
+        startTime: '00:00',
         endDay: Weekdays.Tuesday,
-        endTime: "02:00",
+        endTime: '02:00',
       },
     ])
   ).toStrictEqual({
-    MONDAY: [["00:00", "02:00*"]],
+    MONDAY: [['00:00', '02:00*']],
     TUESDAY: [],
     WEDNESDAY: [],
     THURSDAY: [],
@@ -375,35 +375,35 @@ test("Next day mornings are properly denoted", () => {
     splitOpeningsIntoDays([
       {
         startDay: Weekdays.Thursday,
-        startTime: "00:00",
+        startTime: '00:00',
         endDay: Weekdays.Sunday,
-        endTime: "02:00",
+        endTime: '02:00',
       },
     ])
   ).toStrictEqual({
     MONDAY: [],
     TUESDAY: [],
     WEDNESDAY: [],
-    THURSDAY: [["00:00", "-"]],
-    FRIDAY: [["-", "-"]],
-    SATURDAY: [["-", "02:00*"]],
+    THURSDAY: [['00:00', '-']],
+    FRIDAY: [['-', '-']],
+    SATURDAY: [['-', '02:00*']],
     SUNDAY: [],
   });
 });
 
-test("Many openings are properly split", () => {
+test('Many openings are properly split', () => {
   expect(
     splitOpeningsIntoDays(Calendars.SUMMER_SP_1_2.normalHours)
   ).toStrictEqual({
-    MONDAY: [["09:00", "01:00*"]],
-    TUESDAY: [["09:00", "23:00"]],
-    WEDNESDAY: [["09:00", "23:00"]],
-    THURSDAY: [["09:00", "23:00"]],
+    MONDAY: [['09:00', '01:00*']],
+    TUESDAY: [['09:00', '23:00']],
+    WEDNESDAY: [['09:00', '23:00']],
+    THURSDAY: [['09:00', '23:00']],
     FRIDAY: [
-      ["09:00", "12:00"],
-      ["13:30", "20:00"],
+      ['09:00', '12:00'],
+      ['13:30', '20:00'],
     ],
-    SATURDAY: [["09:00", "20:00"]],
+    SATURDAY: [['09:00', '20:00']],
     SUNDAY: [],
   });
 });

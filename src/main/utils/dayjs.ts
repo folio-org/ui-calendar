@@ -1,17 +1,17 @@
 /* eslint-disable regex/invalid */
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
-import calendar from "dayjs/plugin/calendar";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isBetween from "dayjs/plugin/isBetween";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import localeData from "dayjs/plugin/localeData";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import minMax from "dayjs/plugin/minMax";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import weekday from "dayjs/plugin/weekday";
+import calendar from 'dayjs/plugin/calendar';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import isBetween from 'dayjs/plugin/isBetween';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import localeData from 'dayjs/plugin/localeData';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import minMax from 'dayjs/plugin/minMax';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import weekday from 'dayjs/plugin/weekday';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);

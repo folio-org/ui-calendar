@@ -1,12 +1,12 @@
-import { MultiColumnList } from "@folio/stripes-components";
-import { MultiColumnListProps } from "@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList";
-import React, { ReactElement, ReactNode, useMemo, useState } from "react";
-import { dayjsCompare } from "../utils/DateUtils";
-import dayjs from "../utils/dayjs";
+import { MultiColumnList } from '@folio/stripes-components';
+import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
+import React, { ReactElement, ReactNode, useMemo, useState } from 'react';
+import { dayjsCompare } from '../utils/DateUtils';
+import dayjs from '../utils/dayjs';
 
 export enum SortDirection {
-  ASCENDING = "ascending",
-  DESCENDING = "descending",
+  ASCENDING = 'ascending',
+  DESCENDING = 'descending',
 }
 
 function flipSortDirection(direction: SortDirection): SortDirection {
@@ -22,14 +22,14 @@ export type SortInfo<SortableDataShape> = {
 
 function getInitialSort<SortableDataShape>(
   sortedColumn: keyof SortableDataShape | undefined,
-  sortDirection: "ascending" | "descending" | undefined
+  sortDirection: 'ascending' | 'descending' | undefined
 ): SortInfo<SortableDataShape>[] {
   if (sortedColumn === undefined) return [];
   return [
     {
       key: sortedColumn,
       direction:
-        sortDirection === "descending"
+        sortDirection === 'descending'
           ? SortDirection.DESCENDING
           : SortDirection.ASCENDING,
     },
@@ -38,10 +38,10 @@ function getInitialSort<SortableDataShape>(
 
 export interface SortableMultiColumnListProps<
   DataShape,
-  OmittedColumns extends string = ""
+  OmittedColumns extends string = ''
 > extends Omit<
     MultiColumnListProps<DataShape, OmittedColumns>,
-    "onHeaderClick"
+    'onHeaderClick'
   > {
   dateColumns?: Exclude<keyof DataShape & string, OmittedColumns>[];
 }
@@ -79,7 +79,7 @@ export default function SortableMultiColumnList<
       | string
       | ReactNode;
   },
-  OmittedColumns extends string = ""
+  OmittedColumns extends string = ''
 >(props: SortableMultiColumnListProps<DataShape, OmittedColumns>) {
   const { sortedColumn, sortDirection, contentData, dateColumns, ...rest } =
     props;
@@ -89,7 +89,7 @@ export default function SortableMultiColumnList<
     getInitialSort<Omit<DataShape, OmittedColumns>>(sortedColumn, sortDirection)
   );
 
-  const data: MultiColumnListProps<DataShape, OmittedColumns>["contentData"] =
+  const data: MultiColumnListProps<DataShape, OmittedColumns>['contentData'] =
     useMemo(() => {
       const newData = [...contentData];
       sort
@@ -109,7 +109,7 @@ export default function SortableMultiColumnList<
   const sortProps = useMemo<
     Pick<
       MultiColumnListProps<DataShape, OmittedColumns>,
-      "sortedColumn" | "sortDirection"
+      'sortedColumn' | 'sortDirection'
     >
   >(() => {
     if (sort.length === 0) return {};

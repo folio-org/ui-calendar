@@ -10,35 +10,35 @@ import {
   Icon,
   Row,
   TextField,
-} from "@folio/stripes-components";
-import { DatepickerFieldRenderProps as DateFieldRenderProps } from "@folio/stripes-components/types/lib/Datepicker/Datepicker";
-import { TextFieldRenderProps } from "@folio/stripes-components/types/lib/TextField/TextField";
-import { CalloutContext } from "@folio/stripes-core";
-import { FormApi, FORM_ERROR } from "final-form";
+} from '@folio/stripes-components';
+import { DatepickerFieldRenderProps as DateFieldRenderProps } from '@folio/stripes-components/types/lib/Datepicker/Datepicker';
+import { TextFieldRenderProps } from '@folio/stripes-components/types/lib/TextField/TextField';
+import { CalloutContext } from '@folio/stripes-core';
+import { FormApi, FORM_ERROR } from 'final-form';
 import React, {
   FunctionComponent,
   useCallback,
   useContext,
   useMemo,
   useRef,
-} from "react";
-import { Field, Form } from "react-final-form";
-import { FormattedMessage, useIntl } from "react-intl";
-import ExceptionField from "../../components/fields/ExceptionField";
-import css from "../../components/fields/HoursAndExceptionFields.css";
-import HoursOfOperationField from "../../components/fields/HoursOfOperationField";
-import ServicePointAssignmentField from "../../components/fields/ServicePointAssignmentField";
-import DataRepository from "../../data/DataRepository";
-import { Calendar } from "../../types/types";
-import calendarToInitialValues from "../calendarToInitialValues";
-import onSubmit from "./onSubmit";
-import { FormValues, InnerFieldRefs } from "./types";
-import validate from "./validation/validate";
+} from 'react';
+import { Field, Form } from 'react-final-form';
+import { FormattedMessage, useIntl } from 'react-intl';
+import ExceptionField from '../../components/fields/ExceptionField';
+import css from '../../components/fields/HoursAndExceptionFields.css';
+import HoursOfOperationField from '../../components/fields/HoursOfOperationField';
+import ServicePointAssignmentField from '../../components/fields/ServicePointAssignmentField';
+import DataRepository from '../../data/DataRepository';
+import { Calendar } from '../../types/types';
+import calendarToInitialValues from '../calendarToInitialValues';
+import onSubmit from './onSubmit';
+import { FormValues, InnerFieldRefs } from './types';
+import validate from './validation/validate';
 
 const TextFieldComponent = TextField<string, TextFieldRenderProps<string>>;
 const DateFieldComponent = DateField<DateFieldRenderProps>;
 
-export const FORM_ID = "ui-calendar-create-calendar-form";
+export const FORM_ID = 'ui-calendar-create-calendar-form';
 
 export interface CreateCalendarFormProps {
   closeParentLayer: (id?: string) => void;
@@ -156,7 +156,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                         (!dirtyFieldsSinceLastSubmit?.name &&
                           submitErrors?.name) ||
                         ((props.submitAttempted || touched?.name) &&
-                          active !== "name" &&
+                          active !== 'name' &&
                           errors?.name)
                       }
                     />
@@ -173,11 +173,11 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                         <FormattedMessage id="ui-calendar.calendarForm.field.startDate" />
                       }
                       error={
-                        (!dirtyFieldsSinceLastSubmit?.["start-date"] &&
-                          submitErrors?.["start-date"]) ||
-                        ((props.submitAttempted || touched?.["start-date"]) &&
-                          active !== "start-date" &&
-                          errors?.["start-date"])
+                        (!dirtyFieldsSinceLastSubmit?.['start-date'] &&
+                          submitErrors?.['start-date']) ||
+                        ((props.submitAttempted || touched?.['start-date']) &&
+                          active !== 'start-date' &&
+                          errors?.['start-date'])
                       }
                     />
                   </Col>
@@ -193,18 +193,18 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                         <FormattedMessage id="ui-calendar.calendarForm.field.endDate" />
                       }
                       error={
-                        (!dirtyFieldsSinceLastSubmit?.["end-date"] &&
-                          submitErrors?.["end-date"]) ||
-                        ((props.submitAttempted || touched?.["end-date"]) &&
-                          active !== "end-date" &&
-                          errors?.["end-date"])
+                        (!dirtyFieldsSinceLastSubmit?.['end-date'] &&
+                          submitErrors?.['end-date']) ||
+                        ((props.submitAttempted || touched?.['end-date']) &&
+                          active !== 'end-date' &&
+                          errors?.['end-date'])
                       }
                     />
                   </Col>
                 </Row>
                 <ServicePointAssignmentField
                   servicePoints={props.dataRepository.getServicePoints()}
-                  error={submitErrors?.["service-points"]}
+                  error={submitErrors?.['service-points']}
                 />
               </Accordion>
               <Accordion
@@ -216,7 +216,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   name="hours-of-operation"
                   component={HoursOfOperationField}
                   timeFieldRefs={innerFieldRefs.current.hoursOfOperation}
-                  error={errors?.["hours-of-operation"]}
+                  error={errors?.['hours-of-operation']}
                   localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                   isNewCalendar={props.initialValues === undefined}

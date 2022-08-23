@@ -1,7 +1,7 @@
-import { getDateRange } from "../../main/utils/DateUtils";
-import * as Dates from "../config/data/Dates";
+import { getDateRange } from '../../main/utils/DateUtils';
+import * as Dates from '../config/data/Dates';
 
-test("Date ranges can be calculated for any date range", () => {
+test('Date ranges can be calculated for any date range', () => {
   expect(getDateRange(Dates.JAN_1, Dates.JAN_1)).toStrictEqual([Dates.JAN_1]);
   expect(getDateRange(Dates.MAY_1, Dates.MAY_7)).toStrictEqual([
     Dates.MAY_1,
