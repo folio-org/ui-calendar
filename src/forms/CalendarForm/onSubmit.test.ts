@@ -90,7 +90,7 @@ function resetMocks() {
   submitter.mockReset();
 }
 
-test.skip('Invalid form results in nothing happening', async () => {
+test('Invalid form results in nothing happening', async () => {
   resetMocks();
   expect(
     await onSubmit(
@@ -115,7 +115,7 @@ test.skip('Invalid form results in nothing happening', async () => {
   expect(calloutContext.sendCallout.mock.calls.length).toBe(0);
 });
 
-test.skip('Proper conversion of an empty calendar', async () => {
+test('Proper conversion of an empty calendar', async () => {
   resetMocks();
   submitter.mockReturnValue(Promise.resolve({ id: 'test-id' } as Calendar));
   expect(
@@ -157,7 +157,7 @@ test.skip('Proper conversion of an empty calendar', async () => {
   expect(calloutContext.sendCallout.mock.calls.length).toBe(0);
 });
 
-test.skip('Proper conversion of an undefined empty calendar', async () => {
+test('Proper conversion of an undefined empty calendar', async () => {
   resetMocks();
   submitter.mockReturnValue(Promise.resolve({ id: 'test-id' } as Calendar));
   expect(
@@ -196,7 +196,7 @@ test.skip('Proper conversion of an undefined empty calendar', async () => {
   expect(calloutContext.sendCallout.mock.calls.length).toBe(0);
 });
 
-test.skip('Proper conversion of a complex calendar', async () => {
+test('Proper conversion of a complex calendar', async () => {
   resetMocks();
   submitter.mockReturnValue(
     Promise.resolve({ id: 'test-id-complex' } as Calendar)
@@ -355,7 +355,7 @@ test.skip('Proper conversion of a complex calendar', async () => {
   expect(calloutContext.sendCallout.mock.calls.length).toBe(0);
 });
 
-// test.skip('Proper error display for a date overlap', async () => {
+// test('Proper error display for a date overlap', async () => {
 //   resetMocks();
 //   submitter.mockReturnValue(
 //     // eslint-disable-next-line prefer-promise-reject-errors
