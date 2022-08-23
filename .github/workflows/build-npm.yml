@@ -16,7 +16,7 @@ on: [push, pull_request]
 jobs:
   github-actions-ci:
     env:
-      YARN_TEST_OPTIONS: '--coverage --verbose --logHeapUsage --runInBand --detectOpenHandles'
+      YARN_TEST_OPTIONS: '--coverage'
       SQ_ROOT_DIR: './src'
       COMPILE_TRANSLATION_FILES: 'true'
       PUBLISH_MOD_DESCRIPTOR: 'true'

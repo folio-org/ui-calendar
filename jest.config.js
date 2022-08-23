@@ -21,6 +21,7 @@ module.exports = {
   coverageDirectory: './artifacts/coverage-jest/',
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
     '!src/**/*.test.{ts,tsx}',
     '!src/test/**',
     '!**/node_modules/**',

@@ -1,4 +1,4 @@
-import { ConnectedComponentProps } from '@folio/stripes-connect';
+import { ConnectedComponentProps } from '@folio/stripes/connect';
 import { useEffect, useState } from 'react';
 import DataRepository from './DataRepository';
 import { Resources } from './SharedData';
