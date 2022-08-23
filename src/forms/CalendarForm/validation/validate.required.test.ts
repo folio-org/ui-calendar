@@ -5,8 +5,8 @@ const EMPTY_VALIDATE_PARAMETERS = [
   '',
   '',
   {
-    startDateRef: { current: null as null },
-    endDateRef: { current: null as null },
+    startDateRef: { current: null as unknown as HTMLInputElement },
+    endDateRef: { current: null as unknown as HTMLInputElement },
   },
   {
     hoursOfOperation: {
