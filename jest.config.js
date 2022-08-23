@@ -12,7 +12,7 @@ module.exports = {
 
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
 
-  testMatch: ['**/src/test/**/?(*.)test.{js,jsx,ts,tsx}'],
+  testMatch: ['**/src/**/?(*.)test.{js,jsx,ts,tsx}'],
   testPathIgnorePatterns: ['/node_modules/'],
 
   reporters: ['default', 'jest-junit'],
@@ -20,13 +20,14 @@ module.exports = {
   coverageReporters: ['lcov', 'text'],
   coverageDirectory: './artifacts/coverage-jest/',
   collectCoverageFrom: [
-    'src/main/**/*.{ts,tsx}',
-    '!test/**',
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/test/**',
     '!**/node_modules/**',
   ],
 
-  setupFiles: [join(__dirname, './src/test/config/setupTests.ts')],
-  setupFilesAfterEnv: [join(__dirname, './src/test/config/jest.setup.ts')],
+  setupFiles: [join(__dirname, './src/test/setupTests.ts')],
+  setupFilesAfterEnv: [join(__dirname, './src/test/jest.setup.ts')],
 
   moduleNameMapper: {
     '^.+\\.(css)$': 'identity-obj-proxy',
@@ -36,7 +37,7 @@ module.exports = {
 
   globals: {
     'ts-jest': {
-      tsconfig: 'src/tsconfig.test.json',
+      tsconfig: 'src/tsconfig.json',
     },
   },
 };

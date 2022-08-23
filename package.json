@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=8.9.4"
   },
-  "main": "src/main/index.tsx",
+  "main": "src/index.tsx",
   "stripes": {
     "actsAs": [
       "settings"
