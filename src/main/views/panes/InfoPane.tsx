@@ -15,8 +15,8 @@ import {
   MultiColumnList,
   Pane,
   Row,
-} from '@folio/stripes-components';
-import { IfPermission, useStripes } from '@folio/stripes-core';
+} from '@folio/stripes/components';
+import { IfPermission, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -82,14 +82,14 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     if (exception.openings.length === 0) {
       exceptions.closures.push(exception);
     } else {
-      exception.openings.sort((a, b) =>
-        Math.sign(
+      exception.openings.sort((a, b) => {
+        return Math.sign(
           dayjs(`${a.startDate} ${a.endDate}`).diff(
             dayjs(`${b.startDate} ${b.endDate}`),
             'm'
           )
-        )
-      );
+        );
+      });
       exceptions.openings.push(exception);
     }
   });
@@ -102,8 +102,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         centerContent
         onClose={props.onClose}
         dismissible
-        actionMenu={({ onToggle }) =>
-          ifPermissionOr(
+        actionMenu={({ onToggle }) => {
+          return ifPermissionOr(
             stripes,
             [permissions.UPDATE, permissions.CREATE, permissions.DELETE],
             <MenuSection
@@ -156,8 +156,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 </Button>
               </IfPermission>
             </MenuSection>
-          )
-        }
+          );
+        }}
       >
         <Headline size="x-large" margin="xx-small">
           {calendar.name}
@@ -211,12 +211,12 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
             <MultiColumnList
               interactive={false}
               onHeaderClick={() => ({})}
-              getCellClass={(defaultClass, _rowData, column) =>
-                classNames(defaultClass, {
+              getCellClass={(defaultClass, _rowData, column) => {
+                return classNames(defaultClass, {
                   [css.hoursCell]: column !== 'day',
                   [css.dayCell]: column === 'day',
-                })
-              }
+                });
+              }}
               columnMapping={{
                 day: (
                   <FormattedMessage id="ui-calendar.infoPane.accordion.hours.day" />
@@ -283,13 +283,13 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 start: '30%',
                 end: '30%',
               }}
-              getCellClass={(defaultClass, _rowData, column) =>
-                classNames(defaultClass, {
+              getCellClass={(defaultClass, _rowData, column) => {
+                return classNames(defaultClass, {
                   [css.hoursCell]: column !== 'name',
                   [css.exceptionCell]: column !== 'name',
                   [css.dayCell]: column === 'name',
-                })
-              }
+                });
+              }}
               contentData={generateExceptionalOpeningRows(
                 intl,
                 exceptions.openings

@@ -1,4 +1,4 @@
-import { Pane } from '@folio/stripes-components';
+import { Pane } from '@folio/stripes/components';
 import type { Dayjs } from 'dayjs';
 import React, {
   FunctionComponent,

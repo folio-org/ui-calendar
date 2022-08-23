@@ -1,4 +1,4 @@
-import { CalloutContextType } from '@folio/stripes-core';
+import { CalloutContextType } from '@folio/stripes/core';
 import { FormApi, FORM_ERROR, SubmissionErrors } from 'final-form';
 import React, { ReactNode } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
@@ -38,9 +38,9 @@ export default async function onSubmit(
     exceptions: [],
   };
 
-  values['service-points']?.forEach((servicePoint) =>
-    newCalendar.assignments.push(servicePoint.id)
-  );
+  values['service-points']?.forEach((servicePoint) => {
+    return newCalendar.assignments.push(servicePoint.id);
+  });
 
   values['hours-of-operation']?.forEach((opening) => {
     if (opening.type === RowType.Closed) return;

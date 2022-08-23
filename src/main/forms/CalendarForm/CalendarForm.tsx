@@ -10,10 +10,10 @@ import {
   Icon,
   Row,
   TextField,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { DatepickerFieldRenderProps as DateFieldRenderProps } from '@folio/stripes-components/types/lib/Datepicker/Datepicker';
 import { TextFieldRenderProps } from '@folio/stripes-components/types/lib/TextField/TextField';
-import { CalloutContext } from '@folio/stripes-core';
+import { CalloutContext } from '@folio/stripes/core';
 import { FormApi, FORM_ERROR } from 'final-form';
 import React, {
   FunctionComponent,
@@ -56,8 +56,8 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   const intl = useIntl();
 
   const onSubmitCallback = useCallback(
-    (values: FormValues, form: FormApi<FormValues>) =>
-      onSubmit(
+    (values: FormValues, form: FormApi<FormValues>) => {
+      return onSubmit(
         {
           closeParentLayer: props.closeParentLayer,
           dataRepository: props.dataRepository,
@@ -68,7 +68,8 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
         intl,
         values,
         form
-      ),
+      );
+    },
     [props, calloutContext, intl]
   );
 
@@ -82,17 +83,15 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
     exceptions: { startDate: {}, startTime: {}, endDate: {}, endTime: {} },
   });
 
-  const validationFunction = useMemo(
-    () =>
-      validate.bind(
-        this,
-        localeDateFormat,
-        localeTimeFormat,
-        { startDateRef, endDateRef },
-        innerFieldRefs.current
-      ),
-    [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]
-  );
+  const validationFunction = useMemo(() => {
+    return validate.bind(
+      this,
+      localeDateFormat,
+      localeTimeFormat,
+      { startDateRef, endDateRef },
+      innerFieldRefs.current
+    );
+  }, [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]);
 
   return (
     <Form<FormValues>

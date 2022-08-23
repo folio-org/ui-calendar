@@ -7,7 +7,7 @@ import {
   Layout,
   MultiColumnList,
   TextField,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
 import classNames from 'classnames';
 import React, {
@@ -153,15 +153,15 @@ function getDateTimeFields({
             props.error?.invalid?.startTime?.[row.i]?.[innerRow.i])
         }
         onBlur={props.input.onBlur}
-        onChange={(newValue) =>
+        onChange={(newValue) => {
           updateInnerRowState(
             rowStates,
             setRowStates,
             realIndex,
             innerRowRealIndex,
             { startTime: newValue }
-          )
-        }
+          );
+        }}
       />
     ),
     endDate: (
@@ -222,15 +222,15 @@ function getDateTimeFields({
             props.error?.invalid?.endTime?.[row.i]?.[innerRow.i])
         }
         onBlur={props.input.onBlur}
-        onChange={(newValue) =>
+        onChange={(newValue) => {
           updateInnerRowState(
             rowStates,
             setRowStates,
             realIndex,
             innerRowRealIndex,
             { endTime: newValue }
-          )
-        }
+          );
+        }}
       />
     ),
   };
@@ -285,8 +285,8 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
         fieldRefs.endDate[row.i] = {};
         fieldRefs.endTime[row.i] = {};
       }
-      const dateTimeFields = row.rows.map((innerRow, innerRowRealIndex) =>
-        getDateTimeFields({
+      const dateTimeFields = row.rows.map((innerRow, innerRowRealIndex) => {
+        return getDateTimeFields({
           props,
           row,
           innerRow,
@@ -296,8 +296,8 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           isDirty,
           rowStates,
           setRowStates,
-        })
-      );
+        });
+      });
       return {
         rowState: row,
         name: (
@@ -307,11 +307,11 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
             fullWidth
             value={row.name}
             onBlur={() => props.input.onBlur()}
-            onChange={(e) =>
+            onChange={(e) => {
               updateRowState(rowStates, setRowStates, realIndex, {
                 name: e.target.value,
-              })
-            }
+              });
+            }}
             className={cssHiddenErrorField.hiddenErrorFieldWrapper}
             error={props.meta.touched && props.error?.empty?.name?.[row.i]}
           />
@@ -518,11 +518,11 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           actions: '6%',
         }}
         contentData={contents}
-        getCellClass={(defaultClasses, rowData) =>
-          classNames(defaultClasses, css.cellWrapper, {
+        getCellClass={(defaultClasses, rowData) => {
+          return classNames(defaultClasses, css.cellWrapper, {
             [css.conflictCell]: rowData.isConflicted,
-          })
-        }
+          });
+        }}
         rowFormatter={HoursOfOperationFieldRowFormatter}
       />
       {conflictError}

@@ -37,9 +37,9 @@ export const calendarToInitialValues = memoizee(
         };
 
         if (result.type === RowType.Open) {
-          exception.openings.forEach((opening, j) =>
-            result.rows.push({ i: -1 - j, ...opening })
-          );
+          exception.openings.forEach((opening, j) => {
+            return result.rows.push({ i: -1 - j, ...opening });
+          });
         } else {
           result.rows.push({
             i: -1,

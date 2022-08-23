@@ -1,4 +1,4 @@
-import { ConnectedComponentProps } from '@folio/stripes-connect';
+import { ConnectedComponentProps } from '@folio/stripes/connect';
 import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
 import { Calendar, DailyOpeningInfo, ServicePoint } from '../types/types';
@@ -23,9 +23,9 @@ export default class DataRepository {
     mutator: ConnectedComponentProps<Resources>['mutator']
   ) {
     this.resources = resources;
-    this.resources.servicePoints.records.sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
+    this.resources.servicePoints.records.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
     this.mutator = mutator;
   }
 

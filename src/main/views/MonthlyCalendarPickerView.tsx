@@ -6,11 +6,11 @@ import {
   NavListItem,
   NavListSection,
   Pane,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from '@folio/stripes-connect';
+} from '@folio/stripes/connect';
 import classNames from 'classnames';
 import type { Dayjs } from 'dayjs';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
@@ -41,9 +41,9 @@ function dailyOpeningToCalendarDisplay(
         </p>
       );
     } else {
-      openingInfo.openings.sort((a, b) =>
-        a.startTime.localeCompare(b.startTime)
-      );
+      openingInfo.openings.sort((a, b) => {
+        return a.startTime.localeCompare(b.startTime);
+      });
       status = openingInfo.openings.map((opening, i) => (
         <p key={i}>
           <FormattedMessage

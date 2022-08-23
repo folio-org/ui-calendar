@@ -4,12 +4,12 @@ import {
   LoadingPane,
   MenuSection,
   Pane,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from '@folio/stripes-connect';
-import { IfPermission, useStripes } from '@folio/stripes-core';
+} from '@folio/stripes/connect';
+import { IfPermission, useStripes } from '@folio/stripes/core';
 import React, { ReactNode, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -75,8 +75,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
       <Pane
         defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}
-        actionMenu={({ onToggle }) =>
-          ifPermissionOr(
+        actionMenu={({ onToggle }) => {
+          return ifPermissionOr(
             stripes,
             [permissions.CREATE, permissions.DELETE],
             <MenuSection
@@ -110,8 +110,8 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
                 </Button>
               </IfPermission>
             </MenuSection>
-          )
-        }
+          );
+        }}
       >
         <SortableMultiColumnList<
           {

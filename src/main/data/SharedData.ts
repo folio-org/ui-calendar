@@ -1,8 +1,8 @@
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from '@folio/stripes-connect';
-import { SettingsProps } from '@folio/stripes-smart-components';
+} from '@folio/stripes/connect';
+import { SettingsProps } from '@folio/stripes/smart-components';
 import { matchPath } from 'react-router-dom';
 import { Calendar, DailyOpeningInfo } from '../types/types';
 

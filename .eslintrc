@@ -2,18 +2,14 @@
   "extends": "@folio/eslint-config-stripes",
   "plugins": ["regex"],
   "rules": {
-    "quotes": [
-      "error",
-      "double",
-      { "avoidEscape": true, "allowTemplateLiterals": false }
-    ],
-    "implicit-arrow-linebreak": "off",
-    "function-paren-newline": "off",
-    "import/no-named-as-default": "off",
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"],
-    // ensure we use our wrapper
-    "regex/invalid": ["error", ["import [^t][^y][^p][^e][^ ].* from .dayjs"]]
+    "import/no-named-as-default": "off"
+    // // ensure we use uber-package imports
+    // "regex/invalid": [
+    //   "error",
+    //   [
+    //     "import (type\\s)?(.+,?\\s?)?(\\{(.|\\n)+?\\})? from .@folio.stripes[^/]"
+    //   ]
+    // ]
   },
   "overrides": [
     {

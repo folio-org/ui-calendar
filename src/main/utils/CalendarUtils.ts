@@ -17,17 +17,17 @@ export function getDateMatches(
   exceptions: CalendarException[];
 } {
   return {
-    openings: calendar.normalHours.filter((opening) =>
-      weekdayIsBetween(testDate, opening.startDay, opening.endDay)
-    ),
-    exceptions: calendar.exceptions.filter((exception) =>
-      testDate.isBetween(
+    openings: calendar.normalHours.filter((opening) => {
+      return weekdayIsBetween(testDate, opening.startDay, opening.endDay);
+    }),
+    exceptions: calendar.exceptions.filter((exception) => {
+      return testDate.isBetween(
         dayjs(exception.startDate),
         dayjs(exception.endDate),
         'day',
         '[]'
-      )
-    ),
+      );
+    }),
   };
 }
 

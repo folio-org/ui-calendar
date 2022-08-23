@@ -33,9 +33,11 @@ const localeWeekdays: LocaleWeekdayInfo[] = [
 ];
 
 function renderToTextContent(elements: ReactNode[][]): (string | null)[][] {
-  const results = elements.map((row) =>
-    row.map((el) => render(withIntlConfiguration(el)).container.textContent)
-  );
+  const results = elements.map((row) => {
+    return row.map(
+      (el) => render(withIntlConfiguration(el)).container.textContent
+    );
+  });
   cleanup();
   return results;
 }

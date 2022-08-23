@@ -6,8 +6,8 @@ declare module '*.css' {
   export = styles;
 }
 
-declare module '@folio/stripes-core' {
-  import { StripesType } from '@folio/stripes-smart-components';
+declare module '@folio/stripes/core' {
+  import { StripesType } from '@folio/stripes/smart-components';
   import { Context, FunctionComponent, ReactNode } from 'react';
 
   export type CalloutContextType = {
@@ -27,10 +27,10 @@ declare module '@folio/stripes-core' {
   }>;
 }
 
-declare module '@folio/stripes-connect' {
-  import { Optional } from '@folio/stripes-components/types/utils';
+declare module '@folio/stripes/connect' {
   import { FunctionComponent } from 'react';
   import { RouteComponentProps } from 'react-router-dom';
+  import { Optional } from 'utility-types';
 
   interface LocalResourceManifest {
     type?: 'local';
@@ -267,13 +267,17 @@ declare module '@folio/stripes-connect' {
   }
 }
 
-declare module '@folio/stripes-smart-components' {
+declare module '@folio/stripes/components' {
+  export * from '@folio/stripes-components';
+}
+
+declare module '@folio/stripes/smart-components' {
   import { PaneProps } from '@folio/stripes-components/types/lib/Pane/Pane';
   import {
     ConnectedComponent,
     ConnectedComponentProps,
     ResourceTypeSpec,
-  } from '@folio/stripes-connect';
+  } from '@folio/stripes/connect';
   import { Location } from 'history';
   import { Component, ComponentType, ReactNode, RefObject } from 'react';
   import { Subtract } from 'utility-types';

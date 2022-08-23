@@ -1,4 +1,4 @@
-import { MultiColumnList } from '@folio/stripes-components';
+import { MultiColumnList } from '@folio/stripes/components';
 import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
 import React, { ReactElement, ReactNode, useMemo, useState } from 'react';
 import { dayjsCompare } from '../utils/DateUtils';
@@ -95,14 +95,17 @@ export default function SortableMultiColumnList<
       sort
         .slice()
         .reverse()
-        .forEach((sorting) =>
-          sortBy<DataShape, Exclude<keyof DataShape & string, OmittedColumns>>(
+        .forEach((sorting) => {
+          return sortBy<
+            DataShape,
+            Exclude<keyof DataShape & string, OmittedColumns>
+          >(
             newData,
             sorting.key as Exclude<keyof DataShape & string, OmittedColumns>,
             sorting.direction,
             dateColumns
-          )
-        );
+          );
+        });
       return newData;
     }, [contentData, sort, dateColumns]);
 

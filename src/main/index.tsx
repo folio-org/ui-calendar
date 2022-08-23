@@ -1,4 +1,4 @@
-import { SettingsProps } from '@folio/stripes-smart-components';
+import { SettingsProps } from '@folio/stripes/smart-components';
 import React, { FunctionComponent } from 'react';
 import { hot } from 'react-hot-loader';
 import Settings from './views';

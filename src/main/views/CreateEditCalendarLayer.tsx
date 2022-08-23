@@ -6,7 +6,7 @@ import {
   Pane,
   PaneFooter,
   Paneset,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';

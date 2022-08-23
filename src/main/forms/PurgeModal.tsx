@@ -8,7 +8,7 @@ import {
   Modal,
   ModalFooter,
   Select,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { SelectFieldRenderProps } from '@folio/stripes-components/types/lib/Select/Select';
 import memoizee from 'memoizee';
 import React, { FunctionComponent, useEffect, useState } from 'react';
@@ -73,11 +73,12 @@ const getCalendarsToPurge = memoizee(
     );
 
     return calendars
-      .filter(
-        (calendar) =>
+      .filter((calendar) => {
+        return (
           assignmentCriteria === AssignmentCriteria.ANY ||
           calendar.assignments.length === 0
-      )
+        );
+      })
       .filter((calendar) => dayjs(calendar.endDate).isBefore(endBefore));
   }
 );

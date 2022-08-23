@@ -1,9 +1,9 @@
-import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes-components';
+import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from '@folio/stripes-connect';
-import { IfPermission } from '@folio/stripes-core';
+} from '@folio/stripes/connect';
+import { IfPermission } from '@folio/stripes/core';
 import React, { useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -51,17 +51,12 @@ export const CurrentAssignmentView: ConnectedComponent<
   }
 
   const rows = dataRepository.getServicePoints().map((servicePoint) => {
-    const calendars = dataRepository
-      .getCalendars()
-      .filter(
-        (calendar) =>
-          dayjs().isBetween(
-            calendar.startDate,
-            calendar.endDate,
-            'day',
-            '[]'
-          ) && calendar.assignments.includes(servicePoint.id)
+    const calendars = dataRepository.getCalendars().filter((calendar) => {
+      return (
+        dayjs().isBetween(calendar.startDate, calendar.endDate, 'day', '[]') &&
+        calendar.assignments.includes(servicePoint.id)
       );
+    });
     if (calendars.length === 0) {
       return {
         servicePoint: servicePoint.name.concat(

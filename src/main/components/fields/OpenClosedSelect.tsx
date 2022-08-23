@@ -1,4 +1,4 @@
-import { Select } from '@folio/stripes-components';
+import { Select } from '@folio/stripes/components';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import RowType from './RowType';

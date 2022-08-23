@@ -1,4 +1,4 @@
-import { Headline, IconButton, Loading } from '@folio/stripes-components';
+import { Headline, IconButton, Loading } from '@folio/stripes/components';
 import classNames from 'classnames';
 import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';

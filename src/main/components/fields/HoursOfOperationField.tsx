@@ -5,7 +5,7 @@ import {
   IconButton,
   Layout,
   MultiColumnList,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
 import classNames from 'classnames';
 import React, {
@@ -52,13 +52,14 @@ function rowsToOpenings(
   localeWeekdays: LocaleWeekdayInfo[]
 ): CalendarOpening[] {
   const providedOpenings = providedRows
-    .filter(
-      (row): row is Required<HoursOfOperationRowState> =>
+    .filter((row): row is Required<HoursOfOperationRowState> => {
+      return (
         row.startDay !== undefined &&
         row.startTime !== undefined &&
         row.endDay !== undefined &&
         row.endTime !== undefined
-    )
+      );
+    })
     .map(
       (row): CalendarOpening => ({
         startDay: row.startDay as Weekday,
@@ -241,11 +242,11 @@ export const HoursOfOperationField: FunctionComponent<
                 props.error?.invalidTimes?.startTime?.[row.i])
             }
             onBlur={props.input.onBlur}
-            onChange={(newValue) =>
-              updateRowState(rowStates, setRowStates, realIndex, {
+            onChange={(newValue) => {
+              return updateRowState(rowStates, setRowStates, realIndex, {
                 startTime: newValue,
-              })
-            }
+              });
+            }}
           />
         ),
         endDay: (
@@ -277,11 +278,11 @@ export const HoursOfOperationField: FunctionComponent<
                 props.error?.invalidTimes?.endTime?.[row.i])
             }
             onBlur={props.input.onBlur}
-            onChange={(newValue) =>
-              updateRowState(rowStates, setRowStates, realIndex, {
+            onChange={(newValue) => {
+              return updateRowState(rowStates, setRowStates, realIndex, {
                 endTime: newValue,
-              })
-            }
+              });
+            }}
           />
         ),
         actions: (
@@ -393,11 +394,11 @@ export const HoursOfOperationField: FunctionComponent<
           actions: '6%',
         }}
         contentData={contents}
-        getCellClass={(defaultClasses, rowData) =>
-          classNames(defaultClasses, css.cellWrapper, {
+        getCellClass={(defaultClasses, rowData) => {
+          return classNames(defaultClasses, css.cellWrapper, {
             [css.conflictCell]: rowData.isConflicted,
-          })
-        }
+          });
+        }}
         rowFormatter={MCLRowFormatter<MCLContentsType>}
       />
       {conflictError}

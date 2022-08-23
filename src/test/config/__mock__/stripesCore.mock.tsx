@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable indent */
 import {
   ConnectedComponent,
   ConnectedComponentProps,
-} from '@folio/stripes-connect';
-import { StripesType } from '@folio/stripes-smart-components';
+} from '@folio/stripes/connect';
+import type { StripesType } from '@folio/stripes/smart-components';
 import React, { ComponentType, ReactNode } from 'react';
 
 jest.mock(
@@ -52,9 +51,10 @@ jest.mock(
 
     return {
       ...jest.requireActual('@folio/stripes/core'),
-      stripesConnect:
-        (Component: ConnectedComponent<ConnectedComponentProps<any>, any>) =>
-        ({
+      stripesConnect: (
+        Component: ConnectedComponent<ConnectedComponentProps<any>, any>
+      ) => {
+        return ({
           mutator,
           resources,
           ...rest
@@ -101,7 +101,8 @@ jest.mock(
               resources={fakeResources as any}
             />
           );
-        },
+        };
+      },
 
       useOkapiKy: jest.fn(),
 
@@ -109,13 +110,13 @@ jest.mock(
 
       useStripes: () => STRIPES,
 
-      withStripes:
-        (Component: ComponentType<{ stripes: StripesType }>) =>
-        ({ stripes, ...rest }: { stripes: StripesType }) => {
+      withStripes: (Component: ComponentType<{ stripes: StripesType }>) => {
+        return ({ stripes, ...rest }: { stripes: StripesType }) => {
           const fakeStripes = stripes || STRIPES;
 
           return <Component {...rest} stripes={fakeStripes} />;
-        },
+        };
+      },
 
       // eslint-disable-next-line react/prop-types
       Pluggable: jest.fn((props) => <>{props.children}</>),

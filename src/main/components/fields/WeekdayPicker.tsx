@@ -1,4 +1,4 @@
-import { Select } from '@folio/stripes-components';
+import { Select } from '@folio/stripes/components';
 import { OptionType } from '@folio/stripes-components/types/lib/Select/Select';
 import React, { FunctionComponent, ReactNode, useMemo } from 'react';
 import { useIntl } from 'react-intl';
@@ -25,12 +25,12 @@ export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
         label: '',
       },
     ];
-    localeWeekdays.forEach((weekday) =>
-      opts.push({
+    localeWeekdays.forEach((weekday) => {
+      return opts.push({
         value: weekday.weekday,
         label: weekday.long,
-      })
-    );
+      });
+    });
     return opts;
   }, [localeWeekdays]);
 
