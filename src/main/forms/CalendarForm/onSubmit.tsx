@@ -2,6 +2,7 @@ import { CalloutContextType } from '@folio/stripes/core';
 import { FormApi, FORM_ERROR, SubmissionErrors } from 'final-form';
 import React, { ReactNode } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
+import { Optional } from 'utility-types';
 import RowType from '../../components/fields/RowType';
 import DataRepository from '../../data/DataRepository';
 import { Calendar, ErrorCode, ErrorResponse, Weekday } from '../../types/types';
@@ -19,7 +20,10 @@ export default async function onSubmit(
   calloutContext: CalloutContextType,
   intl: IntlShape,
 
-  values: FormValues,
+  values: Optional<
+    FormValues,
+    'service-points' | 'hours-of-operation' | 'exceptions'
+  >,
   form: FormApi<FormValues>
 ): Promise<SubmissionErrors> {
   if (form.getState().hasValidationErrors) {
@@ -128,23 +132,15 @@ export default async function onSubmit(
         case ErrorCode.CALENDAR_INVALID_EXCEPTION_DATE_BOUNDARY:
         case ErrorCode.CALENDAR_INVALID_EXCEPTION_NAME:
         case ErrorCode.CALENDAR_INVALID_EXCEPTION_OPENINGS:
-          // eslint-disable-next-line no-alert
-          alert(error.message);
-          // eslint-disable-next-line no-console
-          console.error(
-            'The following error should have been caught by form validation!',
-            error
-          );
           submissionErrors[FORM_ERROR] = <>{error.message}</>;
           break;
+
         case ErrorCode.INTERNAL_SERVER_ERROR:
         case ErrorCode.INVALID_REQUEST:
         case ErrorCode.INVALID_PARAMETER:
         case ErrorCode.CALENDAR_NOT_FOUND: // not applicable
         case ErrorCode.CALENDAR_INVALID_EXCEPTION_OPENING_BOUNDARY: // bounds are auto-generated
         default:
-          // eslint-disable-next-line no-alert
-          alert(error.message);
           calloutContext.sendCallout({
             message: (
               <FormattedMessage id="ui-calendar.calendarForm.error.internalServerError" />
