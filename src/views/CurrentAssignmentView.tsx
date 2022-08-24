@@ -1,10 +1,6 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
-import {
-  ConnectedComponent,
-  ConnectedComponentProps,
-} from '@folio/stripes/connect';
 import { IfPermission } from '@folio/stripes/core';
-import React, { useRef } from 'react';
+import React, { FunctionComponent, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
   Route,
@@ -14,7 +10,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
-import { MANIFEST, Resources } from '../data/SharedData';
 import useDataRepository from '../data/useDataRepository';
 import permissions from '../types/permissions';
 import { getLocalizedDate } from '../utils/DateUtils';
@@ -24,15 +19,12 @@ import { useLocaleWeekdays } from '../utils/WeekdayUtils';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
 import InfoPane from './panes/InfoPane';
 
-export type CurrentAssignmentViewProps = ConnectedComponentProps<Resources>;
-
-export const CurrentAssignmentView: ConnectedComponent<
-  CurrentAssignmentViewProps,
-  Resources
-> = (props: CurrentAssignmentViewProps) => {
+export const CurrentAssignmentView: FunctionComponent<
+  Record<string, never>
+> = () => {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
-  const dataRepository = useDataRepository(props.resources, props.mutator);
+  const dataRepository = useDataRepository();
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
@@ -206,7 +198,5 @@ export const CurrentAssignmentView: ConnectedComponent<
     </>
   );
 };
-
-CurrentAssignmentView.manifest = MANIFEST;
 
 export default CurrentAssignmentView;

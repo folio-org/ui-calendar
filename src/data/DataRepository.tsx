@@ -1,8 +1,7 @@
-import { ConnectedComponentProps } from '@folio/stripes/connect';
 import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
 import { Calendar, DailyOpeningInfo, ServicePoint } from '../types/types';
-import { MAX_LIMIT, Resources } from './SharedData';
+import { ServicePointDTO } from './types';
 
 const getServicePointMap = memoizee(
   (servicePoints: ServicePoint[]): Record<string, ServicePoint> => {
@@ -14,19 +13,38 @@ const getServicePointMap = memoizee(
   }
 );
 
+interface MutatorsType {
+  create: (calendar: Calendar) => Promise<Calendar>;
+  update: (calendar: Calendar) => Promise<Calendar>;
+  delete: (calendars: Calendar[]) => Promise<void>;
+  dates: (params: {
+    servicePointId: string;
+    startDate: string;
+    endDate: string;
+  }) => Promise<DailyOpeningInfo[]>;
+}
+
 export default class DataRepository {
-  private resources: ConnectedComponentProps<Resources>['resources'];
-  private mutator: ConnectedComponentProps<Resources>['mutator'];
+  calendarsLoaded: boolean;
+  calendars: Calendar[];
+
+  servicePointsLoaded: boolean;
+  servicePoints: ServicePointDTO[];
+
+  mutators: MutatorsType;
 
   constructor(
-    resources: ConnectedComponentProps<Resources>['resources'],
-    mutator: ConnectedComponentProps<Resources>['mutator']
+    calendars: Calendar[] | undefined,
+    servicePoints: ServicePointDTO[] | undefined,
+    mutators: MutatorsType
   ) {
-    this.resources = resources;
-    this.resources.servicePoints.records.sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
-    this.mutator = mutator;
+    this.calendarsLoaded = calendars !== undefined;
+    this.calendars = calendars ?? [];
+
+    this.servicePointsLoaded = servicePoints !== undefined;
+    this.servicePoints = servicePoints ?? [];
+
+    this.mutators = mutators;
   }
 
   /** If enough data has loaded for the app to render */
@@ -36,7 +54,7 @@ export default class DataRepository {
 
   /** If service points have been loaded */
   areServicePointsLoaded(): boolean {
-    return this.resources.servicePoints.hasLoaded;
+    return this.servicePointsLoaded;
   }
 
   /** Get all service points */
@@ -44,7 +62,7 @@ export default class DataRepository {
     if (!this.areServicePointsLoaded()) {
       return [];
     }
-    return this.resources.servicePoints.records.map((dto) => ({
+    return this.servicePoints.map((dto) => ({
       id: dto.id,
       name: dto.name,
       inactive: false,
@@ -73,7 +91,7 @@ export default class DataRepository {
 
   /** If the calendars have finished loading */
   areCalendarsLoaded(): boolean {
-    return this.resources.calendars.hasLoaded;
+    return this.calendarsLoaded;
   }
 
   /** Gets all the calendars, as an array */
@@ -81,7 +99,7 @@ export default class DataRepository {
     if (!this.areCalendarsLoaded()) {
       return [];
     }
-    return this.resources.calendars.records;
+    return this.calendars;
   }
 
   /** Get a calendar by ID */
@@ -91,49 +109,38 @@ export default class DataRepository {
   }
 
   /** Create a new calendar */
-  createCalendar(calendar: Calendar) {
-    this.mutator.dates.reset?.();
-    return this.mutator.calendars.POST(calendar);
+  async createCalendar(calendar: Calendar): Promise<Calendar> {
+    return this.mutators.create(calendar);
   }
 
   /** Update a new calendar */
   updateCalendar(newCalendar: Calendar): Promise<Calendar> {
-    this.mutator.dates.reset?.();
-    return this.mutator.calendars.PUT(newCalendar);
+    return this.mutators.update(newCalendar);
   }
 
   /** Delete a given calendar */
   deleteCalendar(calendar: Calendar): Promise<void> {
-    this.mutator.dates.reset?.();
-    return this.mutator.calendars.DELETE(calendar);
+    return this.mutators.delete([calendar]);
   }
 
   /** Delete a list of given calendars.  Sends a single request with comma-delimited IDs */
   deleteCalendars(calendars: Calendar[]): Promise<void> {
-    // tricks stripes-connect into sending API request with comma-delimited path variable
-    // stripes-connect only looks at `id` on calendar so other properties are not needed
-    const joinedCalendarIds = calendars.map((c) => c.id).join(',');
-    const calendar = { id: joinedCalendarIds } as Calendar;
-
-    this.mutator.dates.reset?.();
-    return this.mutator.calendars.DELETE(calendar);
+    return this.mutators.delete(calendars);
   }
 
   /**
    * Get dates between a given range.  Service point will be provided by the
    * current route
    */
-  getDateRange(startDate: Dayjs, endDate: Dayjs): Promise<DailyOpeningInfo[]> {
-    if (this.mutator.dates.GET === undefined) {
-      return Promise.resolve([]);
-    }
-    return this.mutator.dates.GET({
-      params: {
-        limit: MAX_LIMIT.toString(),
-        includeClosed: 'true',
-        startDate: startDate.format('YYYY-MM-DD'),
-        endDate: endDate.format('YYYY-MM-DD'),
-      },
+  getDailyOpeningInfo(
+    servicePointId: string,
+    startDate: Dayjs,
+    endDate: Dayjs
+  ): Promise<DailyOpeningInfo[]> {
+    return this.mutators.dates({
+      servicePointId,
+      startDate: startDate.format('YYYY-MM-DD'),
+      endDate: endDate.format('YYYY-MM-DD'),
     });
   }
 }

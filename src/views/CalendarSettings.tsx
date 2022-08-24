@@ -20,9 +20,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
           {
             route: 'all/',
             label: <FormattedMessage id="ui-calendar.allCalendarView.title" />,
-            component: props.stripes.connect(AllCalendarView, {
-              dataKey: 'ui-calendar',
-            }),
+            component: AllCalendarView,
             perm: 'ui-calendar.view',
           },
           {
@@ -30,9 +28,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
             label: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
             ),
-            component: props.stripes.connect(CurrentAssignmentView, {
-              dataKey: 'ui-calendar',
-            }),
+            component: CurrentAssignmentView,
             perm: 'ui-calendar.view',
           },
           {
@@ -40,9 +36,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
             label: (
               <FormattedMessage id="ui-calendar.monthlyCalendarView.title" />
             ),
-            component: props.stripes.connect(MonthlyCalendarPickerView, {
-              dataKey: 'ui-calendar',
-            }),
+            component: MonthlyCalendarPickerView,
             perm: 'ui-calendar.view',
           },
         ]}

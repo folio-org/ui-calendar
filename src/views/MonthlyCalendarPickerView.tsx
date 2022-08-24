@@ -7,17 +7,18 @@ import {
   NavListSection,
   Pane,
 } from '@folio/stripes/components';
-import {
-  ConnectedComponent,
-  ConnectedComponentProps,
-} from '@folio/stripes/connect';
 import classNames from 'classnames';
 import type { Dayjs } from 'dayjs';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import css from '../components/Calendar.css';
-import { MANIFEST, Resources } from '../data/SharedData';
 import useDataRepository from '../data/useDataRepository';
 import { DailyOpeningInfo } from '../types/types';
 import { getDateRange, getLocalizedTime } from '../utils/DateUtils';
@@ -86,14 +87,11 @@ function dailyOpeningToCalendarDisplay(
   );
 }
 
-export type MonthlyCalendarPickerViewProps = ConnectedComponentProps<Resources>;
-
-const MonthlyCalendarPickerView: ConnectedComponent<
-  MonthlyCalendarPickerViewProps,
-  Resources
-> = (props: MonthlyCalendarPickerViewProps) => {
+const MonthlyCalendarPickerView: FunctionComponent<
+  Record<string, never>
+> = () => {
   const intl = useIntl();
-  const dataRepository = useDataRepository(props.resources, props.mutator);
+  const dataRepository = useDataRepository();
   const [events, setEvents] = useState<
     Record<string, Record<string, ReactNode>>
   >({});
@@ -127,7 +125,11 @@ const MonthlyCalendarPickerView: ConnectedComponent<
         // prevents further calls of this function while these events are being loaded
         setEvents(loadingEvents);
 
-        const dateRange = await dataRepository.getDateRange(startDate, endDate);
+        const dateRange = await dataRepository.getDailyOpeningInfo(
+          servicePointId,
+          startDate,
+          endDate
+        );
 
         if (dateRange === null) return;
 
@@ -187,7 +189,5 @@ const MonthlyCalendarPickerView: ConnectedComponent<
     </>
   );
 };
-
-MonthlyCalendarPickerView.manifest = MANIFEST;
 
 export default MonthlyCalendarPickerView;

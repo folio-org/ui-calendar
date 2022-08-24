@@ -35,7 +35,7 @@
   "calendarForm.error.openingConflictError": "Some openings have conflicts with each other",
   "calendarForm.error.exceptionConflictError": "Some exceptions have conflicts with each other",
   "calendarForm.error.internalServerError": "Internal server error",
-  "calendarForm.error.servicePointConflict": "Service points {list} have overlaps.",
+  "calendarForm.error.servicePointConflict": "{num, plural, =1 {Service point} other {Service points}} {list} {num, plural, =1 {has} other {have}} overlaps.",
 
   "currentStatus.open.noNext": "Open",
   "currentStatus.open.sameDay": "Open until {nextTime}",

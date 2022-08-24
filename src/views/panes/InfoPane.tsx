@@ -18,6 +18,7 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
+import { HTTPError } from 'ky';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../../data/DataRepository';
@@ -364,7 +365,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                   // eslint-disable-next-line no-console
                   console.error(e);
                   // eslint-disable-next-line no-alert
-                  alert((e as Response).text());
+                  alert(await (e as HTTPError).response.text());
                 } finally {
                   setShowDeleteModal(false);
                   setDeleteModalSubmitting(false);

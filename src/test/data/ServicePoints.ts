@@ -1,4 +1,4 @@
-import { ServicePointDTO } from '../../data/SharedData';
+import { ServicePointDTO } from '../../data/types';
 
 export const SERVICE_POINT_1: ServicePointDTO = {
   id: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',

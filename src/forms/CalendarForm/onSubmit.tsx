@@ -1,5 +1,6 @@
 import { CalloutContextType } from '@folio/stripes/core';
 import { FormApi, FORM_ERROR, SubmissionErrors } from 'final-form';
+import { HTTPError } from 'ky';
 import React, { ReactNode } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { Optional } from 'utility-types';
@@ -95,8 +96,8 @@ export default async function onSubmit(
     const cal = await props.submitter(newCalendar);
 
     props.closeParentLayer(cal.id as string);
-  } catch (e: unknown) {
-    const response = e as Response;
+  } catch (e) {
+    const response = (e as HTTPError).response;
     const errors = (await response.json()) as ErrorResponse;
 
     errors.errors.forEach((error) => {
@@ -117,8 +118,11 @@ export default async function onSubmit(
                       error.data.conflictingServicePointIds
                     )
                   ),
+                  num: props.dataRepository.getServicePointNamesFromIds(
+                    error.data.conflictingServicePointIds
+                  ).length,
                 }}
-              />
+              />{' '}
               {error.message}
             </>
           );

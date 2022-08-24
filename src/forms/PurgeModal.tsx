@@ -1,3 +1,4 @@
+import { SelectFieldRenderProps } from '@folio/stripes-components/types/lib/Select/Select';
 import {
   Accordion,
   AccordionSet,
@@ -9,7 +10,7 @@ import {
   ModalFooter,
   Select,
 } from '@folio/stripes/components';
-import { SelectFieldRenderProps } from '@folio/stripes-components/types/lib/Select/Select';
+import { HTTPError } from 'ky';
 import memoizee from 'memoizee';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
@@ -152,7 +153,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
             // eslint-disable-next-line no-console
             console.error(e);
             // eslint-disable-next-line no-alert
-            alert((e as Response).text());
+            alert(await (e as HTTPError).response.text());
           } finally {
             setIsSubmitting(false);
           }

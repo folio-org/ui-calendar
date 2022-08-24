@@ -5,12 +5,8 @@ import {
   MenuSection,
   Pane,
 } from '@folio/stripes/components';
-import {
-  ConnectedComponent,
-  ConnectedComponentProps,
-} from '@folio/stripes/connect';
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { FunctionComponent, ReactNode, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
   Route,
@@ -20,7 +16,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
-import { MANIFEST, Resources } from '../data/SharedData';
 import useDataRepository from '../data/useDataRepository';
 import PurgeModal from '../forms/PurgeModal';
 import permissions from '../types/permissions';
@@ -31,14 +26,10 @@ import ifPermissionOr from '../utils/ifPermissionOr';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
 import InfoPane from './panes/InfoPane';
 
-export type AllCalendarViewProps = ConnectedComponentProps<Resources>;
-
-const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
-  props: AllCalendarViewProps
-) => {
+const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
   const intl = useIntl();
   const stripes = useStripes();
-  const dataRepository = useDataRepository(props.resources, props.mutator);
+  const dataRepository = useDataRepository();
   const [showPurgeModal, setShowPurgeModal] = useState<boolean>(false);
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
@@ -215,7 +206,5 @@ const AllCalendarView: ConnectedComponent<AllCalendarViewProps, Resources> = (
     </>
   );
 };
-
-AllCalendarView.manifest = MANIFEST;
 
 export default AllCalendarView;
