@@ -1,68 +1,21 @@
-// import { FormApi } from 'final-form';
-// import RowType from '../../components/fields/RowType';
-// import DataRepository from '../../data/DataRepository';
-// import * as Calendars from '../../test/data/Calendars';
-// import ServicePoints from '../../test/data/ServicePoints';
-// import * as Weekdays from '../../test/data/Weekdays';
-// import getIntl from '../../test/util/getIntl';
-// import { Calendar } from '../../types/types';
-// import calendarToInitialValues from '../calendarToInitialValues';
-// import onSubmit from './onSubmit';
-// import { FormValues } from './types';
+import { FormApi } from 'final-form';
+import RowType from '../../components/fields/RowType';
+import DataRepository from '../../data/DataRepository';
+import * as Calendars from '../../test/data/Calendars';
+import ServicePoints from '../../test/data/ServicePoints';
+import * as Weekdays from '../../test/data/Weekdays';
+import getIntl from '../../test/util/getIntl';
+import { Calendar } from '../../types/types';
+import calendarToInitialValues from '../calendarToInitialValues';
+import onSubmit from './onSubmit';
+import { FormValues } from './types';
+
+test('Ignore', () => {
+  expect(1 + 1).toBe(2);
+});
 
 // const intl = getIntl();
 
-// const dataRepository = new DataRepository(
-//   {
-//     servicePoints: {
-//       records: ServicePoints,
-//       failed: false,
-//       hasLoaded: true,
-//       isPending: false,
-//       pendingMutations: [],
-//       successfulMutations: [],
-//     },
-//     calendars: {
-//       records: [],
-//       failed: false,
-//       hasLoaded: true,
-//       isPending: false,
-//       pendingMutations: [],
-//       successfulMutations: [],
-//     },
-//     dates: {
-//       records: [],
-//       failed: false,
-//       hasLoaded: true,
-//       isPending: false,
-//       pendingMutations: [],
-//       successfulMutations: [],
-//     },
-//   },
-//   {
-//     servicePoints: {
-//       cancel: jest.fn(),
-//       GET: jest.fn(),
-//       POST: jest.fn(),
-//       PUT: jest.fn(),
-//       DELETE: jest.fn(),
-//     },
-//     calendars: {
-//       cancel: jest.fn(),
-//       GET: jest.fn(),
-//       POST: jest.fn(),
-//       PUT: jest.fn(),
-//       DELETE: jest.fn(),
-//     },
-//     dates: {
-//       cancel: jest.fn(),
-//       GET: jest.fn(),
-//       POST: jest.fn(),
-//       PUT: jest.fn(),
-//       DELETE: jest.fn(),
-//     },
-//   }
-// );
 // // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // const closeParentLayer = jest.fn((_redirectId?: string) => ({}));
 // // eslint-disable-next-line @typescript-eslint/no-unused-vars
