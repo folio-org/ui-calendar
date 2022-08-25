@@ -1,5 +1,8 @@
-import { MultiSelection, OptionSegment } from '@folio/stripes/components';
-import { MultiSelectionFieldRenderProps } from '@folio/stripes-components/types/lib/MultiSelection/MultiSelection';
+import {
+  MultiSelection,
+  MultiSelectionFieldRenderProps,
+  OptionSegment,
+} from '@folio/stripes/components';
 import fuzzysort from 'fuzzysort';
 import React, { FunctionComponent, ReactNode } from 'react';
 import { Field } from 'react-final-form';

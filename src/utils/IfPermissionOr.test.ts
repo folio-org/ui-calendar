@@ -1,4 +1,4 @@
-import type { StripesType } from '@folio/stripes/smart-components';
+import type { StripesType } from '@folio/stripes/core';
 import ifPermissionOr from './ifPermissionOr';
 
 test('IfPermissionOr properly matches permissions', () => {

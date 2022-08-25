@@ -1,4 +1,3 @@
-import { SelectFieldRenderProps } from '@folio/stripes-components/types/lib/Select/Select';
 import {
   Accordion,
   AccordionSet,
@@ -9,6 +8,7 @@ import {
   Modal,
   ModalFooter,
   Select,
+  SelectFieldRenderProps,
 } from '@folio/stripes/components';
 import { HTTPError } from 'ky';
 import memoizee from 'memoizee';

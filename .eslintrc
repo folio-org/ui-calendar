@@ -1,15 +1,7 @@
 {
   "extends": "@folio/eslint-config-stripes",
-  "plugins": ["regex"],
   "rules": {
     "import/no-named-as-default": "off"
-    // // ensure we use uber-package imports
-    // "regex/invalid": [
-    //   "error",
-    //   [
-    //     "import (type\\s)?(.+,?\\s?)?(\\{(.|\\n)+?\\})? from .@folio.stripes[^/]"
-    //   ]
-    // ]
   },
   "overrides": [
     {

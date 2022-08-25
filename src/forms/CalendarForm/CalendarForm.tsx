@@ -3,6 +3,7 @@ import {
   AccordionSet,
   Col,
   Datepicker as DateField,
+  DatepickerFieldRenderProps as DateFieldRenderProps,
   ExpandAllButton,
   getLocaleDateFormat,
   getLocalizedTimeFormatInfo,
@@ -10,9 +11,8 @@ import {
   Icon,
   Row,
   TextField,
+  TextFieldRenderProps,
 } from '@folio/stripes/components';
-import { DatepickerFieldRenderProps as DateFieldRenderProps } from '@folio/stripes-components/types/lib/Datepicker/Datepicker';
-import { TextFieldRenderProps } from '@folio/stripes-components/types/lib/TextField/TextField';
 import { CalloutContext } from '@folio/stripes/core';
 import { FormApi, FORM_ERROR } from 'final-form';
 import React, {

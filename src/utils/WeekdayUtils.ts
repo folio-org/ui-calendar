@@ -1,4 +1,4 @@
-import staticFirstWeekDay from '@folio/stripes-components/lib/Datepicker/staticFirstWeekDay';
+import { staticFirstWeekDay } from '@folio/stripes/components';
 import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
 import { useMemo } from 'react';

@@ -1,5 +1,7 @@
-import { MultiColumnList } from '@folio/stripes/components';
-import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
+import {
+  MultiColumnList,
+  MultiColumnListProps,
+} from '@folio/stripes/components';
 import React, { ReactElement, ReactNode, useMemo, useState } from 'react';
 import { dayjsCompare } from '../utils/DateUtils';
 import dayjs from '../utils/dayjs';

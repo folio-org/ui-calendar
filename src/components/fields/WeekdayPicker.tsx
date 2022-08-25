@@ -1,5 +1,4 @@
-import { Select } from '@folio/stripes/components';
-import { OptionType } from '@folio/stripes-components/types/lib/Select/Select';
+import { Select, SelectOptionType } from '@folio/stripes/components';
 import React, { FunctionComponent, ReactNode, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Weekday } from '../../types/types';
@@ -19,7 +18,7 @@ export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
   const localeWeekdays = useLocaleWeekdays(intl);
 
   const options = useMemo(() => {
-    const opts: OptionType<Weekday | undefined>[] = [
+    const opts: SelectOptionType<Weekday | undefined>[] = [
       {
         value: undefined,
         label: '',

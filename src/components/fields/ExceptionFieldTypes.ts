@@ -1,5 +1,5 @@
-import { RequireExactlyOne } from '@folio/stripes-components/types/utils';
 import { ReactNode } from 'react';
+import type { RequireExactlyOne } from '../../types/utils';
 import RowType from './RowType';
 
 export interface MCLContentsType {

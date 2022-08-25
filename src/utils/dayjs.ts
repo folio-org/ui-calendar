@@ -1,4 +1,3 @@
-/* eslint-disable regex/invalid */
 import dayjs from 'dayjs';
 
 import calendar from 'dayjs/plugin/calendar';

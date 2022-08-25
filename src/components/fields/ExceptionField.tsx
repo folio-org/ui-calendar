@@ -6,9 +6,9 @@ import {
   IconButton,
   Layout,
   MultiColumnList,
+  MultiColumnListProps,
   TextField,
 } from '@folio/stripes/components';
-import { MultiColumnListProps } from '@folio/stripes-components/types/lib/MultiColumnList/MultiColumnList';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
