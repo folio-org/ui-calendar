@@ -87,7 +87,7 @@
     "wrongStartEndDate": "開始時間必須在結束時間之前！",
     "deleteQuestionMessage": "圖書館日常開放時間 <strong>{name}</strong> 將 <strong>被删除</strong>。",
     "deleteQuestionTitle": "刪除日常的圖書館開放時間",
-    "exitQuestionTitle": "你確定嗎 ？",
+    "exitQuestionTitle": "你確定嗎？",
     "exitWithoutSaving": "不儲存就離開",
     "exitQuestionMessage": "有未儲存的更改",
     "exceptionalNewPeriod": "+ 新增例外時期",
