@@ -1,6 +1,12 @@
 import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
-import { Calendar, DailyOpeningInfo, ServicePoint } from '../types/types';
+import {
+  Calendar,
+  CalendarDTO,
+  DailyOpeningInfo,
+  ServicePoint,
+  User
+} from '../types/types';
 import { ServicePointDTO } from './types';
 
 const getServicePointMap = memoizee(
@@ -14,19 +20,20 @@ const getServicePointMap = memoizee(
 );
 
 interface MutatorsType {
-  create: (calendar: Calendar) => Promise<Calendar>;
-  update: (calendar: Calendar) => Promise<Calendar>;
+  create: (calendar: Calendar) => Promise<CalendarDTO>;
+  update: (calendar: Calendar) => Promise<CalendarDTO>;
   delete: (calendars: Calendar[]) => Promise<void>;
   dates: (params: {
     servicePointId: string;
     startDate: string;
     endDate: string;
   }) => Promise<DailyOpeningInfo[]>;
+  getUser: (params: { userId: string; signal?: AbortSignal }) => Promise<User>;
 }
 
 export default class DataRepository {
   calendarsLoaded: boolean;
-  calendars: Calendar[];
+  calendars: CalendarDTO[];
 
   servicePointsLoaded: boolean;
   servicePoints: ServicePointDTO[];
@@ -34,7 +41,7 @@ export default class DataRepository {
   mutators: MutatorsType;
 
   constructor(
-    calendars: Calendar[] | undefined,
+    calendars: CalendarDTO[] | undefined,
     servicePoints: ServicePointDTO[] | undefined,
     mutators: MutatorsType
   ) {
@@ -65,7 +72,7 @@ export default class DataRepository {
     return this.servicePoints.map((dto) => ({
       id: dto.id,
       name: dto.name,
-      inactive: false,
+      inactive: false
     }));
   }
 
@@ -95,7 +102,7 @@ export default class DataRepository {
   }
 
   /** Gets all the calendars, as an array */
-  getCalendars(): Calendar[] {
+  getCalendars(): CalendarDTO[] {
     if (!this.areCalendarsLoaded()) {
       return [];
     }
@@ -103,18 +110,18 @@ export default class DataRepository {
   }
 
   /** Get a calendar by ID */
-  getCalendar(id: string | null | undefined): Calendar | undefined {
+  getCalendar(id: string | null | undefined): CalendarDTO | undefined {
     if (id === undefined || id === null) return undefined;
     return this.getCalendars().filter((calendar) => calendar.id === id)[0];
   }
 
   /** Create a new calendar */
-  async createCalendar(calendar: Calendar): Promise<Calendar> {
+  async createCalendar(calendar: Calendar): Promise<CalendarDTO> {
     return this.mutators.create(calendar);
   }
 
   /** Update a new calendar */
-  updateCalendar(newCalendar: Calendar): Promise<Calendar> {
+  updateCalendar(newCalendar: Calendar): Promise<CalendarDTO> {
     return this.mutators.update(newCalendar);
   }
 
@@ -140,7 +147,18 @@ export default class DataRepository {
     return this.mutators.dates({
       servicePointId,
       startDate: startDate.format('YYYY-MM-DD'),
-      endDate: endDate.format('YYYY-MM-DD'),
+      endDate: endDate.format('YYYY-MM-DD')
     });
+  }
+
+  /**
+   * Get a user by ID.  Optionally, requests may be aborted when the data is no longer needed
+   */
+  async getUser(userId: string, signal?: AbortSignal): Promise<User> {
+    try {
+      return await this.mutators.getUser({ userId, signal });
+    } catch (e) {
+      return new Promise(() => ({}));
+    }
   }
 }

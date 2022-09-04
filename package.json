@@ -52,7 +52,8 @@
           "settings.calendar.enabled",
           "calendar.view",
           "configuration.entries.collection.get",
-          "inventory-storage.service-points.collection.get"
+          "inventory-storage.service-points.collection.get",
+          "users.item.get"
         ],
         "visible": true
       },

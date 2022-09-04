@@ -44,6 +44,28 @@ export interface Calendar {
   exceptions: CalendarException[];
 }
 
+// in here as it is used in more places than just data transit
+export interface CalendarDTO extends Calendar {
+  id: string;
+  metadata?: {
+    createdDate?: string;
+    createdByUserId?: string;
+    updatedDate?: string;
+    updatedByUserId?: string;
+  };
+}
+
+export interface User {
+  id: string;
+  username: string;
+  personal: {
+    lastName: string;
+    firstName?: string;
+    middleName?: string;
+    preferredFirstName?: string;
+  };
+}
+
 export enum ErrorCode {
   INTERNAL_SERVER_ERROR = 'internalServerError',
   INVALID_REQUEST = 'invalidRequest',
@@ -58,7 +80,7 @@ export enum ErrorCode {
   CALENDAR_INVALID_NORMAL_OPENINGS = 'calendarInvalidNormalOpenings',
   CALENDAR_INVALID_EXCEPTIONS = 'calendarInvalidExceptions',
   CALENDAR_INVALID_EXCEPTION_DATE_ORDER = 'calendarInvalidExceptionDateOrder',
-  CALENDAR_INVALID_EXCEPTION_DATE_BOUNDARY = 'calendarInvalidExceptionDateBoundary',
+  CALENDAR_INVALID_EXCEPTION_DATE_BOUNDARY = 'calendarInvalidExceptionDateBoundary'
 }
 
 interface ErrorWithNoData {

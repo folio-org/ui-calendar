@@ -1,4 +1,4 @@
-import type { Calendar, DailyOpeningInfo } from '../types/types';
+import type { CalendarDTO, DailyOpeningInfo } from '../types/types';
 
 export interface ServicePointDTO {
   id: string;
@@ -15,7 +15,7 @@ export interface ServicePointResponseDTO {
 }
 
 export interface CalendarResponseDTO {
-  calendars: Calendar[];
+  calendars: CalendarDTO[];
   totalRecords: number;
 }
 

@@ -14,16 +14,26 @@ import {
   ModalFooter,
   MultiColumnList,
   Pane,
-  Row,
+  Row
 } from '@folio/stripes/components';
 import { IfPermission, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
 import { HTTPError } from 'ky';
-import React, { FunctionComponent, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState
+} from 'react';
+import {
+  FormattedDate,
+  FormattedMessage,
+  FormattedTime,
+  useIntl
+} from 'react-intl';
 import DataRepository from '../../data/DataRepository';
 import permissions from '../../types/permissions';
-import { Calendar, CalendarException } from '../../types/types';
+import { CalendarDTO, CalendarException, User } from '../../types/types';
 import { isOpen247 } from '../../utils/CalendarUtils';
 import { getLocalizedDate } from '../../utils/DateUtils';
 import dayjs from '../../utils/dayjs';
@@ -34,7 +44,7 @@ import {
   generateDisplayRows,
   generateExceptionalOpeningRows,
   get247Rows,
-  splitOpeningsIntoDays,
+  splitOpeningsIntoDays
 } from '../../utils/InfoPaneUtils';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 import css from './InfoPane.css';
@@ -42,9 +52,28 @@ import css from './InfoPane.css';
 export interface InfoPaneProps {
   creationBasePath: string;
   editBasePath: string;
-  calendar?: Calendar | null;
+  calendar?: CalendarDTO | null;
   onClose: () => void;
   dataRepository: DataRepository;
+}
+
+// from ui-users components/util/util.js
+function getUserDisplayName(user: User): string {
+  let fullName = user?.personal?.lastName || '';
+  let givenName =
+    user?.personal?.preferredFirstName || user?.personal?.firstName || '';
+
+  const middleName = user?.personal?.middleName || '';
+
+  if (middleName) {
+    givenName += `${givenName ? ' ' : ''}${middleName}`;
+  }
+
+  if (givenName) {
+    fullName += `${fullName ? ', ' : ''}${givenName}`;
+  }
+
+  return fullName;
 }
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (
@@ -57,6 +86,111 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [deleteModalSubmitting, setDeleteModalSubmitting] =
     useState<boolean>(false);
+
+  const [metadata, setMetadata] = useState<{
+    createdBy: ReactNode;
+    createdAt: ReactNode;
+    updatedBy: ReactNode;
+    updatedAt: ReactNode;
+  }>({
+    createdBy: <></>,
+    createdAt: <></>,
+    updatedBy: <></>,
+    updatedAt: <></>
+  });
+
+  const { dataRepository } = props;
+  useEffect(() => {
+    const newMetadata: typeof metadata = {
+      createdBy: (
+        <div className={css.noValue}>
+          <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.unknownUser" />
+        </div>
+      ),
+      createdAt: (
+        <div className={css.noValue}>
+          <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.unknownDate" />
+        </div>
+      ),
+      updatedBy: (
+        <div className={css.noValue}>
+          <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.unknownUser" />
+        </div>
+      ),
+      updatedAt: (
+        <div className={css.noValue}>
+          <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.unknownDate" />
+        </div>
+      )
+    };
+
+    const abortController = new AbortController();
+
+    if (calendar?.metadata?.createdByUserId) {
+      // better than no info, while the API fetches
+      newMetadata.createdBy = calendar.metadata.createdByUserId;
+
+      dataRepository
+        .getUser(calendar.metadata.createdByUserId, abortController.signal)
+        .then(
+          (user) => !abortController.signal.aborted &&
+            setMetadata((current) => ({
+              ...current,
+              createdBy: getUserDisplayName(user)
+            }))
+        );
+    }
+    if (calendar?.metadata?.updatedByUserId) {
+      // better than no info, while the API fetches
+      newMetadata.updatedBy = calendar.metadata.updatedByUserId;
+
+      dataRepository
+        .getUser(calendar.metadata.updatedByUserId, abortController.signal)
+        .then(
+          (user) => !abortController.signal.aborted &&
+            setMetadata((current) => ({
+              ...current,
+              updatedBy: getUserDisplayName(user)
+            }))
+        );
+    }
+
+    if (calendar?.metadata?.createdDate) {
+      newMetadata.createdAt = (
+        <FormattedMessage
+          id="ui-calendar.infoPane.accordion.metadata.dateTime"
+          values={{
+            date: (
+              <FormattedDate value={new Date(calendar.metadata.createdDate)} />
+            ),
+            time: (
+              <FormattedTime value={new Date(calendar.metadata.createdDate)} />
+            )
+          }}
+        />
+      );
+    }
+    if (calendar?.metadata?.updatedDate) {
+      newMetadata.updatedAt = (
+        <FormattedMessage
+          id="ui-calendar.infoPane.accordion.metadata.dateTime"
+          values={{
+            date: (
+              <FormattedDate value={new Date(calendar.metadata.updatedDate)} />
+            ),
+            time: (
+              <FormattedTime value={new Date(calendar.metadata.updatedDate)} />
+            )
+          }}
+        />
+      );
+    }
+
+    setMetadata(newMetadata);
+
+    return () => abortController.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calendar]);
 
   if (calendar === undefined || calendar === null) {
     return null;
@@ -76,7 +210,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     closures: CalendarException[];
   } = {
     openings: [],
-    closures: [],
+    closures: []
   };
 
   calendar.exceptions.forEach((exception) => {
@@ -130,8 +264,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                   to={{
                     pathname: props.creationBasePath,
                     search: new URLSearchParams({
-                      source: calendar.id as string,
-                    }).toString(),
+                      source: calendar.id as string
+                    }).toString()
                   }}
                 >
                   <Icon size="small" icon="duplicate">
@@ -198,7 +332,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               )}
               listStyle="bullets"
               isEmptyMessage={
-                <div className={css.closed}>
+                <div className={css.noValue}>
                   <FormattedMessage id="ui-calendar.infoPane.accordion.assignments.empty" />
                 </div>
               }
@@ -215,7 +349,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               getCellClass={(defaultClass, _rowData, column) => {
                 return classNames(defaultClass, {
                   [css.hoursCell]: column !== 'day',
-                  [css.dayCell]: column === 'day',
+                  [css.dayCell]: column === 'day'
                 });
               }}
               columnMapping={{
@@ -227,12 +361,12 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
                 endTime: (
                   <FormattedMessage id="ui-calendar.infoPane.accordion.hours.close" />
-                ),
+                )
               }}
               columnWidths={{
                 day: '40%',
                 startTime: '30%',
-                endTime: '30%',
+                endTime: '30%'
               }}
               contentData={dataRows}
             />
@@ -277,18 +411,18 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
                 end: (
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.end" />
-                ),
+                )
               }}
               columnWidths={{
                 name: '40%',
                 start: '30%',
-                end: '30%',
+                end: '30%'
               }}
               getCellClass={(defaultClass, _rowData, column) => {
                 return classNames(defaultClass, {
                   [css.hoursCell]: column !== 'name',
                   [css.exceptionCell]: column !== 'name',
-                  [css.dayCell]: column === 'name',
+                  [css.dayCell]: column === 'name'
                 });
               }}
               contentData={generateExceptionalOpeningRows(
@@ -296,7 +430,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 exceptions.openings
               )}
               isEmptyMessage={
-                <div className={css.closed}>
+                <div className={css.noValue}>
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.openings.empty" />
                 </div>
               }
@@ -319,24 +453,58 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
                 endDate: (
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.end" />
-                ),
+                )
               }}
               columnWidths={{
                 name: '40%',
                 startDate: '30%',
-                endDate: '30%',
+                endDate: '30%'
               }}
               contentData={exceptions.closures.map((exception) => ({
                 name: exception.name,
                 startDate: getLocalizedDate(intl, exception.startDate),
-                endDate: getLocalizedDate(intl, exception.endDate),
+                endDate: getLocalizedDate(intl, exception.endDate)
               }))}
               isEmptyMessage={
-                <div className={css.closed}>
+                <div className={css.noValue}>
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.closures.empty" />
                 </div>
               }
             />
+          </Accordion>
+          <Accordion
+            label={
+              <FormattedMessage id="ui-calendar.infoPane.accordion.metadata" />
+            }
+          >
+            <KeyValue
+              label={
+                <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.createdBy" />
+              }
+            >
+              {metadata.createdBy}
+            </KeyValue>
+            <KeyValue
+              label={
+                <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.createdAt" />
+              }
+            >
+              {metadata.createdAt}
+            </KeyValue>
+            <KeyValue
+              label={
+                <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.updatedBy" />
+              }
+            >
+              {metadata.updatedBy}
+            </KeyValue>
+            <KeyValue
+              label={
+                <FormattedMessage id="ui-calendar.infoPane.accordion.metadata.updatedAt" />
+              }
+            >
+              {metadata.updatedAt}
+            </KeyValue>
           </Accordion>
         </AccordionSet>
       </Pane>
@@ -348,7 +516,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           <FormattedMessage id="ui-calendar.infoPane.deletionModal.label" />
         }
         aria-label={intl.formatMessage({
-          id: 'ui-calendar.infoPane.deletionModal.label',
+          id: 'ui-calendar.infoPane.deletionModal.label'
         })}
         size="small"
         footer={

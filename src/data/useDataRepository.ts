@@ -1,12 +1,12 @@
 import { useOkapiKy } from '@folio/stripes/core';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Calendar } from '../types/types';
+import { Calendar, CalendarDTO, User } from '../types/types';
 import DataRepository from './DataRepository';
 import {
   CalendarResponseDTO,
   DateResponseDTO,
   ServicePointDTO,
-  ServicePointResponseDTO,
+  ServicePointResponseDTO
 } from './types';
 
 export const MAX_LIMIT = 2147483647;
@@ -26,7 +26,7 @@ export default function useDataRepository(): DataRepository {
     }
   );
 
-  const calendars = useQuery<Calendar[]>(
+  const calendars = useQuery<CalendarDTO[]>(
     ['ui-calendar', 'calendars'],
     async () => {
       const data = await ky
@@ -41,35 +41,34 @@ export default function useDataRepository(): DataRepository {
   const mutationInvalidator = {
     onSuccess: () => {
       queryClient.invalidateQueries(['ui-calendar', 'calendars']);
-    },
+    }
   };
 
   const createCalendar = useMutation(async (calendar: Calendar) => {
     return ky
       .post('calendar/calendars', {
-        json: calendar,
+        json: calendar
       })
-      .json<Calendar>();
+      .json<CalendarDTO>();
   }, mutationInvalidator);
 
   const putCalendar = useMutation(async (calendar: Calendar) => {
     return ky
       .put(`calendar/calendars/${calendar.id}`, {
-        json: calendar,
+        json: calendar
       })
-      .json<Calendar>();
+      .json<CalendarDTO>();
   }, mutationInvalidator);
 
   const deleteCalendars = useMutation(async (calendarsToDelete: Calendar[]) => {
     const queryString = calendarsToDelete.map((c) => `id=${c.id}`).join('&');
     await ky.delete(`calendar/calendars?${queryString}`);
   }, mutationInvalidator);
-
   const getDateRange = useMutation(
     async ({
       servicePointId,
       startDate,
-      endDate,
+      endDate
     }: {
       servicePointId: string;
       startDate: string;
@@ -84,6 +83,12 @@ export default function useDataRepository(): DataRepository {
     }
   );
 
+  const getUserInfo = useMutation(
+    ({ userId, signal }: { userId: string; signal?: AbortSignal }) => {
+      return ky.get(`users/${userId}`, { signal }).json<User>();
+    }
+  );
+
   return new DataRepository(
     calendars.isSuccess ? calendars.data : undefined,
     servicePoints.isSuccess ? servicePoints.data : undefined,
@@ -92,6 +97,7 @@ export default function useDataRepository(): DataRepository {
       update: putCalendar.mutateAsync,
       delete: deleteCalendars.mutateAsync,
       dates: getDateRange.mutateAsync,
+      getUser: getUserInfo.mutateAsync
     }
   );
 }
