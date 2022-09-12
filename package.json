@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "https://github.com/ualibweb/eslint-config-stripes#esconf-19-typescript",
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "https://github.com/ualibweb/stripes.git#ualibweb/stripes-818-add-ts",
     "@folio/stripes-cli": "^2.0.0",
     "@folio/stripes-components": "https://github.com/ualibweb/stripes-components.git#stcom-1012-initial",
     "@folio/stripes-core": "^8.2.0",
