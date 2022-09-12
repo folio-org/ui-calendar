@@ -1,12 +1,19 @@
 import type { Dayjs } from 'dayjs';
+import memoizee from 'memoizee';
 import {
   Calendar,
   CalendarException,
   CalendarExceptionOpening,
-  CalendarOpening,
+  CalendarOpening
 } from '../types/types';
+import { isSameMonthOrBefore } from './DateUtils';
 import dayjs from './dayjs';
-import { weekdayIsBetween, WEEKDAYS } from './WeekdayUtils';
+import {
+  getFirstDayOfWeek,
+  LocaleWeekdayInfo,
+  weekdayIsBetween,
+  WEEKDAYS
+} from './WeekdayUtils';
 
 /** Get all openings and exceptions which apply to this date */
 export function getDateMatches(
@@ -27,7 +34,7 @@ export function getDateMatches(
         'day',
         '[]'
       );
-    }),
+    })
   };
 }
 
@@ -224,3 +231,46 @@ export function isOpen247(openings: CalendarOpening[]): boolean {
     opening.startTime.substring(0, 5) === '00:00'
   );
 }
+
+/** Get an array of dates to use for a calendar */
+export const getDateArray = memoizee(
+  (
+    locale: string,
+    monthBasis: Date,
+    localeWeekdays: LocaleWeekdayInfo[]
+  ): Date[] => {
+    // start of the month
+    const date = new Date(monthBasis.getFullYear(), monthBasis.getMonth(), 1);
+    // if the month starts at the beginning of the week, add a full row above of the previous month
+    if (date.getDay() === getFirstDayOfWeek(locale)) {
+      date.setDate(date.getDate() - 7);
+    }
+
+    const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
+
+    // ensure startDate starts at the beginning of a week
+    date.setDate(date.getDate() - ((date.getDay() - firstWeekday + 7) % 7));
+
+    // at this point, date must be in a month before `month`.
+
+    // generate this month to the next
+    const displayDates = [];
+    let week = [];
+    do {
+      week.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+      if (week.length === 7) {
+        displayDates.push(...week);
+        week = [];
+      }
+    } while (isSameMonthOrBefore(date, monthBasis));
+
+    while (week.length < 7) {
+      week.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    displayDates.push(...week);
+
+    return displayDates;
+  }
+);

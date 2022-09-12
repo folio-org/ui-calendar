@@ -1,4 +1,3 @@
-import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
 import {
   Calendar,
@@ -7,6 +6,7 @@ import {
   ServicePoint,
   User
 } from '../types/types';
+import { dateToYYYYMMDD } from '../utils/DateUtils';
 import { ServicePointDTO } from './types';
 
 const getServicePointMap = memoizee(
@@ -141,13 +141,13 @@ export default class DataRepository {
    */
   getDailyOpeningInfo(
     servicePointId: string,
-    startDate: Dayjs,
-    endDate: Dayjs
+    startDate: Date,
+    endDate: Date
   ): Promise<DailyOpeningInfo[]> {
     return this.mutators.dates({
       servicePointId,
-      startDate: startDate.format('YYYY-MM-DD'),
-      endDate: endDate.format('YYYY-MM-DD')
+      startDate: dateToYYYYMMDD(startDate),
+      endDate: dateToYYYYMMDD(endDate)
     });
   }
 

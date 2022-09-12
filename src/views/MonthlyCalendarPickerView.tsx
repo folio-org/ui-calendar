@@ -5,23 +5,26 @@ import {
   NavList,
   NavListItem,
   NavListSection,
-  Pane,
+  Pane
 } from '@folio/stripes/components';
 import classNames from 'classnames';
-import type { Dayjs } from 'dayjs';
 import React, {
   FunctionComponent,
   ReactNode,
   useCallback,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import css from '../components/Calendar.css';
 import useDataRepository from '../data/useDataRepository';
 import { DailyOpeningInfo } from '../types/types';
-import { getDateRange, getLocalizedTime } from '../utils/DateUtils';
+import {
+  dateToYYYYMMDD,
+  getDateRange,
+  getLocalizedTime
+} from '../utils/DateUtils';
 import MonthlyCalendarView from './panes/MonthlyCalendarView';
 
 function dailyOpeningToCalendarDisplay(
@@ -51,7 +54,7 @@ function dailyOpeningToCalendarDisplay(
             id="ui-calendar.monthlyCalendarView.day.timeRange"
             values={{
               startTime: getLocalizedTime(intl, opening.startTime),
-              endTime: getLocalizedTime(intl, opening.endTime),
+              endTime: getLocalizedTime(intl, opening.endTime)
             }}
           />
         </p>
@@ -111,16 +114,14 @@ const MonthlyCalendarPickerView: FunctionComponent<
   }, [currentRouteId]);
 
   const requestEvents = useCallback(
-    async (startDate: Dayjs, endDate: Dayjs, servicePointId: string) => {
+    async (startDate: Date, endDate: Date, servicePointId: string) => {
       if (servicePointId === currentRouteId) {
         const loadingEvents = { ...events };
         if (!(servicePointId in loadingEvents)) {
           loadingEvents[servicePointId] = {};
         }
         getDateRange(startDate, endDate).forEach((date) => {
-          loadingEvents[servicePointId][date.format('YYYY-MM-DD')] = (
-            <Loading />
-          );
+          loadingEvents[servicePointId][dateToYYYYMMDD(date)] = <Loading />;
         });
         // prevents further calls of this function while these events are being loaded
         setEvents(loadingEvents);

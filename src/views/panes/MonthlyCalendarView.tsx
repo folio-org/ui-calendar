@@ -1,15 +1,15 @@
 import { Pane } from '@folio/stripes/components';
-import type { Dayjs } from 'dayjs';
 import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import { useIntl } from 'react-intl';
-import Calendar, { getDateArray } from '../../components/Calendar';
+import Calendar from '../../components/Calendar';
 import { ServicePoint } from '../../types/types';
-import dayjs from '../../utils/dayjs';
+import { getDateArray } from '../../utils/CalendarUtils';
+import { dateToYYYYMMDD } from '../../utils/DateUtils';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 
 interface MonthlyCalendarViewProps {
@@ -17,8 +17,8 @@ interface MonthlyCalendarViewProps {
   servicePoint?: ServicePoint;
   events: Record<string, ReactNode>;
   requestEvents: (
-    startDate: Dayjs,
-    endDate: Dayjs,
+    startDate: Date,
+    endDate: Date,
     servicePointId: string
   ) => Promise<void>;
 }
@@ -29,9 +29,11 @@ export const MonthlyCalendarView: FunctionComponent<
   onClose,
   servicePoint,
   events,
-  requestEvents,
+  requestEvents
 }: MonthlyCalendarViewProps) => {
-  const [monthBasis, setMonthBasis] = useState(dayjs().startOf('month')); // start at current date
+  const [monthBasis, setMonthBasis] = useState(
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+  ); // start at current date
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 
@@ -51,7 +53,7 @@ export const MonthlyCalendarView: FunctionComponent<
       }
 
       const missingDates = dateArray.map(
-        (date) => !(date.format('YYYY-MM-DD') in events)
+        (date) => !(dateToYYYYMMDD(date) in events)
       );
       const rangeStartIndex = missingDates.indexOf(true);
       // none missing

@@ -10,14 +10,24 @@ export function dayjsCompare(a: Dayjs, b: Dayjs): number {
 }
 
 /** Compare two dayjs objects */
-export function getDateRange(start: Dayjs, end: Dayjs): Dayjs[] {
-  let current = start;
-  const result = [];
+export function getDateRange(start: Date, end: Date): Date[] {
+  const current = new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    start.getDate()
+  );
+  const endMidnight = new Date(
+    end.getFullYear(),
+    end.getMonth(),
+    end.getDate()
+  );
+  const offset = start.getTime() - current.getTime();
+  const result: Date[] = [];
 
   do {
-    result.push(current);
-    current = current.add(1, 'day');
-  } while (current.isSameOrBefore(end));
+    result.push(new Date(current.getTime() + offset));
+    current.setDate(current.getDate() + 1);
+  } while (current <= endMidnight);
 
   return result;
 }
@@ -46,7 +56,7 @@ export function getRelativeDateTimeProximity(
     sameDay: '[sameDay]', // "[at] LT",
     nextDay: '[nextDay]', // "[tomorrow at] LT",
     nextWeek: '[nextWeek]', // "dddd [at] LT",
-    sameElse: '[sameElse]', // "L",
+    sameElse: '[sameElse]' // "L",
   }) as 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse';
 }
 
@@ -72,4 +82,25 @@ export function getLocalizedDate(
   date: string | Dayjs
 ): string {
   return intl.formatDate(dayjs.tz(date, intl.timeZone).toDate());
+}
+
+/** Ensure a <= b, based on months */
+export function isSameMonthOrBefore(a: Date, b: Date): boolean {
+  return (
+    (a.getFullYear() === b.getFullYear() && a.getMonth() <= b.getMonth()) ||
+    a.getFullYear() < b.getFullYear()
+  );
+}
+
+/** Ensure a == b, based on months */
+export function isSameMonth(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+}
+
+export function dateToYYYYMMDD(d: Date): string {
+  return [
+    d.getFullYear(),
+    ('0' + (d.getMonth() + 1)).slice(-2),
+    ('0' + d.getDate()).slice(-2)
+  ].join('-');
 }
