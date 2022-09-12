@@ -25,7 +25,7 @@ test('Locale weekdays are properly retrieved', () => {
     { weekday: Weekdays.Wednesday, long: 'Wednesday', short: 'Wed' },
     { weekday: Weekdays.Thursday, long: 'Thursday', short: 'Thu' },
     { weekday: Weekdays.Friday, long: 'Friday', short: 'Fri' },
-    { weekday: Weekdays.Saturday, long: 'Saturday', short: 'Sat' },
+    { weekday: Weekdays.Saturday, long: 'Saturday', short: 'Sat' }
   ]);
   expect(getLocaleWeekdays(intlFr)).toStrictEqual([
     { weekday: Weekdays.Monday, long: 'lundi', short: 'lun.' },
@@ -34,7 +34,7 @@ test('Locale weekdays are properly retrieved', () => {
     { weekday: Weekdays.Thursday, long: 'jeudi', short: 'jeu.' },
     { weekday: Weekdays.Friday, long: 'vendredi', short: 'ven.' },
     { weekday: Weekdays.Saturday, long: 'samedi', short: 'sam.' },
-    { weekday: Weekdays.Sunday, long: 'dimanche', short: 'dim.' },
+    { weekday: Weekdays.Sunday, long: 'dimanche', short: 'dim.' }
   ]);
   expect(getLocaleWeekdays(intlAr)).toStrictEqual([
     { weekday: Weekdays.Saturday, long: 'السبت', short: 'السبت' },
@@ -43,7 +43,7 @@ test('Locale weekdays are properly retrieved', () => {
     { weekday: Weekdays.Tuesday, long: 'الثلاثاء', short: 'الثلاثاء' },
     { weekday: Weekdays.Wednesday, long: 'الأربعاء', short: 'الأربعاء' },
     { weekday: Weekdays.Thursday, long: 'الخميس', short: 'الخميس' },
-    { weekday: Weekdays.Friday, long: 'الجمعة', short: 'الجمعة' },
+    { weekday: Weekdays.Friday, long: 'الجمعة', short: 'الجمعة' }
   ]);
 });
 
@@ -60,7 +60,7 @@ test('useLocaleWeekdays hook works like getLocaleWeekdays', () => {
     { weekday: Weekdays.Wednesday, long: 'Wednesday', short: 'Wed' },
     { weekday: Weekdays.Thursday, long: 'Thursday', short: 'Thu' },
     { weekday: Weekdays.Friday, long: 'Friday', short: 'Fri' },
-    { weekday: Weekdays.Saturday, long: 'Saturday', short: 'Sat' },
+    { weekday: Weekdays.Saturday, long: 'Saturday', short: 'Sat' }
   ]);
 
   intlToTest = intlFr;
@@ -72,7 +72,7 @@ test('useLocaleWeekdays hook works like getLocaleWeekdays', () => {
     { weekday: Weekdays.Thursday, long: 'jeudi', short: 'jeu.' },
     { weekday: Weekdays.Friday, long: 'vendredi', short: 'ven.' },
     { weekday: Weekdays.Saturday, long: 'samedi', short: 'sam.' },
-    { weekday: Weekdays.Sunday, long: 'dimanche', short: 'dim.' },
+    { weekday: Weekdays.Sunday, long: 'dimanche', short: 'dim.' }
   ]);
 
   intlToTest = intlAr;
@@ -84,6 +84,6 @@ test('useLocaleWeekdays hook works like getLocaleWeekdays', () => {
     { weekday: Weekdays.Tuesday, long: 'الثلاثاء', short: 'الثلاثاء' },
     { weekday: Weekdays.Wednesday, long: 'الأربعاء', short: 'الأربعاء' },
     { weekday: Weekdays.Thursday, long: 'الخميس', short: 'الخميس' },
-    { weekday: Weekdays.Friday, long: 'الجمعة', short: 'الجمعة' },
+    { weekday: Weekdays.Friday, long: 'الجمعة', short: 'الجمعة' }
   ]);
 });

@@ -6,7 +6,7 @@ module.exports = {
 
   preset: 'ts-jest',
   transform: {
-    '^.+\\.(t|j)sx?$': 'ts-jest',
+    '^.+\\.(t|j)sx?$': 'ts-jest'
   },
   transformIgnorePatterns: ['node_modules/(?!@folio)'],
 
@@ -24,21 +24,21 @@ module.exports = {
     '!src/**/*.d.ts',
     '!src/**/*.test.{ts,tsx}',
     '!src/test/**',
-    '!**/node_modules/**',
+    '!**/node_modules/**'
   ],
 
-  setupFiles: [join(__dirname, './src/test/setupTests.ts')],
+  setupFiles: [join(__dirname, './src/test/setupTests.tsx')],
   setupFilesAfterEnv: [join(__dirname, './src/test/jest.setup.ts')],
 
   moduleNameMapper: {
-    '^.+\\.(css)$': 'identity-obj-proxy',
+    '^.+\\.(css)$': 'identity-obj-proxy'
   },
 
   slowTestThreshold: 10,
 
   globals: {
     'ts-jest': {
-      tsconfig: 'src/tsconfig.json',
-    },
-  },
+      tsconfig: 'src/tsconfig.json'
+    }
+  }
 };

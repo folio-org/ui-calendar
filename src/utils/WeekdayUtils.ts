@@ -25,7 +25,7 @@ export type RelativeWeekdayStatus =
  * Used for algorithmically relating weekdays to each other.  This MUST not be
  * used for any type of user display, only for relating weekdays to each other.
  * The only guarantees are that weekdays (when wrapped around) will be in the
- * typical order, such as Friday -> Saturday, and that .day() on dayjs will
+ * typical order, such as Friday -> Saturday, and that .getDay() on Date will
  * correspond here as expected.
  * Additionally, the values here will correspond to {@link WEEKDAY_INDEX}
  */
@@ -36,13 +36,13 @@ export const WEEKDAYS: Record<Weekday, number> = {
   WEDNESDAY: 3,
   THURSDAY: 4,
   FRIDAY: 5,
-  SATURDAY: 6,
+  SATURDAY: 6
 };
 /**
  * Used for algorithmically relating weekdays to each other.  This MUST not be
  * used for any type of user display, only for relating weekdays to each other.
  * The only guarantees are that weekdays (when wrapped around) will be in the
- * typical order, such as Friday -> Saturday, and that .day() on dayjs will
+ * typical order, such as Friday -> Saturday, and that .getDay() on Date will
  * correspond here as expected.
  * Additionally, the values here will correspond to {@link WEEKDAY_INDEX}
  */
@@ -53,7 +53,7 @@ export const WEEKDAY_INDEX: Weekday[] = [
   'WEDNESDAY',
   'THURSDAY',
   'FRIDAY',
-  'SATURDAY',
+  'SATURDAY'
 ];
 
 /** Information about a weekday in the current locale */
@@ -73,7 +73,7 @@ export const getFirstDayOfWeek: (locale: string) => number = memoizee(
       wed: 3,
       thu: 4,
       fri: 5,
-      sat: 6,
+      sat: 6
     };
     for (const [weekday, regions] of Object.entries(staticFirstWeekDay)) {
       if (regions.includes(region)) {
@@ -91,14 +91,12 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
 
     const weekdays: LocaleWeekdayInfo[] = [];
     for (let i = 0; i < 7; i++) {
-      const day = dayjs()
-        .startOf('day')
-        .tz(intl.timeZone, true)
-        .day((firstDay + i) % 7);
+      const day = new Date(2000, 1, 1);
+      day.setDate(day.getDate() - day.getDay() + firstDay + i);
       weekdays.push({
-        weekday: WEEKDAY_INDEX[day.day()],
-        short: intl.formatDate(day.toDate(), { weekday: 'short' }),
-        long: intl.formatDate(day.toDate(), { weekday: 'long' }),
+        weekday: WEEKDAY_INDEX[(firstDay + i) % 7],
+        short: intl.formatDate(day, { weekday: 'short' }),
+        long: intl.formatDate(day, { weekday: 'long' })
       });
     }
     return weekdays;
@@ -134,7 +132,7 @@ export function getWeekdaySpan(opening: CalendarOpening): Weekday[] {
       return [
         opening.startDay,
         ...WEEKDAY_INDEX.slice(WEEKDAYS[opening.startDay] + 1),
-        ...WEEKDAY_INDEX.slice(0, WEEKDAYS[opening.startDay] + 1),
+        ...WEEKDAY_INDEX.slice(0, WEEKDAYS[opening.startDay] + 1)
       ];
     }
     return [opening.startDay];
@@ -158,7 +156,7 @@ export function getRelativeWeekdayStatus(
       proximity: 'sameDay',
       weekday: undefined,
       date: undefined,
-      time: getLocalizedTime(intl, time),
+      time: getLocalizedTime(intl, time)
     };
   }
   if ((referenceDate.day() + 1) % 7 === WEEKDAYS[weekday]) {
@@ -166,14 +164,14 @@ export function getRelativeWeekdayStatus(
       proximity: 'nextDay',
       weekday: undefined,
       date: undefined,
-      time: getLocalizedTime(intl, time),
+      time: getLocalizedTime(intl, time)
     };
   }
   return {
     proximity: 'otherWeekday',
     weekday,
     date: undefined,
-    time: getLocalizedTime(intl, time),
+    time: getLocalizedTime(intl, time)
   };
 }
 
