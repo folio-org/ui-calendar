@@ -1,1 +1,1 @@
-import './stripesIcon.mock';
+import './stripes-components.mock';

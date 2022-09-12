@@ -98,10 +98,10 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-calendar ./translations/ui-calendar/compiled"
   },
   "devDependencies": {
-    "@folio/eslint-config-stripes": "https://github.com/ualibweb/eslint-config-stripes#esconf-19-typescript",
-    "@folio/stripes": "https://github.com/ualibweb/stripes.git#ualibweb/stripes-818-add-ts",
+    "@folio/eslint-config-stripes": "^6.1.0",
+    "@folio/stripes": "^7.2.0",
     "@folio/stripes-cli": "^2.0.0",
-    "@folio/stripes-components": "https://github.com/ualibweb/stripes-components.git#stcom-1012-initial",
+    "@folio/stripes-components": "^10.2.0",
     "@folio/stripes-core": "^8.2.0",
     "@folio/stripes-smart-components": "^7.2.0",
     "@formatjs/cli": "^4.2.21",

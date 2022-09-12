@@ -27,7 +27,7 @@ module.exports = {
     '!**/node_modules/**'
   ],
 
-  setupFiles: [join(__dirname, './src/test/setupTests.tsx')],
+  setupFiles: [join(__dirname, './src/test/setupTests.ts')],
   setupFilesAfterEnv: [join(__dirname, './src/test/jest.setup.ts')],
 
   moduleNameMapper: {
