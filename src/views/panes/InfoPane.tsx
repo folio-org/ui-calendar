@@ -36,7 +36,6 @@ import permissions from '../../types/permissions';
 import { CalendarDTO, CalendarException, User } from '../../types/types';
 import { isOpen247 } from '../../utils/CalendarUtils';
 import { getLocalizedDate } from '../../utils/DateUtils';
-import dayjs from '../../utils/dayjs';
 import ifPermissionOr from '../../utils/ifPermissionOr';
 import {
   containsFullOvernightSpans,
@@ -219,10 +218,8 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     } else {
       exception.openings.sort((a, b) => {
         return Math.sign(
-          dayjs(`${a.startDate} ${a.endDate}`).diff(
-            dayjs(`${b.startDate} ${b.endDate}`),
-            'm'
-          )
+          new Date(`${a.startDate} ${a.endDate}`).getTime() -
+            new Date(`${b.startDate} ${b.endDate}`).getTime()
         );
       });
       exceptions.openings.push(exception);
