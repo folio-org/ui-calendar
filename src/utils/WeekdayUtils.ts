@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import { IntlShape } from 'react-intl';
 import { CalendarOpening, Weekday } from '../types/types';
 import { getLocalizedTime } from './DateUtils';
-import dayjs from './dayjs';
 
 export type RelativeWeekdayStatus =
   | {
