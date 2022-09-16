@@ -1,7 +1,7 @@
 import { IntlShape } from 'react-intl';
 import * as Dates from '../test/data/Dates';
 import getIntl from '../test/util/getIntl';
-import { getLocalizedDate, getLocalizedTime } from './DateUtils';
+import { dateToYYYYMMDD, getLocalizedDate, getLocalizedTime } from './DateUtils';
 import dayjs from './dayjs';
 
 let intlEn: IntlShape;
@@ -64,4 +64,9 @@ test('Localization date formatting methods return the expected results for en-us
 test('Localization date formatting methods return the expected results for fr-fr', () => {
   expect(getLocalizedDate(intlFr, Dates.MAY_14.tz('CET'))).toBe('14/05/2000');
   expect(getLocalizedDate(intlFr, '2000-05-14')).toBe('14/05/2000');
+});
+
+test('Date YYYY-MM-DD conversion', () => {
+  expect(dateToYYYYMMDD(Dates.MAY_14_DATE)).toBe('2000-05-14');
+  expect(dateToYYYYMMDD(Dates.DEC_1_DATE)).toBe('2000-12-01');
 });
