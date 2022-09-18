@@ -27,31 +27,29 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 
-  const displayDates = getDateArray(
-    intl.locale,
-    monthBasis,
-    localeWeekdays
-  ).map((date: Date) => {
-    const dateString = dateToYYYYMMDD(date);
-    let contents: ReactNode = <Loading />;
-    if (dateString in events) {
-      contents = events[dateString];
-    }
+  const displayDates = getDateArray(intl.locale, monthBasis).map(
+    (date: Date) => {
+      const dateString = dateToYYYYMMDD(date);
+      let contents: ReactNode = <Loading />;
+      if (dateString in events) {
+        contents = events[dateString];
+      }
 
-    return (
-      <div
-        className={classNames(
-          isSameMonth(date, monthBasis) ? '' : css.adjacentMonth,
-          css.calendarDay
-        )}
-      >
-        <span key={dateString} className={css.dayLabel}>
-          <FormattedDate value={date} day="numeric" />
-        </span>
-        {contents}
-      </div>
-    );
-  });
+      return (
+        <div
+          className={classNames(
+            isSameMonth(date, monthBasis) ? '' : css.adjacentMonth,
+            css.calendarDay
+          )}
+        >
+          <span key={dateString} className={css.dayLabel}>
+            <FormattedDate value={date} day="numeric" />
+          </span>
+          {contents}
+        </div>
+      );
+    }
+  );
 
   return (
     <div

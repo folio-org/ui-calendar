@@ -8,12 +8,7 @@ import {
 } from '../types/types';
 import { isSameMonthOrBefore } from './DateUtils';
 import dayjs from './dayjs';
-import {
-  getFirstDayOfWeek,
-  LocaleWeekdayInfo,
-  weekdayIsBetween,
-  WEEKDAYS
-} from './WeekdayUtils';
+import { getFirstDayOfWeek, weekdayIsBetween, WEEKDAYS } from './WeekdayUtils';
 
 /** Get all openings and exceptions which apply to this date */
 export function getDateMatches(
@@ -234,11 +229,7 @@ export function isOpen247(openings: CalendarOpening[]): boolean {
 
 /** Get an array of dates to use for a calendar */
 export const getDateArray = memoizee(
-  (
-    locale: string,
-    monthBasis: Date,
-    localeWeekdays: LocaleWeekdayInfo[]
-  ): Date[] => {
+  (locale: string, monthBasis: Date): Date[] => {
     // start of the month
     const date = new Date(monthBasis.getFullYear(), monthBasis.getMonth(), 1);
     // if the month starts at the beginning of the week, add a full row above of the previous month
@@ -246,7 +237,7 @@ export const getDateArray = memoizee(
       date.setDate(date.getDate() - 7);
     }
 
-    const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
+    const firstWeekday = getFirstDayOfWeek(locale);
 
     // ensure startDate starts at the beginning of a week
     date.setDate(date.getDate() - ((date.getDay() - firstWeekday + 7) % 7));

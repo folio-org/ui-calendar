@@ -42,7 +42,7 @@ export const MonthlyCalendarView: FunctionComponent<
       if (servicePoint === undefined) {
         return;
       }
-      const dateArray = getDateArray(intl.locale, monthBasis, localeWeekdays);
+      const dateArray = getDateArray(intl.locale, monthBasis);
       if (events === undefined) {
         requestEvents(
           dateArray[0],
