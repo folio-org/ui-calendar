@@ -104,3 +104,8 @@ export function dateToYYYYMMDD(d: Date): string {
     ('0' + d.getDate()).slice(-2)
   ].join('-');
 }
+
+export function dateFromYYYYMMDD(d: string): Date {
+  const parts = d.split('-').map((n) => parseInt(n, 10));
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}

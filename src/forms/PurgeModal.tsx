@@ -8,7 +8,7 @@ import {
   Modal,
   ModalFooter,
   Select,
-  SelectFieldRenderProps,
+  SelectFieldRenderProps
 } from '@folio/stripes/components';
 import { HTTPError } from 'ky';
 import memoizee from 'memoizee';
@@ -17,38 +17,38 @@ import { Field, Form } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
 import { Calendar } from '../types/types';
-import dayjs from '../utils/dayjs';
+import { dateFromYYYYMMDD } from '../utils/DateUtils';
 import css from './PurgeModal.css';
 
 enum AgeCriteria {
   MONTHS_3 = 'MONTHS_3',
   MONTHS_6 = 'MONTHS_6',
   YEAR_1 = 'YEAR_1',
-  YEARS_2 = 'YEARS_2',
+  YEARS_2 = 'YEARS_2'
 }
 
 const AgeCriteriaLabels: Record<AgeCriteria, string> = {
   [AgeCriteria.MONTHS_3]: 'ui-calendar.purgeModal.criteria.age.months3',
   [AgeCriteria.MONTHS_6]: 'ui-calendar.purgeModal.criteria.age.months6',
   [AgeCriteria.YEAR_1]: 'ui-calendar.purgeModal.criteria.age.year1',
-  [AgeCriteria.YEARS_2]: 'ui-calendar.purgeModal.criteria.age.years2',
+  [AgeCriteria.YEARS_2]: 'ui-calendar.purgeModal.criteria.age.years2'
 };
 
 const AgeCriteriaMonths: Record<AgeCriteria, number> = {
   [AgeCriteria.MONTHS_3]: 3,
   [AgeCriteria.MONTHS_6]: 6,
   [AgeCriteria.YEAR_1]: 12,
-  [AgeCriteria.YEARS_2]: 24,
+  [AgeCriteria.YEARS_2]: 24
 };
 
 enum AssignmentCriteria {
   NONE = 'NONE',
-  ANY = 'ANY',
+  ANY = 'ANY'
 }
 
 const AssignmentCriteriaLabels: Record<AssignmentCriteria, string> = {
   [AssignmentCriteria.NONE]: 'ui-calendar.purgeModal.criteria.assignment.none',
-  [AssignmentCriteria.ANY]: 'ui-calendar.purgeModal.criteria.assignment.any',
+  [AssignmentCriteria.ANY]: 'ui-calendar.purgeModal.criteria.assignment.any'
 };
 
 interface FormValues {
@@ -68,9 +68,8 @@ const getCalendarsToPurge = memoizee(
       return [];
     }
 
-    const endBefore = dayjs().subtract(
-      AgeCriteriaMonths[ageCriteria],
-      'months'
+    const endBefore = new Date().setMonth(
+      new Date().getMonth() - AgeCriteriaMonths[ageCriteria]
     );
 
     return calendars
@@ -80,7 +79,9 @@ const getCalendarsToPurge = memoizee(
           calendar.assignments.length === 0
         );
       })
-      .filter((calendar) => dayjs(calendar.endDate).isBefore(endBefore));
+      .filter(
+        (calendar) => dateFromYYYYMMDD(calendar.endDate).getTime() < endBefore
+      );
   }
 );
 
@@ -129,7 +130,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
       <Form<FormValues>
         initialValues={{
           ageCriteria: undefined,
-          assignmentCriteria: undefined,
+          assignmentCriteria: undefined
         }}
         onSubmit={async (values) => {
           setIsSubmitting(true);
@@ -187,9 +188,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   ...Object.entries(AgeCriteriaLabels).map(
                     ([value, label]) => ({
                       value: value as AgeCriteria,
-                      label: intl.formatMessage({ id: label }),
+                      label: intl.formatMessage({ id: label })
                     })
-                  ),
+                  )
                 ]}
               />
               <Field
@@ -210,9 +211,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   ...Object.entries(AssignmentCriteriaLabels).map(
                     ([value, label]) => ({
                       value: value as AssignmentCriteria,
-                      label: intl.formatMessage({ id: label }),
+                      label: intl.formatMessage({ id: label })
                     })
-                  ),
+                  )
                 ]}
               />
               <AccordionSet>
@@ -227,7 +228,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                     ),
                     displayWhenOpen: (
                       <Badge color="default">{toPurge.length}</Badge>
-                    ),
+                    )
                   }}
                 >
                   <List
