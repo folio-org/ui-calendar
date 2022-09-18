@@ -109,3 +109,26 @@ export function dateFromYYYYMMDD(d: string): Date {
   const parts = d.split('-').map((n) => parseInt(n, 10));
   return new Date(parts[0], parts[1] - 1, parts[2]);
 }
+
+export function dateFromYYYYMMDDAndHHMM(d: string, t: string): Date {
+  const dateParts = d.split('-').map((n) => parseInt(n, 10));
+  const timeParts = t.split(':').map((n) => parseInt(n, 10));
+  return new Date(
+    dateParts[0],
+    dateParts[1] - 1,
+    dateParts[2],
+    timeParts[0],
+    timeParts[1]
+  );
+}
+
+export function dateFromDateAndHHMM(d: Date, t: string): Date {
+  const timeParts = t.split(':').map((n) => parseInt(n, 10));
+  return new Date(
+    d.getFullYear(),
+    d.getMonth(),
+    d.getDate(),
+    timeParts[0],
+    timeParts[1]
+  );
+}
