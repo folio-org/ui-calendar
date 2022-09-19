@@ -52,5 +52,15 @@ export const OCT_1_DATE = new Date(2000, 9, 1);
 export const DEC_1 = dayjs('2000-12-01').utc(true);
 export const DEC_1_DATE = new Date(2000, 11, 1);
 
+export const DEC_17 = dayjs('2000-12-17').utc(true);
+export const DEC_17_DATE = new Date(2000, 11, 17);
+
+export const DEC_31 = dayjs('2000-12-31').utc(true);
+export const DEC_31_DATE = new Date(2000, 11, 31);
+
+/* 2001 Dates */
 export const MAY_14_2001 = dayjs('2001-05-14').utc(true);
 export const MAY_14_2001_DATE = new Date(2001, 4, 14);
+
+export const DEC_1_2001 = dayjs('2001-12-01').utc(true);
+export const DEC_1_2001_DATE = new Date(2001, 11, 1);
