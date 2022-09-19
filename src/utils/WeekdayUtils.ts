@@ -95,8 +95,8 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
       day.setUTCDate(day.getUTCDate() - day.getUTCDay() + firstDay + i);
       weekdays.push({
         weekday: WEEKDAY_INDEX[(firstDay + i) % 7],
-        short: intl.formatDate(day, { weekday: 'short', timeZone: "UTC" }),
-        long: intl.formatDate(day, { weekday: 'long', timeZone: "UTC" })
+        short: intl.formatDate(day, { weekday: 'short', timeZone: 'UTC' }),
+        long: intl.formatDate(day, { weekday: 'long', timeZone: 'UTC' })
       });
     }
     return weekdays;
