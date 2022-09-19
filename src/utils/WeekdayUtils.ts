@@ -89,12 +89,14 @@ export const getLocaleWeekdays: (intl: IntlShape) => LocaleWeekdayInfo[] =
 
     const weekdays: LocaleWeekdayInfo[] = [];
     for (let i = 0; i < 7; i++) {
-      const day = new Date(2000, 1, 1);
-      day.setDate(day.getDate() - day.getDay() + firstDay + i);
+      // need to be careful to use UTC here, and force react-intl to use UTC
+      // since this is the one date-formatted thing that will be visible to users
+      const day = new Date(Date.UTC(2000, 1, 1));
+      day.setUTCDate(day.getUTCDate() - day.getUTCDay() + firstDay + i);
       weekdays.push({
         weekday: WEEKDAY_INDEX[(firstDay + i) % 7],
-        short: intl.formatDate(day, { weekday: 'short' }),
-        long: intl.formatDate(day, { weekday: 'long' })
+        short: intl.formatDate(day, { weekday: 'short', timeZone: "UTC" }),
+        long: intl.formatDate(day, { weekday: 'long', timeZone: "UTC" })
       });
     }
     return weekdays;
