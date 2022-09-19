@@ -1,5 +1,5 @@
 {
-  "extends": "@folio/eslint-config-stripes",
+  "extends": ["@folio/eslint-config-stripes", "plugin:import/typescript"],
   "rules": {
     "import/no-named-as-default": "off"
   },
