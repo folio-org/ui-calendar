@@ -2,13 +2,13 @@ import * as Weekdays from '../test/data/Weekdays';
 import dayjs from './dayjs';
 import { weekdayIsBetween } from './WeekdayUtils';
 
-const SUNDAY = dayjs().day(0);
-const MONDAY = dayjs().day(1);
-const TUESDAY = dayjs().day(2);
-const WEDNESDAY = dayjs().day(3);
-const THURSDAY = dayjs().day(4);
-const FRIDAY = dayjs().day(5);
-const SATURDAY = dayjs().day(6);
+const SUNDAY = dayjs().day(0).toDate();
+const MONDAY = dayjs().day(1).toDate();
+const TUESDAY = dayjs().day(2).toDate();
+const WEDNESDAY = dayjs().day(3).toDate();
+const THURSDAY = dayjs().day(4).toDate();
+const FRIDAY = dayjs().day(5).toDate();
+const SATURDAY = dayjs().day(6).toDate();
 
 test('Single weekday range contains only one weekday', () => {
   expect(

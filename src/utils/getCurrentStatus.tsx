@@ -1,11 +1,10 @@
-import type { Dayjs } from 'dayjs';
 import React, { ReactNode } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import {
   Calendar,
   CalendarException,
   CalendarOpening,
-  Weekday,
+  Weekday
 } from '../types/types';
 import {
   getCurrentExceptionalOpening,
@@ -13,19 +12,20 @@ import {
   getDateMatches,
   getNextExceptionalOpening,
   getNextNormalOpening,
-  isOpen247,
+  isOpen247
 } from './CalendarUtils';
 import {
+  dateFromYYYYMMDD,
+  dateFromYYYYMMDDAndHHMM,
   getLocalizedDate,
   getLocalizedTime,
-  getRelativeDateTimeProximity,
+  getRelativeDateProximity
 } from './DateUtils';
-import dayjs from './dayjs';
 import {
   getRelativeWeekdayStatus,
   LocaleWeekdayInfo,
   RelativeWeekdayStatus,
-  WEEKDAY_INDEX,
+  WEEKDAY_INDEX
 } from './WeekdayUtils';
 
 type Status =
@@ -49,7 +49,7 @@ type Status =
 
 function getExceptionalStatus(
   intl: IntlShape,
-  testDateTime: Dayjs,
+  testDateTime: Date,
   exception: CalendarException
 ): Status {
   // fully closed exception
@@ -57,7 +57,7 @@ function getExceptionalStatus(
     return {
       open: false,
       exceptional: true,
-      exceptionName: exception.name,
+      exceptionName: exception.name
     };
   }
 
@@ -70,7 +70,7 @@ function getExceptionalStatus(
       return {
         open: false,
         exceptional: true,
-        exceptionName: exception.name,
+        exceptionName: exception.name
       };
     } else {
       // future opening found
@@ -79,17 +79,20 @@ function getExceptionalStatus(
         exceptional: true,
         exceptionName: exception.name,
         nextEvent: {
-          proximity: getRelativeDateTimeProximity(
-            `${nextOpening.startDate} ${nextOpening.startTime}`,
+          proximity: getRelativeDateProximity(
+            dateFromYYYYMMDD(nextOpening.startDate),
             testDateTime
           ),
           date: getLocalizedDate(intl, nextOpening.startDate),
           time: getLocalizedTime(intl, nextOpening.startTime),
           weekday:
             WEEKDAY_INDEX[
-              dayjs(`${nextOpening.startDate} ${nextOpening.startTime}`).day()
-            ],
-        },
+              dateFromYYYYMMDDAndHHMM(
+                nextOpening.startDate,
+                nextOpening.startTime
+              ).getDay()
+            ]
+        }
       };
     }
   } else {
@@ -99,31 +102,29 @@ function getExceptionalStatus(
       exceptional: true,
       exceptionName: exception.name,
       nextEvent: {
-        proximity: getRelativeDateTimeProximity(
-          `${currentOpening.endDate} ${currentOpening.endTime}`,
+        proximity: getRelativeDateProximity(
+          dateFromYYYYMMDD(currentOpening.endDate),
           testDateTime
         ),
         date: getLocalizedDate(intl, currentOpening.endDate),
         time: getLocalizedTime(intl, currentOpening.endTime),
         weekday:
-          WEEKDAY_INDEX[
-            dayjs(`${currentOpening.endDate} ${currentOpening.endTime}`).day()
-          ],
-      },
+          WEEKDAY_INDEX[dateFromYYYYMMDD(currentOpening.endDate).getDay()]
+      }
     };
   }
 }
 
 function getNormalOpeningStatus(
   intl: IntlShape,
-  testDateTime: Dayjs,
+  testDateTime: Date,
   openings: CalendarOpening[]
 ): Status {
   // no openings on that day
   if (openings.length === 0) {
     return {
       open: false,
-      exceptional: false,
+      exceptional: false
     };
   }
 
@@ -135,7 +136,7 @@ function getNormalOpeningStatus(
     if (nextOpening === null) {
       return {
         open: false,
-        exceptional: false,
+        exceptional: false
       };
     } else {
       // future opening found
@@ -147,7 +148,7 @@ function getNormalOpeningStatus(
           nextOpening.startDay,
           nextOpening.startTime,
           testDateTime
-        ),
+        )
       };
     }
   } else {
@@ -160,7 +161,7 @@ function getNormalOpeningStatus(
         currentOpening.endDay,
         currentOpening.endTime,
         testDateTime
-      ),
+      )
     };
   }
 }
@@ -168,7 +169,7 @@ function getNormalOpeningStatus(
 // this function will not consider things more than one day away, unless currently in an opening
 export function getCurrentStatusNonFormatted(
   intl: IntlShape,
-  testDateTime: Dayjs,
+  testDateTime: Date,
   calendar: Calendar
 ): Status {
   const { openings, exceptions } = getDateMatches(testDateTime, calendar);
@@ -200,7 +201,7 @@ export function getCurrentStatusNonFormatted(
 export default function getCurrentStatus(
   intl: IntlShape,
   localeWeekdays: LocaleWeekdayInfo[],
-  testDateTime: Dayjs,
+  testDateTime: Date,
   calendar: Calendar
 ): ReactNode {
   const status = getCurrentStatusNonFormatted(intl, testDateTime, calendar);
@@ -240,7 +241,7 @@ export default function getCurrentStatus(
         exceptionName: status.exceptionName,
         nextWeekday: nextWeekdayString,
         nextDate: status.nextEvent?.date,
-        nextTime: status.nextEvent?.time,
+        nextTime: status.nextEvent?.time
       }}
     />
   );

@@ -7,7 +7,7 @@ import {
   RouteComponentProps,
   Switch,
   useHistory,
-  useRouteMatch,
+  useRouteMatch
 } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
@@ -64,7 +64,7 @@ export const CurrentAssignmentView: FunctionComponent<
         currentStatus: (
           <FormattedMessage id="ui-calendar.currentStatus.closed.noNext" />
         ),
-        calendar: null,
+        calendar: null
       };
     }
     return {
@@ -75,8 +75,8 @@ export const CurrentAssignmentView: FunctionComponent<
       calendarName: calendars[0].name,
       startDate: getLocalizedDate(intl, calendars[0].startDate),
       endDate: getLocalizedDate(intl, calendars[0].endDate),
-      currentStatus: getStatus(intl, localeWeekdays, dayjs(), calendars[0]),
-      calendar: calendars[0],
+      currentStatus: getStatus(intl, localeWeekdays, new Date(), calendars[0]),
+      calendar: calendars[0]
     };
   });
 
@@ -121,7 +121,7 @@ export const CurrentAssignmentView: FunctionComponent<
             ),
             currentStatus: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.currentStatus" />
-            ),
+            )
           }}
           contentData={rows}
           rowMetadata={['servicePointId', 'calendar']}

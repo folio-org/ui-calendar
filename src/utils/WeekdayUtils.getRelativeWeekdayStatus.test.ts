@@ -3,18 +3,18 @@ import * as Weekdays from '../test/data/Weekdays';
 import dayjs from './dayjs';
 import { getRelativeWeekdayStatus } from './WeekdayUtils';
 
-const SUNDAY = dayjs().day(0);
-const MONDAY = dayjs().day(1);
-const TUESDAY = dayjs().day(2);
-const WEDNESDAY = dayjs().day(3);
-const THURSDAY = dayjs().day(4);
-const FRIDAY = dayjs().day(5);
-const SATURDAY = dayjs().day(6);
+const SUNDAY = dayjs().day(0).toDate();
+const MONDAY = dayjs().day(1).toDate();
+const TUESDAY = dayjs().day(2).toDate();
+const WEDNESDAY = dayjs().day(3).toDate();
+const THURSDAY = dayjs().day(4).toDate();
+const FRIDAY = dayjs().day(5).toDate();
+const SATURDAY = dayjs().day(6).toDate();
 
 test('Relative weekdays compared against Sunday return appropriate proximity and formatting info', () => {
   const testTime = '';
   const testIntl = {
-    formatTime: jest.fn(() => testTime),
+    formatTime: jest.fn(() => testTime)
   } as unknown as IntlShape;
 
   expect(
@@ -23,7 +23,7 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'sameDay',
     weekday: undefined,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Monday, testTime, SUNDAY)
@@ -31,7 +31,7 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'nextDay',
     weekday: undefined,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Tuesday, testTime, SUNDAY)
@@ -39,7 +39,7 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'otherWeekday',
     weekday: Weekdays.Tuesday,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Wednesday, testTime, SUNDAY)
@@ -47,7 +47,7 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'otherWeekday',
     weekday: Weekdays.Wednesday,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Thursday, testTime, SUNDAY)
@@ -55,7 +55,7 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'otherWeekday',
     weekday: Weekdays.Thursday,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Friday, testTime, SUNDAY)
@@ -63,7 +63,7 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'otherWeekday',
     weekday: Weekdays.Friday,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
   expect(
     getRelativeWeekdayStatus(testIntl, Weekdays.Saturday, testTime, SUNDAY)
@@ -71,14 +71,14 @@ test('Relative weekdays compared against Sunday return appropriate proximity and
     proximity: 'otherWeekday',
     weekday: Weekdays.Saturday,
     date: undefined,
-    time: testTime,
+    time: testTime
   });
 });
 
 test('Weekdays compared against other weekdays return appropriate proximity', () => {
   const testTime = '';
   const testIntl = {
-    formatTime: jest.fn(() => testTime),
+    formatTime: jest.fn(() => testTime)
   } as unknown as IntlShape;
 
   expect(

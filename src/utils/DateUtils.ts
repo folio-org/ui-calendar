@@ -48,16 +48,43 @@ export function overlaps(
  * used when the date is >= the reference; will return `"sameDay"`, `"nextDay"`,
  * `"nextWeek"`, or `"sameElse"` (for more than a week away).
  */
-export function getRelativeDateTimeProximity(
-  date: Dayjs | string,
-  referenceDate: Dayjs
+export function getRelativeDateProximity(
+  date: Date,
+  referenceDate: Date
 ): 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse' {
-  return dayjs(dayjs(date).utc(true).toISOString()).calendar(referenceDate, {
-    sameDay: '[sameDay]', // "[at] LT",
-    nextDay: '[nextDay]', // "[tomorrow at] LT",
-    nextWeek: '[nextWeek]', // "dddd [at] LT",
-    sameElse: '[sameElse]' // "L",
-  }) as 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse';
+  // ensure every time is midnight
+  const testDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+  // same day
+  const testSameDayReference = new Date(
+    referenceDate.getFullYear(),
+    referenceDate.getMonth(),
+    referenceDate.getDate()
+  );
+  if (testDate <= testSameDayReference) return 'sameDay';
+
+  // check day after (for tomorrow)
+  const testNextDayReference = new Date(
+    referenceDate.getFullYear(),
+    referenceDate.getMonth(),
+    referenceDate.getDate() + 1
+  );
+  if (testDate <= testNextDayReference) return 'nextDay';
+
+  // check next six days
+  // does not check 7 as, for example, saying "closing Monday at 5:00"
+  // is ambiguous if it currently is Monday.
+  const testNextWeekReference = new Date(
+    referenceDate.getFullYear(),
+    referenceDate.getMonth(),
+    referenceDate.getDate() + 6
+  );
+  if (testDate <= testNextWeekReference) return 'nextWeek';
+
+  return 'sameElse';
 }
 
 /** Localize time with `react-intl` */
@@ -131,4 +158,13 @@ export function dateFromDateAndHHMM(d: Date, t: string): Date {
     timeParts[0],
     timeParts[1]
   );
+}
+
+export function dateFromHHMM(t: string): Date {
+  const timeParts = t.split(':').map((n) => parseInt(n, 10));
+  return new Date(0, 0, 0, timeParts[0], timeParts[1]);
+}
+
+export function dateToTimeOnly(d: Date): Date {
+  return new Date(0, 0, 0, d.getHours(), d.getMinutes());
 }

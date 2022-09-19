@@ -3,27 +3,27 @@ import * as Weekdays from '../test/data/Weekdays';
 import { getCurrentNormalOpening } from './CalendarUtils';
 import dayjs from './dayjs';
 
-const SUNDAY_00_00 = dayjs('00:00', 'HH:mm').day(0).utc(true);
-const SUNDAY_12_00 = dayjs('12:00', 'HH:mm').day(0).utc(true);
-const SUNDAY_23_59 = dayjs('23:59', 'HH:mm').day(0).utc(true);
-const MONDAY_00_00 = dayjs('00:00', 'HH:mm').day(1).utc(true);
-const MONDAY_12_00 = dayjs('12:00', 'HH:mm').day(1).utc(true);
-const MONDAY_23_59 = dayjs('23:59', 'HH:mm').day(1).utc(true);
-const TUESDAY_00_00 = dayjs('00:00', 'HH:mm').day(2).utc(true);
-const TUESDAY_12_00 = dayjs('12:00', 'HH:mm').day(2).utc(true);
-const TUESDAY_23_59 = dayjs('23:59', 'HH:mm').day(2).utc(true);
-const WEDNESDAY_00_00 = dayjs('00:00', 'HH:mm').day(3).utc(true);
-const WEDNESDAY_12_00 = dayjs('12:00', 'HH:mm').day(3).utc(true);
-const WEDNESDAY_23_59 = dayjs('23:59', 'HH:mm').day(3).utc(true);
-const THURSDAY_00_00 = dayjs('00:00', 'HH:mm').day(4).utc(true);
-const THURSDAY_12_00 = dayjs('12:00', 'HH:mm').day(4).utc(true);
-const THURSDAY_23_59 = dayjs('23:59', 'HH:mm').day(4).utc(true);
-const FRIDAY_00_00 = dayjs('00:00', 'HH:mm').day(5).utc(true);
-const FRIDAY_12_00 = dayjs('12:00', 'HH:mm').day(5).utc(true);
-const FRIDAY_23_59 = dayjs('23:59', 'HH:mm').day(5).utc(true);
-const SATURDAY_00_00 = dayjs('00:00', 'HH:mm').day(6).utc(true);
-const SATURDAY_12_00 = dayjs('12:00', 'HH:mm').day(6).utc(true);
-const SATURDAY_23_59 = dayjs('23:59', 'HH:mm').day(6).utc(true);
+const SUNDAY_00_00 = dayjs('00:00', 'HH:mm').day(0).toDate();
+const SUNDAY_12_00 = dayjs('12:00', 'HH:mm').day(0).toDate();
+const SUNDAY_23_59 = dayjs('23:59', 'HH:mm').day(0).toDate();
+const MONDAY_00_00 = dayjs('00:00', 'HH:mm').day(1).toDate();
+const MONDAY_12_00 = dayjs('12:00', 'HH:mm').day(1).toDate();
+const MONDAY_23_59 = dayjs('23:59', 'HH:mm').day(1).toDate();
+const TUESDAY_00_00 = dayjs('00:00', 'HH:mm').day(2).toDate();
+const TUESDAY_12_00 = dayjs('12:00', 'HH:mm').day(2).toDate();
+const TUESDAY_23_59 = dayjs('23:59', 'HH:mm').day(2).toDate();
+const WEDNESDAY_00_00 = dayjs('00:00', 'HH:mm').day(3).toDate();
+const WEDNESDAY_12_00 = dayjs('12:00', 'HH:mm').day(3).toDate();
+const WEDNESDAY_23_59 = dayjs('23:59', 'HH:mm').day(3).toDate();
+const THURSDAY_00_00 = dayjs('00:00', 'HH:mm').day(4).toDate();
+const THURSDAY_12_00 = dayjs('12:00', 'HH:mm').day(4).toDate();
+const THURSDAY_23_59 = dayjs('23:59', 'HH:mm').day(4).toDate();
+const FRIDAY_00_00 = dayjs('00:00', 'HH:mm').day(5).toDate();
+const FRIDAY_12_00 = dayjs('12:00', 'HH:mm').day(5).toDate();
+const FRIDAY_23_59 = dayjs('23:59', 'HH:mm').day(5).toDate();
+const SATURDAY_00_00 = dayjs('00:00', 'HH:mm').day(6).toDate();
+const SATURDAY_12_00 = dayjs('12:00', 'HH:mm').day(6).toDate();
+const SATURDAY_23_59 = dayjs('23:59', 'HH:mm').day(6).toDate();
 
 test('No normal openings return no current openings', () => {
   expect(getCurrentNormalOpening(SUNDAY_00_00, [])).toBeNull();
@@ -80,8 +80,8 @@ test('Long range normal openings return appropriate current openings', () => {
       startDay: Weekdays.Monday,
       startTime: '07:00',
       endDay: Weekdays.Friday,
-      endTime: '23:00',
-    },
+      endTime: '23:00'
+    }
   ];
   expect(getCurrentNormalOpening(SUNDAY_00_00, OPENINGS)).toBeNull();
   expect(getCurrentNormalOpening(SUNDAY_12_00, OPENINGS)).toBeNull();
@@ -112,8 +112,8 @@ test('Long range wrapping normal openings return appropriate current openings', 
       startDay: Weekdays.Thursday,
       startTime: '07:00',
       endDay: Weekdays.Tuesday,
-      endTime: '23:00',
-    },
+      endTime: '23:00'
+    }
   ];
   expect(getCurrentNormalOpening(SUNDAY_00_00, OPENINGS)).toBe(OPENINGS[0]);
   expect(getCurrentNormalOpening(SUNDAY_12_00, OPENINGS)).toBe(OPENINGS[0]);
@@ -144,8 +144,8 @@ test('247 on day boundary normal openings return appropriate current openings', 
       startDay: Weekdays.Sunday,
       startTime: '00:00',
       endDay: Weekdays.Saturday,
-      endTime: '23:59',
-    },
+      endTime: '23:59'
+    }
   ];
   expect(getCurrentNormalOpening(SUNDAY_00_00, OPENINGS)).toBe(OPENINGS[0]);
   expect(getCurrentNormalOpening(SUNDAY_12_00, OPENINGS)).toBe(OPENINGS[0]);
@@ -176,8 +176,8 @@ test('247 on mid-day boundary normal openings return appropriate current opening
       startDay: Weekdays.Sunday,
       startTime: '12:00',
       endDay: Weekdays.Sunday,
-      endTime: '11:59',
-    },
+      endTime: '11:59'
+    }
   ];
   expect(getCurrentNormalOpening(SUNDAY_00_00, OPENINGS)).toBe(OPENINGS[0]);
   expect(getCurrentNormalOpening(SUNDAY_12_00, OPENINGS)).toBe(OPENINGS[0]);
@@ -208,8 +208,8 @@ test('247-ish with mid-day gap normal openings return appropriate current openin
       startDay: Weekdays.Sunday,
       startTime: '23:00',
       endDay: Weekdays.Sunday,
-      endTime: '07:59',
-    },
+      endTime: '07:59'
+    }
   ];
   expect(getCurrentNormalOpening(SUNDAY_00_00, OPENINGS)).toBe(OPENINGS[0]);
   expect(getCurrentNormalOpening(SUNDAY_12_00, OPENINGS)).toBeNull();

@@ -5,14 +5,14 @@ import expectRender from '../test/util/expectRender';
 import type { Calendar } from '../types/types';
 import dayjs from './dayjs';
 import getCurrentStatus, {
-  getCurrentStatusNonFormatted,
+  getCurrentStatusNonFormatted
 } from './getCurrentStatus';
 import { LocaleWeekdayInfo } from './WeekdayUtils';
 
 const intl = {
   formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format('HH:mm')}||`),
   formatDate: jest.fn((d) => `||${dayjs(d).utc(false).format('YYYY-MM-DD')}||`),
-  formatMessage: jest.fn((m) => m.id),
+  formatMessage: jest.fn((m) => m.id)
 } as unknown as IntlShape;
 
 const localeWeekdays: LocaleWeekdayInfo[] = [
@@ -22,7 +22,7 @@ const localeWeekdays: LocaleWeekdayInfo[] = [
   { weekday: Weekdays.Wednesday, short: 'XXXXX', long: '||Wednesday||' },
   { weekday: Weekdays.Thursday, short: 'XXXXX', long: '||Thursday||' },
   { weekday: Weekdays.Friday, short: 'XXXXX', long: '||Friday||' },
-  { weekday: Weekdays.Saturday, short: 'XXXXX', long: '||Saturday||' },
+  { weekday: Weekdays.Saturday, short: 'XXXXX', long: '||Saturday||' }
 ];
 
 const calendarTemplate: Calendar = {
@@ -32,19 +32,28 @@ const calendarTemplate: Calendar = {
   startDate: '2000-01-01',
   endDate: '2000-12-31',
   normalHours: [],
-  exceptions: [],
+  exceptions: []
 };
 
 test('No normal openings returns appropriate closure info', () => {
   const noNormalOpeningCalendar = calendarTemplate;
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.JUN_1, noNormalOpeningCalendar)
+    getCurrentStatusNonFormatted(
+      intl,
+      Dates.JUN_1_DATE,
+      noNormalOpeningCalendar
+    )
   ).toStrictEqual({
     open: false,
-    exceptional: false,
+    exceptional: false
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.JUN_1, noNormalOpeningCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.JUN_1_DATE,
+      noNormalOpeningCalendar
+    )
   ).toBe('Closed');
 });
 
@@ -56,25 +65,25 @@ test('No normal openings on the day returns appropriate closure info', () => {
         startDay: Weekdays.Tuesday,
         startTime: '05:00',
         endDay: Weekdays.Sunday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
     getCurrentStatusNonFormatted(
       intl,
-      Dates.MAY_1,
+      Dates.MAY_1_DATE,
       noNormalOpeningsOnMondayCalendar
     )
   ).toStrictEqual({
     open: false,
-    exceptional: false,
+    exceptional: false
   });
   expectRender(
     getCurrentStatus(
       intl,
       localeWeekdays,
-      Dates.MAY_1,
+      Dates.MAY_1_DATE,
       noNormalOpeningsOnMondayCalendar
     )
   ).toBe('Closed');
@@ -89,12 +98,16 @@ test('Opening closing more than a day from now returns appropriate status', () =
         startDay: Weekdays.Sunday,
         startTime: '05:00',
         endDay: Weekdays.Saturday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, closingLongAwayCalendar)
+    getCurrentStatusNonFormatted(
+      intl,
+      Dates.MAY_1_DATE,
+      closingLongAwayCalendar
+    )
   ).toStrictEqual({
     open: true,
     exceptional: false,
@@ -102,11 +115,16 @@ test('Opening closing more than a day from now returns appropriate status', () =
       proximity: 'otherWeekday',
       weekday: Weekdays.Saturday,
       date: undefined,
-      time: '||22:00||',
-    },
+      time: '||22:00||'
+    }
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, closingLongAwayCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1_DATE,
+      closingLongAwayCalendar
+    )
   ).toBe('Open until ||Saturday|| at ||22:00||');
 });
 
@@ -119,12 +137,16 @@ test('Opening closing tomorrow returns appropriate status', () => {
         startDay: Weekdays.Sunday,
         startTime: '05:00',
         endDay: Weekdays.Tuesday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, closingTomorrowCalendar)
+    getCurrentStatusNonFormatted(
+      intl,
+      Dates.MAY_1_DATE,
+      closingTomorrowCalendar
+    )
   ).toStrictEqual({
     open: true,
     exceptional: false,
@@ -132,11 +154,16 @@ test('Opening closing tomorrow returns appropriate status', () => {
       proximity: 'nextDay',
       weekday: undefined,
       date: undefined,
-      time: '||22:00||',
-    },
+      time: '||22:00||'
+    }
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, closingTomorrowCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1_DATE,
+      closingTomorrowCalendar
+    )
   ).toBe('Open until tomorrow at ||22:00||');
 });
 
@@ -149,12 +176,12 @@ test('Opening closing the same day returns appropriate status', () => {
         startDay: Weekdays.Sunday,
         startTime: '05:00',
         endDay: Weekdays.Monday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, closingTonightCalendar)
+    getCurrentStatusNonFormatted(intl, Dates.MAY_1_DATE, closingTonightCalendar)
   ).toStrictEqual({
     open: true,
     exceptional: false,
@@ -162,11 +189,16 @@ test('Opening closing the same day returns appropriate status', () => {
       proximity: 'sameDay',
       weekday: undefined,
       date: undefined,
-      time: '||22:00||',
-    },
+      time: '||22:00||'
+    }
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, closingTonightCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1_DATE,
+      closingTonightCalendar
+    )
   ).toBe('Open until ||22:00||');
 });
 
@@ -179,18 +211,27 @@ test('Closed opening more than a day away returns appropriate status', () => {
         startDay: Weekdays.Friday,
         startTime: '05:00',
         endDay: Weekdays.Saturday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, openingNextWeekCalendar)
+    getCurrentStatusNonFormatted(
+      intl,
+      Dates.MAY_1_DATE,
+      openingNextWeekCalendar
+    )
   ).toStrictEqual({
     open: false,
-    exceptional: false,
+    exceptional: false
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingNextWeekCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1_DATE,
+      openingNextWeekCalendar
+    )
   ).toBe('Closed');
 });
 
@@ -203,18 +244,27 @@ test('Closed opening tomorrow returns appropriate status', () => {
         startDay: Weekdays.Tuesday,
         startTime: '05:00',
         endDay: Weekdays.Saturday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, openingTomorrowCalendar)
+    getCurrentStatusNonFormatted(
+      intl,
+      Dates.MAY_1_DATE,
+      openingTomorrowCalendar
+    )
   ).toStrictEqual({
     open: false,
-    exceptional: false,
+    exceptional: false
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingTomorrowCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1_DATE,
+      openingTomorrowCalendar
+    )
   ).toBe('Closed');
 });
 
@@ -227,12 +277,12 @@ test('Closed opening the same day returns appropriate status', () => {
         startDay: Weekdays.Monday,
         startTime: '05:00',
         endDay: Weekdays.Saturday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
-    getCurrentStatusNonFormatted(intl, Dates.MAY_1, openingTonightCalendar)
+    getCurrentStatusNonFormatted(intl, Dates.MAY_1_DATE, openingTonightCalendar)
   ).toStrictEqual({
     open: false,
     exceptional: false,
@@ -240,11 +290,16 @@ test('Closed opening the same day returns appropriate status', () => {
       proximity: 'sameDay',
       weekday: undefined,
       date: undefined,
-      time: '||05:00||',
-    },
+      time: '||05:00||'
+    }
   });
   expectRender(
-    getCurrentStatus(intl, localeWeekdays, Dates.MAY_1, openingTonightCalendar)
+    getCurrentStatus(
+      intl,
+      localeWeekdays,
+      Dates.MAY_1_DATE,
+      openingTonightCalendar
+    )
   ).toBe('Closed until ||05:00||');
 });
 
@@ -257,25 +312,25 @@ test('Closed after last opening returns appropriate status', () => {
         startDay: Weekdays.Monday,
         startTime: '05:00',
         endDay: Weekdays.Monday,
-        endTime: '22:00',
-      },
-    ],
+        endTime: '22:00'
+      }
+    ]
   };
   expect(
     getCurrentStatusNonFormatted(
       intl,
-      Dates.MAY_1.hour(23).utc(true),
+      new Date(2000, 4, 1, 23),
       openingTonightCalendar
     )
   ).toStrictEqual({
     open: false,
-    exceptional: false,
+    exceptional: false
   });
   expectRender(
     getCurrentStatus(
       intl,
       localeWeekdays,
-      Dates.MAY_1.hour(23),
+      new Date(2000, 4, 1, 23),
       openingTonightCalendar
     )
   ).toBe('Closed');

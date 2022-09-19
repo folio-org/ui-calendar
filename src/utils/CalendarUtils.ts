@@ -1,4 +1,3 @@
-import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
 import {
   Calendar,
@@ -6,28 +5,37 @@ import {
   CalendarExceptionOpening,
   CalendarOpening
 } from '../types/types';
-import { isSameMonthOrBefore } from './DateUtils';
-import dayjs from './dayjs';
+import {
+  dateFromDateAndHHMM,
+  dateFromHHMM,
+  dateFromYYYYMMDD,
+  dateFromYYYYMMDDAndHHMM,
+  dateToTimeOnly,
+  isSameMonthOrBefore
+} from './DateUtils';
 import { getFirstDayOfWeek, weekdayIsBetween, WEEKDAYS } from './WeekdayUtils';
 
 /** Get all openings and exceptions which apply to this date */
 export function getDateMatches(
-  testDate: Dayjs,
+  testDate: Date,
   calendar: Calendar
 ): {
   openings: CalendarOpening[];
   exceptions: CalendarException[];
 } {
+  const testDateDayStart = new Date(
+    testDate.getFullYear(),
+    testDate.getMonth(),
+    testDate.getDate()
+  );
   return {
     openings: calendar.normalHours.filter((opening) => {
       return weekdayIsBetween(testDate, opening.startDay, opening.endDay);
     }),
     exceptions: calendar.exceptions.filter((exception) => {
-      return testDate.isBetween(
-        dayjs(exception.startDate),
-        dayjs(exception.endDate),
-        'day',
-        '[]'
+      return (
+        dateFromYYYYMMDD(exception.startDate) <= testDateDayStart &&
+        testDateDayStart <= dateFromYYYYMMDD(exception.endDate)
       );
     })
   };
@@ -35,17 +43,14 @@ export function getDateMatches(
 
 /** Get the current exceptional opening, if any */
 export function getCurrentExceptionalOpening(
-  testDateTime: Dayjs,
+  testDateTime: Date,
   exception: CalendarException
 ): CalendarExceptionOpening | null {
   for (const opening of exception.openings) {
     if (
-      testDateTime.isBetween(
-        `${opening.startDate} ${opening.startTime}`,
-        `${opening.endDate} ${opening.endTime}`,
-        'minute',
-        '[]'
-      )
+      dateFromYYYYMMDDAndHHMM(opening.startDate, opening.startTime) <=
+        testDateTime &&
+      testDateTime <= dateFromYYYYMMDDAndHHMM(opening.endDate, opening.endTime)
     ) {
       return opening;
     }
@@ -55,22 +60,21 @@ export function getCurrentExceptionalOpening(
 
 /** Get the next exceptional opening on the same date, if any */
 export function getNextExceptionalOpening(
-  testDateTime: Dayjs,
+  testDateTime: Date,
   exception: CalendarException
 ): CalendarExceptionOpening | null {
   let min: CalendarExceptionOpening | null = null;
-  let minDate: Dayjs | null = null;
+  let minDate: Date | null = null;
   for (const opening of exception.openings) {
     if (
-      testDateTime.isBefore(
-        `${opening.startDate} ${opening.startTime}`,
-        'minute'
-      ) &&
+      testDateTime <=
+        dateFromYYYYMMDDAndHHMM(opening.startDate, opening.startTime) &&
       (minDate === null ||
-        minDate.isAfter(`${opening.startDate} ${opening.startTime}`))
+        minDate >=
+          dateFromYYYYMMDDAndHHMM(opening.startDate, opening.startTime))
     ) {
       min = opening;
-      minDate = dayjs(`${opening.startDate} ${opening.startTime}`);
+      minDate = dateFromYYYYMMDDAndHHMM(opening.startDate, opening.startTime);
     }
   }
   return min;
@@ -79,23 +83,25 @@ export function getNextExceptionalOpening(
 function isInSingleDayNormalOpening(
   weekday: number,
   testWeekday: number,
-  testDateTime: Dayjs,
-  startTimeRel: Dayjs,
-  endTimeRel: Dayjs
+  testDateTime: Date,
+  startTimeRel: Date,
+  endTimeRel: Date
 ): boolean {
+  const testTime = dateToTimeOnly(testDateTime);
+
   // really only spans one day
-  if (startTimeRel.isSameOrBefore(endTimeRel)) {
+  if (startTimeRel <= endTimeRel) {
     return (
       testWeekday === weekday &&
-      testDateTime.isSameOrAfter(startTimeRel) &&
-      testDateTime.isSameOrBefore(endTimeRel)
+      testTime >= startTimeRel &&
+      testTime <= endTimeRel
     );
   }
   // wraps around the week
   return (
     weekday !== testWeekday ||
-    testDateTime.isSameOrBefore(endTimeRel) ||
-    testDateTime.isSameOrAfter(startTimeRel)
+    testTime <= endTimeRel ||
+    testTime >= startTimeRel
   );
 }
 
@@ -118,20 +124,18 @@ function isMiddleDayInRange(
 
 /** Get the current normal opening, if any */
 export function getCurrentNormalOpening(
-  testDateTime: Dayjs,
+  testDateTime: Date,
   openings: CalendarOpening[]
 ): CalendarOpening | null {
-  const currentWeekday = testDateTime.day();
+  const currentWeekday = testDateTime.getDay();
+  const testTime = dateToTimeOnly(testDateTime);
+
   for (const opening of openings) {
     const startWeekday = WEEKDAYS[opening.startDay];
     const endWeekday = WEEKDAYS[opening.endDay];
 
-    const startTimeRel = dayjs(
-      `${testDateTime.format('YYYY-MM-DD')} ${opening.startTime}`
-    ).utc(true);
-    const endTimeRel = dayjs(
-      `${testDateTime.format('YYYY-MM-DD')} ${opening.endTime}`
-    ).utc(true);
+    const startTimeRel = dateFromHHMM(opening.startTime);
+    const endTimeRel = dateFromHHMM(opening.endTime);
 
     // single-day interval
     if (
@@ -139,7 +143,7 @@ export function getCurrentNormalOpening(
       isInSingleDayNormalOpening(
         startWeekday,
         currentWeekday,
-        testDateTime.utc(true),
+        testTime,
         startTimeRel,
         endTimeRel
       )
@@ -156,7 +160,7 @@ export function getCurrentNormalOpening(
     if (
       currentWeekday === startWeekday &&
       currentWeekday !== endWeekday &&
-      testDateTime.isSameOrAfter(startTimeRel)
+      testTime >= startTimeRel
     ) {
       return opening;
     }
@@ -165,7 +169,7 @@ export function getCurrentNormalOpening(
     if (
       currentWeekday !== startWeekday &&
       currentWeekday === endWeekday &&
-      testDateTime.isSameOrBefore(endTimeRel)
+      testTime <= endTimeRel
     ) {
       return opening;
     }
@@ -175,22 +179,20 @@ export function getCurrentNormalOpening(
 
 /** Get the next normal opening within the same day */
 export function getNextNormalOpening(
-  testDateTime: Dayjs,
+  testDateTime: Date,
   openings: CalendarOpening[]
 ): CalendarOpening | null {
   let min: CalendarOpening | null = null;
-  let minDate: Dayjs | null = null;
+  let minDate: Date | null = null;
 
   // no need to handle the potential for the next one being before the current day
   // therefore, we only check startDay = current day and minimize startDay within that subset
   for (const opening of openings) {
-    const openingTime = dayjs(
-      `${testDateTime.format('YYYY-MM-DD')} ${opening.startTime}`
-    );
+    const openingTime = dateFromDateAndHHMM(testDateTime, opening.startTime);
     if (
-      WEEKDAYS[opening.startDay] === testDateTime.day() &&
-      testDateTime.isBefore(openingTime) &&
-      (minDate === null || minDate.isAfter(openingTime))
+      WEEKDAYS[opening.startDay] === testDateTime.getDay() &&
+      testDateTime < openingTime &&
+      (minDate === null || minDate > openingTime)
     ) {
       min = opening;
       minDate = openingTime;
@@ -213,9 +215,12 @@ export function isOpen247(openings: CalendarOpening[]): boolean {
   if (opening.startDay === opening.endDay) {
     // M 00:00 to M 23:59 should NOT wrap around in this case
     // cases like M 08:00 -> M 07:59 should wrap
-    const shifted = dayjs(opening.endTime, 'HH:mm').add(1, 'minute');
+    const shifted = dateFromHHMM(opening.endTime);
+    shifted.setMinutes(shifted.getMinutes() + 1);
+    const startTimeDate = dateFromHHMM(opening.startTime);
     return (
-      shifted.format('HH:mm') === opening.startTime.substring(0, 5) &&
+      shifted.getHours() === startTimeDate.getHours() &&
+      shifted.getMinutes() === startTimeDate.getMinutes() &&
       opening.startTime.substring(0, 5) !== '00:00'
     );
   }

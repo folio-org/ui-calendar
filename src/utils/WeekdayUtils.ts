@@ -1,5 +1,4 @@
 import { staticFirstWeekDay } from '@folio/stripes/components';
-import type { Dayjs } from 'dayjs';
 import memoizee from 'memoizee';
 import { useMemo } from 'react';
 import { IntlShape } from 'react-intl';
@@ -148,9 +147,9 @@ export function getRelativeWeekdayStatus(
   intl: IntlShape,
   weekday: Weekday,
   time: string,
-  referenceDate: Dayjs
+  referenceDate: Date
 ): RelativeWeekdayStatus {
-  if (referenceDate.day() === WEEKDAYS[weekday]) {
+  if (referenceDate.getDay() === WEEKDAYS[weekday]) {
     return {
       proximity: 'sameDay',
       weekday: undefined,
@@ -158,7 +157,7 @@ export function getRelativeWeekdayStatus(
       time: getLocalizedTime(intl, time)
     };
   }
-  if ((referenceDate.day() + 1) % 7 === WEEKDAYS[weekday]) {
+  if ((referenceDate.getDay() + 1) % 7 === WEEKDAYS[weekday]) {
     return {
       proximity: 'nextDay',
       weekday: undefined,
@@ -176,7 +175,7 @@ export function getRelativeWeekdayStatus(
 
 /** Determine if a day is between two weekdays, inclusive */
 export function weekdayIsBetween(
-  testWeekday: Dayjs,
+  testWeekday: Date,
   start: Weekday,
   end: Weekday
 ): boolean {
@@ -189,10 +188,10 @@ export function weekdayIsBetween(
     endIndex += 7;
   }
   // potentially shifts the bounds by a week to handle examples like above, if SUN (0) is queried
-  if (startIndex > testWeekday.day()) {
+  if (startIndex > testWeekday.getDay()) {
     startIndex -= 7;
     endIndex -= 7;
   }
 
-  return startIndex <= testWeekday.day() && testWeekday.day() <= endIndex;
+  return startIndex <= testWeekday.getDay() && testWeekday.getDay() <= endIndex;
 }
