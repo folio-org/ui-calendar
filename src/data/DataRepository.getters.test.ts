@@ -2,15 +2,15 @@ import DataRepository from './DataRepository';
 import * as Calendars from '../test/data/Calendars';
 import * as ServicePoints from '../test/data/ServicePoints';
 
-test('Getters work as expected with undefined objects', () => {
-  const mutators = {
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    dates: jest.fn(),
-    getUser: jest.fn()
-  };
+const mutators = {
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn(),
+  dates: jest.fn(),
+  getUser: jest.fn()
+};
 
+test('Getters work as expected with undefined objects', () => {
   const repository = new DataRepository(undefined, undefined, mutators);
   expect(repository.isLoaded()).toBe(false);
   expect(repository.areServicePointsLoaded()).toBe(false);
@@ -20,14 +20,6 @@ test('Getters work as expected with undefined objects', () => {
 });
 
 test('Getters work as expected with empty objects', () => {
-  const mutators = {
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    dates: jest.fn(),
-    getUser: jest.fn()
-  };
-
   const repositoryEmptyCalendar = new DataRepository([], [], mutators);
   expect(repositoryEmptyCalendar.isLoaded()).toBe(true);
   expect(repositoryEmptyCalendar.areServicePointsLoaded()).toBe(true);
@@ -35,14 +27,6 @@ test('Getters work as expected with empty objects', () => {
 });
 
 test('Getters work as expected (1 Calendar, 2 Service Points)', () => {
-  const mutators = {
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    dates: jest.fn(),
-    getUser: jest.fn()
-  };
-
   const repository1 = new DataRepository(
     [Calendars.SPRING_SP_1_2],
     [ServicePoints.SERVICE_POINT_1_DTO, ServicePoints.SERVICE_POINT_2_DTO],
@@ -87,14 +71,6 @@ test('Getters work as expected (1 Calendar, 2 Service Points)', () => {
 });
 
 test('Getters work as expected (multiple calendars)', () => {
-  const mutators = {
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    dates: jest.fn(),
-    getUser: jest.fn()
-  };
-
   const repository1 = new DataRepository(
     [Calendars.SPRING_SP_1_2, Calendars.SPRING_SP_3_4, Calendars.SUMMER_SP_3],
     [],
