@@ -1,7 +1,10 @@
 import { ServicePointDTO } from '../../data/types';
 import { ServicePoint } from '../../types/types';
 
-const ADDITIONAL_DTO_PROPERTIES = {
+const ADDITIONAL_DTO_PROPERTIES: Pick<
+  ServicePointDTO,
+  'code' | 'discoveryDisplayName' | 'staffSlips' | 'metadata'
+> = {
   code: 'n/a',
   discoveryDisplayName: 'n/a',
   staffSlips: [],
