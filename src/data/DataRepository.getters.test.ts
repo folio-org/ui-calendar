@@ -69,7 +69,7 @@ test('Getters work as expected (1 Calendar, 2 Service Points)', () => {
   ]);
 
   expect(
-    repository1.getServicePointsFromId('3a40852d-49fd-4df2-a1f9-6e2641a6e91f')
+    repository1.getServicePointFromId('3a40852d-49fd-4df2-a1f9-6e2641a6e91f')
   ).toStrictEqual(ServicePoints.SERVICE_POINT_1);
   expect(
     repository1.getServicePointNamesFromIds([

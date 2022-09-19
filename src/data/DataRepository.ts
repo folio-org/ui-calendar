@@ -85,7 +85,7 @@ export default class DataRepository {
   }
 
   /** Get the service point, or undefined, corresponding to the provided id */
-  getServicePointsFromId(id?: string): ServicePoint | undefined {
+  getServicePointFromId(id?: string): ServicePoint | undefined {
     if (id === undefined) return undefined;
     const map = getServicePointMap(this.getServicePoints());
     return map[id];

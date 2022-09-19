@@ -182,7 +182,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
           onClose={() => {
             history.push('/settings/calendar/monthly/');
           }}
-          servicePoint={dataRepository.getServicePointsFromId(currentRouteId)}
+          servicePoint={dataRepository.getServicePointFromId(currentRouteId)}
           events={events[currentRouteId ?? '']}
           requestEvents={requestEvents}
         />
