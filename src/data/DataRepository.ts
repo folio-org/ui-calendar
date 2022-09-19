@@ -116,7 +116,7 @@ export default class DataRepository {
   }
 
   /** Create a new calendar */
-  async createCalendar(calendar: Calendar): Promise<CalendarDTO> {
+  createCalendar(calendar: Calendar): Promise<CalendarDTO> {
     return this.mutators.create(calendar);
   }
 
@@ -153,12 +153,9 @@ export default class DataRepository {
 
   /**
    * Get a user by ID.  Optionally, requests may be aborted when the data is no longer needed
+   * Errors will NOT be rejected, instead, a never-resolving promise will be returned
    */
-  async getUser(userId: string, signal?: AbortSignal): Promise<User> {
-    try {
-      return await this.mutators.getUser({ userId, signal });
-    } catch (e) {
-      return new Promise(() => ({}));
-    }
+  getUser(userId: string, signal?: AbortSignal): Promise<User> {
+    return this.mutators.getUser({ userId, signal });
   }
 }

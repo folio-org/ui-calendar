@@ -137,7 +137,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               ...current,
               createdBy: getUserDisplayName(user)
             }))
-        );
+        )
+        // eslint-disable-next-line no-console
+        .catch((e) => console.error(e));
     }
     if (calendar?.metadata?.updatedByUserId) {
       // better than no info, while the API fetches
@@ -151,7 +153,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               ...current,
               updatedBy: getUserDisplayName(user)
             }))
-        );
+        )
+        // eslint-disable-next-line no-console
+        .catch((e) => console.error(e));
     }
 
     if (calendar?.metadata?.createdDate) {
