@@ -31,9 +31,10 @@ import {
   FormattedTime,
   useIntl
 } from 'react-intl';
+import UserNameDisplay from '../../components/UserNameDisplay';
 import DataRepository from '../../data/DataRepository';
 import permissions from '../../types/permissions';
-import { CalendarDTO, CalendarException, User } from '../../types/types';
+import { CalendarDTO, CalendarException } from '../../types/types';
 import { isOpen247 } from '../../utils/CalendarUtils';
 import { getLocalizedDate } from '../../utils/DateUtils';
 import ifPermissionOr from '../../utils/ifPermissionOr';
@@ -54,25 +55,6 @@ export interface InfoPaneProps {
   calendar?: CalendarDTO | null;
   onClose: () => void;
   dataRepository: DataRepository;
-}
-
-// from ui-users components/util/util.js
-function getUserDisplayName(user: User): string {
-  let fullName = user?.personal?.lastName || '';
-  let givenName =
-    user?.personal?.preferredFirstName || user?.personal?.firstName || '';
-
-  const middleName = user?.personal?.middleName || '';
-
-  if (middleName) {
-    givenName += `${givenName ? ' ' : ''}${middleName}`;
-  }
-
-  if (givenName) {
-    fullName += `${fullName ? ', ' : ''}${givenName}`;
-  }
-
-  return fullName;
 }
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (
@@ -135,7 +117,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           (user) => !abortController.signal.aborted &&
             setMetadata((current) => ({
               ...current,
-              createdBy: getUserDisplayName(user)
+              createdBy: <UserNameDisplay user={user} />
             }))
         )
         // eslint-disable-next-line no-console
@@ -151,7 +133,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           (user) => !abortController.signal.aborted &&
             setMetadata((current) => ({
               ...current,
-              updatedBy: getUserDisplayName(user)
+              updatedBy: <UserNameDisplay user={user} />
             }))
         )
         // eslint-disable-next-line no-console
