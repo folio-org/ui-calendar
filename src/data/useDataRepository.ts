@@ -20,8 +20,9 @@ export default function useDataRepository(): DataRepository {
   const servicePoints = useQuery<ServicePointDTO[]>(
     ['ui-calendar', 'service-points'],
     async () => {
-      const response = await ky.get('service-points?cql.allRecords=1');
-      const data = await response.json<ServicePointResponseDTO>();
+      const data = await ky
+        .get('service-points?cql.allRecords=1')
+        .json<ServicePointResponseDTO>();
       return data.servicepoints;
     }
   );
@@ -64,6 +65,7 @@ export default function useDataRepository(): DataRepository {
     const queryString = calendarsToDelete.map((c) => `id=${c.id}`).join('&');
     await ky.delete(`calendar/calendars?${queryString}`);
   }, mutationInvalidator);
+
   const getDateRange = useMutation(
     async ({
       servicePointId,
