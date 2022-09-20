@@ -58,12 +58,19 @@ function updateInnerRowState(
   updateRowState(rowStates, setRowStates, outerRowIndex, { rows: newRowList });
 }
 
-function isIntraRowConflicted(
+function isInnerRowConflicted(
   error: ExceptionFieldErrors | undefined,
   outerRowI: number,
   innerRowI: number
 ): boolean {
   return !!error?.intraConflicts?.[outerRowI]?.has(innerRowI);
+}
+
+function isOuterRowConflicted(
+  error: ExceptionFieldErrors | undefined,
+  outerRowI: number
+): boolean {
+  return !!error?.interConflicts?.has(outerRowI);
 }
 
 function getInnerRowError(
@@ -79,6 +86,47 @@ function getInnerRowError(
     error?.empty?.[field]?.[outerRowI]?.[innerRowI] ||
     error?.invalid?.[field]?.[outerRowI]?.[innerRowI]
   );
+}
+
+function outerRowSorter(a: ExceptionRowState, b: ExceptionRowState) {
+  // start date is enough for equality as overlap on the same day is disallowed
+  const aMin = dayjs.min(a.rows.map(({ startDate }) => dayjs(startDate)));
+  const bMin = dayjs.min(b.rows.map(({ startDate }) => dayjs(startDate)));
+  // don't care about == as that's an issue regardless, so order can be undefined there
+  return aMin.isBefore(bMin) ? -1 : 1;
+}
+
+function getMainConflictError(
+  error: ExceptionFieldErrors | undefined
+): ReactNode {
+  if (
+    error?.interConflicts?.size !== undefined &&
+    error.interConflicts.size > 0
+  ) {
+    return (
+      <Headline
+        margin="none"
+        className={css.conflictMessage}
+        weight="medium"
+        size="medium"
+      >
+        <Icon icon="exclamation-circle" status="error" />
+        <FormattedMessage id="ui-calendar.calendarForm.error.exceptionConflictError" />
+      </Headline>
+    );
+  }
+
+  return undefined;
+}
+
+function getNameFieldError(
+  touched: boolean,
+  error: ExceptionFieldErrors,
+  outerRowI: number
+): ReactNode {
+  if (!touched) return undefined;
+
+  return error?.empty?.name?.[outerRowI];
 }
 
 export interface ExceptionFieldProps
@@ -123,7 +171,7 @@ function getDateTimeFields({
         key={`sd-${innerRow.i}`}
         className={classNames(
           {
-            [css.conflictCell]: isIntraRowConflicted(
+            [css.conflictCell]: isInnerRowConflicted(
               props.error,
               row.i,
               innerRow.i
@@ -164,7 +212,7 @@ function getDateTimeFields({
       <TimeField
         key={`st-${innerRow.i}`}
         className={classNames({
-          [css.conflictCell]: isIntraRowConflicted(
+          [css.conflictCell]: isInnerRowConflicted(
             props.error,
             row.i,
             innerRow.i
@@ -200,7 +248,7 @@ function getDateTimeFields({
         key={`ed-${innerRow.i}`}
         className={classNames(
           {
-            [css.conflictCell]: isIntraRowConflicted(
+            [css.conflictCell]: isInnerRowConflicted(
               props.error,
               row.i,
               innerRow.i
@@ -241,7 +289,7 @@ function getDateTimeFields({
       <TimeField
         key={`et-${innerRow.i}`}
         className={classNames({
-          [css.conflictCell]: isIntraRowConflicted(
+          [css.conflictCell]: isInnerRowConflicted(
             props.error,
             row.i,
             innerRow.i
@@ -301,13 +349,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
       return;
     }
 
-    rows.sort((a, b) => {
-      // start date is enough for equality as overlap on the same day is disallowed
-      const aMin = dayjs.min(a.rows.map(({ startDate }) => dayjs(startDate)));
-      const bMin = dayjs.min(b.rows.map(({ startDate }) => dayjs(startDate)));
-      // don't care about == as that's an issue regardless, so order can be undefined there
-      return aMin.isBefore(bMin) ? -1 : 1;
-    });
+    rows.sort(outerRowSorter);
 
     setRowStates(rows);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -352,7 +394,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
               });
             }}
             className={cssHiddenErrorField.hiddenErrorFieldWrapper}
-            error={props.meta.touched && props.error?.empty?.name?.[row.i]}
+            error={getNameFieldError(props.meta.touched, props.error, row.i)}
           />
         ),
         status: (
@@ -452,7 +494,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
             />
           </Layout>
         ),
-        isConflicted: !!props.error?.interConflicts?.has(row.i)
+        isConflicted: isOuterRowConflicted(props.error, row.i)
       };
     });
 
@@ -501,23 +543,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
     isConflicted: false
   });
 
-  let conflictError: ReactNode = null;
-  if (
-    props.error?.interConflicts?.size !== undefined &&
-    props.error.interConflicts.size > 0
-  ) {
-    conflictError = (
-      <Headline
-        margin="none"
-        className={css.conflictMessage}
-        weight="medium"
-        size="medium"
-      >
-        <Icon icon="exclamation-circle" status="error" />
-        <FormattedMessage id="ui-calendar.calendarForm.error.exceptionConflictError" />
-      </Headline>
-    );
-  }
+  const conflictError: ReactNode = getMainConflictError(props.error);
 
   return (
     <>
@@ -557,11 +583,10 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           actions: '6%'
         }}
         contentData={contents}
-        getCellClass={(defaultClasses, rowData) => {
-          return classNames(defaultClasses, css.cellWrapper, {
-            [css.conflictCell]: rowData.isConflicted
-          });
-        }}
+        getCellClass={(defaultClasses, rowData) => classNames(defaultClasses, css.cellWrapper, {
+          [css.conflictCell]: rowData.isConflicted
+        })
+        }
         rowFormatter={HoursOfOperationFieldRowFormatter}
       />
       {conflictError}
