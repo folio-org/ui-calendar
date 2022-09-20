@@ -36,6 +36,7 @@ test('Ignore', () => {
 //   getState: jest.fn(() => ({ hasValidationErrors: true })),
 // } as unknown as FormApi<FormValues>;
 
+// should've used jest.clearAllMocks() in a nested afterEach
 // function resetMocks() {
 //   calloutContext.sendCallout.mockReset();
 //   closeParentLayer.mockReset();

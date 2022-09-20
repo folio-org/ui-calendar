@@ -11,7 +11,7 @@ export default function getIntl(locale = 'en-US', timeZone = 'UTC'): IntlShape {
   );
   render(withIntlConfiguration(<TestComponent />, locale, timeZone));
 
-  expect(intlCapturer.mock.calls).toHaveLength(1);
+  expect(intlCapturer).toHaveBeenCalled();
   const intl = intlCapturer.mock.calls[0][0] as IntlShape;
 
   cleanup();
