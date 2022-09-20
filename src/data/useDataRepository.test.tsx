@@ -22,7 +22,7 @@ function mockApi() {
   const getServicePointsMock = jest.fn(() => ({}));
   const getCalendarsMock = jest.fn(() => ({}));
   const getDatesMock = jest.fn<{ dates: never[] }, [string]>(() => ({
-    dates: []
+    dates: [] as never[]
   }));
   const getUsersMock = jest.fn();
   const postMock = jest.fn(() => ({
