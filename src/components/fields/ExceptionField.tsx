@@ -7,14 +7,14 @@ import {
   Layout,
   MultiColumnList,
   MultiColumnListProps,
-  TextField,
+  TextField
 } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import { FieldRenderProps } from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
@@ -23,7 +23,7 @@ import dayjs from '../../utils/dayjs';
 import {
   ExceptionFieldErrors,
   ExceptionRowState,
-  MCLContentsType,
+  MCLContentsType
 } from './ExceptionFieldTypes';
 import cssHiddenErrorField from './hiddenErrorField.css';
 import css from './HoursAndExceptionFields.css';
@@ -53,9 +53,17 @@ function updateInnerRowState(
   const newRowList = [...rowStates[outerRowIndex].rows];
   newRowList[innerRowIndex] = {
     ...newRowList[innerRowIndex],
-    ...newState,
+    ...newState
   };
   updateRowState(rowStates, setRowStates, outerRowIndex, { rows: newRowList });
+}
+
+function isIntraRowConflicted(
+  error: ExceptionFieldErrors | undefined,
+  outerRowI: number,
+  innerRowI: number
+): boolean {
+  return !!error?.intraConflicts?.[outerRowI]?.has(innerRowI);
 }
 
 export interface ExceptionFieldProps
@@ -77,7 +85,7 @@ function getDateTimeFields({
   fieldRefs,
   isDirty,
   rowStates,
-  setRowStates,
+  setRowStates
 }: {
   props: ExceptionFieldProps;
   row: ExceptionRowState;
@@ -100,9 +108,11 @@ function getDateTimeFields({
         key={`sd-${innerRow.i}`}
         className={classNames(
           {
-            [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+            [css.conflictCell]: isIntraRowConflicted(
+              props.error,
+              row.i,
               innerRow.i
-            ),
+            )
           },
           cssHiddenErrorField.hiddenErrorFieldWrapper
         )}
@@ -137,9 +147,11 @@ function getDateTimeFields({
       <TimeField
         key={`st-${innerRow.i}`}
         className={classNames({
-          [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+          [css.conflictCell]: isIntraRowConflicted(
+            props.error,
+            row.i,
             innerRow.i
-          ),
+          )
         })}
         display={row.type === RowType.Open}
         value={innerRow.startTime}
@@ -169,9 +181,11 @@ function getDateTimeFields({
         key={`ed-${innerRow.i}`}
         className={classNames(
           {
-            [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+            [css.conflictCell]: isIntraRowConflicted(
+              props.error,
+              row.i,
               innerRow.i
-            ),
+            )
           },
           cssHiddenErrorField.hiddenErrorFieldWrapper
         )}
@@ -206,9 +220,11 @@ function getDateTimeFields({
       <TimeField
         key={`et-${innerRow.i}`}
         className={classNames({
-          [css.conflictCell]: props.error?.intraConflicts?.[row.i]?.has(
+          [css.conflictCell]: isIntraRowConflicted(
+            props.error,
+            row.i,
             innerRow.i
-          ),
+          )
         })}
         display={row.type === RowType.Open}
         value={innerRow.endTime}
@@ -232,7 +248,7 @@ function getDateTimeFields({
           );
         }}
       />
-    ),
+    )
   };
 }
 
@@ -295,7 +311,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           fieldRefs,
           isDirty,
           rowStates,
-          setRowStates,
+          setRowStates
         });
       });
       return {
@@ -309,7 +325,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
             onBlur={() => props.input.onBlur()}
             onChange={(e) => {
               updateRowState(rowStates, setRowStates, realIndex, {
-                name: e.target.value,
+                name: e.target.value
               });
             }}
             className={cssHiddenErrorField.hiddenErrorFieldWrapper}
@@ -340,8 +356,8 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
                       maxDate === null
                         ? undefined
                         : maxDate.format('YYYY-MM-DD'),
-                    endTime: undefined,
-                  },
+                    endTime: undefined
+                  }
                 ];
               }
               updateRowState(rowStates, setRowStates, realIndex, newData);
@@ -382,7 +398,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
               icon="plus-sign"
               aria-disabled={row.type === RowType.Closed}
               className={classNames({
-                [css.disabledIconButton]: row.type === RowType.Closed,
+                [css.disabledIconButton]: row.type === RowType.Closed
               })}
               onClick={() => {
                 if (row.type === RowType.Closed) return;
@@ -393,12 +409,12 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
                     startDate: undefined,
                     startTime: undefined,
                     endDate: undefined,
-                    endTime: undefined,
-                  },
+                    endTime: undefined
+                  }
                 ];
                 updateRowState(rowStates, setRowStates, realIndex, {
                   rows: newRows,
-                  lastRowI: row.lastRowI + 1,
+                  lastRowI: row.lastRowI + 1
                 });
               }}
             />
@@ -413,7 +429,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
             />
           </Layout>
         ),
-        isConflicted: !!props.error?.interConflicts?.has(row.i),
+        isConflicted: !!props.error?.interConflicts?.has(row.i)
       };
     });
 
@@ -423,7 +439,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
       name: '',
       type: RowType.Open,
       lastRowI: 0,
-      rows: [],
+      rows: []
     },
     name: (
       <Button
@@ -441,9 +457,9 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
                 startDate: undefined,
                 startTime: undefined,
                 endDate: undefined,
-                endTime: undefined,
-              },
-            ],
+                endTime: undefined
+              }
+            ]
           });
           currentCount++;
           setCurrentCount(currentCount);
@@ -459,7 +475,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
     endDate: undefined,
     endTime: undefined,
     actions: undefined,
-    isConflicted: false,
+    isConflicted: false
   });
 
   let conflictError: ReactNode = null;
@@ -506,7 +522,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           ),
           actions: (
             <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.actions" />
-          ),
+          )
         }}
         columnWidths={{
           name: '22%',
@@ -515,12 +531,12 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           startTime: '15%',
           endDate: '15%',
           endTime: '15%',
-          actions: '6%',
+          actions: '6%'
         }}
         contentData={contents}
         getCellClass={(defaultClasses, rowData) => {
           return classNames(defaultClasses, css.cellWrapper, {
-            [css.conflictCell]: rowData.isConflicted,
+            [css.conflictCell]: rowData.isConflicted
           });
         }}
         rowFormatter={HoursOfOperationFieldRowFormatter}
