@@ -66,6 +66,21 @@ function isIntraRowConflicted(
   return !!error?.intraConflicts?.[outerRowI]?.has(innerRowI);
 }
 
+function getInnerRowError(
+  isDirty: boolean,
+  error: ExceptionFieldErrors | undefined,
+  outerRowI: number,
+  innerRowI: number,
+  field: 'startDate' | 'startTime' | 'endDate' | 'endTime'
+): ReactNode {
+  if (!isDirty) return undefined;
+
+  return (
+    error?.empty?.[field]?.[outerRowI]?.[innerRowI] ||
+    error?.invalid?.[field]?.[outerRowI]?.[innerRowI]
+  );
+}
+
 export interface ExceptionFieldProps
   extends FieldRenderProps<ExceptionRowState[]> {
   fieldRefs: InnerFieldRefs['exceptions'];
@@ -125,11 +140,13 @@ function getDateTimeFields({
         inputRef={(el) => {
           fieldRefs.startDate[row.i][innerRow.i] = el;
         }}
-        error={
-          isDirty &&
-          (props.error?.empty?.startDate?.[row.i]?.[innerRow.i] ||
-            props.error?.invalid?.startDate?.[row.i]?.[innerRow.i])
-        }
+        error={getInnerRowError(
+          isDirty,
+          props.error,
+          row.i,
+          innerRow.i,
+          'startDate'
+        )}
         onBlur={() => props.input.onBlur()}
         onChange={(_e, _formattedString, dateString) => {
           updateInnerRowState(
@@ -159,11 +176,13 @@ function getDateTimeFields({
         inputRef={(el) => {
           fieldRefs.startTime[row.i][innerRow.i] = el;
         }}
-        error={
-          isDirty &&
-          (props.error?.empty?.startTime?.[row.i]?.[innerRow.i] ||
-            props.error?.invalid?.startTime?.[row.i]?.[innerRow.i])
-        }
+        error={getInnerRowError(
+          isDirty,
+          props.error,
+          row.i,
+          innerRow.i,
+          'startTime'
+        )}
         onBlur={props.input.onBlur}
         onChange={(newValue) => {
           updateInnerRowState(
@@ -198,11 +217,13 @@ function getDateTimeFields({
         inputRef={(el) => {
           fieldRefs.endDate[row.i][innerRow.i] = el;
         }}
-        error={
-          isDirty &&
-          (props.error?.empty?.endDate?.[row.i]?.[innerRow.i] ||
-            props.error?.invalid?.endDate?.[row.i]?.[innerRow.i])
-        }
+        error={getInnerRowError(
+          isDirty,
+          props.error,
+          row.i,
+          innerRow.i,
+          'endDate'
+        )}
         onBlur={() => props.input.onBlur()}
         onChange={(_e, _formattedString, dateString) => {
           updateInnerRowState(
@@ -232,11 +253,13 @@ function getDateTimeFields({
         inputRef={(el) => {
           fieldRefs.endTime[row.i][innerRow.i] = el;
         }}
-        error={
-          isDirty &&
-          (props.error?.empty?.endTime?.[row.i]?.[innerRow.i] ||
-            props.error?.invalid?.endTime?.[row.i]?.[innerRow.i])
-        }
+        error={getInnerRowError(
+          isDirty,
+          props.error,
+          row.i,
+          innerRow.i,
+          'endTime'
+        )}
         onBlur={props.input.onBlur}
         onChange={(newValue) => {
           updateInnerRowState(
