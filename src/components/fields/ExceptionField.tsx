@@ -120,8 +120,8 @@ function getMainConflictError(
 }
 
 function getNameFieldError(
-  touched: boolean,
-  error: ExceptionFieldErrors,
+  touched: boolean | undefined,
+  error: ExceptionFieldErrors | undefined,
   outerRowI: number
 ): ReactNode {
   if (!touched) return undefined;
@@ -137,6 +137,39 @@ export interface ExceptionFieldProps
   // eslint-disable-next-line react/no-unused-prop-types
   localeTimeFormat: string;
   submitAttempted: boolean;
+}
+
+function getDateField(
+  key: 'startDate' | 'endDate',
+  row: ExceptionRowState,
+  innerRow: ExceptionRowState['rows'][0],
+  isDirty: boolean,
+  { error, fieldRefs, input }: ExceptionFieldProps,
+  onChange: (dateString: string) => void
+) {
+  return (
+    <DateField
+      key={`sd-${innerRow.i}`}
+      className={classNames(
+        {
+          [css.conflictCell]: isInnerRowConflicted(error, row.i, innerRow.i)
+        },
+        cssHiddenErrorField.hiddenErrorFieldWrapper
+      )}
+      backendDateStandard="YYYY-MM-DD"
+      marginBottom0
+      required
+      usePortal
+      placement="auto"
+      value={innerRow[key]}
+      inputRef={(el) => {
+        fieldRefs[key][row.i][innerRow.i] = el;
+      }}
+      error={getInnerRowError(isDirty, error, row.i, innerRow.i, 'startDate')}
+      onBlur={() => input.onBlur()}
+      onChange={(_e, _formattedString, dateString) => onChange(dateString)}
+    />
+  );
 }
 
 function getDateTimeFields({
@@ -166,47 +199,22 @@ function getDateTimeFields({
   endTime: ReactNode;
 } {
   return {
-    startDate: (
-      <DateField
-        key={`sd-${innerRow.i}`}
-        className={classNames(
-          {
-            [css.conflictCell]: isInnerRowConflicted(
-              props.error,
-              row.i,
-              innerRow.i
-            )
-          },
-          cssHiddenErrorField.hiddenErrorFieldWrapper
-        )}
-        backendDateStandard="YYYY-MM-DD"
-        marginBottom0
-        required
-        usePortal
-        placement="auto"
-        value={innerRow.startDate}
-        inputRef={(el) => {
-          fieldRefs.startDate[row.i][innerRow.i] = el;
-        }}
-        error={getInnerRowError(
-          isDirty,
-          props.error,
-          row.i,
-          innerRow.i,
-          'startDate'
-        )}
-        onBlur={() => props.input.onBlur()}
-        onChange={(_e, _formattedString, dateString) => {
-          updateInnerRowState(
-            rowStates,
-            setRowStates,
-            realIndex,
-            innerRowRealIndex,
-            { startDate: dateString }
-          );
-          props.input.onBlur();
-        }}
-      />
+    startDate: getDateField(
+      'startDate',
+      row,
+      innerRow,
+      isDirty,
+      props,
+      (dateString) => {
+        updateInnerRowState(
+          rowStates,
+          setRowStates,
+          realIndex,
+          innerRowRealIndex,
+          { startDate: dateString }
+        );
+        props.input.onBlur();
+      }
     ),
     startTime: (
       <TimeField
