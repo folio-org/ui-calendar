@@ -19,6 +19,41 @@ test('Getters work as expected with undefined objects', () => {
   expect(repository.getCalendars()).toStrictEqual([]);
 });
 
+test('Get Calendar works with calendar that does not exist, isLoaded with only Calendars', () => {
+  const repository = new DataRepository(
+    [Calendars.SPRING_SP_1_2, Calendars.SPRING_SP_3_4, Calendars.SUMMER_SP_3],
+    [],
+    mutators
+  );
+  expect(repository.isLoaded()).toBe(true);
+  expect(
+    repository.getCalendar('d3f3354c-2986-5d30-a84c-1eflfd613ac6')
+  ).toStrictEqual(undefined);
+});
+
+test('Get Calendar works with null and undefined', () => {
+  const repository = new DataRepository(
+    [Calendars.SPRING_SP_1_2, Calendars.SPRING_SP_3_4, Calendars.SUMMER_SP_3],
+    [],
+    mutators
+  );
+  expect(repository.isLoaded()).toBe(true);
+  expect(repository.getCalendar(null)).toStrictEqual(undefined);
+  expect(repository.getCalendar(undefined)).toStrictEqual(undefined);
+});
+
+test('getServicePointFromID works with service point that does not exist, isLoaded with ony service points', () => {
+  const repository = new DataRepository(
+    [],
+    [ServicePoints.SERVICE_POINT_1_DTO],
+    mutators
+  );
+  expect(repository.isLoaded()).toBe(true);
+  expect(
+    repository.getServicePointFromId('a3f3354c-2986-5d33-a84c-1eflfd613ac6')
+  ).toStrictEqual(undefined);
+});
+
 test('Getters work as expected with empty objects', () => {
   const repositoryEmptyCalendar = new DataRepository([], [], mutators);
   expect(repositoryEmptyCalendar.isLoaded()).toBe(true);
