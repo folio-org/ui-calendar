@@ -247,7 +247,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                   to={{
                     pathname: props.creationBasePath,
                     search: new URLSearchParams({
-                      source: calendar.id as string
+                      source: calendar.id
                     }).toString()
                   }}
                 >
