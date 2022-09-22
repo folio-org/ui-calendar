@@ -1,5 +1,9 @@
+import { FieldRenderProps } from 'react-final-form';
 import { ServicePoint } from '../../types/types';
-import { ExceptionRowState } from '../../components/fields/ExceptionFieldTypes';
+import {
+  ExceptionFieldErrors,
+  ExceptionRowState
+} from '../../components/fields/ExceptionFieldTypes';
 import { HoursOfOperationRowState } from '../../components/fields/HoursOfOperationFieldTypes';
 
 export interface FormValues {
@@ -22,6 +26,16 @@ export interface InnerFieldRefs {
     endDate: Record<number, Record<number, HTMLInputElement>>;
     endTime: Record<number, Record<number, HTMLInputElement>>;
   };
+}
+
+export interface ExceptionFieldProps
+  extends FieldRenderProps<ExceptionRowState[]> {
+  fieldRefs: InnerFieldRefs['exceptions'];
+  error?: ExceptionFieldErrors;
+  // used in getDateTimeFields
+  // eslint-disable-next-line react/no-unused-prop-types
+  localeTimeFormat: string;
+  submitAttempted: boolean;
 }
 
 export type SimpleErrorFormValues = Omit<

@@ -1,35 +1,34 @@
 import {
   Button,
-  Headline,
-  Icon,
   IconButton,
   Layout,
   MultiColumnList,
-  MultiColumnListProps,
+  MultiColumnListProps
 } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import { FieldRenderProps } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { InnerFieldRefs } from '../../forms/CalendarForm/types';
-import { CalendarOpening, Weekday } from '../../types/types';
-import {
-  getWeekdaySpan,
-  LocaleWeekdayInfo,
-  useLocaleWeekdays,
-  WEEKDAYS,
-} from '../../utils/WeekdayUtils';
+import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 import css from './HoursAndExceptionFields.css';
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
-  MCLContentsType,
+  MCLContentsType
 } from './HoursOfOperationFieldTypes';
+import {
+  calculateInitialRows,
+  getConflictError,
+  getTimeError,
+  getWeekdayError,
+  isRowConflicted
+} from './HoursOfOperationFieldUtils';
 import MCLRowFormatter from './MCLRowFormatter';
 import OpenClosedSelect from './OpenClosedSelect';
 import RowType from './RowType';
@@ -45,43 +44,6 @@ function updateRowState(
   const newRowState = [...rowStates];
   newRowState[rowIndex] = { ...newRowState[rowIndex], ...newState };
   setRowStates(newRowState);
-}
-
-function rowsToOpenings(
-  providedRows: HoursOfOperationRowState[],
-  localeWeekdays: LocaleWeekdayInfo[]
-): CalendarOpening[] {
-  const providedOpenings = providedRows
-    .filter((row): row is Required<HoursOfOperationRowState> => {
-      return (
-        row.startDay !== undefined &&
-        row.startTime !== undefined &&
-        row.endDay !== undefined &&
-        row.endTime !== undefined
-      );
-    })
-    .map(
-      (row): CalendarOpening => ({
-        startDay: row.startDay as Weekday,
-        startTime: row.startTime as string,
-        endDay: row.endDay as Weekday,
-        endTime: row.endTime as string,
-      })
-    );
-
-  const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
-
-  providedOpenings.sort((a, b) => {
-    if (a.startDay !== b.startDay) {
-      return (
-        ((WEEKDAYS[a.startDay] - firstWeekday + 7) % 7) -
-        ((WEEKDAYS[b.startDay] - firstWeekday + 7) % 7)
-      );
-    }
-    return a.startTime.localeCompare(b.endTime);
-  });
-
-  return providedOpenings;
 }
 
 export interface HoursOfOperationFieldProps
@@ -107,8 +69,8 @@ export const HoursOfOperationField: FunctionComponent<
       startDay: undefined,
       startTime: undefined,
       endDay: undefined,
-      endTime: undefined,
-    },
+      endTime: undefined
+    }
   ]);
 
   const setRowStates = (newRowStates: HoursOfOperationRowState[]) => {
@@ -116,83 +78,23 @@ export const HoursOfOperationField: FunctionComponent<
     props.input.onChange(newRowStates);
   };
 
-  const timeFieldRefs = props.timeFieldRefs;
-
-  const _currentCountState = useState(0);
-  let currentCount = _currentCountState[0];
-  const setCurrentCount = _currentCountState[1];
+  // destructured separately as one is re-assignable
+  const [currentCount, setCurrentCount] = useState<number>(0);
 
   // Initially sort and use values as source of rows
   useEffect(() => {
-    const providedRows = [...props.input.value];
-
     // do nothing if there are no openings to render/parse
     if (props.isNewCalendar) {
       return;
     }
 
-    const providedOpenings = rowsToOpenings(providedRows, localeWeekdays);
-
-    // Find all weekdays
-    const weekdaysTouched: Record<Weekday, boolean> = {
-      SUNDAY: false,
-      MONDAY: false,
-      TUESDAY: false,
-      WEDNESDAY: false,
-      THURSDAY: false,
-      FRIDAY: false,
-      SATURDAY: false,
-    };
-
-    providedOpenings.flatMap(getWeekdaySpan).forEach((weekday) => {
-      weekdaysTouched[weekday] = true;
-    });
-
-    const rows: HoursOfOperationRowState[] = [];
-
-    const weekdays = localeWeekdays.map((weekday) => weekday.weekday);
-    let openingIndex = 0;
-    for (let weekdayIndex = 0; weekdayIndex < weekdays.length; weekdayIndex++) {
-      if (weekdaysTouched[weekdays[weekdayIndex]]) {
-        while (
-          openingIndex < providedOpenings.length &&
-          providedOpenings[openingIndex].startDay === weekdays[weekdayIndex]
-        ) {
-          rows.push({
-            i: currentCount,
-            type: RowType.Open,
-            ...providedOpenings[openingIndex],
-          });
-          openingIndex++;
-          currentCount++;
-          setCurrentCount(currentCount);
-        }
-      } else {
-        let endingWeekdayIndex = weekdayIndex;
-        // while the days after this one have not been touched
-        while (
-          endingWeekdayIndex + 1 < weekdays.length &&
-          !weekdaysTouched[weekdays[endingWeekdayIndex + 1]]
-        ) {
-          endingWeekdayIndex++;
-          // touch them to prevent double loops in future
-          weekdaysTouched[weekdays[endingWeekdayIndex]] = true;
-        }
-        rows.push({
-          type: RowType.Closed,
-          i: currentCount,
-          startDay: weekdays[weekdayIndex],
-          startTime: undefined,
-          endDay: weekdays[endingWeekdayIndex],
-          endTime: undefined,
-        });
-
-        currentCount++;
-        setCurrentCount(currentCount);
-      }
-    }
+    const { rows, count } = calculateInitialRows(
+      props.input.value,
+      localeWeekdays
+    );
 
     setRowStates(rows);
+    setCurrentCount(count);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localeWeekdays]);
 
@@ -218,14 +120,17 @@ export const HoursOfOperationField: FunctionComponent<
             value={row.startDay}
             onChange={(newWeekday) => {
               updateRowState(rowStates, setRowStates, realIndex, {
-                startDay: newWeekday,
+                startDay: newWeekday
               });
               props.input.onBlur();
             }}
-            error={
-              (props.submitAttempted || props.meta.touched) &&
-              props.error?.empty?.startDay?.[row.i]
-            }
+            error={getWeekdayError(
+              'startDay',
+              props.error,
+              row.i,
+              props.submitAttempted,
+              props.meta.touched
+            )}
           />
         ),
         startTime: (
@@ -234,19 +139,20 @@ export const HoursOfOperationField: FunctionComponent<
             value={row.startTime}
             localeTimeFormat={props.localeTimeFormat}
             inputRef={(el) => {
-              timeFieldRefs.startTime[row.i] = el;
+              props.timeFieldRefs.startTime[row.i] = el;
             }}
-            error={
-              (props.submitAttempted || props.meta.touched) &&
-              (props.error?.empty?.startTime?.[row.i] ||
-                props.error?.invalidTimes?.startTime?.[row.i])
-            }
+            error={getTimeError(
+              'startTime',
+              props.error,
+              row.i,
+              props.submitAttempted,
+              props.meta.touched
+            )}
             onBlur={props.input.onBlur}
-            onChange={(newValue) => {
-              return updateRowState(rowStates, setRowStates, realIndex, {
-                startTime: newValue,
-              });
-            }}
+            onChange={(newValue) => updateRowState(rowStates, setRowStates, realIndex, {
+              startTime: newValue
+            })
+            }
           />
         ),
         endDay: (
@@ -254,14 +160,17 @@ export const HoursOfOperationField: FunctionComponent<
             value={row.endDay}
             onChange={(newWeekday) => {
               updateRowState(rowStates, setRowStates, realIndex, {
-                endDay: newWeekday,
+                endDay: newWeekday
               });
               props.input.onBlur();
             }}
-            error={
-              (props.submitAttempted || props.meta.touched) &&
-              props.error?.empty?.endDay?.[row.i]
-            }
+            error={getWeekdayError(
+              'endDay',
+              props.error,
+              row.i,
+              props.submitAttempted,
+              props.meta.touched
+            )}
           />
         ),
         endTime: (
@@ -270,17 +179,19 @@ export const HoursOfOperationField: FunctionComponent<
             value={row.endTime}
             localeTimeFormat={props.localeTimeFormat}
             inputRef={(el) => {
-              timeFieldRefs.endTime[row.i] = el;
+              props.timeFieldRefs.endTime[row.i] = el;
             }}
-            error={
-              (props.submitAttempted || props.meta.touched) &&
-              (props.error?.empty?.endTime?.[row.i] ||
-                props.error?.invalidTimes?.endTime?.[row.i])
-            }
+            error={getTimeError(
+              'endTime',
+              props.error,
+              row.i,
+              props.submitAttempted,
+              props.meta.touched
+            )}
             onBlur={props.input.onBlur}
             onChange={(newValue) => {
               return updateRowState(rowStates, setRowStates, realIndex, {
-                endTime: newValue,
+                endTime: newValue
               });
             }}
           />
@@ -292,15 +203,15 @@ export const HoursOfOperationField: FunctionComponent<
               onClick={() => {
                 const newRowStates = [...rowStates];
                 newRowStates.splice(realIndex, 1);
-                delete timeFieldRefs.startTime[row.i];
-                delete timeFieldRefs.endTime[row.i];
+                delete props.timeFieldRefs.startTime[row.i];
+                delete props.timeFieldRefs.endTime[row.i];
                 setRowStates(newRowStates);
                 props.input.onBlur();
               }}
             />
           </Layout>
         ),
-        isConflicted: !!props.error?.conflicts?.has(row.i),
+        isConflicted: isRowConflicted(props.error, row.i)
       };
     });
 
@@ -311,7 +222,7 @@ export const HoursOfOperationField: FunctionComponent<
       startDay: undefined,
       startTime: undefined,
       endDay: undefined,
-      endTime: undefined,
+      endTime: undefined
     },
     status: (
       <Button
@@ -324,10 +235,9 @@ export const HoursOfOperationField: FunctionComponent<
             startDay: undefined,
             startTime: undefined,
             endDay: undefined,
-            endTime: undefined,
+            endTime: undefined
           });
-          currentCount++;
-          setCurrentCount(currentCount);
+          setCurrentCount(currentCount + 1);
           setRowStates(newRowStates);
         }}
       >
@@ -339,26 +249,10 @@ export const HoursOfOperationField: FunctionComponent<
     endDay: undefined,
     endTime: undefined,
     actions: undefined,
-    isConflicted: false,
+    isConflicted: false
   });
 
-  let conflictError: ReactNode = null;
-  if (
-    props.error?.conflicts?.size !== undefined &&
-    props.error.conflicts.size > 0
-  ) {
-    conflictError = (
-      <Headline
-        margin="none"
-        className={css.conflictMessage}
-        weight="medium"
-        size="medium"
-      >
-        <Icon icon="exclamation-circle" status="error" />
-        <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
-      </Headline>
-    );
-  }
+  const conflictError: ReactNode = getConflictError(props.error);
 
   return (
     <>
@@ -383,7 +277,7 @@ export const HoursOfOperationField: FunctionComponent<
           ),
           actions: (
             <FormattedMessage id="ui-calendar.calendarForm.openings.column.actions" />
-          ),
+          )
         }}
         columnWidths={{
           status: '14%',
@@ -391,12 +285,12 @@ export const HoursOfOperationField: FunctionComponent<
           startTime: '20%',
           endDay: '20%',
           endTime: '20%',
-          actions: '6%',
+          actions: '6%'
         }}
         contentData={contents}
         getCellClass={(defaultClasses, rowData) => {
           return classNames(defaultClasses, css.cellWrapper, {
-            [css.conflictCell]: rowData.isConflicted,
+            [css.conflictCell]: rowData.isConflicted
           });
         }}
         rowFormatter={MCLRowFormatter<MCLContentsType>}
