@@ -10,6 +10,16 @@ export const PETRO_PROKOPOVYCH: User = {
   }
 };
 
+export const MYSTERY_MAN: User = {
+  id: 'c7913bd5-f73d-50c9-ae52-63479e632615',
+  username: 'petro_prokopovych',
+  personal: {
+    lastName: 'Doe',
+    firstName: undefined,
+    middleName: undefined
+  }
+};
+
 // https://en.wikipedia.org/wiki/Johann_Dzierzon
 export const JOHANN_DZIERZON: User = {
   id: 'c951334c-03da-5778-ba45-7eae5b3afbe8',
