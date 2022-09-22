@@ -52,6 +52,9 @@ test('getServicePointFromID works with service point that does not exist, isLoad
   expect(
     repository.getServicePointFromId('a3f3354c-2986-5d33-a84c-1eflfd613ac6')
   ).toStrictEqual(undefined);
+  expect(
+    repository.getServicePointFromId(undefined)
+  ).toStrictEqual(undefined);
 });
 
 test('Getters work as expected with empty objects', () => {
