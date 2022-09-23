@@ -3,19 +3,14 @@ import {
   Icon,
   LoadingPane,
   MenuSection,
-  Pane,
+  Pane
 } from '@folio/stripes/components';
 import { IfPermission, useStripes } from '@folio/stripes/core';
 import type { FunctionComponent, ReactNode } from 'react';
 import React, { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { RouteComponentProps } from 'react-router-dom';
-import {
-  Route,
-  Switch,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import PurgeModal from '../forms/PurgeModal';
@@ -58,7 +53,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
           <FormattedMessage id="ui-calendar.allCalendarView.noAssignments" />
         </div>
       ),
-      calendar,
+      calendar
     };
   });
 
@@ -130,7 +125,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
             ),
             assignments: (
               <FormattedMessage id="ui-calendar.allCalendarView.column.assignments" />
-            ),
+            )
           }}
           contentData={rows}
           rowMetadata={['calendar']}
