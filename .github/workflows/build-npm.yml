@@ -65,7 +65,7 @@ jobs:
         continue-on-error: true
 
       - name: Run yarn test
-        run: yarn test $YARN_TEST_OPTIONS
+        run: yarn node --expose-gc $(yarn bin jest) --runInBand --logHeapUsage $YARN_TEST_OPTIONS
 
       - name: Run yarn formatjs-compile
         if: ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
