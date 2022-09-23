@@ -1,7 +1,7 @@
 import {
   MultiSelection,
   MultiSelectionFieldRenderProps,
-  OptionSegment,
+  OptionSegment
 } from '@folio/stripes/components';
 import fuzzysort from 'fuzzysort';
 import type { FunctionComponent, ReactNode } from 'react';
@@ -20,7 +20,7 @@ const ServicePointAssignmentField: FunctionComponent<
 > = (props: ServicePointAssignmentFieldProps) => {
   const formatter = ({
     option,
-    searchTerm,
+    searchTerm
   }: {
     option: ServicePoint;
     searchTerm: string | undefined;
@@ -63,7 +63,7 @@ const ServicePointAssignmentField: FunctionComponent<
 
         // must spread and re-collect into a new array, as the returned array is immutable
         const results = [
-          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' }),
+          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' })
         ];
 
         // score descending, then name ascending
@@ -78,7 +78,7 @@ const ServicePointAssignmentField: FunctionComponent<
         return {
           // retrieve the original service point
           renderedItems: results.map((result) => result.obj),
-          exactMatch: !!list.filter((sp) => sp.name === filterText).length,
+          exactMatch: !!list.filter((sp) => sp.name === filterText).length
         };
       }}
       itemToString={(servicePoint: ServicePoint | undefined) => {
