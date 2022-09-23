@@ -1,15 +1,14 @@
 import type { MultiColumnListProps } from '@folio/stripes/components';
 import {
-  MultiColumnList
+  MultiColumnList,
+  MultiColumnListProps
 } from '@folio/stripes/components';
-import type { ReactElement, ReactNode } from 'react';
-import React, { useMemo, useState } from 'react';
-import { dayjsCompare } from '../utils/DateUtils';
-import dayjs from '../utils/dayjs';
+import React, { ReactElement, ReactNode, useMemo, useState } from 'react';
+import { dateCompare } from '../utils/DateUtils';
 
 export enum SortDirection {
   ASCENDING = 'ascending',
-  DESCENDING = 'descending',
+  DESCENDING = 'descending'
 }
 
 function flipSortDirection(direction: SortDirection): SortDirection {
@@ -34,13 +33,13 @@ function getInitialSort<SortableDataShape>(
       direction:
         sortDirection === 'descending'
           ? SortDirection.DESCENDING
-          : SortDirection.ASCENDING,
-    },
+          : SortDirection.ASCENDING
+    }
   ];
 }
 
 export interface SortableMultiColumnListProps<
-  DataShape,
+  DataShape extends Record<string, unknown>,
   OmittedColumns extends string = ''
 > extends Omit<
     MultiColumnListProps<DataShape, OmittedColumns>,
@@ -52,7 +51,13 @@ export interface SortableMultiColumnListProps<
 function sortBy<
   T extends { [k in K]: object | string | ReactNode },
   K extends string
->(data: T[], key: K, direction: SortDirection, dateColumns: K[] = []): void {
+>(
+  data: T[],
+  key: K,
+  direction: SortDirection,
+  dateColumns: K[] = [],
+  dateColumnMap: Record<string, K> = {}
+): void {
   data.sort((a, b) => {
     if (a?.[key] === undefined || a[key] === null) {
       return direction === SortDirection.ASCENDING ? -1 : 1;
@@ -63,7 +68,10 @@ function sortBy<
     if (dateColumns?.includes(key)) {
       return (
         (direction === SortDirection.ASCENDING ? 1 : -1) *
-        dayjsCompare(dayjs(a[key] as string), dayjs(b[key] as string))
+        dateCompare(
+          a[dateColumnMap[key]] as Date,
+          b[dateColumnMap[key]] as Date
+        )
       );
     }
     return (
@@ -121,7 +129,7 @@ export default function SortableMultiColumnList<
     if (sort.length === 0) return {};
     return {
       sortedColumn: sort[0].key,
-      sortDirection: sort[0].direction,
+      sortDirection: sort[0].direction
     };
   }, [sort]);
 

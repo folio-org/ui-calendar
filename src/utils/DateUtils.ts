@@ -2,14 +2,10 @@ import type { Dayjs } from 'dayjs';
 import type { IntlShape } from 'react-intl';
 import dayjs from './dayjs';
 
-/** Compare two dayjs objects */
-export function dayjsCompare(a: Dayjs, b: Dayjs): number {
-  if (a.isBefore(b)) return -1;
-  if (a.isAfter(b)) return 1;
-  return 0;
+export function dateCompare(a: Date, b: Date): number {
+  return Math.sign(a.getTime() - b.getTime());
 }
 
-/** Compare two dayjs objects */
 export function getDateRange(start: Date, end: Date): Date[] {
   const current = new Date(
     start.getFullYear(),

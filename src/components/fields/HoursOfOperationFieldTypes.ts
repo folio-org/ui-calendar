@@ -3,7 +3,7 @@ import type { Weekday } from '../../types/types';
 import type { RequireExactlyOne } from '../../types/utils';
 import type RowType from './RowType';
 
-export interface MCLContentsType {
+export interface MCLContentsType extends Record<string, unknown> {
   rowState: HoursOfOperationRowState;
   status: ReactNode;
   startDay: ReactNode;
