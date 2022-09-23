@@ -4,7 +4,8 @@ import {
   OptionSegment,
 } from '@folio/stripes/components';
 import fuzzysort from 'fuzzysort';
-import React, { FunctionComponent, ReactNode } from 'react';
+import type { FunctionComponent, ReactNode } from 'react';
+import React from 'react';
 import { Field } from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
 import { ServicePoint } from '../../types/types';

@@ -1,16 +1,16 @@
 import type { Dayjs } from 'dayjs';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import {
+import type {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
 } from '../../../components/fields/HoursOfOperationFieldTypes';
 import RowType from '../../../components/fields/RowType';
-import { CalendarOpening, Weekday } from '../../../types/types';
+import type { CalendarOpening, Weekday } from '../../../types/types';
 import { overlaps } from '../../../utils/DateUtils';
 import dayjs from '../../../utils/dayjs';
 import { getWeekdaySpan } from '../../../utils/WeekdayUtils';
-import { InnerFieldRefs } from '../types';
+import type { InnerFieldRefs } from '../types';
 import { isTimeProper } from './validateDateTime';
 
 /** Ensure normal openings have filled in times/days */

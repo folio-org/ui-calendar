@@ -1,6 +1,8 @@
-import React, { ReactNode } from 'react';
-import { FormattedMessage, IntlShape } from 'react-intl';
-import {
+import type { ReactNode } from 'react';
+import React from 'react';
+import type { IntlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import type {
   Calendar,
   CalendarException,
   CalendarOpening,
@@ -21,10 +23,10 @@ import {
   getLocalizedTime,
   getRelativeDateProximity
 } from './DateUtils';
+import type { LocaleWeekdayInfo,
+  RelativeWeekdayStatus } from './WeekdayUtils';
 import {
   getRelativeWeekdayStatus,
-  LocaleWeekdayInfo,
-  RelativeWeekdayStatus,
   WEEKDAY_INDEX
 } from './WeekdayUtils';
 

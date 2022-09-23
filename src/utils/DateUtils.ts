@@ -1,5 +1,5 @@
 import type { Dayjs } from 'dayjs';
-import { IntlShape } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import dayjs from './dayjs';
 
 /** Compare two dayjs objects */

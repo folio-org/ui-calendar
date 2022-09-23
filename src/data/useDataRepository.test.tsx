@@ -1,15 +1,17 @@
 import { useOkapiKy } from '@folio/stripes/core';
 import { render, waitFor } from '@testing-library/react';
-import ky, { ResponsePromise } from 'ky';
-import { KyInstance } from 'ky/distribution/types/ky';
-import React, { createRef, MutableRefObject } from 'react';
+import type { ResponsePromise } from 'ky';
+import type ky from 'ky';
+import type { KyInstance } from 'ky/distribution/types/ky';
+import type { MutableRefObject } from 'react';
+import React, { createRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import * as Calendars from '../test/data/Calendars';
 import * as Dates from '../test/data/Dates';
 import * as ServicePoints from '../test/data/ServicePoints';
 import * as Users from '../test/data/Users';
 import { dateToYYYYMMDD } from '../utils/DateUtils';
-import DataRepository from './DataRepository';
+import type DataRepository from './DataRepository';
 import useDataRepository from './useDataRepository';
 
 jest.mock('@folio/stripes/core');

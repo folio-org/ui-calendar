@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { RequireExactlyOne } from '../../types/utils';
-import RowType from './RowType';
+import type RowType from './RowType';
 
 export interface MCLContentsType {
   rowState: ExceptionRowState;

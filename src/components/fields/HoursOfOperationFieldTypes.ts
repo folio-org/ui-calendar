@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { Weekday } from '../../types/types';
+import type { ReactNode } from 'react';
+import type { Weekday } from '../../types/types';
 import type { RequireExactlyOne } from '../../types/utils';
-import RowType from './RowType';
+import type RowType from './RowType';
 
 export interface MCLContentsType {
   rowState: HoursOfOperationRowState;

@@ -1,14 +1,14 @@
 import type { Dayjs } from 'dayjs';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import {
+import type {
   ExceptionFieldErrors,
   ExceptionRowState,
 } from '../../../components/fields/ExceptionFieldTypes';
 import RowType from '../../../components/fields/RowType';
 import { overlaps } from '../../../utils/DateUtils';
 import dayjs from '../../../utils/dayjs';
-import { InnerFieldRefs } from '../types';
+import type { InnerFieldRefs } from '../types';
 import { isTimeProper } from './validateDateTime';
 
 /** Validate that inner exception rows are not empty */

@@ -1,8 +1,8 @@
 import { useOkapiKy } from '@folio/stripes/core';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Calendar, CalendarDTO, User } from '../types/types';
+import type { Calendar, CalendarDTO, User } from '../types/types';
 import DataRepository from './DataRepository';
-import {
+import type {
   CalendarResponseDTO,
   DateResponseDTO,
   ServicePointDTO,

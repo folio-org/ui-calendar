@@ -1,8 +1,8 @@
 import { staticFirstWeekDay } from '@folio/stripes/components';
 import memoizee from 'memoizee';
 import { useMemo } from 'react';
-import { IntlShape } from 'react-intl';
-import { CalendarOpening, Weekday } from '../types/types';
+import type { IntlShape } from 'react-intl';
+import type { CalendarOpening, Weekday } from '../types/types';
 import { getLocalizedTime } from './DateUtils';
 
 export type RelativeWeekdayStatus =

@@ -4,14 +4,15 @@ import {
   Icon
 } from '@folio/stripes/components';
 import classNames from 'classnames';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import {
+import type {
   ExceptionFieldProps,
   InnerFieldRefs
 } from '../../forms/CalendarForm/types';
 import dayjs from '../../utils/dayjs';
-import { ExceptionFieldErrors, ExceptionRowState } from './ExceptionFieldTypes';
+import type { ExceptionFieldErrors, ExceptionRowState } from './ExceptionFieldTypes';
 import cssHiddenErrorField from './hiddenErrorField.css';
 import css from './HoursAndExceptionFields.css';
 import RowType from './RowType';

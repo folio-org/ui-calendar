@@ -1,10 +1,10 @@
 import memoizee from 'memoizee';
-import { ExceptionRowState } from '../components/fields/ExceptionFieldTypes';
-import { HoursOfOperationRowState } from '../components/fields/HoursOfOperationFieldTypes';
+import type { ExceptionRowState } from '../components/fields/ExceptionFieldTypes';
+import type { HoursOfOperationRowState } from '../components/fields/HoursOfOperationFieldTypes';
 import RowType from '../components/fields/RowType';
-import DataRepository from '../data/DataRepository';
-import { Calendar } from '../types/types';
-import { FormValues } from './CalendarForm/types';
+import type DataRepository from '../data/DataRepository';
+import type { Calendar } from '../types/types';
+import type { FormValues } from './CalendarForm/types';
 
 /** Convert a given calendar to a set of form values, to initialize edit/duplicate forms */
 export const calendarToInitialValues = memoizee(

@@ -1,5 +1,6 @@
-import { SettingsProps } from '@folio/stripes/smart-components';
-import React, { FunctionComponent } from 'react';
+import type { SettingsProps } from '@folio/stripes/smart-components';
+import type { FunctionComponent } from 'react';
+import React from 'react';
 import { hot } from 'react-hot-loader';
 import Settings from './views';
 

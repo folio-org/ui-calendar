@@ -1,22 +1,22 @@
+import type { MultiColumnListProps } from '@folio/stripes/components';
 import {
   Button,
   IconButton,
   Layout,
   MultiColumnList,
-  MultiColumnListProps,
   TextField
 } from '@folio/stripes/components';
 import classNames from 'classnames';
+import type { FunctionComponent,
+  ReactNode } from 'react';
 import React, {
-  FunctionComponent,
-  ReactNode,
   useEffect,
   useState
 } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ExceptionFieldProps } from '../../forms/CalendarForm/types';
+import type { ExceptionFieldProps } from '../../forms/CalendarForm/types';
 import dayjs from '../../utils/dayjs';
-import { ExceptionRowState, MCLContentsType } from './ExceptionFieldTypes';
+import type { ExceptionRowState, MCLContentsType } from './ExceptionFieldTypes';
 import {
   getDateTimeFields,
   getMainConflictError,

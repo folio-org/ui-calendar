@@ -1,5 +1,5 @@
-import { ServicePointDTO } from '../../data/types';
-import { ServicePoint } from '../../types/types';
+import type { ServicePointDTO } from '../../data/types';
+import type { ServicePoint } from '../../types/types';
 
 const ADDITIONAL_DTO_PROPERTIES: Pick<
   ServicePointDTO,

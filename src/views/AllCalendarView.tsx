@@ -6,11 +6,12 @@ import {
   Pane,
 } from '@folio/stripes/components';
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import React, { FunctionComponent, ReactNode, useRef, useState } from 'react';
+import type { FunctionComponent, ReactNode } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import type { RouteComponentProps } from 'react-router-dom';
 import {
   Route,
-  RouteComponentProps,
   Switch,
   useHistory,
   useRouteMatch,
@@ -19,7 +20,7 @@ import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import PurgeModal from '../forms/PurgeModal';
 import permissions from '../types/permissions';
-import { Calendar } from '../types/types';
+import type { Calendar } from '../types/types';
 import { getLocalizedDate } from '../utils/DateUtils';
 import { formatList } from '../utils/I18nUtils';
 import ifPermissionOr from '../utils/ifPermissionOr';

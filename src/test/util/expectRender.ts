@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import withIntlConfiguration from './withIntlConfiguration';
 
 export default function expectRender(
