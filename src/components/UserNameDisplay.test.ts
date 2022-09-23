@@ -25,4 +25,10 @@ test('User Interface works as expected', () => {
 
   const mid = { user: Users.MID };
   expectRender(UserNameDisplay(mid)).toBe('Middle');
+
+  const midLast = { user: Users.MID_LAST };
+  expectRender(UserNameDisplay(midLast)).toBe('Last, Middle');
+
+  const unnamed2 = { user: Users.EMPTY_2 };
+  expectRender(UserNameDisplay(unnamed2)).toBe('');
 });

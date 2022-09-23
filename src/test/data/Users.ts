@@ -53,8 +53,8 @@ export const L_L_LANGSTROTH: User = {
 };
 
 export const JOE: User = {
-  id: '9440d11b-f0fa-5f53-aceb-6b1101a54abc',
-  username: 'lllangstroth',
+  id: '9440d1ab-f0fa-5f53-aceb-6b1101a54abc',
+  username: 'joejoejoe',
   personal: {
     lastName: '',
     preferredFirstName: 'joe'
@@ -62,8 +62,8 @@ export const JOE: User = {
 };
 
 export const JOE2: User = {
-  id: '9440d11b-f0fa-5f53-aceb-6b1101a54abc',
-  username: 'lllangstroth',
+  id: '9440d11b-f0fa-5fd3-aceb-6b1101a54abc',
+  username: 'Joey12345678',
   personal: {
     lastName: '',
     preferredFirstName: undefined,
@@ -72,10 +72,29 @@ export const JOE2: User = {
 };
 
 export const MID: User = {
-  id: '9440d11b-f0fa-5f53-aceb-6b1101a54abc',
-  username: 'lllangstroth',
+  id: '9440d11b-f0fa-5f5v-aceb-6b1101a54abc',
+  username: 'beans',
   personal: {
     lastName: '',
     middleName: 'Middle'
+  }
+};
+
+export const MID_LAST: User = {
+  id: '9440d11b-f0fa-5fr3-aceb-6b1101a54abc',
+  username: 'creativeusername',
+  personal: {
+    lastName: 'Last',
+    middleName: 'Middle'
+  }
+};
+
+export const EMPTY_2: User = {
+  id: '1440d11b-f0ba-5f53-aceb-6b1101a54cbc',
+  username: 'soup1',
+  personal: {
+    lastName: '',
+    middleName: undefined,
+    firstName: undefined
   }
 };

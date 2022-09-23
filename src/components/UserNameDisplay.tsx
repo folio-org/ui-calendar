@@ -7,11 +7,11 @@ export interface UserNameDisplayProps {
 
 // from ui-users components/util/util.js
 export default function UserNameDisplay({ user }: UserNameDisplayProps) {
-  let fullName = user?.personal?.lastName || '';
+  let fullName = user.personal.lastName || '';
   let givenName =
-    user?.personal?.preferredFirstName || user?.personal?.firstName || '';
+    user.personal.preferredFirstName || user.personal.firstName || '';
 
-  const middleName = user?.personal?.middleName || '';
+  const middleName = user.personal.middleName || '';
 
   if (middleName) {
     givenName += `${givenName ? ' ' : ''}${middleName}`;
