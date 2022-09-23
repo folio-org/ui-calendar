@@ -1,4 +1,4 @@
-import { IntlShape } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import getIntl from '../test/util/getIntl';
 import { formatList } from './I18nUtils';
 

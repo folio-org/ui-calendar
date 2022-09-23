@@ -1,4 +1,4 @@
-import { IntlShape } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import * as Dates from '../test/data/Dates';
 import getIntl from '../test/util/getIntl';
 import { dateToYYYYMMDD, getLocalizedDate, getLocalizedTime } from './DateUtils';

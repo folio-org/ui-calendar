@@ -1,4 +1,4 @@
-import { User } from '../../types/types';
+import type { User } from '../../types/types';
 
 // https://en.wikipedia.org/wiki/Petro_Prokopovych
 export const PETRO_PROKOPOVYCH: User = {

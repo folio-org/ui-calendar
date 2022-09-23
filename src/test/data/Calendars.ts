@@ -1,4 +1,4 @@
-import { CalendarDTO } from '../../types/types';
+import type { CalendarDTO } from '../../types/types';
 import {
   ONLINE,
   SERVICE_POINT_1,

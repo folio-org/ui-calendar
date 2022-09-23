@@ -1,6 +1,7 @@
 import stripesComponentsTranslations from '@folio/stripes-components/translations/stripes-components/en';
 import stripesCoreTranslations from '@folio/stripes-core/translations/stripes-core/en';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import { IntlProvider } from 'react-intl';
 // cannot make TS happy without the .json
 // eslint-disable-next-line import/extensions

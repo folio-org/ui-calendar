@@ -1,10 +1,13 @@
-import React, { ReactNode } from 'react';
-import { FormattedMessage, IntlShape } from 'react-intl';
-import { CalendarException, CalendarOpening, Weekday } from '../types/types';
+import type { ReactNode } from 'react';
+import React from 'react';
+import type { IntlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import type { CalendarException, CalendarOpening, Weekday } from '../types/types';
 import css from '../views/panes/InfoPane.css';
 import { getLocalizedDate, getLocalizedTime } from './DateUtils';
 import dayjs from './dayjs';
-import { getWeekdaySpan, LocaleWeekdayInfo } from './WeekdayUtils';
+import type { LocaleWeekdayInfo } from './WeekdayUtils';
+import { getWeekdaySpan } from './WeekdayUtils';
 
 /**
  * Used for comparison to ensure hours are properly sorted.

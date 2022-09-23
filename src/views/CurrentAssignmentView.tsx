@@ -1,10 +1,11 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
-import React, { FunctionComponent, useRef } from 'react';
+import type { FunctionComponent } from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import type { RouteComponentProps } from 'react-router-dom';
 import {
   Route,
-  RouteComponentProps,
   Switch,
   useHistory,
   useRouteMatch

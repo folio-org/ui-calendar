@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { cleanup, render } from '@testing-library/react';
-import { ReactNode } from 'react';
-import { IntlShape } from 'react-intl';
+import type { ReactNode } from 'react';
+import type { IntlShape } from 'react-intl';
 import * as Calendars from '../test/data/Calendars';
 import getIntl from '../test/util/getIntl';
 import withIntlConfiguration from '../test/util/withIntlConfiguration';

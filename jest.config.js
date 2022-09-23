@@ -13,7 +13,7 @@ module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
 
   testMatch: ['**/src/**/?(*.)test.{js,jsx,ts,tsx}'],
-  testPathIgnorePatterns: ['/node_modules/'],
+  testPathIgnorePatterns: ['/node_modules/', 'src/typings/'],
 
   reporters: ['default', 'jest-junit'],
 

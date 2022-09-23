@@ -1,4 +1,4 @@
-import { IntlShape } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import * as Dates from '../test/data/Dates';
 import * as Weekdays from '../test/data/Weekdays';
 import expectRender from '../test/util/expectRender';
@@ -7,7 +7,7 @@ import dayjs from './dayjs';
 import getCurrentStatus, {
   getCurrentStatusNonFormatted
 } from './getCurrentStatus';
-import { LocaleWeekdayInfo } from './WeekdayUtils';
+import type { LocaleWeekdayInfo } from './WeekdayUtils';
 
 const intl = {
   formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format('HH:mm')}||`),

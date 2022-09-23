@@ -1,5 +1,5 @@
 import React from 'react';
-import { User } from '../types/types';
+import type { User } from '../types/types';
 
 export interface UserNameDisplayProps {
   user: User;

@@ -1,9 +1,9 @@
-import { IntlShape } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import dayjs from './dayjs';
 import getCurrentStatus, {
   getCurrentStatusNonFormatted
 } from './getCurrentStatus';
-import { LocaleWeekdayInfo } from './WeekdayUtils';
+import type { LocaleWeekdayInfo } from './WeekdayUtils';
 import * as Calendars from '../test/data/Calendars';
 import * as Dates from '../test/data/Dates';
 import * as Weekdays from '../test/data/Weekdays';

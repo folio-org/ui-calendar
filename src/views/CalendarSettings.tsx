@@ -1,6 +1,8 @@
 import { ErrorBoundary } from '@folio/stripes/components';
-import { Settings, SettingsProps } from '@folio/stripes/smart-components';
-import React, { FunctionComponent } from 'react';
+import type { SettingsProps } from '@folio/stripes/smart-components';
+import { Settings } from '@folio/stripes/smart-components';
+import type { FunctionComponent } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import AllCalendarView from './AllCalendarView';
 import CurrentAssignmentView from './CurrentAssignmentView';

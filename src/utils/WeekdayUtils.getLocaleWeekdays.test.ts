@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { IntlShape } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import * as Weekdays from '../test/data/Weekdays';
 import getIntl from '../test/util/getIntl';
 import { getLocaleWeekdays, useLocaleWeekdays } from './WeekdayUtils';

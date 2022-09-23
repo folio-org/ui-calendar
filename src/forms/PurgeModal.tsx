@@ -10,13 +10,14 @@ import {
   Select,
   SelectFieldRenderProps
 } from '@folio/stripes/components';
-import { HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 import memoizee from 'memoizee';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import type { FunctionComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import DataRepository from '../data/DataRepository';
-import { Calendar } from '../types/types';
+import type DataRepository from '../data/DataRepository';
+import type { Calendar } from '../types/types';
 import { dateFromYYYYMMDD } from '../utils/DateUtils';
 import css from './PurgeModal.css';
 
