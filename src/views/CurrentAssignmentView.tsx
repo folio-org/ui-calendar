@@ -118,7 +118,7 @@ export const CurrentAssignmentView: FunctionComponent<
             endDate: ReactNode;
             endDateObj?: Date;
             currentStatus: ReactNode;
-            calendar?: Calendar;
+            calendar: Calendar | null;
           },
           'servicePointId' | 'calendar' | 'startDateObj' | 'endDateObj'
         >
