@@ -4,6 +4,7 @@ import dayjs from './dayjs';
 
 export function dateCompare(a: Date | undefined, b: Date | undefined): number {
   // return undefined first, if applicable
+  if (a === undefined && b === undefined) return 0;
   if (a === undefined) return -1;
   if (b === undefined) return 1;
   return Math.sign(a.getTime() - b.getTime());
