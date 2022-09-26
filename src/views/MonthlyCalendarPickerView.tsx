@@ -83,10 +83,10 @@ function dailyOpeningToCalendarDisplay(
     }
   }
   return (
-    <>
+    <div key={openingInfo.date}>
       {status}
       {exception}
-    </>
+    </div>
   );
 }
 

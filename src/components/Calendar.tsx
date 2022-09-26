@@ -14,7 +14,9 @@ interface Props {
   events: Record<string, ReactNode>;
 }
 
-export function getWeekdayLabels(localeWeekdays: LocaleWeekdayInfo[]): ReactNode[] {
+export function getWeekdayLabels(
+  localeWeekdays: LocaleWeekdayInfo[]
+): ReactNode[] {
   return localeWeekdays.map((w, i) => (
     <div key={i} className={css.weekdayLabel}>
       <span>{w.short}</span>
@@ -41,8 +43,9 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
             isSameMonth(date, monthBasis) ? '' : css.adjacentMonth,
             css.calendarDay
           )}
+          key={dateToYYYYMMDD(date)}
         >
-          <span key={dateString} className={css.dayLabel}>
+          <span key="label" className={css.dayLabel}>
             <FormattedDate value={date} day="numeric" />
           </span>
           {contents}
