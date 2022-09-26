@@ -1,10 +1,10 @@
-import type { FieldRenderProps } from 'react-final-form';
-import type { ServicePoint } from '../../types/types';
-import type {
+import { FieldRenderProps } from 'react-final-form';
+import { ServicePoint } from '../../types/types';
+import {
   ExceptionFieldErrors,
   ExceptionRowState
 } from '../../components/fields/ExceptionFieldTypes';
-import type { HoursOfOperationRowState } from '../../components/fields/HoursOfOperationFieldTypes';
+import { HoursOfOperationRowState } from '../../components/fields/HoursOfOperationFieldTypes';
 
 export interface FormValues {
   name: string;

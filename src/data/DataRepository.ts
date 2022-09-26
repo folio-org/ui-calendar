@@ -1,5 +1,5 @@
 import memoizee from 'memoizee';
-import type {
+import {
   Calendar,
   CalendarDTO,
   DailyOpeningInfo,
@@ -7,7 +7,7 @@ import type {
   User
 } from '../types/types';
 import { dateToYYYYMMDD } from '../utils/DateUtils';
-import type { ServicePointDTO } from './types';
+import { ServicePointDTO } from './types';
 
 const getServicePointMap = memoizee(
   (servicePoints: ServicePoint[]): Record<string, ServicePoint> => {

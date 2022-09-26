@@ -1,8 +1,7 @@
-import type { PaneProps } from '@folio/stripes/components';
-import type { StripesType } from '@folio/stripes/core';
-import type { Location } from 'history';
-import type { ComponentType, ReactNode, RefObject } from 'react';
-import { Component } from 'react';
+import { PaneProps } from '@folio/stripes/components';
+import { StripesType } from '@folio/stripes/core';
+import { Location } from 'history';
+import { Component, ComponentType, ReactNode, RefObject } from 'react';
 
 export interface SettingsProps {
   additionalRoutes?: ReactNode[];

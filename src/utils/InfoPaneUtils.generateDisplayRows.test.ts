@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
-import type { ReactNode } from 'react';
-import type { IntlShape } from 'react-intl';
+import { ReactNode } from 'react';
+import { IntlShape } from 'react-intl';
 import * as Calendars from '../test/data/Calendars';
 import * as Weekdays from '../test/data/Weekdays';
 import getIntl from '../test/util/getIntl';
@@ -10,7 +10,7 @@ import {
   get247Rows,
   splitOpeningsIntoDays,
 } from './InfoPaneUtils';
-import type { LocaleWeekdayInfo } from './WeekdayUtils';
+import { LocaleWeekdayInfo } from './WeekdayUtils';
 
 const EN_DASH = '\u{2013}';
 const NBSP = '\u{00a0}';

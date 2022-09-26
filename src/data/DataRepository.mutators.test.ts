@@ -1,7 +1,7 @@
 import * as Calendars from '../test/data/Calendars';
 import * as Dates from '../test/data/Dates';
 import * as Users from '../test/data/Users';
-import type { Calendar, DailyOpeningInfo, User } from '../types/types';
+import { Calendar, DailyOpeningInfo, User } from '../types/types';
 import DataRepository from './DataRepository';
 
 test('Create calendar calls the appropriate mutator', async () => {

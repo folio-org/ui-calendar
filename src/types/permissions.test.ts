@@ -1,4 +1,4 @@
-import type { IntlShape } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import Permissions from './permissions';
 import getIntl from '../test/util/getIntl';
 

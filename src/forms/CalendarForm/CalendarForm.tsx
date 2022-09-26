@@ -14,10 +14,9 @@ import {
   TextFieldRenderProps,
 } from '@folio/stripes/components';
 import { CalloutContext } from '@folio/stripes/core';
-import type { FormApi } from 'final-form';
-import { FORM_ERROR } from 'final-form';
-import type { FunctionComponent } from 'react';
+import { FormApi, FORM_ERROR } from 'final-form';
 import React, {
+  FunctionComponent,
   useCallback,
   useContext,
   useMemo,
@@ -29,11 +28,11 @@ import ExceptionField from '../../components/fields/ExceptionField';
 import css from '../../components/fields/HoursAndExceptionFields.css';
 import HoursOfOperationField from '../../components/fields/HoursOfOperationField';
 import ServicePointAssignmentField from '../../components/fields/ServicePointAssignmentField';
-import type DataRepository from '../../data/DataRepository';
-import type { Calendar } from '../../types/types';
+import DataRepository from '../../data/DataRepository';
+import { Calendar } from '../../types/types';
 import calendarToInitialValues from '../calendarToInitialValues';
 import onSubmit from './onSubmit';
-import type { FormValues, InnerFieldRefs } from './types';
+import { FormValues, InnerFieldRefs } from './types';
 import validate from './validation/validate';
 
 const TextFieldComponent = TextField<string, TextFieldRenderProps<string>>;

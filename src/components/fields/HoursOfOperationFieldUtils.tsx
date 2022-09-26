@@ -1,15 +1,14 @@
 import { Headline, Icon } from '@folio/stripes/components';
-import type { ReactNode } from 'react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { CalendarOpening, Weekday } from '../../types/types';
-import type { LocaleWeekdayInfo } from '../../utils/WeekdayUtils';
+import { CalendarOpening, Weekday } from '../../types/types';
 import {
   getWeekdaySpan,
+  LocaleWeekdayInfo,
   WEEKDAYS
 } from '../../utils/WeekdayUtils';
 import css from './HoursAndExceptionFields.css';
-import type {
+import {
   HoursOfOperationErrors,
   HoursOfOperationRowState
 } from './HoursOfOperationFieldTypes';

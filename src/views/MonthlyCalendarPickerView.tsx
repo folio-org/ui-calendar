@@ -8,19 +8,18 @@ import {
   Pane
 } from '@folio/stripes/components';
 import classNames from 'classnames';
-import type { FunctionComponent,
-  ReactNode } from 'react';
 import React, {
+  FunctionComponent,
+  ReactNode,
   useCallback,
   useEffect,
   useState
 } from 'react';
-import type { IntlShape } from 'react-intl';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import css from '../components/Calendar.css';
 import useDataRepository from '../data/useDataRepository';
-import type { DailyOpeningInfo } from '../types/types';
+import { DailyOpeningInfo } from '../types/types';
 import {
   dateToYYYYMMDD,
   getDateRange,

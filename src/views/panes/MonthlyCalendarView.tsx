@@ -1,13 +1,13 @@
 import { Pane } from '@folio/stripes/components';
-import type { FunctionComponent,
-  ReactNode } from 'react';
 import React, {
+  FunctionComponent,
+  ReactNode,
   useEffect,
   useState
 } from 'react';
 import { useIntl } from 'react-intl';
 import Calendar from '../../components/Calendar';
-import type { ServicePoint } from '../../types/types';
+import { ServicePoint } from '../../types/types';
 import { getDateArray } from '../../utils/CalendarUtils';
 import { dateToYYYYMMDD } from '../../utils/DateUtils';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';

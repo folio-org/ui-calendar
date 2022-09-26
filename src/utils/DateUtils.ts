@@ -1,5 +1,5 @@
 import type { Dayjs } from 'dayjs';
-import type { IntlShape } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import dayjs from './dayjs';
 
 export function dateCompare(a: Date, b: Date): number {
