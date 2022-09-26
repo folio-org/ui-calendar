@@ -16,7 +16,7 @@ interface Props {
   events: Record<string, ReactNode>;
 }
 
-function getWeekdayLabels(localeWeekdays: LocaleWeekdayInfo[]): ReactNode[] {
+export function getWeekdayLabels(localeWeekdays: LocaleWeekdayInfo[]): ReactNode[] {
   return localeWeekdays.map((w, i) => (
     <div key={i} className={css.weekdayLabel}>
       <span>{w.short}</span>
