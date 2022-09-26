@@ -163,7 +163,7 @@
     "utility-types": "^3.10.0"
   },
   "resolutions": {
-    "@folio/stripes-webpack": "^4.0.0"
+    "@folio/stripes-webpack": "https://github.com/ualibweb/stripes-webpack#temp-ui-calendar-paths-override"
   },
   "peerDependencies": {
     "@folio/stripes": "^7.0.0",

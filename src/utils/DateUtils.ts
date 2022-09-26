@@ -2,7 +2,10 @@ import type { Dayjs } from 'dayjs';
 import { IntlShape } from 'react-intl';
 import dayjs from './dayjs';
 
-export function dateCompare(a: Date, b: Date): number {
+export function dateCompare(a: Date | undefined, b: Date | undefined): number {
+  // return undefined first, if applicable
+  if (a === undefined) return -1;
+  if (b === undefined) return 1;
   return Math.sign(a.getTime() - b.getTime());
 }
 

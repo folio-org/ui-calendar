@@ -13,14 +13,14 @@ import {
   RouteComponentProps,
   Switch,
   useHistory,
-  useRouteMatch,
+  useRouteMatch
 } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import PurgeModal from '../forms/PurgeModal';
 import permissions from '../types/permissions';
 import { Calendar } from '../types/types';
-import { getLocalizedDate } from '../utils/DateUtils';
+import { dateFromYYYYMMDD, getLocalizedDate } from '../utils/DateUtils';
 import { formatList } from '../utils/I18nUtils';
 import ifPermissionOr from '../utils/ifPermissionOr';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
@@ -49,7 +49,9 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
     return {
       name: calendar.name,
       startDate: getLocalizedDate(intl, calendar.startDate),
+      startDateObj: dateFromYYYYMMDD(calendar.startDate),
       endDate: getLocalizedDate(intl, calendar.endDate),
+      endDateObj: dateFromYYYYMMDD(calendar.endDate),
       assignments: servicePointNames.length ? (
         formatList(intl, servicePointNames)
       ) : (
@@ -108,15 +110,18 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
           {
             name: string;
             startDate: string;
+            startDateObj: Date;
             endDate: string;
+            endDateObj: Date;
             assignments: ReactNode;
             calendar: Calendar;
           },
-          'calendar'
+          'calendar' | 'startDateObj' | 'endDateObj'
         >
           sortedColumn="startDate"
           sortDirection="ascending"
           dateColumns={['startDate', 'endDate']}
+          dateColumnMap={{ startDate: 'startDateObj', endDate: 'endDateObj' }}
           columnMapping={{
             name: (
               <FormattedMessage id="ui-calendar.allCalendarView.column.name" />
@@ -132,7 +137,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
             )
           }}
           contentData={rows}
-          rowMetadata={['calendar']}
+          rowMetadata={['calendar', 'startDateObj', 'endDateObj']}
           isSelected={({ item }) => {
             return item.calendar.id === currentRouteId;
           }}

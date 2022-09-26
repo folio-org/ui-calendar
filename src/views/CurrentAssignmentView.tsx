@@ -1,6 +1,6 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
-import React, { FunctionComponent, useRef } from 'react';
+import React, { FunctionComponent, ReactNode, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
   Route,
@@ -12,7 +12,8 @@ import {
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import permissions from '../types/permissions';
-import { getLocalizedDate } from '../utils/DateUtils';
+import { Calendar } from '../types/types';
+import { dateFromYYYYMMDD, getLocalizedDate } from '../utils/DateUtils';
 import dayjs from '../utils/dayjs';
 import getStatus from '../utils/getCurrentStatus';
 import { useLocaleWeekdays } from '../utils/WeekdayUtils';
@@ -54,13 +55,16 @@ export const CurrentAssignmentView: FunctionComponent<
         servicePoint: servicePoint.name.concat(
           servicePoint.inactive ? ' (inactive)' : ''
         ),
+        servicePointId: servicePoint.id,
         calendarName: (
           <div style={{ fontStyle: 'italic', color: 'grey' }}>
             <FormattedMessage id="ui-calendar.currentAssignmentView.noCalendar" />
           </div>
         ),
         startDate: '',
+        startDateObj: undefined,
         endDate: '',
+        endDateObj: undefined,
         currentStatus: (
           <FormattedMessage id="ui-calendar.currentStatus.closed.noNext" />
         ),
@@ -74,7 +78,9 @@ export const CurrentAssignmentView: FunctionComponent<
       ),
       calendarName: calendars[0].name,
       startDate: getLocalizedDate(intl, calendars[0].startDate),
+      startDateObj: dateFromYYYYMMDD(calendars[0].startDate),
       endDate: getLocalizedDate(intl, calendars[0].endDate),
+      endDateObj: dateFromYYYYMMDD(calendars[0].endDate),
       currentStatus: getStatus(intl, localeWeekdays, new Date(), calendars[0]),
       calendar: calendars[0]
     };
@@ -102,10 +108,24 @@ export const CurrentAssignmentView: FunctionComponent<
           </IfPermission>
         }
       >
-        <SortableMultiColumnList
+        <SortableMultiColumnList<
+          {
+            servicePoint: ReactNode;
+            servicePointId: string;
+            calendarName: ReactNode;
+            startDate: ReactNode;
+            startDateObj?: Date;
+            endDate: ReactNode;
+            endDateObj?: Date;
+            currentStatus: ReactNode;
+            calendar?: Calendar;
+          },
+          'servicePointId' | 'calendar' | 'startDateObj' | 'endDateObj'
+        >
           sortedColumn="servicePoint"
           sortDirection="ascending"
           dateColumns={['startDate', 'endDate']}
+          dateColumnMap={{ startDate: 'startDateObj' }}
           columnMapping={{
             servicePoint: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.servicePoint" />
@@ -124,7 +144,12 @@ export const CurrentAssignmentView: FunctionComponent<
             )
           }}
           contentData={rows}
-          rowMetadata={['servicePointId', 'calendar']}
+          rowMetadata={[
+            'servicePointId',
+            'calendar',
+            'startDateObj',
+            'endDateObj'
+          ]}
           isSelected={({ item }) => {
             return (
               currentRouteId !== undefined &&

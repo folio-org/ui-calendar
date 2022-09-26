@@ -45,17 +45,18 @@ export interface SortableMultiColumnListProps<
     'onHeaderClick'
   > {
   dateColumns?: Exclude<keyof DataShape & string, OmittedColumns>[];
+  dateColumnMap?: Record<string, OmittedColumns>;
 }
 
 function sortBy<
-  T extends { [k in K]: object | string | ReactNode },
+  T extends Record<string, object | string | ReactNode>,
   K extends string
 >(
   data: T[],
   key: K,
   direction: SortDirection,
   dateColumns: K[] = [],
-  dateColumnMap: Record<string, K> = {}
+  dateColumnMap: Record<string, string> = {}
 ): void {
   data.sort((a, b) => {
     if (a?.[key] === undefined || a[key] === null) {
@@ -68,8 +69,8 @@ function sortBy<
       return (
         (direction === SortDirection.ASCENDING ? 1 : -1) *
         dateCompare(
-          a[dateColumnMap[key]] as Date,
-          b[dateColumnMap[key]] as Date
+          a[dateColumnMap[key]] as Date | undefined,
+          b[dateColumnMap[key]] as Date | undefined
         )
       );
     }
@@ -91,8 +92,14 @@ export default function SortableMultiColumnList<
   },
   OmittedColumns extends string = ''
 >(props: SortableMultiColumnListProps<DataShape, OmittedColumns>) {
-  const { sortedColumn, sortDirection, contentData, dateColumns, ...rest } =
-    props;
+  const {
+    sortedColumn,
+    sortDirection,
+    contentData,
+    dateColumns,
+    dateColumnMap,
+    ...rest
+  } = props;
 
   // first element is the primary sort, optional secondary
   const [sort, setSort] = useState<SortInfo<Omit<DataShape, OmittedColumns>>[]>(
@@ -113,11 +120,12 @@ export default function SortableMultiColumnList<
             newData,
             sorting.key as Exclude<keyof DataShape & string, OmittedColumns>,
             sorting.direction,
-            dateColumns
+            dateColumns,
+            dateColumnMap
           );
         });
       return newData;
-    }, [contentData, sort, dateColumns]);
+    }, [contentData, sort, dateColumns, dateColumnMap]);
 
   const sortProps = useMemo<
     Pick<
