@@ -1,13 +1,11 @@
 import { Headline, IconButton, Loading } from '@folio/stripes/components';
 import classNames from 'classnames';
-import type { FunctionComponent, ReactNode } from 'react';
-import React from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import { FormattedDate, useIntl } from 'react-intl';
-import type { CSSPropertiesWithVars } from '../types/css';
+import { CSSPropertiesWithVars } from '../types/css';
 import { getDateArray } from '../utils/CalendarUtils';
 import { dateToYYYYMMDD, isSameMonth } from '../utils/DateUtils';
-import type { LocaleWeekdayInfo } from '../utils/WeekdayUtils';
-import { useLocaleWeekdays } from '../utils/WeekdayUtils';
+import { LocaleWeekdayInfo, useLocaleWeekdays } from '../utils/WeekdayUtils';
 import css from './Calendar.css';
 
 interface Props {

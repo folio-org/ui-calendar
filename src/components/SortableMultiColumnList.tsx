@@ -1,7 +1,8 @@
-import type { MultiColumnListProps } from '@folio/stripes/components';
-import { MultiColumnList } from '@folio/stripes/components';
-import type { ReactElement, ReactNode } from 'react';
-import React, { useMemo, useState } from 'react';
+import {
+  MultiColumnList,
+  MultiColumnListProps
+} from '@folio/stripes/components';
+import React, { ReactElement, ReactNode, useMemo, useState } from 'react';
 import { dateCompare } from '../utils/DateUtils';
 
 export enum SortDirection {

@@ -7,12 +7,11 @@ import {
   PaneFooter,
   Paneset,
 } from '@folio/stripes/components';
-import type { FunctionComponent } from 'react';
-import React, { useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type DataRepository from '../data/DataRepository';
+import DataRepository from '../data/DataRepository';
 import CalendarForm, { FORM_ID } from '../forms/CalendarForm/CalendarForm';
-import type { Calendar } from '../types/types';
+import { Calendar } from '../types/types';
 
 export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;

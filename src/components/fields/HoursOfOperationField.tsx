@@ -1,24 +1,26 @@
-import type { MultiColumnListProps } from '@folio/stripes/components';
 import {
   Button,
   IconButton,
   Layout,
-  MultiColumnList
+  MultiColumnList,
+  MultiColumnListProps
 } from '@folio/stripes/components';
 import classNames from 'classnames';
-import type { FunctionComponent, ReactNode } from 'react';
-import React, { useEffect, useState } from 'react';
-import type { FieldRenderProps } from 'react-final-form';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState
+} from 'react';
+import { FieldRenderProps } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { InnerFieldRefs } from '../../forms/CalendarForm/types';
+import { InnerFieldRefs } from '../../forms/CalendarForm/types';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 import css from './HoursAndExceptionFields.css';
 import {
-  MCLContentsType
-} from './HoursOfOperationFieldTypes';
-import type {
   HoursOfOperationErrors,
-  HoursOfOperationRowState
+  HoursOfOperationRowState,
+  MCLContentsType
 } from './HoursOfOperationFieldTypes';
 import {
   calculateInitialRows,

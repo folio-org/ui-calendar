@@ -18,10 +18,10 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
-import type { HTTPError } from 'ky';
-import type { FunctionComponent,
-  ReactNode } from 'react';
+import { HTTPError } from 'ky';
 import React, {
+  FunctionComponent,
+  ReactNode,
   useEffect,
   useState
 } from 'react';
@@ -32,9 +32,9 @@ import {
   useIntl
 } from 'react-intl';
 import UserNameDisplay from '../../components/UserNameDisplay';
-import type DataRepository from '../../data/DataRepository';
+import DataRepository from '../../data/DataRepository';
 import permissions from '../../types/permissions';
-import type { CalendarDTO, CalendarException } from '../../types/types';
+import { CalendarDTO, CalendarException } from '../../types/types';
 import { isOpen247 } from '../../utils/CalendarUtils';
 import { getLocalizedDate } from '../../utils/DateUtils';
 import ifPermissionOr from '../../utils/ifPermissionOr';

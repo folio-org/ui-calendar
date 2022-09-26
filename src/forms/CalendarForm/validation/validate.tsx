@@ -1,10 +1,9 @@
-import type { ReactNode, RefObject } from 'react';
-import React from 'react';
+import React, { ReactNode, RefObject } from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { ExceptionFieldErrors } from '../../../components/fields/ExceptionFieldTypes';
-import type { HoursOfOperationErrors } from '../../../components/fields/HoursOfOperationFieldTypes';
+import { ExceptionFieldErrors } from '../../../components/fields/ExceptionFieldTypes';
+import { HoursOfOperationErrors } from '../../../components/fields/HoursOfOperationFieldTypes';
 import { validateDateOrder, validateDate } from './validateDateTime';
-import type { FormValues, InnerFieldRefs, SimpleErrorFormValues } from '../types';
+import { FormValues, InnerFieldRefs, SimpleErrorFormValues } from '../types';
 import validateHoursOfOperation from './validateHoursOfOperation';
 import validateExceptions from './validateExceptions';
 

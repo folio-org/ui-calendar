@@ -1,4 +1,4 @@
-import type { IntlShape } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import * as Weekdays from '../test/data/Weekdays';
 import dayjs from './dayjs';
 import { getRelativeWeekdayStatus } from './WeekdayUtils';

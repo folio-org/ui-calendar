@@ -1,4 +1,4 @@
-import type { MultiColumnListRowFormatterProps } from '@folio/stripes/components';
+import { MultiColumnListRowFormatterProps } from '@folio/stripes/components';
 import React from 'react';
 
 export default function MCLRowFormatter<

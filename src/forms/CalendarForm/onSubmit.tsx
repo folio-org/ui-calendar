@@ -1,19 +1,15 @@
-import type { CalloutContextType } from '@folio/stripes/core';
-import type { FormApi, SubmissionErrors } from 'final-form';
-import { FORM_ERROR } from 'final-form';
-import type { HTTPError } from 'ky';
-import type { ReactNode } from 'react';
-import React from 'react';
-import type { IntlShape } from 'react-intl';
-import { FormattedMessage } from 'react-intl';
-import type { Optional } from 'utility-types';
+import { CalloutContextType } from '@folio/stripes/core';
+import { FormApi, FORM_ERROR, SubmissionErrors } from 'final-form';
+import { HTTPError } from 'ky';
+import React, { ReactNode } from 'react';
+import { FormattedMessage, IntlShape } from 'react-intl';
+import { Optional } from 'utility-types';
 import RowType from '../../components/fields/RowType';
-import type DataRepository from '../../data/DataRepository';
-import type { Calendar, ErrorResponse, Weekday } from '../../types/types';
-import { ErrorCode } from '../../types/types';
+import DataRepository from '../../data/DataRepository';
+import { Calendar, ErrorCode, ErrorResponse, Weekday } from '../../types/types';
 import dayjs from '../../utils/dayjs';
 import { formatList } from '../../utils/I18nUtils';
-import type { FormValues } from './types';
+import { FormValues } from './types';
 
 export default async function onSubmit(
   props: {

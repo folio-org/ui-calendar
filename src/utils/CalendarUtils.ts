@@ -1,5 +1,5 @@
 import memoizee from 'memoizee';
-import type {
+import {
   Calendar,
   CalendarException,
   CalendarExceptionOpening,

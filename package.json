@@ -138,6 +138,8 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^3.1.0",
+    "@folio/stripes-final-form": "^6.1.10000099",
+    "@folio/stripes-form": "^7.1.100000102",
     "@testing-library/jest-dom": "^5.16.5",
     "@types/jest": "^28.1.6",
     "@types/memoizee": "^0.4.8",
@@ -159,6 +161,9 @@
     "react-query": "^3.39.2",
     "ts-jest": "^28.0.7",
     "utility-types": "^3.10.0"
+  },
+  "resolutions": {
+    "@folio/stripes-webpack": "^4.0.0"
   },
   "peerDependencies": {
     "@folio/stripes": "^7.0.0",

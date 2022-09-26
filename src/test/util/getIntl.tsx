@@ -1,8 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
-import type { FunctionComponent } from 'react';
-import React from 'react';
-import type { IntlShape } from 'react-intl';
-import { IntlContext } from 'react-intl';
+import React, { FunctionComponent } from 'react';
+import { IntlContext, IntlShape } from 'react-intl';
 import withIntlConfiguration from './withIntlConfiguration';
 
 export default function getIntl(locale = 'en-US', timeZone = 'UTC'): IntlShape {

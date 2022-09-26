@@ -1,8 +1,7 @@
-import type { ReactNode, RefObject } from 'react';
-import React from 'react';
+import React, { ReactNode, RefObject } from 'react';
 import { FormattedMessage } from 'react-intl';
 import dayjs from '../../../utils/dayjs';
-import type { FormValues, SimpleErrorFormValues } from '../types';
+import { FormValues, SimpleErrorFormValues } from '../types';
 
 /** Ensure a time's format is correct */
 export function isTimeProper(
