@@ -237,33 +237,6 @@ describe('isInnerRowConflicted', () => {
   });
 });
 
-// export type ExceptionFieldErrors = RequireExactlyOne<{
-//   empty?: {
-//     name: Record<number, ReactNode>;
-//   } & {
-//     [field in keyof Omit<ExceptionRowState['rows'][0], 'i'>]: Record<
-//       number,
-//       Record<number, ReactNode>
-//     >;
-//   };
-//   invalid?: {
-//     [field in keyof Omit<ExceptionRowState['rows'][0], 'i'>]: Record<
-//       number,
-//       Record<number, ReactNode>
-//     >;
-//   };
-//   interConflicts?: Set<number>;
-//   intraConflicts?: Record<number, Set<number>>;
-// }>;
-
-// describe('isOuterRowConflicted', () => { });
-
-// export function isOuterRowConflicted(
-//   error: ExceptionFieldErrors | undefined,
-//   outerRowI: number
-// ): boolean {
-//   return !!error?.interConflicts?.has(outerRowI);
-// }
 describe('isOuterRowConflicted', () => {
   it('finds errors when present', () => {
     const av = {
