@@ -141,6 +141,7 @@
     "@folio/stripes-final-form": "^6.1.10000099",
     "@folio/stripes-form": "^7.1.100000102",
     "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^28.1.6",
     "@types/memoizee": "^0.4.8",
     "@types/react-router-dom": "^5.2.0",
