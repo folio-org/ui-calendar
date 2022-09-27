@@ -11,7 +11,15 @@ describe('OpenClosedSelect', () => {
     const onBlur = jest.fn();
     const onChange = jest.fn();
 
-    render(withIntlConfiguration(<OpenClosedSelect onBlur={onBlur} onChange={onChange} />));
+    render(
+      withIntlConfiguration(
+        <OpenClosedSelect
+          onBlur={onBlur}
+          onChange={onChange}
+          value={RowType.Open}
+        />
+      )
+    );
 
     expect(screen.getByText('Open')).toBeInTheDocument();
   });
@@ -20,7 +28,15 @@ describe('OpenClosedSelect', () => {
     const onBlur = jest.fn();
     const onChange = jest.fn();
 
-    render(withIntlConfiguration(<OpenClosedSelect onBlur={onBlur} onChange={onChange} />));
+    render(
+      withIntlConfiguration(
+        <OpenClosedSelect
+          onBlur={onBlur}
+          onChange={onChange}
+          value={RowType.Open}
+        />
+      )
+    );
 
     expect(screen.getByText('Closed')).toBeInTheDocument();
   });
@@ -29,7 +45,15 @@ describe('OpenClosedSelect', () => {
     const onBlur = jest.fn();
     const onChange = jest.fn();
 
-    render(withIntlConfiguration(<OpenClosedSelect onBlur={onBlur} onChange={onChange} />));
+    render(
+      withIntlConfiguration(
+        <OpenClosedSelect
+          onBlur={onBlur}
+          onChange={onChange}
+          value={RowType.Open}
+        />
+      )
+    );
     userEvent.selectOptions(screen.getByRole('combobox'), [RowType.Open]);
 
     expect(onBlur).toHaveBeenCalled();
