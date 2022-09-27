@@ -13,8 +13,11 @@ import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import permissions from '../types/permissions';
 import { Calendar } from '../types/types';
-import { dateFromYYYYMMDD, getLocalizedDate } from '../utils/DateUtils';
-import dayjs from '../utils/dayjs';
+import {
+  dateFromYYYYMMDD,
+  getLocalizedDate,
+  isBetweenDatesByDay
+} from '../utils/DateUtils';
 import getStatus from '../utils/getCurrentStatus';
 import { useLocaleWeekdays } from '../utils/WeekdayUtils';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
@@ -46,8 +49,11 @@ export const CurrentAssignmentView: FunctionComponent<
   const rows = dataRepository.getServicePoints().map((servicePoint) => {
     const calendars = dataRepository.getCalendars().filter((calendar) => {
       return (
-        dayjs().isBetween(calendar.startDate, calendar.endDate, 'day', '[]') &&
-        calendar.assignments.includes(servicePoint.id)
+        isBetweenDatesByDay(
+          new Date(),
+          dateFromYYYYMMDD(calendar.startDate),
+          dateFromYYYYMMDD(calendar.endDate)
+        ) && calendar.assignments.includes(servicePoint.id)
       );
     });
     if (calendars.length === 0) {

@@ -2,25 +2,24 @@ import type { Dayjs } from 'dayjs';
 import { IntlShape } from 'react-intl';
 import dayjs from './dayjs';
 
-export function dateCompare(a: Date | undefined, b: Date | undefined): number {
+export function dateCompare(
+  a: Date | undefined | null,
+  b: Date | undefined | null
+): number {
   // return undefined first, if applicable
-  if (a === undefined && b === undefined) return 0;
-  if (a === undefined) return -1;
-  if (b === undefined) return 1;
+  if ((a === undefined || a === null) && (b === undefined || b === null)) return 0;
+  if (a === undefined || a === null) return -1;
+  if (b === undefined || b === null) return 1;
   return Math.sign(a.getTime() - b.getTime());
 }
 
+export function toStartOfDay(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
 export function getDateRange(start: Date, end: Date): Date[] {
-  const current = new Date(
-    start.getFullYear(),
-    start.getMonth(),
-    start.getDate()
-  );
-  const endMidnight = new Date(
-    end.getFullYear(),
-    end.getMonth(),
-    end.getDate()
-  );
+  const current = toStartOfDay(start);
+  const endMidnight = toStartOfDay(end);
   const offset = start.getTime() - current.getTime();
   const result: Date[] = [];
 
@@ -43,34 +42,35 @@ export function overlaps(
   return !(start2.isAfter(end1) || end2.isBefore(start1));
 }
 
+/** Determine if two date ranges overlap each other */
+export function overlapsDates(
+  start1: Date,
+  end1: Date,
+  start2: Date,
+  end2: Date
+): boolean {
+  // Does not overlap if one ends before the other starts
+  return !(end1 < start2 || end2 < start1);
+}
+
 /**
  * Determine how close a given date is to a reference date.  Should only be
  * used when the date is >= the reference; will return `"sameDay"`, `"nextDay"`,
  * `"nextWeek"`, or `"sameElse"` (for more than a week away).
  */
 export function getRelativeDateProximity(
-  date: Date,
+  test: Date,
   referenceDate: Date
 ): 'sameDay' | 'nextDay' | 'nextWeek' | 'sameElse' {
   // ensure every time is midnight
-  const testDate = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate()
-  );
+  const testDate = toStartOfDay(test);
   // same day
-  const testSameDayReference = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth(),
-    referenceDate.getDate()
-  );
+  const testSameDayReference = toStartOfDay(referenceDate);
   if (testDate <= testSameDayReference) return 'sameDay';
 
   // check day after (for tomorrow)
   const testNextDayReference = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth(),
-    referenceDate.getDate() + 1
+    toStartOfDay(referenceDate).setDate(testSameDayReference.getDate() + 1)
   );
   if (testDate <= testNextDayReference) return 'nextDay';
 
@@ -78,9 +78,7 @@ export function getRelativeDateProximity(
   // does not check 7 as, for example, saying "closing Monday at 5:00"
   // is ambiguous if it currently is Monday.
   const testNextWeekReference = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth(),
-    referenceDate.getDate() + 6
+    toStartOfDay(referenceDate).setDate(testSameDayReference.getDate() + 6)
   );
   if (testDate <= testNextWeekReference) return 'nextWeek';
 
@@ -167,4 +165,26 @@ export function dateFromHHMM(t: string): Date {
 
 export function dateToTimeOnly(d: Date): Date {
   return new Date(0, 0, 0, d.getHours(), d.getMinutes());
+}
+
+export function minDate(dates: Date[]): Date | null {
+  if (dates.length === 0) return null;
+  return new Date(Math.min(...dates.map((d) => d.getTime())));
+}
+
+export function maxDate(dates: Date[]): Date | null {
+  if (dates.length === 0) return null;
+  return new Date(Math.max(...dates.map((d) => d.getTime())));
+}
+
+export function isBetweenDatesByDay(
+  test: Date,
+  left: Date,
+  right: Date
+): boolean {
+  const testStart = toStartOfDay(test);
+  const leftStart = toStartOfDay(left);
+  const rightStart = toStartOfDay(right);
+
+  return leftStart <= testStart && testStart <= rightStart;
 }

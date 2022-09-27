@@ -10,7 +10,7 @@ import {
   ExceptionFieldProps,
   InnerFieldRefs
 } from '../../forms/CalendarForm/types';
-import dayjs from '../../utils/dayjs';
+import { dateCompare, dateFromYYYYMMDD, minDate } from '../../utils/DateUtils';
 import { ExceptionFieldErrors, ExceptionRowState } from './ExceptionFieldTypes';
 import cssHiddenErrorField from './hiddenErrorField.css';
 import css from './HoursAndExceptionFields.css';
@@ -75,10 +75,18 @@ export function getInnerRowError(
 
 export function outerRowSorter(a: ExceptionRowState, b: ExceptionRowState) {
   // start date is enough for equality as overlap on the same day is disallowed
-  const aMin = dayjs.min(a.rows.map(({ startDate }) => dayjs(startDate)));
-  const bMin = dayjs.min(b.rows.map(({ startDate }) => dayjs(startDate)));
-  // don't care about == as that's an issue regardless, so order can be undefined there
-  return aMin.isBefore(bMin) ? -1 : 1;
+  const aMin = minDate(
+    a.rows
+      .filter(({ startDate }) => startDate !== undefined)
+      .map(({ startDate }) => dateFromYYYYMMDD(startDate as string))
+  );
+  const bMin = minDate(
+    b.rows
+      .filter(({ startDate }) => startDate !== undefined)
+      .map(({ startDate }) => dateFromYYYYMMDD(startDate as string))
+  );
+
+  return dateCompare(aMin, bMin);
 }
 
 export function getMainConflictError(
