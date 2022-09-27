@@ -222,14 +222,12 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                     <FormattedMessage id="ui-calendar.purgeModal.deletionList.label" />
                   }
                   closedByDefault
-                  headerProps={{
-                    displayWhenClosed: (
-                      <Badge color="default">{toPurge.length}</Badge>
-                    ),
-                    displayWhenOpen: (
-                      <Badge color="default">{toPurge.length}</Badge>
-                    )
-                  }}
+                  displayWhenClosed={
+                    <Badge color="default">{toPurge.length}</Badge>
+                  }
+                  displayWhenOpen={
+                    <Badge color="default">{toPurge.length}</Badge>
+                  }
                 >
                   <List
                     items={toPurge.map((c) => c.name)}
