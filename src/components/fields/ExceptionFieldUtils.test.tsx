@@ -289,8 +289,8 @@ describe('isOuterRowConflicted and isInnerRowConflicted', () => {
 
     it('empty intraConflicts', () => {
       const av = {
-        intraConflicts: []
-      };
+        intraConflicts: {}
+      } as ExceptionFieldErrors;
 
       const response = isInnerRowConflicted(av, 0, 0);
       expect(response).toBe(false);
