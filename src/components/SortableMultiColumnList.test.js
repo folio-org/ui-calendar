@@ -70,6 +70,24 @@ describe('sortBy', () => {
     expect(data[3]).toMatchObject(a);
   });
 
+  it('sorts by date (mapped)', () => {
+    const a = { formattedDate: 'Thursday', beginDate: new Date('2022-09-01T01:02:03Z') };
+    const b = { formattedDate: 'Friday', beginDate: new Date('2022-09-02T01:02:03Z') };
+    const c = { formattedDate: 'Saturday', beginDate: new Date('2022-09-03T01:02:03Z') };
+    const d = { formattedDate: 'Sunday', beginDate: new Date('2022-09-04T01:02:03Z') };
+    const data = [c, d, b, a];
+    const key = 'formattedDate';
+    const direction = SortDirection.ASCENDING;
+    const dateColumns = ['formattedDate'];
+    const dateColumnMap = { formattedDate: 'beginDate' };
+
+    sortBy(data, key, direction, dateColumns, dateColumnMap);
+    expect(data[0]).toMatchObject(a);
+    expect(data[1]).toMatchObject(b);
+    expect(data[2]).toMatchObject(c);
+    expect(data[3]).toMatchObject(d);
+  });
+
   it('nulls sink to the bottom (DESCENDING)', () => {
     const a = { fname: 'angela' };
     const b = { name: 'beatrice' };
