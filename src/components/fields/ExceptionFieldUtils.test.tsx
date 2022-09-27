@@ -1,8 +1,11 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvents from '@testing-library/user-event';
+import React from 'react';
 import expectRender from '../../test/util/expectRender';
-import { ExceptionFieldErrors } from './ExceptionFieldTypes';
+import withIntlConfiguration from '../../test/util/withIntlConfiguration';
+import { ExceptionFieldErrors, ExceptionRowState } from './ExceptionFieldTypes';
 import {
-  // getDateField,
-  // getDateTimeFields,
+  getDateTimeFields,
   getInnerRowError,
   getMainConflictError,
   getNameFieldError,
@@ -12,9 +15,7 @@ import {
   updateInnerRowState,
   updateRowState
 } from './ExceptionFieldUtils';
-
-// describe('getDateField', () => { });
-// describe('getDateTimeFields', () => { });
+import RowType from './RowType';
 
 describe('getInnerRowError', () => {
   it('if not dirty, receives undefined', () => {
@@ -255,105 +256,204 @@ describe('isInnerRowConflicted', () => {
   });
 });
 
-// describe('isOuterRowConflicted', () => {
-//   it('finds errors when present', () => {
-//     const av = {
-//       interConflicts: new Set([1, 3, 5])
-//     };
+describe('isOuterRowConflicted and isInnerRowConflicted', () => {
+  it('finds errors when present', () => {
+    const av = {
+      interConflicts: new Set([1, 3, 5])
+    };
 
-//     const response = isOuterRowConflicted(av, 3);
-//     expect(response).toBe(true);
-//   });
+    expect(isOuterRowConflicted(av, 3)).toBe(true);
+    expect(isOuterRowConflicted(av, 4)).toBe(false);
+  });
 
-//   describe('does not find errors when data is missing', () => {
-//     it('null error', () => {
-//       const response = isInnerRowConflicted(null);
-//       expect(response).toBe(false);
-//     });
+  describe('does not find errors when data is missing', () => {
+    it('undefined error', () => {
+      const response = isInnerRowConflicted(undefined, 0, 0);
+      expect(response).toBe(false);
+    });
 
-//     it('null interConflicts', () => {
-//       const response = isInnerRowConflicted({});
-//       expect(response).toBe(false);
-//     });
+    it('non-existent interConflicts', () => {
+      const response = isInnerRowConflicted({ intraConflicts: {} }, 0, 0);
+      expect(response).toBe(false);
+    });
 
-//     it('empty interConflicts', () => {
-//       const av = {
-//         interConflicts: []
-//       };
+    it('empty intraConflicts', () => {
+      const av = {
+        intraConflicts: []
+      };
 
-//       const response = isInnerRowConflicted(av);
-//       expect(response).toBe(false);
-//     });
+      const response = isInnerRowConflicted(av, 0, 0);
+      expect(response).toBe(false);
+    });
 
-//     it('interConflicts does not contain outerRowI', () => {
-//       const av = {
-//         interConflicts: new Set([1, 3, 5])
-//       };
+    it('intraConflicts does not contain outerRowI', () => {
+      const av = {
+        intraConflicts: [new Set([1, 3, 5])]
+      };
 
-//       const response = isInnerRowConflicted(av, 2);
-//       expect(response).toBe(false);
-//     });
-//   });
-// });
+      const response = isInnerRowConflicted(av, 1, 0);
+      expect(response).toBe(false);
+    });
 
-// describe('outerRowSorter', () => {
-//   const a = {
-//     rows: [
-//       { startDate: '2022-09-22' },
-//       { startDate: '2022-09-24' },
-//       { startDate: '2022-09-26' }
-//     ]
-//   };
-//   const b = {
-//     rows: [
-//       { startDate: '2022-09-21' },
-//       { startDate: '2022-09-23' },
-//       { startDate: '2022-09-25' }
-//     ]
-//   };
+    it('intraConflicts does contain outerRowI and innerRowI', () => {
+      const av = {
+        intraConflicts: [new Set([1, 3, 5])]
+      };
 
-//   it('av[0] is greater', () => {
-//     const result = outerRowSorter(a, b);
-//     expect(result).toEqual(1);
-//   });
+      const response = isInnerRowConflicted(av, 0, 1);
+      expect(response).toBe(true);
+    });
 
-//   it('av[1] is greater', () => {
-//     const result = outerRowSorter(b, a);
-//     expect(result).toEqual(-1);
-//   });
-// });
+    it('interConflicts in non-zero outer contain outerRowI', () => {
+      const av = {
+        intraConflicts: [new Set([1, 3, 5]), new Set([2, 3, 5])]
+      };
 
-// describe('updateInnerRowState', () => {
-//   it('correctly updates given row', () => {
-//     const r1 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
-//     const r2 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
-//     const r3 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
+      const response = isInnerRowConflicted(av, 1, 2);
+      expect(response).toBe(true);
+    });
+  });
+});
 
-//     const rowStates = [r1, r2, r3];
+describe('outerRowSorter', () => {
+  const a = {
+    rows: [
+      { startDate: '2022-09-22' },
+      { startDate: '2022-09-24' },
+      { startDate: '2022-09-26' }
+    ]
+  } as ExceptionRowState;
+  const b = {
+    rows: [
+      { startDate: '2022-09-21' },
+      { startDate: '2022-09-23' },
+      { startDate: '2022-09-25' }
+    ]
+  } as ExceptionRowState;
 
-//     const newState = { monkey: 'bagel' };
+  it('av[0] is greater', () => {
+    const result = outerRowSorter(a, b);
+    expect(result).toEqual(1);
+  });
 
-//     const setRowStates = jest.fn();
+  it('av[1] is greater', () => {
+    const result = outerRowSorter(b, a);
+    expect(result).toEqual(-1);
+  });
+});
 
-//     updateInnerRowState(rowStates, setRowStates, 1, 1, newState);
+describe('updateInnerRowState', () => {
+  it('correctly updates given row', () => {
+    const r1 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
+    const r2 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
+    const r3 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
 
-//     r2.rows[1] = { ...r2.rows[1], ...newState };
+    const rowStates = [r1, r2, r3];
 
-//     expect(setRowStates).toHaveBeenCalledWith([r1, r2, r3]);
-//   });
-// });
+    const newState = { monkey: 'bagel' };
 
-// describe('updateRowState', () => {
-//   it('correctly updates given row', () => {
-//     const r1 = { foo: true, bar: false };
-//     const r2 = { foo: true, bar: false };
-//     const r3 = { foo: true, bar: false };
-//     const newState = { bat: true };
+    const setRowStates = jest.fn();
 
-//     const setRowStates = jest.fn();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updateInnerRowState(rowStates as any, setRowStates, 1, 1, newState as any);
 
-//     updateRowState([r1, r2, r3], setRowStates, 1, newState);
+    r2.rows[1] = { ...r2.rows[1], ...newState };
 
-//     expect(setRowStates).toHaveBeenCalledWith([r1, { ...r2, ...newState }, r3]);
-//   });
-// });
+    expect(setRowStates).toHaveBeenCalledWith([r1, r2, r3]);
+  });
+});
+
+describe('updateRowState', () => {
+  it('correctly updates given row', () => {
+    const r1 = { foo: true, bar: false };
+    const r2 = { foo: true, bar: false };
+    const r3 = { foo: true, bar: false };
+    const newState = { bat: true };
+
+    const setRowStates = jest.fn();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updateRowState([r1, r2, r3] as any, setRowStates, 1, newState as any);
+
+    expect(setRowStates).toHaveBeenCalledWith([r1, { ...r2, ...newState }, r3]);
+  });
+});
+
+describe('Date/time field generation', () => {
+  it('Generates fields that interact properly', () => {
+    const setRowStates = jest.fn();
+    const onBlur = jest.fn();
+    const fieldRefs = {
+      startDate: { 0: {} },
+      endDate: { 0: {} },
+      startTime: { 0: {} },
+      endTime: { 0: {} }
+    };
+    const rows = [
+      {
+        i: 0,
+        name: 'Test',
+        lastRowI: 0,
+        type: RowType.Open,
+        rows: [
+          {
+            i: 0,
+            startDate: '',
+            startTime: '',
+            endDate: '',
+            endTime: ''
+          }
+        ]
+      }
+    ];
+
+    const fields = getDateTimeFields({
+      props: { input: { onBlur }, fieldRefs } as any,
+      row: rows[0],
+      innerRow: rows[0].rows[0],
+      realIndex: 0,
+      innerRowRealIndex: 0,
+      fieldRefs,
+      isDirty: false,
+      rowStates: rows,
+      setRowStates
+    });
+
+    render(
+      withIntlConfiguration(
+        <>
+          {fields.startDate}
+          {fields.startTime}
+          {fields.endDate}
+          {fields.endTime}
+        </>
+      )
+    );
+
+    const [startDate, startTime, endDate, endTime] =
+      screen.getAllByRole('textbox');
+
+    fireEvent.change(startDate, { target: { value: 'foo' } });
+    fireEvent.change(startTime, { target: { value: '02:24' } });
+    fireEvent.change(startTime, { target: { value: '02:24 AM' } });
+    fireEvent.change(endDate, { target: { value: 'foo' } });
+    fireEvent.change(endTime, { target: { value: '02:24' } });
+    fireEvent.change(endTime, { target: { value: '02:24 AM' } });
+
+    // test focus
+    userEvents.type(startDate, 'bar');
+    userEvents.tab();
+    fireEvent.blur(startDate);
+    fireEvent.blur(startTime);
+    fireEvent.blur(endDate);
+    fireEvent.blur(endTime);
+
+    expect(onBlur).toHaveBeenCalled();
+    expect(setRowStates).toHaveBeenCalled();
+
+    expect(fieldRefs).toHaveProperty('startDate.0.0', startDate);
+    expect(fieldRefs).toHaveProperty('startTime.0.0', startTime);
+    expect(fieldRefs).toHaveProperty('endDate.0.0', endDate);
+    expect(fieldRefs).toHaveProperty('endTime.0.0', endTime);
+  });
+});

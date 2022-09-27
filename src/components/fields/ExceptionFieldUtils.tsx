@@ -132,7 +132,7 @@ export function getDateField(
 ) {
   return (
     <DateField
-      key={`sd-${innerRow.i}`}
+      key={`${key}-${innerRow.i}`}
       className={classNames(
         {
           [css.conflictCell]: isInnerRowConflicted(error, row.i, innerRow.i)
@@ -143,7 +143,6 @@ export function getDateField(
       marginBottom0
       required
       usePortal
-      placement="auto"
       value={innerRow[key]}
       inputRef={(el) => {
         fieldRefs[key][row.i][innerRow.i] = el;
@@ -176,10 +175,10 @@ export function getDateTimeFields({
   rowStates: ExceptionRowState[];
   setRowStates: (newRowStates: ExceptionRowState[]) => void;
 }): {
-  startDate: ReactNode;
-  startTime: ReactNode;
-  endDate: ReactNode;
-  endTime: ReactNode;
+  startDate: JSX.Element;
+  startTime: JSX.Element;
+  endDate: JSX.Element;
+  endTime: JSX.Element;
 } {
   return {
     startDate: getDateField(
@@ -234,47 +233,22 @@ export function getDateTimeFields({
         }}
       />
     ),
-    endDate: (
-      <DateField
-        key={`ed-${innerRow.i}`}
-        className={classNames(
-          {
-            [css.conflictCell]: isInnerRowConflicted(
-              props.error,
-              row.i,
-              innerRow.i
-            )
-          },
-          cssHiddenErrorField.hiddenErrorFieldWrapper
-        )}
-        backendDateStandard="YYYY-MM-DD"
-        marginBottom0
-        required
-        usePortal
-        placement="auto"
-        value={innerRow.endDate}
-        inputRef={(el) => {
-          fieldRefs.endDate[row.i][innerRow.i] = el;
-        }}
-        error={getInnerRowError(
-          isDirty,
-          props.error,
-          row.i,
-          innerRow.i,
-          'endDate'
-        )}
-        onBlur={() => props.input.onBlur()}
-        onChange={(_e, _formattedString, dateString) => {
-          updateInnerRowState(
-            rowStates,
-            setRowStates,
-            realIndex,
-            innerRowRealIndex,
-            { endDate: dateString }
-          );
-          props.input.onBlur();
-        }}
-      />
+    endDate: getDateField(
+      'endDate',
+      row,
+      innerRow,
+      isDirty,
+      props,
+      (dateString) => {
+        updateInnerRowState(
+          rowStates,
+          setRowStates,
+          realIndex,
+          innerRowRealIndex,
+          { endDate: dateString }
+        );
+        props.input.onBlur();
+      }
     ),
     endTime: (
       <TimeField
