@@ -41,7 +41,7 @@ describe('OpenClosedSelect', () => {
     expect(screen.getByText('Closed')).toBeInTheDocument();
   });
 
-  it('calls onBlur and onChange callbacks', () => {
+  it('calls onBlur and onChange callbacks', async () => {
     const onBlur = jest.fn();
     const onChange = jest.fn();
 
@@ -54,7 +54,7 @@ describe('OpenClosedSelect', () => {
         />
       )
     );
-    userEvent.selectOptions(screen.getByRole('combobox'), [RowType.Open]);
+    await userEvent.selectOptions(screen.getByRole('combobox'), [RowType.Open]);
 
     expect(onBlur).toHaveBeenCalled();
     expect(onChange).toHaveBeenCalled();
