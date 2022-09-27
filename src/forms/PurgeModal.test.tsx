@@ -4,17 +4,22 @@ import userEvent from '@testing-library/user-event';
 
 import withIntlConfiguration from '../test/util/withIntlConfiguration';
 import PurgeModal from './PurgeModal';
+import DataRepository from '../data/DataRepository';
 
 describe('PurgeModal', () => {
-  it('correctly calls props.onClose', () => {
+  it('correctly calls props.onClose', async () => {
     const onClose = jest.fn();
     const dataRepository = {
-      getCalendars: jest.fn(),
-    };
+      getCalendars: jest.fn()
+    } as unknown as DataRepository;
 
-    render(withIntlConfiguration(<PurgeModal onClose={onClose} open dataRepository={dataRepository} />));
+    render(
+      withIntlConfiguration(
+        <PurgeModal onClose={onClose} open dataRepository={dataRepository} />
+      )
+    );
 
-    userEvent.click(screen.getByText('Cancel'));
+    await userEvent.click(screen.getByText('Cancel'));
     expect(onClose).toHaveBeenCalled();
   });
 });
