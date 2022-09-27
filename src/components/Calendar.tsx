@@ -1,6 +1,6 @@
 import { Headline, IconButton, Loading } from '@folio/stripes/components';
 import classNames from 'classnames';
-import React, { FunctionComponent, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedDate, useIntl } from 'react-intl';
 import { CSSPropertiesWithVars } from '../types/css';
 import { getDateArray } from '../utils/CalendarUtils';
@@ -24,7 +24,7 @@ export function getWeekdayLabels(
   ));
 }
 
-const Calendar: FunctionComponent<Props> = (props: Props) => {
+export default function Calendar(props: Props) {
   const { monthBasis, setMonthBasis, events } = props;
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
@@ -86,6 +86,4 @@ const Calendar: FunctionComponent<Props> = (props: Props) => {
       {displayDates}
     </div>
   );
-};
-
-export default Calendar;
+}
