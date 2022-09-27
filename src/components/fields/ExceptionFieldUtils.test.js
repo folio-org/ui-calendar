@@ -7,7 +7,7 @@ import {
   isInnerRowConflicted,
   isOuterRowConflicted,
   outerRowSorter,
-  // updateInnerRowState,
+  updateInnerRowState,
   updateRowState,
 } from './ExceptionFieldUtils';
 
@@ -332,7 +332,25 @@ describe('outerRowSorter', () => {
   });
 });
 
-// describe('updateInnerRowState', () => { });
+describe('updateInnerRowState', () => {
+  it('correctly updates given row', () => {
+    const r1 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
+    const r2 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
+    const r3 = { rows: [{ foo: 'bar' }, { bat: 'baz' }] };
+
+    const rowStates = [r1, r2, r3];
+
+    const newState = { monkey: 'bagel' };
+
+    const setRowStates = jest.fn();
+
+    updateInnerRowState(rowStates, setRowStates, 1, 1, newState);
+
+    r2.rows[1] = { ...r2.rows[1], ...newState };
+
+    expect(setRowStates).toHaveBeenCalledWith([r1, r2, r3]);
+  });
+});
 
 describe('updateRowState', () => {
   it('correctly updates given row', () => {
