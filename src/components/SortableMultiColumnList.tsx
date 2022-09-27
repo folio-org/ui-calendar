@@ -10,7 +10,7 @@ export enum SortDirection {
   DESCENDING = 'descending'
 }
 
-function flipSortDirection(direction: SortDirection): SortDirection {
+export function flipSortDirection(direction: SortDirection): SortDirection {
   return direction === SortDirection.ASCENDING
     ? SortDirection.DESCENDING
     : SortDirection.ASCENDING;
@@ -21,7 +21,7 @@ export type SortInfo<SortableDataShape> = {
   direction: SortDirection;
 };
 
-function getInitialSort<SortableDataShape>(
+export function getInitialSort<SortableDataShape>(
   sortedColumn: keyof SortableDataShape | undefined,
   sortDirection: 'ascending' | 'descending' | undefined
 ): SortInfo<SortableDataShape>[] {
@@ -48,7 +48,7 @@ export interface SortableMultiColumnListProps<
   dateColumnMap?: Record<string, OmittedColumns>;
 }
 
-function sortBy<
+export function sortBy<
   T extends Record<string, object | string | ReactNode>,
   K extends string
 >(
