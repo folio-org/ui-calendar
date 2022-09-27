@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 // needed for Jest to properly require UMD-global React
 global.React = React;
@@ -6,7 +6,9 @@ global.React = React;
 // relies on Webpack's require.context
 jest.mock('@folio/stripes-components/lib/Icon', () => {
   return (props: Record<string, unknown>) => (
-    <span data-testid={props?.['data-testid']}>Icon</span>
+    <span data-testid={props?.['data-testid']}>
+      {props.children as ReactNode}
+    </span>
   );
 });
 

@@ -55,7 +55,7 @@ export default function TimeField({
             props.onChange(
               newTime.length ? newTime.substring(0, 5) : undefined
             );
-          },
+          }
         }}
         // always fires, compared to input.onChange
         onChange={() => onBlur()}
@@ -65,10 +65,9 @@ export default function TimeField({
         }}
         marginBottom0
         usePortal
-        placement="auto"
         meta={{
           touched: true,
-          error,
+          error
         }}
       />
     </div>
