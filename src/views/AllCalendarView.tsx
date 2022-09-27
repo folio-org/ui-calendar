@@ -39,7 +39,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
   )?.params?.calendarId;
 
   if (!dataRepository.isLoaded()) {
-    return <LoadingPane paneTitle="All calendars" />;
+    return <LoadingPane paneTitle={intl.formatMessage({ id: 'ui-calendar.allCalendarView.title' })} />;
   }
 
   const rows = dataRepository.getCalendars().map((calendar) => {
