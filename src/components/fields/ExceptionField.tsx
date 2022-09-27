@@ -15,7 +15,12 @@ import React, {
 } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ExceptionFieldProps } from '../../forms/CalendarForm/types';
-import dayjs from '../../utils/dayjs';
+import {
+  dateFromYYYYMMDD,
+  dateToYYYYMMDD,
+  maxDate,
+  minDate
+} from '../../utils/DateUtils';
 import { ExceptionRowState, MCLContentsType } from './ExceptionFieldTypes';
 import {
   getDateTimeFields,
@@ -111,24 +116,22 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
             onBlur={props.input.onBlur}
             onChange={(newData: Partial<ExceptionRowState>) => {
               if (newData.type === RowType.Closed) {
-                const minDate = dayjs.min(
-                  row.rows.map(({ startDate }) => dayjs(startDate))
+                const min = minDate(
+                  row.rows
+                    .filter(({ startDate }) => startDate !== undefined)
+                    .map(({ startDate }) => dateFromYYYYMMDD(startDate as string))
                 );
-                const maxDate = dayjs.max(
-                  row.rows.map(({ endDate }) => dayjs(endDate))
+                const max = maxDate(
+                  row.rows
+                    .filter(({ endDate }) => endDate !== undefined)
+                    .map(({ endDate }) => dateFromYYYYMMDD(endDate as string))
                 );
                 newData.rows = [
                   {
                     i: row.lastRowI + 1,
-                    startDate:
-                      minDate === null
-                        ? undefined
-                        : minDate.format('YYYY-MM-DD'),
+                    startDate: min === null ? undefined : dateToYYYYMMDD(min),
                     startTime: undefined,
-                    endDate:
-                      maxDate === null
-                        ? undefined
-                        : maxDate.format('YYYY-MM-DD'),
+                    endDate: max === null ? undefined : dateToYYYYMMDD(max),
                     endTime: undefined
                   }
                 ];

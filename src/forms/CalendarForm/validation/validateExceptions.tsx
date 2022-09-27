@@ -3,10 +3,14 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   ExceptionFieldErrors,
-  ExceptionRowState,
+  ExceptionRowState
 } from '../../../components/fields/ExceptionFieldTypes';
 import RowType from '../../../components/fields/RowType';
-import { overlaps } from '../../../utils/DateUtils';
+import {
+  dateFromYYYYMMDDAndHHMM,
+  overlaps,
+  overlapsDates
+} from '../../../utils/DateUtils';
 import dayjs from '../../../utils/dayjs';
 import { InnerFieldRefs } from '../types';
 import { isTimeProper } from './validateDateTime';
@@ -67,7 +71,7 @@ export function validateExceptionsEmpty(
     startDate: {},
     startTime: {},
     endDate: {},
-    endTime: {},
+    endTime: {}
   };
 
   let hasError = false;
@@ -204,7 +208,7 @@ export function validateExceptionsDatesAndTimes(
     startDate: {},
     startTime: {},
     endDate: {},
-    endTime: {},
+    endTime: {}
   };
 
   let hasError = false;
@@ -249,7 +253,7 @@ export function validateExceptionInterOverlaps(
         .startOf('day'),
       endDate: dayjs
         .max(row.rows.map(({ endDate }) => dayjs(endDate)))
-        .endOf('day'),
+        .endOf('day')
     }));
 
   for (let i = 0; i < rowMinMaxes.length - 1; i++) {
@@ -284,11 +288,23 @@ export function getExceptionRowIntraOverlap(
   for (let i = 0; i < row.rows.length - 1; i++) {
     for (let j = i + 1; j < row.rows.length; j++) {
       if (
-        overlaps(
-          dayjs(`${row.rows[i].startDate} ${row.rows[i].startTime}`),
-          dayjs(`${row.rows[i].endDate} ${row.rows[i].endTime}`),
-          dayjs(`${row.rows[j].startDate} ${row.rows[j].startTime}`),
-          dayjs(`${row.rows[j].endDate} ${row.rows[j].endTime}`)
+        overlapsDates(
+          dateFromYYYYMMDDAndHHMM(
+            row.rows[i].startDate as string,
+            row.rows[i].startTime as string
+          ),
+          dateFromYYYYMMDDAndHHMM(
+            row.rows[i].endDate as string,
+            row.rows[i].endTime as string
+          ),
+          dateFromYYYYMMDDAndHHMM(
+            row.rows[j].startDate as string,
+            row.rows[j].startTime as string
+          ),
+          dateFromYYYYMMDDAndHHMM(
+            row.rows[j].endDate as string,
+            row.rows[j].endTime as string
+          )
         )
       ) {
         overlappingRows.add(row.rows[i].i);
@@ -361,6 +377,6 @@ export default function validateExceptions(
   return {
     // can be undefined but that is acceptable here
     // as no other cases to check
-    exceptions: validateExceptionIntraOverlaps(rows),
+    exceptions: validateExceptionIntraOverlaps(rows)
   };
 }

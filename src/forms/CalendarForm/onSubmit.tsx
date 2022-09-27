@@ -7,7 +7,12 @@ import { Optional } from 'utility-types';
 import RowType from '../../components/fields/RowType';
 import DataRepository from '../../data/DataRepository';
 import { Calendar, ErrorCode, ErrorResponse, Weekday } from '../../types/types';
-import dayjs from '../../utils/dayjs';
+import {
+  dateFromYYYYMMDD,
+  dateToYYYYMMDD,
+  maxDate,
+  minDate
+} from '../../utils/DateUtils';
 import { formatList } from '../../utils/I18nUtils';
 import { FormValues } from './types';
 
@@ -40,7 +45,7 @@ export default async function onSubmit(
     endDate: values['end-date'],
     assignments: [],
     normalHours: [],
-    exceptions: [],
+    exceptions: []
   };
 
   values['service-points']?.forEach((servicePoint) => {
@@ -54,7 +59,7 @@ export default async function onSubmit(
       startDay: opening.startDay as Weekday,
       startTime: opening.startTime as string,
       endDay: opening.endDay as Weekday,
-      endTime: opening.endTime as string,
+      endTime: opening.endTime as string
     });
   });
 
@@ -64,26 +69,37 @@ export default async function onSubmit(
         name: exception.name,
         startDate: exception.rows[0].startDate as string,
         endDate: exception.rows[0].endDate as string,
-        openings: [],
+        openings: []
       });
     } else {
-      const minDate = dayjs
-        .min(exception.rows.map(({ startDate }) => dayjs(startDate)))
-        .format('YYYY-MM-DD');
-      const maxDate = dayjs
-        .max(exception.rows.map(({ endDate }) => dayjs(endDate)))
-        .format('YYYY-MM-DD');
+      // validated to not be empty as part of pre-submission
+      // therefore, we know they will all be defined and non-empty
+      // so assertion `as Date` is valid
+      const min = dateToYYYYMMDD(
+        minDate(
+          exception.rows
+            .filter(({ startDate }) => startDate !== undefined)
+            .map(({ startDate }) => dateFromYYYYMMDD(startDate as string))
+        ) as Date
+      );
+      const max = dateToYYYYMMDD(
+        maxDate(
+          exception.rows
+            .filter(({ endDate }) => endDate !== undefined)
+            .map(({ endDate }) => dateFromYYYYMMDD(endDate as string))
+        ) as Date
+      );
 
       newCalendar.exceptions.push({
         name: exception.name,
-        startDate: minDate,
-        endDate: maxDate,
+        startDate: min,
+        endDate: max,
         openings: exception.rows.map((row) => ({
           startDate: row.startDate as string,
           startTime: row.startTime as string,
           endDate: row.endDate as string,
-          endTime: row.endTime as string,
-        })),
+          endTime: row.endTime as string
+        }))
       });
     }
   });
@@ -105,7 +121,7 @@ export default async function onSubmit(
         case ErrorCode.CALENDAR_DATE_OVERLAP:
           calloutContext.sendCallout({
             message: error.message,
-            type: 'error',
+            type: 'error'
           });
           submissionErrors['service-points'] = (
             <>
@@ -120,7 +136,7 @@ export default async function onSubmit(
                   ),
                   num: props.dataRepository.getServicePointNamesFromIds(
                     error.data.conflictingServicePointIds
-                  ).length,
+                  ).length
                 }}
               />{' '}
               {error.message}
@@ -149,7 +165,7 @@ export default async function onSubmit(
             message: (
               <FormattedMessage id="ui-calendar.calendarForm.error.internalServerError" />
             ),
-            type: 'error',
+            type: 'error'
           });
           submissionErrors[FORM_ERROR] = error.message;
       }
