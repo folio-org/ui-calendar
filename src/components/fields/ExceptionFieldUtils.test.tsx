@@ -267,12 +267,22 @@ describe('isOuterRowConflicted and isInnerRowConflicted', () => {
   });
 
   describe('does not find errors when data is missing', () => {
-    it('undefined error', () => {
+    it('outer undefined error', () => {
+      const response = isOuterRowConflicted(undefined, 0);
+      expect(response).toBe(false);
+    });
+
+    it('outer non-existent interConflicts', () => {
+      const response = isOuterRowConflicted({ intraConflicts: {} }, 0);
+      expect(response).toBe(false);
+    });
+
+    it('inner undefined error', () => {
       const response = isInnerRowConflicted(undefined, 0, 0);
       expect(response).toBe(false);
     });
 
-    it('non-existent interConflicts', () => {
+    it('inner non-existent interConflicts', () => {
       const response = isInnerRowConflicted({ intraConflicts: {} }, 0, 0);
       expect(response).toBe(false);
     });
