@@ -33,9 +33,9 @@ test('Calendar.tsx getWeekdayLabels works as expected', () => {
 
 test('Calendar.tsx Calendar works as expected', () => {
   const setMonthBasis = jest.fn();
-  expectRender(<><Calendar monthBasis={Dates.JAN_1_DATE} setMonthBasis={setMonthBasis} events={{ '2022-03-13': <span> something </span> }} /></>);
-  expectRender(<><Calendar monthBasis={Dates.MAR_1_DATE} setMonthBasis={setMonthBasis} events={{ '': <span>1</span> }} /></>);
-  expectRender(<><Calendar monthBasis={Dates.DEC_1_DATE} setMonthBasis={setMonthBasis} events={{ '2000-12-01': <span>1</span> }} /></>);
+  expectRender(<Calendar monthBasis={Dates.JAN_1_DATE} setMonthBasis={setMonthBasis} events={{ '2022-03-13': <span> something </span> }} />);
+  expectRender(<Calendar monthBasis={Dates.MAR_1_DATE} setMonthBasis={setMonthBasis} events={{ '': <span>1</span> }} />);
+  expectRender(<Calendar monthBasis={Dates.DEC_1_DATE} setMonthBasis={setMonthBasis} events={{ '2000-12-01': <span>1</span> }} />);
 });
 
 test('Calendar.tsx Calendar left button works as expected', async () => {
