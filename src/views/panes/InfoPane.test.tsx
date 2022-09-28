@@ -306,7 +306,7 @@ describe('Calendar info pane', () => {
     expect(props.onClose).toHaveBeenCalled();
   });
 
-  it('Metadata when none is included', () => {
+  it('Metadata when none is included', async () => {
     render(
       withHistoryConfiguration(
         withIntlConfiguration(
@@ -331,13 +331,15 @@ describe('Calendar info pane', () => {
 
     const metadata = screen.getByRole('region', { name: 'Record metadata' });
 
-    expect(metadata).toHaveTextContent('Created by' + 'Unknown');
-    expect(metadata).toHaveTextContent('Created at' + 'Unknown');
-    expect(metadata).toHaveTextContent('Last edited by' + 'Unknown');
-    expect(metadata).toHaveTextContent('Last edited at' + 'Unknown');
+    await waitFor(() => {
+      expect(metadata).toHaveTextContent('Created by' + 'Unknown');
+      expect(metadata).toHaveTextContent('Created at' + 'Unknown');
+      expect(metadata).toHaveTextContent('Last edited by' + 'Unknown');
+      expect(metadata).toHaveTextContent('Last edited at' + 'Unknown');
+    });
   });
 
-  it('Metadata when empty metadata object is provided', () => {
+  it('Metadata when empty metadata object is provided', async () => {
     render(
       withHistoryConfiguration(
         withIntlConfiguration(
@@ -362,10 +364,12 @@ describe('Calendar info pane', () => {
 
     const metadata = screen.getByRole('region', { name: 'Record metadata' });
 
-    expect(metadata).toHaveTextContent('Created by' + 'Unknown');
-    expect(metadata).toHaveTextContent('Created at' + 'Unknown');
-    expect(metadata).toHaveTextContent('Last edited by' + 'Unknown');
-    expect(metadata).toHaveTextContent('Last edited at' + 'Unknown');
+    await waitFor(() => {
+      expect(metadata).toHaveTextContent('Created by' + 'Unknown');
+      expect(metadata).toHaveTextContent('Created at' + 'Unknown');
+      expect(metadata).toHaveTextContent('Last edited by' + 'Unknown');
+      expect(metadata).toHaveTextContent('Last edited at' + 'Unknown');
+    });
   });
 
   it('Metadata when all is included', async () => {
@@ -407,10 +411,14 @@ describe('Calendar info pane', () => {
 
     const metadata = screen.getByRole('region', { name: 'Record metadata' });
 
-    expect(metadata).toHaveTextContent('Created by' + 'Prokopovych, Petro');
-    expect(metadata).toHaveTextContent('Created at' + '9/20/2022 4:07 AM');
-    expect(metadata).toHaveTextContent('Last edited by' + 'Dzierzon, Jan');
-    expect(metadata).toHaveTextContent('Last edited at' + '9/28/2022 4:07 AM');
+    await waitFor(() => {
+      expect(metadata).toHaveTextContent('Created by' + 'Prokopovych, Petro');
+      expect(metadata).toHaveTextContent('Created at' + '9/20/2022 4:07 AM');
+      expect(metadata).toHaveTextContent('Last edited by' + 'Dzierzon, Jan');
+      expect(metadata).toHaveTextContent(
+        'Last edited at' + '9/28/2022 4:07 AM'
+      );
+    });
   });
 
   it('Metadata handles unknown errors gracefully', async () => {
@@ -455,10 +463,14 @@ describe('Calendar info pane', () => {
     const metadata = screen.getByRole('region', { name: 'Record metadata' });
 
     // would normally fallback to UUIDs but we supply these names for testing
-    expect(metadata).toHaveTextContent('Created by' + 'PETRO_PROKOPOVYCH');
-    expect(metadata).toHaveTextContent('Created at' + '9/20/2022 4:07 AM');
-    expect(metadata).toHaveTextContent('Last edited by' + 'JOHANN_DZIERZON');
-    expect(metadata).toHaveTextContent('Last edited at' + '9/28/2022 4:07 AM');
+    await waitFor(() => {
+      expect(metadata).toHaveTextContent('Created by' + 'PETRO_PROKOPOVYCH');
+      expect(metadata).toHaveTextContent('Created at' + '9/20/2022 4:07 AM');
+      expect(metadata).toHaveTextContent('Last edited by' + 'JOHANN_DZIERZON');
+      expect(metadata).toHaveTextContent(
+        'Last edited at' + '9/28/2022 4:07 AM'
+      );
+    });
 
     expect(consoleMock).toHaveBeenCalledTimes(2);
 
