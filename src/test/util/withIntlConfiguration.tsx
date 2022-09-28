@@ -6,19 +6,19 @@ import { IntlProvider } from 'react-intl';
 // eslint-disable-next-line import/extensions
 import localTranslations from '../../../translations/ui-calendar/en.json';
 
-const translationSets = [
+export const translationSets = [
   {
     prefix: 'ui-calendar',
-    translations: localTranslations,
+    translations: localTranslations
   },
   {
     prefix: 'stripes-components',
-    translations: stripesComponentsTranslations,
+    translations: stripesComponentsTranslations
   },
   {
     prefix: 'stripes-core',
-    translations: stripesCoreTranslations,
-  },
+    translations: stripesCoreTranslations
+  }
 ];
 
 function withIntlConfiguration(

@@ -214,7 +214,7 @@ describe('isInnerRowConflicted', () => {
       expect(response).toBe(false);
     });
 
-    it('undefined intraconflicts', () => {
+    it('undefined intra conflicts', () => {
       const response = isInnerRowConflicted(
         {
           interConflicts: new Set<number>()
@@ -225,7 +225,7 @@ describe('isInnerRowConflicted', () => {
       expect(response).toBe(false);
     });
 
-    it('empty intraconflicts', () => {
+    it('empty intra conflicts', () => {
       const av = {
         intraConflicts: {}
       };
@@ -418,6 +418,7 @@ describe('Date/time field generation', () => {
     ];
 
     const fields = getDateTimeFields({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       props: { input: { onBlur }, fieldRefs } as any,
       row: rows[0],
       innerRow: rows[0].rows[0],
