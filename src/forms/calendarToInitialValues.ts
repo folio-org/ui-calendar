@@ -7,7 +7,7 @@ import { Calendar } from '../types/types';
 import { FormValues } from './CalendarForm/types';
 
 /** Convert a given calendar to a set of form values, to initialize edit/duplicate forms */
-export const calendarToInitialValues = memoizee(
+const calendarToInitialValues = memoizee(
   (
     dataRepository: DataRepository,
     calendar?: Calendar
@@ -23,17 +23,17 @@ export const calendarToInitialValues = memoizee(
       'hours-of-operation': calendar.normalHours.map(
         (opening, i): HoursOfOperationRowState => ({
           type: RowType.Open,
-          i: -1 - i, // ensure `i` is negative as not to conflict
-          ...opening,
+          i: -1 - i, // ensure `i` is negative as not to conflict with self-assigned indexes
+          ...opening
         })
       ),
       exceptions: calendar.exceptions.map((exception, i): ExceptionRowState => {
         const result: ExceptionRowState = {
-          i: -1 - i, // ensure `i` is negative as not to conflict
+          i: -1 - i, // ensure `i` is negative as not to conflict with self-assigned indexes
           type: exception.openings.length === 0 ? RowType.Closed : RowType.Open,
           name: exception.name,
           lastRowI: 0,
-          rows: [],
+          rows: []
         };
 
         if (result.type === RowType.Open) {
@@ -46,12 +46,12 @@ export const calendarToInitialValues = memoizee(
             startDate: exception.startDate,
             startTime: undefined,
             endDate: exception.endDate,
-            endTime: undefined,
+            endTime: undefined
           });
         }
 
         return result;
-      }),
+      })
     };
   }
 );
