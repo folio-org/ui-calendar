@@ -328,7 +328,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           >
             <MultiColumnList
               interactive={false}
-              onHeaderClick={() => ({})}
               getCellClass={(defaultClass, _rowData, column) => {
                 return classNames(defaultClass, {
                   [css.hoursCell]: column !== 'day',
@@ -384,7 +383,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           >
             <MultiColumnList
               interactive={false}
-              onHeaderClick={() => ({})}
               columnMapping={{
                 name: (
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.name" />
@@ -426,7 +424,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           >
             <MultiColumnList
               interactive={false}
-              onHeaderClick={() => ({})}
               columnMapping={{
                 name: (
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.name" />

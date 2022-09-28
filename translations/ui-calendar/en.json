@@ -90,7 +90,7 @@
   "infoPane.accordion.exceptions.openings.empty": "This calendar has no exceptional openings.",
   "infoPane.accordion.exceptions.closures": "Exceptions \u2014 closures",
   "infoPane.accordion.exceptions.closures.empty": "This calendar has no exceptional closures.",
-  "infoPane.accordion.exceptions.name": "Day",
+  "infoPane.accordion.exceptions.name": "Name",
   "infoPane.accordion.exceptions.start": "Start",
   "infoPane.accordion.exceptions.end": "Close",
   "infoPane.accordion.metadata": "Record metadata",
