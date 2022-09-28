@@ -36,7 +36,7 @@ export const permissions = {
 
 export const ALL_DAY = <FormattedMessage id="ui-calendar.settings.allDay" />;
 
-export const MAX_RECORDS = '1000';
+export const MAX_RECORDS = '10000';
 
 export const localizer = momentLocalizer(moment);
 

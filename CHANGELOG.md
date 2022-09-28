@@ -1,6 +1,10 @@
 # Change history for ui-calendar
 
-## [7.2.0] (https://github.com/folio-org/ui-calendar/tree/v7.1.1) (2022-06-25)
+## IN PROGRESS
+* Fixed display of service point in Library Hours. Refs UICAL-230.
+
+## [7.2.0] (https://github.com/folio-org/ui-calendar/tree/v7.2.0) (2022-06-25)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.1.1...v7.2.0)
 
 * Refactor away from `react-intl-safe-html`. Refs UICAL-142.
 * Update NodeJS to v16 in GitHub Actions. Refs UICAL-202.
