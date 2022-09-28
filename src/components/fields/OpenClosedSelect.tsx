@@ -12,12 +12,15 @@ export interface OpenClosedSelectProps {
 export default function OpenClosedSelect({
   value,
   onBlur,
-  onChange,
+  onChange
 }: OpenClosedSelectProps) {
   const intl = useIntl();
 
   return (
     <Select<RowType>
+      aria-label={intl.formatMessage({
+        id: 'ui-calendar.calendarForm.openings.column.status'
+      })}
       required
       fullWidth
       marginBottom0
@@ -25,21 +28,21 @@ export default function OpenClosedSelect({
         {
           value: RowType.Open,
           label: intl.formatMessage({
-            id: 'ui-calendar.calendarForm.openClosedSelect.open',
-          }),
+            id: 'ui-calendar.calendarForm.openClosedSelect.open'
+          })
         },
         {
           value: RowType.Closed,
           label: intl.formatMessage({
-            id: 'ui-calendar.calendarForm.openClosedSelect.closed',
-          }),
-        },
+            id: 'ui-calendar.calendarForm.openClosedSelect.closed'
+          })
+        }
       ]}
       value={value}
       onInput={(e) => {
         const newType = (e.target as HTMLSelectElement).value as RowType;
         const newProps: { type: RowType } = {
-          type: newType,
+          type: newType
         };
         onChange(newProps);
         onBlur();

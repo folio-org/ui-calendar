@@ -299,7 +299,7 @@ describe('Calendar info pane', () => {
       await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
       await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
       await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
-      expect(screen.getByText('Confirm deletion')).toBeVisible();
+      await waitFor(() => expect(screen.getByText('Confirm deletion')).toBeVisible());
       await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
     });
 
