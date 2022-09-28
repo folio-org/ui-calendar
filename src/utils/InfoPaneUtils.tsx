@@ -3,7 +3,6 @@ import { FormattedMessage, IntlShape } from 'react-intl';
 import { CalendarException, CalendarOpening, Weekday } from '../types/types';
 import css from '../views/panes/InfoPane.css';
 import { getLocalizedDate, getLocalizedTime } from './DateUtils';
-import dayjs from './dayjs';
 import { getWeekdaySpan, LocaleWeekdayInfo } from './WeekdayUtils';
 
 /**
@@ -72,7 +71,7 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
     THURSDAY: [],
     FRIDAY: [],
     SATURDAY: [],
-    SUNDAY: [],
+    SUNDAY: []
   };
 
   openings.forEach((opening) => {
@@ -90,7 +89,7 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
     span.forEach((day, i) => {
       const bounds: OpenCloseTimeTuple = [
         NEXT_DAY_FULL_WRAPAROUND,
-        NEXT_DAY_FULL_WRAPAROUND,
+        NEXT_DAY_FULL_WRAPAROUND
       ];
       if (i === 0) {
         bounds[0] = startTime;
@@ -131,7 +130,7 @@ export function get247Rows(
       >
         &ndash;
       </p>
-    ),
+    )
   }));
 }
 
@@ -148,7 +147,7 @@ export function generateDisplayRows(
       endTime: ReactNode[];
     } = {
       startTime: [],
-      endTime: [],
+      endTime: []
     };
 
     if (tuples.length === 0) {
@@ -165,7 +164,7 @@ export function generateDisplayRows(
           <p
             key={i}
             title={intl.formatMessage({
-              id: 'ui-calendar.infoPane.display.wrappedOpening',
+              id: 'ui-calendar.infoPane.display.wrappedOpening'
             })}
           >
             &ndash;
@@ -179,7 +178,7 @@ export function generateDisplayRows(
           <p
             key={i}
             title={intl.formatMessage({
-              id: 'ui-calendar.infoPane.display.wrappedClosed',
+              id: 'ui-calendar.infoPane.display.wrappedClosed'
             })}
           >
             &ndash;
@@ -190,7 +189,7 @@ export function generateDisplayRows(
           <p
             key={i}
             title={intl.formatMessage({
-              id: 'ui-calendar.infoPane.display.closesAfterMidnight',
+              id: 'ui-calendar.infoPane.display.closesAfterMidnight'
             })}
           >
             <FormattedMessage
@@ -198,8 +197,8 @@ export function generateDisplayRows(
               values={{
                 time: getLocalizedTime(
                   intl,
-                  close.replace(NEXT_DAY_OVERNIGHT, '')
-                ),
+                  close.replace(NEXT_DAY_OVERNIGHT, '').trim()
+                )
               }}
             />
           </p>
@@ -212,7 +211,7 @@ export function generateDisplayRows(
     return {
       day: weekday.long,
       startTime: <>{times.startTime}</>,
-      endTime: <>{times.endTime}</>,
+      endTime: <>{times.endTime}</>
     };
   });
 }
@@ -228,28 +227,23 @@ export function generateExceptionalOpeningRows(
       end: ReactNode[];
     } = {
       start: [],
-      end: [],
+      end: []
     };
 
     exception.openings.forEach(
       ({ startDate, startTime, endDate, endTime }, i) => {
-        const start = dayjs(`${startDate} ${startTime}`).tz(
-          intl.timeZone,
-          true
-        );
-        const end = dayjs(`${endDate} ${endTime}`).tz(intl.timeZone, true);
         times.start.push(
           <p key={i}>
-            {getLocalizedDate(intl, start)}
+            {getLocalizedDate(intl, startDate)}
             <br />
-            {getLocalizedTime(intl, start)}
+            {getLocalizedTime(intl, startTime)}
           </p>
         );
         times.end.push(
           <p key={i}>
-            {getLocalizedDate(intl, end)}
+            {getLocalizedDate(intl, endDate)}
             <br />
-            {getLocalizedTime(intl, end)}
+            {getLocalizedTime(intl, endTime)}
           </p>
         );
       }
@@ -258,7 +252,7 @@ export function generateExceptionalOpeningRows(
     return {
       name: exception.name,
       start: <>{times.start}</>,
-      end: <>{times.end}</>,
+      end: <>{times.end}</>
     };
   });
 }

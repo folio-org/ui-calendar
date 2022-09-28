@@ -315,9 +315,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               )}
               listStyle="bullets"
               isEmptyMessage={
-                <div className={css.noValue}>
+                <span className={css.noValue}>
                   <FormattedMessage id="ui-calendar.infoPane.accordion.assignments.empty" />
-                </div>
+                </span>
               }
             />
           </Accordion>

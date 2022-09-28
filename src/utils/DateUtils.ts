@@ -1,6 +1,5 @@
 import type { Dayjs } from 'dayjs';
 import { IntlShape } from 'react-intl';
-import dayjs from './dayjs';
 
 export function dateCompare(
   a: Date | undefined | null,
@@ -85,30 +84,6 @@ export function getRelativeDateProximity(
   return 'sameElse';
 }
 
-/** Localize time with `react-intl` */
-export function getLocalizedTime(
-  intl: IntlShape,
-  time: string | Dayjs
-): string {
-  const obj = dayjs(time, 'HH:mm');
-  if (
-    (obj.tz(intl.timeZone).hour() === 23 &&
-      obj.tz(intl.timeZone).minute() === 59) ||
-    (obj.tz(intl.timeZone).hour() === 0 && obj.tz(intl.timeZone).minute() === 0)
-  ) {
-    return intl.formatMessage({ id: 'ui-calendar.midnight' });
-  }
-  return intl.formatTime(obj.utc(true).toDate());
-}
-
-/** Localize date with `react-intl` */
-export function getLocalizedDate(
-  intl: IntlShape,
-  date: string | Dayjs
-): string {
-  return intl.formatDate(dayjs.tz(date, intl.timeZone).toDate());
-}
-
 /** Ensure a <= b, based on months */
 export function isSameMonthOrBefore(a: Date, b: Date): boolean {
   return (
@@ -133,6 +108,11 @@ export function dateToYYYYMMDD(d: Date): string {
 export function dateFromYYYYMMDD(d: string): Date {
   const parts = d.split('-').map((n) => parseInt(n, 10));
   return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+export function dateUTCFromYYYYMMDD(d: string): Date {
+  const parts = d.split('-').map((n) => parseInt(n, 10));
+  return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
 }
 
 export function dateFromYYYYMMDDAndHHMM(d: string, t: string): Date {
@@ -163,6 +143,11 @@ export function dateFromHHMM(t: string): Date {
   return new Date(0, 0, 0, timeParts[0], timeParts[1]);
 }
 
+export function dateUTCFromHHMM(t: string): Date {
+  const timeParts = t.split(':').map((n) => parseInt(n, 10));
+  return new Date(Date.UTC(0, 0, 0, timeParts[0], timeParts[1]));
+}
+
 export function dateToTimeOnly(d: Date): Date {
   return new Date(0, 0, 0, d.getHours(), d.getMinutes());
 }
@@ -187,4 +172,24 @@ export function isBetweenDatesByDay(
   const rightStart = toStartOfDay(right);
 
   return leftStart <= testStart && testStart <= rightStart;
+}
+
+/** Localize time with `react-intl` */
+export function getLocalizedTime(intl: IntlShape, time: string): string {
+  // forcibly use UTC for local time-ness
+  const date = dateUTCFromHHMM(time);
+
+  if (
+    (date.getUTCHours() === 23 && date.getUTCMinutes() === 59) ||
+    (date.getUTCHours() === 0 && date.getUTCMinutes() === 0)
+  ) {
+    return intl.formatMessage({ id: 'ui-calendar.midnight' });
+  }
+
+  return intl.formatTime(date, { timeZone: 'UTC' });
+}
+
+/** Localize date with `react-intl` */
+export function getLocalizedDate(intl: IntlShape, date: string): string {
+  return intl.formatDate(dateUTCFromYYYYMMDD(date), { timeZone: 'UTC' });
 }
