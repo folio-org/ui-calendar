@@ -1,24 +1,22 @@
 /* eslint-disable no-useless-concat */
+import { Paneset } from '@folio/stripes/components';
 import {
   act,
   getAllByRole,
-  getAllByText,
   getByRole,
-  logRoles,
   render,
   screen,
   waitFor
 } from '@testing-library/react';
-import React from 'react';
-import { Paneset } from '@folio/stripes/components';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import DataRepository from '../../data/DataRepository';
-import withIntlConfiguration from '../../test/util/withIntlConfiguration';
-import InfoPane from './InfoPane';
 import * as Calendars from '../../test/data/Calendars';
 import * as Users from '../../test/data/Users';
 import withHistoryConfiguration from '../../test/util/withHistoryConfiguration';
+import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import { CalendarDTO, User } from '../../types/types';
+import InfoPane from './InfoPane';
 
 const EN_DASH = '\u{2013}';
 const NBSP = '\u{00a0}';
