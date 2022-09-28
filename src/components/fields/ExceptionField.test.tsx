@@ -193,7 +193,7 @@ describe('ExceptionField', () => {
   });
 
   it('Adds inner row on button click', async () => {
-    const { container } = render(
+    render(
       withIntlConfiguration(
         <ExceptionField
           fieldRefs={{ startDate: {}, startTime: {}, endDate: {}, endTime: {} }}
