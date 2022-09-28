@@ -13,7 +13,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { ExceptionFieldProps } from '../../forms/CalendarForm/types';
 import {
   dateFromYYYYMMDD,
@@ -46,6 +46,8 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
     _setRowStates(newRowStates);
     props.input.onChange(newRowStates);
   };
+
+  const intl = useIntl();
 
   const fieldRefs = props.fieldRefs;
 
@@ -96,6 +98,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
         rowState: row,
         name: (
           <TextField
+            ariaLabel={intl.formatMessage({ id: 'ui-calendar.calendarForm.exceptions.column.name' })}
             marginBottom0
             required
             fullWidth
@@ -261,6 +264,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
       <MultiColumnList<MCLContentsType, 'isConflicted' | 'rowState'>
         interactive={false}
         rowMetadata={['isConflicted', 'rowState']}
+        columnIdPrefix="exceptions"
         columnMapping={{
           name: (
             <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.name" />
