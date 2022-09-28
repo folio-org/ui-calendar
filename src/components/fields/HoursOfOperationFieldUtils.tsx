@@ -145,18 +145,16 @@ export function getTimeError(
   submitAttempted: boolean,
   touched: boolean | undefined
 ): ReactNode {
-  if (!submitAttempted && !touched) {
+  if ((!submitAttempted && !touched) || error === undefined) {
     return undefined;
   }
-  return (
-    error?.empty?.[key]?.[rowIndex] || error?.invalidTimes?.[key]?.[rowIndex]
-  );
+  return error.empty?.[key][rowIndex] || error.invalidTimes?.[key][rowIndex];
 }
 
 export function getConflictError(
   error: HoursOfOperationErrors | undefined
 ): ReactNode {
-  if (error?.conflicts?.size !== undefined && error.conflicts.size > 0) {
+  if (!error?.conflicts?.size) {
     return undefined;
   }
   return (
