@@ -117,6 +117,9 @@ export const HoursOfOperationField: FunctionComponent<
         ),
         startDay: (
           <WeekdayPicker
+            ariaLabel={intl.formatMessage({
+              id: 'ui-calendar.calendarForm.openings.column.startDay'
+            })}
             value={row.startDay}
             onChange={(newWeekday) => {
               updateRowState(rowStates, setRowStates, realIndex, {
@@ -157,6 +160,9 @@ export const HoursOfOperationField: FunctionComponent<
         ),
         endDay: (
           <WeekdayPicker
+            ariaLabel={intl.formatMessage({
+              id: 'ui-calendar.calendarForm.openings.column.endDay'
+            })}
             value={row.endDay}
             onChange={(newWeekday) => {
               updateRowState(rowStates, setRowStates, realIndex, {
@@ -259,6 +265,7 @@ export const HoursOfOperationField: FunctionComponent<
       <MultiColumnList<MCLContentsType, 'isConflicted' | 'rowState'>
         interactive={false}
         rowMetadata={['isConflicted', 'rowState']}
+        columnIdPrefix="hours-of-operation"
         columnMapping={{
           status: (
             <FormattedMessage id="ui-calendar.calendarForm.openings.column.status" />

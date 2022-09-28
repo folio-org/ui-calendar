@@ -12,7 +12,7 @@ describe('WeekdayPicker', () => {
     const onChange = jest.fn();
     render(
       withIntlConfiguration(
-        <WeekdayPicker value={undefined} onChange={onChange} />
+        <WeekdayPicker value={undefined} onChange={onChange} ariaLabel="funky-chicken" />
       )
     );
 

@@ -9,6 +9,7 @@ export interface WeekdayPickerProps {
   value: Weekday | undefined;
   onChange?: (newValue: Weekday | undefined) => void;
   error?: ReactNode;
+  ariaLabel: string;
 }
 
 export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
@@ -36,6 +37,7 @@ export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
   return (
     <div className={css.wrapper}>
       <Select<Weekday | undefined>
+        aria-label={props.ariaLabel}
         required
         fullWidth
         marginBottom0
