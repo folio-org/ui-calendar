@@ -11,7 +11,6 @@ import {
   SelectFieldRenderProps
 } from '@folio/stripes/components';
 import { HTTPError } from 'ky';
-import memoizee from 'memoizee';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -20,7 +19,8 @@ import { Calendar } from '../types/types';
 import { dateFromYYYYMMDD } from '../utils/DateUtils';
 import css from './PurgeModal.css';
 
-enum AgeCriteria {
+
+export enum AgeCriteria {
   MONTHS_3 = 'MONTHS_3',
   MONTHS_6 = 'MONTHS_6',
   YEAR_1 = 'YEAR_1',
@@ -41,7 +41,7 @@ const AgeCriteriaMonths: Record<AgeCriteria, number> = {
   [AgeCriteria.YEARS_2]: 24
 };
 
-enum AssignmentCriteria {
+export enum AssignmentCriteria {
   NONE = 'NONE',
   ANY = 'ANY'
 }
@@ -51,14 +51,14 @@ const AssignmentCriteriaLabels: Record<AssignmentCriteria, string> = {
   [AssignmentCriteria.ANY]: 'ui-calendar.purgeModal.criteria.assignment.any'
 };
 
-interface FormValues {
+export interface FormValues {
   ageCriteria: AgeCriteria | undefined;
   assignmentCriteria: AssignmentCriteria | undefined;
 }
 
 export const FORM_ID = 'ui-calendar-purge-old-calendar-form';
 
-const getCalendarsToPurge = memoizee(
+export const getCalendarsToPurge = (
   (
     calendars: Calendar[],
     ageCriteria: AgeCriteria | undefined = undefined,
@@ -134,13 +134,11 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
         }}
         onSubmit={async (values) => {
           setIsSubmitting(true);
-
           const toPurge = getCalendarsToPurge(
             props.dataRepository.getCalendars(),
             values.ageCriteria,
             values.assignmentCriteria
           );
-
           if (toPurge.length === 0) {
             props.onClose();
             setIsSubmitting(false);

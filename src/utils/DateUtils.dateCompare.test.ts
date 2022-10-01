@@ -1,5 +1,5 @@
 import * as Dates from '../test/data/Dates';
-import { dateCompare, isBetweenDatesByDay} from './DateUtils';
+import { dateCompare, isBetweenDatesByDay } from './DateUtils';
 
 describe('dateCompare utility function', () => {
   it('Date comparison works as expected', () => {

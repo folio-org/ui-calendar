@@ -1,5 +1,5 @@
 import * as Dates from '../test/data/Dates';
-import { minDate, maxDate} from './DateUtils';
+import { minDate, maxDate } from './DateUtils';
 
 test('min and max date work for null', () => {
   expect(minDate([])).toBe(null);
