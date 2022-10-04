@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import * as Calendars from '../../test/data/Calendars';
 import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import CreateCalendarForm from './CalendarForm';
@@ -29,7 +28,7 @@ const mutators = {
 
 
 describe('CreateCalendarForm', () => {
-  describe('idk whats going on', () => {
+  describe('Creates Calendar Form', () => {
     const dataRepository = new DataRepository([Calendars.SPRING_SP_1_2], [ServicePoints.SERVICE_POINT_1_DTO], mutators);
     const closeParentLayer = jest.fn();
     const setIsSubmitting = jest.fn();
