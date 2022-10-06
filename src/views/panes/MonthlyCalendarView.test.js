@@ -20,4 +20,27 @@ describe('MonthlyCalendarView', () => {
     ));
     expect(screen.getByText('Calendar')).toBeInTheDocument();
   });
+
+  it('should render MonthlyCalendarView', () => {
+    const requestEvents = jest.fn();
+    render(withIntlConfiguration(
+      <MonthlyCalendarView
+        servicePoint={undefined}
+        events={undefined}
+        requestEvents={requestEvents}
+      />
+    ));
+    expect(requestEvents).toHaveBeenCalledTimes(0);
+  });
+  it('should render MonthlyCalendarView', () => {
+    const requestEvents = jest.fn();
+    render(withIntlConfiguration(
+      <MonthlyCalendarView
+        servicePoint={SERVICE_POINT_1}
+        events={undefined}
+        requestEvents={requestEvents}
+      />
+    ));
+    expect(requestEvents).toHaveBeenCalledTimes(1);
+  });
 });
