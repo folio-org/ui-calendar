@@ -1,10 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { useIntl } from 'react-intl';
 import useDataRepository from '../data/useDataRepository';
 import withIntlConfiguration from '../test/util/withIntlConfiguration';
 import withHistoryConfiguration from '../test/util/withHistoryConfiguration';
 import ServicePoints from '../test/data/ServicePoints';
-import MonthlyCalendarPickerView from './MonthlyCalendarPickerView';
+import MonthlyCalendarPickerView, { dailyOpeningToCalendarDisplay } from './MonthlyCalendarPickerView';
+import * as Dates from '../test/data/Dates';
+import * as Times from '../test/data/DateTimes';
 
 jest.mock('../data/useDataRepository');
 jest.mock('../components/Calendar.tsx', () => {
@@ -68,4 +71,37 @@ describe('MonthlyCalendarPickerView', () => {
       expect(links[4].href).toContain('/7c5abc9f-f3d7-4856-b8d7-6712462ca007');
     });
   });
+});
+
+test('dailyOpeningToCalendarDisplay', () => {
+  const openingInfo = {
+    date: Dates.DEC_1,
+    allDay: true,
+    open: true,
+    exceptional: false,
+    openings: { startTime: '12:00', endTime: '18:00' }
+  };
+  expect(dailyOpeningToCalendarDisplay(useIntl, openingInfo).key).toBe('975628800000');
+});
+
+test('dailyOpeningToCalendarDisplay', () => {
+  const openingInfo = {
+    date: Dates.DEC_1,
+    allDay: true,
+    open: true,
+    exceptional: true,
+    openings: { startTime: '12:00', endTime: '18:00' }
+  };
+  expect(dailyOpeningToCalendarDisplay(useIntl, openingInfo).key).toBe('975628800000');
+});
+
+test('dailyOpeningToCalendarDisplay', () => {
+  const openingInfo = {
+    date: Dates.DEC_1,
+    allDay: true,
+    open: false,
+    exceptional: true,
+    openings: { startTime: '12:00', endTime: '18:00' }
+  };
+  expect(dailyOpeningToCalendarDisplay(useIntl, openingInfo).key).toBe('975628800000');
 });

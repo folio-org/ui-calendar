@@ -27,7 +27,7 @@ import {
 } from '../utils/DateUtils';
 import MonthlyCalendarView from './panes/MonthlyCalendarView';
 
-function dailyOpeningToCalendarDisplay(
+export function dailyOpeningToCalendarDisplay(
   intl: IntlShape,
   openingInfo: DailyOpeningInfo
 ): ReactNode {
