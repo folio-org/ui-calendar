@@ -26,7 +26,7 @@ enum OpType {
   DUPLICATE,
 }
 
-function getOpType(initialValue?: Calendar, isEdit?: boolean): OpType {
+export function getOpType(initialValue?: Calendar, isEdit?: boolean): OpType {
   if (initialValue === undefined) {
     return OpType.CREATE_NEW;
   }
