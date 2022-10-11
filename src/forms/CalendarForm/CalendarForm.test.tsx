@@ -16,7 +16,7 @@ window.matchMedia = window.matchMedia || function () {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     removeListener() {}
   };
-};
+} as any;
 
 const mutators = {
   create: jest.fn(),
