@@ -16,7 +16,7 @@ import * as Users from '../../test/data/Users';
 import withHistoryConfiguration from '../../test/util/withHistoryConfiguration';
 import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import { CalendarDTO, User } from '../../types/types';
-import InfoPane from './InfoPane';
+import InfoPane, { InfoPaneProps } from './InfoPane';
 
 const EN_DASH = '\u{2013}';
 const NBSP = '\u{00a0}';
@@ -282,7 +282,7 @@ describe('Calendar info pane', () => {
         getServicePointNamesFromIds: (list: string[]) => list,
         deleteCalendar: () => Promise.resolve()
       } as unknown as DataRepository
-    };
+    } as InfoPaneProps;
 
     render(
       withHistoryConfiguration(
