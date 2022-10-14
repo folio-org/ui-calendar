@@ -74,7 +74,7 @@
         "description": "User can edit and reassign existing calendars",
         "subPermissions": [
           "ui-calendar.view",
-          "calendar.edit"
+          "calendar.update"
         ],
         "visible": true
       },
