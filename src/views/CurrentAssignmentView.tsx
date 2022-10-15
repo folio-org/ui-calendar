@@ -71,9 +71,9 @@ export const CurrentAssignmentView: FunctionComponent<
         startDateObj: undefined,
         endDate: '',
         endDateObj: undefined,
-        currentStatus: (
-          <FormattedMessage id="ui-calendar.currentStatus.closed.noNext" />
-        ),
+        currentStatus: intl.formatMessage({
+          id: 'ui-calendar.currentStatus.closed.noNext'
+        }),
         calendar: null
       };
     }
@@ -123,7 +123,7 @@ export const CurrentAssignmentView: FunctionComponent<
             startDateObj?: Date;
             endDate: ReactNode;
             endDateObj?: Date;
-            currentStatus: ReactNode;
+            currentStatus: string;
             calendar: Calendar | null;
           },
           'servicePointId' | 'calendar' | 'startDateObj' | 'endDateObj'
@@ -145,9 +145,9 @@ export const CurrentAssignmentView: FunctionComponent<
             endDate: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.endDate" />
             ),
-            currentStatus: (
-              <FormattedMessage id="ui-calendar.currentAssignmentView.column.currentStatus" />
-            )
+            currentStatus: intl.formatMessage({
+              id: 'ui-calendar.currentAssignmentView.column.currentStatus'
+            })
           }}
           contentData={rows}
           rowMetadata={[

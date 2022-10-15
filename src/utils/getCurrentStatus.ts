@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import { FormattedMessage, IntlShape } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import {
   Calendar,
   CalendarException,
@@ -203,7 +202,7 @@ export default function getCurrentStatus(
   localeWeekdays: LocaleWeekdayInfo[],
   testDateTime: Date,
   calendar: Calendar
-): ReactNode {
+): string {
   const status = getCurrentStatusNonFormatted(intl, testDateTime, calendar);
 
   let translationKey = 'ui-calendar.currentStatus';
@@ -234,15 +233,15 @@ export default function getCurrentStatus(
     });
   }
 
-  return (
-    <FormattedMessage
-      id={translationKey}
-      values={{
-        exceptionName: status.exceptionName,
-        nextWeekday: nextWeekdayString,
-        nextDate: status.nextEvent?.date,
-        nextTime: status.nextEvent?.time
-      }}
-    />
+  return intl.formatMessage(
+    {
+      id: translationKey
+    },
+    {
+      exceptionName: status.exceptionName,
+      nextWeekday: nextWeekdayString,
+      nextDate: status.nextEvent?.date,
+      nextTime: status.nextEvent?.time
+    }
   );
 }
