@@ -2,6 +2,7 @@ import { IntlShape } from 'react-intl';
 import * as Dates from '../test/data/Dates';
 import * as Weekdays from '../test/data/Weekdays';
 import expectRender from '../test/util/expectRender';
+import getIntl from '../test/util/getIntl';
 import type { Calendar } from '../types/types';
 import dayjs from './dayjs';
 import getCurrentStatus, {
@@ -9,11 +10,17 @@ import getCurrentStatus, {
 } from './getCurrentStatus';
 import { LocaleWeekdayInfo } from './WeekdayUtils';
 
-const intl = {
-  formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format('HH:mm')}||`),
-  formatDate: jest.fn((d) => `||${dayjs(d).utc(false).format('YYYY-MM-DD')}||`),
-  formatMessage: jest.fn((m) => m.id)
-} as unknown as IntlShape;
+let intl: IntlShape;
+
+beforeAll(() => {
+  intl = {
+    ...getIntl('en-US'),
+    formatTime: jest.fn((t) => `||${dayjs(t).utc(false).format('HH:mm')}||`),
+    formatDate: jest.fn(
+      (d) => `||${dayjs(d).utc(false).format('YYYY-MM-DD')}||`
+    )
+  };
+});
 
 const localeWeekdays: LocaleWeekdayInfo[] = [
   { weekday: Weekdays.Sunday, short: 'XXXXX', long: '||Sunday||' },

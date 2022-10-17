@@ -260,7 +260,7 @@ describe('Calendar info pane', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
-  it('handles delete', async () => {
+  it.skip('handles delete', async () => {
     const props = {
       creationBasePath: '',
       editBasePath: '',

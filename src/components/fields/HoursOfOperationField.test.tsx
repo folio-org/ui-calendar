@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import * as Weekdays from '../../test/data/Weekdays';
@@ -205,12 +205,12 @@ describe('HoursOfOperationField', () => {
       screen.getByRole('combobox', { name: 'Status' }),
       RowType.Closed
     );
-    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
+    await waitFor(() => expect(screen.queryAllByRole('textbox')).toHaveLength(0));
 
     await userEvent.selectOptions(
       screen.getByRole('combobox', { name: 'Status' }),
       RowType.Open
     );
-    expect(screen.getAllByRole('textbox')).toHaveLength(2);
+    await waitFor(() => expect(screen.getAllByRole('textbox')).toHaveLength(2));
   });
 });
