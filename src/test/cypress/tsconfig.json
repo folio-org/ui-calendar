@@ -1,0 +1,11 @@
+{
+  "include": ["./**/*.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "types": ["cypress"],
+    "lib": ["esnext", "dom"],
+    "isolatedModules": false,
+    "allowJs": true,
+    "noEmit": true
+  }
+}
