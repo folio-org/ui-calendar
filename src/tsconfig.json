@@ -1,4 +1,5 @@
 {
+  "exclude": ["./../cypress.config.ts"],
   "compilerOptions": {
     "allowJs": true,
     "noImplicitAny": true,
