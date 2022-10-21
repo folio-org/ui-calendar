@@ -1,6 +1,8 @@
 # Change history for ui-calendar
 
-## IN PROGRESS
+## [7.3.0] (https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.2.0...v7.3.0)
+
 * Fixed display of service point in Library Hours. Refs UICAL-230.
 
 ## [7.2.0] (https://github.com/folio-org/ui-calendar/tree/v7.2.0) (2022-06-25)
