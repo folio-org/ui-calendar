@@ -1,5 +1,23 @@
 # Change history for ui-calendar
 
+## [8.0.0] (IN PROGRESS)
+
+* Rewrite module in TypeScript
+* Add new layout for accessing calendar information
+* Support duplicating calendars
+* Support tabular calendar creation/edit format
+
+## [7.3.0] (https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.2.0...v7.3.0)
+
+* Fixed display of service point in Library Hours. Refs UICAL-230.
+
+## [7.2.0] (https://github.com/folio-org/ui-calendar/tree/v7.2.0) (2022-06-25)
+[Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.1.1...v7.2.0)
+
+* Refactor away from `react-intl-safe-html`. Refs UICAL-142.
+* Update NodeJS to v16 in GitHub Actions. Refs UICAL-202.
+
 ## [7.1.1] (https://github.com/folio-org/ui-calendar/tree/v7.1.1) (2022-03-13)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.1.0...v7.1.1)
 
