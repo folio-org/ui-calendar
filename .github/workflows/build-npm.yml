@@ -10,15 +10,13 @@
 #   - PUBLISH_MOD_DESCRIPTOR (boolean 'true' or 'false')
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
 
-
-
 name: buildNPM Snapshot
 on: [push, pull_request]
 
 jobs:
   github-actions-ci:
     env:
-      YARN_TEST_OPTIONS: '--karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
+      YARN_TEST_OPTIONS: '--coverage'
       SQ_ROOT_DIR: './src'
       COMPILE_TRANSLATION_FILES: 'true'
       PUBLISH_MOD_DESCRIPTOR: 'true'
@@ -27,10 +25,8 @@ jobs:
       NODEJS_VERSION: '16'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
       JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
-      BIGTEST_JUNIT_OUTPUT_DIR: 'artifacts/runTest'
-      BIGTEST_COVERAGE_REPORT_DIR: 'artifacts/coverage/lcov-report/'
       SQ_LCOV_REPORT: 'artifacts/coverage-jest/lcov.info'
-      SQ_EXCLUSIONS: '**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*-spec.js,**/karma.conf.js,**/jest.config.js'
+      SQ_EXCLUSIONS: '**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*.test.ts,**/*.test.tsx,**/*-spec.js,**/karma.conf.js,**/jest.config.js'
 
     runs-on: ubuntu-latest
     steps:
@@ -69,7 +65,7 @@ jobs:
         continue-on-error: true
 
       - name: Run yarn test
-        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
+        run: yarn node --expose-gc $(yarn bin jest) --runInBand --logHeapUsage $YARN_TEST_OPTIONS
 
       - name: Run yarn formatjs-compile
         if: ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
@@ -88,9 +84,9 @@ jobs:
         if: always()
         with:
           github_token: ${{ github.token }}
-          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
+          files: '${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml'
           check_name: Jest Unit Test Results
-          comment_mode: update last
+          comment_mode: always
           comment_title: Jest Unit Test Statistics
 
       - name: Publish Jest coverage report
@@ -99,24 +95,6 @@ jobs:
         with:
           name: jest-coverage-report
           path: ${{ env.JEST_COVERAGE_REPORT_DIR }}
-          retention-days: 30
-
-      - name: Publish BigTest unit test results
-        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
-        if: always()
-        with:
-          github_token: ${{ github.token }}
-          files: "${{ env.BIGTEST_JUNIT_OUTPUT_DIR }}/*.xml"
-          check_name: BigTest Unit Test Results
-          comment_mode: update last
-          comment_title: BigTest Unit Test Statistics
-
-      - name: Publish BigTest coverage report
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: bigtest-coverage-report
-          path: ${{ env.BIGTEST_COVERAGE_REPORT_DIR }}
           retention-days: 30
 
       - name: Publish yarn.lock
@@ -196,4 +174,3 @@ jobs:
           data: ${{ steps.moduleDescriptor.outputs.content }}
           username: ${{ secrets.FOLIO_REGISTRY_USERNAME }}
           password: ${{ secrets.FOLIO_REGISTRY_PASSWORD }}
-

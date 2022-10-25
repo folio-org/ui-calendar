@@ -1,5 +1,12 @@
 # Change history for ui-calendar
 
+## [8.0.0] (IN PROGRESS)
+
+* Rewrite module in TypeScript
+* Add new layout for accessing calendar information
+* Support duplicating calendars
+* Support tabular calendar creation/edit format
+
 ## [7.3.0] (https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.2.0...v7.3.0)
 

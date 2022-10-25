@@ -1,4 +1,15 @@
 {
-  "parser": "babel-eslint",
-  "extends": "@folio/eslint-config-stripes"
+  "extends": ["@folio/eslint-config-stripes", "plugin:import/typescript"],
+  "env": {
+    "jest": true
+  },
+  "rules": {
+    "import/no-named-as-default": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/test/**/*", "src/**/*.test.ts", "src/**/*.test.tsx"],
+      "env": { "jest": true }
+    }
+  ]
 }

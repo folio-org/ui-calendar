@@ -1,0 +1,16 @@
+.hiddenErrorFieldWrapper {
+  width: 100%;
+
+  & [role="alert"] div {
+    display: none;
+    margin-bottom: 0 !important;
+  }
+
+  & div {
+    margin-bottom: 0 !important;
+  }
+
+  & > div > div > div {
+    margin-bottom: 0 !important;
+  }
+}

@@ -1,0 +1,33 @@
+@import '@folio/stripes-components/lib/variables';
+
+.deleteButton {
+  color: var(--danger);
+}
+
+.dayCell {
+  align-items: start;
+}
+
+.hoursCell {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+
+  & p {
+    margin: 0;
+    padding: 5px 10px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.noValue {
+  font-style: italic;
+  color: grey;
+}
+
+.hidden {
+  display: none;
+}

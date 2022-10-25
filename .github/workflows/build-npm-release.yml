@@ -19,9 +19,9 @@ on:
 
 jobs:
   github-actions-ci:
-    if : ${{ startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     env:
-      YARN_TEST_OPTIONS: '--karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage'
+      YARN_TEST_OPTIONS: '--coverage'
       SQ_ROOT_DIR: './src'
       COMPILE_TRANSLATION_FILES: 'true'
       PUBLISH_MOD_DESCRIPTOR: 'true'
@@ -87,10 +87,10 @@ jobs:
         continue-on-error: true
 
       - name: Run yarn test
-        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
+        run: yarn test $YARN_TEST_OPTIONS
 
       - name: Run yarn formatjs-compile
-        if : ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
+        if: ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
         run: yarn formatjs-compile
 
       - name: Generate FOLIO module descriptor
@@ -145,9 +145,9 @@ jobs:
         if: always()
         with:
           github_token: ${{ github.token }}
-          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
+          files: '${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml'
           check_name: Jest Unit Test Results
-          comment_mode: update last
+          comment_mode: always
           comment_title: Jest Unit Test Statistics
 
       - name: Publish Jest coverage report
@@ -156,24 +156,6 @@ jobs:
         with:
           name: jest-coverage-report
           path: ${{ env.JEST_COVERAGE_REPORT_DIR }}
-          retention-days: 30
-
-      - name: Publish BigTest unit test results
-        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
-        if: always()
-        with:
-          github_token: ${{ github.token }}
-          files: "${{ env.BIGTEST_JUNIT_OUTPUT_DIR }}/*.xml"
-          check_name: BigTest Unit Test Results
-          comment_mode: update last
-          comment_title: BigTest Unit Test Statistics
-
-      - name: Publish BigTest coverage report
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: bigtest-coverage-report
-          path: ${{ env.BIGTEST_COVERAGE_REPORT_DIR }}
           retention-days: 30
 
       - name: Publish yarn.lock
@@ -242,4 +224,3 @@ jobs:
           data: ${{ steps.moduleDescriptor.outputs.content }}
           username: ${{ secrets.FOLIO_REGISTRY_USERNAME }}
           password: ${{ secrets.FOLIO_REGISTRY_PASSWORD }}
-
