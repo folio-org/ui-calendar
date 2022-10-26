@@ -6,6 +6,7 @@
 * Add new layout for accessing calendar information
 * Support duplicating calendars
 * Support tabular calendar creation/edit format
+* Use Jest for testing instead of bigtest
 
 ## [7.3.0] (https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.2.0...v7.3.0)
