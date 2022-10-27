@@ -1,12 +1,13 @@
 # Change history for ui-calendar
 
-## [8.0.0] (IN PROGRESS)
+## [8.0.0] (https://github.com/folio-org/ui-calendar/tree/v8.0.0) (2022-10-27)
 
 * Rewrite module in TypeScript
 * Add new layout for accessing calendar information
 * Support duplicating calendars
 * Support tabular calendar creation/edit format
 * Use Jest for testing instead of bigtest
+* Use new calendar 5.0 interface (from mod-calendar 2.0.0)
 
 ## [7.3.0] (https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.2.0...v7.3.0)
