@@ -1,6 +1,6 @@
 {
     "meta.title": "Calendário",
-    "permission.view": "Configurações (Calendário): Pode ver eventos do calendário",
+    "permission.view": "Configurações (Calendário): Pode visualizar os calendários existentes",
     "midnight": "Meia-noite",
     "calendarForm.title.create": "Novo calendário",
     "calendarForm.title.edit": "Editar calendário",
@@ -16,7 +16,7 @@
     "calendarForm.openings.column.startDay": "Dia de início",
     "calendarForm.openings.column.startTime": "Hora de início",
     "calendarForm.openings.column.endDay": "Fim do dia",
-    "calendarForm.openings.column.endTime": "End time",
+    "calendarForm.openings.column.endTime": "Tempo final",
     "calendarForm.openings.column.actions": "Ações",
     "calendarForm.exceptions.column.name": "Nome",
     "calendarForm.exceptions.column.status": "Status",
