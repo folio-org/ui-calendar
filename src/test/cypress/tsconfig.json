@@ -3,9 +3,12 @@
   "exclude": [],
   "compilerOptions": {
     "types": ["cypress"],
-    "lib": ["esnext", "dom"],
-    "isolatedModules": false,
     "allowJs": true,
-    "noEmit": true
-  }
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["esnext", "dom"],
+    "module": "es2020",
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  },
 }
