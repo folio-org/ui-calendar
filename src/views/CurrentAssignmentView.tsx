@@ -131,7 +131,7 @@ export const CurrentAssignmentView: FunctionComponent<
           sortedColumn="servicePoint"
           sortDirection="ascending"
           dateColumns={['startDate', 'endDate']}
-          dateColumnMap={{ startDate: 'startDateObj' }}
+          dateColumnMap={{ startDate: 'startDateObj', endDate: 'endDateObj' }}
           columnMapping={{
             servicePoint: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.servicePoint" />
