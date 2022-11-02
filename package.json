@@ -66,6 +66,10 @@
           "ui-calendar.view",
           "calendar.create"
         ],
+        "replaces": [
+          "ui-calendar.edit",
+          "ui-calendar.all"
+        ],
         "visible": true
       },
       {
@@ -75,6 +79,10 @@
         "subPermissions": [
           "ui-calendar.view",
           "calendar.update"
+        ],
+        "replaces": [
+          "ui-calendar.edit",
+          "ui-calendar.all"
         ],
         "visible": true
       },
@@ -86,6 +94,7 @@
           "ui-calendar.view",
           "calendar.delete"
         ],
+        "replaces": ["ui-calendar.all"],
         "visible": true
       }
     ]
