@@ -15,7 +15,12 @@ ModuleDescriptor.json
 *.swp
 *.swo
 .prettierrc
+.env
 
 # stripes
 stripes.config.js.local
 .stripesclirc
+
+# cypress
+.nyc_output
+coverage
