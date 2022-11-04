@@ -118,7 +118,7 @@
     "@folio/stripes-final-form": "^6.1.0",
     "@folio/stripes-form": "^7.1.0",
     "@folio/stripes-smart-components": "^7.2.0",
-    "@folio/stripes-testing": "^4.4.1000005196",
+    "@folio/stripes-testing": "^4.4.1",
     "@formatjs/cli": "^4.2.21",
     "@interactors/html": "^1.0.0-rc1.4",
     "@interactors/with-cypress": "^1.0.0-rc1.2",
