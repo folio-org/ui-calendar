@@ -9,6 +9,7 @@ import Button from '../interactors/button';
 
 describe('Duplicate an existing calendar to make a new one', () => {
   const testCalendarRequestBody = {
+    id: null,
     name: 'test-calendar-a8531527-aa3b-447a-8c76-88f905ade409',
     startDate: '2022-01-08',
     endDate: '2022-05-09',

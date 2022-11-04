@@ -1,34 +1,5 @@
 /// <reference types="cypress" />
-interface TestHour {
-    calendarId: string;
-    startDate: string;
-    startTime: string;
-    endDay: string;
-    endTime: string;
-}
-
-interface TestException {
-    calendarId: string;
-    name: string;
-    startDate: string;
-    endDate: string;
-    openings: {
-        exceptionId: string,
-        startDate: string;
-        startTime: string;
-        endDay: string;
-        endTime: string;
-    }[]
-}
-
-interface TestCalendarReqBody{
-    name: string;
-    startDate: string;
-    endDate: string;
-    assignments: string[];
-    normalHours: TestHour[];
-    exceptions: TestException[];
-}
+import { Calendar, ErrorResponse } from '../../types/types';
 
 
 declare namespace Cypress {
@@ -36,7 +7,7 @@ declare namespace Cypress {
         login(username: string, password: string): void;
         loginAsAdmin(): void;
         openCalendarSettings(isLoggedIn?: boolean): void;
-        createCalendar(reqBody: TestCalendarReqBody, callback: (res: Response<any>) => void): void;
-        deleteCalendar(calendarID: string, callback?: (res: Response<any>) => void): void;
+        createCalendar(reqBody: Calendar, callback: (res: Response<Calendar>) => void): void;
+        deleteCalendar(calendarID: string, callback?: (res: Response<ErrorResponse>) => void): void;
     }
 }
