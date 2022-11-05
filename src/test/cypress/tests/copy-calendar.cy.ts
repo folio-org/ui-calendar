@@ -3,21 +3,12 @@ import TextField from '@folio/stripes-testing/interactors/text-field';
 import Pane from '../interactors/pane';
 import { MultiColumnListCell } from '../interactors/multi-column-list';
 import Button from '../interactors/button';
+import testCalendarRequestBody from '../fixtures/bare-test-calendar.json';
 
 
 
 
 describe('Duplicate an existing calendar to make a new one', () => {
-  const testCalendarRequestBody = {
-    id: null,
-    name: 'test-calendar-a8531527-aa3b-447a-8c76-88f905ade409',
-    startDate: '2022-01-08',
-    endDate: '2022-05-09',
-    assignments: [],
-    normalHours: [],
-    exceptions: []
-  };
-
   let testCalendarResponse;
   const duplicateCalendarName = 'test-calendar-a8531527-aa3b-447a-8c76-88f905ade409-duplicate';
 
