@@ -6,7 +6,7 @@ import {
   ServicePoint,
   User
 } from '../types/types';
-import { dateToYYYYMMDD } from '../utils/DateUtils';
+import { dateUTCToYYYYMMDD } from '../utils/DateUtils';
 import { ServicePointDTO } from './types';
 
 const getServicePointMap = memoizee(
@@ -146,8 +146,8 @@ export default class DataRepository {
   ): Promise<DailyOpeningInfo[]> {
     return this.mutators.dates({
       servicePointId,
-      startDate: dateToYYYYMMDD(startDate),
-      endDate: dateToYYYYMMDD(endDate)
+      startDate: dateUTCToYYYYMMDD(startDate),
+      endDate: dateUTCToYYYYMMDD(endDate)
     });
   }
 

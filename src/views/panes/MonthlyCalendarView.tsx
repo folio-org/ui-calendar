@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import Calendar from '../../components/Calendar';
 import { ServicePoint } from '../../types/types';
 import { getDateArray } from '../../utils/CalendarUtils';
-import { dateToYYYYMMDD } from '../../utils/DateUtils';
+import { dateUTCToYYYYMMDD } from '../../utils/DateUtils';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 
 interface MonthlyCalendarViewProps {
@@ -32,7 +32,7 @@ export const MonthlyCalendarView: FunctionComponent<
   requestEvents
 }: MonthlyCalendarViewProps) => {
   const [monthBasis, setMonthBasis] = useState(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+    new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), 1))
   ); // start at current date
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
@@ -53,7 +53,7 @@ export const MonthlyCalendarView: FunctionComponent<
       }
 
       const missingDates = dateArray.map(
-        (date) => !(dateToYYYYMMDD(date) in events)
+        (date) => !(dateUTCToYYYYMMDD(date) in events)
       );
       const rangeStartIndex = missingDates.indexOf(true);
       // none missing

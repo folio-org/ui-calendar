@@ -11,7 +11,7 @@ import {
   dateFromYYYYMMDD,
   dateFromYYYYMMDDAndHHMM,
   dateToTimeOnly,
-  isSameMonthOrBefore
+  isSameUTCMonthOrBefore
 } from './DateUtils';
 import { getFirstDayOfWeek, weekdayIsBetween, WEEKDAYS } from './WeekdayUtils';
 
@@ -236,16 +236,20 @@ export function isOpen247(openings: CalendarOpening[]): boolean {
 export const getDateArray = memoizee(
   (locale: string, monthBasis: Date): Date[] => {
     // start of the month
-    const date = new Date(monthBasis.getFullYear(), monthBasis.getMonth(), 1);
+    const date = new Date(
+      Date.UTC(monthBasis.getUTCFullYear(), monthBasis.getUTCMonth(), 1)
+    );
     // if the month starts at the beginning of the week, add a full row above of the previous month
-    if (date.getDay() === getFirstDayOfWeek(locale)) {
-      date.setDate(date.getDate() - 7);
+    if (date.getUTCDay() === getFirstDayOfWeek(locale)) {
+      date.setUTCDate(date.getUTCDate() - 7);
     }
 
     const firstWeekday = getFirstDayOfWeek(locale);
 
     // ensure startDate starts at the beginning of a week
-    date.setDate(date.getDate() - ((date.getDay() - firstWeekday + 7) % 7));
+    date.setUTCDate(
+      date.getUTCDate() - ((date.getUTCDay() - firstWeekday + 7) % 7)
+    );
 
     // at this point, date must be in a month before `month`.
 
@@ -254,16 +258,16 @@ export const getDateArray = memoizee(
     let week = [];
     do {
       week.push(new Date(date));
-      date.setDate(date.getDate() + 1);
+      date.setUTCDate(date.getUTCDate() + 1);
       if (week.length === 7) {
         displayDates.push(...week);
         week = [];
       }
-    } while (isSameMonthOrBefore(date, monthBasis));
+    } while (isSameUTCMonthOrBefore(date, monthBasis));
 
     while (week.length < 7) {
       week.push(new Date(date));
-      date.setDate(date.getDate() + 1);
+      date.setUTCDate(date.getUTCDate() + 1);
     }
     displayDates.push(...week);
 
