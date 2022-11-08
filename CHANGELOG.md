@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## [8.0.2] (https://github.com/folio-org/ui-calendar/tree/v8.0.2) (2022-11-07)
+
+* Fix stripes-testing version to non-CI version.
+
 ## [8.0.1] (https://github.com/folio-org/ui-calendar/tree/v8.0.1) (2022-11-07)
 
 * Use replacement permission syntax for automatic permission carryover. Refs UICAL-247
