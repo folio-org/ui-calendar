@@ -69,6 +69,7 @@ export default function TimeField({
           touched: true,
           error
         }}
+        timeZone="UTC"
       />
     </div>
   );
