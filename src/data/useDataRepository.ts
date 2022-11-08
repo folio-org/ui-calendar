@@ -21,7 +21,7 @@ export default function useDataRepository(): DataRepository {
     ['ui-calendar', 'service-points'],
     async () => {
       const data = await ky
-        .get('service-points?cql.allRecords=1')
+        .get(`service-points?cql.allRecords=1&limit=${MAX_LIMIT}`)
         .json<ServicePointResponseDTO>();
       return data.servicepoints;
     }
