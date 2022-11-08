@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 import { FormattedDate, useIntl } from 'react-intl';
 import { CSSPropertiesWithVars } from '../types/css';
 import { getDateArray } from '../utils/CalendarUtils';
-import { dateToYYYYMMDD, isSameMonth } from '../utils/DateUtils';
+import { dateUTCToYYYYMMDD, isSameUTCMonth } from '../utils/DateUtils';
 import { LocaleWeekdayInfo, useLocaleWeekdays } from '../utils/WeekdayUtils';
 import css from './Calendar.css';
 
@@ -31,7 +31,7 @@ export default function Calendar(props: Props) {
 
   const displayDates = getDateArray(intl.locale, monthBasis).map(
     (date: Date) => {
-      const dateString = dateToYYYYMMDD(date);
+      const dateString = dateUTCToYYYYMMDD(date);
       let contents: ReactNode = <Loading />;
       if (dateString in events) {
         contents = events[dateString];
@@ -40,13 +40,13 @@ export default function Calendar(props: Props) {
       return (
         <div
           className={classNames(
-            isSameMonth(date, monthBasis) ? '' : css.adjacentMonth,
+            isSameUTCMonth(date, monthBasis) ? '' : css.adjacentMonth,
             css.calendarDay
           )}
-          key={dateToYYYYMMDD(date)}
+          key={dateUTCToYYYYMMDD(date)}
         >
           <span key="label" className={css.dayLabel}>
-            <FormattedDate value={date} day="numeric" />
+            <FormattedDate value={date} day="numeric" timeZone="UTC" />
           </span>
           {contents}
         </div>
@@ -67,17 +67,26 @@ export default function Calendar(props: Props) {
         <IconButton
           icon="arrow-left"
           onClick={() => setMonthBasis(
-            new Date(new Date(monthBasis).setMonth(monthBasis.getMonth() - 1))
+            new Date(
+              new Date(monthBasis).setUTCMonth(monthBasis.getUTCMonth() - 1)
+            )
           )
           }
         />
         <Headline size="xx-large" margin="none">
-          <FormattedDate value={monthBasis} month="long" year="numeric" />
+          <FormattedDate
+            value={monthBasis}
+            month="long"
+            year="numeric"
+            timeZone="UTC"
+          />
         </Headline>
         <IconButton
           icon="arrow-right"
           onClick={() => setMonthBasis(
-            new Date(new Date(monthBasis).setMonth(monthBasis.getMonth() + 1))
+            new Date(
+              new Date(monthBasis).setUTCMonth(monthBasis.getUTCMonth() + 1)
+            )
           )
           }
         />

@@ -85,6 +85,15 @@ export function getRelativeDateProximity(
 }
 
 /** Ensure a <= b, based on months */
+export function isSameUTCMonthOrBefore(a: Date, b: Date): boolean {
+  return (
+    (a.getUTCFullYear() === b.getUTCFullYear() &&
+      a.getUTCMonth() <= b.getUTCMonth()) ||
+    a.getUTCFullYear() < b.getUTCFullYear()
+  );
+}
+
+/** Ensure a <= b, based on months */
 export function isSameMonthOrBefore(a: Date, b: Date): boolean {
   return (
     (a.getFullYear() === b.getFullYear() && a.getMonth() <= b.getMonth()) ||
@@ -95,6 +104,22 @@ export function isSameMonthOrBefore(a: Date, b: Date): boolean {
 /** Ensure a == b, based on months */
 export function isSameMonth(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+}
+
+/** Ensure a == b, based on months */
+export function isSameUTCMonth(a: Date, b: Date): boolean {
+  return (
+    a.getUTCFullYear() === b.getUTCFullYear() &&
+    a.getUTCMonth() === b.getUTCMonth()
+  );
+}
+
+export function dateUTCToYYYYMMDD(d: Date): string {
+  return [
+    d.getUTCFullYear(),
+    ('0' + (d.getUTCMonth() + 1)).slice(-2),
+    ('0' + d.getUTCDate()).slice(-2)
+  ].join('-');
 }
 
 export function dateToYYYYMMDD(d: Date): string {
