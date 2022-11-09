@@ -11,7 +11,8 @@ export default defineConfig({
     diku_login: process.env.DIKU_USERNAME,
     diku_password: process.env.DIKU_PASSWORD,
     okapi_tenant: 'diku',
-    calendar_api_url: 'https://folio-snapshot-okapi.dev.folio.org/calendar/calendars'
+    calendar_api_url: 'https://folio-snapshot-okapi.dev.folio.org/calendar/calendars',
+    service_point_api_url: 'https://folio-snapshot-okapi.dev.folio.org/service-points'
   },
   e2e: {
     baseUrl: 'http://localhost:3000',

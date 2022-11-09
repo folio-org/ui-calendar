@@ -1,9 +1,12 @@
 import { including, Link } from '@interactors/html';
 import Accordion from '@folio/stripes-testing/interactors/accordion';
+import List, { ListItem } from '@folio/stripes-testing/interactors/list';
 import KeyValue from '@folio/stripes-testing/interactors/key-value';
-import testCalendarRequestBody from '../fixtures/bare-test-calendar.json';
+import { CYPRESS_TEST_CALENDAR } from '../../data/Calendars';
+import { CYPRESS_TEST_SERVICE_POINT } from '../../data/ServicePoints';
 import Pane from '../interactors/pane';
 import { MultiColumnListCell } from '../interactors/multi-column-list';
+import Headline from '../interactors/headline';
 import Button from '../interactors/button';
 
 
@@ -15,10 +18,17 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
     cy.loginAsAdmin();
 
     // create test calendar
-    cy.createCalendar(testCalendarRequestBody, (response) => {
-      testCalendarResponse = response.body;
+    cy.createServicePoint(CYPRESS_TEST_SERVICE_POINT, (response) => {
+      console.log('response: ', response);
+      CYPRESS_TEST_CALENDAR.assignments = [response.body.id];
+
+      cy.createCalendar(CYPRESS_TEST_CALENDAR, (calResponse) => {
+        testCalendarResponse = calResponse.body;
+        console.log('testCalendarResponse', testCalendarResponse);
+      });
     });
   });
+
 
   beforeEach(() => {
     cy.openCalendarSettings();
@@ -27,6 +37,7 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
 
   after(() => {
     // delete test calendar
+    cy.deleteServicePoint(CYPRESS_TEST_SERVICE_POINT.id);
     cy.deleteCalendar(testCalendarResponse.id);
   });
 
@@ -40,14 +51,20 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
   });
 
   it('should check that the fields of the calendar exists', () => {
+    const firstClosureException = CYPRESS_TEST_CALENDAR.exceptions.find(cal => cal.openings.length === 0);
+    const firstOpeningException = CYPRESS_TEST_CALENDAR.exceptions.find(cal => cal.openings.length !== 0);
     cy.do([
       Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name)).click(),
+      Headline(CYPRESS_TEST_CALENDAR.name).exists(),
       KeyValue('Start date').exists(),
       KeyValue('End date').exists(),
       Accordion('Service point assignments').exists(),
+      Accordion('Service point assignments').find(List()).find(ListItem(including(CYPRESS_TEST_SERVICE_POINT.name))).exists(),
       Accordion('Hours of operation').exists(),
       Accordion('Exceptions — openings').exists(),
+      Accordion('Exceptions — openings').find(MultiColumnListCell(firstOpeningException.name)).exists(),
       Accordion('Exceptions — closures').exists(),
+      Accordion('Exceptions — closures').find(MultiColumnListCell(firstClosureException.name)).exists(),
       Accordion('Record metadata').exists(),
     ]);
   });
