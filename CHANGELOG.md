@@ -1,5 +1,18 @@
 # Change history for ui-calendar
 
+## [8.0.2] (https://github.com/folio-org/ui-calendar/tree/v8.0.2) (2022-11-07)
+
+* Fix stripes-testing version to non-CI version.
+
+## [8.0.1] (https://github.com/folio-org/ui-calendar/tree/v8.0.1) (2022-11-07)
+
+* Use replacement permission syntax for automatic permission carryover. Refs UICAL-247
+* Fix end date column sorting in Current Assignment View. Refs UICAL-246
+* Add initial Cypress tests and infrastructure. Refs UICAL-249.
+* Fix timepicker timezone miscalculations. Refs UICAL-251
+* Allow more than ten service points to be chosen from. Refs UICAL-248
+* Fix monthly date view calculations. Refs UICAL-205
+
 ## [8.0.0] (https://github.com/folio-org/ui-calendar/tree/v8.0.0) (2022-10-27)
 
 * Rewrite module in TypeScript

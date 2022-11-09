@@ -21,7 +21,7 @@ import css from '../components/Calendar.css';
 import useDataRepository from '../data/useDataRepository';
 import { DailyOpeningInfo } from '../types/types';
 import {
-  dateToYYYYMMDD,
+  dateUTCToYYYYMMDD,
   getDateRange,
   getLocalizedTime
 } from '../utils/DateUtils';
@@ -121,7 +121,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
           loadingEvents[servicePointId] = {};
         }
         getDateRange(startDate, endDate).forEach((date) => {
-          loadingEvents[servicePointId][dateToYYYYMMDD(date)] = <Loading />;
+          loadingEvents[servicePointId][dateUTCToYYYYMMDD(date)] = <Loading />;
         });
         // prevents further calls of this function while these events are being loaded
         setEvents(loadingEvents);
