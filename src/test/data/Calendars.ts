@@ -227,3 +227,88 @@ export const SUMMER_SP_4_245: CalendarDTO = {
   ],
   exceptions: []
 };
+
+export const CYPRESS_TEST_CALENDAR: CalendarDTO = {
+  id: 'a8531527-aa3b-447a-8c76-88f905ade409',
+  name: 'Cypress-Test-Calendar',
+  assignments: [],
+  startDate: '2000-05-01',
+  endDate: '2000-08-01',
+  normalHours: [
+    {
+      startDay: 'SATURDAY',
+      startTime: '09:00',
+      endDay: 'SATURDAY',
+      endTime: '20:00'
+    },
+    {
+      startDay: 'MONDAY',
+      startTime: '09:00',
+      endDay: 'TUESDAY',
+      endTime: '01:00'
+    },
+    {
+      startDay: 'TUESDAY',
+      startTime: '09:00',
+      endDay: 'TUESDAY',
+      endTime: '23:00'
+    },
+    {
+      startDay: 'WEDNESDAY',
+      startTime: '09:00',
+      endDay: 'WEDNESDAY',
+      endTime: '23:00'
+    },
+    {
+      startDay: 'THURSDAY',
+      startTime: '09:00',
+      endDay: 'THURSDAY',
+      endTime: '23:00'
+    },
+    {
+      startDay: 'FRIDAY',
+      startTime: '09:00',
+      endDay: 'FRIDAY',
+      endTime: '12:00'
+    },
+    {
+      startDay: 'FRIDAY',
+      startTime: '13:30',
+      endDay: 'FRIDAY',
+      endTime: '20:00'
+    }
+  ],
+  exceptions: [
+    {
+      name: 'Sample Holiday',
+      startDate: '2000-06-01',
+      endDate: '2000-06-01',
+      openings: []
+    },
+    {
+      name: 'Community Event (Longer Hours)',
+      startDate: '2000-05-13',
+      endDate: '2000-05-15',
+      openings: [
+        {
+          startDate: '2000-05-13',
+          startTime: '07:00',
+          endDate: '2000-05-13',
+          endTime: '23:59'
+        },
+        {
+          startDate: '2000-05-14',
+          startTime: '05:00',
+          endDate: '2000-05-14',
+          endTime: '21:59'
+        },
+        {
+          startDate: '2000-05-15',
+          startTime: '06:00',
+          endDate: '2000-05-15',
+          endTime: '22:59'
+        }
+      ]
+    }
+  ]
+};

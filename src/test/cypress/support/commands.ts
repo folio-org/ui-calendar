@@ -77,6 +77,41 @@ Cypress.Commands.add('deleteCalendar', (calendarID, callback = null) => {
 });
 
 
+Cypress.Commands.add('createServicePoint', (testServicePointRequestBody, callback) => {
+  cy.wrap(localforage.getItem('okapiSess')).then((okapiSess) => {
+    expect(okapiSess).to.have.property('token');
+    cy.request({
+      url: Cypress.env('service_point_api_url'),
+      method: 'POST',
+      body: testServicePointRequestBody,
+      headers: {
+        'x-okapi-tenant': Cypress.env('okapi_tenant'),
+        'x-okapi-token': okapiSess.token
+      }
+    }).then((response) => {
+      expect(response.status).equals(201);
+      callback(response);
+    });
+  });
+});
+
+Cypress.Commands.add('deleteServicePoint', (servicePointID, callback = null) => {
+  cy.wrap(localforage.getItem('okapiSess')).then(okapiSess => {
+    expect(okapiSess).to.have.property('token');
+    cy.request({
+      url: Cypress.env('service_point_api_url') + '/' + servicePointID,
+      method: 'DELETE',
+      headers: {
+        'x-okapi-tenant': 'diku',
+        'x-okapi-token': okapiSess.token
+      }
+    }).then((response) => {
+      expect(response.status).equals(204);
+      if (callback) { callback(response); }
+    });
+  });
+});
+
 
 
 
