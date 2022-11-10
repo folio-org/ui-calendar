@@ -6,6 +6,8 @@ import Button from '../../interactors/button';
 import Pane from '../../interactors/pane';
 import Headline from '../../interactors/headline';
 import { MultiColumnListCell } from '../../interactors/multi-column-list';
+import { CalendarDTO } from '../../../../types/types';
+import { ServicePointDTO } from '../../../../data/types';
 
 export const checkExpandButton = () => {
   cy.do([
@@ -31,7 +33,7 @@ export const checkExpandButton = () => {
   ]);
 };
 
-export const checkMenuAction = (calendarName) => {
+export const checkMenuAction = (calendarName: string) => {
   cy.do([
     Pane(calendarName).find(Button({ className: including('actionMenuToggle') })).click(),
     Button('Edit').exists(),
@@ -40,7 +42,7 @@ export const checkMenuAction = (calendarName) => {
   ]);
 };
 
-export const checkCalendarFields = (calendar, servicePoint) => {
+export const checkCalendarFields = (calendar: CalendarDTO, servicePoint: ServicePointDTO) => {
   const firstClosureException = calendar.exceptions.find(cal => cal.openings.length === 0);
   const firstOpeningException = calendar.exceptions.find(cal => cal.openings.length !== 0);
   cy.do([
@@ -54,6 +56,6 @@ export const checkCalendarFields = (calendar, servicePoint) => {
     Accordion('Exceptions — openings').find(MultiColumnListCell(firstOpeningException.name)).exists(),
     Accordion('Exceptions — closures').exists(),
     Accordion('Exceptions — closures').find(MultiColumnListCell(firstClosureException.name)).exists(),
-    Accordion('Record metadata').exists(),
+    Accordion('Record metadata').exists()
   ]);
 };
