@@ -1,14 +1,10 @@
 import { including, Link } from '@interactors/html';
-import Accordion from '@folio/stripes-testing/interactors/accordion';
-import List, { ListItem } from '@folio/stripes-testing/interactors/list';
-import KeyValue from '@folio/stripes-testing/interactors/key-value';
 import { CYPRESS_TEST_CALENDAR } from '../../data/Calendars';
 import { CYPRESS_TEST_SERVICE_POINT } from '../../data/ServicePoints';
 import Pane from '../interactors/pane';
 import { MultiColumnListCell } from '../interactors/multi-column-list';
-import Headline from '../interactors/headline';
 import Button from '../interactors/button';
-
+import { checkCalendarFields, checkExpandButton, checkMenuAction } from '../support/fragments/calendar-info-pane';
 
 describe('Checking the view of calendar on "All Calendars" tab', () => {
   let testCalendarResponse;
@@ -51,56 +47,23 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
   });
 
   it('should check that the fields of the calendar exists', () => {
-    const firstClosureException = CYPRESS_TEST_CALENDAR.exceptions.find(cal => cal.openings.length === 0);
-    const firstOpeningException = CYPRESS_TEST_CALENDAR.exceptions.find(cal => cal.openings.length !== 0);
-    cy.do([
+    cy.do(
       Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name)).click(),
-      Headline(CYPRESS_TEST_CALENDAR.name).exists(),
-      KeyValue('Start date').exists(),
-      KeyValue('End date').exists(),
-      Accordion('Service point assignments').exists(),
-      Accordion('Service point assignments').find(List()).find(ListItem(including(CYPRESS_TEST_SERVICE_POINT.name))).exists(),
-      Accordion('Hours of operation').exists(),
-      Accordion('Exceptions — openings').exists(),
-      Accordion('Exceptions — openings').find(MultiColumnListCell(firstOpeningException.name)).exists(),
-      Accordion('Exceptions — closures').exists(),
-      Accordion('Exceptions — closures').find(MultiColumnListCell(firstClosureException.name)).exists(),
-      Accordion('Record metadata').exists(),
-    ]);
+    );
+    checkCalendarFields(CYPRESS_TEST_CALENDAR, CYPRESS_TEST_SERVICE_POINT);
   });
 
   it('should check that the expand/collapse button works correctly', () => {
-    cy.do([
-      Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name)).click(),
-      Button('Expand all').absent(),
-      Button('Collapse all').exists(),
-
-
-      Accordion('Service point assignments', { open: true }).exists(),
-      Accordion('Hours of operation', { open: true }).exists(),
-      Accordion('Exceptions — openings', { open: true }).exists(),
-      Accordion('Exceptions — closures', { open: true }).exists(),
-      Accordion('Record metadata', { open: true }).exists(),
-
-      Button('Collapse all').click(),
-      Button('Collapse all').absent(),
-      Button('Expand all').exists(),
-
-      Accordion('Service point assignments', { open: false }).exists(),
-      Accordion('Hours of operation', { open: false }).exists(),
-      Accordion('Exceptions — openings', { open: false }).exists(),
-      Accordion('Exceptions — closures', { open: false }).exists(),
-      Accordion('Record metadata', { open: false }).exists()
-    ]);
+    cy.do(
+      Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name, { column: 'Calendar name' })).click(),
+    );
+    checkExpandButton();
   });
 
   it('should check that the individual calendar tab has the appropriate menu actions', () => {
-    cy.do([
-      Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name)).click(),
-      Pane(testCalendarResponse.name).find(Button({ className: including('actionMenuToggle') })).click(),
-      Button('Edit').exists(),
-      Button('Duplicate').exists(),
-      Button('Delete').exists()
-    ]);
+    cy.do(
+      Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name, { column: 'Calendar name' })).click(),
+    );
+    checkMenuAction(testCalendarResponse.name);
   });
 });
