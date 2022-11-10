@@ -232,8 +232,8 @@ export const CYPRESS_TEST_CALENDAR: CalendarDTO = {
   id: 'a8531527-aa3b-447a-8c76-88f905ade409',
   name: 'Cypress-Test-Calendar',
   assignments: [],
-  startDate: '2000-05-01',
-  endDate: '2000-08-01',
+  startDate: '2022-07-01',
+  endDate: '2022-12-01',
   normalHours: [
     {
       startDay: 'SATURDAY',
@@ -281,31 +281,31 @@ export const CYPRESS_TEST_CALENDAR: CalendarDTO = {
   exceptions: [
     {
       name: 'Sample Holiday',
-      startDate: '2000-06-01',
-      endDate: '2000-06-01',
+      startDate: '2022-07-01',
+      endDate: '2022-07-10',
       openings: []
     },
     {
       name: 'Community Event (Longer Hours)',
-      startDate: '2000-05-13',
-      endDate: '2000-05-15',
+      startDate: '2022-08-01',
+      endDate: '2022-08-03',
       openings: [
         {
-          startDate: '2000-05-13',
+          startDate: '2022-08-01',
           startTime: '07:00',
-          endDate: '2000-05-13',
+          endDate: '2022-08-01',
           endTime: '23:59'
         },
         {
-          startDate: '2000-05-14',
+          startDate: '2022-08-02',
           startTime: '05:00',
-          endDate: '2000-05-14',
+          endDate: '2022-08-02',
           endTime: '21:59'
         },
         {
-          startDate: '2000-05-15',
+          startDate: '2022-08-03',
           startTime: '06:00',
-          endDate: '2000-05-15',
+          endDate: '2022-08-03',
           endTime: '22:59'
         }
       ]
