@@ -15,12 +15,10 @@ describe('Checking the view of calendar on "Current Calendar assignments tab"', 
 
     // create test calendar
     cy.createServicePoint(CYPRESS_TEST_SERVICE_POINT, (response) => {
-      console.log('response: ', response);
       CYPRESS_TEST_CALENDAR.assignments = [response.body.id];
 
       cy.createCalendar(CYPRESS_TEST_CALENDAR, (calResponse) => {
         testCalendarResponse = calResponse.body;
-        console.log('testCalendarResponse', testCalendarResponse);
       });
     });
   });
@@ -46,7 +44,7 @@ describe('Checking the view of calendar on "Current Calendar assignments tab"', 
 
   it('should check that the fields of the calendar exists', () => {
     cy.do([
-      Pane('Current calendar assignments').find(MultiColumnListCell(CYPRESS_TEST_SERVICE_POINT.name, { column: 'Service point' })).click(),
+      Pane('Current calendar assignments').find(MultiColumnListCell(testCalendarResponse.name, { column: 'Calendar name' })).click(),
     ]);
     checkCalendarFields(CYPRESS_TEST_CALENDAR, CYPRESS_TEST_SERVICE_POINT);
   });
