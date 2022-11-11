@@ -44,11 +44,7 @@ describe('Checking the view of calendar on "Current Calendar assignments tab"', 
 
   it('should check that the fields of the calendar exists', () => {
     cy.do([
-<<<<<<< HEAD
       Pane('Current calendar assignments').find(MultiColumnListCell(testCalendarResponse.name, { column: 'Calendar name' })).click(),
-=======
-      Pane('Current calendar assignments').find(MultiColumnListCell(CYPRESS_TEST_SERVICE_POINT.name, { column: 'Service point' })).click(),
->>>>>>> b04e5bbb56c17645047026c2d3ac27c6bb40374d
     ]);
     checkCalendarFields(CYPRESS_TEST_CALENDAR, CYPRESS_TEST_SERVICE_POINT);
   });
