@@ -15,12 +15,10 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
 
     // create test calendar
     cy.createServicePoint(CYPRESS_TEST_SERVICE_POINT, (response) => {
-      console.log('response: ', response);
       CYPRESS_TEST_CALENDAR.assignments = [response.body.id];
 
       cy.createCalendar(CYPRESS_TEST_CALENDAR, (calResponse) => {
         testCalendarResponse = calResponse.body;
-        console.log('testCalendarResponse', testCalendarResponse);
       });
     });
   });
