@@ -3,7 +3,7 @@ import TextField from '@folio/stripes-testing/interactors/text-field';
 import Pane from '../interactors/pane';
 import { MultiColumnListCell } from '../interactors/multi-column-list';
 import Button from '../interactors/button';
-import { CYPRESS_TEST_CALENDAR } from '../../data/Calendars';
+import { cypressTestCalendarInfo } from '../../data/e2e-data';
 
 
 
@@ -17,7 +17,7 @@ describe('Duplicate an existing calendar to make a new one', () => {
     cy.openCalendarSettings(false);
 
     // create test calendar
-    cy.createCalendar(CYPRESS_TEST_CALENDAR, (response) => {
+    cy.createCalendar(cypressTestCalendarInfo.calendar, (response) => {
       testCalendarResponse = response.body;
     });
   });

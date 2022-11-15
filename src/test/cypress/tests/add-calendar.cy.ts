@@ -5,7 +5,7 @@ import { Calendar } from '@folio/stripes-testing/interactors/datepicker';
 import Accordion from '@folio/stripes-testing/interactors/accordion';
 import MultiSelect from '../interactors/multi-select';
 import { CYPRESS_TEST_SERVICE_POINT } from '../../data/ServicePoints';
-import { CYPRESS_TEST_CALENDAR } from '../../data/Calendars';
+import { cypressTestCalendarInfo } from '../../data/e2e-data';
 import Pane, { PaneHeader } from '../interactors/pane';
 import { MultiColumnList, MultiColumnListCell, MultiColumnListRow } from '../interactors/multi-column-list';
 import Button from '../interactors/button';
@@ -27,9 +27,9 @@ describe('Add new calendar for service point', () => {
 
     // create test service point
     cy.createServicePoint(CYPRESS_TEST_SERVICE_POINT, (response) => {
-      CYPRESS_TEST_CALENDAR.assignments = [response.body.id];
+      cypressTestCalendarInfo.calendar.assignments = [response.body.id];
 
-      cy.createCalendar(CYPRESS_TEST_CALENDAR, (calResponse) => {
+      cy.createCalendar(cypressTestCalendarInfo.calendar, (calResponse) => {
         testCalendarResponse = calResponse.body;
       });
     });
@@ -72,24 +72,24 @@ describe('Add new calendar for service point', () => {
 
 
     // intercept http request
-    let duplicateCalendarID;
+    let calendarID;
     cy.intercept('POST', Cypress.env('calendar_api_url'), (req) => {
       req.continue((res) => {
         expect(res.statusCode).equals(201);
-        duplicateCalendarID = res.body.id;
+        calendarID = res.body.id;
       });
-    }).as('createDuplicateCalendar');
+    }).as('createCalendar');
 
-    // check that duplicate calendar exists in list of calendars
-    cy.wait('@createDuplicateCalendar').then(() => {
+    // check that new calendar exists in list of calendars
+    cy.wait('@createCalendar').then(() => {
       cy.openCalendarSettings();
       cy.do([
         Pane('Calendar').find(Link('All calendars')).click(),
         Pane('All calendars').find(MultiColumnListCell(newCalendarInfo.name)).exists(),
       ]);
 
-      // delete duplicate calendar
-      cy.deleteCalendar(duplicateCalendarID);
+      // delete calendar
+      cy.deleteCalendar(calendarID);
     });
   });
 });
