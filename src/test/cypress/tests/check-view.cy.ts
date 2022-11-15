@@ -1,5 +1,5 @@
 import { including, Link } from '@interactors/html';
-import { CYPRESS_TEST_CALENDAR } from '../../data/Calendars';
+import { cypressTestCalendarInfo } from '../../data/e2e-data';
 import { CYPRESS_TEST_SERVICE_POINT } from '../../data/ServicePoints';
 import Pane from '../interactors/pane';
 import { MultiColumnListCell } from '../interactors/multi-column-list';
@@ -15,9 +15,9 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
 
     // create test calendar
     cy.createServicePoint(CYPRESS_TEST_SERVICE_POINT, (response) => {
-      CYPRESS_TEST_CALENDAR.assignments = [response.body.id];
+      cypressTestCalendarInfo.calendar.assignments = [response.body.id];
 
-      cy.createCalendar(CYPRESS_TEST_CALENDAR, (calResponse) => {
+      cy.createCalendar(cypressTestCalendarInfo.calendar, (calResponse) => {
         testCalendarResponse = calResponse.body;
       });
     });
@@ -48,7 +48,7 @@ describe('Checking the view of calendar on "All Calendars" tab', () => {
     cy.do(
       Pane('All calendars').find(MultiColumnListCell(testCalendarResponse.name)).click(),
     );
-    checkCalendarFields(CYPRESS_TEST_CALENDAR, CYPRESS_TEST_SERVICE_POINT);
+    checkCalendarFields(cypressTestCalendarInfo.calendar, CYPRESS_TEST_SERVICE_POINT);
   });
 
   it('should check that the expand/collapse button works correctly', () => {
