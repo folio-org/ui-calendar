@@ -24,3 +24,4 @@ stripes.config.js.local
 # cypress
 .nyc_output
 coverage
+cypress/
