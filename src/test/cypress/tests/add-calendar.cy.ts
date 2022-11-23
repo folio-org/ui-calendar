@@ -52,7 +52,7 @@ describe('Add new calendar for service point', () => {
 
     cy.deleteCalendar(testCalendarResponse.id);
 
-    cy.url().should('include', '/settings/calendar/active/create');
+    cy.url().should('match', '/settings/calendar/active/create$');
 
 
 
