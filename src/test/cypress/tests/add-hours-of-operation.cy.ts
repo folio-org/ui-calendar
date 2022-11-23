@@ -7,7 +7,7 @@ import { CYPRESS_TEST_SERVICE_POINT } from '../../data/ServicePoints';
 import { cypressTestCalendarInfo } from '../../data/e2e-data';
 import Button from '../interactors/button';
 import Pane from '../interactors/pane';
-import { TimeDropdown } from '../interactors/timepicker';
+import TimeDropdown from '../interactors/timedropdown';
 import { MultiColumnListCell, MultiColumnListRow } from '../interactors/multi-column-list';
 
 describe('Add new hours of operation for service point', () => {
