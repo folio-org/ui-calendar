@@ -42,6 +42,21 @@ const lastDayOfMonth: string = monthToLastDay[currentMonth];
 
 interface CypressTestCalendarInfo {
   calendar: CalendarDTO,
+  addHoursOfOperation: {
+    data: {
+      status: string,
+      startDay: string,
+      startTime: string,
+      endDay: string,
+      endTime: string
+    },
+    expectedUIValues: {
+      [key: string]: {
+        startTime: string,
+        endTime: string
+      }
+    }
+  },
   expectedUIValues: {
     monthlyCalendarView: {
       days: {
@@ -96,13 +111,13 @@ export const cypressTestCalendarInfo: CypressTestCalendarInfo = {
         startDay: 'THURSDAY',
         startTime: '09:00',
         endDay: 'THURSDAY',
-        endTime: '23:00'
+        endTime: '12:00'
       },
       {
         startDay: 'FRIDAY',
         startTime: '09:00',
         endDay: 'FRIDAY',
-        endTime: '19:00'
+        endTime: '13:00'
       },
     ],
     exceptions: [
@@ -140,14 +155,30 @@ export const cypressTestCalendarInfo: CypressTestCalendarInfo = {
     ]
   },
 
+  addHoursOfOperation: {
+    data: {
+      status: 'Open',
+      startDay: 'Friday',
+      startTime: '15:00',
+      endDay: 'Friday',
+      endTime: '23:00',
+    },
+    expectedUIValues: {
+      'Friday': {
+        startTime: '3:00 PM',
+        endTime: '11:00 PM'
+      }
+    }
+  },
+
   expectedUIValues: {
     monthlyCalendarView: {
       days: {
         monday: '9:00 AM – Midnight',
         tuesday: 'Midnight – 2:00 AM9:00 AM – Midnight',
         wednesday: 'Midnight – Midnight9:00 AM – 11:00 PM',
-        thursday: '9:00 AM – 11:00 PM',
-        friday: '9:00 AM – 7:00 PM',
+        thursday: '9:00 AM – 12:00 PM',
+        friday: '9:00 AM – 1:00 PM',
         saturday: '9:00 AM – 8:00 PM',
         sunday: 'Closed'
       },
