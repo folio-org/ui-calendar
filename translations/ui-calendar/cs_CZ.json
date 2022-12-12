@@ -33,7 +33,7 @@
     "calendarForm.error.timeOrder": "Datum/čas ukončení nesmí být před datem/časem zahájení",
     "calendarForm.error.openingConflictError": "Některé zahájení mají vzájemné konflikty",
     "calendarForm.error.exceptionConflictError": "Některé výjimky mají vzájemné konflikty",
-    "calendarForm.error.internalServerError": "Interní chyba serveru",
+    "calendarForm.error.internalServerError": "Vnitřní chyba serveru",
     "calendarForm.error.servicePointConflict": "{num, plural, =1 {Servisní místo} other {Servisní místa}} {list} {num, plural, =1 {má} other {mají}} překrytí.",
     "currentStatus.open.noNext": "Otevřít",
     "currentStatus.open.sameDay": "Otevřeno do {nextTime}",
