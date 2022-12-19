@@ -12,5 +12,6 @@ declare namespace Cypress {
         deleteCalendar(calendarID: string, callback?: (res: Response<ErrorResponse>) => void): void;
         createServicePoint(reqBody: Calendar, callback: (res: Response<ServicePointDTO>) => void): void;
         deleteServicePoint(calendarID: string, callback?: (res: Response<ErrorResponse>) => void): void;
+        deleteCalendarUI(): void;
     }
 }

@@ -1,15 +1,14 @@
-import { CalendarDTO } from '../../types/types';
-
 interface MonthToLastDayOfMonth {
   [key: string]: string;
 }
 
-const currentDate: Date = new Date();
-const currentYearInt: number = currentDate.getUTCFullYear();
-const currentYear: string = currentYearInt.toString();
-const currentMonth: string = ('0' + (currentDate.getUTCMonth() + 1).toString()).slice(-2);
 
-let febNumberOfDays: string;
+const currentDate = new Date();
+const currentYearInt = currentDate.getUTCFullYear();
+const currentYear = currentYearInt.toString();
+const currentMonth = ('0' + (currentDate.getUTCMonth() + 1).toString()).slice(-2);
+
+let febNumberOfDays;
 if ((currentYearInt % 4) === 0) {
   if ((currentYearInt % 100) === 0) {
     febNumberOfDays = (currentYearInt % 400) === 0 ? '29' : '28';
@@ -37,45 +36,15 @@ const monthToLastDay: MonthToLastDayOfMonth = {
 };
 
 
-const lastDayOfMonth: string = monthToLastDay[currentMonth];
+const lastDayOfMonth = monthToLastDay[currentMonth];
 
+const nextMonth = ('0' + ((currentDate.getUTCMonth() + 2) % 12).toString()).slice(-2);
+const nextMonthYearInt = currentDate.getUTCMonth() === 11 ? currentYearInt + 1 : currentYearInt;
+const nextMonthYear = nextMonthYearInt.toString();
 
-interface CypressTestCalendarInfo {
-  calendar: CalendarDTO,
-  addHoursOfOperation: {
-    data: {
-      status: string,
-      startDay: string,
-      startTime: string,
-      endDay: string,
-      endTime: string
-    },
-    expectedUIValues: {
-      [key: string]: {
-        startTime: string,
-        endTime: string
-      }
-    }
-  },
-  expectedUIValues: {
-    monthlyCalendarView: {
-      days: {
-        monday: string,
-        tuesday: string,
-        wednesday: string,
-        thursday: string,
-        friday: string,
-        saturday: string,
-        sunday: string
-      },
-      exceptions: {
-        [date: string]: string
-      }
-    }
-  }
-}
+const lastDayOfNextMonth = monthToLastDay[nextMonth];
 
-export const cypressTestCalendarInfo: CypressTestCalendarInfo = {
+export default {
   calendar: {
     id: 'a8531527-aa3b-447a-8c76-88f905ade409',
     name: 'Cypress-Test-Calendar',
@@ -85,14 +54,14 @@ export const cypressTestCalendarInfo: CypressTestCalendarInfo = {
     normalHours: [
       {
         startDay: 'SATURDAY',
-        startTime: '09:00',
-        endDay: 'SATURDAY',
-        endTime: '20:00'
+        startTime: '00:00',
+        endDay: 'SUNDAY',
+        endTime: '11:00'
       },
       {
-        startDay: 'MONDAY',
+        startDay: 'Monday',
         startTime: '09:00',
-        endDay: 'TUESDAY',
+        endDay: 'Tuesday',
         endTime: '02:00'
       },
       {
@@ -155,19 +124,50 @@ export const cypressTestCalendarInfo: CypressTestCalendarInfo = {
     ]
   },
 
-  addHoursOfOperation: {
-    data: {
+  servicePoint: {
+    id: 'ea414290-0e76-47dd-935d-d0fa6ed10ca9',
+    name: 'Test service point',
+    code: 'n/a',
+    discoveryDisplayName: 'n/a',
+    staffSlips: [],
+    metadata: undefined
+  },
+
+  data: {
+    newCalendar: {
+      name: 'test-calendar-create',
+      startDate: `${nextMonthYear}-${nextMonth}-01`,
+      endDate: `${nextMonthYear}-${nextMonth}-${lastDayOfNextMonth}`,
+    },
+    editHoursOfOperation: {
+      startTime: '08:00',
+      endTime: '17:00'
+    },
+    addHoursOfOperation: {
       status: 'Open',
       startDay: 'Friday',
       startTime: '15:00',
       endDay: 'Friday',
       endTime: '23:00',
     },
-    expectedUIValues: {
-      'Friday': {
-        startTime: '3:00 PM',
-        endTime: '11:00 PM'
-      }
+
+    addExceptionsClosure: {
+      name: 'TestClosureException',
+      status: 'Closed',
+      startDate: `${currentYear}-${currentMonth}-06`,
+      endDate: `${currentYear}-${currentMonth}-07`,
+    },
+
+    addExceptionsOpening: {
+      name: 'TestOpeningException',
+      status: 'Open',
+      startDate: `${currentYear}-${currentMonth}-07`,
+      endDate: `${currentYear}-${currentMonth}-07`,
+      startTime: '13:00',
+      endTime: '15:00'
+    },
+    editExistingCalendars: {
+      name: 'test-calendar-edit',
     }
   },
 
@@ -189,7 +189,25 @@ export const cypressTestCalendarInfo: CypressTestCalendarInfo = {
         [`${currentYear}-${currentMonth}-04`]: '6:00 AM – 9:59 PM',
         [`${currentYear}-${currentMonth}-05`]: '6:00 AM – 10:59 PM'
       },
-    }
+    },
+    addHoursOfOperation: {
+      'Friday': {
+        startTime: '3:00 PM',
+        endTime: '11:00 PM'
+      }
+    },
+    addExceptionsClosure: {
 
+    },
+    addExceptionsOpening: {
+      startDate: `${currentMonth}/7/${currentYear}`,
+      startTime: '1:00 PM',
+      endDate: `${currentMonth}/7/${currentYear}`,
+      endTime: '3:00 PM'
+    },
+    editHoursOfOperation: {
+      startTime: '8:00 AM',
+      endTime: '5:00 PM'
+    }
   }
 };

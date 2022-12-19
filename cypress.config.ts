@@ -10,12 +10,13 @@ export default defineConfig({
     // stripes username and password
     diku_login: process.env.DIKU_USERNAME,
     diku_password: process.env.DIKU_PASSWORD,
-    okapi_tenant: 'diku',
+    OKAPI_HOST: 'https://folio-testing-cypress-okapi.ci.folio.org',
+    OKAPI_TENANT: 'diku',
     calendar_api_url: 'https://folio-snapshot-okapi.dev.folio.org/calendar/calendars',
-    service_point_api_url: 'https://folio-snapshot-okapi.dev.folio.org/service-points'
+    service_point_api_url: 'https://folio-snapshot-okapi.dev.folio.org/service-points',
   },
   e2e: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://folio-testing-cypress-diku.ci.folio.org',
     setupNodeEvents(on, config) {
       return config;
     },
@@ -24,3 +25,5 @@ export default defineConfig({
     specPattern: 'src/test/cypress/tests/*.cy.{js,jsx,ts,tsx}',
   },
 });
+
+
