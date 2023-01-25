@@ -78,7 +78,7 @@
     "infoPane.accordion.hours": "Öffnungszeiten",
     "infoPane.accordion.hours.day": "Tag",
     "infoPane.accordion.hours.open": "Geöffnet",
-    "infoPane.accordion.hours.close": "Schließen",
+    "infoPane.accordion.hours.close": "Geschlossen",
     "infoPane.nextDayHelpText": "* steht für den nächsten Tag",
     "infoPane.overnightHelpText": "– zeigt an, dass Servicestelle bereits geöffnet war oder nicht schließt",
     "infoPane.247HelpText": "Dieser Kalender ist 24/7 geöffnet und schließt nicht",
