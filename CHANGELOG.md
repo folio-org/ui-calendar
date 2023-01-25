@@ -1,9 +1,5 @@
 # Change history for ui-calendar
 
-## IN PROGRESS
-
-* Move `cypress` to dev-deps since it is not a run-time dep. Refs UICAL-260.
-
 ## [8.0.2] (https://github.com/folio-org/ui-calendar/tree/v8.0.2) (2022-11-07)
 
 * Fix stripes-testing version to non-CI version.
