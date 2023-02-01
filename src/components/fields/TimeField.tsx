@@ -1,18 +1,13 @@
 import { Timepicker } from '@folio/stripes/components';
 import classNames from 'classnames';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import dayjs from '../../utils/dayjs';
 import css from './hiddenErrorField.css';
-
-function noOp() {
-  /* no-op */
-}
 
 export interface TimeFieldProps {
   display: boolean;
   value: string | undefined;
   inputRef: (el: HTMLInputElement) => void;
-  localeTimeFormat: string;
   error: ReactNode;
   onBlur: () => void;
   onChange: (newValue: string | undefined) => void;
@@ -23,15 +18,17 @@ export default function TimeField({
   value,
   display,
   inputRef,
-  localeTimeFormat,
   error,
   onBlur,
   className,
-  ...props
+  onChange
 }: TimeFieldProps) {
-  const [internalRef, setInternalRef] = useState<HTMLInputElement | null>(null);
-
   if (!display) return null;
+
+  let valueWithSuffix = value;
+  if (valueWithSuffix !== undefined && !valueWithSuffix.endsWith('Z')) {
+    valueWithSuffix += 'Z';
+  }
 
   return (
     <div
@@ -40,34 +37,30 @@ export default function TimeField({
     >
       <Timepicker
         required
-        input={{
-          value: value === undefined ? '' : value,
-          name: '',
-          onBlur: noOp,
-          onFocus: noOp,
-          onChange: (newTime: string) => {
-            const input = internalRef;
-            if (input !== null) {
-              const selection = input.selectionStart;
-              input.value = dayjs(newTime, 'HH:mm').format(localeTimeFormat);
-              input.setSelectionRange(selection, selection);
-            }
-            props.onChange(
-              newTime.length ? newTime.substring(0, 5) : undefined
-            );
-          }
+        value={valueWithSuffix}
+        onChange={(_e, newTime) => {
+          onChange(newTime?.substring(0, 5));
+          onBlur();
         }}
-        // always fires, compared to input.onChange
-        onChange={() => onBlur()}
-        inputRef={(r) => {
-          setInternalRef(r);
-          inputRef(r);
-        }}
+        inputRef={inputRef}
         marginBottom0
         usePortal
         meta={{
           touched: true,
           error
+        }}
+        parser={(time, _timezone, timeFormat) => {
+          if (!time) return '';
+
+          if (time.endsWith('Z')) {
+            return dayjs.utc(time, 'HH:mm').format(timeFormat);
+          }
+
+          if (dayjs.utc(time, timeFormat).isValid()) {
+            return dayjs.utc(time, timeFormat).format(timeFormat);
+          }
+
+          return time;
         }}
         timeZone="UTC"
       />

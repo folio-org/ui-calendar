@@ -50,7 +50,7 @@ export function validateDate(
     (!(key in values) || typeof values[key] !== 'string')
   ) {
     return {
-      [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />,
+      [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />
     };
   }
 
@@ -64,7 +64,7 @@ export function validateDate(
           id="ui-calendar.calendarForm.error.dateFormat"
           values={{ localeDateFormat }}
         />
-      ),
+      )
     };
   }
 
@@ -88,7 +88,7 @@ export function validateDateOrder(values: Partial<FormValues>): {
     return {
       'end-date': (
         <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
-      ),
+      )
     };
   }
   return {};

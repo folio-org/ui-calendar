@@ -1,4 +1,5 @@
 import Popper from 'popper.js';
+import { IntlShape } from 'react-intl';
 import { AriaAttributes, Component, ReactNode, RefObject } from 'react';
 import { FieldRenderProps } from 'react-final-form';
 
@@ -21,6 +22,20 @@ export interface TimepickerProps extends AriaAttributes {
   modifiers?: Popper.Modifiers;
   /** Fired anytime internal state changes */
   onChange?: (e: Event, standardizedTime?: string) => void;
+  /** Format a UTC value into the specified timezone */
+  outputFormatter?: (props: {
+    value: string | undefined;
+    formats: string[];
+    timezone: string;
+    intl: IntlShape;
+  }) => string;
+  /** Parse a provided value into a given format */
+  parser?: (
+    value: string | undefined,
+    timezone: string,
+    timeFormat: string,
+    intl: IntlShape
+  ) => string;
   /** Where the overlay should be placed in relation to the field */
   placement?: Popper.Placement;
   /** If the control is readonly */
