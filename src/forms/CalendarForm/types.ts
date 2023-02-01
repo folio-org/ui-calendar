@@ -32,10 +32,6 @@ export interface ExceptionFieldProps
   extends FieldRenderProps<ExceptionRowState[]> {
   fieldRefs: InnerFieldRefs['exceptions'];
   error?: ExceptionFieldErrors;
-  // used in getDateTimeFields
-  // eslint-disable-next-line react/no-unused-prop-types
-  localeTimeFormat: string;
-  submitAttempted: boolean;
 }
 
 export type SimpleErrorFormValues = Omit<

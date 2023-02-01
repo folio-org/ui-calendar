@@ -210,7 +210,6 @@ export function getDateTimeFields({
         })}
         display={row.type === RowType.Open}
         value={innerRow.startTime}
-        localeTimeFormat={props.localeTimeFormat}
         inputRef={(el) => {
           fieldRefs.startTime[row.i][innerRow.i] = el;
         }}
@@ -262,7 +261,6 @@ export function getDateTimeFields({
         })}
         display={row.type === RowType.Open}
         value={innerRow.endTime}
-        localeTimeFormat={props.localeTimeFormat}
         inputRef={(el) => {
           fieldRefs.endTime[row.i][innerRow.i] = el;
         }}
