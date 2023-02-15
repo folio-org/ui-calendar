@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## [8.0.3] (https://github.com/folio-org/ui-calendar/tree/v8.0.3) (2023-02-15)
+
+* Fix over-aggressive validation of timepicker inputs. Refs UICAL-262
+
 ## [8.0.2] (https://github.com/folio-org/ui-calendar/tree/v8.0.2) (2022-11-07)
 
 * Fix stripes-testing version to non-CI version.

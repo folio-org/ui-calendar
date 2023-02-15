@@ -14,6 +14,9 @@ export function isTimeProper(
   }
 
   let timeObject = dayjs(realInputValue, localeTimeFormat, true);
+  if (!timeObject.isValid() && realInputValue.length <= 5) {
+    timeObject = dayjs(realInputValue, 'HH:mm');
+  }
   if (!timeObject.isValid()) {
     // the picker has a tendency to remove leading zeroes
     timeObject = dayjs(
