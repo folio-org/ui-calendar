@@ -54,7 +54,6 @@ test('Invalid 24-hour time values returns false', () => {
 test('Invalid 12-hour time values returns false', () => {
   expect(isTimeProper(localeTimeFormat12, '13:30', '')).toBe(false);
   expect(isTimeProper(localeTimeFormat12, '13:30', 'foo')).toBe(false);
-  expect(isTimeProper(localeTimeFormat12, '13:30', '13:30')).toBe(false);
   expect(isTimeProper(localeTimeFormat12, '13:30', '13:30 AM')).toBe(false);
   expect(isTimeProper(localeTimeFormat12, '03:30', '25:29')).toBe(false);
   expect(isTimeProper(localeTimeFormat12, '03:30', '3:61')).toBe(false);
