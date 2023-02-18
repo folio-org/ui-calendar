@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "8.1.0",
+  "version": "9.0.0",
   "description": "Calendar settings",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
@@ -163,7 +163,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "^8.0.0",
     "final-form": "^4.20.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
