@@ -1,6 +1,10 @@
 # Change history for ui-calendar
 
 
+## [9.1.0] (https://github.com/folio-org/ui-calendar/tree/v9.1.0) (2023-02-22)
+
+* Remove Cypress tests. Refs UICAL-260
+
 ## [9.0.0] (https://github.com/folio-org/ui-calendar/tree/v9.0.0) (2023-02-17)
 
 * Upgrade stripes to v8.0.0 for Orchid. Refs UICAL-259
