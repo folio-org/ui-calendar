@@ -61,20 +61,11 @@ export const ONLINE_DTO: ServicePointDTO = {
   ...ONLINE
 };
 
-export const CYPRESS_TEST_SERVICE_POINT: ServicePointDTO = {
-  id: 'ea414290-0e76-47dd-935d-d0fa6ed10ca9',
-  name: 'Test service point',
-  code: 'n/a',
-  discoveryDisplayName: 'n/a',
-  staffSlips: [],
-  metadata: undefined
-};
 
 export default [
   SERVICE_POINT_1,
   SERVICE_POINT_2,
   SERVICE_POINT_3,
   SERVICE_POINT_4,
-  ONLINE,
-  CYPRESS_TEST_SERVICE_POINT
+  ONLINE
 ];
