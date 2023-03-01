@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "8.0.3",
+  "version": "8.0.4",
   "description": "Calendar settings",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
@@ -111,7 +111,7 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^6.3.0",
-    "@folio/stripes": "^7.2.0",
+    "@folio/stripes": "^7.3.0",
     "@folio/stripes-cli": "^2.6.0",
     "@folio/stripes-components": "^10.2.0",
     "@folio/stripes-core": "^8.2.0",
@@ -119,6 +119,7 @@
     "@folio/stripes-form": "^7.1.0",
     "@folio/stripes-smart-components": "^7.2.0",
     "@folio/stripes-testing": "^4.2.0",
+    "@folio/stripes-ui": "^1.0.0",
     "@formatjs/cli": "^4.2.21",
     "@interactors/html": "^1.0.0-rc1.4",
     "@interactors/with-cypress": "^1.0.0-rc1.2",
@@ -163,7 +164,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "^7.3.0",
     "final-form": "^4.20.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
