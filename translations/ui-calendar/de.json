@@ -89,14 +89,6 @@
     "infoPane.accordion.exceptions.name": "Name",
     "infoPane.accordion.exceptions.start": "Start",
     "infoPane.accordion.exceptions.end": "Schließen",
-    "infoPane.accordion.metadata": "Metadaten erfassen",
-    "infoPane.accordion.metadata.createdBy": "Erstellt von",
-    "infoPane.accordion.metadata.createdAt": "Erstellt am",
-    "infoPane.accordion.metadata.updatedBy": "Zuletzt bearbeitet von",
-    "infoPane.accordion.metadata.updatedAt": "Zuletzt bearbeitet am",
-    "infoPane.accordion.metadata.unknownDate": "Unbekannt",
-    "infoPane.accordion.metadata.unknownUser": "Unbekannt",
-    "infoPane.accordion.metadata.dateTime": "{date} {time}",
     "infoPane.deletionModal.label": "Löschen bestätigen",
     "infoPane.deletionModal.contents": "Soll der Kalender “{name}” wirklich gelöscht werden?",
     "infoPane.display.closed": "Geschlossen",
@@ -127,5 +119,6 @@
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
     "permission.create": "Einstellungen (Kalender): kann neue Kalender erstellen und zuordnen",
     "permission.update": "Einstellungen (Kalender): kann bestehende Kalender bearbeiten und neu zuordnen",
-    "permission.delete": "Einstellungen (Kalender): kann bestehende Kalender löschen"
+    "permission.delete": "Einstellungen (Kalender): kann bestehende Kalender löschen",
+    "infoPane.accordion.infoLabel": "Calendar information"
 }

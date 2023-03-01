@@ -89,14 +89,6 @@
     "infoPane.accordion.exceptions.name": "Nombre",
     "infoPane.accordion.exceptions.start": "Empezar",
     "infoPane.accordion.exceptions.end": "Cerrar",
-    "infoPane.accordion.metadata": "Registro de metadatos",
-    "infoPane.accordion.metadata.createdBy": "Creado por",
-    "infoPane.accordion.metadata.createdAt": "Creado en",
-    "infoPane.accordion.metadata.updatedBy": "Last edited by",
-    "infoPane.accordion.metadata.updatedAt": "Last edited at",
-    "infoPane.accordion.metadata.unknownDate": "Desconocido",
-    "infoPane.accordion.metadata.unknownUser": "Desconocido",
-    "infoPane.accordion.metadata.dateTime": "{date} {time}",
     "infoPane.deletionModal.label": "Confirm deletion",
     "infoPane.deletionModal.contents": "Are you sure you would like to delete the calendar “{name}”?",
     "infoPane.display.closed": "Cerrado",
@@ -127,5 +119,6 @@
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
     "permission.create": "Ajustes (Calendario): Puede crear y asignar nuevos calendarios",
     "permission.update": "Ajustes (Calendario): Puede editar y reasignar los calendarios existentes",
-    "permission.delete": "Ajustes (Calendario): Puede eliminar los calendarios existentes"
+    "permission.delete": "Ajustes (Calendario): Puede eliminar los calendarios existentes",
+    "infoPane.accordion.infoLabel": "Calendar information"
 }

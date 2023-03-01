@@ -89,14 +89,6 @@
     "infoPane.accordion.exceptions.name": "名称",
     "infoPane.accordion.exceptions.start": "开始",
     "infoPane.accordion.exceptions.end": "关闭",
-    "infoPane.accordion.metadata": "记录元数据",
-    "infoPane.accordion.metadata.createdBy": "创建者",
-    "infoPane.accordion.metadata.createdAt": "创建于",
-    "infoPane.accordion.metadata.updatedBy": "最后编辑者",
-    "infoPane.accordion.metadata.updatedAt": "最后编辑于",
-    "infoPane.accordion.metadata.unknownDate": "未知",
-    "infoPane.accordion.metadata.unknownUser": "未知",
-    "infoPane.accordion.metadata.dateTime": "{date} {time}",
     "infoPane.deletionModal.label": "确认删除",
     "infoPane.deletionModal.contents": "确定要删除日历“ {name} ”？",
     "infoPane.display.closed": "已关闭",
@@ -127,5 +119,6 @@
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
     "permission.create": "设置（日历）：可以创建和分配新日历",
     "permission.update": "设置（日历）：可以编辑和重新分配现有日历",
-    "permission.delete": "设置（日历）：可以删除已有的日历"
+    "permission.delete": "设置（日历）：可以删除已有的日历",
+    "infoPane.accordion.infoLabel": "Calendar information"
 }
