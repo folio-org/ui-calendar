@@ -6,7 +6,7 @@ import {
   getByRole,
   render,
   screen,
-  waitFor
+  waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -37,7 +37,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -60,7 +60,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -85,7 +85,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -105,7 +105,7 @@ describe('Calendar info pane', () => {
       ['Wednesday', 'Closed', ''],
       ['Thursday', 'Closed', ''],
       ['Friday', 'Closed', ''],
-      ['Saturday', 'Closed', '']
+      ['Saturday', 'Closed', ''],
     ]);
   });
 
@@ -124,7 +124,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />,
@@ -145,7 +145,7 @@ describe('Calendar info pane', () => {
       ['jeudi', '09:00', '23:00'],
       ['vendredi', '09:00' + '13:30', '12:00' + '20:00'],
       ['samedi', '09:00', '20:00'],
-      ['dimanche', 'Closed', '']
+      ['dimanche', 'Closed', ''],
     ]);
   });
 
@@ -164,7 +164,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -184,7 +184,7 @@ describe('Calendar info pane', () => {
       ['Wednesday', EN_DASH, EN_DASH],
       ['Thursday', EN_DASH, EN_DASH],
       ['Friday', EN_DASH, EN_DASH],
-      ['Saturday', EN_DASH, EN_DASH]
+      ['Saturday', EN_DASH, EN_DASH],
     ]);
   });
 
@@ -203,7 +203,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -223,7 +223,7 @@ describe('Calendar info pane', () => {
       ['Wednesday', EN_DASH, EN_DASH],
       ['Thursday', EN_DASH, EN_DASH],
       ['Friday', EN_DASH, '8:00 PM'],
-      ['Saturday', '9:00 AM', '8:00 PM']
+      ['Saturday', '9:00 AM', '8:00 PM'],
     ]);
   });
 
@@ -238,8 +238,8 @@ describe('Calendar info pane', () => {
         update: jest.fn(),
         delete: jest.fn(),
         getUser: jest.fn(),
-        dates: jest.fn()
-      })
+        dates: jest.fn(),
+      }),
     };
 
     render(
@@ -274,14 +274,14 @@ describe('Calendar info pane', () => {
         exceptions: [],
         metadata: {
           createdDate: '2022-08-01T01:02:03Z',
-          updatedDate: '2022-08-01T01:02:03Z'
-        }
+          updatedDate: '2022-08-01T01:02:03Z',
+        },
       },
       onClose: jest.fn(),
       dataRepository: {
         getServicePointNamesFromIds: (list: string[]) => list,
-        deleteCalendar: () => Promise.resolve()
-      } as unknown as DataRepository
+        deleteCalendar: () => Promise.resolve(),
+      } as unknown as DataRepository,
     } as InfoPaneProps;
 
     render(
@@ -321,7 +321,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -329,13 +329,18 @@ describe('Calendar info pane', () => {
       )
     );
 
-    const metadata = screen.getByRole('region', { name: 'Record metadata' });
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Record last updated: Unknown' })
+    );
+    const metadata = screen.getByRole('region', {
+      name: 'Calendar information',
+    });
 
     await waitFor(() => {
-      expect(metadata).toHaveTextContent('Created by' + 'Unknown');
-      expect(metadata).toHaveTextContent('Created at' + 'Unknown');
-      expect(metadata).toHaveTextContent('Last edited by' + 'Unknown');
-      expect(metadata).toHaveTextContent('Last edited at' + 'Unknown');
+      expect(metadata).toHaveTextContent('Source: ' + 'Unknown');
+      expect(metadata).toHaveTextContent('Record created: ' + 'Unknown');
+      expect(metadata).toHaveTextContent('Source: ' + 'Unknown');
+      expect(metadata).toHaveTextContent('Record last updated: ' + 'Unknown');
     });
   });
 
@@ -354,7 +359,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -362,13 +367,18 @@ describe('Calendar info pane', () => {
       )
     );
 
-    const metadata = screen.getByRole('region', { name: 'Record metadata' });
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Record last updated: Unknown' })
+    );
+    const metadata = screen.getByRole('region', {
+      name: 'Calendar information',
+    });
 
     await waitFor(() => {
-      expect(metadata).toHaveTextContent('Created by' + 'Unknown');
-      expect(metadata).toHaveTextContent('Created at' + 'Unknown');
-      expect(metadata).toHaveTextContent('Last edited by' + 'Unknown');
-      expect(metadata).toHaveTextContent('Last edited at' + 'Unknown');
+      expect(metadata).toHaveTextContent('Source: ' + 'Unknown');
+      expect(metadata).toHaveTextContent('Record created: ' + 'Unknown');
+      expect(metadata).toHaveTextContent('Source: ' + 'Unknown');
+      expect(metadata).toHaveTextContent('Record last updated: ' + 'Unknown');
     });
   });
 
@@ -388,8 +398,8 @@ describe('Calendar info pane', () => {
                   createdDate: '2022-09-20T04:07:00.557Z',
                   createdByUserId: 'PETRO_PROKOPOVYCH',
                   updatedDate: '2022-09-28T04:07:00.557Z',
-                  updatedByUserId: 'JOHANN_DZIERZON'
-                }
+                  updatedByUserId: 'JOHANN_DZIERZON',
+                },
               } as CalendarDTO
             }
             onClose={jest.fn()}
@@ -399,7 +409,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: userMock,
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -409,14 +419,23 @@ describe('Calendar info pane', () => {
 
     await waitFor(() => expect(userMock).toHaveBeenCalledTimes(2));
 
-    const metadata = screen.getByRole('region', { name: 'Record metadata' });
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: 'Record last updated: 9/28/2022 4:07 AM',
+      })
+    );
+    const metadata = screen.getByRole('region', {
+      name: 'Calendar information',
+    });
 
     await waitFor(() => {
-      expect(metadata).toHaveTextContent('Created by' + 'Prokopovych, Petro');
-      expect(metadata).toHaveTextContent('Created at' + '9/20/2022 4:07 AM');
-      expect(metadata).toHaveTextContent('Last edited by' + 'Dzierzon, Jan');
+      expect(metadata).toHaveTextContent('Source: ' + 'Prokopovych, Petro');
       expect(metadata).toHaveTextContent(
-        'Last edited at' + '9/28/2022 4:07 AM'
+        'Record created: ' + '9/20/2022 4:07 AM'
+      );
+      expect(metadata).toHaveTextContent('Source: ' + 'Dzierzon, Johann');
+      expect(metadata).toHaveTextContent(
+        'Record last updated: ' + '9/28/2022 4:07 AM'
       );
     });
   });
@@ -437,8 +456,8 @@ describe('Calendar info pane', () => {
                   createdDate: '2022-09-20T04:07:00.557Z',
                   createdByUserId: 'PETRO_PROKOPOVYCH',
                   updatedDate: '2022-09-28T04:07:00.557Z',
-                  updatedByUserId: 'JOHANN_DZIERZON'
-                }
+                  updatedByUserId: 'JOHANN_DZIERZON',
+                },
               } as CalendarDTO
             }
             onClose={jest.fn()}
@@ -448,7 +467,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: userMock,
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
@@ -460,15 +479,23 @@ describe('Calendar info pane', () => {
 
     await waitFor(() => expect(userMock).toHaveBeenCalledTimes(2));
 
-    const metadata = screen.getByRole('region', { name: 'Record metadata' });
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: 'Record last updated: 9/28/2022 4:07 AM',
+      })
+    );
+    const metadata = screen.getByRole('region', {
+      name: 'Calendar information',
+    });
 
-    // would normally fallback to UUIDs but we supply these names for testing
     await waitFor(() => {
-      expect(metadata).toHaveTextContent('Created by' + 'PETRO_PROKOPOVYCH');
-      expect(metadata).toHaveTextContent('Created at' + '9/20/2022 4:07 AM');
-      expect(metadata).toHaveTextContent('Last edited by' + 'JOHANN_DZIERZON');
+      expect(metadata).toHaveTextContent('Source: ' + 'PETRO_PROKOPOVYCH');
       expect(metadata).toHaveTextContent(
-        'Last edited at' + '9/28/2022 4:07 AM'
+        'Record created: ' + '9/20/2022 4:07 AM'
+      );
+      expect(metadata).toHaveTextContent('Source: ' + 'JOHANN_DZIERZON');
+      expect(metadata).toHaveTextContent(
+        'Record last updated: ' + '9/28/2022 4:07 AM'
       );
     });
 
@@ -492,7 +519,7 @@ describe('Calendar info pane', () => {
                 update: jest.fn(),
                 delete: jest.fn(),
                 getUser: jest.fn(),
-                dates: jest.fn()
+                dates: jest.fn(),
               })
             }
           />
