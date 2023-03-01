@@ -74,7 +74,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   );
 
   const localeDateFormat = getLocaleDateFormat({ intl });
-  const localeTimeFormat = getLocalizedTimeFormatInfo(intl.locale).timeFormat;
+  const localeTimeFormat = getLocalizedTimeFormatInfo(
+    intl.locale
+  ).timeFormat.replaceAll('\u202f', ' ');
 
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
@@ -216,7 +218,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   component={HoursOfOperationField}
                   timeFieldRefs={innerFieldRefs.current.hoursOfOperation}
                   error={errors?.['hours-of-operation']}
-                  localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                   isNewCalendar={props.initialValues === undefined}
                 />
@@ -231,7 +232,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                   component={ExceptionField}
                   fieldRefs={innerFieldRefs.current.exceptions}
                   error={errors?.exceptions}
-                  localeTimeFormat={localeTimeFormat}
                   submitAttempted={props.submitAttempted}
                 />
               </Accordion>

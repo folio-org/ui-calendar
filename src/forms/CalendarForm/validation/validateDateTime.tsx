@@ -18,6 +18,14 @@ export function isTimeProper(
     timeObject = dayjs(realInputValue, 'HH:mm');
   }
   if (!timeObject.isValid()) {
+    // attempt parsing value from timepicker (it returns ISO format sometimes)
+    timeObject = dayjs(
+      realInputValue,
+      'HH:mm:ss.SSS[Z]',
+      true
+    );
+  }
+  if (!timeObject.isValid()) {
     // the picker has a tendency to remove leading zeroes
     timeObject = dayjs(
       realInputValue,

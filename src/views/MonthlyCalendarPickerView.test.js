@@ -7,7 +7,6 @@ import withHistoryConfiguration from '../test/util/withHistoryConfiguration';
 import ServicePoints from '../test/data/ServicePoints';
 import MonthlyCalendarPickerView, { dailyOpeningToCalendarDisplay } from './MonthlyCalendarPickerView';
 import * as Dates from '../test/data/Dates';
-import * as Times from '../test/data/DateTimes';
 
 jest.mock('../data/useDataRepository');
 jest.mock('../components/Calendar.tsx', () => {
