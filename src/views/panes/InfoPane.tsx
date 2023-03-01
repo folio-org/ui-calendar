@@ -24,7 +24,8 @@ import React, {
   FunctionComponent,
   ReactNode,
   useEffect,
-  useState
+  useMemo,
+  useState,
 } from 'react';
 import {
   FormattedMessage, useIntl
@@ -124,6 +125,39 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendar]);
 
+  const exceptions = useMemo(() => {
+    const ex: {
+      openings: CalendarException[];
+      closures: CalendarException[];
+    } = {
+      openings: [],
+      closures: [],
+    };
+
+    calendar?.exceptions.forEach((exception) => {
+      if (exception.openings.length === 0) {
+        ex.closures.push(exception);
+      } else {
+        exception.openings.sort((a, b) => {
+          return Math.sign(
+            new Date(`${a.startDate} ${a.endDate}`).getTime() -
+              new Date(`${b.startDate} ${b.endDate}`).getTime()
+          );
+        });
+        ex.openings.push(exception);
+      }
+    });
+
+    return {
+      openings: generateExceptionalOpeningRows(intl, ex.openings),
+      closures: ex.closures.map((exception) => ({
+        name: exception.name,
+        startDate: getLocalizedDate(intl, exception.startDate),
+        endDate: getLocalizedDate(intl, exception.endDate),
+      })),
+    };
+  }, [calendar, intl]);
+
   if (calendar === undefined || calendar === null) {
     return null;
   }
@@ -136,28 +170,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
   } else {
     dataRows = generateDisplayRows(intl, localeWeekdays, hours);
   }
-
-  const exceptions: {
-    openings: CalendarException[];
-    closures: CalendarException[];
-  } = {
-    openings: [],
-    closures: [],
-  };
-
-  calendar.exceptions.forEach((exception) => {
-    if (exception.openings.length === 0) {
-      exceptions.closures.push(exception);
-    } else {
-      exception.openings.sort((a, b) => {
-        return Math.sign(
-          new Date(`${a.startDate} ${a.endDate}`).getTime() -
-            new Date(`${b.startDate} ${b.endDate}`).getTime()
-        );
-      });
-      exceptions.openings.push(exception);
-    }
-  });
 
   return (
     <>
@@ -310,9 +322,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
               }}
               columnWidths={{
-                day: '40%',
-                startTime: '30%',
-                endTime: '30%',
+                day: 200,
+                startTime: { min: 100, max: 100 },
+                endTime: { min: 100, max: 100 },
               }}
               contentData={dataRows}
             />
@@ -346,6 +358,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
             }
           >
             <MultiColumnList
+              key={`${calendar.id}-ex-openings`}
               interactive={false}
               columnMapping={{
                 name: (
@@ -359,9 +372,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
               }}
               columnWidths={{
-                name: '40%',
-                start: '30%',
-                end: '30%',
+                name: 200,
+                start: { min: 100, max: 100 },
+                end: { min: 100, max: 100 },
               }}
               getCellClass={(defaultClass, _rowData, column) => {
                 return classNames(defaultClass, {
@@ -370,10 +383,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                   [css.dayCell]: column === 'name',
                 });
               }}
-              contentData={generateExceptionalOpeningRows(
-                intl,
-                exceptions.openings
-              )}
+              contentData={exceptions.openings}
               isEmptyMessage={
                 <div className={css.noValue}>
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.openings.empty" />
@@ -387,6 +397,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
             }
           >
             <MultiColumnList
+              key={`${calendar.id}-ex-closures`}
               interactive={false}
               columnMapping={{
                 name: (
@@ -400,15 +411,11 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 ),
               }}
               columnWidths={{
-                name: '40%',
-                startDate: '30%',
-                endDate: '30%',
+                name: 200,
+                startDate: { min: 100, max: 100 },
+                endDate: { min: 100, max: 100 },
               }}
-              contentData={exceptions.closures.map((exception) => ({
-                name: exception.name,
-                startDate: getLocalizedDate(intl, exception.startDate),
-                endDate: getLocalizedDate(intl, exception.endDate),
-              }))}
+              contentData={exceptions.closures}
               isEmptyMessage={
                 <div className={css.noValue}>
                   <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.closures.empty" />
