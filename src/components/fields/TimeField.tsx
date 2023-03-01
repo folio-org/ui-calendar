@@ -1,7 +1,6 @@
 import { Timepicker } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, { ReactNode, useState } from 'react';
-import dayjs from '../../utils/dayjs';
 import css from './hiddenErrorField.css';
 
 function noOp() {
@@ -12,7 +11,6 @@ export interface TimeFieldProps {
   display: boolean;
   value: string | undefined;
   inputRef: (el: HTMLInputElement) => void;
-  localeTimeFormat: string;
   error: ReactNode;
   onBlur: () => void;
   onChange: (newValue: string | undefined) => void;
@@ -23,7 +21,6 @@ export default function TimeField({
   value,
   display,
   inputRef,
-  localeTimeFormat,
   error,
   onBlur,
   className,
@@ -45,17 +42,18 @@ export default function TimeField({
           name: '',
           onBlur: noOp,
           onFocus: noOp,
-          onChange: (newTime: string) => {
+          onChange: (newTimeWithWeirdSpace: string) => {
+            const newTime = newTimeWithWeirdSpace.replaceAll('\u202f', ' ');
             const input = internalRef;
             if (input !== null) {
               const selection = input.selectionStart;
-              input.value = dayjs(newTime, 'HH:mm').format(localeTimeFormat);
+              input.value = newTime;
               input.setSelectionRange(selection, selection);
             }
             props.onChange(
               newTime.length ? newTime.substring(0, 5) : undefined
             );
-          }
+          },
         }}
         // always fires, compared to input.onChange
         onChange={() => onBlur()}
@@ -67,7 +65,7 @@ export default function TimeField({
         usePortal
         meta={{
           touched: true,
-          error
+          error,
         }}
         timeZone="UTC"
       />

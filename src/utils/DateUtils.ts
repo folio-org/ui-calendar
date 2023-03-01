@@ -211,7 +211,7 @@ export function getLocalizedTime(intl: IntlShape, time: string): string {
     return intl.formatMessage({ id: 'ui-calendar.midnight' });
   }
 
-  return intl.formatTime(date, { timeZone: 'UTC' });
+  return intl.formatTime(date, { timeZone: 'UTC' }).replaceAll('\u202f', ' ');
 }
 
 /** Localize date with `react-intl` */

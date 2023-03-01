@@ -50,7 +50,6 @@ export interface HoursOfOperationFieldProps
   extends FieldRenderProps<HoursOfOperationRowState[]> {
   timeFieldRefs: InnerFieldRefs['hoursOfOperation'];
   error?: HoursOfOperationErrors;
-  localeTimeFormat: string;
   submitAttempted: boolean;
   isNewCalendar: boolean;
 }
@@ -140,7 +139,6 @@ export const HoursOfOperationField: FunctionComponent<
           <TimeField
             display={row.type === RowType.Open}
             value={row.startTime}
-            localeTimeFormat={props.localeTimeFormat}
             inputRef={(el) => {
               props.timeFieldRefs.startTime[row.i] = el;
             }}
@@ -183,7 +181,6 @@ export const HoursOfOperationField: FunctionComponent<
           <TimeField
             display={row.type === RowType.Open}
             value={row.endTime}
-            localeTimeFormat={props.localeTimeFormat}
             inputRef={(el) => {
               props.timeFieldRefs.endTime[row.i] = el;
             }}

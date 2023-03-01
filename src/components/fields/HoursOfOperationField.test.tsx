@@ -143,7 +143,6 @@ describe('HoursOfOperationField', () => {
         <HoursOfOperationField
           timeFieldRefs={{ startTime: {}, endTime: {} }}
           error={undefined}
-          localeTimeFormat="HH:mm a"
           submitAttempted={false}
           input={{
             name: 'exception-field',
