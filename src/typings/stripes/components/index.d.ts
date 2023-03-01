@@ -157,6 +157,7 @@ export { default as MenuSection, MenuSectionProps } from './lib/MenuSection';
 // lib/MessageBanner
 
 // lib/MetaSection
+export { default as MetaSection } from './lib/MetaSection';
 
 // lib/Modal
 export { default as Modal, ModalProps } from './lib/Modal';
