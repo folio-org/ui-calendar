@@ -1,5 +1,6 @@
 {
   "extends": ["@folio/eslint-config-stripes", "plugin:import/typescript"],
+  "ignorePatterns": ["src/typings/**/*.d.ts"],
   "env": {
     "jest": true
   },
@@ -9,7 +10,10 @@
   "overrides": [
     {
       "files": ["src/test/**/*", "src/**/*.test.ts", "src/**/*.test.tsx"],
-      "env": { "jest": true }
+      "env": { "jest": true },
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
     }
   ]
 }
