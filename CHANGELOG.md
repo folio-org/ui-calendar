@@ -1,5 +1,10 @@
 # Change history for ui-calendar
 
+## [9.2.0] (https://github.com/folio-org/ui-calendar/tree/v9.2.0) (2023-03-01)
+
+* Update eslint to ignore typings files and allow any in unit tests. Refs UICAL-266
+* Use FOLIO standard metadata display. Refs UICAL-265
+* Fix MCL rendering issues. Refs UICAL-241
 
 ## [9.1.0] (https://github.com/folio-org/ui-calendar/tree/v9.1.0) (2023-02-22)
 
