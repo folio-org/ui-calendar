@@ -89,14 +89,6 @@
     "infoPane.accordion.exceptions.name": "Nome",
     "infoPane.accordion.exceptions.start": "Iniciar",
     "infoPane.accordion.exceptions.end": "Fechar",
-    "infoPane.accordion.metadata": "Metadados do registro",
-    "infoPane.accordion.metadata.createdBy": "Criado por",
-    "infoPane.accordion.metadata.createdAt": "Criado em",
-    "infoPane.accordion.metadata.updatedBy": "Última edição por",
-    "infoPane.accordion.metadata.updatedAt": "Última edição em",
-    "infoPane.accordion.metadata.unknownDate": "Desconhecido",
-    "infoPane.accordion.metadata.unknownUser": "Desconhecido",
-    "infoPane.accordion.metadata.dateTime": "{date} {time}",
     "infoPane.deletionModal.label": "Confirmar exclusão",
     "infoPane.deletionModal.contents": "Tem certeza de que deseja excluir a agenda “ {name} ”?",
     "infoPane.display.closed": "Fechado",
@@ -127,5 +119,6 @@
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
     "permission.create": "Configurações (Calendário): Pode criar e atribuir novos calendários",
     "permission.update": "Configurações (Calendário): Pode editar e reatribuir calendários existentes",
-    "permission.delete": "Configurações (Calendário): Pode excluir calendários existentes"
+    "permission.delete": "Configurações (Calendário): Pode excluir calendários existentes",
+    "infoPane.accordion.infoLabel": "Informações do calendário"
 }
