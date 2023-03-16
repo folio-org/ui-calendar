@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## [9.2.1] (https://github.com/folio-org/ui-calendar/tree/v9.2.1) (2023-03-16)
+
+* Fix placement of datepicker to prevent overflow. Refs UICAL-240
+
 ## [9.2.0] (https://github.com/folio-org/ui-calendar/tree/v9.2.0) (2023-03-01)
 
 * Update eslint to ignore typings files and allow any in unit tests. Refs UICAL-266
