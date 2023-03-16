@@ -1,14 +1,14 @@
 import {
   Datepicker as DateField,
   Headline,
-  Icon
+  Icon,
 } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   ExceptionFieldProps,
-  InnerFieldRefs
+  InnerFieldRefs,
 } from '../../forms/CalendarForm/types';
 import { dateCompare, dateFromYYYYMMDD, minDate } from '../../utils/DateUtils';
 import { ExceptionFieldErrors, ExceptionRowState } from './ExceptionFieldTypes';
@@ -38,7 +38,7 @@ export function updateInnerRowState(
   const newRowList = [...rowStates[outerRowIndex].rows];
   newRowList[innerRowIndex] = {
     ...newRowList[innerRowIndex],
-    ...newState
+    ...newState,
   };
   updateRowState(rowStates, setRowStates, outerRowIndex, { rows: newRowList });
 }
@@ -135,12 +135,13 @@ export function getDateField(
       key={`${key}-${innerRow.i}`}
       className={classNames(
         {
-          [css.conflictCell]: isInnerRowConflicted(error, row.i, innerRow.i)
+          [css.conflictCell]: isInnerRowConflicted(error, row.i, innerRow.i),
         },
         cssHiddenErrorField.hiddenErrorFieldWrapper
       )}
       backendDateStandard="YYYY-MM-DD"
       marginBottom0
+      placement="auto"
       required
       usePortal
       value={innerRow[key]}
@@ -163,7 +164,7 @@ export function getDateTimeFields({
   fieldRefs,
   isDirty,
   rowStates,
-  setRowStates
+  setRowStates,
 }: {
   props: ExceptionFieldProps;
   row: ExceptionRowState;
@@ -206,7 +207,7 @@ export function getDateTimeFields({
             props.error,
             row.i,
             innerRow.i
-          )
+          ),
         })}
         display={row.type === RowType.Open}
         value={innerRow.startTime}
@@ -257,7 +258,7 @@ export function getDateTimeFields({
             props.error,
             row.i,
             innerRow.i
-          )
+          ),
         })}
         display={row.type === RowType.Open}
         value={innerRow.endTime}
@@ -282,6 +283,6 @@ export function getDateTimeFields({
           );
         }}
       />
-    )
+    ),
   };
 }
