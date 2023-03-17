@@ -11,7 +11,7 @@
     "calendarForm.field.startDate": "Start date",
     "calendarForm.field.endDate": "End date",
     "calendarForm.field.servicePoints": "Service points",
-    "calendarForm.addRowButton": "Add row",
+    "calendarForm.addRowButton": "行を追加する",
     "calendarForm.openings.column.status": "Status",
     "calendarForm.openings.column.startDay": "Start day",
     "calendarForm.openings.column.startTime": "Start time",
