@@ -50,7 +50,7 @@
     "currentStatus.closed.noNext": "Cerrado",
     "currentStatus.closed.sameDay": "Cerrado hasta {nextTime}",
     "currentStatus.closed.nextDay": "Cerrado hasta mañana a las {nextTime}",
-    "currentStatus.closed.nextWeek": "Cerrado hasta {próximoSemana} a {próximaHora}",
+    "currentStatus.closed.nextWeek": "Cerrado hasta {nextWeekday} a {nextTime}",
     "currentStatus.closed.sameElse": "Cerrado hasta {nextDate} a {nextTime}.",
     "currentStatus.closed.otherWeekday": "Cerrado hasta {nextWeekday} a {nextTime}",
     "currentStatus.closed.exceptional.noNext": "Cerrado ({exceptionName})",
