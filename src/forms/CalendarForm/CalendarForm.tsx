@@ -29,7 +29,6 @@ import validate from './validation/validate';
 export const FORM_ID = 'ui-calendar-create-calendar-form';
 
 export interface CalendarFormProps {
-  submitAttempted: boolean;
   dataRepository: DataRepository;
 }
 
