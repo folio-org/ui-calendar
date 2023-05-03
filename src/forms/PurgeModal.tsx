@@ -12,6 +12,7 @@ import {
 import { CalloutContext } from '@folio/stripes/core';
 import { HTTPError } from 'ky';
 import React, {
+  FormEvent,
   FunctionComponent,
   useContext,
   useEffect,
@@ -170,13 +171,12 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
             values.assignmentCriteria
           );
 
+          const submitter = (e: FormEvent) => {
+            handleSubmit(e);
+          };
+
           return (
-            <form
-              id={FORM_ID}
-              onSubmit={(e) => (async () => {
-                await handleSubmit(e);
-              })()}
-            >
+            <form id={FORM_ID} onSubmit={submitter}>
               <Field
                 name="ageCriteria"
                 component={Select<AgeCriteria | undefined>}

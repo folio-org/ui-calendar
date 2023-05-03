@@ -11,7 +11,7 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 import { FORM_ERROR } from 'final-form';
-import React, { FunctionComponent } from 'react';
+import React, { FormEvent, FunctionComponent, useCallback } from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import { FormattedMessage } from 'react-intl';
@@ -54,13 +54,15 @@ export const CalendarForm: FunctionComponent<
     );
   }
 
+  const submitter = useCallback(
+    (e: FormEvent) => {
+      handleSubmit(e);
+    },
+    [handleSubmit]
+  );
+
   return (
-    <form
-      id={FORM_ID}
-      onSubmit={(e) => (async () => {
-        await handleSubmit(e);
-      })()}
-    >
+    <form id={FORM_ID} onSubmit={submitter}>
       {topErrorMessage}
       <AccordionSet>
         <Row end="xs">
