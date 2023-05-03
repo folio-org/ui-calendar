@@ -139,7 +139,7 @@ describe('ExceptionField', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'trash' }));
     expect(screen.getAllByRole('row')).toHaveLength(2);
-    expect(await screen.findAllByRole('textbox')).toHaveLength(0);
+    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
   });
 
   it('Adding to closed rows is a no-op', async () => {
