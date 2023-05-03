@@ -173,9 +173,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
           return (
             <form
               id={FORM_ID}
-              onSubmit={async (e) => {
+              onSubmit={(e) => (async () => {
                 await handleSubmit(e);
-              }}
+              })()}
             >
               <Field
                 name="ageCriteria"
