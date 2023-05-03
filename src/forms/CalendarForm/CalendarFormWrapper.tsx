@@ -14,7 +14,6 @@ export { FORM_ID } from './CalendarForm';
 
 export interface CalendarFormWrapperProps {
   closeParentLayer: (id?: string) => void;
-  submitAttempted: boolean;
   dataRepository: DataRepository;
   setIsSubmitting: (isSaving: boolean) => void;
   submitter: (calendar: Calendar) => Promise<Calendar>;
@@ -54,7 +53,6 @@ export const CalendarFormWrapper: FunctionComponent<
         localeWeekdays,
         props.initialValues
       )}
-      submitAttempted={props.submitAttempted}
       dataRepository={props.dataRepository}
     />
   );

@@ -43,7 +43,6 @@ export const CreateEditCalendarLayer: FunctionComponent<
 > = (props: CreateEditCalendarLayerProps) => {
   const intl = useIntl();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
   let pane = <LoadingPane />;
 
@@ -77,7 +76,6 @@ export const CreateEditCalendarLayer: FunctionComponent<
                 marginBottom0
                 type="submit"
                 form={FORM_ID}
-                onClick={() => setSubmitAttempted(true)}
               >
                 {isSubmitting ? (
                   <Loading />
@@ -92,7 +90,6 @@ export const CreateEditCalendarLayer: FunctionComponent<
         <CalendarForm
           closeParentLayer={props.onClose}
           setIsSubmitting={setIsSubmitting}
-          submitAttempted={submitAttempted}
           dataRepository={props.dataRepository}
           initialValues={props.initialValue}
           submitter={(calendar: Calendar): Promise<Calendar> => {

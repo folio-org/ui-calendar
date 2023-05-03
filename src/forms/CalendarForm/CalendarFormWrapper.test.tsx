@@ -47,7 +47,6 @@ describe('CalendarFormWrapper', () => {
             <CalendarFormWrapper
               closeParentLayer={closeParentLayer}
               dataRepository={dataRepository}
-              submitAttempted
               setIsSubmitting={setIsSubmitting}
               submitter={submitter}
               initialValues={Calendars.SPRING_SP_1_2}
