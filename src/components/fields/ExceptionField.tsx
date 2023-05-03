@@ -27,6 +27,10 @@ import {
   isOuterRowConflicted,
 } from './ExceptionFieldUtils';
 
+function getKey(_: unknown, index: number, innerIndex: number) {
+  return `${index}-${innerIndex}`;
+}
+
 export interface ExceptionFieldProps {
   values: FieldArrayRenderProps<ExceptionRowState, HTMLElement>['fields'];
 }
@@ -65,7 +69,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
           {values.value[index].rows.map((_, innerIndex) => (
             <Field
               component={Datepicker}
-              key={`${index}-${innerIndex}`}
+              key={getKey(_, index, innerIndex)}
               name={`${name}.rows[${innerIndex}].startDate`}
               className={classNames(
                 {
@@ -91,7 +95,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
         >
           {values.value[index].rows.map((_, innerIndex) => (
             <TimeField
-              key={`${index}-${innerIndex}`}
+              key={getKey(_, index, innerIndex)}
               name={`${name}.rows[${innerIndex}].startTime`}
               className={classNames({
                 [css.conflictCell]: isInnerRowConflicted(
@@ -112,7 +116,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
           {values.value[index].rows.map((_, innerIndex) => (
             <Field
               component={Datepicker}
-              key={`${index}-${innerIndex}`}
+              key={getKey(_, index, innerIndex)}
               name={`${name}.rows[${innerIndex}].endDate`}
               className={classNames(
                 {
@@ -138,7 +142,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
         >
           {values.value[index].rows.map((_, innerIndex) => (
             <TimeField
-              key={`${index}-${innerIndex}`}
+              key={getKey(_, index, innerIndex)}
               name={`${name}.rows[${innerIndex}].endTime`}
               className={classNames({
                 [css.conflictCell]: isInnerRowConflicted(
