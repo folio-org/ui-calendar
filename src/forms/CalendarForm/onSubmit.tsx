@@ -11,7 +11,7 @@ import {
   dateFromYYYYMMDD,
   dateToYYYYMMDD,
   maxDate,
-  minDate
+  minDate,
 } from '../../utils/DateUtils';
 import { formatList } from '../../utils/I18nUtils';
 import { FormValues } from './types';
@@ -25,7 +25,6 @@ export default async function onSubmit(
   },
   calloutContext: CalloutContextType,
   intl: IntlShape,
-
   values: Optional<
     FormValues,
     'service-points' | 'hours-of-operation' | 'exceptions'
@@ -45,7 +44,7 @@ export default async function onSubmit(
     endDate: values['end-date'],
     assignments: [],
     normalHours: [],
-    exceptions: []
+    exceptions: [],
   };
 
   values['service-points']?.forEach((servicePoint) => {
@@ -57,9 +56,9 @@ export default async function onSubmit(
 
     newCalendar.normalHours.push({
       startDay: opening.startDay as Weekday,
-      startTime: opening.startTime as string,
+      startTime: (opening.startTime as string).replaceAll('Z', ''),
       endDay: opening.endDay as Weekday,
-      endTime: opening.endTime as string
+      endTime: (opening.endTime as string).replaceAll('Z', ''),
     });
   });
 
@@ -69,7 +68,7 @@ export default async function onSubmit(
         name: exception.name,
         startDate: exception.rows[0].startDate as string,
         endDate: exception.rows[0].endDate as string,
-        openings: []
+        openings: [],
       });
     } else {
       // validated to not be empty as part of pre-submission
@@ -96,10 +95,10 @@ export default async function onSubmit(
         endDate: max,
         openings: exception.rows.map((row) => ({
           startDate: row.startDate as string,
-          startTime: row.startTime as string,
+          startTime: (row.startTime as string).replaceAll('Z', ''),
           endDate: row.endDate as string,
-          endTime: row.endTime as string
-        }))
+          endTime: (row.endTime as string).replaceAll('Z', ''),
+        })),
       });
     }
   });
@@ -121,7 +120,7 @@ export default async function onSubmit(
         case ErrorCode.CALENDAR_DATE_OVERLAP:
           calloutContext.sendCallout({
             message: error.message,
-            type: 'error'
+            type: 'error',
           });
           submissionErrors['service-points'] = (
             <>
@@ -136,7 +135,7 @@ export default async function onSubmit(
                   ),
                   num: props.dataRepository.getServicePointNamesFromIds(
                     error.data.conflictingServicePointIds
-                  ).length
+                  ).length,
                 }}
               />{' '}
               {error.message}
@@ -165,7 +164,7 @@ export default async function onSubmit(
             message: (
               <FormattedMessage id="ui-calendar.calendarForm.error.internalServerError" />
             ),
-            type: 'error'
+            type: 'error',
           });
           submissionErrors[FORM_ERROR] = error.message;
       }

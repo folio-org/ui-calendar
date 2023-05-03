@@ -30,6 +30,7 @@
   "calendarForm.openClosedSelect.closed": "Closed",
   "calendarForm.error.dateFormat": "Please enter a date in the {localeDateFormat} format",
   "calendarForm.error.dateOrder": "End date must not be before the start date",
+  "calendarForm.error.dateRange": "The exception must be within the calendar date range",
   "calendarForm.error.timeFormat": "Please enter a time in the {localeTimeFormat} format",
   "calendarForm.error.timeOrder": "End date/time must not be before the start date/time",
   "calendarForm.error.openingConflictError": "Some openings have conflicts with each other",

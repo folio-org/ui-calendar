@@ -1,11 +1,12 @@
-import React, { ReactNode, RefObject } from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ExceptionFieldErrors } from '../../../components/fields/ExceptionFieldTypes';
 import { HoursOfOperationErrors } from '../../../components/fields/HoursOfOperationFieldTypes';
-import { validateDateOrder, validateDate } from './validateDateTime';
-import { FormValues, InnerFieldRefs, SimpleErrorFormValues } from '../types';
-import validateHoursOfOperation from './validateHoursOfOperation';
+import { FormValues, SimpleErrorFormValues } from '../types';
+import validateDateOrder from './validateDateTime';
 import validateExceptions from './validateExceptions';
+import validateHoursOfOperation from './validateHoursOfOperation';
+import flattenObject from '../../../utils/flattenObject';
 
 /** Require a given key */
 function required(
@@ -30,45 +31,33 @@ function required(
 }
 
 /** Run all validation functions */
-export default function validate(
-  localeDateFormat: string,
-  localeTimeFormat: string,
-  dateRefs: {
-    startDateRef: RefObject<HTMLInputElement>;
-    endDateRef: RefObject<HTMLInputElement>;
-  },
-  innerFieldRefs: InnerFieldRefs,
-  values: Partial<FormValues>
-): Partial<
+export default function validate(values: Partial<FormValues>): Partial<
   {
-    'hours-of-operation': HoursOfOperationErrors;
-    exceptions: ExceptionFieldErrors;
+    'hours-of-operation'?: HoursOfOperationErrors[0][];
+    exceptions?: ExceptionFieldErrors[0][];
   } & {
     [key in keyof SimpleErrorFormValues]: ReactNode;
   }
 > {
   // in reverse order of priority, later objects will unpack on top of earlier ones
   // therefore, required should take precedence over any other errors
-  return {
-    ...validateHoursOfOperation(
-      values['hours-of-operation'],
-      innerFieldRefs.hoursOfOperation,
-      localeTimeFormat
-    ),
-    ...validateExceptions(
-      values.exceptions,
-      innerFieldRefs.exceptions,
-      localeDateFormat,
-      localeTimeFormat
-    ),
+  const r = {
+    ...{
+      'hours-of-operation': flattenObject(
+        validateHoursOfOperation(values['hours-of-operation'])
+      ),
+    },
+    ...{
+      exceptions: flattenObject(
+        validateExceptions(
+          values.exceptions,
+          values['start-date'],
+          values['end-date']
+        )
+      ),
+    },
     ...validateDateOrder(values),
     ...required(values, 'name'),
-    ...validateDate(
-      values,
-      'start-date',
-      dateRefs.startDateRef,
-      localeDateFormat
-    ),
-    ...validateDate(values, 'end-date', dateRefs.endDateRef, localeDateFormat),
   };
+  return r;
 }

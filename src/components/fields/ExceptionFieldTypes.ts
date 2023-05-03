@@ -1,9 +1,7 @@
 import { ReactNode } from 'react';
-import type { RequireExactlyOne } from '../../types/utils';
 import RowType from './RowType';
 
 export interface MCLContentsType extends Record<string, unknown> {
-  rowState: ExceptionRowState;
   name: ReactNode;
   status: ReactNode;
   startDate: ReactNode;
@@ -15,12 +13,9 @@ export interface MCLContentsType extends Record<string, unknown> {
 }
 
 export interface ExceptionRowState {
-  i: number;
   name: string;
   type: RowType;
-  lastRowI: number;
   rows: {
-    i: number;
     startDate: string | undefined;
     startTime: string | undefined;
     endDate: string | undefined;
@@ -28,21 +23,10 @@ export interface ExceptionRowState {
   }[];
 }
 
-export type ExceptionFieldErrors = RequireExactlyOne<{
-  empty?: {
-    name: Record<number, ReactNode>;
-  } & {
-    [field in keyof Omit<ExceptionRowState['rows'][0], 'i'>]: Record<
-      number,
-      Record<number, ReactNode>
-    >;
-  };
-  invalid?: {
-    [field in keyof Omit<ExceptionRowState['rows'][0], 'i'>]: Record<
-      number,
-      Record<number, ReactNode>
-    >;
-  };
-  interConflicts?: Set<number>;
-  intraConflicts?: Record<number, Set<number>>;
-}>;
+export type ExceptionFieldErrors = Record<
+  number,
+  {
+    conflict?: true;
+    rows?: { conflict?: true; startDate?: ReactNode; endDate?: ReactNode }[];
+  }
+>;

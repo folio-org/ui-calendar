@@ -1,249 +1,199 @@
 import {
   Button,
+  Datepicker,
   IconButton,
   Layout,
   MultiColumnList,
   MultiColumnListProps,
-  TextField
+  TextField,
 } from '@folio/stripes/components';
 import classNames from 'classnames';
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useState
-} from 'react';
+import React, { ReactNode } from 'react';
+import { Field, useField, useForm } from 'react-final-form';
+import { FieldArrayRenderProps } from 'react-final-form-arrays';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { ExceptionFieldProps } from '../../forms/CalendarForm/types';
-import {
-  dateFromYYYYMMDD,
-  dateToYYYYMMDD,
-  maxDate,
-  minDate
-} from '../../utils/DateUtils';
+import { FormValues } from '../../forms/CalendarForm/types';
 import { ExceptionRowState, MCLContentsType } from './ExceptionFieldTypes';
-import {
-  getDateTimeFields,
-  getMainConflictError,
-  getNameFieldError,
-  isOuterRowConflicted,
-  outerRowSorter,
-  updateRowState
-} from './ExceptionFieldUtils';
-import cssHiddenErrorField from './hiddenErrorField.css';
 import css from './HoursAndExceptionFields.css';
 import HoursOfOperationFieldRowFormatter from './MCLRowFormatter';
-import OpenClosedSelect from './OpenClosedSelect';
+import OpenClosedSelectExceptional from './OpenClosedSelectExceptional';
 import RowType from './RowType';
+import TimeField from './TimeField';
+import cssHiddenErrorField from './hiddenErrorField.css';
+import {
+  getErrorDisplay,
+  getMainConflictError,
+  isInnerRowConflicted,
+  isOuterRowConflicted,
+} from './ExceptionFieldUtils';
 
-export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
-  props: ExceptionFieldProps
-) => {
-  /** Must add at least one empty row, or MCL will not render properly */
-  const [rowStates, _setRowStates] = useState<ExceptionRowState[]>([]);
+export interface ExceptionFieldProps {
+  values: FieldArrayRenderProps<ExceptionRowState, HTMLElement>['fields'];
+}
 
-  const setRowStates = (newRowStates: ExceptionRowState[]) => {
-    _setRowStates(newRowStates);
-    props.input.onChange(newRowStates);
-  };
-
+export default function ExceptionField({ values }: ExceptionFieldProps) {
   const intl = useIntl();
 
-  const fieldRefs = props.fieldRefs;
-
-  const _currentCountState = useState(0);
-  let currentCount = _currentCountState[0];
-  const setCurrentCount = _currentCountState[1];
-
-  // Initially sort and use values as source of rows
-  useEffect(() => {
-    const rows = [...props.input.value];
-
-    // do nothing if there are no openings to render/parse
-    if (rows.length === 0) {
-      return;
-    }
-
-    rows.sort(outerRowSorter);
-
-    setRowStates(rows);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // controls whether empty/invalid error messages should be shown
-  const isDirty = !!(props.submitAttempted || props.meta.touched);
+  const form = useForm<FormValues>();
+  const fieldState = useField<ExceptionRowState[]>('exceptions');
 
   const contents: MultiColumnListProps<MCLContentsType, never>['contentData'] =
-    rowStates.map((row, realIndex) => {
-      if (!(row.i in fieldRefs.startDate)) {
-        fieldRefs.startDate[row.i] = {};
-        fieldRefs.startTime[row.i] = {};
-        fieldRefs.endDate[row.i] = {};
-        fieldRefs.endTime[row.i] = {};
-      }
-      const dateTimeFields = row.rows.map((innerRow, innerRowRealIndex) => {
-        return getDateTimeFields({
-          props,
-          row,
-          innerRow,
-          realIndex,
-          innerRowRealIndex,
-          fieldRefs,
-          isDirty,
-          rowStates,
-          setRowStates
-        });
-      });
-      return {
-        rowState: row,
-        name: (
-          <TextField
-            ariaLabel={intl.formatMessage({ id: 'ui-calendar.calendarForm.exceptions.column.name' })}
-            marginBottom0
-            required
-            fullWidth
-            value={row.name}
-            onBlur={() => props.input.onBlur()}
-            onChange={(e) => {
-              updateRowState(rowStates, setRowStates, realIndex, {
-                name: e.target.value
-              });
-            }}
-            className={cssHiddenErrorField.hiddenErrorFieldWrapper}
-            error={getNameFieldError(props.meta.touched, props.error, row.i)}
-          />
-        ),
-        status: (
-          <OpenClosedSelect
-            value={row.type}
-            onBlur={props.input.onBlur}
-            onChange={(newData: Partial<ExceptionRowState>) => {
-              if (newData.type === RowType.Closed) {
-                const min = minDate(
-                  row.rows
-                    .filter(({ startDate }) => startDate !== undefined)
-                    .map(({ startDate }) => dateFromYYYYMMDD(startDate as string))
-                );
-                const max = maxDate(
-                  row.rows
-                    .filter(({ endDate }) => endDate !== undefined)
-                    .map(({ endDate }) => dateFromYYYYMMDD(endDate as string))
-                );
-                newData.rows = [
-                  {
-                    i: row.lastRowI + 1,
-                    startDate: min === null ? undefined : dateToYYYYMMDD(min),
-                    startTime: undefined,
-                    endDate: max === null ? undefined : dateToYYYYMMDD(max),
-                    endTime: undefined
-                  }
-                ];
-              }
-              updateRowState(rowStates, setRowStates, realIndex, newData);
-            }}
-          />
-        ),
-        startDate: (
-          <Layout
-            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
-          >
-            {dateTimeFields.map((r) => r.startDate)}
-          </Layout>
-        ),
-        startTime: (
-          <Layout
-            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
-          >
-            {dateTimeFields.map((r) => r.startTime)}
-          </Layout>
-        ),
-        endDate: (
-          <Layout
-            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
-          >
-            {dateTimeFields.map((r) => r.endDate)}
-          </Layout>
-        ),
-        endTime: (
-          <Layout
-            className={`full flex flex-direction-column ${css.fieldListWrapper}`}
-          >
-            {dateTimeFields.map((r) => r.endTime)}
-          </Layout>
-        ),
-        actions: (
-          <Layout className="full flex centerContent">
-            <IconButton
-              icon="plus-sign"
-              aria-disabled={row.type === RowType.Closed}
+    values.map((name, index) => ({
+      name: (
+        <Field
+          component={TextField<string>}
+          ariaLabel={intl.formatMessage({
+            id: 'ui-calendar.calendarForm.exceptions.column.name',
+          })}
+          name={`${name}.name`}
+          marginBottom0
+          required
+          fullWidth
+          error={getErrorDisplay(fieldState.meta.error, index)}
+        />
+      ),
+      status: (
+        <OpenClosedSelectExceptional
+          rowsName={`${name}.rows`}
+          name={`${name}.type`}
+        />
+      ),
+      startDate: (
+        <Layout
+          className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+        >
+          {values.value[index].rows.map((_, innerIndex) => (
+            <Field
+              component={Datepicker}
+              key={innerIndex}
+              name={`${name}.rows[${innerIndex}].startDate`}
+              className={classNames(
+                {
+                  [css.conflictCell]: isInnerRowConflicted(
+                    fieldState.meta.error,
+                    index,
+                    innerIndex
+                  ),
+                },
+                cssHiddenErrorField.hiddenErrorFieldWrapper
+              )}
+              backendDateStandard="YYYY-MM-DD"
+              marginBottom0
+              required
+              usePortal
+            />
+          ))}
+        </Layout>
+      ),
+      startTime: (
+        <Layout
+          className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+        >
+          {values.value[index].rows.map((_, innerIndex) => (
+            <TimeField
+              key={innerIndex}
+              name={`${name}.rows[${innerIndex}].startTime`}
               className={classNames({
-                [css.disabledIconButton]: row.type === RowType.Closed
+                [css.conflictCell]: isInnerRowConflicted(
+                  fieldState.meta.error,
+                  index,
+                  innerIndex
+                ),
               })}
-              onClick={() => {
-                if (row.type === RowType.Closed) return;
-                const newRows = [
-                  ...row.rows,
-                  {
-                    i: row.lastRowI + 1,
-                    startDate: undefined,
-                    startTime: undefined,
-                    endDate: undefined,
-                    endTime: undefined
-                  }
-                ];
-                updateRowState(rowStates, setRowStates, realIndex, {
-                  rows: newRows,
-                  lastRowI: row.lastRowI + 1
-                });
-              }}
+              display={values.value[index].type === RowType.Open}
             />
-            <IconButton
-              icon="trash"
-              onClick={() => {
-                const newRowStates = [...rowStates];
-                newRowStates.splice(realIndex, 1);
-                setRowStates(newRowStates);
-                props.input.onBlur();
-              }}
+          ))}
+        </Layout>
+      ),
+      endDate: (
+        <Layout
+          className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+        >
+          {values.value[index].rows.map((_, innerIndex) => (
+            <Field
+              component={Datepicker}
+              key={innerIndex}
+              name={`${name}.rows[${innerIndex}].endDate`}
+              className={classNames(
+                {
+                  [css.conflictCell]: isInnerRowConflicted(
+                    fieldState.meta.error,
+                    index,
+                    innerIndex
+                  ),
+                },
+                cssHiddenErrorField.hiddenErrorFieldWrapper
+              )}
+              backendDateStandard="YYYY-MM-DD"
+              marginBottom0
+              required
+              usePortal
             />
-          </Layout>
-        ),
-        isConflicted: isOuterRowConflicted(props.error, row.i)
-      };
-    });
-
-  contents.push({
-    rowState: {
-      i: -1,
-      name: '',
-      type: RowType.Open,
-      lastRowI: 0,
-      rows: []
-    },
-    name: (
-      <Button
-        marginBottom0
-        onClick={() => {
-          const newRowStates = [...rowStates];
-          newRowStates.push({
-            i: currentCount,
-            type: RowType.Open,
-            name: '',
-            lastRowI: 0,
-            rows: [
-              {
-                i: 0,
+          ))}
+        </Layout>
+      ),
+      endTime: (
+        <Layout
+          className={`full flex flex-direction-column ${css.fieldListWrapper}`}
+        >
+          {values.value[index].rows.map((_, innerIndex) => (
+            <TimeField
+              key={innerIndex}
+              name={`${name}.rows[${innerIndex}].endTime`}
+              className={classNames({
+                [css.conflictCell]: isInnerRowConflicted(
+                  fieldState.meta.error,
+                  index,
+                  innerIndex
+                ),
+              })}
+              display={values.value[index].type === RowType.Open}
+            />
+          ))}
+        </Layout>
+      ),
+      actions: (
+        <Layout className="full flex centerContent">
+          <IconButton
+            icon="plus-sign"
+            aria-disabled={values.value[index].type === RowType.Closed}
+            className={classNames({
+              [css.disabledIconButton]:
+                values.value[index].type === RowType.Closed,
+            })}
+            onClick={() => {
+              if (values.value[index].type === RowType.Closed) return;
+              form.mutators.push(`${name}.rows`, {
                 startDate: undefined,
                 startTime: undefined,
                 endDate: undefined,
-                endTime: undefined
-              }
-            ]
-          });
-          currentCount++;
-          setCurrentCount(currentCount);
-          setRowStates(newRowStates);
-        }}
+                endTime: undefined,
+              });
+            }}
+          />
+          <IconButton icon="trash" onClick={() => values.remove(index)} />
+        </Layout>
+      ),
+      isConflicted: isOuterRowConflicted(fieldState.meta.error, index),
+    }));
+
+  contents.push({
+    name: (
+      <Button
+        marginBottom0
+        onClick={() => values.push({
+          type: RowType.Open,
+          name: '',
+          rows: [
+            {
+              startDate: undefined,
+              startTime: undefined,
+              endDate: undefined,
+              endTime: undefined,
+            },
+          ],
+        })
+        }
       >
         <FormattedMessage id="ui-calendar.calendarForm.addRowButton" />
       </Button>
@@ -254,16 +204,16 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
     endDate: undefined,
     endTime: undefined,
     actions: undefined,
-    isConflicted: false
+    isConflicted: false,
   });
 
-  const conflictError: ReactNode = getMainConflictError(props.error);
+  const conflictError: ReactNode = getMainConflictError(fieldState.meta.error);
 
   return (
     <>
-      <MultiColumnList<MCLContentsType, 'isConflicted' | 'rowState'>
+      <MultiColumnList<MCLContentsType, 'isConflicted'>
         interactive={false}
-        rowMetadata={['isConflicted', 'rowState']}
+        rowMetadata={['isConflicted']}
         columnIdPrefix="exceptions"
         columnMapping={{
           name: (
@@ -286,7 +236,7 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           ),
           actions: (
             <FormattedMessage id="ui-calendar.calendarForm.exceptions.column.actions" />
-          )
+          ),
         }}
         columnWidths={{
           name: '22%',
@@ -295,11 +245,11 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
           startTime: '15%',
           endDate: '15%',
           endTime: '15%',
-          actions: '6%'
+          actions: '6%',
         }}
         contentData={contents}
         getCellClass={(defaultClasses, rowData) => classNames(defaultClasses, css.cellWrapper, {
-          [css.conflictCell]: rowData.isConflicted
+          [css.conflictCell]: rowData.isConflicted,
         })
         }
         rowFormatter={HoursOfOperationFieldRowFormatter}
@@ -307,6 +257,4 @@ export const ExceptionField: FunctionComponent<ExceptionFieldProps> = (
       {conflictError}
     </>
   );
-};
-
-export default ExceptionField;
+}

@@ -59,7 +59,7 @@ export default function Calendar(props: Props) {
       className={css.calendar}
       style={
         {
-          '--num-main-cal-rows': displayDates.length / 7
+          '--num-main-cal-rows': displayDates.length / 7,
         } as CSSPropertiesWithVars
       }
     >

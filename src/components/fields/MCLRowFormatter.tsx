@@ -1,13 +1,13 @@
 import { MultiColumnListRowFormatterProps } from '@folio/stripes/components';
 import React from 'react';
 
-export default function MCLRowFormatter<
-  MCLContentsType extends { rowState: { i: number } }
->(props: MultiColumnListRowFormatterProps<MCLContentsType>) {
-  const { rowClass, rowData, cells, rowProps } = props;
+export default function MCLRowFormatter<MCLContentsType>(
+  props: MultiColumnListRowFormatterProps<MCLContentsType>
+) {
+  const { rowClass, cells, rowProps } = props;
 
   return (
-    <div key={`row-${rowData.rowState.i}`} className={rowClass} {...rowProps}>
+    <div className={rowClass} {...rowProps}>
       {cells}
     </div>
   );

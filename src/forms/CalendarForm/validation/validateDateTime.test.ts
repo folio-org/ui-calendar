@@ -1,5 +1,5 @@
 import expectRender from '../../../test/util/expectRender';
-import { validateDateOrder } from './validateDateTime';
+import validateDateOrder from './validateDateTime';
 
 test('Missing values results in no error (caught elsewhere)', () => {
   expect(validateDateOrder({})).toStrictEqual({});

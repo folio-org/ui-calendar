@@ -1,289 +1,52 @@
 import type { Dayjs } from 'dayjs';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   ExceptionFieldErrors,
-  ExceptionRowState
+  ExceptionRowState,
 } from '../../../components/fields/ExceptionFieldTypes';
 import RowType from '../../../components/fields/RowType';
 import {
+  dateFromYYYYMMDD,
   dateFromYYYYMMDDAndHHMM,
   overlaps,
-  overlapsDates
+  overlapsDates,
 } from '../../../utils/DateUtils';
 import dayjs from '../../../utils/dayjs';
-import { InnerFieldRefs } from '../types';
-import { isTimeProper } from './validateDateTime';
+import flattenObject from '../../../utils/flattenObject';
 
-/** Validate that inner exception rows are not empty */
-function validateExceptionInnerRowEmpty(
-  row: ExceptionRowState,
-  innerRow: ExceptionRowState['rows'][0],
-  innerFieldRefs: InnerFieldRefs['exceptions'],
-  emptyErrors: NonNullable<ExceptionFieldErrors['empty']>,
-  _hasError: boolean
-): boolean {
-  let hasError = _hasError;
-  if (
-    innerRow.startDate === undefined ||
-    innerRow.startDate === '' ||
-    innerFieldRefs.startDate[row.i]?.[innerRow.i]?.value === undefined
-  ) {
-    emptyErrors.startDate[row.i][innerRow.i] = (
-      <FormattedMessage id="stripes-core.label.missingRequiredField" />
-    );
-    hasError = true;
-  }
-  if (
-    innerRow.endDate === undefined ||
-    innerRow.endDate === '' ||
-    innerFieldRefs.endDate[row.i]?.[innerRow.i]?.value === undefined
-  ) {
-    emptyErrors.endDate[row.i][innerRow.i] = (
-      <FormattedMessage id="stripes-core.label.missingRequiredField" />
-    );
-    hasError = true;
-  }
-  if (row.type === RowType.Open) {
-    if (innerRow.startTime === undefined) {
-      emptyErrors.startTime[row.i][innerRow.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
-      hasError = true;
+export function isExceptionFilled(exception: ExceptionRowState): exception is {
+  name: string;
+  type: RowType;
+  rows: {
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+  }[];
+} {
+  for (const row of exception.rows) {
+    if (row.startDate === undefined || row.endDate === undefined) {
+      return false;
     }
-    if (innerRow.endTime === undefined) {
-      emptyErrors.endTime[row.i][innerRow.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
-      hasError = true;
-    }
-  }
-  return hasError;
-}
-
-/** Validate that exception rows as a whole are not empty */
-export function validateExceptionsEmpty(
-  rows: ExceptionRowState[],
-  innerFieldRefs: InnerFieldRefs['exceptions']
-): ExceptionFieldErrors | undefined {
-  const emptyErrors: ExceptionFieldErrors['empty'] = {
-    name: {},
-    startDate: {},
-    startTime: {},
-    endDate: {},
-    endTime: {}
-  };
-
-  let hasError = false;
-
-  rows.forEach((row) => {
-    if (row.name === undefined || row.name.trim() === '') {
-      emptyErrors.name[row.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
-      hasError = true;
-    }
-    emptyErrors.startDate[row.i] = {};
-    emptyErrors.startTime[row.i] = {};
-    emptyErrors.endDate[row.i] = {};
-    emptyErrors.endTime[row.i] = {};
-    row.rows.forEach((innerRow) => {
-      hasError = validateExceptionInnerRowEmpty(
-        row,
-        innerRow,
-        innerFieldRefs,
-        emptyErrors,
-        hasError
-      );
-    });
-  });
-
-  if (hasError) {
-    return { empty: emptyErrors };
-  }
-
-  return undefined;
-}
-
-/** Validate that inner exception rows have proper dates/times */
-function validateExceptionInnerRowDatesAndTimes(
-  row: ExceptionRowState,
-  innerRow: ExceptionRowState['rows'][0],
-  innerFieldRefs: InnerFieldRefs['exceptions'],
-  invalidErrors: NonNullable<ExceptionFieldErrors['invalid']>,
-  localeDateFormat: string,
-  localeTimeFormat: string,
-  _hasError: boolean
-) {
-  let hasError = _hasError;
-  if (
-    dayjs(innerRow.startDate).format(localeDateFormat) !==
-    innerFieldRefs.startDate[row.i]?.[innerRow.i]?.value
-  ) {
-    invalidErrors.startDate[row.i][innerRow.i] = (
-      <FormattedMessage
-        id="ui-calendar.calendarForm.error.dateFormat"
-        values={{ localeDateFormat }}
-      />
-    );
-    hasError = true;
-  }
-  if (
-    dayjs(innerRow.endDate).format(localeDateFormat) !==
-    innerFieldRefs.endDate[row.i]?.[innerRow.i]?.value
-  ) {
-    invalidErrors.endDate[row.i][innerRow.i] = (
-      <FormattedMessage
-        id="ui-calendar.calendarForm.error.dateFormat"
-        values={{ localeDateFormat }}
-      />
-    );
-    hasError = true;
-  }
-  if (dayjs(innerRow.startDate).isAfter(innerRow.endDate)) {
-    invalidErrors.startDate[row.i][innerRow.i] = (
-      <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
-    );
-    invalidErrors.endDate[row.i][innerRow.i] = (
-      <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
-    );
-    hasError = true;
-  }
-  if (row.type === RowType.Open) {
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        innerRow.startTime as string,
-        innerFieldRefs.startTime[row.i]?.[innerRow.i]?.value
-      )
-    ) {
-      invalidErrors.startTime[row.i][innerRow.i] = (
-        <FormattedMessage
-          id="ui-calendar.calendarForm.error.timeFormat"
-          values={{ localeTimeFormat }}
-        />
-      );
-      hasError = true;
-    }
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        innerRow.endTime as string,
-        innerFieldRefs.endTime[row.i]?.[innerRow.i]?.value
-      )
-    ) {
-      invalidErrors.endTime[row.i][innerRow.i] = (
-        <FormattedMessage
-          id="ui-calendar.calendarForm.error.timeFormat"
-          values={{ localeTimeFormat }}
-        />
-      );
-      hasError = true;
-    }
-    if (
-      dayjs(`${innerRow.startDate} ${innerRow.startTime}`).isAfter(
-        `${innerRow.endDate} ${innerRow.endTime}`
-      )
-    ) {
-      invalidErrors.startTime[row.i][innerRow.i] = (
-        <FormattedMessage id="ui-calendar.calendarForm.error.timeOrder" />
-      );
-      invalidErrors.endTime[row.i][innerRow.i] = (
-        <FormattedMessage id="ui-calendar.calendarForm.error.timeOrder" />
-      );
-      hasError = true;
-    }
-  }
-  return hasError;
-}
-
-/** Validate all inner dates/times within each overall row */
-export function validateExceptionsDatesAndTimes(
-  rows: ExceptionRowState[],
-  innerFieldRefs: InnerFieldRefs['exceptions'],
-  localeDateFormat: string,
-  localeTimeFormat: string
-): ExceptionFieldErrors | undefined {
-  const invalidErrors: ExceptionFieldErrors['invalid'] = {
-    startDate: {},
-    startTime: {},
-    endDate: {},
-    endTime: {}
-  };
-
-  let hasError = false;
-
-  rows.forEach((row) => {
-    invalidErrors.startDate[row.i] = {};
-    invalidErrors.startTime[row.i] = {};
-    invalidErrors.endDate[row.i] = {};
-    invalidErrors.endTime[row.i] = {};
-    row.rows.forEach((innerRow) => {
-      hasError = validateExceptionInnerRowDatesAndTimes(
-        row,
-        innerRow,
-        innerFieldRefs,
-        invalidErrors,
-        localeDateFormat,
-        localeTimeFormat,
-        hasError
-      );
-    });
-  });
-
-  if (hasError) {
-    return { invalid: invalidErrors };
-  }
-
-  return undefined;
-}
-
-/** Check overlaps between exception rows */
-export function validateExceptionInterOverlaps(
-  rows: ExceptionRowState[]
-): ExceptionFieldErrors | undefined {
-  const interConflicts: ExceptionFieldErrors['interConflicts'] =
-    new Set<number>();
-
-  const rowMinMaxes: { i: number; startDate: Dayjs; endDate: Dayjs }[] =
-    rows.map((row) => ({
-      i: row.i,
-      startDate: dayjs
-        .min(row.rows.map(({ startDate }) => dayjs(startDate)))
-        .startOf('day'),
-      endDate: dayjs
-        .max(row.rows.map(({ endDate }) => dayjs(endDate)))
-        .endOf('day')
-    }));
-
-  for (let i = 0; i < rowMinMaxes.length - 1; i++) {
-    for (let j = i + 1; j < rowMinMaxes.length; j++) {
-      if (
-        overlaps(
-          rowMinMaxes[i].startDate,
-          rowMinMaxes[i].endDate,
-          rowMinMaxes[j].startDate,
-          rowMinMaxes[j].endDate
-        )
-      ) {
-        interConflicts.add(rowMinMaxes[i].i);
-        interConflicts.add(rowMinMaxes[j].i);
+    if (exception.type === RowType.Open) {
+      if (row.startTime === undefined || row.endTime === undefined) {
+        return false;
       }
     }
   }
-
-  if (interConflicts.size) {
-    return { interConflicts };
-  }
-
-  return undefined;
+  return true;
 }
 
 /** Check overlaps between inner exception rows */
 export function getExceptionRowIntraOverlap(
   row: ExceptionRowState
-): Set<number> {
-  const overlappingRows = new Set<number>();
+): Record<number, { conflict?: true }> {
+  if (row.type === RowType.Closed || !isExceptionFilled(row)) {
+    return {};
+  }
+
+  const conflicts: Record<number, { conflict?: true }> = {};
 
   for (let i = 0; i < row.rows.length - 1; i++) {
     for (let j = i + 1; j < row.rows.length; j++) {
@@ -307,76 +70,161 @@ export function getExceptionRowIntraOverlap(
           )
         )
       ) {
-        overlappingRows.add(row.rows[i].i);
-        overlappingRows.add(row.rows[j].i);
+        conflicts[i] = { conflict: true };
+        conflicts[j] = { conflict: true };
       }
     }
   }
 
-  return overlappingRows;
+  return conflicts;
 }
-
-/** Validate overlaps between inside exception rows */
-export function validateExceptionIntraOverlaps(
+/** Check overlaps between exception rows */
+export function validateExceptionOverlaps(
   rows: ExceptionRowState[]
-): ExceptionFieldErrors | undefined {
-  const intraConflicts: ExceptionFieldErrors['intraConflicts'] = {};
-  let hasError = false;
+): ExceptionFieldErrors {
+  const conflicts: ExceptionFieldErrors = {};
 
-  rows.forEach((row) => {
-    if (row.type === RowType.Closed) return;
+  const rowMinMaxes: { i: number; startDate: Dayjs; endDate: Dayjs }[] = rows
+    .map((row, i) => ({
+      i,
+      startDate: dayjs
+        .min(row.rows.map(({ startDate }) => dayjs(startDate)))
+        .startOf('day'),
+      endDate: dayjs
+        .max(row.rows.map(({ endDate }) => dayjs(endDate)))
+        .endOf('day'),
+    }))
+    .filter(({ i }) => isExceptionFilled(rows[i]));
 
-    const innerOverlaps = getExceptionRowIntraOverlap(row);
-    if (innerOverlaps.size) {
-      intraConflicts[row.i] = new Set<number>();
-      hasError = true;
+  for (let i = 0; i < rowMinMaxes.length - 1; i++) {
+    for (let j = i + 1; j < rowMinMaxes.length; j++) {
+      if (
+        overlaps(
+          rowMinMaxes[i].startDate,
+          rowMinMaxes[i].endDate,
+          rowMinMaxes[j].startDate,
+          rowMinMaxes[j].endDate
+        )
+      ) {
+        conflicts[rowMinMaxes[i].i] = { conflict: true };
+        conflicts[rowMinMaxes[j].i] = { conflict: true };
+      }
+    }
+  }
 
-      innerOverlaps.forEach((innerI) => {
-        intraConflicts[row.i].add(innerI);
-      });
+  rows.forEach((row, i) => {
+    if (Object.values(getExceptionRowIntraOverlap(row)).length) {
+      conflicts[i] = { rows: flattenObject(getExceptionRowIntraOverlap(row)) };
     }
   });
 
-  if (hasError) {
-    return { intraConflicts };
-  }
-
-  return undefined;
+  return conflicts;
 }
-/** Validate all parts of exceptions */
+
+export function validateDateOrder(
+  rows: ExceptionRowState[]
+): ExceptionFieldErrors {
+  const errors: ExceptionFieldErrors = {};
+
+  rows.forEach((exception, i) => {
+    if (!isExceptionFilled(exception)) {
+      return;
+    }
+
+    let hasError = false;
+    const rowErrors = exception.rows.map<{ endDate?: ReactNode }>((row) => {
+      if (
+        exception.type === RowType.Open &&
+        dateFromYYYYMMDDAndHHMM(row.startDate, row.startTime) >
+          dateFromYYYYMMDDAndHHMM(row.endDate, row.endTime)
+      ) {
+        hasError = true;
+        return {
+          endDate: (
+            <FormattedMessage id="ui-calendar.calendarForm.error.timeOrder" />
+          ),
+        };
+      } else if (
+        exception.type === RowType.Closed &&
+        row.startDate > row.endDate
+      ) {
+        hasError = true;
+        return {
+          endDate: (
+            <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
+          ),
+        };
+      }
+      return {};
+    });
+
+    if (hasError) {
+      errors[i] = { rows: rowErrors };
+    }
+  });
+
+  return errors;
+}
+
+export function validateDateBounds(
+  rows: ExceptionRowState[],
+  startDate: Date,
+  endDate: Date
+): ExceptionFieldErrors {
+  const errors: ExceptionFieldErrors = {};
+
+  rows.forEach((exception, i) => {
+    if (!isExceptionFilled(exception)) {
+      return;
+    }
+
+    let hasError = false;
+    const rowErrors = exception.rows.map<{ endDate?: ReactNode }>((row) => {
+      if (dateFromYYYYMMDD(row.startDate) < startDate) {
+        hasError = true;
+        return {
+          startDate: (
+            <FormattedMessage id="ui-calendar.calendarForm.error.dateRange" />
+          ),
+        };
+      }
+      if (dateFromYYYYMMDD(row.endDate) > endDate) {
+        hasError = true;
+        return {
+          endDate: (
+            <FormattedMessage id="ui-calendar.calendarForm.error.dateRange" />
+          ),
+        };
+      }
+      return {};
+    });
+
+    if (hasError) {
+      errors[i] = { rows: rowErrors };
+    }
+  });
+
+  return errors;
+}
+
 export default function validateExceptions(
   rows: ExceptionRowState[] | undefined,
-  innerFieldRefs: InnerFieldRefs['exceptions'],
-  localeDateFormat: string,
-  localeTimeFormat: string
-): { exceptions?: ExceptionFieldErrors } {
+  startDate: string | undefined,
+  endDate: string | undefined
+): ExceptionFieldErrors {
   if (rows === undefined) {
     return {};
   }
 
-  const emptyErrors = validateExceptionsEmpty(rows, innerFieldRefs);
-  if (emptyErrors !== undefined) {
-    return { exceptions: emptyErrors };
-  }
-
-  const invalidErrors = validateExceptionsDatesAndTimes(
-    rows,
-    innerFieldRefs,
-    localeDateFormat,
-    localeTimeFormat
-  );
-  if (invalidErrors !== undefined) {
-    return { exceptions: invalidErrors };
-  }
-
-  const interOverlaps = validateExceptionInterOverlaps(rows);
-  if (interOverlaps !== undefined) {
-    return { exceptions: interOverlaps };
-  }
-
   return {
-    // can be undefined but that is acceptable here
-    // as no other cases to check
-    exceptions: validateExceptionIntraOverlaps(rows)
+    ...validateExceptionOverlaps(rows),
+    ...(startDate && endDate
+      ? validateDateBounds(
+        rows,
+        dateFromYYYYMMDD(startDate),
+        dateFromYYYYMMDD(endDate)
+      )
+      : {}),
+    ...validateDateOrder(rows),
   };
 }

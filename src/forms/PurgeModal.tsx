@@ -8,10 +8,15 @@ import {
   Modal,
   ModalFooter,
   Select,
-  SelectFieldRenderProps
 } from '@folio/stripes/components';
+import { CalloutContext } from '@folio/stripes/core';
 import { HTTPError } from 'ky';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Field, Form } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
@@ -19,36 +24,35 @@ import { Calendar } from '../types/types';
 import { dateFromYYYYMMDD } from '../utils/DateUtils';
 import css from './PurgeModal.css';
 
-
 export enum AgeCriteria {
   MONTHS_3 = 'MONTHS_3',
   MONTHS_6 = 'MONTHS_6',
   YEAR_1 = 'YEAR_1',
-  YEARS_2 = 'YEARS_2'
+  YEARS_2 = 'YEARS_2',
 }
 
 const AgeCriteriaLabels: Record<AgeCriteria, string> = {
   [AgeCriteria.MONTHS_3]: 'ui-calendar.purgeModal.criteria.age.months3',
   [AgeCriteria.MONTHS_6]: 'ui-calendar.purgeModal.criteria.age.months6',
   [AgeCriteria.YEAR_1]: 'ui-calendar.purgeModal.criteria.age.year1',
-  [AgeCriteria.YEARS_2]: 'ui-calendar.purgeModal.criteria.age.years2'
+  [AgeCriteria.YEARS_2]: 'ui-calendar.purgeModal.criteria.age.years2',
 };
 
 const AgeCriteriaMonths: Record<AgeCriteria, number> = {
   [AgeCriteria.MONTHS_3]: 3,
   [AgeCriteria.MONTHS_6]: 6,
   [AgeCriteria.YEAR_1]: 12,
-  [AgeCriteria.YEARS_2]: 24
+  [AgeCriteria.YEARS_2]: 24,
 };
 
 export enum AssignmentCriteria {
   NONE = 'NONE',
-  ANY = 'ANY'
+  ANY = 'ANY',
 }
 
 const AssignmentCriteriaLabels: Record<AssignmentCriteria, string> = {
   [AssignmentCriteria.NONE]: 'ui-calendar.purgeModal.criteria.assignment.none',
-  [AssignmentCriteria.ANY]: 'ui-calendar.purgeModal.criteria.assignment.any'
+  [AssignmentCriteria.ANY]: 'ui-calendar.purgeModal.criteria.assignment.any',
 };
 
 export interface FormValues {
@@ -59,31 +63,29 @@ export interface FormValues {
 export const FORM_ID = 'ui-calendar-purge-old-calendar-form';
 
 export const getCalendarsToPurge = (
-  (
-    calendars: Calendar[],
-    ageCriteria: AgeCriteria | undefined = undefined,
-    assignmentCriteria: AssignmentCriteria | undefined = undefined
-  ) => {
-    if (ageCriteria === undefined || assignmentCriteria === undefined) {
-      return [];
-    }
-
-    const endBefore = new Date().setMonth(
-      new Date().getMonth() - AgeCriteriaMonths[ageCriteria]
-    );
-
-    return calendars
-      .filter((calendar) => {
-        return (
-          assignmentCriteria === AssignmentCriteria.ANY ||
-          calendar.assignments.length === 0
-        );
-      })
-      .filter(
-        (calendar) => dateFromYYYYMMDD(calendar.endDate).getTime() < endBefore
-      );
+  calendars: Calendar[],
+  ageCriteria: AgeCriteria | undefined = undefined,
+  assignmentCriteria: AssignmentCriteria | undefined = undefined
+) => {
+  if (ageCriteria === undefined || assignmentCriteria === undefined) {
+    return [];
   }
-);
+
+  const endBefore = new Date().setMonth(
+    new Date().getMonth() - AgeCriteriaMonths[ageCriteria]
+  );
+
+  return calendars
+    .filter((calendar) => {
+      return (
+        assignmentCriteria === AssignmentCriteria.ANY ||
+        calendar.assignments.length === 0
+      );
+    })
+    .filter(
+      (calendar) => dateFromYYYYMMDD(calendar.endDate).getTime() < endBefore
+    );
+};
 
 export interface PurgeModalProps {
   dataRepository: DataRepository;
@@ -98,6 +100,8 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   // reset submitting on mount/unmount
   useEffect(() => setIsSubmitting(false), []);
+
+  const callout = useContext(CalloutContext);
 
   return (
     <Modal
@@ -130,7 +134,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
       <Form<FormValues>
         initialValues={{
           ageCriteria: undefined,
-          assignmentCriteria: undefined
+          assignmentCriteria: undefined,
         }}
         onSubmit={async (values) => {
           setIsSubmitting(true);
@@ -149,10 +153,10 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
             await props.dataRepository.deleteCalendars(toPurge);
             props.onClose();
           } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
-            // eslint-disable-next-line no-alert
-            alert(await (e as HTTPError).response.text());
+            callout.sendCallout({
+              type: 'error',
+              message: await (e as HTTPError).response.text(),
+            });
           } finally {
             setIsSubmitting(false);
           }
@@ -170,12 +174,7 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
             <form id={FORM_ID} onSubmit={handleSubmit}>
               <Field
                 name="ageCriteria"
-                component={
-                  Select<
-                    AgeCriteria | undefined,
-                    SelectFieldRenderProps<AgeCriteria | undefined>
-                  >
-                }
+                component={Select<AgeCriteria | undefined>}
                 required
                 label={
                   <FormattedMessage id="ui-calendar.purgeModal.criteria.age.prompt" />
@@ -186,19 +185,14 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   ...Object.entries(AgeCriteriaLabels).map(
                     ([value, label]) => ({
                       value: value as AgeCriteria,
-                      label: intl.formatMessage({ id: label })
+                      label: intl.formatMessage({ id: label }),
                     })
-                  )
+                  ),
                 ]}
               />
               <Field
                 name="assignmentCriteria"
-                component={
-                  Select<
-                    AssignmentCriteria | undefined,
-                    SelectFieldRenderProps<AssignmentCriteria | undefined>
-                  >
-                }
+                component={Select<AssignmentCriteria | undefined>}
                 required
                 label={
                   <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.prompt" />
@@ -209,9 +203,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
                   ...Object.entries(AssignmentCriteriaLabels).map(
                     ([value, label]) => ({
                       value: value as AssignmentCriteria,
-                      label: intl.formatMessage({ id: label })
+                      label: intl.formatMessage({ id: label }),
                     })
-                  )
+                  ),
                 ]}
               />
               <AccordionSet>

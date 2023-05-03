@@ -1,25 +1,29 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-
+import React from 'react';
+import { Form } from 'react-final-form';
 import withIntlConfiguration from '../../test/util/withIntlConfiguration';
-import * as Weekdays from '../../test/data/Weekdays';
+import { WEEKDAYS } from '../../utils/WeekdayUtils';
 import WeekdayPicker from './WeekdayPicker';
 
-describe('WeekdayPicker', () => {
-  it('correctly calls props.onChange', async () => {
-    const day = Weekdays.Sunday;
-    const onChange = jest.fn();
-    render(
-      withIntlConfiguration(
-        <WeekdayPicker value={undefined} onChange={onChange} ariaLabel="funky-chicken" />
-      )
-    );
+test('WeekdayPicker contains locale weekdays', async () => {
+  render(
+    withIntlConfiguration(
+      <Form
+        onSubmit={() => ({})}
+        initialValues={{ foo: WEEKDAYS.FRIDAY }}
+        render={() => {
+          return <WeekdayPicker ariaLabel="funky chicken" name="foo" />;
+        }}
+      />,
+      'fr-FR'
+    )
+  );
 
-    await userEvent.selectOptions(screen.getByRole('combobox'), [day]);
-    await userEvent.selectOptions(screen.getByRole('combobox'), ['']);
-
-    expect(onChange).toHaveBeenNthCalledWith(1, day);
-    expect(onChange).toHaveBeenNthCalledWith(2, undefined);
-  });
+  expect(screen.getByRole('option', { name: 'lundi' })).toBeInTheDocument();
+  expect(screen.getByRole('option', { name: 'mardi' })).toBeInTheDocument();
+  expect(screen.getByRole('option', { name: 'mercredi' })).toBeInTheDocument();
+  expect(screen.getByRole('option', { name: 'jeudi' })).toBeInTheDocument();
+  expect(screen.getByRole('option', { name: 'vendredi' })).toBeInTheDocument();
+  expect(screen.getByRole('option', { name: 'samedi' })).toBeInTheDocument();
+  expect(screen.getByRole('option', { name: 'dimanche' })).toBeInTheDocument();
 });

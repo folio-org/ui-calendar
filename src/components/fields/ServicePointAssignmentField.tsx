@@ -1,8 +1,4 @@
-import {
-  MultiSelection,
-  MultiSelectionFieldRenderProps,
-  OptionSegment
-} from '@folio/stripes/components';
+import { MultiSelection, OptionSegment } from '@folio/stripes/components';
 import fuzzysort from 'fuzzysort';
 import React, { FunctionComponent, ReactNode } from 'react';
 import { Field } from 'react-final-form';
@@ -11,7 +7,7 @@ import { ServicePoint } from '../../types/types';
 
 interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
-  error: ReactNode | undefined;
+  error?: ReactNode;
 }
 
 const ServicePointAssignmentField: FunctionComponent<
@@ -19,7 +15,7 @@ const ServicePointAssignmentField: FunctionComponent<
 > = (props: ServicePointAssignmentFieldProps) => {
   const formatter = ({
     option,
-    searchTerm
+    searchTerm,
   }: {
     option: ServicePoint;
     searchTerm: string | undefined;
@@ -45,12 +41,7 @@ const ServicePointAssignmentField: FunctionComponent<
   return (
     <Field
       name="service-points"
-      component={
-        MultiSelection<
-          ServicePoint,
-          MultiSelectionFieldRenderProps<ServicePoint>
-        >
-      }
+      component={MultiSelection<ServicePoint>}
       label={
         <FormattedMessage id="ui-calendar.calendarForm.field.servicePoints" />
       }
@@ -62,7 +53,7 @@ const ServicePointAssignmentField: FunctionComponent<
 
         // must spread and re-collect into a new array, as the returned array is immutable
         const results = [
-          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' })
+          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' }),
         ];
 
         // score descending, then name ascending
@@ -77,11 +68,11 @@ const ServicePointAssignmentField: FunctionComponent<
         return {
           // retrieve the original service point
           renderedItems: results.map((result) => result.obj),
-          exactMatch: !!list.filter((sp) => sp.name === filterText).length
+          exactMatch: !!list.filter((sp) => sp.name === filterText).length,
         };
       }}
       itemToString={(servicePoint: ServicePoint | undefined) => {
-        if (typeof servicePoint === 'object' && servicePoint !== null) {
+        if (servicePoint) {
           return servicePoint.name;
         } else {
           return '';

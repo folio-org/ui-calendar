@@ -1,28 +1,31 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import arrayMutators from 'final-form-arrays';
 import React from 'react';
+import { Form } from 'react-final-form';
+import { FieldArray } from 'react-final-form-arrays';
+import { FormValues } from '../../forms/CalendarForm/types';
 import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import ExceptionField from './ExceptionField';
+import { ExceptionRowState } from './ExceptionFieldTypes';
 import RowType from './RowType';
 
 describe('ExceptionField', () => {
-  it('Renders successfully', () => {
+  it('Empty field renders successfully', () => {
     render(
       withIntlConfiguration(
-        <ExceptionField
-          fieldRefs={{ startDate: {}, startTime: {}, endDate: {}, endTime: {} }}
-          error={undefined}
-          localeTimeFormat="HH:mm a"
-          submitAttempted={false}
-          input={{
-            name: 'exception-field',
-            onBlur: jest.fn(),
-            onChange: jest.fn(),
-            onFocus: jest.fn(),
-            value: []
+        <Form
+          mutators={{
+            ...arrayMutators,
           }}
-          meta={{ touched: true }}
-        />
+          onSubmit={() => ({})}
+        >
+          {() => (
+            <FieldArray<ExceptionRowState> name="exceptions">
+              {({ fields: values }) => <ExceptionField values={values} />}
+            </FieldArray>
+          )}
+        </Form>
       )
     );
 
@@ -30,85 +33,21 @@ describe('ExceptionField', () => {
     expect(screen.getAllByRole('row')).toHaveLength(2);
   });
 
-  it('Renders successfully with rows', () => {
+  it('Rows add successfully', async () => {
     render(
       withIntlConfiguration(
-        <ExceptionField
-          fieldRefs={{ startDate: {}, startTime: {}, endDate: {}, endTime: {} }}
-          error={undefined}
-          localeTimeFormat="HH:mm a"
-          submitAttempted={false}
-          input={{
-            name: 'exception-field',
-            onBlur: jest.fn(),
-            onChange: jest.fn(),
-            onFocus: jest.fn(),
-            value: [
-              {
-                i: 0,
-                type: RowType.Open,
-                name: 'Foo',
-                lastRowI: 1,
-                rows: [
-                  {
-                    i: 0,
-                    startDate: '2000-01-01',
-                    startTime: '00:00',
-                    endDate: '2000-01-05',
-                    endTime: '03:00'
-                  },
-                  {
-                    i: 1,
-                    startDate: '2000-01-06',
-                    startTime: '00:00',
-                    endDate: '2000-01-08',
-                    endTime: '03:00'
-                  }
-                ]
-              },
-              {
-                i: 1,
-                type: RowType.Closed,
-                name: 'Sample closure',
-                lastRowI: 0,
-                rows: [
-                  {
-                    i: 0,
-                    startDate: '2000-01-01',
-                    startTime: undefined,
-                    endDate: '2000-01-05',
-                    endTime: undefined
-                  }
-                ]
-              }
-            ]
+        <Form
+          mutators={{
+            ...arrayMutators,
           }}
-          meta={{ touched: true }}
-        />
-      )
-    );
-
-    // header and add row button
-    expect(screen.getAllByRole('row')).toHaveLength(4);
-  });
-
-  it('Adds rows on button click', async () => {
-    render(
-      withIntlConfiguration(
-        <ExceptionField
-          fieldRefs={{ startDate: {}, startTime: {}, endDate: {}, endTime: {} }}
-          error={undefined}
-          localeTimeFormat="HH:mm a"
-          submitAttempted={false}
-          input={{
-            name: 'exception-field',
-            onBlur: jest.fn(),
-            onChange: jest.fn(),
-            onFocus: jest.fn(),
-            value: []
-          }}
-          meta={{ touched: true }}
-        />
+          onSubmit={() => ({})}
+        >
+          {() => (
+            <FieldArray<ExceptionRowState> name="exceptions">
+              {({ fields: values }) => <ExceptionField values={values} />}
+            </FieldArray>
+          )}
+        </Form>
       )
     );
 
@@ -118,130 +57,131 @@ describe('ExceptionField', () => {
     expect(screen.getAllByRole('row')).toHaveLength(3);
   });
 
-  it('Removes row on button click', async () => {
+  it('Field with values renders successfully', () => {
     render(
       withIntlConfiguration(
-        <ExceptionField
-          fieldRefs={{ startDate: {}, startTime: {}, endDate: {}, endTime: {} }}
-          error={undefined}
-          localeTimeFormat="HH:mm a"
-          submitAttempted={false}
-          input={{
-            name: 'exception-field',
-            onBlur: jest.fn(),
-            onChange: jest.fn(),
-            onFocus: jest.fn(),
-            value: [
-              {
-                i: 0,
-                type: RowType.Open,
-                name: 'Foo',
-                lastRowI: 1,
-                rows: [
-                  {
-                    i: 0,
-                    startDate: '2000-01-01',
-                    startTime: '00:00',
-                    endDate: '2000-01-05',
-                    endTime: '03:00'
-                  },
-                  {
-                    i: 1,
-                    startDate: '2000-01-06',
-                    startTime: '00:00',
-                    endDate: '2000-01-08',
-                    endTime: '03:00'
-                  }
-                ]
-              },
-              {
-                i: 1,
-                type: RowType.Closed,
-                name: 'Sample closure',
-                lastRowI: 0,
-                rows: [
-                  {
-                    i: 0,
-                    startDate: '2000-01-01',
-                    startTime: undefined,
-                    endDate: '2000-01-05',
-                    endTime: undefined
-                  }
-                ]
-              }
-            ]
+        <Form<FormValues>
+          mutators={{
+            ...arrayMutators,
           }}
-          meta={{ touched: true }}
-        />
+          onSubmit={() => ({})}
+          initialValues={{
+            exceptions: [
+              {
+                name: 'test',
+                type: RowType.Open,
+                rows: [
+                  {
+                    startDate: '2000-01-01',
+                    startTime: '00:00',
+                    endDate: '2000-01-01',
+                    endTime: '00:00',
+                  },
+                ],
+              },
+            ],
+          }}
+        >
+          {() => (
+            <FieldArray<ExceptionRowState> name="exceptions">
+              {({ fields: values }) => <ExceptionField values={values} />}
+            </FieldArray>
+          )}
+        </Form>
       )
     );
 
     // header and add row button
-    expect(screen.getAllByRole('row')).toHaveLength(4);
-    // 9 from open and 3 from closed
-    expect(screen.getAllByRole('textbox')).toHaveLength(12);
-
-    // delete open row
-    await userEvent.click(screen.getAllByRole('button', { name: 'trash' })[0]);
     expect(screen.getAllByRole('row')).toHaveLength(3);
-    expect(screen.getAllByRole('textbox')).toHaveLength(3);
-
-    // delete closed row
-    await userEvent.click(screen.getAllByRole('button', { name: 'trash' })[0]);
-    expect(screen.getAllByRole('row')).toHaveLength(2);
-    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
   });
 
-  it('Adds inner row on button click', async () => {
+  it('Adding and deleting rows works successfully', async () => {
     render(
       withIntlConfiguration(
-        <ExceptionField
-          fieldRefs={{ startDate: {}, startTime: {}, endDate: {}, endTime: {} }}
-          error={undefined}
-          localeTimeFormat="HH:mm a"
-          submitAttempted={false}
-          input={{
-            name: 'exception-field',
-            onBlur: jest.fn(),
-            onChange: jest.fn(),
-            onFocus: jest.fn(),
-            value: [
+        <Form<FormValues>
+          mutators={{
+            ...arrayMutators,
+          }}
+          onSubmit={() => ({})}
+          initialValues={{
+            exceptions: [
               {
-                i: 0,
+                name: 'test',
                 type: RowType.Open,
-                name: 'Foo',
-                lastRowI: 1,
                 rows: [
                   {
-                    i: 0,
                     startDate: '2000-01-01',
                     startTime: '00:00',
-                    endDate: '2000-01-05',
-                    endTime: '03:00'
+                    endDate: '2000-01-01',
+                    endTime: '00:00',
                   },
-                  {
-                    i: 1,
-                    startDate: '2000-01-06',
-                    startTime: '00:00',
-                    endDate: '2000-01-08',
-                    endTime: '03:00'
-                  }
-                ]
-              }
-            ]
+                ],
+              },
+            ],
           }}
-          meta={{ touched: true }}
-        />
+        >
+          {() => (
+            <FieldArray<ExceptionRowState> name="exceptions">
+              {({ fields: values }) => <ExceptionField values={values} />}
+            </FieldArray>
+          )}
+        </Form>
       )
     );
 
     // header and add row button
+    expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(screen.getAllByRole('textbox')).toHaveLength(5);
+
+    await userEvent.click(screen.getByRole('button', { name: 'plus-sign' }));
     expect(screen.getAllByRole('row')).toHaveLength(3);
     expect(screen.getAllByRole('textbox')).toHaveLength(9);
 
-    // create additional inner row (four more textboxes)
+    await userEvent.click(screen.getByRole('button', { name: 'trash' }));
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+    expect(screen.findAllByRole('textbox')).toHaveLength(0);
+  });
+
+  it('Adding to closed rows is a no-op', async () => {
+    render(
+      withIntlConfiguration(
+        <Form<FormValues>
+          mutators={{
+            ...arrayMutators,
+          }}
+          onSubmit={() => ({})}
+          initialValues={{
+            exceptions: [
+              {
+                name: 'test',
+                type: RowType.Closed,
+                rows: [
+                  {
+                    startDate: '2000-01-01',
+                    startTime: undefined,
+                    endDate: '2000-01-01',
+                    endTime: undefined,
+                  },
+                ],
+              },
+            ],
+          }}
+        >
+          {() => (
+            <FieldArray<ExceptionRowState> name="exceptions">
+              {({ fields: values }) => <ExceptionField values={values} />}
+            </FieldArray>
+          )}
+        </Form>
+      )
+    );
+
+    // header and add row button
+    expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(screen.getAllByRole('textbox')).toHaveLength(3);
+
     await userEvent.click(screen.getByRole('button', { name: 'plus-sign' }));
     expect(screen.getAllByRole('row')).toHaveLength(3);
-    expect(screen.getAllByRole('textbox')).toHaveLength(13);
+    expect(screen.getAllByRole('textbox')).toHaveLength(3);
   });
 });

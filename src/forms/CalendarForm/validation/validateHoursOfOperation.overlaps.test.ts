@@ -8,7 +8,7 @@ import {
 test('No rows produces no overlaps', () => {
   expect(
     validateHoursOfOperationOverlaps(splitRowsIntoWeekdays([]))
-  ).toBeUndefined();
+  ).toStrictEqual({});
 });
 
 test('Single closures produce no overlaps', () => {
@@ -16,7 +16,6 @@ test('Single closures produce no overlaps', () => {
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Closed,
           startDay: Weekdays.Monday,
           startTime: undefined,
@@ -25,13 +24,12 @@ test('Single closures produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 
   expect(
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Closed,
           startDay: Weekdays.Monday,
           startTime: undefined,
@@ -40,7 +38,7 @@ test('Single closures produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 });
 
 test('Single openings produce no overlaps', () => {
@@ -48,7 +46,6 @@ test('Single openings produce no overlaps', () => {
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
           startTime: '09:00',
@@ -57,13 +54,12 @@ test('Single openings produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 
   expect(
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
           startTime: '09:00',
@@ -72,7 +68,7 @@ test('Single openings produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 });
 
 test('24/7 openings produce no overlaps', () => {
@@ -80,7 +76,6 @@ test('24/7 openings produce no overlaps', () => {
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
           startTime: '00:00',
@@ -89,13 +84,12 @@ test('24/7 openings produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 
   expect(
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
           startTime: '12:00',
@@ -104,7 +98,7 @@ test('24/7 openings produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 });
 
 test('Multiple non-overlapping closures produce no overlaps', () => {
@@ -112,7 +106,6 @@ test('Multiple non-overlapping closures produce no overlaps', () => {
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Closed,
           startDay: Weekdays.Monday,
           startTime: undefined,
@@ -120,7 +113,6 @@ test('Multiple non-overlapping closures produce no overlaps', () => {
           endTime: undefined,
         },
         {
-          i: 1,
           type: RowType.Closed,
           startDay: Weekdays.Sunday,
           startTime: undefined,
@@ -129,7 +121,7 @@ test('Multiple non-overlapping closures produce no overlaps', () => {
         },
       ])
     )
-  ).toBeUndefined();
+  ).toStrictEqual({});
 });
 
 test('Multiple overlapping closures produce overlaps', () => {
@@ -137,7 +129,6 @@ test('Multiple overlapping closures produce overlaps', () => {
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Closed,
           startDay: Weekdays.Saturday,
           startTime: undefined,
@@ -145,7 +136,6 @@ test('Multiple overlapping closures produce overlaps', () => {
           endTime: undefined,
         },
         {
-          i: 1,
           type: RowType.Closed,
           startDay: Weekdays.Sunday,
           startTime: undefined,
@@ -154,12 +144,11 @@ test('Multiple overlapping closures produce overlaps', () => {
         },
       ])
     )
-  ).toHaveProperty('conflicts', new Set([0, 1]));
+  ).toStrictEqual({ 0: { conflict: true }, 1: { conflict: true } });
   expect(
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 1,
           type: RowType.Closed,
           startDay: Weekdays.Sunday,
           startTime: undefined,
@@ -167,7 +156,6 @@ test('Multiple overlapping closures produce overlaps', () => {
           endTime: undefined,
         },
         {
-          i: 0,
           type: RowType.Closed,
           startDay: Weekdays.Saturday,
           startTime: undefined,
@@ -176,7 +164,7 @@ test('Multiple overlapping closures produce overlaps', () => {
         },
       ])
     )
-  ).toHaveProperty('conflicts', new Set([0, 1]));
+  ).toStrictEqual({ 0: { conflict: true }, 1: { conflict: true } });
 });
 
 test('Overlapping closures and openings produce overlaps', () => {
@@ -184,7 +172,6 @@ test('Overlapping closures and openings produce overlaps', () => {
     validateHoursOfOperationOverlaps(
       splitRowsIntoWeekdays([
         {
-          i: 0,
           type: RowType.Open,
           startDay: Weekdays.Saturday,
           startTime: '09:00',
@@ -192,7 +179,6 @@ test('Overlapping closures and openings produce overlaps', () => {
           endTime: '23:00',
         },
         {
-          i: 1,
           type: RowType.Closed,
           startDay: Weekdays.Sunday,
           startTime: undefined,
@@ -200,7 +186,6 @@ test('Overlapping closures and openings produce overlaps', () => {
           endTime: undefined,
         },
         {
-          i: 4,
           type: RowType.Open,
           startDay: Weekdays.Tuesday,
           startTime: '12:00',
@@ -209,5 +194,39 @@ test('Overlapping closures and openings produce overlaps', () => {
         },
       ])
     )
-  ).toHaveProperty('conflicts', new Set([0, 1, 4]));
+  ).toStrictEqual({
+    0: { conflict: true },
+    1: { conflict: true },
+    2: { conflict: true },
+  });
+});
+
+test('Only some overlaps are returned when applicable', () => {
+  expect(
+    validateHoursOfOperationOverlaps(
+      splitRowsIntoWeekdays([
+        {
+          type: RowType.Open,
+          startDay: Weekdays.Monday,
+          startTime: '09:00',
+          endDay: Weekdays.Tuesday,
+          endTime: '23:00',
+        },
+        {
+          type: RowType.Closed,
+          startDay: Weekdays.Sunday,
+          startTime: undefined,
+          endDay: Weekdays.Sunday,
+          endTime: undefined,
+        },
+        {
+          type: RowType.Open,
+          startDay: Weekdays.Tuesday,
+          startTime: '12:00',
+          endDay: Weekdays.Wednesday,
+          endTime: '23:59',
+        },
+      ])
+    )
+  ).toStrictEqual({ 0: { conflict: true }, 2: { conflict: true } });
 });

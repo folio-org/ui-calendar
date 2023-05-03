@@ -1,25 +1,18 @@
 import { Select } from '@folio/stripes/components';
 import React from 'react';
+import { Field } from 'react-final-form';
 import { useIntl } from 'react-intl';
 import RowType from './RowType';
 
-export interface OpenClosedSelectProps {
-  value: RowType;
-  onBlur: () => void;
-  onChange: (newData: { type: RowType }) => void;
-}
-
-export default function OpenClosedSelect({
-  value,
-  onBlur,
-  onChange
-}: OpenClosedSelectProps) {
+export default function OpenClosedSelect({ name }: { name: string }) {
   const intl = useIntl();
 
   return (
-    <Select<RowType>
+    <Field
+      component={Select<RowType>}
+      name={name}
       aria-label={intl.formatMessage({
-        id: 'ui-calendar.calendarForm.openings.column.status'
+        id: 'ui-calendar.calendarForm.openings.column.status',
       })}
       required
       fullWidth
@@ -28,25 +21,16 @@ export default function OpenClosedSelect({
         {
           value: RowType.Open,
           label: intl.formatMessage({
-            id: 'ui-calendar.calendarForm.openClosedSelect.open'
-          })
+            id: 'ui-calendar.calendarForm.openClosedSelect.open',
+          }),
         },
         {
           value: RowType.Closed,
           label: intl.formatMessage({
-            id: 'ui-calendar.calendarForm.openClosedSelect.closed'
-          })
-        }
+            id: 'ui-calendar.calendarForm.openClosedSelect.closed',
+          }),
+        },
       ]}
-      value={value}
-      onInput={(e) => {
-        const newType = (e.target as HTMLSelectElement).value as RowType;
-        const newProps: { type: RowType } = {
-          type: newType
-        };
-        onChange(newProps);
-        onBlur();
-      }}
     />
   );
 }

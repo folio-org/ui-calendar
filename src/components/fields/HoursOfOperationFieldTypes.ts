@@ -1,10 +1,8 @@
 import { ReactNode } from 'react';
 import { Weekday } from '../../types/types';
-import type { RequireExactlyOne } from '../../types/utils';
 import RowType from './RowType';
 
 export interface MCLContentsType extends Record<string, unknown> {
-  rowState: HoursOfOperationRowState;
   status: ReactNode;
   startDay: ReactNode;
   startTime: ReactNode;
@@ -15,7 +13,6 @@ export interface MCLContentsType extends Record<string, unknown> {
 }
 
 export interface HoursOfOperationRowState {
-  i: number;
   type: RowType;
   startDay: Weekday | undefined;
   startTime: string | undefined;
@@ -23,15 +20,4 @@ export interface HoursOfOperationRowState {
   endTime: string | undefined;
 }
 
-export type HoursOfOperationErrors = RequireExactlyOne<{
-  empty?: {
-    [field in keyof Omit<HoursOfOperationRowState, 'i' | 'type'>]: Record<
-      number,
-      ReactNode
-    >;
-  };
-  invalidTimes?: {
-    [field in 'startTime' | 'endTime']: Record<number, ReactNode>;
-  };
-  conflicts?: Set<number>;
-}>;
+export type HoursOfOperationErrors = Record<number, { conflict?: true }>;

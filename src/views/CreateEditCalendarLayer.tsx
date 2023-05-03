@@ -10,7 +10,9 @@ import {
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
-import CalendarForm, { FORM_ID } from '../forms/CalendarForm/CalendarForm';
+import CalendarForm, {
+  FORM_ID,
+} from '../forms/CalendarForm/CalendarFormWrapper';
 import { Calendar } from '../types/types';
 
 export interface CreateEditCalendarLayerProps {

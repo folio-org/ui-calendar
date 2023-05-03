@@ -1,6 +1,4 @@
 import type { Dayjs } from 'dayjs';
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
@@ -8,114 +6,8 @@ import {
 import RowType from '../../../components/fields/RowType';
 import { CalendarOpening, Weekday } from '../../../types/types';
 import { overlaps } from '../../../utils/DateUtils';
-import dayjs from '../../../utils/dayjs';
 import { getWeekdaySpan } from '../../../utils/WeekdayUtils';
-import { InnerFieldRefs } from '../types';
-import { isTimeProper } from './validateDateTime';
-
-/** Ensure normal openings have filled in times/days */
-export function validateHoursOfOperationEmpty(
-  rows: HoursOfOperationRowState[]
-): HoursOfOperationErrors | undefined {
-  const emptyErrors: HoursOfOperationErrors['empty'] = {
-    startDay: {},
-    startTime: {},
-    endDay: {},
-    endTime: {},
-  };
-
-  let hasError = false;
-
-  rows.forEach((row) => {
-    if (row.startDay === undefined) {
-      emptyErrors.startDay[row.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
-      hasError = true;
-    }
-    if (row.endDay === undefined) {
-      emptyErrors.endDay[row.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
-      hasError = true;
-    }
-    if (row.type === RowType.Open) {
-      if (row.startTime === undefined) {
-        emptyErrors.startTime[row.i] = (
-          <FormattedMessage id="stripes-core.label.missingRequiredField" />
-        );
-        hasError = true;
-      }
-      if (row.endTime === undefined) {
-        emptyErrors.endTime[row.i] = (
-          <FormattedMessage id="stripes-core.label.missingRequiredField" />
-        );
-        hasError = true;
-      }
-    }
-  });
-
-  if (hasError) {
-    return { empty: emptyErrors };
-  }
-
-  return undefined;
-}
-
-/** Ensure times are valid */
-export function validateHoursOfOperationTimes(
-  rows: HoursOfOperationRowState[],
-  timeFieldRefs: InnerFieldRefs['hoursOfOperation'],
-  localeTimeFormat: string
-): HoursOfOperationErrors | undefined {
-  const invalidTimeErrors: HoursOfOperationErrors['invalidTimes'] = {
-    startTime: {},
-    endTime: {},
-  };
-
-  rows.forEach((row) => {
-    if (row.type === RowType.Closed) {
-      return;
-    }
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        row.startTime as string,
-        timeFieldRefs.startTime[row.i]?.value
-      )
-    ) {
-      invalidTimeErrors.startTime[row.i] = (
-        <FormattedMessage
-          id="ui-calendar.calendarForm.error.timeFormat"
-          values={{ localeTimeFormat }}
-        />
-      );
-    }
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        row.endTime as string,
-        timeFieldRefs.endTime[row.i]?.value
-      )
-    ) {
-      invalidTimeErrors.endTime[row.i] = (
-        <FormattedMessage
-          id="ui-calendar.calendarForm.error.timeFormat"
-          values={{ localeTimeFormat }}
-        />
-      );
-    }
-  });
-
-  if (
-    Object.values(invalidTimeErrors.startTime).length ||
-    Object.values(invalidTimeErrors.endTime).length
-  ) {
-    return { invalidTimes: invalidTimeErrors };
-  }
-
-  return undefined;
-}
+import dayjs from '../../../utils/dayjs';
 
 /** Split rows into weekday ranges */
 export function splitRowsIntoWeekdays(
@@ -134,13 +26,24 @@ export function splitRowsIntoWeekdays(
   const baseStart = baseDay.startOf('day');
   const baseEnd = baseDay.endOf('day');
 
-  rows.forEach((_row: HoursOfOperationRowState) => {
+  rows.forEach((_row: HoursOfOperationRowState, rowIndex) => {
+    // don't pollute original row
     const row: HoursOfOperationRowState = { ..._row };
 
     if (row.type === RowType.Closed) {
       row.startTime = '00:00';
       row.endTime = '23:59';
     }
+
+    if (
+      row.startDay === undefined ||
+      row.endDay === undefined ||
+      row.startTime === undefined ||
+      row.endTime === undefined
+    ) {
+      return;
+    }
+
     const opening: CalendarOpening = {
       startDay: row.startDay as Weekday,
       startTime: row.startTime as string,
@@ -170,7 +73,7 @@ export function splitRowsIntoWeekdays(
       split[weekday].push({
         start,
         end,
-        row: row.i,
+        row: rowIndex,
       });
     });
   });
@@ -181,8 +84,8 @@ export function splitRowsIntoWeekdays(
 /** Check for hours of operation overlaps */
 export function validateHoursOfOperationOverlaps(
   split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]>
-): HoursOfOperationErrors | undefined {
-  const conflicts = new Set<number>();
+): HoursOfOperationErrors {
+  const conflicts: HoursOfOperationErrors = {};
 
   Object.values(split).forEach((timeRanges) => {
     for (let i = 0; i < timeRanges.length - 1; i++) {
@@ -195,49 +98,21 @@ export function validateHoursOfOperationOverlaps(
             timeRanges[j].end
           )
         ) {
-          conflicts.add(timeRanges[i].row);
-          conflicts.add(timeRanges[j].row);
+          conflicts[timeRanges[i].row] = { conflict: true };
+          conflicts[timeRanges[j].row] = { conflict: true };
         }
       }
     }
   });
 
-  if (conflicts.size) {
-    return { conflicts };
-  }
-
-  return undefined;
+  return conflicts;
 }
 
 /** Validate all parts of hours of operation */
 export default function validateHoursOfOperation(
-  rows: HoursOfOperationRowState[] | undefined,
-  timeFieldRefs: InnerFieldRefs['hoursOfOperation'],
-  localeTimeFormat: string
-): {
-  'hours-of-operation'?: HoursOfOperationErrors;
-} {
+  rows: HoursOfOperationRowState[] | undefined
+): HoursOfOperationErrors {
   if (rows === undefined) return {};
 
-  const emptyError = validateHoursOfOperationEmpty(rows);
-  if (emptyError !== undefined) {
-    return { 'hours-of-operation': emptyError };
-  }
-
-  const timeError = validateHoursOfOperationTimes(
-    rows,
-    timeFieldRefs,
-    localeTimeFormat
-  );
-  if (timeError !== undefined) {
-    return { 'hours-of-operation': timeError };
-  }
-
-  const split = splitRowsIntoWeekdays(rows);
-
-  return {
-    // can be undefined but that is acceptable here
-    // as no other cases to check
-    'hours-of-operation': validateHoursOfOperationOverlaps(split),
-  };
+  return validateHoursOfOperationOverlaps(splitRowsIntoWeekdays(rows));
 }

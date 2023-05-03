@@ -1,138 +1,496 @@
+import RowType from '../components/fields/RowType';
 import DataRepository from '../data/DataRepository';
-import * as ServicePoints from '../test/data/ServicePoints';
 import * as Calendars from '../test/data/Calendars';
 import * as Weekdays from '../test/data/Weekdays';
-import calendarToInitialValues from './calendarToInitialValues';
-import { FormValues } from './CalendarForm/types';
-import RowType from '../components/fields/RowType';
+import { LocaleWeekdayInfo } from '../utils/WeekdayUtils';
+import calendarToInitialValues, {
+  addZToExceptions,
+  addZToHours,
+  exceptionsToInitialValues,
+  hoursOfOperationToInitialValues,
+} from './calendarToInitialValues';
 
-describe('calendar to initial form values conversion', () => {
-  test('Undefined calendar results in no form values', () => {
-    expect(calendarToInitialValues({} as DataRepository)).toStrictEqual({});
+const localeWeekdaysSunday: LocaleWeekdayInfo[] = [
+  { weekday: Weekdays.Sunday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Monday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Tuesday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Wednesday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Thursday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Friday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Saturday, short: 'XXXXX', long: 'XXXXXXXX' },
+];
+
+const localeWeekdaysWednesday: LocaleWeekdayInfo[] = [
+  { weekday: Weekdays.Wednesday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Thursday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Friday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Saturday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Sunday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Monday, short: 'XXXXX', long: 'XXXXXXXX' },
+  { weekday: Weekdays.Tuesday, short: 'XXXXX', long: 'XXXXXXXX' },
+];
+
+test('UTC Z suffixes are added to times, as applicable', () => {
+  expect(
+    addZToHours([
+      {
+        type: RowType.Open,
+        startDay: undefined,
+        startTime: '09:00Z',
+        endDay: undefined,
+        endTime: '17:00Z',
+      },
+      {
+        type: RowType.Open,
+        startDay: undefined,
+        startTime: undefined,
+        endDay: undefined,
+        endTime: undefined,
+      },
+    ])
+  ).toStrictEqual([
+    {
+      type: RowType.Open,
+      startDay: undefined,
+      startTime: '09:00ZZ',
+      endDay: undefined,
+      endTime: '17:00ZZ',
+    },
+    {
+      type: RowType.Open,
+      startDay: undefined,
+      startTime: undefined,
+      endDay: undefined,
+      endTime: undefined,
+    },
+  ]);
+
+  expect(
+    addZToExceptions([
+      {
+        name: 'Exception 1',
+        type: RowType.Open,
+        rows: [
+          {
+            startDate: undefined,
+            startTime: '09:00',
+            endDate: undefined,
+            endTime: '17:00',
+          },
+          {
+            startDate: undefined,
+            startTime: undefined,
+            endDate: undefined,
+            endTime: undefined,
+          },
+        ],
+      },
+    ])
+  ).toStrictEqual([
+    {
+      name: 'Exception 1',
+      type: RowType.Open,
+      rows: [
+        {
+          startDate: undefined,
+          startTime: '09:00Z',
+          endDate: undefined,
+          endTime: '17:00Z',
+        },
+        {
+          startDate: undefined,
+          startTime: undefined,
+          endDate: undefined,
+          endTime: undefined,
+        },
+      ],
+    },
+  ]);
+});
+
+describe('Calendar openings converted to initial rows correctly', () => {
+  test('No rows result in filler closed rows', () => {
+    expect(
+      hoursOfOperationToInitialValues([], localeWeekdaysWednesday)
+    ).toStrictEqual([
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Wednesday,
+        startTime: undefined,
+        endDay: Weekdays.Tuesday,
+        endTime: undefined,
+      },
+    ]);
   });
 
-  test('Calendar is properly converted', () => {
-    const conversion = calendarToInitialValues(
-      new DataRepository(
-        [],
-        [ServicePoints.SERVICE_POINT_1_DTO, ServicePoints.SERVICE_POINT_2_DTO],
-        {} as any
-      ),
-      Calendars.SUMMER_SP_1_2
-    );
+  test('Single-day opening results in proper filler row allocation', () => {
+    expect(
+      hoursOfOperationToInitialValues(
+        [
+          {
+            startDay: Weekdays.Wednesday,
+            startTime: '00:00',
+            endDay: Weekdays.Wednesday,
+            endTime: '20:00',
+          },
+        ],
+        localeWeekdaysSunday
+      )
+    ).toStrictEqual([
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Sunday,
+        startTime: undefined,
+        endDay: Weekdays.Tuesday,
+        endTime: undefined,
+      },
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Wednesday,
+        startTime: '00:00Z',
+        endDay: Weekdays.Wednesday,
+        endTime: '20:00Z',
+      },
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Thursday,
+        startTime: undefined,
+        endDay: Weekdays.Saturday,
+        endTime: undefined,
+      },
+    ]);
 
-    expect(conversion).toStrictEqual<FormValues>({
-      name: '2000 Summer Hours',
-      'start-date': '2000-05-01',
-      'end-date': '2000-08-01',
-      'service-points': [
-        ServicePoints.SERVICE_POINT_1,
-        ServicePoints.SERVICE_POINT_2
+    expect(
+      hoursOfOperationToInitialValues(
+        [
+          {
+            startDay: Weekdays.Sunday,
+            startTime: '00:00',
+            endDay: Weekdays.Sunday,
+            endTime: '20:00',
+          },
+          {
+            startDay: Weekdays.Saturday,
+            startTime: '02:00',
+            endDay: Weekdays.Saturday,
+            endTime: '22:00',
+          },
+        ],
+        localeWeekdaysSunday
+      )
+    ).toStrictEqual([
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Sunday,
+        startTime: '00:00Z',
+        endDay: Weekdays.Sunday,
+        endTime: '20:00Z',
+      },
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Monday,
+        startTime: undefined,
+        endDay: Weekdays.Friday,
+        endTime: undefined,
+      },
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Saturday,
+        startTime: '02:00Z',
+        endDay: Weekdays.Saturday,
+        endTime: '22:00Z',
+      },
+    ]);
+  });
+
+  test('Multi-day opening results in proper filler row allocation', () => {
+    expect(
+      hoursOfOperationToInitialValues(
+        [
+          {
+            startDay: Weekdays.Friday,
+            startTime: '00:00',
+            endDay: Weekdays.Monday,
+            endTime: '20:00',
+          },
+        ],
+        localeWeekdaysSunday
+      )
+    ).toStrictEqual([
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Tuesday,
+        startTime: undefined,
+        endDay: Weekdays.Thursday,
+        endTime: undefined,
+      },
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Friday,
+        startTime: '00:00Z',
+        endDay: Weekdays.Monday,
+        endTime: '20:00Z',
+      },
+    ]);
+
+    expect(
+      hoursOfOperationToInitialValues(
+        [
+          {
+            startDay: Weekdays.Friday,
+            startTime: '00:00',
+            endDay: Weekdays.Monday,
+            endTime: '20:00',
+          },
+        ],
+        localeWeekdaysWednesday
+      )
+    ).toStrictEqual([
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Wednesday,
+        startTime: undefined,
+        endDay: Weekdays.Thursday,
+        endTime: undefined,
+      },
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Friday,
+        startTime: '00:00Z',
+        endDay: Weekdays.Monday,
+        endTime: '20:00Z',
+      },
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Tuesday,
+        startTime: undefined,
+        endDay: Weekdays.Tuesday,
+        endTime: undefined,
+      },
+    ]);
+  });
+
+  test('Same-day openings are properly sorted', () => {
+    expect(
+      hoursOfOperationToInitialValues(
+        [
+          {
+            startDay: Weekdays.Sunday,
+            startTime: '00:00',
+            endDay: Weekdays.Sunday,
+            endTime: '04:00',
+          },
+          {
+            startDay: Weekdays.Sunday,
+            startTime: '09:00',
+            endDay: Weekdays.Sunday,
+            endTime: '20:00',
+          },
+        ],
+        localeWeekdaysSunday
+      )
+    ).toStrictEqual([
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Sunday,
+        startTime: '00:00Z',
+        endDay: Weekdays.Sunday,
+        endTime: '04:00Z',
+      },
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Sunday,
+        startTime: '09:00Z',
+        endDay: Weekdays.Sunday,
+        endTime: '20:00Z',
+      },
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Monday,
+        startTime: undefined,
+        endDay: Weekdays.Saturday,
+        endTime: undefined,
+      },
+    ]);
+
+    expect(
+      hoursOfOperationToInitialValues(
+        [
+          {
+            startDay: Weekdays.Sunday,
+            startTime: '09:00',
+            endDay: Weekdays.Sunday,
+            endTime: '20:00',
+          },
+          {
+            startDay: Weekdays.Sunday,
+            startTime: '00:00',
+            endDay: Weekdays.Sunday,
+            endTime: '04:00',
+          },
+        ],
+        localeWeekdaysSunday
+      )
+    ).toStrictEqual([
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Sunday,
+        startTime: '00:00Z',
+        endDay: Weekdays.Sunday,
+        endTime: '04:00Z',
+      },
+      {
+        type: RowType.Open,
+        startDay: Weekdays.Sunday,
+        startTime: '09:00Z',
+        endDay: Weekdays.Sunday,
+        endTime: '20:00Z',
+      },
+      {
+        type: RowType.Closed,
+        startDay: Weekdays.Monday,
+        startTime: undefined,
+        endDay: Weekdays.Saturday,
+        endTime: undefined,
+      },
+    ]);
+  });
+});
+
+test('Exceptions convert properly', () => {
+  expect(
+    exceptionsToInitialValues([
+      {
+        name: 'Foo',
+        startDate: '2021-03-01',
+        endDate: '2021-03-01',
+        openings: [],
+      },
+      {
+        name: 'Bar',
+        startDate: '2021-03-02',
+        endDate: '2021-03-10',
+        openings: [
+          {
+            startDate: '2021-03-02',
+            startTime: '00:00',
+            endDate: '2021-03-03',
+            endTime: '20:00',
+          },
+          {
+            startDate: '2021-03-04',
+            startTime: '00:00',
+            endDate: '2021-03-04',
+            endTime: '20:00',
+          },
+          {
+            startDate: '2021-03-04',
+            startTime: '21:00',
+            endDate: '2021-03-04',
+            endTime: '22:00',
+          },
+          {
+            startDate: '2021-03-04',
+            startTime: '23:00',
+            endDate: '2021-03-04',
+            endTime: '23:30',
+          },
+        ],
+      },
+      {
+        name: 'Baz',
+        startDate: '2021-02-11',
+        endDate: '2021-02-11',
+        openings: [],
+      },
+    ])
+  ).toStrictEqual([
+    {
+      name: 'Baz',
+      rows: [
+        {
+          endDate: '2021-02-11',
+          endTime: undefined,
+          startDate: '2021-02-11',
+          startTime: undefined,
+        },
       ],
-      'hours-of-operation': [
+      type: RowType.Closed,
+    },
+    {
+      name: 'Foo',
+      rows: [
         {
-          i: -1,
-          type: RowType.Open,
-          startDay: Weekdays.Saturday,
-          startTime: '09:00',
-          endDay: Weekdays.Saturday,
-          endTime: '20:00'
+          endDate: '2021-03-01',
+          endTime: undefined,
+          startDate: '2021-03-01',
+          startTime: undefined,
         },
-        {
-          i: -2,
-          type: RowType.Open,
-          startDay: Weekdays.Monday,
-          startTime: '09:00',
-          endDay: Weekdays.Tuesday,
-          endTime: '01:00'
-        },
-        {
-          i: -3,
-          type: RowType.Open,
-          startDay: Weekdays.Tuesday,
-          startTime: '09:00',
-          endDay: Weekdays.Tuesday,
-          endTime: '23:00'
-        },
-        {
-          i: -4,
-          type: RowType.Open,
-          startDay: Weekdays.Wednesday,
-          startTime: '09:00',
-          endDay: Weekdays.Wednesday,
-          endTime: '23:00'
-        },
-        {
-          i: -5,
-          type: RowType.Open,
-          startDay: Weekdays.Thursday,
-          startTime: '09:00',
-          endDay: Weekdays.Thursday,
-          endTime: '23:00'
-        },
-        {
-          i: -6,
-          type: RowType.Open,
-          startDay: Weekdays.Friday,
-          startTime: '09:00',
-          endDay: Weekdays.Friday,
-          endTime: '12:00'
-        },
-        {
-          i: -7,
-          type: RowType.Open,
-          startDay: Weekdays.Friday,
-          startTime: '13:30',
-          endDay: Weekdays.Friday,
-          endTime: '20:00'
-        }
       ],
-      exceptions: [
+      type: RowType.Closed,
+    },
+    {
+      name: 'Bar',
+      rows: [
         {
-          i: -1,
-          lastRowI: 0,
-          name: 'Sample Holiday',
-          type: RowType.Closed,
-          rows: [
-            {
-              i: -1,
-              startDate: '2000-06-01',
-              startTime: undefined,
-              endDate: '2000-06-01',
-              endTime: undefined
-            }
-          ]
+          endDate: '2021-03-03',
+          endTime: '20:00Z',
+          startDate: '2021-03-02',
+          startTime: '00:00Z',
         },
         {
-          i: -2,
-          lastRowI: 0,
-          name: 'Community Event (Longer Hours)',
-          type: RowType.Open,
-          rows: [
-            {
-              i: -1,
-              startDate: '2000-05-13',
-              startTime: '07:00',
-              endDate: '2000-05-13',
-              endTime: '23:59'
-            },
-            {
-              i: -2,
-              startDate: '2000-05-14',
-              startTime: '05:00',
-              endDate: '2000-05-14',
-              endTime: '21:59'
-            },
-            {
-              i: -3,
-              startDate: '2000-05-15',
-              startTime: '06:00',
-              endDate: '2000-05-15',
-              endTime: '22:59'
-            }
-          ]
-        }
-      ]
-    });
+          endDate: '2021-03-04',
+          endTime: '20:00Z',
+          startDate: '2021-03-04',
+          startTime: '00:00Z',
+        },
+        {
+          endDate: '2021-03-04',
+          endTime: '22:00Z',
+          startDate: '2021-03-04',
+          startTime: '21:00Z',
+        },
+        {
+          endDate: '2021-03-04',
+          endTime: '23:30Z',
+          startDate: '2021-03-04',
+          startTime: '23:00Z',
+        },
+      ],
+      type: RowType.Open,
+    },
+  ]);
+});
+
+test('Default method works as expected', () => {
+  expect(
+    calendarToInitialValues(
+      {} as DataRepository,
+      localeWeekdaysSunday,
+      undefined
+    )
+  ).toStrictEqual({
+    name: undefined,
+    'start-date': undefined,
+    'end-date': undefined,
+    'service-points': [],
+    'hours-of-operation': [],
+    exceptions: [],
+  });
+  expect(
+    calendarToInitialValues(
+      {
+        getServicePointsFromIds: jest.fn(() => []),
+      } as unknown as DataRepository,
+      localeWeekdaysSunday,
+      Calendars.SPRING_UNASSIGNED
+    )
+  ).not.toStrictEqual({
+    name: undefined,
+    'start-date': undefined,
+    'end-date': undefined,
+    'service-points': [],
+    'hours-of-operation': [],
+    exceptions: [],
   });
 });

@@ -3,7 +3,7 @@ import {
   Icon,
   LoadingPane,
   MenuSection,
-  Pane
+  Pane,
 } from '@folio/stripes/components';
 import { IfPermission, useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef, useState } from 'react';
@@ -13,7 +13,7 @@ import {
   RouteComponentProps,
   Switch,
   useHistory,
-  useRouteMatch
+  useRouteMatch,
 } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
@@ -42,7 +42,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
     return (
       <LoadingPane
         paneTitle={intl.formatMessage({
-          id: 'ui-calendar.allCalendarView.title'
+          id: 'ui-calendar.allCalendarView.title',
         })}
       />
     );
@@ -65,7 +65,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
           <FormattedMessage id="ui-calendar.allCalendarView.noAssignments" />
         </div>
       ),
-      calendar
+      calendar,
     };
   });
 
@@ -140,7 +140,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
             ),
             assignments: (
               <FormattedMessage id="ui-calendar.allCalendarView.column.assignments" />
-            )
+            ),
           }}
           contentData={rows}
           rowMetadata={['calendar', 'startDateObj', 'endDateObj']}

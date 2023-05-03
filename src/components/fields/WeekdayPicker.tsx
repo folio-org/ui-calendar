@@ -1,20 +1,18 @@
 import { Select, SelectOptionType } from '@folio/stripes/components';
-import React, { FunctionComponent, ReactNode, useMemo } from 'react';
+import React, { useMemo } from 'react';
+import { Field } from 'react-final-form';
 import { useIntl } from 'react-intl';
 import { Weekday } from '../../types/types';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 import css from './WeekdayPicker.css';
 
-export interface WeekdayPickerProps {
-  value: Weekday | undefined;
-  onChange?: (newValue: Weekday | undefined) => void;
-  error?: ReactNode;
+export default function WeekdayPicker({
+  ariaLabel,
+  name,
+}: {
   ariaLabel: string;
-}
-
-export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
-  props: WeekdayPickerProps
-) => {
+  name: string;
+}) {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 
@@ -36,23 +34,15 @@ export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
 
   return (
     <div className={css.wrapper}>
-      <Select<Weekday | undefined>
-        aria-label={props.ariaLabel}
+      <Field
+        component={Select<Weekday | undefined>}
+        name={name}
+        aria-label={ariaLabel}
         required
         fullWidth
         marginBottom0
         dataOptions={options}
-        value={props.value}
-        onChange={(e) => {
-          if (props.onChange) {
-            const value = (e.target as HTMLSelectElement).value;
-            props.onChange(value === '' ? undefined : (value as Weekday));
-          }
-        }}
-        error={props.error}
       />
     </div>
   );
-};
-
-export default WeekdayPicker;
+}
