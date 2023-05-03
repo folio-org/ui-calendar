@@ -7,6 +7,7 @@ import * as Calendars from '../../test/data/Calendars';
 import * as ServicePoints from '../../test/data/ServicePoints';
 import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import CalendarFormWrapper, { FORM_ID } from './CalendarFormWrapper';
+import { Calendar } from '../../types/types';
 
 // eslint-disable-next-line func-names
 window.matchMedia =
@@ -30,7 +31,7 @@ const mutators = {
 };
 
 describe('CalendarFormWrapper', () => {
-  describe('Creates Calendar Form', () => {
+  describe('Create Calendar Form', () => {
     const dataRepository = new DataRepository(
       [Calendars.SPRING_SP_1_2],
       [ServicePoints.SERVICE_POINT_1_DTO],
@@ -38,7 +39,7 @@ describe('CalendarFormWrapper', () => {
     );
     const closeParentLayer = jest.fn();
     const setIsSubmitting = jest.fn();
-    const submitter = jest.fn();
+    const submitter = jest.fn(() => Promise.resolve({ id: '1234' } as Calendar));
 
     it('renders', async () => {
       render(
