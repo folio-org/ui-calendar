@@ -4,20 +4,10 @@ declare module '*.css' {
   export = styles;
 }
 
-declare module 'json-stringify-safe';
-
 declare module '@folio/stripes/core' {
   export = STCOR;
 }
 
 declare module '@folio/stripes/smart-components' {
   export = STSMACOM;
-}
-
-declare module '@folio/stripes/components' {
-  export = STCOM;
-}
-
-declare module '@folio/stripes/final-form' {
-  export = STRIPESFF;
 }
