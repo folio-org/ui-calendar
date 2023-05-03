@@ -52,22 +52,10 @@ export function getExceptionRowIntraOverlap(
     for (let j = i + 1; j < row.rows.length; j++) {
       if (
         overlapsDates(
-          dateFromYYYYMMDDAndHHMM(
-            row.rows[i].startDate as string,
-            row.rows[i].startTime as string
-          ),
-          dateFromYYYYMMDDAndHHMM(
-            row.rows[i].endDate as string,
-            row.rows[i].endTime as string
-          ),
-          dateFromYYYYMMDDAndHHMM(
-            row.rows[j].startDate as string,
-            row.rows[j].startTime as string
-          ),
-          dateFromYYYYMMDDAndHHMM(
-            row.rows[j].endDate as string,
-            row.rows[j].endTime as string
-          )
+          dateFromYYYYMMDDAndHHMM(row.rows[i].startDate, row.rows[i].startTime),
+          dateFromYYYYMMDDAndHHMM(row.rows[i].endDate, row.rows[i].endTime),
+          dateFromYYYYMMDDAndHHMM(row.rows[j].startDate, row.rows[j].startTime),
+          dateFromYYYYMMDDAndHHMM(row.rows[j].endDate, row.rows[j].endTime)
         )
       ) {
         conflicts[i] = { conflict: true };

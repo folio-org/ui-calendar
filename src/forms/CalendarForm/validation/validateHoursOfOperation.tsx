@@ -45,10 +45,10 @@ export function splitRowsIntoWeekdays(
     }
 
     const opening: CalendarOpening = {
-      startDay: row.startDay as Weekday,
-      startTime: row.startTime as string,
-      endDay: row.endDay as Weekday,
-      endTime: row.endTime as string,
+      startDay: row.startDay,
+      startTime: row.startTime,
+      endDay: row.endDay,
+      endTime: row.endTime,
     };
 
     const span = getWeekdaySpan(opening);

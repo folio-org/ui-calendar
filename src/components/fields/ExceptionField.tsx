@@ -65,7 +65,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
           {values.value[index].rows.map((_, innerIndex) => (
             <Field
               component={Datepicker}
-              key={innerIndex}
+              key={`${index}-${innerIndex}`}
               name={`${name}.rows[${innerIndex}].startDate`}
               className={classNames(
                 {
@@ -91,7 +91,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
         >
           {values.value[index].rows.map((_, innerIndex) => (
             <TimeField
-              key={innerIndex}
+              key={`${index}-${innerIndex}`}
               name={`${name}.rows[${innerIndex}].startTime`}
               className={classNames({
                 [css.conflictCell]: isInnerRowConflicted(
@@ -112,7 +112,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
           {values.value[index].rows.map((_, innerIndex) => (
             <Field
               component={Datepicker}
-              key={innerIndex}
+              key={`${index}-${innerIndex}`}
               name={`${name}.rows[${innerIndex}].endDate`}
               className={classNames(
                 {
@@ -138,7 +138,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
         >
           {values.value[index].rows.map((_, innerIndex) => (
             <TimeField
-              key={innerIndex}
+              key={`${index}-${innerIndex}`}
               name={`${name}.rows[${innerIndex}].endTime`}
               className={classNames({
                 [css.conflictCell]: isInnerRowConflicted(
