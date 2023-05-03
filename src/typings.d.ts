@@ -14,9 +14,9 @@ declare module '@folio/stripes/smart-components' {
   export = STSMACOM;
 }
 
-// declare module '@folio/stripes/components' {
-//   export = STCOM;
-// }
+declare module '@folio/stripes/components' {
+  export = STCOM;
+}
 
 declare module '@folio/stripes/final-form' {
   export = STRIPESFF;
