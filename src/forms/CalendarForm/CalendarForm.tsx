@@ -57,8 +57,8 @@ export const CalendarForm: FunctionComponent<
   return (
     <form
       id={FORM_ID}
-      onSubmit={(e) => {
-        handleSubmit(e);
+      onSubmit={async (e) => {
+        await handleSubmit(e);
       }}
     >
       {topErrorMessage}

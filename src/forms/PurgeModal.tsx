@@ -173,8 +173,8 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
           return (
             <form
               id={FORM_ID}
-              onSubmit={(e) => {
-                handleSubmit(e);
+              onSubmit={async (e) => {
+                await handleSubmit(e);
               }}
             >
               <Field
