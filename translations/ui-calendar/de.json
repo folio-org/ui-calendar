@@ -120,5 +120,5 @@
     "permission.create": "Einstellungen (Kalender): kann neue Kalender erstellen und zuordnen",
     "permission.update": "Einstellungen (Kalender): kann bestehende Kalender bearbeiten und neu zuordnen",
     "permission.delete": "Einstellungen (Kalender): kann bestehende Kalender löschen",
-    "infoPane.accordion.infoLabel": "Calendar information"
+    "infoPane.accordion.infoLabel": "Kalenderinformationen"
 }
