@@ -172,7 +172,9 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
           );
 
           const submitter = (e: FormEvent) => {
-            handleSubmit(e);
+            handleSubmit(e)?.catch(() => {
+              throw new Error();
+            });
           };
 
           return (

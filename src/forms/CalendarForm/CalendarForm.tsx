@@ -56,7 +56,9 @@ export const CalendarForm: FunctionComponent<
 
   const submitter = useCallback(
     (e: FormEvent) => {
-      handleSubmit(e);
+      handleSubmit(e)?.catch(() => {
+        throw new Error();
+      });
     },
     [handleSubmit]
   );
