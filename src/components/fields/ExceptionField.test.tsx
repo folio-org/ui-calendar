@@ -128,7 +128,6 @@ describe('ExceptionField', () => {
         </Form>
       )
     );
-
     // header and add row button
     expect(screen.getAllByRole('row')).toHaveLength(3);
     expect(screen.getAllByRole('textbox')).toHaveLength(5);

@@ -171,7 +171,12 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
           );
 
           return (
-            <form id={FORM_ID} onSubmit={(e) => handleSubmit(e)}>
+            <form
+              id={FORM_ID}
+              onSubmit={(e) => {
+                handleSubmit(e);
+              }}
+            >
               <Field
                 name="ageCriteria"
                 component={Select<AgeCriteria | undefined>}

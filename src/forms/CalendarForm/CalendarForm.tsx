@@ -55,7 +55,12 @@ export const CalendarForm: FunctionComponent<
   }
 
   return (
-    <form id={FORM_ID} onSubmit={(e) => handleSubmit(e)}>
+    <form
+      id={FORM_ID}
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
+    >
       {topErrorMessage}
       <AccordionSet>
         <Row end="xs">
