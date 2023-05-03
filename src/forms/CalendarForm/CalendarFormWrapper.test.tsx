@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { HTTPError } from 'ky';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import DataRepository from '../../data/DataRepository';
@@ -7,7 +8,6 @@ import * as Calendars from '../../test/data/Calendars';
 import * as ServicePoints from '../../test/data/ServicePoints';
 import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import CalendarFormWrapper, { FORM_ID } from './CalendarFormWrapper';
-import { Calendar } from '../../types/types';
 
 // eslint-disable-next-line func-names
 window.matchMedia =
@@ -39,7 +39,13 @@ describe('CalendarFormWrapper', () => {
     );
     const closeParentLayer = jest.fn();
     const setIsSubmitting = jest.fn();
-    const submitter = jest.fn(() => Promise.resolve({ id: '1234' } as Calendar));
+    const submitter = jest.fn(() => {
+      throw new HTTPError(
+        { json: () => Promise.resolve({ errors: [] }) } as any,
+        {} as any,
+        {} as any
+      );
+    });
 
     it('renders', async () => {
       render(
