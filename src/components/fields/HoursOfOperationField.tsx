@@ -1,15 +1,14 @@
-/* eslint-disable implicit-arrow-linebreak */
 import {
   Button,
+  Datepicker,
   IconButton,
-  Label,
   Layout,
   MultiColumnList,
   MultiColumnListProps,
 } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
-import { useField } from 'react-final-form';
+import { Field, useField } from 'react-final-form';
 import { FieldArrayRenderProps } from 'react-final-form-arrays';
 import { FormattedMessage, useIntl } from 'react-intl';
 import css from './HoursAndExceptionFields.css';
@@ -94,7 +93,6 @@ export default function HoursOfOperationField({
           })
         }
       >
-        <Label />
         <FormattedMessage id="ui-calendar.calendarForm.addRowButton" />
       </Button>
     ),
