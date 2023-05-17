@@ -111,7 +111,7 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^6.3.0",
-    "@folio/stripes": "https://github.com/ualibweb/stripes.git#stripes-859",
+    "@folio/stripes": "https://github.com/ualibweb/stripes.git#stripes-859-none",
     "@folio/stripes-cli": "^2.6.0",
     "@folio/stripes-components": "^11.0.0",
     "@folio/stripes-core": "^9.0.0",
@@ -126,6 +126,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^28.1.6",
     "@types/memoizee": "^0.4.8",
+    "@types/react": "^17.0.2",
     "@types/react-router-dom": "^5.2.0",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
@@ -162,9 +163,6 @@
     "react-final-form": "^6.5.9",
     "react-final-form-arrays": "^3.1.4",
     "utility-types": "^3.10.0"
-  },
-  "resolutions": {
-    "@types/react": "^17.0.2"
   },
   "peerDependencies": {
     "@folio/stripes": "^8.0.0",
