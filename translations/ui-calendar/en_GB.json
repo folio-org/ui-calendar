@@ -1,6 +1,6 @@
 {
     "meta.title": "Calendar",
-    "permission.view": "Settings (Calendar): Can view calendar events",
+    "permission.view": "Settings (Calendar): Can view existing calendars",
     "midnight": "Midnight",
     "calendarForm.title.create": "New calendar",
     "calendarForm.title.edit": "Edit calendar",
