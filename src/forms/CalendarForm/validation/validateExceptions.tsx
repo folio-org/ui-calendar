@@ -250,10 +250,10 @@ export function validateExceptionInterOverlaps(
       i: row.i,
       startDate: dayjs
         .min(row.rows.map(({ startDate }) => dayjs(startDate)))
-        .startOf('day'),
+        ?.startOf('day') ?? dayjs(0),
       endDate: dayjs
         .max(row.rows.map(({ endDate }) => dayjs(endDate)))
-        .endOf('day')
+        ?.endOf('day') ?? dayjs(0)
     }));
 
   for (let i = 0; i < rowMinMaxes.length - 1; i++) {
