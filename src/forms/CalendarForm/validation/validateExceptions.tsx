@@ -80,7 +80,7 @@ export function validateExceptionOverlaps(
         ?.startOf('day') ?? dayjs(0),
       endDate: dayjs
         .max(row.rows.map(({ endDate }) => dayjs(endDate)))
-        .endOf('day'),
+        ?.endOf('day') ?? dayjs(0),
     }))
     .filter(({ i }) => isExceptionFilled(rows[i]));
 
