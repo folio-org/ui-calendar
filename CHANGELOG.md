@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## 10.0.0 IN PROGRESS
+
+* *BREAKING* bump `react-intl` to `v6.4.4`. Refs UICAL-275
+
 ## [9.2.1] (https://github.com/folio-org/ui-calendar/tree/v9.2.1) (2023-03-16)
 
 * Fix placement of datepicker to prevent overflow. Refs UICAL-240
