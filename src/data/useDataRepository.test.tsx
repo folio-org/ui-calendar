@@ -1,9 +1,9 @@
 import { useOkapiKy } from '@folio/stripes/core';
-import { render, waitFor } from '@testing-library/react';
+import { act, render, renderHook, waitFor } from '@testing-library/react';
 import ky, { ResponsePromise } from 'ky';
 import { KyInstance } from 'ky/distribution/types/ky';
 import React, { createRef, MutableRefObject } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { Query, QueryClient, QueryClientProvider } from 'react-query';
 import * as Calendars from '../test/data/Calendars';
 import * as Dates from '../test/data/Dates';
 import * as ServicePoints from '../test/data/ServicePoints';
@@ -62,15 +62,6 @@ function mockApi() {
     return kyBase;
   });
 
-  const dataRepositoryRef = createRef<DataRepository | null>();
-
-  // needed so the hook can be wrapped by QueryClientProvider
-  const Inner = (props: {
-    dataRepositoryRef: MutableRefObject<DataRepository | null>;
-  }) => {
-    props.dataRepositoryRef.current = useDataRepository();
-    return <></>;
-  };
 
   return {
     getServicePointsMock,
@@ -80,13 +71,14 @@ function mockApi() {
     postMock,
     putMock,
     deleteMock,
-    dataRepository: dataRepositoryRef,
-    renderer: async () => {
-      render(
-        <QueryClientProvider client={new QueryClient()}>
-          <Inner dataRepositoryRef={dataRepositoryRef} />
-        </QueryClientProvider>
+    renderHook: async () => {
+      const result = renderHook(
+        () => useDataRepository(),
+        {
+          wrapper: ({children}) => <QueryClientProvider client={new QueryClient()}>{children}</QueryClientProvider>
+        }
       );
+
       await waitFor(() => {
         expect(getServicePointsMock).toHaveBeenCalled();
         expect(getCalendarsMock).toHaveBeenCalled();
@@ -98,13 +90,16 @@ function mockApi() {
       expect(putMock).not.toHaveBeenCalled();
       expect(deleteMock).not.toHaveBeenCalled();
       jest.clearAllMocks();
+
+      return result;
     }
   };
 }
 
 test('useDataRepository queries work properly', async () => {
-  const { getServicePointsMock, getCalendarsMock, dataRepository, renderer } =
+  const { getServicePointsMock, getCalendarsMock, renderHook } =
     mockApi();
+
   getServicePointsMock.mockReturnValue({
     servicepoints: [
       ServicePoints.SERVICE_POINT_1_DTO,
@@ -120,7 +115,7 @@ test('useDataRepository queries work properly', async () => {
     ]
   });
 
-  await renderer();
+  const { result: dataRepository } = await renderHook();
 
   await waitFor(() => expect(dataRepository.current?.areCalendarsLoaded()).toBe(true));
   expect(dataRepository.current?.getCalendars()).toStrictEqual([
@@ -139,8 +134,7 @@ test('useDataRepository create mutation works properly', async () => {
   const {
     getServicePointsMock,
     getCalendarsMock,
-    dataRepository,
-    renderer,
+    renderHook,
     getDatesMock,
     getUsersMock,
     postMock,
@@ -148,9 +142,12 @@ test('useDataRepository create mutation works properly', async () => {
     deleteMock
   } = mockApi();
 
-  await renderer();
+  const { result: dataRepository} = await renderHook();
 
-  await dataRepository.current?.createCalendar(Calendars.SUMMER_SP_1_2);
+  await act(async () => {
+    await dataRepository.current?.createCalendar(Calendars.SUMMER_SP_1_2);
+  });
+
   expect(postMock).toHaveBeenCalledWith('calendar/calendars', {
     json: Calendars.SUMMER_SP_1_2
   });
@@ -171,8 +168,7 @@ test('useDataRepository update mutation works properly', async () => {
   const {
     getServicePointsMock,
     getCalendarsMock,
-    dataRepository,
-    renderer,
+    renderHook,
     getDatesMock,
     getUsersMock,
     postMock,
@@ -180,12 +176,15 @@ test('useDataRepository update mutation works properly', async () => {
     deleteMock
   } = mockApi();
 
-  await renderer();
+  const { result: dataRepository} = await renderHook();
 
-  await dataRepository.current?.updateCalendar({
-    ...Calendars.SUMMER_SP_1_2,
-    name: 'New Name'
+  await act(async () => {
+    await dataRepository.current?.updateCalendar({
+      ...Calendars.SUMMER_SP_1_2,
+      name: 'New Name'
+    });
   });
+
   expect(putMock).toHaveBeenCalledWith(
     `calendar/calendars/${Calendars.SUMMER_SP_1_2.id}`,
     {
@@ -212,8 +211,7 @@ test('useDataRepository singular delete mutation works properly', async () => {
   const {
     getServicePointsMock,
     getCalendarsMock,
-    dataRepository,
-    renderer,
+    renderHook,
     getDatesMock,
     getUsersMock,
     postMock,
@@ -221,9 +219,13 @@ test('useDataRepository singular delete mutation works properly', async () => {
     deleteMock
   } = mockApi();
 
-  await renderer();
 
-  await dataRepository.current?.deleteCalendar(Calendars.SUMMER_SP_1_2);
+  const { result: dataRepository} = await renderHook();
+
+  await act(async () => {
+    await dataRepository.current?.deleteCalendar(Calendars.SUMMER_SP_1_2);
+  });
+
   expect(deleteMock).toHaveBeenCalledWith(
     `calendar/calendars?id=${Calendars.SUMMER_SP_1_2.id}`
   );
@@ -244,8 +246,7 @@ test('useDataRepository multiple delete mutation works properly', async () => {
   const {
     getServicePointsMock,
     getCalendarsMock,
-    dataRepository,
-    renderer,
+    renderHook,
     getDatesMock,
     getUsersMock,
     postMock,
@@ -253,12 +254,15 @@ test('useDataRepository multiple delete mutation works properly', async () => {
     deleteMock
   } = mockApi();
 
-  await renderer();
+  const { result: dataRepository} = await renderHook();
 
-  await dataRepository.current?.deleteCalendars([
-    Calendars.SUMMER_SP_1_2,
-    Calendars.SUMMER_SP_3
-  ]);
+  await act(async () => {
+    await dataRepository.current?.deleteCalendars([
+      Calendars.SUMMER_SP_1_2,
+      Calendars.SUMMER_SP_3
+    ]);
+  });
+
   expect(deleteMock).toHaveBeenCalledWith(
     `calendar/calendars?id=${Calendars.SUMMER_SP_1_2.id}&id=${Calendars.SUMMER_SP_3.id}`
   );
@@ -279,8 +283,7 @@ test('useDataRepository get dates mutation works properly', async () => {
   const {
     getServicePointsMock,
     getCalendarsMock,
-    dataRepository,
-    renderer,
+    renderHook,
     getDatesMock,
     getUsersMock,
     postMock,
@@ -288,13 +291,16 @@ test('useDataRepository get dates mutation works properly', async () => {
     deleteMock
   } = mockApi();
 
-  await renderer();
+  const { result: dataRepository} = await renderHook();
 
-  await dataRepository.current?.getDailyOpeningInfo(
-    ServicePoints.SERVICE_POINT_1.id,
-    Dates.MAY_1_DATE,
-    Dates.MAY_14_DATE
-  );
+  await act(async () => {
+    await dataRepository.current?.getDailyOpeningInfo(
+      ServicePoints.SERVICE_POINT_1.id,
+      Dates.MAY_1_DATE,
+      Dates.MAY_14_DATE
+    );
+  });
+
   expect(getDatesMock).toHaveBeenCalledWith(
     `calendar/dates/${
       ServicePoints.SERVICE_POINT_1.id
@@ -316,8 +322,7 @@ test('useDataRepository get user mutation works properly', async () => {
   const {
     getServicePointsMock,
     getCalendarsMock,
-    dataRepository,
-    renderer,
+    renderHook,
     getDatesMock,
     getUsersMock,
     postMock,
@@ -325,9 +330,12 @@ test('useDataRepository get user mutation works properly', async () => {
     deleteMock
   } = mockApi();
 
-  await renderer();
+  const { result: dataRepository} = await renderHook();
 
-  await dataRepository.current?.getUser(Users.PETRO_PROKOPOVYCH.id);
+  await act(async () => {
+    await dataRepository.current?.getUser(Users.PETRO_PROKOPOVYCH.id);
+  });
+
   expect(getUsersMock).toHaveBeenCalledWith(
     `users/${Users.PETRO_PROKOPOVYCH.id}`
   );
