@@ -1,6 +1,5 @@
 import {
   Button,
-  Datepicker,
   IconButton,
   Layout,
   MultiColumnList,
@@ -8,7 +7,7 @@ import {
 } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
-import { Field, useField } from 'react-final-form';
+import { useField } from 'react-final-form';
 import { FieldArrayRenderProps } from 'react-final-form-arrays';
 import { FormattedMessage, useIntl } from 'react-intl';
 import css from './HoursAndExceptionFields.css';
@@ -83,15 +82,13 @@ export default function HoursOfOperationField({
     status: (
       <Button
         marginBottom0
-        onClick={() =>
-          values.push({
-            type: RowType.Open,
-            startDay: undefined,
-            startTime: undefined,
-            endDay: undefined,
-            endTime: undefined,
-          })
-        }
+        onClick={() => values.push({
+          type: RowType.Open,
+          startDay: undefined,
+          startTime: undefined,
+          endDay: undefined,
+          endTime: undefined,
+        })}
       >
         <FormattedMessage id="ui-calendar.calendarForm.addRowButton" />
       </Button>
