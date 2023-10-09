@@ -80,37 +80,49 @@ export const CalendarForm: FunctionComponent<
           <Row>
             <Col xs={12} md={6}>
               <Field
-                component={TextField<string>}
-                autoFocus
-                required
                 name="name"
-                label={
-                  <FormattedMessage id="ui-calendar.calendarForm.field.name" />
-                }
+                render={(fieldProps) => (
+                  <TextField<string>
+                    {...fieldProps}
+                    autoFocus
+                    required
+                    label={
+                      <FormattedMessage id="ui-calendar.calendarForm.field.name" />
+                    }
+                  />
+                )}
               />
             </Col>
             <Col xs={12} md={3}>
               <Field
-                component={Datepicker}
-                backendDateStandard="YYYY-MM-DD"
-                required
-                usePortal
                 name="start-date"
-                label={
-                  <FormattedMessage id="ui-calendar.calendarForm.field.startDate" />
-                }
+                render={(fieldProps) => (
+                  <Datepicker
+                    {...fieldProps}
+                    backendDateStandard="YYYY-MM-DD"
+                    required
+                    usePortal
+                    label={
+                      <FormattedMessage id="ui-calendar.calendarForm.field.startDate" />
+                    }
+                  />
+                )}
               />
             </Col>
             <Col xs={12} md={3}>
               <Field
-                component={Datepicker}
-                backendDateStandard="YYYY-MM-DD"
-                required
-                usePortal
                 name="end-date"
-                label={
-                  <FormattedMessage id="ui-calendar.calendarForm.field.endDate" />
-                }
+                render={(fieldProps) => (
+                  <Datepicker
+                    {...fieldProps}
+                    backendDateStandard="YYYY-MM-DD"
+                    required
+                    usePortal
+                    label={
+                      <FormattedMessage id="ui-calendar.calendarForm.field.endDate" />
+                    }
+                  />
+                )}
               />
             </Col>
           </Row>

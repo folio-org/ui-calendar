@@ -257,7 +257,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               createdDate={metadata.createdAt}
               lastUpdatedBy={metadata.updatedBy}
               lastUpdatedDate={metadata.updatedAt}
-              showUserLink={stripes.hasPerm('ui-users.view')}
+              showUserLink={!!stripes.hasPerm('ui-users.view')}
             />
 
             <Row>

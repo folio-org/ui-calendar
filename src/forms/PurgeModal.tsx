@@ -181,39 +181,47 @@ export const PurgeModal: FunctionComponent<PurgeModalProps> = (
             <form id={FORM_ID} onSubmit={submitter}>
               <Field
                 name="ageCriteria"
-                component={Select<AgeCriteria | undefined>}
-                required
-                label={
-                  <FormattedMessage id="ui-calendar.purgeModal.criteria.age.prompt" />
-                }
-                fullWidth
-                dataOptions={[
-                  { value: undefined, label: '' },
-                  ...Object.entries(AgeCriteriaLabels).map(
-                    ([value, label]) => ({
-                      value: value as AgeCriteria,
-                      label: intl.formatMessage({ id: label }),
-                    })
-                  ),
-                ]}
+                render={(fieldProps) => (
+                  <Select<AgeCriteria | undefined>
+                    {...fieldProps}
+                    required
+                    label={
+                      <FormattedMessage id="ui-calendar.purgeModal.criteria.age.prompt" />
+                    }
+                    fullWidth
+                    dataOptions={[
+                      { value: undefined, label: '' },
+                      ...Object.entries(AgeCriteriaLabels).map(
+                        ([value, label]) => ({
+                          value: value as AgeCriteria,
+                          label: intl.formatMessage({ id: label }),
+                        }),
+                      ),
+                    ]}
+                  />
+                )}
               />
               <Field
                 name="assignmentCriteria"
-                component={Select<AssignmentCriteria | undefined>}
-                required
-                label={
-                  <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.prompt" />
-                }
-                fullWidth
-                dataOptions={[
-                  { value: undefined, label: '' },
-                  ...Object.entries(AssignmentCriteriaLabels).map(
-                    ([value, label]) => ({
-                      value: value as AssignmentCriteria,
-                      label: intl.formatMessage({ id: label }),
-                    })
-                  ),
-                ]}
+                render={(fieldProps) => (
+                  <Select<AssignmentCriteria | undefined>
+                    {...fieldProps}
+                    required
+                    label={
+                      <FormattedMessage id="ui-calendar.purgeModal.criteria.assignment.prompt" />
+                    }
+                    fullWidth
+                    dataOptions={[
+                      { value: undefined, label: '' },
+                      ...Object.entries(AssignmentCriteriaLabels).map(
+                        ([value, label]) => ({
+                          value: value as AssignmentCriteria,
+                          label: intl.formatMessage({ id: label }),
+                        }),
+                      ),
+                    ]}
+                  />
+                )}
               />
               <AccordionSet>
                 <Accordion

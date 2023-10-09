@@ -35,13 +35,17 @@ export default function WeekdayPicker({
   return (
     <div className={css.wrapper}>
       <Field
-        component={Select<Weekday | undefined>}
         name={name}
-        aria-label={ariaLabel}
-        required
-        fullWidth
-        marginBottom0
-        dataOptions={options}
+        render={(fieldProps) => (
+          <Select<Weekday | undefined>
+            {...fieldProps}
+            aria-label={ariaLabel}
+            required
+            fullWidth
+            marginBottom0
+            dataOptions={options}
+          />
+        )}
       />
     </div>
   );

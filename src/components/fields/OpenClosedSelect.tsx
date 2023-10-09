@@ -9,28 +9,32 @@ export default function OpenClosedSelect({ name }: { name: string }) {
 
   return (
     <Field
-      component={Select<RowType>}
       name={name}
-      aria-label={intl.formatMessage({
-        id: 'ui-calendar.calendarForm.openings.column.status',
-      })}
-      required
-      fullWidth
-      marginBottom0
-      dataOptions={[
-        {
-          value: RowType.Open,
-          label: intl.formatMessage({
-            id: 'ui-calendar.calendarForm.openClosedSelect.open',
-          }),
-        },
-        {
-          value: RowType.Closed,
-          label: intl.formatMessage({
-            id: 'ui-calendar.calendarForm.openClosedSelect.closed',
-          }),
-        },
-      ]}
+      render={(fieldProps) => (
+        <Select<RowType>
+          {...fieldProps}
+          aria-label={intl.formatMessage({
+            id: 'ui-calendar.calendarForm.openings.column.status',
+          })}
+          required
+          fullWidth
+          marginBottom0
+          dataOptions={[
+            {
+              value: RowType.Open,
+              label: intl.formatMessage({
+                id: 'ui-calendar.calendarForm.openClosedSelect.open',
+              }),
+            },
+            {
+              value: RowType.Closed,
+              label: intl.formatMessage({
+                id: 'ui-calendar.calendarForm.openClosedSelect.closed',
+              }),
+            },
+          ]}
+        />
+      )}
     />
   );
 }

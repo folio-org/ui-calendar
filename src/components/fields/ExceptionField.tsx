@@ -45,15 +45,19 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
     values.map((name, index) => ({
       name: (
         <Field
-          component={TextField<string>}
-          ariaLabel={intl.formatMessage({
-            id: 'ui-calendar.calendarForm.exceptions.column.name',
-          })}
           name={`${name}.name`}
-          marginBottom0
-          required
-          fullWidth
-          error={getErrorDisplay(fieldState.meta.error, index)}
+          render={(fieldProps) => (
+            <TextField<string>
+              {...fieldProps}
+              aria-label={intl.formatMessage({
+                id: 'ui-calendar.calendarForm.exceptions.column.name',
+              })}
+              marginBottom0
+              required
+              fullWidth
+              error={getErrorDisplay(fieldState.meta.error, index)}
+            />
+          )}
         />
       ),
       status: (
@@ -76,10 +80,10 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
                   [css.conflictCell]: isInnerRowConflicted(
                     fieldState.meta.error,
                     index,
-                    innerIndex
+                    innerIndex,
                   ),
                 },
-                cssHiddenErrorField.hiddenErrorFieldWrapper
+                cssHiddenErrorField.hiddenErrorFieldWrapper,
               )}
               backendDateStandard="YYYY-MM-DD"
               marginBottom0
@@ -101,7 +105,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
                 [css.conflictCell]: isInnerRowConflicted(
                   fieldState.meta.error,
                   index,
-                  innerIndex
+                  innerIndex,
                 ),
               })}
               display={values.value[index].type === RowType.Open}
@@ -123,10 +127,10 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
                   [css.conflictCell]: isInnerRowConflicted(
                     fieldState.meta.error,
                     index,
-                    innerIndex
+                    innerIndex,
                   ),
                 },
-                cssHiddenErrorField.hiddenErrorFieldWrapper
+                cssHiddenErrorField.hiddenErrorFieldWrapper,
               )}
               backendDateStandard="YYYY-MM-DD"
               marginBottom0
@@ -148,7 +152,7 @@ export default function ExceptionField({ values }: ExceptionFieldProps) {
                 [css.conflictCell]: isInnerRowConflicted(
                   fieldState.meta.error,
                   index,
-                  innerIndex
+                  innerIndex,
                 ),
               })}
               display={values.value[index].type === RowType.Open}

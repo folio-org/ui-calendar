@@ -41,45 +41,49 @@ const ServicePointAssignmentField: FunctionComponent<
   return (
     <Field
       name="service-points"
-      component={MultiSelection<ServicePoint>}
-      label={
-        <FormattedMessage id="ui-calendar.calendarForm.field.servicePoints" />
-      }
-      formatter={formatter}
-      filter={(filterText: string | undefined, list: ServicePoint[]) => {
-        if (typeof filterText !== 'string' || filterText === '') {
-          return { renderedItems: list, exactMatch: false };
-        }
-
-        // must spread and re-collect into a new array, as the returned array is immutable
-        const results = [
-          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' }),
-        ];
-
-        // score descending, then name ascending
-        // fixes "service point 1".."service point 4" etc having undefined order
-        results.sort((a, b) => {
-          if (a.score === b.score) {
-            return a.target.localeCompare(b.target);
-          }
-          return -(a.score - b.score);
-        });
-
-        return {
-          // retrieve the original service point
-          renderedItems: results.map((result) => result.obj),
-          exactMatch: !!list.filter((sp) => sp.name === filterText).length,
-        };
-      }}
-      itemToString={(servicePoint: ServicePoint | undefined) => {
-        if (servicePoint) {
-          return servicePoint.name;
-        } else {
-          return '';
-        }
-      }}
-      dataOptions={props.servicePoints}
       error={props.error}
+      render={(fieldProps) => (
+        <MultiSelection<ServicePoint>
+          {...fieldProps}
+          label={
+            <FormattedMessage id="ui-calendar.calendarForm.field.servicePoints" />
+          }
+          formatter={formatter}
+          filter={(filterText: string | undefined, list: ServicePoint[]) => {
+            if (typeof filterText !== 'string' || filterText === '') {
+              return { renderedItems: list, exactMatch: false };
+            }
+
+            // must spread and re-collect into a new array, as the returned array is immutable
+            const results = [
+              ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' }),
+            ];
+
+            // score descending, then name ascending
+            // fixes "service point 1".."service point 4" etc having undefined order
+            results.sort((a, b) => {
+              if (a.score === b.score) {
+                return a.target.localeCompare(b.target);
+              }
+              return -(a.score - b.score);
+            });
+
+            return {
+              // retrieve the original service point
+              renderedItems: results.map((result) => result.obj),
+              exactMatch: !!list.filter((sp) => sp.name === filterText).length,
+            };
+          }}
+          itemToString={(servicePoint: ServicePoint | undefined) => {
+            if (servicePoint) {
+              return servicePoint.name;
+            } else {
+              return '';
+            }
+          }}
+          dataOptions={props.servicePoints}
+        />
+      )}
     />
   );
 };

@@ -7,7 +7,7 @@ export default function ifPermissionOr(
   children: ReactNode
 ): ReactNode {
   // ensure the user has at least one perm
-  if (perms.some((p) => stripes.hasPerm(p))) {
+  if (perms.some((p) => !!stripes.hasPerm(p))) {
     return children;
   }
   return null;
