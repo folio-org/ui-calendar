@@ -1,8 +1,10 @@
 # Change history for ui-calendar
 
-## 10.0.0 IN PROGRESS
+## [10.0.0] (https://github.com/folio-org/ui-calendar/tree/v10.0.0) (2023-10-11)
 
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UICAL-275
+* *BREAKING* bump `react` to `18.2.0`. Refs UICAL-270
+* *BREAKING* bump stripes to v9.0.0 for Poppy. Refs UICAL-270
 
 ## [9.2.1] (https://github.com/folio-org/ui-calendar/tree/v9.2.1) (2023-03-16)
 
