@@ -110,9 +110,9 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-calendar ./translations/ui-calendar/compiled"
   },
   "devDependencies": {
-    "@folio/eslint-config-stripes": "^6.3.0",
-    "@folio/stripes": "^8.0.0",
-    "@folio/stripes-cli": "^2.6.0",
+    "@folio/eslint-config-stripes": "^7.0.0",
+    "@folio/stripes": "^9.0.0",
+    "@folio/stripes-cli": "^3.0.0",
     "@folio/stripes-components": "^11.0.0",
     "@folio/stripes-core": "^9.0.0",
     "@folio/stripes-final-form": "^7.0.0",
@@ -139,8 +139,8 @@
     "jest-junit": "^14.0.0",
     "localforage": "^1.10.0",
     "prettier": "^2.7.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-intl": "^6.4.4",
     "react-router-dom": "^5.2.0",
     "ts-jest": "^28.0.7",
@@ -160,10 +160,10 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^8.0.0",
+    "@folio/stripes": "^9.0.0",
     "final-form": "^4.20.7",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-final-form": "^6.5.9",
     "react-intl": "^6.4.4",
     "react-query": "^3.39.2",
