@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { IntlShape } from 'react-intl';
 import * as Weekdays from '../test/data/Weekdays';
 import getIntl from '../test/util/getIntl';
