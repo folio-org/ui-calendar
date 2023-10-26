@@ -1,5 +1,8 @@
 import { useOkapiKy } from '@folio/stripes/core';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  useMemo
+} from 'react';
 import { Calendar, CalendarDTO, User } from '../types/types';
 import DataRepository from './DataRepository';
 import {
@@ -91,7 +94,7 @@ export default function useDataRepository(): DataRepository {
     }
   );
 
-  return new DataRepository(
+  return useMemo(() => new DataRepository(
     calendars.isSuccess ? calendars.data : undefined,
     servicePoints.isSuccess ? servicePoints.data : undefined,
     {
@@ -101,5 +104,5 @@ export default function useDataRepository(): DataRepository {
       dates: getDateRange.mutateAsync,
       getUser: getUserInfo.mutateAsync
     }
-  );
+  ), [calendars.isSuccess, calendars.data, servicePoints.isSuccess, servicePoints.data, createCalendar.mutateAsync, putCalendar.mutateAsync, deleteCalendars.mutateAsync, getDateRange.mutateAsync, getUserInfo.mutateAsync]);
 }

@@ -38,7 +38,7 @@ export const MonthlyCalendarView: FunctionComponent<
   const localeWeekdays = useLocaleWeekdays(intl);
 
   useEffect(() => {
-    (async () => {
+    (() => {
       if (servicePoint === undefined) {
         return;
       }
@@ -65,7 +65,7 @@ export const MonthlyCalendarView: FunctionComponent<
         servicePoint?.id
       );
     })();
-  }, [monthBasis, servicePoint, events, requestEvents, localeWeekdays, intl]);
+  }, [monthBasis, events, localeWeekdays, intl, servicePoint, requestEvents]);
 
   if (servicePoint === undefined) {
     return null;

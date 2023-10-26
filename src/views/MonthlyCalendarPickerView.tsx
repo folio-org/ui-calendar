@@ -13,7 +13,8 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
-  useState
+  useState,
+  useMemo
 } from 'react';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
@@ -104,6 +105,8 @@ const MonthlyCalendarPickerView: FunctionComponent<
     servicePointId: string;
   }>('/settings/calendar/monthly/:servicePointId')?.params?.servicePointId;
 
+  const getServicePoint = useMemo(() => dataRepository.getServicePointFromId(currentRouteId), [dataRepository, currentRouteId]);
+
   useEffect(() => {
     if (currentRouteId !== undefined && !(currentRouteId in events)) {
       const newEvents = { ...events, [currentRouteId]: {} };
@@ -182,7 +185,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
           onClose={() => {
             history.push('/settings/calendar/monthly/');
           }}
-          servicePoint={dataRepository.getServicePointFromId(currentRouteId)}
+          servicePoint={getServicePoint}
           events={events[currentRouteId ?? '']}
           requestEvents={requestEvents}
         />
