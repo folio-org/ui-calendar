@@ -20,7 +20,8 @@ describe('MonthlyCalendarPickerView', () => {
     beforeEach(() => {
       const mockUseDataRepository = useDataRepository;
       mockUseDataRepository.mockReturnValue({
-        isLoaded: () => false
+        isLoaded: () => false,
+        getServicePointFromId: () => {}
       });
     });
 
