@@ -23,6 +23,7 @@ import { HTTPError } from 'ky';
 import React, {
   FunctionComponent,
   ReactNode,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -46,6 +47,7 @@ import {
 } from '../../utils/InfoPaneUtils';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
 import css from './InfoPane.css';
+import InfoPaneHours from '../../components/InfoPaneHours';
 
 export interface InfoPaneProps {
   creationBasePath: string;
@@ -58,6 +60,7 @@ export interface InfoPaneProps {
 export const InfoPane: FunctionComponent<InfoPaneProps> = (
   props: InfoPaneProps
 ) => {
+  console.log('InfoPane.tsx: Component Render');
   const intl = useIntl();
   const stripes = useStripes();
   const localeWeekdays = useLocaleWeekdays(intl);
@@ -75,6 +78,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
 
   const { dataRepository } = props;
   useEffect(() => {
+    console.log('InfoPane.tsx: useEffect for fetching user data');
     const newMetadata: typeof metadata = {};
 
     const abortController = new AbortController();
@@ -97,6 +101,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     }
     if (calendar?.metadata?.updatedByUserId) {
       // better than no info, while the API fetches
+      console.log('InfoPane.tsx: useEffect for fetching user data, updatedByUserId');
       newMetadata.updatedBy = calendar.metadata.updatedByUserId;
 
       dataRepository
@@ -125,7 +130,17 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendar]);
 
+  const getCellClass = useCallback((defaultClass: string, _rowData: any, column: string) => {
+    console.log('InfoPane.tsx: getCellClass, new');
+    return classNames(defaultClass, {
+      [css.hoursCell]: column !== 'name',
+      [css.exceptionCell]: column !== 'name',
+      [css.dayCell]: column === 'name',
+    });
+  }, []);
+
   const exceptions = useMemo(() => {
+    console.log('InfoPane.tsx: useMemo for exceptions');
     const ex: {
       openings: CalendarException[];
       closures: CalendarException[];
@@ -160,15 +175,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
 
   if (calendar === undefined || calendar === null) {
     return null;
-  }
-
-  const hours = splitOpeningsIntoDays(calendar.normalHours);
-
-  let dataRows;
-  if (isOpen247(calendar.normalHours)) {
-    dataRows = get247Rows(intl, localeWeekdays);
-  } else {
-    dataRows = generateDisplayRows(intl, localeWeekdays, hours);
   }
 
   return (
@@ -297,61 +303,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               }
             />
           </Accordion>
-          <Accordion
-            label={
-              <FormattedMessage id="ui-calendar.infoPane.accordion.hours" />
-            }
-          >
-            <MultiColumnList
-              interactive={false}
-              getCellClass={(defaultClass, _rowData, column) => {
-                return classNames(defaultClass, {
-                  [css.hoursCell]: column !== 'day',
-                  [css.dayCell]: column === 'day',
-                });
-              }}
-              columnMapping={{
-                day: (
-                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.day" />
-                ),
-                startTime: (
-                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.open" />
-                ),
-                endTime: (
-                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.close" />
-                ),
-              }}
-              columnWidths={{
-                day: 200,
-                startTime: { min: 100, max: 100 },
-                endTime: { min: 100, max: 100 },
-              }}
-              contentData={dataRows}
-            />
-            <p
-              className={
-                !isOpen247(calendar.normalHours) &&
-                containsNextDayOvernight(hours)
-                  ? ''
-                  : css.hidden
-              }
-            >
-              <FormattedMessage id="ui-calendar.infoPane.nextDayHelpText" />
-            </p>
-            <p
-              className={
-                !isOpen247(calendar.normalHours) &&
-                containsFullOvernightSpans(hours)
-                  ? ''
-                  : css.hidden
-              }
-            >
-              <FormattedMessage id="ui-calendar.infoPane.overnightHelpText" />
-            </p>
-            <p className={isOpen247(calendar.normalHours) ? '' : css.hidden}>
-              <FormattedMessage id="ui-calendar.infoPane.247HelpText" />
-            </p>
-          </Accordion>
+          <InfoPaneHours calendar={calendar} />
           <Accordion
             label={
               <FormattedMessage id="ui-calendar.infoPane.accordion.exceptions.openings" />
@@ -376,13 +328,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 start: { min: 100, max: 100 },
                 end: { min: 100, max: 100 },
               }}
-              getCellClass={(defaultClass, _rowData, column) => {
-                return classNames(defaultClass, {
-                  [css.hoursCell]: column !== 'name',
-                  [css.exceptionCell]: column !== 'name',
-                  [css.dayCell]: column === 'name',
-                });
-              }}
+              getCellClass={getCellClass}
               contentData={exceptions.openings}
               isEmptyMessage={
                 <div className={css.noValue}>
@@ -423,6 +369,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               }
             />
           </Accordion>
+          
         </AccordionSet>
       </Pane>
       <Modal
