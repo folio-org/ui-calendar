@@ -36,7 +36,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -59,7 +58,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -84,7 +82,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -123,7 +120,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -163,7 +159,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -202,7 +197,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -237,7 +231,6 @@ describe('Calendar info pane', () => {
         create: jest.fn(),
         update: jest.fn(),
         delete: jest.fn(),
-        getUser: jest.fn(),
         dates: jest.fn(),
       }),
     };
@@ -320,7 +313,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -358,7 +350,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }
@@ -408,7 +399,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: userMock,
                 dates: jest.fn(),
               })
             }
@@ -466,7 +456,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: userMock,
                 dates: jest.fn(),
               })
             }
@@ -518,7 +507,6 @@ describe('Calendar info pane', () => {
                 create: jest.fn(),
                 update: jest.fn(),
                 delete: jest.fn(),
-                getUser: jest.fn(),
                 dates: jest.fn(),
               })
             }

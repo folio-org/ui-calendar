@@ -15,36 +15,29 @@ import {
   ModalFooter,
   MultiColumnList,
   Pane,
-  Row
+  Row,
 } from '@folio/stripes/components';
-import { IfPermission, useStripes } from '@folio/stripes/core';
+import { IfPermission, useOkapiKy, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
 import { HTTPError } from 'ky';
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import {
-  FormattedMessage, useIntl
-} from 'react-intl';
+import React, { FunctionComponent, useMemo, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useQuery } from 'react-query';
 import DataRepository from '../../data/DataRepository';
 import permissions from '../../types/permissions';
 import { CalendarDTO, CalendarException, User } from '../../types/types';
 import { isOpen247 } from '../../utils/CalendarUtils';
 import { getLocalizedDate } from '../../utils/DateUtils';
-import ifPermissionOr from '../../utils/ifPermissionOr';
 import {
   containsFullOvernightSpans,
   containsNextDayOvernight,
   generateDisplayRows,
   generateExceptionalOpeningRows,
   get247Rows,
-  splitOpeningsIntoDays
+  splitOpeningsIntoDays,
 } from '../../utils/InfoPaneUtils';
 import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
+import ifPermissionOr from '../../utils/ifPermissionOr';
 import css from './InfoPane.css';
 
 export interface InfoPaneProps {
@@ -56,7 +49,7 @@ export interface InfoPaneProps {
 }
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (
-  props: InfoPaneProps
+  props: InfoPaneProps,
 ) => {
   const intl = useIntl();
   const stripes = useStripes();
@@ -66,64 +59,20 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
   const [deleteModalSubmitting, setDeleteModalSubmitting] =
     useState<boolean>(false);
 
-  const [metadata, setMetadata] = useState<{
-    createdBy?: User | ReactNode;
-    createdAt?: string;
-    updatedBy?: User | ReactNode;
-    updatedAt?: string;
-  }>({});
+  const ky = useOkapiKy();
 
-  const { dataRepository } = props;
-  useEffect(() => {
-    const newMetadata: typeof metadata = {};
-
-    const abortController = new AbortController();
-
-    if (calendar?.metadata?.createdByUserId) {
-      // better than no info, while the API fetches
-      newMetadata.createdBy = calendar.metadata.createdByUserId;
-
-      dataRepository
-        .getUser(calendar.metadata.createdByUserId, abortController.signal)
-        .then(
-          (createdBy) => !abortController.signal.aborted &&
-            setMetadata((current) => ({
-              ...current,
-              createdBy,
-            }))
-        )
-        // eslint-disable-next-line no-console
-        .catch((e) => console.error(e));
-    }
-    if (calendar?.metadata?.updatedByUserId) {
-      // better than no info, while the API fetches
-      newMetadata.updatedBy = calendar.metadata.updatedByUserId;
-
-      dataRepository
-        .getUser(calendar.metadata.updatedByUserId, abortController.signal)
-        .then(
-          (updatedBy) => !abortController.signal.aborted &&
-            setMetadata((current) => ({
-              ...current,
-              updatedBy,
-            }))
-        )
-        // eslint-disable-next-line no-console
-        .catch((e) => console.error(e));
-    }
-
-    if (calendar?.metadata?.createdDate) {
-      newMetadata.createdAt = calendar.metadata.createdDate;
-    }
-    if (calendar?.metadata?.updatedDate) {
-      newMetadata.updatedAt = calendar.metadata.updatedDate;
-    }
-
-    setMetadata(newMetadata);
-
-    return () => abortController.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calendar]);
+  const metadata = {
+    createdBy: useQuery<User>(
+      ['ui-calendar', 'users', calendar?.metadata?.createdByUserId],
+      () => ky.get(`users/${calendar?.metadata?.createdByUserId}`).json<User>(),
+    ).data,
+    createdAt: calendar?.metadata?.createdDate,
+    updatedBy: useQuery<User>(
+      ['ui-calendar', 'users', calendar?.metadata?.updatedByUserId],
+      () => ky.get(`users/${calendar?.metadata?.updatedByUserId}`).json<User>(),
+    ).data,
+    updatedAt: calendar?.metadata?.updatedDate,
+  };
 
   const exceptions = useMemo(() => {
     const ex: {
@@ -141,7 +90,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         exception.openings.sort((a, b) => {
           return Math.sign(
             new Date(`${a.startDate} ${a.endDate}`).getTime() -
-              new Date(`${b.startDate} ${b.endDate}`).getTime()
+              new Date(`${b.startDate} ${b.endDate}`).getTime(),
           );
         });
         ex.openings.push(exception);
@@ -232,7 +181,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                   </Icon>
                 </Button>
               </IfPermission>
-            </MenuSection>
+            </MenuSection>,
           );
         }}
       >
@@ -287,7 +236,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
           >
             <List
               items={props.dataRepository.getServicePointNamesFromIds(
-                calendar.assignments
+                calendar.assignments,
               )}
               listStyle="bullets"
               isEmptyMessage={
