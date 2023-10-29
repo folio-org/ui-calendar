@@ -23,20 +23,12 @@ import { HTTPError } from 'ky';
 import React, { FunctionComponent, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
+import InfoPaneHours from '../../components/InfoPaneHours';
 import DataRepository from '../../data/DataRepository';
 import permissions from '../../types/permissions';
 import { CalendarDTO, CalendarException, User } from '../../types/types';
-import { isOpen247 } from '../../utils/CalendarUtils';
 import { getLocalizedDate } from '../../utils/DateUtils';
-import {
-  containsFullOvernightSpans,
-  containsNextDayOvernight,
-  generateDisplayRows,
-  generateExceptionalOpeningRows,
-  get247Rows,
-  splitOpeningsIntoDays,
-} from '../../utils/InfoPaneUtils';
-import { useLocaleWeekdays } from '../../utils/WeekdayUtils';
+import { generateExceptionalOpeningRows } from '../../utils/InfoPaneUtils';
 import ifPermissionOr from '../../utils/ifPermissionOr';
 import css from './InfoPane.css';
 
@@ -53,7 +45,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
 ) => {
   const intl = useIntl();
   const stripes = useStripes();
-  const localeWeekdays = useLocaleWeekdays(intl);
   const calendar = props.calendar;
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [deleteModalSubmitting, setDeleteModalSubmitting] =
@@ -109,15 +100,6 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
 
   if (calendar === undefined || calendar === null) {
     return null;
-  }
-
-  const hours = splitOpeningsIntoDays(calendar.normalHours);
-
-  let dataRows;
-  if (isOpen247(calendar.normalHours)) {
-    dataRows = get247Rows(intl, localeWeekdays);
-  } else {
-    dataRows = generateDisplayRows(intl, localeWeekdays, hours);
   }
 
   return (
@@ -251,55 +233,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
               <FormattedMessage id="ui-calendar.infoPane.accordion.hours" />
             }
           >
-            <MultiColumnList
-              interactive={false}
-              getCellClass={(defaultClass, _rowData, column) => {
-                return classNames(defaultClass, {
-                  [css.hoursCell]: column !== 'day',
-                  [css.dayCell]: column === 'day',
-                });
-              }}
-              columnMapping={{
-                day: (
-                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.day" />
-                ),
-                startTime: (
-                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.open" />
-                ),
-                endTime: (
-                  <FormattedMessage id="ui-calendar.infoPane.accordion.hours.close" />
-                ),
-              }}
-              columnWidths={{
-                day: 200,
-                startTime: { min: 100, max: 100 },
-                endTime: { min: 100, max: 100 },
-              }}
-              contentData={dataRows}
-            />
-            <p
-              className={
-                !isOpen247(calendar.normalHours) &&
-                containsNextDayOvernight(hours)
-                  ? ''
-                  : css.hidden
-              }
-            >
-              <FormattedMessage id="ui-calendar.infoPane.nextDayHelpText" />
-            </p>
-            <p
-              className={
-                !isOpen247(calendar.normalHours) &&
-                containsFullOvernightSpans(hours)
-                  ? ''
-                  : css.hidden
-              }
-            >
-              <FormattedMessage id="ui-calendar.infoPane.overnightHelpText" />
-            </p>
-            <p className={isOpen247(calendar.normalHours) ? '' : css.hidden}>
-              <FormattedMessage id="ui-calendar.infoPane.247HelpText" />
-            </p>
+            <InfoPaneHours calendar={calendar} />
           </Accordion>
           <Accordion
             label={
