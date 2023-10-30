@@ -3,6 +3,7 @@
 ## [10.0.1] IN PROGRESS
 
 * Use non-empty close times for closed calendars. Refs UICAL-278
+* Fix rendering monthly calendar view issue. Refs UICAL-277
 
 ## [10.0.0] (https://github.com/folio-org/ui-calendar/tree/v10.0.0) (2023-10-11)
 
