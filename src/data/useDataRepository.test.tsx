@@ -2,12 +2,11 @@ import { useOkapiKy } from '@folio/stripes/core';
 import { render, waitFor } from '@testing-library/react';
 import ky, { ResponsePromise } from 'ky';
 import { KyInstance } from 'ky/distribution/types/ky';
-import React, { createRef, MutableRefObject } from 'react';
+import React, { MutableRefObject, createRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import * as Calendars from '../test/data/Calendars';
 import * as Dates from '../test/data/Dates';
 import * as ServicePoints from '../test/data/ServicePoints';
-import * as Users from '../test/data/Users';
 import { dateToYYYYMMDD } from '../utils/DateUtils';
 import DataRepository from './DataRepository';
 import useDataRepository from './useDataRepository';
@@ -22,14 +21,13 @@ function mockApi() {
   const getServicePointsMock = jest.fn(() => ({}));
   const getCalendarsMock = jest.fn(() => ({}));
   const getDatesMock = jest.fn<{ dates: never[] }, [string]>(() => ({
-    dates: [] as never[]
+    dates: [] as never[],
   }));
-  const getUsersMock = jest.fn();
   const postMock = jest.fn(() => ({
-    json: () => Promise.resolve({})
+    json: () => Promise.resolve({}),
   }));
   const putMock = jest.fn(() => ({
-    json: () => Promise.resolve({})
+    json: () => Promise.resolve({}),
   }));
   const deleteMock = jest.fn(() => Promise.resolve());
 
@@ -38,19 +36,15 @@ function mockApi() {
     kyBase.get = (url) => {
       if ((url as string).startsWith('service-points')) {
         return {
-          json: () => Promise.resolve(getServicePointsMock())
+          json: () => Promise.resolve(getServicePointsMock()),
         } as unknown as ResponsePromise;
       } else if ((url as string).startsWith('calendar/calendars')) {
         return {
-          json: () => Promise.resolve(getCalendarsMock())
+          json: () => Promise.resolve(getCalendarsMock()),
         } as unknown as ResponsePromise;
       } else if ((url as string).startsWith('calendar/dates')) {
         return {
-          json: () => Promise.resolve(getDatesMock(url as string))
-        } as unknown as ResponsePromise;
-      } else if ((url as string).startsWith('users')) {
-        return {
-          json: () => Promise.resolve(getUsersMock(url as string))
+          json: () => Promise.resolve(getDatesMock(url as string)),
         } as unknown as ResponsePromise;
       } else {
         return fail(`ky attempted to GET an unknown URL ${url}`);
@@ -76,7 +70,6 @@ function mockApi() {
     getServicePointsMock,
     getCalendarsMock,
     getDatesMock,
-    getUsersMock,
     postMock,
     putMock,
     deleteMock,
@@ -85,7 +78,7 @@ function mockApi() {
       render(
         <QueryClientProvider client={new QueryClient()}>
           <Inner dataRepositoryRef={dataRepositoryRef} />
-        </QueryClientProvider>
+        </QueryClientProvider>,
       );
       await waitFor(() => {
         expect(getServicePointsMock).toHaveBeenCalled();
@@ -93,12 +86,11 @@ function mockApi() {
       });
 
       expect(getDatesMock).not.toHaveBeenCalled();
-      expect(getUsersMock).not.toHaveBeenCalled();
       expect(postMock).not.toHaveBeenCalled();
       expect(putMock).not.toHaveBeenCalled();
       expect(deleteMock).not.toHaveBeenCalled();
       jest.clearAllMocks();
-    }
+    },
   };
 }
 
@@ -109,15 +101,15 @@ test('useDataRepository queries work properly', async () => {
     servicepoints: [
       ServicePoints.SERVICE_POINT_1_DTO,
       ServicePoints.SERVICE_POINT_2_DTO,
-      ServicePoints.SERVICE_POINT_3_DTO
-    ]
+      ServicePoints.SERVICE_POINT_3_DTO,
+    ],
   });
   getCalendarsMock.mockReturnValue({
     calendars: [
       Calendars.SPRING_SP_1_2,
       Calendars.SPRING_SP_3_4,
-      Calendars.ALL_YEAR_SP_ONLINE_247
-    ]
+      Calendars.ALL_YEAR_SP_ONLINE_247,
+    ],
   });
 
   await renderer();
@@ -126,12 +118,12 @@ test('useDataRepository queries work properly', async () => {
   expect(dataRepository.current?.getCalendars()).toStrictEqual([
     Calendars.SPRING_SP_1_2,
     Calendars.SPRING_SP_3_4,
-    Calendars.ALL_YEAR_SP_ONLINE_247
+    Calendars.ALL_YEAR_SP_ONLINE_247,
   ]);
   expect(dataRepository.current?.getServicePoints()).toStrictEqual([
     ServicePoints.SERVICE_POINT_1,
     ServicePoints.SERVICE_POINT_2,
-    ServicePoints.SERVICE_POINT_3
+    ServicePoints.SERVICE_POINT_3,
   ]);
 });
 
@@ -142,17 +134,16 @@ test('useDataRepository create mutation works properly', async () => {
     dataRepository,
     renderer,
     getDatesMock,
-    getUsersMock,
     postMock,
     putMock,
-    deleteMock
+    deleteMock,
   } = mockApi();
 
   await renderer();
 
   await dataRepository.current?.createCalendar(Calendars.SUMMER_SP_1_2);
   expect(postMock).toHaveBeenCalledWith('calendar/calendars', {
-    json: Calendars.SUMMER_SP_1_2
+    json: Calendars.SUMMER_SP_1_2,
   });
 
   // this queries should have been invalidated
@@ -162,7 +153,6 @@ test('useDataRepository create mutation works properly', async () => {
   // this query should NOT have been invalidated
   expect(getServicePointsMock).not.toHaveBeenCalled();
   expect(getDatesMock).not.toHaveBeenCalled();
-  expect(getUsersMock).not.toHaveBeenCalled();
   expect(putMock).not.toHaveBeenCalled();
   expect(deleteMock).not.toHaveBeenCalled();
 });
@@ -174,26 +164,25 @@ test('useDataRepository update mutation works properly', async () => {
     dataRepository,
     renderer,
     getDatesMock,
-    getUsersMock,
     postMock,
     putMock,
-    deleteMock
+    deleteMock,
   } = mockApi();
 
   await renderer();
 
   await dataRepository.current?.updateCalendar({
     ...Calendars.SUMMER_SP_1_2,
-    name: 'New Name'
+    name: 'New Name',
   });
   expect(putMock).toHaveBeenCalledWith(
     `calendar/calendars/${Calendars.SUMMER_SP_1_2.id}`,
     {
       json: {
         ...Calendars.SUMMER_SP_1_2,
-        name: 'New Name'
-      }
-    }
+        name: 'New Name',
+      },
+    },
   );
 
   // this query should have been invalidated
@@ -203,7 +192,6 @@ test('useDataRepository update mutation works properly', async () => {
   // this query should NOT have been invalidated
   expect(getServicePointsMock).not.toHaveBeenCalled();
   expect(getDatesMock).not.toHaveBeenCalled();
-  expect(getUsersMock).not.toHaveBeenCalled();
   expect(postMock).not.toHaveBeenCalled();
   expect(deleteMock).not.toHaveBeenCalled();
 });
@@ -215,17 +203,16 @@ test('useDataRepository singular delete mutation works properly', async () => {
     dataRepository,
     renderer,
     getDatesMock,
-    getUsersMock,
     postMock,
     putMock,
-    deleteMock
+    deleteMock,
   } = mockApi();
 
   await renderer();
 
   await dataRepository.current?.deleteCalendar(Calendars.SUMMER_SP_1_2);
   expect(deleteMock).toHaveBeenCalledWith(
-    `calendar/calendars?id=${Calendars.SUMMER_SP_1_2.id}`
+    `calendar/calendars?id=${Calendars.SUMMER_SP_1_2.id}`,
   );
 
   // this query should have been invalidated
@@ -235,7 +222,6 @@ test('useDataRepository singular delete mutation works properly', async () => {
   // this query should NOT have been invalidated
   expect(getServicePointsMock).not.toHaveBeenCalled();
   expect(getDatesMock).not.toHaveBeenCalled();
-  expect(getUsersMock).not.toHaveBeenCalled();
   expect(postMock).not.toHaveBeenCalled();
   expect(putMock).not.toHaveBeenCalled();
 });
@@ -247,20 +233,19 @@ test('useDataRepository multiple delete mutation works properly', async () => {
     dataRepository,
     renderer,
     getDatesMock,
-    getUsersMock,
     postMock,
     putMock,
-    deleteMock
+    deleteMock,
   } = mockApi();
 
   await renderer();
 
   await dataRepository.current?.deleteCalendars([
     Calendars.SUMMER_SP_1_2,
-    Calendars.SUMMER_SP_3
+    Calendars.SUMMER_SP_3,
   ]);
   expect(deleteMock).toHaveBeenCalledWith(
-    `calendar/calendars?id=${Calendars.SUMMER_SP_1_2.id}&id=${Calendars.SUMMER_SP_3.id}`
+    `calendar/calendars?id=${Calendars.SUMMER_SP_1_2.id}&id=${Calendars.SUMMER_SP_3.id}`,
   );
 
   // this query should have been invalidated
@@ -270,7 +255,6 @@ test('useDataRepository multiple delete mutation works properly', async () => {
   // this query should NOT have been invalidated
   expect(getServicePointsMock).not.toHaveBeenCalled();
   expect(getDatesMock).not.toHaveBeenCalled();
-  expect(getUsersMock).not.toHaveBeenCalled();
   expect(postMock).not.toHaveBeenCalled();
   expect(putMock).not.toHaveBeenCalled();
 });
@@ -282,10 +266,9 @@ test('useDataRepository get dates mutation works properly', async () => {
     dataRepository,
     renderer,
     getDatesMock,
-    getUsersMock,
     postMock,
     putMock,
-    deleteMock
+    deleteMock,
   } = mockApi();
 
   await renderer();
@@ -293,49 +276,19 @@ test('useDataRepository get dates mutation works properly', async () => {
   await dataRepository.current?.getDailyOpeningInfo(
     ServicePoints.SERVICE_POINT_1.id,
     Dates.MAY_1_DATE,
-    Dates.MAY_14_DATE
+    Dates.MAY_14_DATE,
   );
   expect(getDatesMock).toHaveBeenCalledWith(
     `calendar/dates/${
       ServicePoints.SERVICE_POINT_1.id
     }/all-openings?includeClosed=true&startDate=${dateToYYYYMMDD(
-      Dates.MAY_1_DATE
-    )}&endDate=${dateToYYYYMMDD(Dates.MAY_14_DATE)}&limit=2147483647`
+      Dates.MAY_1_DATE,
+    )}&endDate=${dateToYYYYMMDD(Dates.MAY_14_DATE)}&limit=2147483647`,
   );
 
   // these queries should NOT have been invalidated
   expect(getCalendarsMock).not.toHaveBeenCalled();
   expect(getServicePointsMock).not.toHaveBeenCalled();
-  expect(getUsersMock).not.toHaveBeenCalled();
-  expect(postMock).not.toHaveBeenCalled();
-  expect(putMock).not.toHaveBeenCalled();
-  expect(deleteMock).not.toHaveBeenCalled();
-});
-
-test('useDataRepository get user mutation works properly', async () => {
-  const {
-    getServicePointsMock,
-    getCalendarsMock,
-    dataRepository,
-    renderer,
-    getDatesMock,
-    getUsersMock,
-    postMock,
-    putMock,
-    deleteMock
-  } = mockApi();
-
-  await renderer();
-
-  await dataRepository.current?.getUser(Users.PETRO_PROKOPOVYCH.id);
-  expect(getUsersMock).toHaveBeenCalledWith(
-    `users/${Users.PETRO_PROKOPOVYCH.id}`
-  );
-
-  // these queries should NOT have been invalidated
-  expect(getCalendarsMock).not.toHaveBeenCalled();
-  expect(getServicePointsMock).not.toHaveBeenCalled();
-  expect(getDatesMock).not.toHaveBeenCalled();
   expect(postMock).not.toHaveBeenCalled();
   expect(putMock).not.toHaveBeenCalled();
   expect(deleteMock).not.toHaveBeenCalled();

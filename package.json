@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "Calendar settings",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
@@ -137,13 +137,13 @@
   },
   "dependencies": {
     "@types/memoizee": "^0.4.8",
-    "@types/react-router-dom": "^5.3.3",
+    "@types/react-router-dom": "^5.2.0",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
     "final-form": "^4.20.10",
     "final-form-arrays": "^3.1.0",
     "fuzzysort": "^2.0.4",
-    "history": "^5.3.0",
+    "history": "^4.7.11",
     "ky": "^0.31.1",
     "memoizee": "^0.4.15",
     "react-final-form": "^6.5.9",

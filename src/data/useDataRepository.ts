@@ -1,12 +1,13 @@
 import { useOkapiKy } from '@folio/stripes/core';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Calendar, CalendarDTO, User } from '../types/types';
+import { useMemo } from 'react';
+import { Calendar, CalendarDTO } from '../types/types';
 import DataRepository from './DataRepository';
 import {
   CalendarResponseDTO,
   DateResponseDTO,
   ServicePointDTO,
-  ServicePointResponseDTO
+  ServicePointResponseDTO,
 } from './types';
 
 export const MAX_LIMIT = 2147483647;
@@ -24,7 +25,7 @@ export default function useDataRepository(): DataRepository {
         .get(`service-points?cql.allRecords=1&limit=${MAX_LIMIT}`)
         .json<ServicePointResponseDTO>();
       return data.servicepoints;
-    }
+    },
   );
 
   const calendars = useQuery<CalendarDTO[]>(
@@ -34,7 +35,7 @@ export default function useDataRepository(): DataRepository {
         .get(`calendar/calendars?limit=${MAX_LIMIT}`)
         .json<CalendarResponseDTO>();
       return data.calendars;
-    }
+    },
   );
 
   const queryClient = useQueryClient();
@@ -42,13 +43,13 @@ export default function useDataRepository(): DataRepository {
   const mutationInvalidator = {
     onSuccess: () => {
       queryClient.invalidateQueries(['ui-calendar', 'calendars']);
-    }
+    },
   };
 
   const createCalendar = useMutation(async (calendar: Calendar) => {
     return ky
       .post('calendar/calendars', {
-        json: calendar
+        json: calendar,
       })
       .json<CalendarDTO>();
   }, mutationInvalidator);
@@ -56,7 +57,7 @@ export default function useDataRepository(): DataRepository {
   const putCalendar = useMutation(async (calendar: Calendar) => {
     return ky
       .put(`calendar/calendars/${calendar.id}`, {
-        json: calendar
+        json: calendar,
       })
       .json<CalendarDTO>();
   }, mutationInvalidator);
@@ -70,7 +71,7 @@ export default function useDataRepository(): DataRepository {
     async ({
       servicePointId,
       startDate,
-      endDate
+      endDate,
     }: {
       servicePointId: string;
       startDate: string;
@@ -78,28 +79,33 @@ export default function useDataRepository(): DataRepository {
     }) => {
       const data = await ky
         .get(
-          `calendar/dates/${servicePointId}/all-openings?includeClosed=true&startDate=${startDate}&endDate=${endDate}&limit=${MAX_LIMIT}`
+          `calendar/dates/${servicePointId}/all-openings?includeClosed=true&startDate=${startDate}&endDate=${endDate}&limit=${MAX_LIMIT}`,
         )
         .json<DateResponseDTO>();
       return data.dates;
-    }
+    },
   );
 
-  const getUserInfo = useMutation(
-    ({ userId, signal }: { userId: string; signal?: AbortSignal }) => {
-      return ky.get(`users/${userId}`, { signal }).json<User>();
-    }
-  );
-
-  return new DataRepository(
-    calendars.isSuccess ? calendars.data : undefined,
-    servicePoints.isSuccess ? servicePoints.data : undefined,
-    {
-      create: createCalendar.mutateAsync,
-      update: putCalendar.mutateAsync,
-      delete: deleteCalendars.mutateAsync,
-      dates: getDateRange.mutateAsync,
-      getUser: getUserInfo.mutateAsync
-    }
+  return useMemo(
+    () => new DataRepository(
+      calendars.isSuccess ? calendars.data : undefined,
+      servicePoints.isSuccess ? servicePoints.data : undefined,
+      {
+        create: createCalendar.mutateAsync,
+        update: putCalendar.mutateAsync,
+        delete: deleteCalendars.mutateAsync,
+        dates: getDateRange.mutateAsync,
+      },
+    ),
+    [
+      calendars.isSuccess,
+      calendars.data,
+      servicePoints.isSuccess,
+      servicePoints.data,
+      createCalendar.mutateAsync,
+      putCalendar.mutateAsync,
+      deleteCalendars.mutateAsync,
+      getDateRange.mutateAsync,
+    ],
   );
 }

@@ -4,7 +4,6 @@ import {
   CalendarDTO,
   DailyOpeningInfo,
   ServicePoint,
-  User
 } from '../types/types';
 import { dateUTCToYYYYMMDD } from '../utils/DateUtils';
 import { ServicePointDTO } from './types';
@@ -16,7 +15,7 @@ const getServicePointMap = memoizee(
       map[sp.id] = sp;
     });
     return map;
-  }
+  },
 );
 
 interface MutatorsType {
@@ -28,7 +27,6 @@ interface MutatorsType {
     startDate: string;
     endDate: string;
   }) => Promise<DailyOpeningInfo[]>;
-  getUser: (params: { userId: string; signal?: AbortSignal }) => Promise<User>;
 }
 
 export default class DataRepository {
@@ -43,7 +41,7 @@ export default class DataRepository {
   constructor(
     calendars: CalendarDTO[] | undefined,
     servicePoints: ServicePointDTO[] | undefined,
-    mutators: MutatorsType
+    mutators: MutatorsType,
   ) {
     this.calendarsLoaded = calendars !== undefined;
     this.calendars = calendars ?? [];
@@ -72,7 +70,7 @@ export default class DataRepository {
     return this.servicePoints.map((dto) => ({
       id: dto.id,
       name: dto.name,
-      inactive: false
+      inactive: false,
     }));
   }
 
@@ -142,20 +140,12 @@ export default class DataRepository {
   getDailyOpeningInfo(
     servicePointId: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<DailyOpeningInfo[]> {
     return this.mutators.dates({
       servicePointId,
       startDate: dateUTCToYYYYMMDD(startDate),
-      endDate: dateUTCToYYYYMMDD(endDate)
+      endDate: dateUTCToYYYYMMDD(endDate),
     });
-  }
-
-  /**
-   * Get a user by ID.  Optionally, requests may be aborted when the data is no longer needed
-   * Errors will NOT be rejected, instead, a never-resolving promise will be returned
-   */
-  getUser(userId: string, signal?: AbortSignal): Promise<User> {
-    return this.mutators.getUser({ userId, signal });
   }
 }
