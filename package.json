@@ -1,6 +1,6 @@
 {
   "name": "@folio/calendar",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "Calendar settings",
   "repository": "folio-org/ui-calendar",
   "publishConfig": {
