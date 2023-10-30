@@ -71,7 +71,7 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
     THURSDAY: [],
     FRIDAY: [],
     SATURDAY: [],
-    SUNDAY: [],
+    SUNDAY: []
   };
 
   openings.forEach((opening) => {
@@ -89,7 +89,7 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
     span.forEach((day, i) => {
       const bounds: OpenCloseTimeTuple = [
         NEXT_DAY_FULL_WRAPAROUND,
-        NEXT_DAY_FULL_WRAPAROUND,
+        NEXT_DAY_FULL_WRAPAROUND
       ];
       if (i === 0) {
         bounds[0] = startTime;
@@ -111,7 +111,7 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
 
 export function get247Rows(
   intl: IntlShape,
-  localeWeekdays: LocaleWeekdayInfo[],
+  localeWeekdays: LocaleWeekdayInfo[]
 ) {
   return localeWeekdays.map((weekday, i) => ({
     day: weekday.long,
@@ -130,7 +130,7 @@ export function get247Rows(
       >
         &ndash;
       </p>
-    ),
+    )
   }));
 }
 
@@ -138,7 +138,7 @@ export function get247Rows(
 export function generateDisplayRows(
   intl: IntlShape,
   localeWeekdays: LocaleWeekdayInfo[],
-  hours: HoursType,
+  hours: HoursType
 ) {
   return localeWeekdays.map((weekday, weekdayNum) => {
     const tuples = hours[weekday.weekday];
@@ -147,14 +147,14 @@ export function generateDisplayRows(
       endTime: ReactNode[];
     } = {
       startTime: [],
-      endTime: [],
+      endTime: []
     };
 
     if (tuples.length === 0) {
       times.startTime.push(
-        <p className={css.closed} key={`${weekdayNum}-s`}>
+        <p className={css.closed} key={weekdayNum}>
           <FormattedMessage id="ui-calendar.infoPane.display.closed" />
-        </p>,
+        </p>
       );
     }
 
@@ -162,36 +162,34 @@ export function generateDisplayRows(
       if (open === NEXT_DAY_FULL_WRAPAROUND) {
         times.startTime.push(
           <p
-            key={`${weekdayNum}-${i}-s`}
+            key={i}
             title={intl.formatMessage({
-              id: 'ui-calendar.infoPane.display.wrappedOpening',
+              id: 'ui-calendar.infoPane.display.wrappedOpening'
             })}
           >
             &ndash;
-          </p>,
+          </p>
         );
       } else {
-        times.startTime.push(
-          <p key={`${weekdayNum}-${i}-s`}>{getLocalizedTime(intl, open)}</p>,
-        );
+        times.startTime.push(<p key={i}>{getLocalizedTime(intl, open)}</p>);
       }
       if (close === NEXT_DAY_FULL_WRAPAROUND) {
         times.endTime.push(
           <p
-            key={`${weekdayNum}-${i}-e`}
+            key={i}
             title={intl.formatMessage({
-              id: 'ui-calendar.infoPane.display.wrappedClosed',
+              id: 'ui-calendar.infoPane.display.wrappedClosed'
             })}
           >
             &ndash;
-          </p>,
+          </p>
         );
       } else if (close.endsWith(NEXT_DAY_OVERNIGHT)) {
         times.endTime.push(
           <p
-            key={`${weekdayNum}-${i}-e`}
+            key={i}
             title={intl.formatMessage({
-              id: 'ui-calendar.infoPane.display.closesAfterMidnight',
+              id: 'ui-calendar.infoPane.display.closesAfterMidnight'
             })}
           >
             <FormattedMessage
@@ -199,23 +197,21 @@ export function generateDisplayRows(
               values={{
                 time: getLocalizedTime(
                   intl,
-                  close.replace(NEXT_DAY_OVERNIGHT, '').trim(),
-                ),
+                  close.replace(NEXT_DAY_OVERNIGHT, '').trim()
+                )
               }}
             />
-          </p>,
+          </p>
         );
       } else {
-        times.endTime.push(
-          <p key={`${weekdayNum}-${i}-e`}>{getLocalizedTime(intl, close)}</p>,
-        );
+        times.endTime.push(<p key={i}>{getLocalizedTime(intl, close)}</p>);
       }
     });
 
     return {
       day: weekday.long,
       startTime: <>{times.startTime}</>,
-      endTime: <>{times.endTime}</>,
+      endTime: <>{times.endTime}</>
     };
   });
 }
@@ -223,7 +219,7 @@ export function generateDisplayRows(
 /** Display rows for exceptional information */
 export function generateExceptionalOpeningRows(
   intl: IntlShape,
-  exceptions: CalendarException[],
+  exceptions: CalendarException[]
 ) {
   return exceptions.map((exception) => {
     const times: {
@@ -231,7 +227,7 @@ export function generateExceptionalOpeningRows(
       end: ReactNode[];
     } = {
       start: [],
-      end: [],
+      end: []
     };
 
     exception.openings.forEach(
@@ -241,22 +237,22 @@ export function generateExceptionalOpeningRows(
             {getLocalizedDate(intl, startDate)}
             <br />
             {getLocalizedTime(intl, startTime)}
-          </p>,
+          </p>
         );
         times.end.push(
           <p key={i}>
             {getLocalizedDate(intl, endDate)}
             <br />
             {getLocalizedTime(intl, endTime)}
-          </p>,
+          </p>
         );
-      },
+      }
     );
 
     return {
       name: exception.name,
       start: <>{times.start}</>,
-      end: <>{times.end}</>,
+      end: <>{times.end}</>
     };
   });
 }
