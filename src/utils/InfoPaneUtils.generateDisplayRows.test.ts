@@ -35,7 +35,7 @@ const localeWeekdays: LocaleWeekdayInfo[] = [
 function renderToTextContent(elements: ReactNode[][]): (string | null)[][] {
   const results = elements.map((row) => {
     return row.map(
-      (el) => render(withIntlConfiguration(el)).container.textContent
+      (el) => render(withIntlConfiguration(el)).container.textContent,
     );
   });
   cleanup();
@@ -64,17 +64,17 @@ test('Closed rows display correctly', () => {
   const rows = generateDisplayRows(
     intl,
     localeWeekdays,
-    splitOpeningsIntoDays([])
+    splitOpeningsIntoDays([]),
   ).map((row) => [row.day, row.startTime, row.endTime]);
 
   expect(renderToTextContent(rows)).toStrictEqual([
-    ['Friday', 'Closed', ''],
-    ['Saturday', 'Closed', ''],
-    ['Monday', 'Closed', ''],
-    ['Wednesday', 'Closed', ''],
-    ['Thursday', 'Closed', ''],
-    ['Sunday', 'Closed', ''],
-    ['Tuesday', 'Closed', ''],
+    ['Friday', 'Closed', `${NBSP}Closed`],
+    ['Saturday', 'Closed', `${NBSP}Closed`],
+    ['Monday', 'Closed', `${NBSP}Closed`],
+    ['Wednesday', 'Closed', `${NBSP}Closed`],
+    ['Thursday', 'Closed', `${NBSP}Closed`],
+    ['Sunday', 'Closed', `${NBSP}Closed`],
+    ['Tuesday', 'Closed', `${NBSP}Closed`],
   ]);
 });
 
@@ -82,7 +82,7 @@ test('Open rows display correctly', () => {
   const rows = generateDisplayRows(
     intl,
     localeWeekdays,
-    splitOpeningsIntoDays(Calendars.SUMMER_SP_1_2.normalHours)
+    splitOpeningsIntoDays(Calendars.SUMMER_SP_1_2.normalHours),
   ).map((row) => [row.day, row.startTime, row.endTime]);
 
   // rows with multiple openings will be concatenated together by start/end
@@ -93,7 +93,7 @@ test('Open rows display correctly', () => {
     ['Monday', '9:00 AM', `1:00 AM${NBSP}*`],
     ['Wednesday', '9:00 AM', '11:00 PM'],
     ['Thursday', '9:00 AM', '11:00 PM'],
-    ['Sunday', 'Closed', ''],
+    ['Sunday', 'Closed', `${NBSP}Closed`],
     ['Tuesday', '9:00 AM', '11:00 PM'],
   ]);
 });
@@ -109,7 +109,7 @@ test('Multi-day opening rows display correctly', () => {
         endDay: Weekdays.Tuesday,
         endTime: '01:00',
       },
-    ])
+    ]),
   ).map((row) => [row.day, row.startTime, row.endTime]);
 
   // rows with multiple openings will be concatenated together by start/end
@@ -118,9 +118,9 @@ test('Multi-day opening rows display correctly', () => {
     ['Friday', '9:00 AM', EN_DASH],
     ['Saturday', EN_DASH, EN_DASH],
     ['Monday', EN_DASH, `1:00 AM${NBSP}*`],
-    ['Wednesday', 'Closed', ''],
-    ['Thursday', 'Closed', ''],
+    ['Wednesday', 'Closed', `${NBSP}Closed`],
+    ['Thursday', 'Closed', `${NBSP}Closed`],
     ['Sunday', EN_DASH, EN_DASH],
-    ['Tuesday', 'Closed', ''],
+    ['Tuesday', 'Closed', `${NBSP}Closed`],
   ]);
 });

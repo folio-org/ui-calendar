@@ -157,12 +157,12 @@ export function generateDisplayRows(
         </p>,
       );
       times.endTime.push(
-        <>
+        <div key={weekdayNum}>
           &nbsp;
           <p className="sr-only">
             <FormattedMessage id="ui-calendar.infoPane.display.closed" />
           </p>
-        </>,
+        </div>,
       );
     }
 

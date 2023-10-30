@@ -56,11 +56,13 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     createdBy: useQuery<User>(
       ['ui-calendar', 'users', calendar?.metadata?.createdByUserId],
       () => ky.get(`users/${calendar?.metadata?.createdByUserId}`).json<User>(),
+      { enabled: !!calendar?.metadata?.createdByUserId }
     ).data,
     createdAt: calendar?.metadata?.createdDate,
     updatedBy: useQuery<User>(
       ['ui-calendar', 'users', calendar?.metadata?.updatedByUserId],
       () => ky.get(`users/${calendar?.metadata?.updatedByUserId}`).json<User>(),
+      { enabled: !!calendar?.metadata?.updatedByUserId }
     ).data,
     updatedAt: calendar?.metadata?.updatedDate,
   };
