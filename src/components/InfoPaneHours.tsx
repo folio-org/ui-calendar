@@ -14,7 +14,11 @@ import { isOpen247 } from '../utils/CalendarUtils';
 import { useLocaleWeekdays } from '../utils/WeekdayUtils';
 import css from '../views/panes/InfoPane.css';
 
-export default function InfoPaneHours({ calendar }: { calendar: Calendar }) {
+export default function InfoPaneHours({
+  calendar,
+}: {
+  readonly calendar: Calendar;
+}) {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 

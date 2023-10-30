@@ -140,7 +140,7 @@ export function generateDisplayRows(
   localeWeekdays: LocaleWeekdayInfo[],
   hours: HoursType,
 ) {
-  return localeWeekdays.map((weekday, weekdayNum) => {
+  return localeWeekdays.map((weekday) => {
     const tuples = hours[weekday.weekday];
     const times: {
       startTime: ReactNode[];
@@ -152,12 +152,12 @@ export function generateDisplayRows(
 
     if (tuples.length === 0) {
       times.startTime.push(
-        <p className={css.closed} key={weekdayNum}>
+        <p className={css.closed} key="closed">
           <FormattedMessage id="ui-calendar.infoPane.display.closed" />
         </p>,
       );
       times.endTime.push(
-        <div key={weekdayNum}>
+        <div key="closed">
           &nbsp;
           <p className="sr-only">
             <FormattedMessage id="ui-calendar.infoPane.display.closed" />
