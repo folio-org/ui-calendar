@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## [10.0.1] IN PROGRESS
+
+* Use non-empty close times for closed calendars. Refs UICAL-278
+
 ## [10.0.0] (https://github.com/folio-org/ui-calendar/tree/v10.0.0) (2023-10-11)
 
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UICAL-275

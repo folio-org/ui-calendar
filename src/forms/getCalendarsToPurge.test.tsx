@@ -8,7 +8,6 @@ const mutators = {
   update: jest.fn(),
   delete: jest.fn(),
   dates: jest.fn(),
-  getUser: jest.fn()
 };
 
 test('getCalendarsToPurge works with no criteria and empty calendar', () => {
