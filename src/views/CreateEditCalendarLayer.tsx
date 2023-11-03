@@ -7,6 +7,7 @@ import {
   PaneFooter,
   Paneset,
 } from '@folio/stripes/components';
+import { TitleManager } from '@folio/stripes/core/index.js';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
@@ -109,18 +110,28 @@ export const CreateEditCalendarLayer: FunctionComponent<
     );
   }
 
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+  ' - ' + intl.formatMessage({
+    id:
+      getOpType(props.initialValue, props.isEdit) === OpType.EDIT
+        ? 'ui-calendar.calendarForm.title.edit'
+        : 'ui-calendar.calendarForm.title.create',
+  });
+
   return (
-    <Layer
-      contentLabel={intl.formatMessage({
-        id:
-          getOpType(props.initialValue, props.isEdit) === OpType.EDIT
-            ? 'ui-calendar.calendarForm.title.edit'
-            : 'ui-calendar.calendarForm.title.create',
-      })}
-      isOpen
-    >
-      <Paneset isRoot>{pane}</Paneset>
-    </Layer>
+    <TitleManager page={pageTitle}>
+      <Layer
+        contentLabel={intl.formatMessage({
+          id:
+            getOpType(props.initialValue, props.isEdit) === OpType.EDIT
+              ? 'ui-calendar.calendarForm.title.edit'
+              : 'ui-calendar.calendarForm.title.create',
+        })}
+        isOpen
+      >
+        <Paneset isRoot>{pane}</Paneset>
+      </Layer>
+    </TitleManager>
   );
 };
 export default CreateEditCalendarLayer;

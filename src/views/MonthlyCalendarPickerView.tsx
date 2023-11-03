@@ -7,6 +7,7 @@ import {
   NavListSection,
   Pane
 } from '@folio/stripes/components';
+import { TitleManager } from '@folio/stripes/core/index.js';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
@@ -166,8 +167,13 @@ const MonthlyCalendarPickerView: FunctionComponent<
     );
   });
 
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+  ' - ' + intl.formatMessage({
+    id: 'ui-calendar.monthlyCalendarView.title'
+  }) + (currentRouteId ? ` - ${getServicePoint?.name}` : '');
+
   return (
-    <>
+    <TitleManager page={pageTitle}>
       <Pane
         defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={
@@ -190,7 +196,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
           requestEvents={requestEvents}
         />
       </Route>
-    </>
+    </TitleManager>
   );
 };
 

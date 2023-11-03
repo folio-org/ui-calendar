@@ -1,7 +1,8 @@
 import { ErrorBoundary } from '@folio/stripes/components';
 import { Settings, SettingsProps } from '@folio/stripes/smart-components';
 import React, { FunctionComponent } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { TitleManager } from '@folio/stripes/core/index.js';
 import AllCalendarView from './AllCalendarView';
 import CurrentAssignmentView from './CurrentAssignmentView';
 import MonthlyCalendarPickerView from './MonthlyCalendarPickerView';
@@ -14,6 +15,9 @@ export type CalendarSettingsProps = Omit<
 export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
   props: CalendarSettingsProps
 ) => {
+  const intl = useIntl();
+  const paneTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' });
+
   return (
     <ErrorBoundary>
       <Settings
@@ -22,7 +26,11 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
         pages={[
           {
             route: 'all/',
-            label: <FormattedMessage id="ui-calendar.allCalendarView.title" />,
+            label: (
+              <TitleManager page={paneTitle}>
+                <FormattedMessage id="ui-calendar.allCalendarView.title" />
+              </TitleManager>
+            ),
             component: AllCalendarView,
             perm: 'ui-calendar.view'
           },

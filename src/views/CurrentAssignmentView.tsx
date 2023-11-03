@@ -1,5 +1,6 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+import { TitleManager } from '@folio/stripes/core/index.js';
 import React, { FunctionComponent, ReactNode, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -34,7 +35,7 @@ export const CurrentAssignmentView: FunctionComponent<
   const history = useHistory();
   const currentRouteId = useRouteMatch<{ servicePointId: string }>(
     '/settings/calendar/active/:servicePointId'
-  )?.params?.servicePointId;
+  )?.params?.servicePointId || '';
 
   if (!dataRepository.isLoaded()) {
     return (
@@ -92,8 +93,14 @@ export const CurrentAssignmentView: FunctionComponent<
     };
   });
 
+  const calendarName = dataRepository.getCalendars().filter((c) => c.assignments.includes(currentRouteId))[0]?.name || '';
+
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) + ' - ' + intl.formatMessage({
+    id: 'ui-calendar.currentAssignmentView.title'
+  }) + (calendarName ? ` - ${calendarName}` : '');
+
   return (
-    <>
+    <TitleManager page={pageTitle}>
       <Pane
         paneTitle={
           <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
@@ -226,7 +233,7 @@ export const CurrentAssignmentView: FunctionComponent<
           />
         </Route>
       </Switch>
-    </>
+    </TitleManager>
   );
 };
 
