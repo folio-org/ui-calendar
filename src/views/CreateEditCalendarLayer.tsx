@@ -7,7 +7,7 @@ import {
   PaneFooter,
   Paneset,
 } from '@folio/stripes/components';
-import { TitleManager } from '@folio/stripes/core/index.js';
+import { TitleManager } from '@folio/stripes/core';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';

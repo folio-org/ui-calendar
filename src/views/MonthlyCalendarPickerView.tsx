@@ -7,7 +7,7 @@ import {
   NavListSection,
   Pane
 } from '@folio/stripes/components';
-import { TitleManager } from '@folio/stripes/core/index.js';
+import { TitleManager } from '@folio/stripes/core';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,

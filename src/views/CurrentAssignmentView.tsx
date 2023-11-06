@@ -1,6 +1,5 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
-import { TitleManager } from '@folio/stripes/core/index.js';
+import { IfPermission, TitleManager } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
