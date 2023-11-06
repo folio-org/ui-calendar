@@ -25,7 +25,7 @@ export const IfPermission: FunctionComponent<{
   children: ReactNode | ((props: { hasPermission: boolean }) => ReactNode);
 }>;
 
-export const TitleManager: React.Component<{
+export const TitleManager: FunctionComponent<{
   children?: ReactNode;
   prefix?: string;
   page?: string;
