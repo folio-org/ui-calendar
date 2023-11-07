@@ -7,7 +7,7 @@ import {
   NavListSection,
   Pane
 } from '@folio/stripes/components';
-import { TitleManager } from '@folio/stripes/core';
+import { TitleManager, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
@@ -96,6 +96,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
   Record<string, never>
 > = () => {
   const intl = useIntl();
+  const stripes = useStripes();
   const dataRepository = useDataRepository();
   const [events, setEvents] = useState<
     Record<string, Record<string, ReactNode>>
@@ -173,7 +174,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
   }) + (currentRouteId ? ` - ${getServicePoint?.name}` : '');
 
   return (
-    <TitleManager page={pageTitle}>
+    <TitleManager page={pageTitle} stripes={stripes}>
       <Pane
         defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={

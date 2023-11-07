@@ -80,7 +80,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
 
 
   return (
-    <TitleManager page={pageTitle}>
+    <TitleManager page={pageTitle} stripes={stripes}>
       <Pane
         defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}

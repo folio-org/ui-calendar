@@ -7,7 +7,7 @@ import {
   PaneFooter,
   Paneset,
 } from '@folio/stripes/components';
-import { TitleManager } from '@folio/stripes/core';
+import { TitleManager, useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
@@ -41,6 +41,7 @@ export const CreateEditCalendarLayer: FunctionComponent<
   CreateEditCalendarLayerProps
 > = (props: CreateEditCalendarLayerProps) => {
   const intl = useIntl();
+  const stripes = useStripes();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
@@ -119,7 +120,7 @@ export const CreateEditCalendarLayer: FunctionComponent<
   });
 
   return (
-    <TitleManager page={pageTitle}>
+    <TitleManager page={pageTitle} stripes={stripes}>
       <Layer
         contentLabel={intl.formatMessage({
           id:

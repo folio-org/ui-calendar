@@ -1,5 +1,5 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
-import { IfPermission, TitleManager } from '@folio/stripes/core';
+import { IfPermission, TitleManager, useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -29,6 +29,7 @@ export const CurrentAssignmentView: FunctionComponent<
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
   const dataRepository = useDataRepository();
+  const stripes = useStripes();
 
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
@@ -99,7 +100,7 @@ export const CurrentAssignmentView: FunctionComponent<
   }) + (calendarName ? ` - ${calendarName}` : '');
 
   return (
-    <TitleManager page={pageTitle}>
+    <TitleManager page={pageTitle} stripes={stripes}>
       <Pane
         paneTitle={
           <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
