@@ -5,7 +5,7 @@ import {
   MenuSection,
   Pane
 } from '@folio/stripes/components';
-import { IfPermission, useStripes } from '@folio/stripes/core';
+import { IfPermission, useStripes, TitleManager } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -69,8 +69,18 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
     };
   });
 
+  const calendarName = dataRepository
+    .getCalendars()
+    .filter((c) => c.id === currentRouteId)[0]?.name;
+
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+  ' - ' + intl.formatMessage({
+    id: 'ui-calendar.allCalendarView.title'
+  }) + (calendarName ? ` - ${calendarName}` : '');
+
+
   return (
-    <>
+    <TitleManager page={pageTitle} stripes={stripes}>
       <Pane
         defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         paneTitle={<FormattedMessage id="ui-calendar.allCalendarView.title" />}
@@ -214,7 +224,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
         open={showPurgeModal}
         onClose={() => setShowPurgeModal(false)}
       />
-    </>
+    </TitleManager>
   );
 };
 
