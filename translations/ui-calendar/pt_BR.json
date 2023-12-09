@@ -120,5 +120,6 @@
     "permission.create": "Configurações (Calendário): Pode criar e atribuir novos calendários",
     "permission.update": "Configurações (Calendário): Pode editar e reatribuir calendários existentes",
     "permission.delete": "Configurações (Calendário): Pode excluir calendários existentes",
-    "infoPane.accordion.infoLabel": "Informações do calendário"
+    "infoPane.accordion.infoLabel": "Informações do calendário",
+    "meta.titleSettings": "Configurações do calendário"
 }
