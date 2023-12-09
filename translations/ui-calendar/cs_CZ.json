@@ -120,5 +120,6 @@
     "permission.create": "Nastavení (Kalendář): Může vytvářet a přiřazovat nové kalendáře",
     "permission.update": "Nastavení (Kalendář): Může upravovat a přeřazovat stávající kalendáře.",
     "permission.delete": "Nastavení (Kalendář): Může smazat existující kalendáře",
-    "infoPane.accordion.infoLabel": "Informace z kalendáře"
+    "infoPane.accordion.infoLabel": "Informace z kalendáře",
+    "meta.titleSettings": "Nastavení kalendáře"
 }
