@@ -121,5 +121,5 @@
     "permission.update": "Einstellungen (Kalender): kann bestehende Kalender bearbeiten und neu zuordnen",
     "permission.delete": "Einstellungen (Kalender): kann bestehende Kalender löschen",
     "infoPane.accordion.infoLabel": "Kalenderinformationen",
-    "meta.titleSettings": "Calendar settings"
+    "meta.titleSettings": "Kalendereinstellungen"
 }
