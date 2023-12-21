@@ -2,7 +2,11 @@ import { ErrorBoundary } from '@folio/stripes/components';
 import { Settings, SettingsProps } from '@folio/stripes/smart-components';
 import React, { FunctionComponent } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { TitleManager, useStripes } from '@folio/stripes/core';
+import {
+  FooBar as TitleManager,
+  IfPermission,
+  useStripes,
+} from '@folio/stripes/core';
 import AllCalendarView from './AllCalendarView';
 import CurrentAssignmentView from './CurrentAssignmentView';
 import MonthlyCalendarPickerView from './MonthlyCalendarPickerView';
@@ -23,6 +27,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
 
   return (
     <ErrorBoundary>
+      <IfPermission perm="foo">bar</IfPermission>
       <Settings
         {...props}
         navPaneWidth="30%"

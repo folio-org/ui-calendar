@@ -7,12 +7,14 @@ import {
   PaneFooter,
   Paneset,
 } from '@folio/stripes/components';
-import { TitleManager, useStripes } from '@folio/stripes/core';
+import { useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
 import CalendarForm, { FORM_ID } from '../forms/CalendarForm/CalendarForm';
 import { Calendar } from '../types/types';
+
+const TitleManager = (props: any) => <>{props.children}</>;
 
 export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;

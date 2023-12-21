@@ -7,7 +7,7 @@ import {
   NavListSection,
   Pane,
 } from '@folio/stripes/components';
-import { TitleManager, useStripes } from '@folio/stripes/core';
+import { useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
@@ -28,6 +28,8 @@ import {
   getLocalizedTime,
 } from '../utils/DateUtils';
 import MonthlyCalendarView from './panes/MonthlyCalendarView';
+
+const TitleManager = (props: any) => <>{props.children}</>;
 
 export function dailyOpeningToCalendarDisplay(
   intl: IntlShape,

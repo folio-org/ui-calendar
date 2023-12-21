@@ -1,36 +1,33 @@
 import { Button, LoadingPane, Pane, PaneMenu } from '@folio/stripes/components';
-import { IfPermission, TitleManager, useStripes } from '@folio/stripes/core';
+import { IfPermission, useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef } from 'react';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
-import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { FormattedMessage, useIntl } from 'react-intl';
+import {
+  Route,
+  RouteComponentProps,
+  Switch,
+  useHistory,
+  useRouteMatch,
+} from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import permissions from '../types/permissions';
-import { Calendar, CalendarDTO } from '../types/types';
-import { dateFromYYYYMMDD, getLocalizedDate, isBetweenDatesByDay } from '../utils/DateUtils';
+import { Calendar } from '../types/types';
+import {
+  dateFromYYYYMMDD,
+  getLocalizedDate,
+  isBetweenDatesByDay,
+} from '../utils/DateUtils';
 import getStatus from '../utils/getCurrentStatus';
 import { useLocaleWeekdays } from '../utils/WeekdayUtils';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
 import InfoPane from './panes/InfoPane';
 
-export function getPageTitle(intl: IntlShape, calendar: CalendarDTO | undefined) {
-  const prefix =
-    intl.formatMessage({
-      id: 'ui-calendar.meta.titleSettings',
-    }) +
-    ' - ' +
-    intl.formatMessage({
-      id: 'ui-calendar.currentAssignmentView.title',
-    });
+const TitleManager = (props: any) => <>{props.children}</>;
 
-  if (calendar !== undefined) {
-    return `${prefix} - ${calendar.name}`;
-  } else {
-    return prefix;
-  }
-}
-
-export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = () => {
+export const CurrentAssignmentView: FunctionComponent<
+  Record<string, never>
+> = () => {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
   const dataRepository = useDataRepository();
@@ -39,12 +36,17 @@ export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = (
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
   const currentRouteId =
-    useRouteMatch<{ servicePointId: string }>('/settings/calendar/active/:servicePointId')?.params
-      ?.servicePointId ?? '';
+    useRouteMatch<{ servicePointId: string }>(
+      '/settings/calendar/active/:servicePointId',
+    )?.params?.servicePointId ?? '';
 
   if (!dataRepository.isLoaded()) {
     return (
-      <LoadingPane paneTitle={<FormattedMessage id="ui-calendar.currentAssignmentView.title" />} />
+      <LoadingPane
+        paneTitle={
+          <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
+        }
+      />
     );
   }
 
@@ -60,7 +62,9 @@ export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = (
     });
     if (calendars.length === 0) {
       return {
-        servicePoint: servicePoint.name.concat(servicePoint.inactive ? ' (inactive)' : ''),
+        servicePoint: servicePoint.name.concat(
+          servicePoint.inactive ? ' (inactive)' : '',
+        ),
         servicePointId: servicePoint.id,
         calendarName: (
           <div style={{ fontStyle: 'italic', color: 'grey' }}>
@@ -79,7 +83,9 @@ export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = (
     }
     return {
       servicePointId: servicePoint.id,
-      servicePoint: servicePoint.name.concat(servicePoint.inactive ? ' (inactive)' : ''),
+      servicePoint: servicePoint.name.concat(
+        servicePoint.inactive ? ' (inactive)' : '',
+      ),
       calendarName: calendars[0].name,
       startDate: getLocalizedDate(intl, calendars[0].startDate),
       startDateObj: dateFromYYYYMMDD(calendars[0].startDate),
@@ -90,12 +96,25 @@ export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = (
     };
   });
 
-  const pageTitle = getPageTitle(intl, dataRepository.getCalendar(currentRouteId));
+  const calendarName =
+    dataRepository
+      .getCalendars()
+      .filter((c) => c.assignments.includes(currentRouteId))[0]?.name ?? '';
+
+  const pageTitle =
+    intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+    ' - ' +
+    intl.formatMessage({
+      id: 'ui-calendar.currentAssignmentView.title',
+    }) +
+    (calendarName ? ` - ${calendarName}` : '');
 
   return (
     <TitleManager page={pageTitle} stripes={stripes}>
       <Pane
-        paneTitle={<FormattedMessage id="ui-calendar.currentAssignmentView.title" />}
+        paneTitle={
+          <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
+        }
         defaultWidth={currentRouteId === undefined ? 'fill' : '20%'}
         lastMenu={
           <IfPermission perm={permissions.CREATE}>
@@ -134,20 +153,37 @@ export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = (
             servicePoint: (
               <FormattedMessage id="ui-calendar.currentAssignmentView.column.servicePoint" />
             ),
-            calendarName: <FormattedMessage id="ui-calendar.currentAssignmentView.column.name" />,
-            startDate: <FormattedMessage id="ui-calendar.currentAssignmentView.column.startDate" />,
-            endDate: <FormattedMessage id="ui-calendar.currentAssignmentView.column.endDate" />,
+            calendarName: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.name" />
+            ),
+            startDate: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.startDate" />
+            ),
+            endDate: (
+              <FormattedMessage id="ui-calendar.currentAssignmentView.column.endDate" />
+            ),
             currentStatus: intl.formatMessage({
               id: 'ui-calendar.currentAssignmentView.column.currentStatus',
             }),
           }}
           contentData={rows}
-          rowMetadata={['servicePointId', 'calendar', 'startDateObj', 'endDateObj']}
+          rowMetadata={[
+            'servicePointId',
+            'calendar',
+            'startDateObj',
+            'endDateObj',
+          ]}
           isSelected={({ item }) => {
-            return currentRouteId !== undefined && item.servicePointId === currentRouteId;
+            return (
+              currentRouteId !== undefined &&
+              item.servicePointId === currentRouteId
+            );
           }}
           onRowClick={(_e, info) => {
-            if (info.startDate === '' || info.servicePointId === currentRouteId) {
+            if (
+              info.startDate === '' ||
+              info.servicePointId === currentRouteId
+            ) {
               // no cal assigned or being toggled off
               history.push('/settings/calendar/active/');
             } else {
@@ -199,7 +235,10 @@ export const CurrentAssignmentView: FunctionComponent<Record<string, never>> = (
             onClose={() => {
               history.push('/settings/calendar/active/');
             }}
-            calendar={rows.filter((row) => row.servicePointId === currentRouteId)[0]?.calendar}
+            calendar={
+              rows.filter((row) => row.servicePointId === currentRouteId)[0]
+                ?.calendar
+            }
             dataRepository={dataRepository}
           />
         </Route>

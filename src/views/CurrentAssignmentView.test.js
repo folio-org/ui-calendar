@@ -4,7 +4,7 @@ import '../test/__mocks__/matchMedia.mock';
 import useDataRepository from '../data/useDataRepository';
 import withIntlConfiguration from '../test/util/withIntlConfiguration';
 import withHistoryConfiguration from '../test/util/withHistoryConfiguration';
-import CurrentAssignmentView, { getPageTitle } from './CurrentAssignmentView';
+import CurrentAssignmentView from './CurrentAssignmentView';
 
 jest.mock('../data/useDataRepository');
 
@@ -13,12 +13,14 @@ describe('CurrentAssignmentView', () => {
     beforeEach(() => {
       const mockUseDataRepository = useDataRepository;
       mockUseDataRepository.mockReturnValue({
-        isLoaded: () => false,
+        isLoaded: () => false
       });
     });
 
     it('renders', () => {
-      render(withHistoryConfiguration(withIntlConfiguration(<CurrentAssignmentView />)));
+      render(
+        withHistoryConfiguration(withIntlConfiguration(<CurrentAssignmentView />))
+      );
       expect(screen.getByText('Current calendar assignments')).toBeInTheDocument();
     });
   });
@@ -28,20 +30,13 @@ describe('CurrentAssignmentView', () => {
       const mockUseDataRepository = useDataRepository;
       mockUseDataRepository.mockReturnValue({
         isLoaded: () => true,
-        getCalendar: () => [],
-        getServicePoints: () => [],
+        getCalendars: () => [],
+        getServicePoints: () => []
       });
     });
     it('renders', () => {
       render(withHistoryConfiguration(withIntlConfiguration(<CurrentAssignmentView />)));
       expect(screen.getByText('Current calendar assignments')).toBeInTheDocument();
     });
-  });
-
-  it('has a title with the correct information', () => {
-    expect(getPageTitle({ formatMessage: () => 'test' }, undefined)).toBe('test - test');
-    expect(getPageTitle({ formatMessage: () => 'test' }, { name: 'calendar name' })).toBe(
-      'test - test - calendar name',
-    );
   });
 });

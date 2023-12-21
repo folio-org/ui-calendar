@@ -5,7 +5,7 @@ import {
   MenuSection,
   Pane,
 } from '@folio/stripes/components';
-import { IfPermission, useStripes, TitleManager } from '@folio/stripes/core';
+import { IfPermission, useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -25,6 +25,8 @@ import { formatList } from '../utils/I18nUtils';
 import ifPermissionOr from '../utils/ifPermissionOr';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
 import InfoPane from './panes/InfoPane';
+
+const TitleManager = (props: any) => <>{props.children}</>;
 
 const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
   const intl = useIntl();
