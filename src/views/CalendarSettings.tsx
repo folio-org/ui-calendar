@@ -13,11 +13,13 @@ export type CalendarSettingsProps = Omit<
 >;
 
 export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
-  props: CalendarSettingsProps
+  props: CalendarSettingsProps,
 ) => {
   const intl = useIntl();
   const stripes = useStripes();
-  const paneTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' });
+  const paneTitle = intl.formatMessage({
+    id: 'ui-calendar.meta.titleSettings',
+  });
 
   return (
     <ErrorBoundary>
@@ -33,7 +35,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
               </TitleManager>
             ),
             component: AllCalendarView,
-            perm: 'ui-calendar.view'
+            perm: 'ui-calendar.view',
           },
           {
             route: 'active/',
@@ -41,7 +43,7 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
               <FormattedMessage id="ui-calendar.currentAssignmentView.title" />
             ),
             component: CurrentAssignmentView,
-            perm: 'ui-calendar.view'
+            perm: 'ui-calendar.view',
           },
           {
             route: 'monthly/',
@@ -49,8 +51,8 @@ export const CalendarSettings: FunctionComponent<CalendarSettingsProps> = (
               <FormattedMessage id="ui-calendar.monthlyCalendarView.title" />
             ),
             component: MonthlyCalendarPickerView,
-            perm: 'ui-calendar.view'
-          }
+            perm: 'ui-calendar.view',
+          },
         ]}
         paneTitle={<FormattedMessage id="ui-calendar.meta.title" />}
       />

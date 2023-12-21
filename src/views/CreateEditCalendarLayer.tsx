@@ -111,13 +111,15 @@ export const CreateEditCalendarLayer: FunctionComponent<
     );
   }
 
-  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
-  ' - ' + intl.formatMessage({
-    id:
-      getOpType(props.initialValue, props.isEdit) === OpType.EDIT
-        ? 'ui-calendar.calendarForm.title.edit'
-        : 'ui-calendar.calendarForm.title.create',
-  });
+  const pageTitle =
+    intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+    ' - ' +
+    intl.formatMessage({
+      id:
+        getOpType(props.initialValue, props.isEdit) === OpType.EDIT
+          ? 'ui-calendar.calendarForm.title.edit'
+          : 'ui-calendar.calendarForm.title.create',
+    });
 
   return (
     <TitleManager page={pageTitle} stripes={stripes}>
