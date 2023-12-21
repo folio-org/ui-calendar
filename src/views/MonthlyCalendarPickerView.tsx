@@ -5,9 +5,9 @@ import {
   NavList,
   NavListItem,
   NavListSection,
-  Pane,
+  Pane
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { TitleManager, useStripes } from '@folio/stripes/core';
 import classNames from 'classnames';
 import React, {
   FunctionComponent,
@@ -15,7 +15,7 @@ import React, {
   useCallback,
   useEffect,
   useState,
-  useMemo,
+  useMemo
 } from 'react';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
@@ -25,15 +25,13 @@ import { DailyOpeningInfo } from '../types/types';
 import {
   dateUTCToYYYYMMDD,
   getDateRange,
-  getLocalizedTime,
+  getLocalizedTime
 } from '../utils/DateUtils';
 import MonthlyCalendarView from './panes/MonthlyCalendarView';
 
-const TitleManager = (props: any) => <>{props.children}</>;
-
 export function dailyOpeningToCalendarDisplay(
   intl: IntlShape,
-  openingInfo: DailyOpeningInfo,
+  openingInfo: DailyOpeningInfo
 ): ReactNode {
   let exception: ReactNode = null;
   let status: ReactNode = (
@@ -58,7 +56,7 @@ export function dailyOpeningToCalendarDisplay(
             id="ui-calendar.monthlyCalendarView.day.timeRange"
             values={{
               startTime: getLocalizedTime(intl, opening.startTime),
-              endTime: getLocalizedTime(intl, opening.endTime),
+              endTime: getLocalizedTime(intl, opening.endTime)
             }}
           />
         </p>
@@ -109,10 +107,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
     servicePointId: string;
   }>('/settings/calendar/monthly/:servicePointId')?.params?.servicePointId;
 
-  const getServicePoint = useMemo(
-    () => dataRepository.getServicePointFromId(currentRouteId),
-    [dataRepository, currentRouteId],
-  );
+  const getServicePoint = useMemo(() => dataRepository.getServicePointFromId(currentRouteId), [dataRepository, currentRouteId]);
 
   useEffect(() => {
     if (currentRouteId !== undefined && !(currentRouteId in events)) {
@@ -139,7 +134,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
         const dateRange = await dataRepository.getDailyOpeningInfo(
           servicePointId,
           startDate,
-          endDate,
+          endDate
         );
 
         if (dateRange === null) return;
@@ -152,7 +147,7 @@ const MonthlyCalendarPickerView: FunctionComponent<
         setEvents(newEvents);
       }
     },
-    [dataRepository, currentRouteId, events, intl],
+    [dataRepository, currentRouteId, events, intl]
   );
 
   if (!dataRepository.isLoaded()) {
@@ -173,13 +168,10 @@ const MonthlyCalendarPickerView: FunctionComponent<
     );
   });
 
-  const pageTitle =
-    intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
-    ' - ' +
-    intl.formatMessage({
-      id: 'ui-calendar.monthlyCalendarView.title',
-    }) +
-    (currentRouteId ? ` - ${getServicePoint?.name}` : '');
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+  ' - ' + intl.formatMessage({
+    id: 'ui-calendar.monthlyCalendarView.title'
+  }) + (currentRouteId ? ` - ${getServicePoint?.name}` : '');
 
   return (
     <TitleManager page={pageTitle} stripes={stripes}>

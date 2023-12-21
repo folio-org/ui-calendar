@@ -3,9 +3,9 @@ import {
   Icon,
   LoadingPane,
   MenuSection,
-  Pane,
+  Pane
 } from '@folio/stripes/components';
-import { IfPermission, useStripes } from '@folio/stripes/core';
+import { IfPermission, useStripes, TitleManager } from '@folio/stripes/core';
 import React, { FunctionComponent, ReactNode, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
@@ -13,7 +13,7 @@ import {
   RouteComponentProps,
   Switch,
   useHistory,
-  useRouteMatch,
+  useRouteMatch
 } from 'react-router-dom';
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
@@ -26,8 +26,6 @@ import ifPermissionOr from '../utils/ifPermissionOr';
 import CreateEditCalendarLayer from './CreateEditCalendarLayer';
 import InfoPane from './panes/InfoPane';
 
-const TitleManager = (props: any) => <>{props.children}</>;
-
 const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
   const intl = useIntl();
   const stripes = useStripes();
@@ -37,14 +35,14 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
   const showCreateLayerButtonRef = useRef<HTMLButtonElement>(null);
   const history = useHistory();
   const currentRouteId = useRouteMatch<{ calendarId: string }>(
-    '/settings/calendar/all/:calendarId',
+    '/settings/calendar/all/:calendarId'
   )?.params?.calendarId;
 
   if (!dataRepository.isLoaded()) {
     return (
       <LoadingPane
         paneTitle={intl.formatMessage({
-          id: 'ui-calendar.allCalendarView.title',
+          id: 'ui-calendar.allCalendarView.title'
         })}
       />
     );
@@ -52,7 +50,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
 
   const rows = dataRepository.getCalendars().map((calendar) => {
     const servicePointNames = dataRepository.getServicePointNamesFromIds(
-      calendar.assignments,
+      calendar.assignments
     );
     return {
       name: calendar.name,
@@ -67,7 +65,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
           <FormattedMessage id="ui-calendar.allCalendarView.noAssignments" />
         </div>
       ),
-      calendar,
+      calendar
     };
   });
 
@@ -75,13 +73,11 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
     .getCalendars()
     .filter((c) => c.id === currentRouteId)[0]?.name;
 
-  const pageTitle =
-    intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
-    ' - ' +
-    intl.formatMessage({
-      id: 'ui-calendar.allCalendarView.title',
-    }) +
-    (calendarName ? ` - ${calendarName}` : '');
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+  ' - ' + intl.formatMessage({
+    id: 'ui-calendar.allCalendarView.title'
+  }) + (calendarName ? ` - ${calendarName}` : '');
+
 
   return (
     <TitleManager page={pageTitle} stripes={stripes}>
@@ -122,7 +118,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
                   </Icon>
                 </Button>
               </IfPermission>
-            </MenuSection>,
+            </MenuSection>
           );
         }}
       >
@@ -154,7 +150,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
             ),
             assignments: (
               <FormattedMessage id="ui-calendar.allCalendarView.column.assignments" />
-            ),
+            )
           }}
           contentData={rows}
           rowMetadata={['calendar', 'startDateObj', 'endDateObj']}
@@ -180,7 +176,7 @@ const AllCalendarView: FunctionComponent<Record<string, never>> = () => {
               <CreateEditCalendarLayer
                 dataRepository={dataRepository}
                 initialValue={dataRepository.getCalendar(
-                  new URLSearchParams(location.search).get('source'),
+                  new URLSearchParams(location.search).get('source')
                 )}
                 onClose={(id = '') => {
                   history.push(`/settings/calendar/all/${id}`);

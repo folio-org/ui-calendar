@@ -7,14 +7,12 @@ import {
   PaneFooter,
   Paneset,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { TitleManager, useStripes } from '@folio/stripes/core';
 import React, { FunctionComponent, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DataRepository from '../data/DataRepository';
 import CalendarForm, { FORM_ID } from '../forms/CalendarForm/CalendarForm';
 import { Calendar } from '../types/types';
-
-const TitleManager = (props: any) => <>{props.children}</>;
 
 export interface CreateEditCalendarLayerProps {
   dataRepository: DataRepository;
@@ -113,15 +111,13 @@ export const CreateEditCalendarLayer: FunctionComponent<
     );
   }
 
-  const pageTitle =
-    intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
-    ' - ' +
-    intl.formatMessage({
-      id:
-        getOpType(props.initialValue, props.isEdit) === OpType.EDIT
-          ? 'ui-calendar.calendarForm.title.edit'
-          : 'ui-calendar.calendarForm.title.create',
-    });
+  const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) +
+  ' - ' + intl.formatMessage({
+    id:
+      getOpType(props.initialValue, props.isEdit) === OpType.EDIT
+        ? 'ui-calendar.calendarForm.title.edit'
+        : 'ui-calendar.calendarForm.title.create',
+  });
 
   return (
     <TitleManager page={pageTitle} stripes={stripes}>
