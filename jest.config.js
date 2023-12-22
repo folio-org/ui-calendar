@@ -6,14 +6,14 @@ module.exports = {
 
   preset: 'ts-jest',
   transform: {
-    '^.+\\.(t|j)sx?$': ['ts-jest', { tsconfig: 'src/tsconfig.json' }],
+    '^.+\\.(t|j)sx?$': ['ts-jest', { tsconfig: 'src/tsconfig.json' }]
   },
   transformIgnorePatterns: ['node_modules/(?!@folio|ky)'],
 
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
 
   testMatch: ['**/src/**/?(*.)test.{js,jsx,ts,tsx}'],
-  testPathIgnorePatterns: ['/node_modules/'],
+  testPathIgnorePatterns: ['/node_modules/', 'src/typings/'],
 
   reporters: ['default', 'jest-junit'],
 
@@ -24,7 +24,7 @@ module.exports = {
     '!src/**/*.d.ts',
     '!src/**/*.test.{ts,tsx}',
     '!src/test/**',
-    '!**/node_modules/**',
+    '!**/node_modules/**'
   ],
 
   setupFiles: [join(__dirname, './src/test/setupTests.ts')],
@@ -34,8 +34,8 @@ module.exports = {
     '^.+\\.(css|svg)$': 'identity-obj-proxy',
 
     // Force module uuid to resolve with the CJS entry point, because Jest does not support package.json.exports. See https://github.com/uuidjs/uuid/issues/451
-    uuid: require.resolve('uuid'),
+    uuid: require.resolve('uuid')
   },
 
-  slowTestThreshold: 10,
+  slowTestThreshold: 10
 };
