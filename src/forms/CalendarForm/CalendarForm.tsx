@@ -3,7 +3,6 @@ import {
   AccordionSet,
   Col,
   Datepicker as DateField,
-  DatepickerFieldRenderProps as DateFieldRenderProps,
   ExpandAllButton,
   getLocaleDateFormat,
   getLocalizedTimeFormatInfo,
@@ -11,17 +10,10 @@ import {
   Icon,
   Row,
   TextField,
-  TextFieldRenderProps,
 } from '@folio/stripes/components';
 import { CalloutContext } from '@folio/stripes/core';
 import { FormApi, FORM_ERROR } from 'final-form';
-import React, {
-  FunctionComponent,
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { FunctionComponent, useCallback, useContext, useMemo, useRef } from 'react';
 import { Field, Form } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ExceptionField from '../../components/fields/ExceptionField';
@@ -35,9 +27,6 @@ import onSubmit from './onSubmit';
 import { FormValues, InnerFieldRefs } from './types';
 import validate from './validation/validate';
 
-const TextFieldComponent = TextField<string, TextFieldRenderProps<string>>;
-const DateFieldComponent = DateField<DateFieldRenderProps>;
-
 export const FORM_ID = 'ui-calendar-create-calendar-form';
 
 export interface CreateCalendarFormProps {
@@ -50,7 +39,7 @@ export interface CreateCalendarFormProps {
 }
 
 export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
-  props: CreateCalendarFormProps
+  props: CreateCalendarFormProps,
 ) => {
   const calloutContext = useContext(CalloutContext);
   const intl = useIntl();
@@ -67,10 +56,10 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
         calloutContext,
         intl,
         values,
-        form
+        form,
       );
     },
-    [props, calloutContext, intl]
+    [props, calloutContext, intl],
   );
 
   const localeDateFormat = getLocaleDateFormat({ intl });
@@ -89,7 +78,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       localeDateFormat,
       localeTimeFormat,
       { startDateRef, endDateRef },
-      innerFieldRefs.current
+      innerFieldRefs.current,
     );
   }, [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]);
 
@@ -98,29 +87,15 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       onSubmit={onSubmitCallback}
       validate={validationFunction}
       validateOnBlur
-      initialValues={calendarToInitialValues(
-        props.dataRepository,
-        props.initialValues
-      )}
+      initialValues={calendarToInitialValues(props.dataRepository, props.initialValues)}
       render={(params) => {
-        const {
-          handleSubmit,
-          errors,
-          submitErrors,
-          touched,
-          dirtyFieldsSinceLastSubmit,
-          active,
-        } = params;
+        const { handleSubmit, errors, submitErrors, touched, dirtyFieldsSinceLastSubmit, active } =
+          params;
 
         let topErrorMessage = <></>;
         if (submitErrors?.[FORM_ERROR]) {
           topErrorMessage = (
-            <Headline
-              margin="none"
-              className={css.conflictMessage}
-              weight="medium"
-              size="medium"
-            >
+            <Headline margin="none" className={css.conflictMessage} weight="medium" size="medium">
               <Icon icon="exclamation-circle" status="error" />
               {submitErrors[FORM_ERROR]}
             </Headline>
@@ -137,40 +112,31 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 </Col>
               </Row>
               <Accordion
-                label={
-                  <FormattedMessage id="ui-calendar.calendarForm.category.general" />
-                }
+                label={<FormattedMessage id="ui-calendar.calendarForm.category.general" />}
               >
                 <Row>
                   <Col xs={12} md={6}>
                     <Field
-                      component={TextFieldComponent}
-                      autoFocus
-                      required
                       name="name"
-                      label={
-                        <FormattedMessage id="ui-calendar.calendarForm.field.name" />
-                      }
                       error={
-                        (!dirtyFieldsSinceLastSubmit?.name &&
-                          submitErrors?.name) ||
+                        (!dirtyFieldsSinceLastSubmit?.name && submitErrors?.name) ||
                         ((props.submitAttempted || touched?.name) &&
                           active !== 'name' &&
                           errors?.name)
                       }
+                      render={(fieldProps) => (
+                        <TextField
+                          {...fieldProps}
+                          label={<FormattedMessage id="ui-calendar.calendarForm.field.name" />}
+                          autoFocus
+                          required
+                        />
+                      )}
                     />
                   </Col>
                   <Col xs={12} md={3}>
                     <Field
-                      component={DateFieldComponent}
-                      inputRef={startDateRef}
-                      backendDateStandard="YYYY-MM-DD"
-                      required
-                      usePortal
                       name="start-date"
-                      label={
-                        <FormattedMessage id="ui-calendar.calendarForm.field.startDate" />
-                      }
                       error={
                         (!dirtyFieldsSinceLastSubmit?.['start-date'] &&
                           submitErrors?.['start-date']) ||
@@ -178,26 +144,37 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                           active !== 'start-date' &&
                           errors?.['start-date'])
                       }
+                      render={(fieldProps) => (
+                        <DateField
+                          {...fieldProps}
+                          inputRef={startDateRef}
+                          backendDateStandard="YYYY-MM-DD"
+                          required
+                          usePortal
+                          label={<FormattedMessage id="ui-calendar.calendarForm.field.startDate" />}
+                        />
+                      )}
                     />
                   </Col>
                   <Col xs={12} md={3}>
                     <Field
-                      component={DateFieldComponent}
-                      inputRef={endDateRef}
-                      backendDateStandard="YYYY-MM-DD"
-                      required
-                      usePortal
                       name="end-date"
-                      label={
-                        <FormattedMessage id="ui-calendar.calendarForm.field.endDate" />
-                      }
                       error={
-                        (!dirtyFieldsSinceLastSubmit?.['end-date'] &&
-                          submitErrors?.['end-date']) ||
+                        (!dirtyFieldsSinceLastSubmit?.['end-date'] && submitErrors?.['end-date']) ||
                         ((props.submitAttempted || touched?.['end-date']) &&
                           active !== 'end-date' &&
                           errors?.['end-date'])
                       }
+                      render={(fieldProps) => (
+                        <DateField
+                          {...fieldProps}
+                          inputRef={endDateRef}
+                          backendDateStandard="YYYY-MM-DD"
+                          required
+                          usePortal
+                          label={<FormattedMessage id="ui-calendar.calendarForm.field.endDate" />}
+                        />
+                      )}
                     />
                   </Col>
                 </Row>
@@ -207,9 +184,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 />
               </Accordion>
               <Accordion
-                label={
-                  <FormattedMessage id="ui-calendar.calendarForm.category.hoursOfOperation" />
-                }
+                label={<FormattedMessage id="ui-calendar.calendarForm.category.hoursOfOperation" />}
               >
                 <Field
                   name="hours-of-operation"
@@ -222,9 +197,7 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
                 />
               </Accordion>
               <Accordion
-                label={
-                  <FormattedMessage id="ui-calendar.calendarForm.category.exceptions" />
-                }
+                label={<FormattedMessage id="ui-calendar.calendarForm.category.exceptions" />}
               >
                 <Field
                   name="exceptions"

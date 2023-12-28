@@ -1,8 +1,4 @@
-import {
-  MultiSelection,
-  MultiSelectionFieldRenderProps,
-  OptionSegment
-} from '@folio/stripes/components';
+import { MultiSelection, OptionSegment } from '@folio/stripes/components';
 import fuzzysort from 'fuzzysort';
 import React, { FunctionComponent, ReactNode } from 'react';
 import { Field } from 'react-final-form';
@@ -11,7 +7,7 @@ import { ServicePoint } from '../../types/types';
 
 interface ServicePointAssignmentFieldProps {
   servicePoints: ServicePoint[];
-  error: ReactNode | undefined;
+  error?: ReactNode;
 }
 
 const ServicePointAssignmentField: FunctionComponent<
@@ -19,7 +15,7 @@ const ServicePointAssignmentField: FunctionComponent<
 > = (props: ServicePointAssignmentFieldProps) => {
   const formatter = ({
     option,
-    searchTerm
+    searchTerm,
   }: {
     option: ServicePoint;
     searchTerm: string | undefined;
@@ -45,50 +41,49 @@ const ServicePointAssignmentField: FunctionComponent<
   return (
     <Field
       name="service-points"
-      component={
-        MultiSelection<
-          ServicePoint,
-          MultiSelectionFieldRenderProps<ServicePoint>
-        >
-      }
-      label={
-        <FormattedMessage id="ui-calendar.calendarForm.field.servicePoints" />
-      }
-      formatter={formatter}
-      filter={(filterText: string | undefined, list: ServicePoint[]) => {
-        if (typeof filterText !== 'string' || filterText === '') {
-          return { renderedItems: list, exactMatch: false };
-        }
-
-        // must spread and re-collect into a new array, as the returned array is immutable
-        const results = [
-          ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' })
-        ];
-
-        // score descending, then name ascending
-        // fixes "service point 1".."service point 4" etc having undefined order
-        results.sort((a, b) => {
-          if (a.score === b.score) {
-            return a.target.localeCompare(b.target);
-          }
-          return -(a.score - b.score);
-        });
-
-        return {
-          // retrieve the original service point
-          renderedItems: results.map((result) => result.obj),
-          exactMatch: !!list.filter((sp) => sp.name === filterText).length
-        };
-      }}
-      itemToString={(servicePoint: ServicePoint | undefined) => {
-        if (typeof servicePoint === 'object' && servicePoint !== null) {
-          return servicePoint.name;
-        } else {
-          return '';
-        }
-      }}
-      dataOptions={props.servicePoints}
       error={props.error}
+      render={(fieldProps) => (
+        <MultiSelection<ServicePoint>
+          {...fieldProps}
+          label={
+            <FormattedMessage id="ui-calendar.calendarForm.field.servicePoints" />
+          }
+          formatter={formatter}
+          filter={(filterText: string | undefined, list: ServicePoint[]) => {
+            if (typeof filterText !== 'string' || filterText === '') {
+              return { renderedItems: list, exactMatch: false };
+            }
+
+            // must spread and re-collect into a new array, as the returned array is immutable
+            const results = [
+              ...fuzzysort.go(filterText, props.servicePoints, { key: 'name' }),
+            ];
+
+            // score descending, then name ascending
+            // fixes "service point 1".."service point 4" etc having undefined order
+            results.sort((a, b) => {
+              if (a.score === b.score) {
+                return a.target.localeCompare(b.target);
+              }
+              return -(a.score - b.score);
+            });
+
+            return {
+              // retrieve the original service point
+              renderedItems: results.map((result) => result.obj),
+              exactMatch: !!list.filter((sp) => sp.name === filterText).length,
+            };
+          }}
+          itemToString={(servicePoint: ServicePoint | undefined) => {
+            if (servicePoint) {
+              return servicePoint.name;
+            } else {
+              return '';
+            }
+          }}
+          dataOptions={props.servicePoints}
+        />
+      )}
     />
   );
 };
