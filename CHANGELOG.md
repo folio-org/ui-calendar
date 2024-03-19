@@ -1,11 +1,14 @@
 # Change history for ui-calendar
 
-## [10.0.1] IN PROGRESS
+## [11.0.0] (https://github.com/folio-org/ui-calendar/tree/v11.0.0) (2024-03-19)
+
+* Add page titles. Refs UICAL-272
+* Remove self-contained typings. Refs UICAL-269
+
+## [10.0.1] (https://github.com/folio-org/ui-calendar/tree/v10.0.1) (2023-10-23)
 
 * Use non-empty close times for closed calendars. Refs UICAL-278
 * Fix rendering monthly calendar view issue. Refs UICAL-277
-* Add page titles. Refs UICAL-272
-* Remove self-contained typings. Refs UICAL-269
 
 ## [10.0.0] (https://github.com/folio-org/ui-calendar/tree/v10.0.0) (2023-10-11)
 
