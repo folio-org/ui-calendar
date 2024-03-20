@@ -4,7 +4,7 @@ jest.mock('@folio/stripes/core', () => {
   };
 
   return {
-    ...jest.requireActual('@folio/stripes/core'),
+    CalloutContext: jest.fn(() => ({ sendCallout: jest.fn() })),
     IfInterface: jest.fn(({ name, children }) => {
       return name === 'interface' || name === 'service-points-users' ? children : null;
     }),
@@ -20,7 +20,8 @@ jest.mock('@folio/stripes/core', () => {
       }
     }),
     Pluggable: jest.fn(({ children }) => [children]),
+    TitleManager: jest.fn(({ children }) => children),
     useOkapiKy: jest.fn(),
-    useStripes: () => STRIPES,
+    useStripes: jest.fn(() => STRIPES),
   };
 });

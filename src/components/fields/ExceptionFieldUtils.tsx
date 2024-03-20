@@ -146,7 +146,7 @@ export function getDateField(
       usePortal
       value={innerRow[key]}
       inputRef={(el) => {
-        fieldRefs[key][row.i][innerRow.i] = el;
+        fieldRefs[key][row.i][innerRow.i] = el as HTMLInputElement;
       }}
       error={getInnerRowError(isDirty, error, row.i, innerRow.i, 'startDate')}
       onBlur={() => input.onBlur()}
