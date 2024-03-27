@@ -113,7 +113,7 @@
     "currentAssignmentView.column.startDate": "Start date",
     "currentAssignmentView.column.endDate": "End date",
     "currentAssignmentView.column.currentStatus": "Current status",
-    "monthlyCalendarView.title": "Monthly calendar view",
+    "monthlyCalendarView.title": "月間カレンダー表示",
     "monthlyCalendarView.day.allDay": "All day",
     "monthlyCalendarView.day.closed": "Closed",
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
