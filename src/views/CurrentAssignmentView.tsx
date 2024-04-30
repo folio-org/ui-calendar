@@ -35,7 +35,7 @@ export const CurrentAssignmentView: FunctionComponent<
   const history = useHistory();
   const currentRouteId = useRouteMatch<{ servicePointId: string }>(
     '/settings/calendar/active/:servicePointId'
-  )?.params?.servicePointId ?? '';
+  )?.params?.servicePointId;
 
   if (!dataRepository.isLoaded()) {
     return (
@@ -93,7 +93,7 @@ export const CurrentAssignmentView: FunctionComponent<
     };
   });
 
-  const calendarName = dataRepository.getCalendars().filter((c) => c.assignments.includes(currentRouteId))[0]?.name ?? '';
+  const calendarName = dataRepository.getCalendars().filter((c) => c.assignments.includes(currentRouteId ?? ''))[0]?.name ?? '';
 
   const pageTitle = intl.formatMessage({ id: 'ui-calendar.meta.titleSettings' }) + ' - ' + intl.formatMessage({
     id: 'ui-calendar.currentAssignmentView.title'
