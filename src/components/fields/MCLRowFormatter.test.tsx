@@ -45,5 +45,4 @@ describe('MCLRowFormatter', () => {
     expect((await screen.findByRole('heading')).textContent).toBe('test');
     expect((await screen.findByRole('heading')).parentElement?.className).toBe('test-classname');
   });
-  
 });
