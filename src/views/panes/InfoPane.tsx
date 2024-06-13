@@ -82,12 +82,19 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
       } else {
         exception.openings.sort((a, b) => {
           return Math.sign(
-            new Date(`${a.startDate} ${a.endDate}`).getTime() -
-              new Date(`${b.startDate} ${b.endDate}`).getTime(),
+            new Date(`${a.startDate}`).getTime() -
+              new Date(`${b.startDate}`).getTime(),
           );
         });
         ex.openings.push(exception);
       }
+    });
+
+    ex.openings.sort((a, b) => {
+      return Math.sign(
+        new Date(`${a.startDate}`).getTime() -
+          new Date(`${b.startDate}`).getTime(),
+      );
     });
 
     return {
@@ -108,7 +115,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
     <>
       <Pane
         paneTitle={calendar.name}
-        defaultWidth="fill"
+        defaultWidth="30%"
         centerContent
         onClose={props.onClose}
         dismissible
