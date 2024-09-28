@@ -33,6 +33,7 @@ import ifPermissionOr from '../../utils/ifPermissionOr';
 import css from './InfoPane.css';
 
 const DCB_CALENDAR = 'DCB Calendar';
+
 export interface InfoPaneProps {
   creationBasePath: string;
   editBasePath: string;

@@ -229,11 +229,11 @@ export const SUMMER_SP_4_245: CalendarDTO = {
 };
 
 export const DCB: CalendarDTO = {
-  id: "f3fde29e-59f7-47a6-8109-af6cb92acde5",
-  name:  "DCB Calendar",
-  assignments: ["9d1b77e8-f02e-4b7f-b296-3f2042ddac54"],
+  id: 'f3fde29e-59f7-47a6-8109-af6cb92acde5',
+  name:  'DCB Calendar',
+  assignments: ['9d1b77e8-f02e-4b7f-b296-3f2042ddac54'],
   startDate: '2000-01-01',
   endDate: '2000-04-30',
   normalHours: [],
   exceptions: []
-}
+};
