@@ -120,6 +120,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         onClose={props.onClose}
         dismissible
         actionMenu={({ onToggle }) => {
+          if ( calendar.name === 'DCB Calendar') {
+            return null;
+          }
           return ifPermissionOr(
             stripes,
             [permissions.UPDATE, permissions.CREATE, permissions.DELETE],

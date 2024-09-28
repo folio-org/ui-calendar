@@ -285,6 +285,39 @@ describe('Calendar info pane', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
+  it('should not render action buttons for DCB calendar', async () => {
+    const props = {
+      creationBasePath: '',
+      editBasePath: '',
+      calendar: Calendars.DCB,
+      onClose: jest.fn(),
+      dataRepository: new DataRepository(undefined, undefined, {
+        create: jest.fn(),
+        update: jest.fn(),
+        delete: jest.fn(),
+        dates: jest.fn(),
+      }),
+    };
+
+    render(
+      withEverything(
+        <Paneset>
+          <InfoPane {...props} />
+        </Paneset>,
+      ),
+    );
+
+    // await act(async () => {
+    //   await userEvent.click(screen.getByRole('button', { name: 'Actions' }));
+    // });
+
+    // expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
+    // expect(
+    //   screen.getByRole('button', { name: 'Duplicate' }),
+    // ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+  });
+
   it.skip('handles delete', async () => {
     const props = {
       creationBasePath: '',
