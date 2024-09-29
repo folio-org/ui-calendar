@@ -307,14 +307,6 @@ describe('Calendar info pane', () => {
       ),
     );
 
-    // await act(async () => {
-    //   await userEvent.click(screen.getByRole('button', { name: 'Actions' }));
-    // });
-
-    // expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
-    // expect(
-    //   screen.getByRole('button', { name: 'Duplicate' }),
-    // ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
   });
 
