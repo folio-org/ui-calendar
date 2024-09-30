@@ -32,6 +32,8 @@ import { generateExceptionalOpeningRows } from '../../utils/InfoPaneUtils';
 import ifPermissionOr from '../../utils/ifPermissionOr';
 import css from './InfoPane.css';
 
+const DCB_CALENDAR = 'DCB Calendar';
+
 export interface InfoPaneProps {
   creationBasePath: string;
   editBasePath: string;
@@ -120,6 +122,9 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         onClose={props.onClose}
         dismissible
         actionMenu={({ onToggle }) => {
+          if (calendar.name === DCB_CALENDAR) {
+            return null;
+          }
           return ifPermissionOr(
             stripes,
             [permissions.UPDATE, permissions.CREATE, permissions.DELETE],
