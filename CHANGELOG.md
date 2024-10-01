@@ -3,6 +3,7 @@
 ## In progress
 
 * Disable 'Actions' menu on DCB Calendar. Refs UICAL-285.
+* Use new GitHub Actions workflows. Refs UICAL-287.
 
 ## [11.0.1] (https://github.com/folio-org/ui-calendar/tree/v11.0.1) (2024-05-08)
 
