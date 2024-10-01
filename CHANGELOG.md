@@ -1,5 +1,14 @@
 # Change history for ui-calendar
 
+## In progress
+
+* Disable 'Actions' menu on DCB Calendar. Refs UICAL-285.
+
+## [11.0.1] (https://github.com/folio-org/ui-calendar/tree/v11.0.1) (2024-05-08)
+
+* Address empty fourth pane on open of 'Current calendar assignment'. Refs UICAL-283
+* Fix failing tests. Refs UICAL-281
+
 ## [11.0.0] (https://github.com/folio-org/ui-calendar/tree/v11.0.0) (2024-03-19)
 
 * Add page titles. Refs UICAL-272
