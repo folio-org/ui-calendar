@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## IN PROGRESS
+
+* Fix GitHub Actions workflow not running for tags. Refs FOLIO-4086.
+
 ## [11.0.2] (https://github.com/folio-org/ui-calendar/tree/v11.0.2) (2024-10-01)
 
 * Disable 'Actions' menu on DCB Calendar. Refs UICAL-285.
