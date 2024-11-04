@@ -1,70 +1,71 @@
 # Change history for ui-calendar
 
-## IN PROGRESS
+## [11.0.3](https://github.com/folio-org/ui-calendar/tree/v11.0.3) (2024-11.02)
 
 * Fix GitHub Actions workflow not running for tags. Refs FOLIO-4086.
+* Update translations
 
-## [11.0.2] (https://github.com/folio-org/ui-calendar/tree/v11.0.2) (2024-10-01)
+## [11.0.2](https://github.com/folio-org/ui-calendar/tree/v11.0.2) (2024-10-01)
 
 * Disable 'Actions' menu on DCB Calendar. Refs UICAL-285.
 * Use new GitHub Actions workflows. Refs UICAL-287.
 
-## [11.0.1] (https://github.com/folio-org/ui-calendar/tree/v11.0.1) (2024-05-08)
+## [11.0.1](https://github.com/folio-org/ui-calendar/tree/v11.0.1) (2024-05-08)
 
 * Address empty fourth pane on open of 'Current calendar assignment'. Refs UICAL-283
 * Fix failing tests. Refs UICAL-281
 
-## [11.0.0] (https://github.com/folio-org/ui-calendar/tree/v11.0.0) (2024-03-19)
+## [11.0.0](https://github.com/folio-org/ui-calendar/tree/v11.0.0) (2024-03-19)
 
 * Add page titles. Refs UICAL-272
 * Remove self-contained typings. Refs UICAL-269
 
-## [10.0.1] (https://github.com/folio-org/ui-calendar/tree/v10.0.1) (2023-10-23)
+## [10.0.1](https://github.com/folio-org/ui-calendar/tree/v10.0.1) (2023-10-23)
 
 * Use non-empty close times for closed calendars. Refs UICAL-278
 * Fix rendering monthly calendar view issue. Refs UICAL-277
 
-## [10.0.0] (https://github.com/folio-org/ui-calendar/tree/v10.0.0) (2023-10-11)
+## [10.0.0](https://github.com/folio-org/ui-calendar/tree/v10.0.0) (2023-10-11)
 
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UICAL-275
 * *BREAKING* bump `react` to `18.2.0`. Refs UICAL-270
 * *BREAKING* bump stripes to v9.0.0 for Poppy. Refs UICAL-270
 
-## [9.2.1] (https://github.com/folio-org/ui-calendar/tree/v9.2.1) (2023-03-16)
+## [9.2.1](https://github.com/folio-org/ui-calendar/tree/v9.2.1) (2023-03-16)
 
 * Fix placement of datepicker to prevent overflow. Refs UICAL-240
 
-## [9.2.0] (https://github.com/folio-org/ui-calendar/tree/v9.2.0) (2023-03-01)
+## [9.2.0](https://github.com/folio-org/ui-calendar/tree/v9.2.0) (2023-03-01)
 
 * Update eslint to ignore typings files and allow any in unit tests. Refs UICAL-266
 * Use FOLIO standard metadata display. Refs UICAL-265
 * Fix MCL rendering issues. Refs UICAL-241
 
-## [9.1.0] (https://github.com/folio-org/ui-calendar/tree/v9.1.0) (2023-02-22)
+## [9.1.0](https://github.com/folio-org/ui-calendar/tree/v9.1.0) (2023-02-22)
 
 * Remove Cypress tests. Refs UICAL-260
 
-## [9.0.0] (https://github.com/folio-org/ui-calendar/tree/v9.0.0) (2023-02-17)
+## [9.0.0](https://github.com/folio-org/ui-calendar/tree/v9.0.0) (2023-02-17)
 
 * Upgrade stripes to v8.0.0 for Orchid. Refs UICAL-259
 
-## [8.1.0] (https://github.com/folio-org/ui-calendar/tree/v8.1.0) (2023-02-17)
+## [8.1.0](https://github.com/folio-org/ui-calendar/tree/v8.1.0) (2023-02-17)
 
 * Refactor timepicker usage to reflect new component. Refs UICAL-261
 
-## [8.0.4] (https://github.com/folio-org/ui-calendar/tree/v8.0.4) (2023-02-28)
+## [8.0.4](https://github.com/folio-org/ui-calendar/tree/v8.0.4) (2023-02-28)
 
 * Fix Chrome v110 time formatting changes. Refs UICAL-262
 
-## [8.0.3] (https://github.com/folio-org/ui-calendar/tree/v8.0.3) (2023-02-15)
+## [8.0.3](https://github.com/folio-org/ui-calendar/tree/v8.0.3) (2023-02-15)
 
 * Fix over-aggressive validation of timepicker inputs. Refs UICAL-262
 
-## [8.0.2] (https://github.com/folio-org/ui-calendar/tree/v8.0.2) (2022-11-07)
+## [8.0.2](https://github.com/folio-org/ui-calendar/tree/v8.0.2) (2022-11-07)
 
 * Fix stripes-testing version to non-CI version.
 
-## [8.0.1] (https://github.com/folio-org/ui-calendar/tree/v8.0.1) (2022-11-07)
+## [8.0.1](https://github.com/folio-org/ui-calendar/tree/v8.0.1) (2022-11-07)
 
 * Use replacement permission syntax for automatic permission carryover. Refs UICAL-247
 * Fix end date column sorting in Current Assignment View. Refs UICAL-246
@@ -73,7 +74,7 @@
 * Allow more than ten service points to be chosen from. Refs UICAL-248
 * Fix monthly date view calculations. Refs UICAL-205
 
-## [8.0.0] (https://github.com/folio-org/ui-calendar/tree/v8.0.0) (2022-10-27)
+## [8.0.0](https://github.com/folio-org/ui-calendar/tree/v8.0.0) (2022-10-27)
 
 * Rewrite module in TypeScript
 * Add new layout for accessing calendar information
@@ -82,23 +83,23 @@
 * Use Jest for testing instead of bigtest
 * Use new calendar 5.0 interface (from mod-calendar 2.0.0)
 
-## [7.3.0] (https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
+## [7.3.0](https://github.com/folio-org/ui-calendar/tree/v7.3.0) (2022-10-21)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.2.0...v7.3.0)
 
 * Fixed display of service point in Library Hours. Refs UICAL-230.
 
-## [7.2.0] (https://github.com/folio-org/ui-calendar/tree/v7.2.0) (2022-06-25)
+## [7.2.0](https://github.com/folio-org/ui-calendar/tree/v7.2.0) (2022-06-25)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.1.1...v7.2.0)
 
 * Refactor away from `react-intl-safe-html`. Refs UICAL-142.
 * Update NodeJS to v16 in GitHub Actions. Refs UICAL-202.
 
-## [7.1.1] (https://github.com/folio-org/ui-calendar/tree/v7.1.1) (2022-03-13)
+## [7.1.1](https://github.com/folio-org/ui-calendar/tree/v7.1.1) (2022-03-13)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.1.0...v7.1.1)
 
 * Fix exceptional defaults for opening/closure. Refs UICAL-196
 
-## [7.1.0] (https://github.com/folio-org/ui-calendar/tree/v7.1.0) (2022-02-24)
+## [7.1.0](https://github.com/folio-org/ui-calendar/tree/v7.1.0) (2022-02-24)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.2...v7.1.0)
 
 * Upgrade `@folio/react-intl-safe-html` for compatibility with `@folio/stripes` `v7`. Refs UICAL-173.
@@ -109,17 +110,17 @@
 * Fix Calendar hours displayed off by one day in Regular hours Edit view. Refs UICAL-176.
 * User can save empty "Name" field in editing Exception Period page. Refs UICAL-179.
 
-## [7.0.2] (https://github.com/folio-org/ui-calendar/tree/v7.0.2) (2021-11-12)
+## [7.0.2](https://github.com/folio-org/ui-calendar/tree/v7.0.2) (2021-11-12)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.1...v7.0.2)
 
 * Fix issue when after the transition from summer to winter time, the graphical interface displays Exception Period one day less. Refs UICAL-181.
 
-## [7.0.1] (https://github.com/folio-org/ui-calendar/tree/v7.0.1) (2021-11-11)
+## [7.0.1](https://github.com/folio-org/ui-calendar/tree/v7.0.1) (2021-11-11)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v7.0.0...v7.0.1)
 
 * Fix long exception periods display wrong days and subsequent exception periods display on the wrong days. Refs UICAL-175.
 
-## [7.0.0] (https://github.com/folio-org/ui-calendar/tree/v7.0.0) (2021-09-30)
+## [7.0.0](https://github.com/folio-org/ui-calendar/tree/v7.0.0) (2021-09-30)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.2...v7.0.0)
 
 * Fix import paths. Refs UICAL-139.
@@ -132,17 +133,17 @@
 * Increment `stripes` to `v7`, `react` to `v17`. Refs UICAL-154.
 * Fix issue when viewing library hours causes browser crash after viewing other settings. Refs UICAL-134.
 
-## [6.1.2] (https://github.com/folio-org/ui-calendar/tree/v6.1.2) (2021-08-04)
+## [6.1.2](https://github.com/folio-org/ui-calendar/tree/v6.1.2) (2021-08-04)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.1...v6.1.2)
 
 * Fix failed test. Refs UICAL-150.
 
-## [6.1.1] (https://github.com/folio-org/ui-calendar/tree/v6.1.1) (2021-08-04)
+## [6.1.1](https://github.com/folio-org/ui-calendar/tree/v6.1.1) (2021-08-04)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.1.0...v6.1.1)
 
 * Use react-intl for date formatting. Refs UICAL-148.
 
-## [6.1.0] (https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
+## [6.1.0](https://github.com/folio-org/ui-calendar/tree/v6.1.0) (2021-06-15)
 [Full Changelog](https://github.com/folio-org/ui-calendar/compare/v6.0.0...v6.1.0)
 
 * Update the .gitignore file. Refs UICAL-135.
