@@ -88,7 +88,7 @@
     "infoPane.accordion.exceptions.closures.empty": "Dieser Kalender enthält keine außergewöhnlichen Schließungen.",
     "infoPane.accordion.exceptions.name": "Name",
     "infoPane.accordion.exceptions.start": "Start",
-    "infoPane.accordion.exceptions.end": "Schließen",
+    "infoPane.accordion.exceptions.end": "Ende",
     "infoPane.deletionModal.label": "Löschen bestätigen",
     "infoPane.deletionModal.contents": "Soll der Kalender “{name}” wirklich gelöscht werden?",
     "infoPane.display.closed": "Geschlossen",
