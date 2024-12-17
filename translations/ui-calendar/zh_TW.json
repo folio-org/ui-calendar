@@ -117,9 +117,9 @@
     "monthlyCalendarView.day.allDay": "一整天",
     "monthlyCalendarView.day.closed": "已關閉",
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
-    "permission.create": "設定（日曆）：可以建立和指派新日曆",
-    "permission.update": "設定（日曆）：可以編輯和重新指派現有日曆",
-    "permission.delete": "設定（日曆）：可以刪除現有日曆",
+    "permission.create": "設定 ( 日曆 ) : 可以建立和指派新日曆",
+    "permission.update": "設定 ( 日曆 ) : 可以編輯和重新指派現有日曆",
+    "permission.delete": "設定 ( 日曆 ) : 可以刪除現有日曆",
     "infoPane.accordion.infoLabel": "日曆資訊",
     "meta.titleSettings": "日曆設定"
 }
