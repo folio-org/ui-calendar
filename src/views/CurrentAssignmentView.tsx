@@ -12,7 +12,7 @@ import {
 import SortableMultiColumnList from '../components/SortableMultiColumnList';
 import useDataRepository from '../data/useDataRepository';
 import permissions from '../types/permissions';
-import { Calendar } from '../types/types';
+import { Calendar, CalendarDTO } from '../types/types';
 import {
   dateFromYYYYMMDD,
   getLocalizedDate,
@@ -47,7 +47,17 @@ export const CurrentAssignmentView: FunctionComponent<
     );
   }
 
-  const rows = dataRepository.getServicePoints().map((servicePoint) => {
+  const rows = dataRepository.getServicePoints().map((servicePoint): {
+    servicePoint: string;
+    servicePointId: string;
+    calendarName: ReactNode;
+    startDate: ReactNode;
+    startDateObj?: Date;
+    endDate: ReactNode;
+    endDateObj?: Date;
+    currentStatus: string;
+    calendar: CalendarDTO | null;
+  } => {
     const calendars = dataRepository.getCalendars().filter((calendar) => {
       return (
         isBetweenDatesByDay(
@@ -57,6 +67,7 @@ export const CurrentAssignmentView: FunctionComponent<
         ) && calendar.assignments.includes(servicePoint.id)
       );
     });
+
     if (calendars.length === 0) {
       return {
         servicePoint: servicePoint.name.concat(
