@@ -1,6 +1,6 @@
 {
     "meta.title": "日曆",
-    "permission.view": "設定（日曆）：可以檢視現有日曆",
+    "permission.view": "設定 ( 日曆 ) : 可以檢視現有日曆",
     "midnight": "午夜",
     "calendarForm.title.create": "新增日曆",
     "calendarForm.title.edit": "編輯日曆",
@@ -41,7 +41,7 @@
     "currentStatus.open.nextWeek": "開放至{nextWeekday} {nextTime}",
     "currentStatus.open.sameElse": "開放至{nextDate} {nextTime}",
     "currentStatus.open.otherWeekday": "開放至{nextWeekday} {nextTime}",
-    "currentStatus.open.exceptional.noNext": "開放（ {exceptionName} ）",
+    "currentStatus.open.exceptional.noNext": "開放 ( {exceptionName} )",
     "currentStatus.open.exceptional.sameDay": "開放 ( {exceptionName} ) 直到{nextTime}",
     "currentStatus.open.exceptional.nextDay": "開啟 ( {exceptionName} ) 直到明天{nextTime}",
     "currentStatus.open.exceptional.nextWeek": "開放 ( {exceptionName} ) 直至{nextWeekday} 在{nextTime}",
@@ -117,9 +117,9 @@
     "monthlyCalendarView.day.allDay": "一整天",
     "monthlyCalendarView.day.closed": "已關閉",
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
-    "permission.create": "設定（日曆）：可以建立和指派新日曆",
-    "permission.update": "設定（日曆）：可以編輯和重新指派現有日曆",
-    "permission.delete": "設定（日曆）：可以刪除現有日曆",
+    "permission.create": "設定 ( 日曆 ) : 可以建立和指派新日曆",
+    "permission.update": "設定 ( 日曆 ) : 可以編輯和重新指派現有日曆",
+    "permission.delete": "設定 ( 日曆 ) : 可以刪除現有日曆",
     "infoPane.accordion.infoLabel": "日曆資訊",
     "meta.titleSettings": "日曆設定"
 }
