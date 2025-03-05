@@ -1,5 +1,10 @@
 # Change history for ui-calendar
 
+## In progress
+
+* *Breaking* migrate stripes dependencies to their Sunflower versions. Refs UICAL-292.
+* *Breaking* migrate react-intl to v7. Refs UICAL-293.
+
 ## [11.0.3](https://github.com/folio-org/ui-calendar/tree/v11.0.3) (2024-11.02)
 
 * Fix GitHub Actions workflow not running for tags. Refs FOLIO-4086.
