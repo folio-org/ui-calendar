@@ -1,6 +1,6 @@
 {
     "meta.title": "日历",
-    "permission.view": "设置（日历）：可以查看已有日历",
+    "permission.view": "设置 : 日历 )  : 可以查看已有日历",
     "midnight": "午夜",
     "calendarForm.title.create": "新建日历",
     "calendarForm.title.edit": "编辑日历",
@@ -41,7 +41,7 @@
     "currentStatus.open.nextWeek": "开放至{nextWeekday} 在{nextTime}",
     "currentStatus.open.sameElse": "开放至{nextDate} 在{nextTime}",
     "currentStatus.open.otherWeekday": "开放至{nextWeekday} 在{nextTime}",
-    "currentStatus.open.exceptional.noNext": "开放（ {exceptionName} ）",
+    "currentStatus.open.exceptional.noNext": "开放 :  {exceptionName}  ) ",
     "currentStatus.open.exceptional.sameDay": "开放 ( {exceptionName} ) 直到{nextTime}",
     "currentStatus.open.exceptional.nextDay": "开放 ( {exceptionName} ) 直到明天在{nextTime}",
     "currentStatus.open.exceptional.nextWeek": "开放 ( {exceptionName} ) 至{nextWeekday} 在{nextTime}",
@@ -53,7 +53,7 @@
     "currentStatus.closed.nextWeek": "关闭至{nextWeekday} 在{nextTime}",
     "currentStatus.closed.sameElse": "关闭至{nextDate} 在{nextTime}",
     "currentStatus.closed.otherWeekday": "关闭至{nextWeekday} 在{nextTime}",
-    "currentStatus.closed.exceptional.noNext": "关闭（ {exceptionName} ）",
+    "currentStatus.closed.exceptional.noNext": "关闭 :  {exceptionName}  ) ",
     "currentStatus.closed.exceptional.sameDay": "关闭 ( {exceptionName} ) 直到{nextTime}",
     "currentStatus.closed.exceptional.nextDay": "关闭 ( {exceptionName} ) 直到明天在{nextTime}",
     "currentStatus.closed.exceptional.nextWeek": "关闭 ( {exceptionName} ) 直到{nextWeekday}在{nextTime}",
@@ -117,9 +117,9 @@
     "monthlyCalendarView.day.allDay": "全天",
     "monthlyCalendarView.day.closed": "已关闭",
     "monthlyCalendarView.day.timeRange": "{startTime} – {endTime}",
-    "permission.create": "设置（日历）：可以创建和分配新日历",
-    "permission.update": "设置（日历）：可以编辑和重新分配现有日历",
-    "permission.delete": "设置（日历）：可以删除已有的日历",
+    "permission.create": "设置 : 日历 )  : 可以创建和分配新日历",
+    "permission.update": "设置 : 日历 )  : 可以编辑和重新分配现有日历",
+    "permission.delete": "设置 : 日历 )  : 可以删除已有的日历",
     "infoPane.accordion.infoLabel": "日历信息",
     "meta.titleSettings": "日历设置"
 }
