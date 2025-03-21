@@ -30,7 +30,7 @@
     "calendarForm.error.dateFormat": "請輸入{localeDateFormat}格式的日期",
     "calendarForm.error.dateOrder": "結束日期不得早於開始日期",
     "calendarForm.error.timeFormat": "請輸入{localeTimeFormat}格式的時間",
-    "calendarForm.error.timeOrder": "結束日期/時間不得早於開始日期/時間",
+    "calendarForm.error.timeOrder": "結束日期 / 時間 不得早於 開始日期 / 時間",
     "calendarForm.error.openingConflictError": "有些開放相互衝突",
     "calendarForm.error.exceptionConflictError": "有些例外是互相衝突的",
     "calendarForm.error.internalServerError": "內部伺服器錯誤",
