@@ -21,9 +21,9 @@ export function rowsToOpenings(
       );
     })
     .map((row) => ({
-      startDay: row.startDay as Weekday,
+      startDay: row.startDay,
       startTime: row.startTime,
-      endDay: row.endDay as Weekday,
+      endDay: row.endDay,
       endTime: row.endTime,
     }));
 
@@ -36,7 +36,7 @@ export function rowsToOpenings(
         ((WEEKDAYS[b.startDay] - firstWeekday + 7) % 7)
       );
     }
-    return a.startTime![0].localeCompare(b.endTime![0]);
+    return a.startTime[0].localeCompare(b.endTime[0]);
   });
 
   return providedOpenings;
@@ -61,7 +61,7 @@ export function calculateInitialRows(
   };
 
   providedOpenings
-    .map((o) => ({ ...o, startTime: o.startTime![0], endTime: o.endTime![0] }))
+    .map((o) => ({ ...o, startTime: o.startTime[0], endTime: o.endTime[0] }))
     .flatMap(getWeekdaySpan)
     .forEach((weekday) => {
       weekdaysTouched[weekday] = true;
