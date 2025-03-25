@@ -75,8 +75,8 @@ export function splitOpeningsIntoDays(openings: CalendarOpening[]): HoursType {
   };
 
   openings.forEach((opening) => {
-    const { startTime } = opening;
-    let { endTime } = opening;
+    const startTime = opening.startTime.substring(0, 5);
+    let endTime = opening.endTime.substring(0, 5);
     const span = getWeekdaySpan(opening);
 
     // if the closing time should be considered overnight on the previous day,

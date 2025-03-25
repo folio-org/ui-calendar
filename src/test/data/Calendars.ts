@@ -4,7 +4,7 @@ import {
   SERVICE_POINT_1,
   SERVICE_POINT_2,
   SERVICE_POINT_3,
-  SERVICE_POINT_4
+  SERVICE_POINT_4,
 } from './ServicePoints';
 
 export const SPRING_SP_1_2: CalendarDTO = {
@@ -14,7 +14,7 @@ export const SPRING_SP_1_2: CalendarDTO = {
   startDate: '2000-01-01',
   endDate: '2000-04-30',
   normalHours: [],
-  exceptions: []
+  exceptions: [],
 };
 
 export const SPRING_SP_3_4: CalendarDTO = {
@@ -24,7 +24,7 @@ export const SPRING_SP_3_4: CalendarDTO = {
   startDate: '2000-01-01',
   endDate: '2000-04-30',
   normalHours: [],
-  exceptions: []
+  exceptions: [],
 };
 
 export const SPRING_UNASSIGNED: CalendarDTO = {
@@ -34,7 +34,7 @@ export const SPRING_UNASSIGNED: CalendarDTO = {
   startDate: '2000-01-01',
   endDate: '2000-04-30',
   normalHours: [],
-  exceptions: []
+  exceptions: [],
 };
 
 export const ALL_YEAR_SP_ONLINE_247: CalendarDTO = {
@@ -46,12 +46,12 @@ export const ALL_YEAR_SP_ONLINE_247: CalendarDTO = {
   normalHours: [
     {
       startDay: 'MONDAY',
-      startTime: '00:00',
+      startTime: '00:00:00',
       endDay: 'SUNDAY',
-      endTime: '23:59'
-    }
+      endTime: '23:59:00',
+    },
   ],
-  exceptions: []
+  exceptions: [],
 };
 
 export const SUMMER_SP_1_2: CalendarDTO = {
@@ -63,53 +63,53 @@ export const SUMMER_SP_1_2: CalendarDTO = {
   normalHours: [
     {
       startDay: 'SATURDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'SATURDAY',
-      endTime: '20:00'
+      endTime: '20:00:00',
     },
     {
       startDay: 'MONDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'TUESDAY',
-      endTime: '01:00'
+      endTime: '01:00:00',
     },
     {
       startDay: 'TUESDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'TUESDAY',
-      endTime: '23:00'
+      endTime: '23:00:00',
     },
     {
       startDay: 'WEDNESDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'WEDNESDAY',
-      endTime: '23:00'
+      endTime: '23:00:00',
     },
     {
       startDay: 'THURSDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'THURSDAY',
-      endTime: '23:00'
+      endTime: '23:00:00',
     },
     {
       startDay: 'FRIDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'FRIDAY',
-      endTime: '12:00'
+      endTime: '12:00:00',
     },
     {
       startDay: 'FRIDAY',
-      startTime: '13:30',
+      startTime: '13:30:00',
       endDay: 'FRIDAY',
-      endTime: '20:00'
-    }
+      endTime: '20:00:00',
+    },
   ],
   exceptions: [
     {
       name: 'Sample Holiday',
       startDate: '2000-06-01',
       endDate: '2000-06-01',
-      openings: []
+      openings: [],
     },
     {
       name: 'Community Event (Longer Hours)',
@@ -118,25 +118,25 @@ export const SUMMER_SP_1_2: CalendarDTO = {
       openings: [
         {
           startDate: '2000-05-13',
-          startTime: '07:00',
+          startTime: '07:00:00',
           endDate: '2000-05-13',
-          endTime: '23:59'
+          endTime: '23:59:00',
         },
         {
           startDate: '2000-05-14',
-          startTime: '05:00',
+          startTime: '05:00:00',
           endDate: '2000-05-14',
-          endTime: '21:59'
+          endTime: '21:59:00',
         },
         {
           startDate: '2000-05-15',
-          startTime: '06:00',
+          startTime: '06:00:00',
           endDate: '2000-05-15',
-          endTime: '22:59'
-        }
-      ]
-    }
-  ]
+          endTime: '22:59:00',
+        },
+      ],
+    },
+  ],
 };
 
 export const SUMMER_SP_3: CalendarDTO = {
@@ -148,61 +148,61 @@ export const SUMMER_SP_3: CalendarDTO = {
   normalHours: [
     {
       startDay: 'SUNDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'SUNDAY',
-      endTime: '20:00'
+      endTime: '20:00:00',
     },
     {
       startDay: 'MONDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'TUESDAY',
-      endTime: '01:00'
+      endTime: '01:00:00',
     },
     {
       startDay: 'TUESDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'TUESDAY',
-      endTime: '23:00'
+      endTime: '23:00:00',
     },
     {
       startDay: 'WEDNESDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'WEDNESDAY',
-      endTime: '23:00'
+      endTime: '23:00:00',
     },
     {
       startDay: 'THURSDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'THURSDAY',
-      endTime: '23:00'
+      endTime: '23:00:00',
     },
     {
       startDay: 'FRIDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'FRIDAY',
-      endTime: '12:00'
+      endTime: '12:00:00',
     },
     {
       startDay: 'FRIDAY',
-      startTime: '13:30',
+      startTime: '13:30:00',
       endDay: 'FRIDAY',
-      endTime: '20:00'
+      endTime: '20:00:00',
     },
     {
       startDay: 'SATURDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'SATURDAY',
-      endTime: '20:00'
-    }
+      endTime: '20:00:00',
+    },
   ],
   exceptions: [
     {
       name: 'Remodeling',
       startDate: '2000-05-08',
       endDate: '2000-05-20',
-      openings: []
-    }
-  ]
+      openings: [],
+    },
+  ],
 };
 
 export const SUMMER_SP_4_245: CalendarDTO = {
@@ -214,26 +214,26 @@ export const SUMMER_SP_4_245: CalendarDTO = {
   normalHours: [
     {
       startDay: 'SUNDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'FRIDAY',
-      endTime: '20:00'
+      endTime: '20:00:00',
     },
     {
       startDay: 'SATURDAY',
-      startTime: '09:00',
+      startTime: '09:00:00',
       endDay: 'SATURDAY',
-      endTime: '20:00'
-    }
+      endTime: '20:00:00',
+    },
   ],
-  exceptions: []
+  exceptions: [],
 };
 
 export const DCB: CalendarDTO = {
   id: 'f3fde29e-59f7-47a6-8109-af6cb92acde5',
-  name:  'DCB Calendar',
+  name: 'DCB Calendar',
   assignments: ['9d1b77e8-f02e-4b7f-b296-3f2042ddac54'],
   startDate: '2000-01-01',
   endDate: '2000-04-30',
   normalHours: [],
-  exceptions: []
+  exceptions: [],
 };
