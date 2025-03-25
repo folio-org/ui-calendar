@@ -22,9 +22,9 @@ export interface ExceptionRowState {
   rows: {
     i: number;
     startDate: string | undefined;
-    startTime: string | undefined;
+    startTime: [string, string | null] | undefined;
     endDate: string | undefined;
-    endTime: string | undefined;
+    endTime: [string, string | null] | undefined;
   }[];
 }
 

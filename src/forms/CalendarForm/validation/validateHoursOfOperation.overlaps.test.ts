@@ -51,9 +51,9 @@ test('Single openings produce no overlaps', () => {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: '09:00',
+          startTime: ['09:00', null],
           endDay: Weekdays.Sunday,
-          endTime: '23:00',
+          endTime: ['23:00', null],
         },
       ])
     )
@@ -66,9 +66,9 @@ test('Single openings produce no overlaps', () => {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: '09:00',
+          startTime: ['09:00', null],
           endDay: Weekdays.Monday,
-          endTime: '23:00',
+          endTime: ['23:00', null],
         },
       ])
     )
@@ -83,9 +83,9 @@ test('24/7 openings produce no overlaps', () => {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: '00:00',
+          startTime: ['00:00', null],
           endDay: Weekdays.Sunday,
-          endTime: '23:59',
+          endTime: ['23:59', null],
         },
       ])
     )
@@ -98,9 +98,9 @@ test('24/7 openings produce no overlaps', () => {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: '12:00',
+          startTime: ['12:00', null],
           endDay: Weekdays.Monday,
-          endTime: '11:59',
+          endTime: ['11:59', null],
         },
       ])
     )
@@ -187,9 +187,9 @@ test('Overlapping closures and openings produce overlaps', () => {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Saturday,
-          startTime: '09:00',
+          startTime: ['09:00', null],
           endDay: Weekdays.Tuesday,
-          endTime: '23:00',
+          endTime: ['23:00', null],
         },
         {
           i: 1,
@@ -203,9 +203,9 @@ test('Overlapping closures and openings produce overlaps', () => {
           i: 4,
           type: RowType.Open,
           startDay: Weekdays.Tuesday,
-          startTime: '12:00',
+          startTime: ['12:00', null],
           endDay: Weekdays.Wednesday,
-          endTime: '23:59',
+          endTime: ['23:59', null],
         },
       ])
     )

@@ -1,16 +1,15 @@
 import { Timepicker } from '@folio/stripes/components';
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
-import dayjs from '../../utils/dayjs';
 import css from './hiddenErrorField.css';
 
 export interface TimeFieldProps {
   display: boolean;
-  value: string | undefined;
+  value: [string, string | null] | undefined;
   inputRef: (el: HTMLInputElement) => void;
   error: ReactNode;
   onBlur: () => void;
-  onChange: (newValue: string | undefined) => void;
+  onChange: (newValue: [string, string | null] | undefined) => void;
   className?: string;
 }
 
@@ -21,48 +20,25 @@ export default function TimeField({
   error,
   onBlur,
   className,
-  onChange
+  onChange,
 }: TimeFieldProps) {
   if (!display) return null;
 
-  let valueWithSuffix = value;
-  if (valueWithSuffix !== undefined && !valueWithSuffix.endsWith('Z')) {
-    valueWithSuffix += 'Z';
-  }
-
   return (
-    <div
-      className={classNames(css.hiddenErrorFieldWrapper, className)}
-      title={error?.toString()}
-    >
+    <div className={classNames(css.hiddenErrorFieldWrapper, className)}>
       <Timepicker
         required
-        value={valueWithSuffix}
-        onChange={(_e, newTime) => {
-          onChange(newTime?.substring(0, 5));
-          onBlur();
-        }}
-        inputRef={inputRef}
-        marginBottom0
-        usePortal
-        meta={{
-          touched: true,
-          error
-        }}
-        parser={(time, _timezone, timeFormat) => {
-          if (!time) return '';
-
-          if (time.endsWith('Z')) {
-            return dayjs.utc(time, 'HH:mm').format(timeFormat);
-          }
-
-          if (dayjs.utc(time, timeFormat).isValid()) {
-            return dayjs.utc(time, timeFormat).format(timeFormat);
-          }
-
-          return time;
-        }}
         timeZone="UTC"
+        value={value?.[0]}
+        onChange={(_, newValue, inputValue) => {
+          onChange([newValue, inputValue]);
+          onBlur(); // re-perform validation
+        }}
+        onInput={onBlur}
+        onBlur={onBlur}
+        inputRef={inputRef}
+        useInput
+        error={error}
       />
     </div>
   );

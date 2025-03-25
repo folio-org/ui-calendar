@@ -75,9 +75,9 @@ test('A single-day opening splits correctly', () => {
       i: 5,
       type: RowType.Open,
       startDay: Weekdays.Monday,
-      startTime: '09:00',
+      startTime: ['09:00', null],
       endDay: Weekdays.Monday,
-      endTime: '23:00',
+      endTime: ['23:00', null],
     },
   ]);
   expect(split).toHaveProperty(Weekdays.Sunday, []);
@@ -98,9 +98,9 @@ test('A multi-day opening splits correctly', () => {
       i: 5,
       type: RowType.Open,
       startDay: Weekdays.Monday,
-      startTime: '09:00',
+      startTime: ['09:00', null],
       endDay: Weekdays.Wednesday,
-      endTime: '23:00',
+      endTime: ['23:00', null],
     },
   ]);
   expect(split).toHaveProperty(Weekdays.Sunday, []);
@@ -127,9 +127,9 @@ test('A 24/7 opening splits correctly', () => {
       i: 3,
       type: RowType.Open,
       startDay: Weekdays.Monday,
-      startTime: '00:00',
+      startTime: ['00:00', null],
       endDay: Weekdays.Sunday,
-      endTime: '23:59',
+      endTime: ['23:59', null],
     },
   ]);
   WEEKDAY_INDEX.forEach((weekday) => {
@@ -154,17 +154,17 @@ test('A myriad of openings split correctly', () => {
       i: 3,
       type: RowType.Open,
       startDay: Weekdays.Friday,
-      startTime: '14:00',
+      startTime: ['14:00', null],
       endDay: Weekdays.Friday,
-      endTime: '23:00',
+      endTime: ['23:00', null],
     },
     {
       i: 4,
       type: RowType.Open,
       startDay: Weekdays.Thursday,
-      startTime: '09:00',
+      startTime: ['09:00', null],
       endDay: Weekdays.Friday,
-      endTime: '16:00',
+      endTime: ['16:00', null],
     },
   ]);
 

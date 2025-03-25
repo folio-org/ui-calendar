@@ -19,11 +19,11 @@ describe('ExceptionField', () => {
             onBlur: jest.fn(),
             onChange: jest.fn(),
             onFocus: jest.fn(),
-            value: []
+            value: [],
           }}
           meta={{ touched: true }}
-        />
-      )
+        />,
+      ),
     );
 
     // header and add row button
@@ -53,18 +53,18 @@ describe('ExceptionField', () => {
                   {
                     i: 0,
                     startDate: '2000-01-01',
-                    startTime: '00:00',
+                    startTime: ['00:00:00Z', null],
                     endDate: '2000-01-05',
-                    endTime: '03:00'
+                    endTime: ['03:00:00Z', null],
                   },
                   {
                     i: 1,
                     startDate: '2000-01-06',
-                    startTime: '00:00',
+                    startTime: ['00:00:00Z', null],
                     endDate: '2000-01-08',
-                    endTime: '03:00'
-                  }
-                ]
+                    endTime: ['03:00:00Z', null],
+                  },
+                ],
               },
               {
                 i: 1,
@@ -77,15 +77,15 @@ describe('ExceptionField', () => {
                     startDate: '2000-01-01',
                     startTime: undefined,
                     endDate: '2000-01-05',
-                    endTime: undefined
-                  }
-                ]
-              }
-            ]
+                    endTime: undefined,
+                  },
+                ],
+              },
+            ],
           }}
           meta={{ touched: true }}
-        />
-      )
+        />,
+      ),
     );
 
     // header and add row button
@@ -105,11 +105,11 @@ describe('ExceptionField', () => {
             onBlur: jest.fn(),
             onChange: jest.fn(),
             onFocus: jest.fn(),
-            value: []
+            value: [],
           }}
           meta={{ touched: true }}
-        />
-      )
+        />,
+      ),
     );
 
     // header and add row button
@@ -141,18 +141,18 @@ describe('ExceptionField', () => {
                   {
                     i: 0,
                     startDate: '2000-01-01',
-                    startTime: '00:00',
+                    startTime: ['00:00:00Z', null],
                     endDate: '2000-01-05',
-                    endTime: '03:00'
+                    endTime: ['03:00:00Z', null],
                   },
                   {
                     i: 1,
                     startDate: '2000-01-06',
-                    startTime: '00:00',
+                    startTime: ['00:00:00Z', null],
                     endDate: '2000-01-08',
-                    endTime: '03:00'
-                  }
-                ]
+                    endTime: ['03:00:00Z', null],
+                  },
+                ],
               },
               {
                 i: 1,
@@ -165,15 +165,15 @@ describe('ExceptionField', () => {
                     startDate: '2000-01-01',
                     startTime: undefined,
                     endDate: '2000-01-05',
-                    endTime: undefined
-                  }
-                ]
-              }
-            ]
+                    endTime: undefined,
+                  },
+                ],
+              },
+            ],
           }}
           meta={{ touched: true }}
-        />
-      )
+        />,
+      ),
     );
 
     // header and add row button
@@ -215,24 +215,24 @@ describe('ExceptionField', () => {
                   {
                     i: 0,
                     startDate: '2000-01-01',
-                    startTime: '00:00',
+                    startTime: ['00:00:00Z', null],
                     endDate: '2000-01-05',
-                    endTime: '03:00'
+                    endTime: ['03:00:00Z', null],
                   },
                   {
                     i: 1,
                     startDate: '2000-01-06',
-                    startTime: '00:00',
+                    startTime: ['00:00:00Z', null],
                     endDate: '2000-01-08',
-                    endTime: '03:00'
-                  }
-                ]
-              }
-            ]
+                    endTime: ['03:00:00Z', null],
+                  },
+                ],
+              },
+            ],
           }}
           meta={{ touched: true }}
-        />
-      )
+        />,
+      ),
     );
 
     // header and add row button

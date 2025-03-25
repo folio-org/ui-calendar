@@ -409,9 +409,9 @@ describe('Date/time field generation', () => {
           {
             i: 0,
             startDate: '',
-            startTime: '',
+            startTime: undefined,
             endDate: '',
-            endTime: ''
+            endTime: undefined
           }
         ]
       }

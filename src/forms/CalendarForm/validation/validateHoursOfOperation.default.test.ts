@@ -7,18 +7,10 @@ const localeTimeFormat12 = 'hh:mm A';
 test('No rows is valid', () => {
   // either version is valid
   expect(
-    validateHoursOfOperation(
-      [],
-      { startTime: {}, endTime: {} },
-      localeTimeFormat12
-    )
+    validateHoursOfOperation([], { startTime: {}, endTime: {} }, localeTimeFormat12),
   ).toStrictEqual({ 'hours-of-operation': undefined });
   expect(
-    validateHoursOfOperation(
-      undefined,
-      { startTime: {}, endTime: {} },
-      localeTimeFormat12
-    )
+    validateHoursOfOperation(undefined, { startTime: {}, endTime: {} }, localeTimeFormat12),
   ).toStrictEqual({});
 });
 
@@ -36,8 +28,8 @@ test('Empty errors are reported', () => {
         },
       ],
       { startTime: {}, endTime: {} },
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('hours-of-operation.empty');
 });
 
@@ -49,9 +41,9 @@ test('Invalid time errors are reported', () => {
           i: 2,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', 'invalid'],
           endDay: Weekdays.Tuesday,
-          endTime: '09:00',
+          endTime: ['09:00:00Z', 'invalid'],
         },
       ],
       {
@@ -64,8 +56,8 @@ test('Invalid time errors are reported', () => {
           2: { value: '8:00 AM' },
         } as unknown as Record<number, HTMLInputElement>,
       },
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('hours-of-operation.invalidTimes');
 });
 
@@ -77,9 +69,9 @@ test('Empty has precedence over invalid time errors', () => {
           i: 2,
           type: RowType.Open,
           startDay: undefined,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: undefined,
-          endTime: '09:00',
+          endTime: ['09:00:00Z', null],
         },
       ],
       {
@@ -92,8 +84,8 @@ test('Empty has precedence over invalid time errors', () => {
           2: { value: '8:00 AM' },
         } as unknown as Record<number, HTMLInputElement>,
       },
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('hours-of-operation.empty');
 });
 
@@ -122,7 +114,7 @@ test('Conflicts are reported', () => {
         startTime: {},
         endTime: {},
       },
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('hours-of-operation.conflicts');
 });

@@ -34,57 +34,57 @@ describe('calendar to initial form values conversion', () => {
           i: -1,
           type: RowType.Open,
           startDay: Weekdays.Saturday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Saturday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null]
         },
         {
           i: -2,
           type: RowType.Open,
           startDay: Weekdays.Monday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Tuesday,
-          endTime: '01:00'
+          endTime: ['01:00:00Z', null]
         },
         {
           i: -3,
           type: RowType.Open,
           startDay: Weekdays.Tuesday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Tuesday,
-          endTime: '23:00'
+          endTime: ['23:00:00Z', null]
         },
         {
           i: -4,
           type: RowType.Open,
           startDay: Weekdays.Wednesday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Wednesday,
-          endTime: '23:00'
+          endTime: ['23:00:00Z', null]
         },
         {
           i: -5,
           type: RowType.Open,
           startDay: Weekdays.Thursday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Thursday,
-          endTime: '23:00'
+          endTime: ['23:00:00Z', null]
         },
         {
           i: -6,
           type: RowType.Open,
           startDay: Weekdays.Friday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Friday,
-          endTime: '12:00'
+          endTime: ['12:00:00Z', null]
         },
         {
           i: -7,
           type: RowType.Open,
           startDay: Weekdays.Friday,
-          startTime: '13:30',
+          startTime: ['13:30:00Z', null],
           endDay: Weekdays.Friday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null]
         }
       ],
       exceptions: [
@@ -112,23 +112,23 @@ describe('calendar to initial form values conversion', () => {
             {
               i: -1,
               startDate: '2000-05-13',
-              startTime: '07:00',
+              startTime: ['07:00:00Z', null],
               endDate: '2000-05-13',
-              endTime: '23:59'
+              endTime: ['23:59:00Z', null]
             },
             {
               i: -2,
               startDate: '2000-05-14',
-              startTime: '05:00',
+              startTime: ['05:00:00Z', null],
               endDate: '2000-05-14',
-              endTime: '21:59'
+              endTime: ['21:59:00Z', null]
             },
             {
               i: -3,
               startDate: '2000-05-15',
-              startTime: '06:00',
+              startTime: ['06:00:00Z', null],
               endDate: '2000-05-15',
-              endTime: '22:59'
+              endTime: ['22:59:00Z', null]
             }
           ]
         }

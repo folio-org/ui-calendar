@@ -17,18 +17,15 @@ export interface MCLContentsType extends Record<string, unknown> {
 export interface HoursOfOperationRowState {
   i: number;
   type: RowType;
-  startDay: Weekday | undefined;
-  startTime: string | undefined;
-  endDay: Weekday | undefined;
-  endTime: string | undefined;
+  startDay?: Weekday;
+  startTime?: [string, string | null];
+  endDay?: Weekday;
+  endTime?: [string, string | null];
 }
 
 export type HoursOfOperationErrors = RequireExactlyOne<{
   empty?: {
-    [field in keyof Omit<HoursOfOperationRowState, 'i' | 'type'>]: Record<
-      number,
-      ReactNode
-    >;
+    [field in keyof Omit<Required<HoursOfOperationRowState>, 'i' | 'type'>]: Record<number, ReactNode>;
   };
   invalidTimes?: {
     [field in 'startTime' | 'endTime']: Record<number, ReactNode>;

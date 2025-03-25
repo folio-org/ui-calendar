@@ -1,57 +1,56 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import React from 'react'
-import { IntlProvider } from "react-intl";
-import TimeField from "./TimeField";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { IntlProvider } from 'react-intl';
+import TimeField from './TimeField';
 
 describe('TimeField', () => {
   it('Renders the TimeField correctly', async () => {
     render(
       <IntlProvider locale="en">
         <TimeField
-          display={true}
+          display
           value={undefined}
           inputRef={() => {}}
           error={undefined}
           onBlur={() => {}}
           onChange={() => {}}
         />
-      </IntlProvider>
+      </IntlProvider>,
     );
 
     expect(await screen.findByRole('textbox')).toBeInTheDocument();
     expect(await screen.findByRole('textbox')).toHaveValue('');
   });
 
-  it('Renders nothing when display is false', async () => {
+  it('Renders nothing when display is false', () => {
     render(
       <IntlProvider locale="en">
         <TimeField
           display={false}
-          value='test'
+          value={undefined}
           inputRef={() => {}}
           error={undefined}
           onBlur={() => {}}
           onChange={() => {}}
         />
-      </IntlProvider>
+      </IntlProvider>,
     );
 
-    expect(await screen.queryByRole('textbox')).toBeNull();
+    expect(screen.queryByRole('textbox')).toBeNull();
   });
 
-  it('Formatse time correctly', async () => {
+  it('Formats time correctly', async () => {
     render(
       <IntlProvider locale="en">
         <TimeField
-          display={true}
-          value='12:30:00'
+          display
+          value={['12:30:00Z', null]}
           inputRef={() => {}}
           error={undefined}
           onBlur={() => {}}
           onChange={() => {}}
         />
-      </IntlProvider>
+      </IntlProvider>,
     );
 
     expect(await screen.findByRole('textbox')).toHaveValue('12:30 PM');

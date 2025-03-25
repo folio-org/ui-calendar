@@ -1,23 +1,16 @@
 import { Headline, Icon } from '@folio/stripes/components';
 import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { CalendarOpening, Weekday } from '../../types/types';
-import {
-  getWeekdaySpan,
-  LocaleWeekdayInfo,
-  WEEKDAYS
-} from '../../utils/WeekdayUtils';
+import { Weekday } from '../../types/types';
+import { getWeekdaySpan, LocaleWeekdayInfo, WEEKDAYS } from '../../utils/WeekdayUtils';
 import css from './HoursAndExceptionFields.css';
-import {
-  HoursOfOperationErrors,
-  HoursOfOperationRowState
-} from './HoursOfOperationFieldTypes';
+import { HoursOfOperationErrors, HoursOfOperationRowState } from './HoursOfOperationFieldTypes';
 import RowType from './RowType';
 
 export function rowsToOpenings(
   providedRows: HoursOfOperationRowState[],
-  localeWeekdays: LocaleWeekdayInfo[]
-): CalendarOpening[] {
+  localeWeekdays: LocaleWeekdayInfo[],
+): Pick<Required<HoursOfOperationRowState>, 'startDay' | 'startTime' | 'endDay' | 'endTime'>[] {
   const providedOpenings = providedRows
     .filter((row): row is Required<HoursOfOperationRowState> => {
       return (
@@ -27,14 +20,12 @@ export function rowsToOpenings(
         row.endTime !== undefined
       );
     })
-    .map(
-      (row): CalendarOpening => ({
-        startDay: row.startDay as Weekday,
-        startTime: row.startTime as string,
-        endDay: row.endDay as Weekday,
-        endTime: row.endTime as string
-      })
-    );
+    .map((row) => ({
+      startDay: row.startDay as Weekday,
+      startTime: row.startTime,
+      endDay: row.endDay as Weekday,
+      endTime: row.endTime,
+    }));
 
   const firstWeekday = WEEKDAYS[localeWeekdays[0].weekday];
 
@@ -45,7 +36,7 @@ export function rowsToOpenings(
         ((WEEKDAYS[b.startDay] - firstWeekday + 7) % 7)
       );
     }
-    return a.startTime.localeCompare(b.endTime);
+    return a.startTime![0].localeCompare(b.endTime![0]);
   });
 
   return providedOpenings;
@@ -53,7 +44,7 @@ export function rowsToOpenings(
 
 export function calculateInitialRows(
   providedRows: HoursOfOperationRowState[],
-  localeWeekdays: LocaleWeekdayInfo[]
+  localeWeekdays: LocaleWeekdayInfo[],
 ) {
   const providedOpenings = rowsToOpenings(providedRows, localeWeekdays);
   let count = 0;
@@ -66,12 +57,15 @@ export function calculateInitialRows(
     WEDNESDAY: false,
     THURSDAY: false,
     FRIDAY: false,
-    SATURDAY: false
+    SATURDAY: false,
   };
 
-  providedOpenings.flatMap(getWeekdaySpan).forEach((weekday) => {
-    weekdaysTouched[weekday] = true;
-  });
+  providedOpenings
+    .map((o) => ({ ...o, startTime: o.startTime![0], endTime: o.endTime![0] }))
+    .flatMap(getWeekdaySpan)
+    .forEach((weekday) => {
+      weekdaysTouched[weekday] = true;
+    });
 
   const rows: HoursOfOperationRowState[] = [];
 
@@ -86,7 +80,7 @@ export function calculateInitialRows(
         rows.push({
           i: count,
           type: RowType.Open,
-          ...providedOpenings[openingIndex]
+          ...providedOpenings[openingIndex],
         });
         openingIndex++;
         count++;
@@ -108,7 +102,7 @@ export function calculateInitialRows(
         startDay: weekdays[weekdayIndex],
         startTime: undefined,
         endDay: weekdays[endingWeekdayIndex],
-        endTime: undefined
+        endTime: undefined,
       });
 
       count++;
@@ -120,7 +114,7 @@ export function calculateInitialRows(
 
 export function isRowConflicted(
   error: HoursOfOperationErrors | undefined,
-  rowIndex: number
+  rowIndex: number,
 ): boolean {
   return !!error?.conflicts?.has(rowIndex);
 }
@@ -130,7 +124,7 @@ export function getWeekdayError(
   error: HoursOfOperationErrors | undefined,
   rowIndex: number,
   submitAttempted: boolean,
-  touched: boolean | undefined
+  touched: boolean | undefined,
 ): ReactNode {
   if (!submitAttempted && !touched) {
     return undefined;
@@ -143,27 +137,20 @@ export function getTimeError(
   error: HoursOfOperationErrors | undefined,
   rowIndex: number,
   submitAttempted: boolean,
-  touched: boolean | undefined
+  touched: boolean | undefined,
 ): ReactNode {
   if ((!submitAttempted && !touched) || error === undefined) {
     return undefined;
   }
-  return error.empty?.[key][rowIndex] || error.invalidTimes?.[key][rowIndex];
+  return error.empty?.[key]?.[rowIndex] || error.invalidTimes?.[key][rowIndex];
 }
 
-export function getConflictError(
-  error: HoursOfOperationErrors | undefined
-): ReactNode {
+export function getConflictError(error: HoursOfOperationErrors | undefined): ReactNode {
   if (!error?.conflicts?.size) {
     return undefined;
   }
   return (
-    <Headline
-      margin="none"
-      className={css.conflictMessage}
-      weight="medium"
-      size="medium"
-    >
+    <Headline margin="none" className={css.conflictMessage} weight="medium" size="medium">
       <Icon icon="exclamation-circle" status="error" />
       <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
     </Headline>

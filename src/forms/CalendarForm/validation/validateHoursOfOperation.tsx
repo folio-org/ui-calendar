@@ -15,9 +15,9 @@ import { isTimeProper } from './validateDateTime';
 
 /** Ensure normal openings have filled in times/days */
 export function validateHoursOfOperationEmpty(
-  rows: HoursOfOperationRowState[]
+  rows: HoursOfOperationRowState[],
 ): HoursOfOperationErrors | undefined {
-  const emptyErrors: HoursOfOperationErrors['empty'] = {
+  const emptyErrors: Required<HoursOfOperationErrors>['empty'] = {
     startDay: {},
     startTime: {},
     endDay: {},
@@ -34,9 +34,7 @@ export function validateHoursOfOperationEmpty(
       hasError = true;
     }
     if (row.endDay === undefined) {
-      emptyErrors.endDay[row.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
+      emptyErrors.endDay[row.i] = <FormattedMessage id="stripes-core.label.missingRequiredField" />;
       hasError = true;
     }
     if (row.type === RowType.Open) {
@@ -66,7 +64,7 @@ export function validateHoursOfOperationEmpty(
 export function validateHoursOfOperationTimes(
   rows: HoursOfOperationRowState[],
   timeFieldRefs: InnerFieldRefs['hoursOfOperation'],
-  localeTimeFormat: string
+  localeTimeFormat: string,
 ): HoursOfOperationErrors | undefined {
   const invalidTimeErrors: HoursOfOperationErrors['invalidTimes'] = {
     startTime: {},
@@ -77,13 +75,7 @@ export function validateHoursOfOperationTimes(
     if (row.type === RowType.Closed) {
       return;
     }
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        row.startTime as string,
-        timeFieldRefs.startTime[row.i]?.value
-      )
-    ) {
+    if (!isTimeProper(row.startTime?.[1], timeFieldRefs.startTime[row.i]?.value)) {
       invalidTimeErrors.startTime[row.i] = (
         <FormattedMessage
           id="ui-calendar.calendarForm.error.timeFormat"
@@ -91,13 +83,7 @@ export function validateHoursOfOperationTimes(
         />
       );
     }
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        row.endTime as string,
-        timeFieldRefs.endTime[row.i]?.value
-      )
-    ) {
+    if (!isTimeProper(row.endTime?.[1], timeFieldRefs.endTime[row.i]?.value)) {
       invalidTimeErrors.endTime[row.i] = (
         <FormattedMessage
           id="ui-calendar.calendarForm.error.timeFormat"
@@ -119,7 +105,7 @@ export function validateHoursOfOperationTimes(
 
 /** Split rows into weekday ranges */
 export function splitRowsIntoWeekdays(
-  rows: HoursOfOperationRowState[]
+  rows: HoursOfOperationRowState[],
 ): Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]> {
   const split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]> = {
     MONDAY: [],
@@ -138,14 +124,14 @@ export function splitRowsIntoWeekdays(
     const row: HoursOfOperationRowState = { ..._row };
 
     if (row.type === RowType.Closed) {
-      row.startTime = '00:00';
-      row.endTime = '23:59';
+      row.startTime = ['00:00', null];
+      row.endTime = ['23:59', null];
     }
     const opening: CalendarOpening = {
       startDay: row.startDay as Weekday,
-      startTime: row.startTime as string,
+      startTime: row.startTime![0].substring(0, 5),
       endDay: row.endDay as Weekday,
-      endTime: row.endTime as string,
+      endTime: row.endTime![0].substring(0, 5),
     };
 
     const span = getWeekdaySpan(opening);
@@ -153,12 +139,14 @@ export function splitRowsIntoWeekdays(
       let start = baseStart;
       let end = baseEnd;
 
-      const startTime = opening.startTime
-        .split(':')
-        .map((num) => parseInt(num, 10)) as [number, number];
-      const endTime = opening.endTime
-        .split(':')
-        .map((num) => parseInt(num, 10)) as [number, number];
+      const startTime = opening.startTime.split(':').map((num) => parseInt(num, 10)) as [
+        number,
+        number,
+      ];
+      const endTime = opening.endTime.split(':').map((num) => parseInt(num, 10)) as [
+        number,
+        number,
+      ];
 
       if (i === 0) {
         start = start.hour(startTime[0]).minute(startTime[1]);
@@ -180,7 +168,7 @@ export function splitRowsIntoWeekdays(
 
 /** Check for hours of operation overlaps */
 export function validateHoursOfOperationOverlaps(
-  split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]>
+  split: Record<Weekday, { start: Dayjs; end: Dayjs; row: number }[]>,
 ): HoursOfOperationErrors | undefined {
   const conflicts = new Set<number>();
 
@@ -188,12 +176,7 @@ export function validateHoursOfOperationOverlaps(
     for (let i = 0; i < timeRanges.length - 1; i++) {
       for (let j = i + 1; j < timeRanges.length; j++) {
         if (
-          overlaps(
-            timeRanges[i].start,
-            timeRanges[i].end,
-            timeRanges[j].start,
-            timeRanges[j].end
-          )
+          overlaps(timeRanges[i].start, timeRanges[i].end, timeRanges[j].start, timeRanges[j].end)
         ) {
           conflicts.add(timeRanges[i].row);
           conflicts.add(timeRanges[j].row);
@@ -213,7 +196,7 @@ export function validateHoursOfOperationOverlaps(
 export default function validateHoursOfOperation(
   rows: HoursOfOperationRowState[] | undefined,
   timeFieldRefs: InnerFieldRefs['hoursOfOperation'],
-  localeTimeFormat: string
+  localeTimeFormat: string,
 ): {
   'hours-of-operation'?: HoursOfOperationErrors;
 } {
@@ -224,11 +207,7 @@ export default function validateHoursOfOperation(
     return { 'hours-of-operation': emptyError };
   }
 
-  const timeError = validateHoursOfOperationTimes(
-    rows,
-    timeFieldRefs,
-    localeTimeFormat
-  );
+  const timeError = validateHoursOfOperationTimes(rows, timeFieldRefs, localeTimeFormat);
   if (timeError !== undefined) {
     return { 'hours-of-operation': timeError };
   }

@@ -75,9 +75,9 @@ describe('HoursOfOperationField', () => {
                 i: 0,
                 type: RowType.Open,
                 startDay: Weekdays.Wednesday,
-                startTime: '00:00',
+                startTime: ['00:00:00Z', null],
                 endDay: Weekdays.Wednesday,
-                endTime: '20:00'
+                endTime: ['20:00:00Z', null]
               }
             ]
           }}
@@ -110,9 +110,9 @@ describe('HoursOfOperationField', () => {
                 i: 0,
                 type: RowType.Open,
                 startDay: Weekdays.Wednesday,
-                startTime: '00:00',
+                startTime: ['00:00:00Z', null],
                 endDay: Weekdays.Wednesday,
-                endTime: '20:00'
+                endTime: ['20:00:00Z', null]
               }
             ]
           }}
