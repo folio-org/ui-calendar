@@ -11,16 +11,16 @@ test('No rows/undefined rows is a valid state', () => {
       [],
       { startDate: {}, startTime: {}, endDate: {}, endTime: {} },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('exceptions', undefined);
   expect(
     validateExceptions(
       undefined,
       { startDate: {}, startTime: {}, endDate: {}, endTime: {} },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toStrictEqual({});
 });
 
@@ -46,8 +46,8 @@ test('Empty errors are reported alone', () => {
       ],
       { startDate: {}, startTime: {}, endDate: {}, endTime: {} },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('exceptions.empty.startDate.2.3');
 });
 
@@ -78,8 +78,8 @@ test('Invalid errors are reported appropriately', () => {
         endTime: {},
       },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('exceptions.invalid.startDate.0.0');
 });
 
@@ -131,8 +131,8 @@ test('Inter-row overlaps are reported appropriately', () => {
         endTime: {},
       },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('exceptions.interConflicts', new Set([1, 2]));
 });
 
@@ -149,16 +149,16 @@ test('Intra-row overlaps are reported appropriately', () => {
             {
               i: 0,
               startDate: '2000-01-01',
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDate: '2000-01-05',
-              endTime: '13:00',
+              endTime: ['13:00:00Z', null],
             },
             {
               i: 1,
               startDate: '2000-01-05',
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDate: '2000-01-08',
-              endTime: '23:00',
+              endTime: ['23:00:00Z', null],
             },
           ],
         },
@@ -180,8 +180,8 @@ test('Intra-row overlaps are reported appropriately', () => {
         endTime: {},
       },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('exceptions.intraConflicts.1', new Set([0, 1]));
 });
 
@@ -198,16 +198,16 @@ test('Valid states are reported appropriately', () => {
             {
               i: 0,
               startDate: '2000-01-01',
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDate: '2000-01-04',
-              endTime: '13:00',
+              endTime: ['13:00:00Z', null],
             },
             {
               i: 1,
               startDate: '2000-01-05',
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDate: '2000-01-08',
-              endTime: '23:00',
+              endTime: ['23:00:00Z', null],
             },
           ],
         },
@@ -229,7 +229,7 @@ test('Valid states are reported appropriately', () => {
         endTime: {},
       },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toHaveProperty('exceptions', undefined);
 });

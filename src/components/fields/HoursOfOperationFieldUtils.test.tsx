@@ -6,7 +6,7 @@ import {
   getConflictError,
   getTimeError,
   getWeekdayError,
-  isRowConflicted
+  isRowConflicted,
 } from './HoursOfOperationFieldUtils';
 import RowType from './RowType';
 
@@ -17,7 +17,7 @@ const localeWeekdaysSunday: LocaleWeekdayInfo[] = [
   { weekday: Weekdays.Wednesday, short: 'XXXXX', long: 'XXXXXXXX' },
   { weekday: Weekdays.Thursday, short: 'XXXXX', long: 'XXXXXXXX' },
   { weekday: Weekdays.Friday, short: 'XXXXX', long: 'XXXXXXXX' },
-  { weekday: Weekdays.Saturday, short: 'XXXXX', long: 'XXXXXXXX' }
+  { weekday: Weekdays.Saturday, short: 'XXXXX', long: 'XXXXXXXX' },
 ];
 
 const localeWeekdaysWednesday: LocaleWeekdayInfo[] = [
@@ -27,23 +27,21 @@ const localeWeekdaysWednesday: LocaleWeekdayInfo[] = [
   { weekday: Weekdays.Saturday, short: 'XXXXX', long: 'XXXXXXXX' },
   { weekday: Weekdays.Sunday, short: 'XXXXX', long: 'XXXXXXXX' },
   { weekday: Weekdays.Monday, short: 'XXXXX', long: 'XXXXXXXX' },
-  { weekday: Weekdays.Tuesday, short: 'XXXXX', long: 'XXXXXXXX' }
+  { weekday: Weekdays.Tuesday, short: 'XXXXX', long: 'XXXXXXXX' },
 ];
 
 describe('Hours of operation utilities work correctly', () => {
   describe('initial rows are correctly created', () => {
     test('No rows result in filler closed rows', () => {
-      expect(
-        calculateInitialRows([], localeWeekdaysWednesday).rows
-      ).toStrictEqual([
+      expect(calculateInitialRows([], localeWeekdaysWednesday).rows).toStrictEqual([
         {
           i: 0,
           type: RowType.Closed,
           startDay: Weekdays.Wednesday,
           startTime: undefined,
           endDay: Weekdays.Tuesday,
-          endTime: undefined
-        }
+          endTime: undefined,
+        },
       ]);
     });
 
@@ -55,13 +53,13 @@ describe('Hours of operation utilities work correctly', () => {
               i: 0,
               type: RowType.Open,
               startDay: Weekdays.Wednesday,
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDay: Weekdays.Wednesday,
-              endTime: '20:00'
-            }
+              endTime: ['20:00:00Z', null],
+            },
           ],
-          localeWeekdaysSunday
-        ).rows
+          localeWeekdaysSunday,
+        ).rows,
       ).toStrictEqual([
         {
           i: 0,
@@ -69,15 +67,15 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Sunday,
           startTime: undefined,
           endDay: Weekdays.Tuesday,
-          endTime: undefined
+          endTime: undefined,
         },
         {
           i: 1,
           type: RowType.Open,
           startDay: Weekdays.Wednesday,
-          startTime: '00:00',
+          startTime: ['00:00:00Z', null],
           endDay: Weekdays.Wednesday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null],
         },
         {
           i: 2,
@@ -85,8 +83,8 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Thursday,
           startTime: undefined,
           endDay: Weekdays.Saturday,
-          endTime: undefined
-        }
+          endTime: undefined,
+        },
       ]);
 
       expect(
@@ -96,29 +94,29 @@ describe('Hours of operation utilities work correctly', () => {
               i: 0,
               type: RowType.Open,
               startDay: Weekdays.Sunday,
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDay: Weekdays.Sunday,
-              endTime: '20:00'
+              endTime: ['20:00:00Z', null],
             },
             {
               i: 1,
               type: RowType.Open,
               startDay: Weekdays.Saturday,
-              startTime: '02:00',
+              startTime: ['02:00:00Z', null],
               endDay: Weekdays.Saturday,
-              endTime: '22:00'
-            }
+              endTime: ['22:00:00Z', null],
+            },
           ],
-          localeWeekdaysSunday
-        ).rows
+          localeWeekdaysSunday,
+        ).rows,
       ).toStrictEqual([
         {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Sunday,
-          startTime: '00:00',
+          startTime: ['00:00:00Z', null],
           endDay: Weekdays.Sunday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null],
         },
         {
           i: 1,
@@ -126,16 +124,16 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Monday,
           startTime: undefined,
           endDay: Weekdays.Friday,
-          endTime: undefined
+          endTime: undefined,
         },
         {
           i: 2,
           type: RowType.Open,
           startDay: Weekdays.Saturday,
-          startTime: '02:00',
+          startTime: ['02:00:00Z', null],
           endDay: Weekdays.Saturday,
-          endTime: '22:00'
-        }
+          endTime: ['22:00:00Z', null],
+        },
       ]);
     });
 
@@ -147,13 +145,13 @@ describe('Hours of operation utilities work correctly', () => {
               i: 0,
               type: RowType.Open,
               startDay: Weekdays.Friday,
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDay: Weekdays.Monday,
-              endTime: '20:00'
-            }
+              endTime: ['20:00:00Z', null],
+            },
           ],
-          localeWeekdaysSunday
-        ).rows
+          localeWeekdaysSunday,
+        ).rows,
       ).toStrictEqual([
         {
           i: 0,
@@ -161,16 +159,16 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Tuesday,
           startTime: undefined,
           endDay: Weekdays.Thursday,
-          endTime: undefined
+          endTime: undefined,
         },
         {
           i: 1,
           type: RowType.Open,
           startDay: Weekdays.Friday,
-          startTime: '00:00',
+          startTime: ['00:00:00Z', null],
           endDay: Weekdays.Monday,
-          endTime: '20:00'
-        }
+          endTime: ['20:00:00Z', null],
+        },
       ]);
 
       expect(
@@ -180,13 +178,13 @@ describe('Hours of operation utilities work correctly', () => {
               i: 0,
               type: RowType.Open,
               startDay: Weekdays.Friday,
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDay: Weekdays.Monday,
-              endTime: '20:00'
-            }
+              endTime: ['20:00:00Z', null],
+            },
           ],
-          localeWeekdaysWednesday
-        ).rows
+          localeWeekdaysWednesday,
+        ).rows,
       ).toStrictEqual([
         {
           i: 0,
@@ -194,15 +192,15 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Wednesday,
           startTime: undefined,
           endDay: Weekdays.Thursday,
-          endTime: undefined
+          endTime: undefined,
         },
         {
           i: 1,
           type: RowType.Open,
           startDay: Weekdays.Friday,
-          startTime: '00:00',
+          startTime: ['00:00:00Z', null],
           endDay: Weekdays.Monday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null],
         },
         {
           i: 2,
@@ -210,8 +208,8 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Tuesday,
           startTime: undefined,
           endDay: Weekdays.Tuesday,
-          endTime: undefined
-        }
+          endTime: undefined,
+        },
       ]);
     });
 
@@ -223,37 +221,37 @@ describe('Hours of operation utilities work correctly', () => {
               i: 0,
               type: RowType.Open,
               startDay: Weekdays.Sunday,
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDay: Weekdays.Sunday,
-              endTime: '04:00'
+              endTime: ['04:00:00Z', null],
             },
             {
               i: 1,
               type: RowType.Open,
               startDay: Weekdays.Sunday,
-              startTime: '09:00',
+              startTime: ['09:00:00Z', null],
               endDay: Weekdays.Sunday,
-              endTime: '20:00'
-            }
+              endTime: ['20:00:00Z', null],
+            },
           ],
-          localeWeekdaysSunday
-        ).rows
+          localeWeekdaysSunday,
+        ).rows,
       ).toStrictEqual([
         {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Sunday,
-          startTime: '00:00',
+          startTime: ['00:00:00Z', null],
           endDay: Weekdays.Sunday,
-          endTime: '04:00'
+          endTime: ['04:00:00Z', null],
         },
         {
           i: 1,
           type: RowType.Open,
           startDay: Weekdays.Sunday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Sunday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null],
         },
         {
           i: 2,
@@ -261,8 +259,8 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Monday,
           startTime: undefined,
           endDay: Weekdays.Saturday,
-          endTime: undefined
-        }
+          endTime: undefined,
+        },
       ]);
 
       expect(
@@ -272,37 +270,37 @@ describe('Hours of operation utilities work correctly', () => {
               i: 0,
               type: RowType.Open,
               startDay: Weekdays.Sunday,
-              startTime: '09:00',
+              startTime: ['09:00:00Z', null],
               endDay: Weekdays.Sunday,
-              endTime: '20:00'
+              endTime: ['20:00:00Z', null],
             },
             {
               i: 1,
               type: RowType.Open,
               startDay: Weekdays.Sunday,
-              startTime: '00:00',
+              startTime: ['00:00:00Z', null],
               endDay: Weekdays.Sunday,
-              endTime: '04:00'
-            }
+              endTime: ['04:00:00Z', null],
+            },
           ],
-          localeWeekdaysSunday
-        ).rows
+          localeWeekdaysSunday,
+        ).rows,
       ).toStrictEqual([
         {
           i: 0,
           type: RowType.Open,
           startDay: Weekdays.Sunday,
-          startTime: '00:00',
+          startTime: ['00:00:00Z', null],
           endDay: Weekdays.Sunday,
-          endTime: '04:00'
+          endTime: ['04:00:00Z', null],
         },
         {
           i: 1,
           type: RowType.Open,
           startDay: Weekdays.Sunday,
-          startTime: '09:00',
+          startTime: ['09:00:00Z', null],
           endDay: Weekdays.Sunday,
-          endTime: '20:00'
+          endTime: ['20:00:00Z', null],
         },
         {
           i: 2,
@@ -310,8 +308,8 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: Weekdays.Monday,
           startTime: undefined,
           endDay: Weekdays.Saturday,
-          endTime: undefined
-        }
+          endTime: undefined,
+        },
       ]);
     });
   });
@@ -320,21 +318,14 @@ describe('Hours of operation utilities work correctly', () => {
     test('Levels of undefined-ness', () => {
       expect(isRowConflicted(undefined, 0)).toBe(false);
       expect(
-        isRowConflicted(
-          { empty: { startDay: {}, startTime: {}, endDay: {}, endTime: {} } },
-          0
-        )
+        isRowConflicted({ empty: { startDay: {}, startTime: {}, endDay: {}, endTime: {} } }, 0),
       ).toBe(false);
     });
 
     test('Rows from set are returned when set is present', () => {
       expect(isRowConflicted({ conflicts: new Set<number>() }, 0)).toBe(false);
-      expect(
-        isRowConflicted({ conflicts: new Set<number>([0, 2, 4]) }, 0)
-      ).toBe(true);
-      expect(
-        isRowConflicted({ conflicts: new Set<number>([0, 2, 4]) }, 3)
-      ).toBe(false);
+      expect(isRowConflicted({ conflicts: new Set<number>([0, 2, 4]) }, 0)).toBe(true);
+      expect(isRowConflicted({ conflicts: new Set<number>([0, 2, 4]) }, 3)).toBe(false);
     });
   });
 
@@ -348,13 +339,13 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: { 0: 'foo' },
               startTime: {},
               endDay: {},
-              endTime: {}
-            }
+              endTime: {},
+            },
           },
           0,
           false,
-          false
-        )
+          false,
+        ),
       ).toBeUndefined();
     });
 
@@ -367,13 +358,13 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: { 0: 'foo' },
               startTime: {},
               endDay: {},
-              endTime: {}
-            }
+              endTime: {},
+            },
           },
           0,
           true,
-          false
-        )
+          false,
+        ),
       ).toBe('foo');
 
       expect(
@@ -384,13 +375,13 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: { 0: 'foo' },
               startTime: {},
               endDay: {},
-              endTime: {}
-            }
+              endTime: {},
+            },
           },
           0,
           false,
-          true
-        )
+          true,
+        ),
       ).toBe('foo');
 
       expect(
@@ -401,23 +392,19 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: { 0: 'foo' },
               startTime: {},
               endDay: {},
-              endTime: {}
-            }
+              endTime: {},
+            },
           },
           0,
           true,
-          true
-        )
+          true,
+        ),
       ).toBe('foo');
     });
 
     test('Partially-present errors are properly reported', () => {
-      expect(
-        getWeekdayError('startDay', undefined, 0, true, true)
-      ).toBeUndefined();
-      expect(
-        getWeekdayError('startDay', { conflicts: new Set() }, 0, true, true)
-      ).toBeUndefined();
+      expect(getWeekdayError('startDay', undefined, 0, true, true)).toBeUndefined();
+      expect(getWeekdayError('startDay', { conflicts: new Set() }, 0, true, true)).toBeUndefined();
       expect(
         getWeekdayError(
           'startDay',
@@ -426,13 +413,13 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: { 1: 'not me!' },
               startTime: {},
               endDay: {},
-              endTime: {}
-            }
+              endTime: {},
+            },
           },
           0,
           true,
-          true
-        )
+          true,
+        ),
       ).toBeUndefined();
     });
   });
@@ -444,8 +431,8 @@ describe('Hours of operation utilities work correctly', () => {
           startDay: {},
           startTime: { 0: 'hi' },
           endDay: {},
-          endTime: {}
-        }
+          endTime: {},
+        },
       };
 
       expect(getTimeError('startTime', er, 0, false, false)).toBeUndefined();
@@ -455,9 +442,7 @@ describe('Hours of operation utilities work correctly', () => {
     });
 
     test('Undefined results in no error returned', () => {
-      expect(
-        getTimeError('startTime', undefined, 0, true, true)
-      ).toBeUndefined();
+      expect(getTimeError('startTime', undefined, 0, true, true)).toBeUndefined();
     });
 
     test('empty returns appropriately', () => {
@@ -469,13 +454,13 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: {},
               startTime: {},
               endDay: {},
-              endTime: { 0: 'hi' }
-            }
+              endTime: { 0: 'hi' },
+            },
           },
           0,
           true,
-          true
-        )
+          true,
+        ),
       ).toBe('hi');
       expect(
         getTimeError(
@@ -485,13 +470,13 @@ describe('Hours of operation utilities work correctly', () => {
               startDay: {},
               startTime: {},
               endDay: {},
-              endTime: { 0: 'hi' }
-            }
+              endTime: { 0: 'hi' },
+            },
           },
           1,
           true,
-          true
-        )
+          true,
+        ),
       ).toBeUndefined();
     });
 
@@ -502,8 +487,8 @@ describe('Hours of operation utilities work correctly', () => {
           { invalidTimes: { startTime: {}, endTime: { 0: 'hi' } } },
           0,
           true,
-          true
-        )
+          true,
+        ),
       ).toBe('hi');
       expect(
         getTimeError(
@@ -511,26 +496,22 @@ describe('Hours of operation utilities work correctly', () => {
           { invalidTimes: { startTime: {}, endTime: { 0: 'hi' } } },
           1,
           true,
-          true
-        )
+          true,
+        ),
       ).toBeUndefined();
     });
 
     test('Neither empty nor invalidTime = undefined', () => {
-      expect(
-        getTimeError('endTime', { conflicts: new Set() }, 0, true, true)
-      ).toBeUndefined();
+      expect(getTimeError('endTime', { conflicts: new Set() }, 0, true, true)).toBeUndefined();
     });
   });
 
   test('conflicts are reported when applicable', () => {
     expect(getConflictError(undefined)).toBeUndefined();
-    expect(
-      getConflictError({ invalidTimes: { startTime: {}, endTime: {} } })
-    ).toBeUndefined();
+    expect(getConflictError({ invalidTimes: { startTime: {}, endTime: {} } })).toBeUndefined();
     expect(getConflictError({ conflicts: new Set() })).toBeUndefined();
     expectRender(getConflictError({ conflicts: new Set([1, 2, 3]) })).toContain(
-      'Some openings have conflicts'
+      'Some openings have conflicts',
     );
   });
 });

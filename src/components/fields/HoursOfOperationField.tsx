@@ -3,15 +3,10 @@ import {
   IconButton,
   Layout,
   MultiColumnList,
-  MultiColumnListProps
+  MultiColumnListProps,
 } from '@folio/stripes/components';
 import classNames from 'classnames';
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useState
-} from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { FieldRenderProps } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { InnerFieldRefs } from '../../forms/CalendarForm/types';
@@ -20,14 +15,14 @@ import css from './HoursAndExceptionFields.css';
 import {
   HoursOfOperationErrors,
   HoursOfOperationRowState,
-  MCLContentsType
+  MCLContentsType,
 } from './HoursOfOperationFieldTypes';
 import {
   calculateInitialRows,
   getConflictError,
   getTimeError,
   getWeekdayError,
-  isRowConflicted
+  isRowConflicted,
 } from './HoursOfOperationFieldUtils';
 import MCLRowFormatter from './MCLRowFormatter';
 import OpenClosedSelect from './OpenClosedSelect';
@@ -39,24 +34,23 @@ function updateRowState(
   rowStates: HoursOfOperationRowState[],
   setRowStates: React.Dispatch<HoursOfOperationRowState[]>,
   rowIndex: number,
-  newState: Partial<HoursOfOperationRowState>
+  newState: Partial<HoursOfOperationRowState>,
 ) {
   const newRowState = [...rowStates];
   newRowState[rowIndex] = { ...newRowState[rowIndex], ...newState };
   setRowStates(newRowState);
 }
 
-export interface HoursOfOperationFieldProps
-  extends FieldRenderProps<HoursOfOperationRowState[]> {
+export interface HoursOfOperationFieldProps extends FieldRenderProps<HoursOfOperationRowState[]> {
   timeFieldRefs: InnerFieldRefs['hoursOfOperation'];
   error?: HoursOfOperationErrors;
   submitAttempted: boolean;
   isNewCalendar: boolean;
 }
 
-export const HoursOfOperationField: FunctionComponent<
-  HoursOfOperationFieldProps
-> = (props: HoursOfOperationFieldProps) => {
+export const HoursOfOperationField: FunctionComponent<HoursOfOperationFieldProps> = (
+  props: HoursOfOperationFieldProps,
+) => {
   const intl = useIntl();
   const localeWeekdays = useLocaleWeekdays(intl);
 
@@ -68,8 +62,8 @@ export const HoursOfOperationField: FunctionComponent<
       startDay: undefined,
       startTime: undefined,
       endDay: undefined,
-      endTime: undefined
-    }
+      endTime: undefined,
+    },
   ]);
 
   const setRowStates = (newRowStates: HoursOfOperationRowState[]) => {
@@ -87,18 +81,15 @@ export const HoursOfOperationField: FunctionComponent<
       return;
     }
 
-    const { rows, count } = calculateInitialRows(
-      props.input.value,
-      localeWeekdays
-    );
+    const { rows, count } = calculateInitialRows(props.input.value, localeWeekdays);
 
     setRowStates(rows);
     setCurrentCount(count);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localeWeekdays]);
 
-  const contents: MultiColumnListProps<MCLContentsType, never>['contentData'] =
-    rowStates.map((row, realIndex) => {
+  const contents: MultiColumnListProps<MCLContentsType, never>['contentData'] = rowStates.map(
+    (row, realIndex) => {
       return {
         rowState: row,
         status: (
@@ -117,13 +108,11 @@ export const HoursOfOperationField: FunctionComponent<
         startDay: (
           <WeekdayPicker
             ariaLabel={intl.formatMessage({
-              id: 'ui-calendar.calendarForm.openings.column.startDay'
+              id: 'ui-calendar.calendarForm.openings.column.startDay',
             })}
             value={row.startDay}
             onChange={(newWeekday) => {
-              updateRowState(rowStates, setRowStates, realIndex, {
-                startDay: newWeekday
-              });
+              updateRowState(rowStates, setRowStates, realIndex, { startDay: newWeekday });
               props.input.onBlur();
             }}
             error={getWeekdayError(
@@ -131,7 +120,7 @@ export const HoursOfOperationField: FunctionComponent<
               props.error,
               row.i,
               props.submitAttempted,
-              props.meta.touched
+              props.meta.touched,
             )}
           />
         ),
@@ -147,25 +136,21 @@ export const HoursOfOperationField: FunctionComponent<
               props.error,
               row.i,
               props.submitAttempted,
-              props.meta.touched
+              props.meta.touched,
             )}
             onBlur={props.input.onBlur}
-            onChange={(newValue) => updateRowState(rowStates, setRowStates, realIndex, {
-              startTime: newValue
-            })
+            onChange={(newValue) => updateRowState(rowStates, setRowStates, realIndex, { startTime: newValue })
             }
           />
         ),
         endDay: (
           <WeekdayPicker
             ariaLabel={intl.formatMessage({
-              id: 'ui-calendar.calendarForm.openings.column.endDay'
+              id: 'ui-calendar.calendarForm.openings.column.endDay',
             })}
             value={row.endDay}
             onChange={(newWeekday) => {
-              updateRowState(rowStates, setRowStates, realIndex, {
-                endDay: newWeekday
-              });
+              updateRowState(rowStates, setRowStates, realIndex, { endDay: newWeekday });
               props.input.onBlur();
             }}
             error={getWeekdayError(
@@ -173,7 +158,7 @@ export const HoursOfOperationField: FunctionComponent<
               props.error,
               row.i,
               props.submitAttempted,
-              props.meta.touched
+              props.meta.touched,
             )}
           />
         ),
@@ -189,14 +174,11 @@ export const HoursOfOperationField: FunctionComponent<
               props.error,
               row.i,
               props.submitAttempted,
-              props.meta.touched
+              props.meta.touched,
             )}
             onBlur={props.input.onBlur}
-            onChange={(newValue) => {
-              return updateRowState(rowStates, setRowStates, realIndex, {
-                endTime: newValue
-              });
-            }}
+            onChange={(newValue) => updateRowState(rowStates, setRowStates, realIndex, { endTime: newValue })
+            }
           />
         ),
         actions: (
@@ -214,9 +196,10 @@ export const HoursOfOperationField: FunctionComponent<
             />
           </Layout>
         ),
-        isConflicted: isRowConflicted(props.error, row.i)
+        isConflicted: isRowConflicted(props.error, row.i),
       };
-    });
+    },
+  );
 
   contents.push({
     rowState: {
@@ -225,7 +208,7 @@ export const HoursOfOperationField: FunctionComponent<
       startDay: undefined,
       startTime: undefined,
       endDay: undefined,
-      endTime: undefined
+      endTime: undefined,
     },
     status: (
       <Button
@@ -238,7 +221,7 @@ export const HoursOfOperationField: FunctionComponent<
             startDay: undefined,
             startTime: undefined,
             endDay: undefined,
-            endTime: undefined
+            endTime: undefined,
           });
           setCurrentCount(currentCount + 1);
           setRowStates(newRowStates);
@@ -252,10 +235,10 @@ export const HoursOfOperationField: FunctionComponent<
     endDay: undefined,
     endTime: undefined,
     actions: undefined,
-    isConflicted: false
+    isConflicted: false,
   });
 
-  const conflictError: ReactNode = getConflictError(props.error);
+  const conflictError = getConflictError(props.error);
 
   return (
     <>
@@ -264,24 +247,12 @@ export const HoursOfOperationField: FunctionComponent<
         rowMetadata={['isConflicted', 'rowState']}
         columnIdPrefix="hours-of-operation"
         columnMapping={{
-          status: (
-            <FormattedMessage id="ui-calendar.calendarForm.openings.column.status" />
-          ),
-          startDay: (
-            <FormattedMessage id="ui-calendar.calendarForm.openings.column.startDay" />
-          ),
-          startTime: (
-            <FormattedMessage id="ui-calendar.calendarForm.openings.column.startTime" />
-          ),
-          endDay: (
-            <FormattedMessage id="ui-calendar.calendarForm.openings.column.endDay" />
-          ),
-          endTime: (
-            <FormattedMessage id="ui-calendar.calendarForm.openings.column.endTime" />
-          ),
-          actions: (
-            <FormattedMessage id="ui-calendar.calendarForm.openings.column.actions" />
-          )
+          status: <FormattedMessage id="ui-calendar.calendarForm.openings.column.status" />,
+          startDay: <FormattedMessage id="ui-calendar.calendarForm.openings.column.startDay" />,
+          startTime: <FormattedMessage id="ui-calendar.calendarForm.openings.column.startTime" />,
+          endDay: <FormattedMessage id="ui-calendar.calendarForm.openings.column.endDay" />,
+          endTime: <FormattedMessage id="ui-calendar.calendarForm.openings.column.endTime" />,
+          actions: <FormattedMessage id="ui-calendar.calendarForm.openings.column.actions" />,
         }}
         columnWidths={{
           status: '14%',
@@ -289,12 +260,12 @@ export const HoursOfOperationField: FunctionComponent<
           startTime: '20%',
           endDay: '20%',
           endTime: '20%',
-          actions: '6%'
+          actions: '6%',
         }}
         contentData={contents}
         getCellClass={(defaultClasses, rowData) => {
           return classNames(defaultClasses, css.cellWrapper, {
-            [css.conflictCell]: rowData.isConflicted
+            [css.conflictCell]: rowData.isConflicted,
           });
         }}
         rowFormatter={MCLRowFormatter<MCLContentsType>}

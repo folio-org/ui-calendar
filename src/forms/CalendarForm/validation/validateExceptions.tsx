@@ -3,14 +3,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   ExceptionFieldErrors,
-  ExceptionRowState
+  ExceptionRowState,
 } from '../../../components/fields/ExceptionFieldTypes';
 import RowType from '../../../components/fields/RowType';
-import {
-  dateFromYYYYMMDDAndHHMM,
-  overlaps,
-  overlapsDates
-} from '../../../utils/DateUtils';
+import { dateFromYYYYMMDDAndHHMM, overlaps, overlapsDates } from '../../../utils/DateUtils';
 import dayjs from '../../../utils/dayjs';
 import { InnerFieldRefs } from '../types';
 import { isTimeProper } from './validateDateTime';
@@ -21,7 +17,7 @@ function validateExceptionInnerRowEmpty(
   innerRow: ExceptionRowState['rows'][0],
   innerFieldRefs: InnerFieldRefs['exceptions'],
   emptyErrors: NonNullable<ExceptionFieldErrors['empty']>,
-  _hasError: boolean
+  _hasError: boolean,
 ): boolean {
   let hasError = _hasError;
   if (
@@ -64,23 +60,21 @@ function validateExceptionInnerRowEmpty(
 /** Validate that exception rows as a whole are not empty */
 export function validateExceptionsEmpty(
   rows: ExceptionRowState[],
-  innerFieldRefs: InnerFieldRefs['exceptions']
+  innerFieldRefs: InnerFieldRefs['exceptions'],
 ): ExceptionFieldErrors | undefined {
   const emptyErrors: ExceptionFieldErrors['empty'] = {
     name: {},
     startDate: {},
     startTime: {},
     endDate: {},
-    endTime: {}
+    endTime: {},
   };
 
   let hasError = false;
 
   rows.forEach((row) => {
     if (row.name === undefined || row.name.trim() === '') {
-      emptyErrors.name[row.i] = (
-        <FormattedMessage id="stripes-core.label.missingRequiredField" />
-      );
+      emptyErrors.name[row.i] = <FormattedMessage id="stripes-core.label.missingRequiredField" />;
       hasError = true;
     }
     emptyErrors.startDate[row.i] = {};
@@ -93,7 +87,7 @@ export function validateExceptionsEmpty(
         innerRow,
         innerFieldRefs,
         emptyErrors,
-        hasError
+        hasError,
       );
     });
   });
@@ -113,9 +107,10 @@ function validateExceptionInnerRowDatesAndTimes(
   invalidErrors: NonNullable<ExceptionFieldErrors['invalid']>,
   localeDateFormat: string,
   localeTimeFormat: string,
-  _hasError: boolean
+  _hasError: boolean,
 ) {
   let hasError = _hasError;
+
   if (
     dayjs(innerRow.startDate).format(localeDateFormat) !==
     innerFieldRefs.startDate[row.i]?.[innerRow.i]?.value
@@ -128,6 +123,7 @@ function validateExceptionInnerRowDatesAndTimes(
     );
     hasError = true;
   }
+
   if (
     dayjs(innerRow.endDate).format(localeDateFormat) !==
     innerFieldRefs.endDate[row.i]?.[innerRow.i]?.value
@@ -140,6 +136,7 @@ function validateExceptionInnerRowDatesAndTimes(
     );
     hasError = true;
   }
+
   if (dayjs(innerRow.startDate).isAfter(innerRow.endDate)) {
     invalidErrors.startDate[row.i][innerRow.i] = (
       <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
@@ -149,14 +146,9 @@ function validateExceptionInnerRowDatesAndTimes(
     );
     hasError = true;
   }
+
   if (row.type === RowType.Open) {
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        innerRow.startTime as string,
-        innerFieldRefs.startTime[row.i]?.[innerRow.i]?.value
-      )
-    ) {
+    if (!isTimeProper(innerRow.startTime?.[1], innerFieldRefs.startTime[row.i]?.[innerRow.i]?.value)) {
       invalidErrors.startTime[row.i][innerRow.i] = (
         <FormattedMessage
           id="ui-calendar.calendarForm.error.timeFormat"
@@ -165,13 +157,8 @@ function validateExceptionInnerRowDatesAndTimes(
       );
       hasError = true;
     }
-    if (
-      !isTimeProper(
-        localeTimeFormat,
-        innerRow.endTime as string,
-        innerFieldRefs.endTime[row.i]?.[innerRow.i]?.value
-      )
-    ) {
+
+    if (!isTimeProper(innerRow.endTime?.[1], innerFieldRefs.endTime[row.i]?.[innerRow.i]?.value)) {
       invalidErrors.endTime[row.i][innerRow.i] = (
         <FormattedMessage
           id="ui-calendar.calendarForm.error.timeFormat"
@@ -180,9 +167,10 @@ function validateExceptionInnerRowDatesAndTimes(
       );
       hasError = true;
     }
+
     if (
       dayjs(`${innerRow.startDate} ${innerRow.startTime}`).isAfter(
-        `${innerRow.endDate} ${innerRow.endTime}`
+        `${innerRow.endDate} ${innerRow.endTime}`,
       )
     ) {
       invalidErrors.startTime[row.i][innerRow.i] = (
@@ -202,13 +190,13 @@ export function validateExceptionsDatesAndTimes(
   rows: ExceptionRowState[],
   innerFieldRefs: InnerFieldRefs['exceptions'],
   localeDateFormat: string,
-  localeTimeFormat: string
+  localeTimeFormat: string,
 ): ExceptionFieldErrors | undefined {
   const invalidErrors: ExceptionFieldErrors['invalid'] = {
     startDate: {},
     startTime: {},
     endDate: {},
-    endTime: {}
+    endTime: {},
   };
 
   let hasError = false;
@@ -226,7 +214,7 @@ export function validateExceptionsDatesAndTimes(
         invalidErrors,
         localeDateFormat,
         localeTimeFormat,
-        hasError
+        hasError,
       );
     });
   });
@@ -240,21 +228,16 @@ export function validateExceptionsDatesAndTimes(
 
 /** Check overlaps between exception rows */
 export function validateExceptionInterOverlaps(
-  rows: ExceptionRowState[]
+  rows: ExceptionRowState[],
 ): ExceptionFieldErrors | undefined {
-  const interConflicts: ExceptionFieldErrors['interConflicts'] =
-    new Set<number>();
+  const interConflicts: ExceptionFieldErrors['interConflicts'] = new Set<number>();
 
-  const rowMinMaxes: { i: number; startDate: Dayjs; endDate: Dayjs }[] =
-    rows.map((row) => ({
-      i: row.i,
-      startDate: dayjs
-        .min(row.rows.map(({ startDate }) => dayjs(startDate)))
-        ?.startOf('day') ?? dayjs(0),
-      endDate: dayjs
-        .max(row.rows.map(({ endDate }) => dayjs(endDate)))
-        ?.endOf('day') ?? dayjs(0)
-    }));
+  const rowMinMaxes: { i: number; startDate: Dayjs; endDate: Dayjs }[] = rows.map((row) => ({
+    i: row.i,
+    startDate:
+      dayjs.min(row.rows.map(({ startDate }) => dayjs(startDate)))?.startOf('day') ?? dayjs(0),
+    endDate: dayjs.max(row.rows.map(({ endDate }) => dayjs(endDate)))?.endOf('day') ?? dayjs(0),
+  }));
 
   for (let i = 0; i < rowMinMaxes.length - 1; i++) {
     for (let j = i + 1; j < rowMinMaxes.length; j++) {
@@ -263,7 +246,7 @@ export function validateExceptionInterOverlaps(
           rowMinMaxes[i].startDate,
           rowMinMaxes[i].endDate,
           rowMinMaxes[j].startDate,
-          rowMinMaxes[j].endDate
+          rowMinMaxes[j].endDate,
         )
       ) {
         interConflicts.add(rowMinMaxes[i].i);
@@ -280,9 +263,7 @@ export function validateExceptionInterOverlaps(
 }
 
 /** Check overlaps between inner exception rows */
-export function getExceptionRowIntraOverlap(
-  row: ExceptionRowState
-): Set<number> {
+export function getExceptionRowIntraOverlap(row: ExceptionRowState): Set<number> {
   const overlappingRows = new Set<number>();
 
   for (let i = 0; i < row.rows.length - 1; i++) {
@@ -291,20 +272,20 @@ export function getExceptionRowIntraOverlap(
         overlapsDates(
           dateFromYYYYMMDDAndHHMM(
             row.rows[i].startDate as string,
-            row.rows[i].startTime as string
+            row.rows[i].startTime![0].substring(0, 5),
           ),
           dateFromYYYYMMDDAndHHMM(
             row.rows[i].endDate as string,
-            row.rows[i].endTime as string
+            row.rows[i].endTime![0].substring(0, 5),
           ),
           dateFromYYYYMMDDAndHHMM(
             row.rows[j].startDate as string,
-            row.rows[j].startTime as string
+            row.rows[j].startTime![0].substring(0, 5),
           ),
           dateFromYYYYMMDDAndHHMM(
             row.rows[j].endDate as string,
-            row.rows[j].endTime as string
-          )
+            row.rows[j].endTime![0].substring(0, 5),
+          ),
         )
       ) {
         overlappingRows.add(row.rows[i].i);
@@ -318,7 +299,7 @@ export function getExceptionRowIntraOverlap(
 
 /** Validate overlaps between inside exception rows */
 export function validateExceptionIntraOverlaps(
-  rows: ExceptionRowState[]
+  rows: ExceptionRowState[],
 ): ExceptionFieldErrors | undefined {
   const intraConflicts: ExceptionFieldErrors['intraConflicts'] = {};
   let hasError = false;
@@ -348,7 +329,7 @@ export default function validateExceptions(
   rows: ExceptionRowState[] | undefined,
   innerFieldRefs: InnerFieldRefs['exceptions'],
   localeDateFormat: string,
-  localeTimeFormat: string
+  localeTimeFormat: string,
 ): { exceptions?: ExceptionFieldErrors } {
   if (rows === undefined) {
     return {};
@@ -363,7 +344,7 @@ export default function validateExceptions(
     rows,
     innerFieldRefs,
     localeDateFormat,
-    localeTimeFormat
+    localeTimeFormat,
   );
   if (invalidErrors !== undefined) {
     return { exceptions: invalidErrors };
@@ -377,6 +358,6 @@ export default function validateExceptions(
   return {
     // can be undefined but that is acceptable here
     // as no other cases to check
-    exceptions: validateExceptionIntraOverlaps(rows)
+    exceptions: validateExceptionIntraOverlaps(rows),
   };
 }

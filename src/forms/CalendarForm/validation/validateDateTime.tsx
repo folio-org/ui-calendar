@@ -5,30 +5,13 @@ import { FormValues, SimpleErrorFormValues } from '../types';
 
 /** Ensure a time's format is correct */
 export function isTimeProper(
-  localeTimeFormat: string,
-  fieldValue: string, // from onchange/similar
-  realInputValue: string | undefined // from ref
+  fieldValue: string | null | undefined, // from onchange/similar. null if untouched in edit mode; undefined if we don't have a value
+  realInputValue: string | undefined, // from ref
 ): boolean {
-  if (realInputValue === undefined) {
-    return true;
-  }
-
-  let timeObject = dayjs(realInputValue, localeTimeFormat, true);
-  if (!timeObject.isValid()) {
-    // the picker has a tendency to remove leading zeroes
-    timeObject = dayjs(
-      realInputValue,
-      localeTimeFormat.replace('HH', 'H').replace('hh', 'h'),
-      true
-    );
-  }
-
   return (
-    timeObject.isValid() &&
-    (timeObject.format('HH:mm') === fieldValue ||
-      timeObject.format('HH:mm:ss') === fieldValue ||
-      timeObject.format('H:mm') === fieldValue ||
-      timeObject.format('H:mm:ss') === fieldValue)
+    realInputValue === undefined || // we never got the ref
+    fieldValue === null || // field was never touched so never had onChange called
+    fieldValue === realInputValue
   );
 }
 
@@ -37,7 +20,7 @@ export function validateDate(
   values: Partial<FormValues>,
   key: keyof SimpleErrorFormValues,
   dateRef: RefObject<HTMLInputElement>,
-  localeDateFormat: string
+  localeDateFormat: string,
 ): Partial<{
   [key in keyof SimpleErrorFormValues]?: ReactNode;
 }> {
@@ -45,12 +28,9 @@ export function validateDate(
     return {};
   }
 
-  if (
-    dateRef.current.value === '' &&
-    (!(key in values) || typeof values[key] !== 'string')
-  ) {
+  if (dateRef.current.value === '' && (!(key in values) || typeof values[key] !== 'string')) {
     return {
-      [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />
+      [key]: <FormattedMessage id="stripes-core.label.missingRequiredField" />,
     };
   }
 
@@ -64,7 +44,7 @@ export function validateDate(
           id="ui-calendar.calendarForm.error.dateFormat"
           values={{ localeDateFormat }}
         />
-      )
+      ),
     };
   }
 
@@ -86,9 +66,7 @@ export function validateDateOrder(values: Partial<FormValues>): {
     values['end-date'] < values['start-date']
   ) {
     return {
-      'end-date': (
-        <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />
-      )
+      'end-date': <FormattedMessage id="ui-calendar.calendarForm.error.dateOrder" />,
     };
   }
   return {};

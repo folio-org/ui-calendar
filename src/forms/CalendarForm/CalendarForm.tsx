@@ -81,7 +81,6 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
       innerFieldRefs.current,
     );
   }, [localeDateFormat, localeTimeFormat, startDateRef, endDateRef]);
-
   return (
     <Form<FormValues>
       onSubmit={onSubmitCallback}

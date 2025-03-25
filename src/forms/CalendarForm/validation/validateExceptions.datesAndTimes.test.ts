@@ -16,8 +16,8 @@ test('No rows is a valid state', () => {
         endTime: {},
       },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toBeUndefined();
   expect(
     validateExceptionsDatesAndTimes(
@@ -32,8 +32,8 @@ test('No rows is a valid state', () => {
       ],
       { startDate: {}, startTime: {}, endDate: {}, endTime: {} },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toBeUndefined();
 });
 
@@ -63,7 +63,7 @@ test('Invalid dates are properly reported', () => {
       endTime: {},
     },
     localeDateFormat,
-    localeTimeFormat12
+    localeTimeFormat12,
   );
   expect(validationResult).not.toBeUndefined();
   expect(validationResult).toHaveProperty('invalid.startDate.0.0');
@@ -72,7 +72,7 @@ test('Invalid dates are properly reported', () => {
   expect(validationResult).not.toHaveProperty('invalid.endTime.0.0');
 
   expectRender(validationResult?.invalid?.startDate[0][0]).toBe(
-    'Please enter a date in the MM/DD/YYYY format'
+    'Please enter a date in the MM/DD/YYYY format',
   );
 });
 
@@ -117,7 +117,7 @@ test('Invalid dates in multiple rows are properly reported', () => {
       endTime: {},
     },
     localeDateFormat,
-    localeTimeFormat12
+    localeTimeFormat12,
   );
   expect(validationResult).not.toBeUndefined();
   expect(validationResult).not.toHaveProperty('invalid.startDate.0.0');
@@ -138,16 +138,16 @@ test('Invalid times are properly reported', () => {
           {
             i: 0,
             startDate: '2000-01-01',
-            startTime: '09:00',
+            startTime: ['09:00', 'invalid'],
             endDate: '2000-01-01',
-            endTime: '09:00',
+            endTime: ['09:00', 'invalid'],
           },
           {
             i: 1,
             startDate: '2000-01-01',
-            startTime: '09:00',
+            startTime: ['09:00', 'invalid'],
             endDate: '2000-01-01',
-            endTime: '09:00',
+            endTime: ['09:00', 'invalid'],
           },
         ],
       },
@@ -159,15 +159,16 @@ test('Invalid times are properly reported', () => {
       endTime: { 0: { 1: { value: '08:00 AM' } as HTMLInputElement } },
     },
     localeDateFormat,
-    localeTimeFormat12
+    localeTimeFormat12,
   );
   expect(validationResult).not.toBeUndefined();
   // time validation fails when ref is defined and improper
   expect(validationResult).toHaveProperty('invalid.startTime.0.0');
   expect(validationResult).toHaveProperty('invalid.endTime.0.1');
+  // ref is not defined for others, so it can't know if it's invalid
 
   expectRender(validationResult?.invalid?.startTime[0][0]).toBe(
-    'Please enter a time in the hh:mm A format'
+    'Please enter a time in the hh:mm A format',
   );
 });
 
@@ -197,14 +198,14 @@ test('Date order is checked', () => {
       endTime: {},
     },
     localeDateFormat,
-    localeTimeFormat12
+    localeTimeFormat12,
   );
   expect(validationResult).not.toBeUndefined();
   expect(validationResult).toHaveProperty('invalid.startDate.0.0');
   expect(validationResult).toHaveProperty('invalid.endDate.0.0');
 
   expectRender(validationResult?.invalid?.startDate[0][0]).toBe(
-    'End date must not be before the start date'
+    'End date must not be before the start date',
   );
 });
 
@@ -220,9 +221,9 @@ test('Date-time order is checked', () => {
           {
             i: 0,
             startDate: '2000-01-01',
-            startTime: '13:00',
+            startTime: ['13:00:00Z', null],
             endDate: '2000-01-01',
-            endTime: '09:00',
+            endTime: ['09:00:00Z', null],
           },
         ],
       },
@@ -234,14 +235,14 @@ test('Date-time order is checked', () => {
       endTime: {},
     },
     localeDateFormat,
-    localeTimeFormat12
+    localeTimeFormat12,
   );
   expect(validationResult).not.toBeUndefined();
   expect(validationResult).toHaveProperty('invalid.startTime.0.0');
   expect(validationResult).toHaveProperty('invalid.endTime.0.0');
 
   expectRender(validationResult?.invalid?.startTime[0][0]).toBe(
-    'End date/time must not be before the start date/time'
+    'End date/time must not be before the start date/time',
   );
 });
 
@@ -273,16 +274,16 @@ test('Valid rows are valid', () => {
             {
               i: 0,
               startDate: '2000-01-01',
-              startTime: '09:00',
+              startTime: ['09:00:00Z', null],
               endDate: '2000-01-02',
-              endTime: '13:00',
+              endTime: ['13:00:00Z', null],
             },
             {
               i: 1,
               startDate: '2000-01-03',
-              startTime: '09:00',
+              startTime: ['09:00:00Z', null],
               endDate: '2000-01-04',
-              endTime: '13:00',
+              endTime: ['13:00:00Z', null],
             },
           ],
         },
@@ -308,7 +309,7 @@ test('Valid rows are valid', () => {
         endTime: {},
       },
       localeDateFormat,
-      localeTimeFormat12
-    )
+      localeTimeFormat12,
+    ),
   ).toBeUndefined();
 });

@@ -240,7 +240,7 @@ test('Empty string open date rows are properly reported', () => {
           {
             i: 3,
             startDate: '',
-            startTime: 'valid',
+            startTime: ['valid', 'valid'],
             endDate: '',
             endTime: undefined,
           },
@@ -283,9 +283,9 @@ test('Bad ref inner opening row dates are properly reported', () => {
           {
             i: 3,
             startDate: '2000-01-01',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-01',
-            endTime: '09:00',
+            endTime: ['09:00:00Z', 'valid'],
           },
         ],
       },

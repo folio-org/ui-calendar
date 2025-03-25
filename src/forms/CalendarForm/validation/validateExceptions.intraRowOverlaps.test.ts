@@ -23,7 +23,7 @@ test('Single rows result in no overlaps', () => {
           },
         ],
       },
-    ])
+    ]),
   ).toBeUndefined();
   expect(
     validateExceptionIntraOverlaps([
@@ -36,13 +36,13 @@ test('Single rows result in no overlaps', () => {
           {
             i: 2,
             startDate: '2000-01-01',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-04',
-            endTime: '23:59',
+            endTime: ['23:59:00Z', 'valid'],
           },
         ],
       },
-    ])
+    ]),
   ).toBeUndefined();
 });
 
@@ -58,20 +58,20 @@ test('Self-overlapping rows are reported as such', () => {
           {
             i: 2,
             startDate: '2000-01-01',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-03',
-            endTime: '12:00',
+            endTime: ['12:00:00Z', 'valid'],
           },
           {
             i: 3,
             startDate: '2000-01-02',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-04',
-            endTime: '23:59',
+            endTime: ['23:59:00Z', 'valid'],
           },
         ],
       },
-    ])
+    ]),
   ).toHaveProperty('intraConflicts.1', new Set([2, 3]));
   expect(
     validateExceptionIntraOverlaps([
@@ -84,20 +84,20 @@ test('Self-overlapping rows are reported as such', () => {
           {
             i: 2,
             startDate: '2000-01-02',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-03',
-            endTime: '12:00',
+            endTime: ['12:00:00Z', 'valid'],
           },
           {
             i: 3,
             startDate: '2000-01-03',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-04',
-            endTime: '23:59',
+            endTime: ['23:59:00Z', 'valid'],
           },
         ],
       },
-    ])
+    ]),
   ).toHaveProperty('intraConflicts.1', new Set([2, 3]));
   expect(
     validateExceptionIntraOverlaps([
@@ -110,26 +110,26 @@ test('Self-overlapping rows are reported as such', () => {
           {
             i: 2,
             startDate: '2000-01-01',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-03',
-            endTime: '12:00',
+            endTime: ['12:00:00Z', 'valid'],
           },
           {
             i: 3,
             startDate: '2000-01-07',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-08',
-            endTime: '23:59',
+            endTime: ['23:59:00Z', 'valid'],
           },
           {
             i: 4,
             startDate: '2000-01-01',
-            startTime: '00:00',
+            startTime: ['00:00:00Z', 'valid'],
             endDate: '2000-01-08',
-            endTime: '23:59',
+            endTime: ['23:59:00Z', 'valid'],
           },
         ],
       },
-    ])
+    ]),
   ).toHaveProperty('intraConflicts.2', new Set([2, 3, 4]));
 });

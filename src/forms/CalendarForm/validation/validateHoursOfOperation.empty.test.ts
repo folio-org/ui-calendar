@@ -47,7 +47,7 @@ test('A closed row with days filled in is valid', () => {
       i: 0,
       type: RowType.Closed,
       startDay: Weekdays.Monday,
-      startTime: '09:00', // should not affect result
+      startTime: ['09:00', null], // should not affect result
       endDay: Weekdays.Monday,
       endTime: undefined,
     },
@@ -86,9 +86,9 @@ test('Multiple valid rows produces expected valid result', () => {
       i: 1,
       type: RowType.Open,
       startDay: Weekdays.Monday,
-      startTime: '09:00',
+      startTime: ['09:00', null],
       endDay: Weekdays.Monday,
-      endTime: '09:00',
+      endTime: ['09:00', null],
     },
   ]);
   expect(mixedValidResult).toBeUndefined();
@@ -108,7 +108,7 @@ test('Multiple rows with different statuses produces expected invalid result', (
       i: 1,
       type: RowType.Open,
       startDay: Weekdays.Monday,
-      startTime: '09:00',
+      startTime: ['09:00', null],
       endDay: Weekdays.Monday,
       endTime: undefined,
     },
@@ -118,7 +118,7 @@ test('Multiple rows with different statuses produces expected invalid result', (
       startDay: undefined,
       startTime: undefined,
       endDay: Weekdays.Monday,
-      endTime: '09:00',
+      endTime: ['09:00', null],
     },
   ]);
   expect(mixedInvalidResult).not.toHaveProperty('empty.startDay.0');
@@ -151,16 +151,8 @@ test('Error messages translate properly', () => {
   expect(openAllEmptyResult).toHaveProperty('empty.endDay.0');
   expect(openAllEmptyResult).toHaveProperty('empty.endTime.0');
 
-  expectRender(openAllEmptyResult?.empty?.startDay[0]).toBe(
-    'Please fill this in to continue'
-  );
-  expectRender(openAllEmptyResult?.empty?.startTime[0]).toBe(
-    'Please fill this in to continue'
-  );
-  expectRender(openAllEmptyResult?.empty?.endDay[0]).toBe(
-    'Please fill this in to continue'
-  );
-  expectRender(openAllEmptyResult?.empty?.endTime[0]).toBe(
-    'Please fill this in to continue'
-  );
+  expectRender(openAllEmptyResult?.empty?.startDay[0]).toBe('Please fill this in to continue');
+  expectRender(openAllEmptyResult?.empty?.startTime[0]).toBe('Please fill this in to continue');
+  expectRender(openAllEmptyResult?.empty?.endDay[0]).toBe('Please fill this in to continue');
+  expectRender(openAllEmptyResult?.empty?.endTime[0]).toBe('Please fill this in to continue');
 });
