@@ -20,8 +20,8 @@ const calendarToInitialValues = memoizee(
           type: RowType.Open,
           i: -1 - i, // ensure `i` is negative as not to conflict with self-assigned indexes
           ...opening,
-          startTime: [opening.startTime + ':00Z', null],
-          endTime: [opening.endTime + ':00Z', null],
+          startTime: [opening.startTime + 'Z', null],
+          endTime: [opening.endTime + 'Z', null],
         }),
       ),
       exceptions: calendar.exceptions.map((exception, i): ExceptionRowState => {
@@ -38,8 +38,8 @@ const calendarToInitialValues = memoizee(
             return result.rows.push({
               i: -1 - j,
               ...opening,
-              startTime: [opening.startTime + ':00Z', null],
-              endTime: [opening.endTime + ':00Z', null],
+              startTime: [opening.startTime + 'Z', null],
+              endTime: [opening.endTime + 'Z', null],
             });
           });
         } else {
