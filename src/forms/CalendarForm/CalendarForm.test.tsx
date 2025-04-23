@@ -5,6 +5,7 @@ import withIntlConfiguration from '../../test/util/withIntlConfiguration';
 import CreateCalendarForm from './CalendarForm';
 import DataRepository from '../../data/DataRepository';
 import * as ServicePoints from '../../test/data/ServicePoints';
+import withHistoryConfiguration from '../../test/util/withHistoryConfiguration';
 
 
 // eslint-disable-next-line func-names
@@ -34,8 +35,10 @@ describe('CreateCalendarForm', () => {
     const submitter = jest.fn();
     it('renders', () => {
       render(
-        withIntlConfiguration(
-          <CreateCalendarForm closeParentLayer={closeParentLayer} dataRepository={dataRepository} submitAttempted setIsSubmitting={setIsSubmitting} submitter={submitter} />
+        withHistoryConfiguration(
+          withIntlConfiguration(
+            <CreateCalendarForm closeParentLayer={closeParentLayer} dataRepository={dataRepository} submitAttempted setIsSubmitting={setIsSubmitting} submitter={submitter} />
+          )
         )
       );
       expect(screen.getByText('Calendar name')).toBeInTheDocument();
