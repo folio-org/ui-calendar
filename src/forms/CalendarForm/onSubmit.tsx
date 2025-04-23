@@ -23,6 +23,7 @@ export default async function onSubmit(
 
   values: Optional<FormValues, 'service-points' | 'hours-of-operation' | 'exceptions'>,
   form: FormApi<FormValues>,
+  returnTo: string | null,
 ): Promise<SubmissionErrors> {
   if (form.getState().hasValidationErrors) {
     return undefined;
@@ -101,7 +102,7 @@ export default async function onSubmit(
   try {
     const cal = await props.submitter(newCalendar);
 
-    props.closeParentLayer(cal.id as string);
+    props.closeParentLayer(returnTo ?? cal.id as string);
   } catch (e) {
     const response = (e as HTTPError).response;
     const errors = (await response.json()) as ErrorResponse;
