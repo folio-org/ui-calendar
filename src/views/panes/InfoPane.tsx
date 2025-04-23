@@ -40,6 +40,7 @@ export interface InfoPaneProps {
   calendar?: CalendarDTO | null;
   onClose: () => void;
   dataRepository: DataRepository;
+  returnToServicePointView?: string;
 }
 
 export const InfoPane: FunctionComponent<InfoPaneProps> = (
@@ -137,7 +138,11 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
                 <Button
                   buttonStyle="dropdownItem"
                   onClick={onToggle}
-                  to={`${props.editBasePath}/${calendar.id}`}
+                  to={`${props.editBasePath}/${calendar.id}${
+                    props.returnToServicePointView
+                      ? `?returnToServicePoint=${props.returnToServicePointView}`
+                      : ''
+                  }`}
                 >
                   <Icon size="small" icon="edit">
                     <FormattedMessage id="stripes-core.button.edit" />

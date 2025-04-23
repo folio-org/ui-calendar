@@ -221,8 +221,8 @@ export const CurrentAssignmentView: FunctionComponent<
                 dataRepository={dataRepository}
                 initialValue={dataRepository.getCalendar(match.params.id)}
                 isEdit
-                onClose={() => {
-                  history.push(`/settings/calendar/active/${match.params.id}`);
+                onClose={(returnToServicePoint?: string) => {
+                  history.push(`/settings/calendar/active/${returnToServicePoint ?? match.params.id}`);
                   showCreateLayerButtonRef.current?.focus();
                 }}
               />
@@ -241,6 +241,7 @@ export const CurrentAssignmentView: FunctionComponent<
                 ?.calendar
             }
             dataRepository={dataRepository}
+            returnToServicePointView={currentRouteId}
           />
         </Route>
       </Switch>

@@ -12,10 +12,11 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import { CalloutContext } from '@folio/stripes/core';
-import { FormApi, FORM_ERROR } from 'final-form';
+import { FORM_ERROR, FormApi } from 'final-form';
 import React, { FunctionComponent, useCallback, useContext, useMemo, useRef } from 'react';
 import { Field, Form } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useLocation } from 'react-router-dom';
 import ExceptionField from '../../components/fields/ExceptionField';
 import css from '../../components/fields/HoursAndExceptionFields.css';
 import HoursOfOperationField from '../../components/fields/HoursOfOperationField';
@@ -44,6 +45,9 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
   const calloutContext = useContext(CalloutContext);
   const intl = useIntl();
 
+  // Parse the returnTo parameter from the URL
+  const returnTo = new URLSearchParams(useLocation().search).get('returnToServicePoint');
+
   const onSubmitCallback = useCallback(
     (values: FormValues, form: FormApi<FormValues>) => {
       return onSubmit(
@@ -57,9 +61,10 @@ export const CreateCalendarForm: FunctionComponent<CreateCalendarFormProps> = (
         intl,
         values,
         form,
+        returnTo,
       );
     },
-    [props, calloutContext, intl],
+    [props, calloutContext, intl, returnTo],
   );
 
   const localeDateFormat = getLocaleDateFormat({ intl });
