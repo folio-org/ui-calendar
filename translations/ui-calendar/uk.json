@@ -81,7 +81,7 @@
     "infoPane.accordion.hours.close": "Закрити",
     "infoPane.nextDayHelpText": "* вказує на наступний день",
     "infoPane.overnightHelpText": "– вказує на те, що пункт обслуговування вже був відкритий або не закривається",
-    "infoPane.247HelpText": "This calendar is open 24/7 and does not close",
+    "infoPane.247HelpText": "Цей календар для тих, хто відчинений 24/7 та не зачиняється",
     "infoPane.accordion.exceptions.openings": "Винятки - пункт обслуговування працює",
     "infoPane.accordion.exceptions.openings.empty": "У цьому календарі немає винятків, коли пункт обслуговування працює.",
     "infoPane.accordion.exceptions.closures": "Винятки - пункт обслуговування зачинений",
