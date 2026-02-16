@@ -108,7 +108,7 @@
     "currentAssignmentView.title": "Bieżące przypisane kalendarze",
     "currentAssignmentView.noCalendar": "Brak",
     "currentAssignmentView.actions.new": "Nowy",
-    "currentAssignmentView.column.servicePoint": "Punkt obsługi",
+    "currentAssignmentView.column.servicePoint": "Punkt odbioru",
     "currentAssignmentView.column.name": "Nazwa kalendarza",
     "currentAssignmentView.column.startDate": "Data rozpoczęcia",
     "currentAssignmentView.column.endDate": "Data zakończenia",
