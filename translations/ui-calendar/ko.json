@@ -18,7 +18,7 @@
     "calendarForm.openings.column.endDay": "End day",
     "calendarForm.openings.column.endTime": "End time",
     "calendarForm.openings.column.actions": "Actions",
-    "calendarForm.exceptions.column.name": "Name",
+    "calendarForm.exceptions.column.name": "이름",
     "calendarForm.exceptions.column.status": "Status",
     "calendarForm.exceptions.column.startDate": "Start date",
     "calendarForm.exceptions.column.startTime": "Start time",
