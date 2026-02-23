@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## IN PROGRESS
+
+* Dependency correction: bump `react-intl` peer to v7. Refs UICAL-297.
+
 ## [12.0.0](https://github.com/folio-org/ui-calendar/tree/v12.0.0) (2025-04-02)
 
 * *Breaking* migrate stripes dependencies to their Sunflower versions. Refs UICAL-292.
