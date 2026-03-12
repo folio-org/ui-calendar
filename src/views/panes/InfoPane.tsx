@@ -107,6 +107,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         startDate: getLocalizedDate(intl, exception.startDate),
         endDate: getLocalizedDate(intl, exception.endDate),
       })),
+      key: Date.now(),
     };
   }, [calendar, intl]);
 
@@ -260,7 +261,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
             }
           >
             <MultiColumnList
-              key={`${calendar.id}-ex-openings`}
+              key={`${calendar.id}-ex-openings-${exceptions.key}`}
               interactive={false}
               columnMapping={{
                 name: (
@@ -299,7 +300,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
             }
           >
             <MultiColumnList
-              key={`${calendar.id}-ex-closures`}
+              key={`${calendar.id}-ex-closures-${exceptions.key}`}
               interactive={false}
               columnMapping={{
                 name: (
