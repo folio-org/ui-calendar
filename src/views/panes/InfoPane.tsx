@@ -107,7 +107,7 @@ export const InfoPane: FunctionComponent<InfoPaneProps> = (
         startDate: getLocalizedDate(intl, exception.startDate),
         endDate: getLocalizedDate(intl, exception.endDate),
       })),
-      key: (new Date()).valueOf(),
+      key: Date.now(),
     };
   }, [calendar, intl]);
 
