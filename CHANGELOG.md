@@ -3,6 +3,7 @@
 ## IN PROGRESS
 
 * Dependency correction: bump `react-intl` peer to v7. Refs UICAL-297.
+* Return to current assignment (service point) view after editing. Refs UICAL-294.
 
 ## [12.0.0](https://github.com/folio-org/ui-calendar/tree/v12.0.0) (2025-04-02)
 
