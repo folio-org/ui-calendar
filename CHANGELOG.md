@@ -1,8 +1,9 @@
 # Change history for ui-calendar
 
-## IN PROGRESS
+## [13.0.0](https://github.com/folio-org/ui-calendar/tree/v13.0.0) (2026-04-16) Trillium
 
 * Dependency correction: bump `react-intl` peer to v7. Refs UICAL-297.
+* Return to current assignment (service point) view after editing. Refs UICAL-294.
 
 ## [12.0.0](https://github.com/folio-org/ui-calendar/tree/v12.0.0) (2025-04-02)
 
