@@ -39,7 +39,7 @@ export default function OpenClosedSelect({
         }
       ]}
       value={value}
-      onInput={(e) => {
+      onInput={(e: React.ChangeEvent<HTMLSelectElement>) => {
         const newType = (e.target as HTMLSelectElement).value as RowType;
         const newProps: { type: RowType } = {
           type: newType

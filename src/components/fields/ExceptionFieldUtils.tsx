@@ -176,10 +176,10 @@ export function getDateTimeFields({
   rowStates: ExceptionRowState[];
   setRowStates: (newRowStates: ExceptionRowState[]) => void;
 }): {
-  startDate: JSX.Element;
-  startTime: JSX.Element;
-  endDate: JSX.Element;
-  endTime: JSX.Element;
+  startDate: React.JSX.Element;
+  startTime: React.JSX.Element;
+  endDate: React.JSX.Element;
+  endTime: React.JSX.Element;
 } {
   return {
     startDate: getDateField(

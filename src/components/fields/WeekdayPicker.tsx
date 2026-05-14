@@ -43,7 +43,7 @@ export const WeekdayPicker: FunctionComponent<WeekdayPickerProps> = (
         marginBottom0
         dataOptions={options}
         value={props.value}
-        onChange={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           if (props.onChange) {
             const value = (e.target as HTMLSelectElement).value;
             props.onChange(value === '' ? undefined : (value as Weekday));
