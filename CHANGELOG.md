@@ -1,5 +1,9 @@
 # Change history for ui-calendar
 
+## IN PROGRESS
+
+* Supply correct namespace and strict types where absent. Refs UICAL-XXX.
+
 ## [13.0.0](https://github.com/folio-org/ui-calendar/tree/v13.0.0) (2026-04-16) Trillium
 
 * Dependency correction: bump `react-intl` peer to v7. Refs UICAL-297.
