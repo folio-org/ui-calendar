@@ -34,13 +34,17 @@
       {
         "permissionName": "module.calendar.enabled",
         "displayName": "UI: Calendar module is enabled",
-        "visible": false
+        "visible": false,
+        "subPermissions": [
+          "stripes-core.settings.read"
+        ]
       },
       {
         "permissionName": "settings.calendar.enabled",
         "displayName": "Settings (Calendar): Display calendar in the settings list",
         "subPermissions": [
-          "settings.enabled"
+          "settings.enabled",
+          "stripes-core.settings.read"
         ],
         "visible": false
       },
