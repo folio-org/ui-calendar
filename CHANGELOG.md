@@ -2,6 +2,8 @@
 
 ## IN PROGRESS
 
+## [13.0.1](https://github.com/folio-org/ui-calendar/tree/v13.0.1) (2026-06-03) Trillium
+
 * Supply correct namespace and strict types where absent. Refs UICAL-XXX.
 * Include global permissions in package.json base permissions. Refs UICAL-295.
 
