@@ -150,9 +150,11 @@ export function getConflictError(error: HoursOfOperationErrors | undefined): Rea
     return undefined;
   }
   return (
-    <Headline margin="none" className={css.conflictMessage} weight="medium" size="medium">
-      <Icon icon="exclamation-circle" status="error" />
-      <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
-    </Headline>
+    <div role="alert" aria-live="assertive">
+      <Headline margin="none" className={css.conflictMessage} weight="medium" size="medium">
+        <Icon icon="exclamation-circle" status="error" />
+        <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
+      </Headline>
+    </div>
   );
 }
