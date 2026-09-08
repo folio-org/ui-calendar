@@ -1,11 +1,17 @@
-import { Headline, Icon } from '@folio/stripes/components';
-import React, { ReactNode } from 'react';
+import { Headline as BaseHeadline, Icon } from '@folio/stripes/components';
+import React, { AriaAttributes, AriaRole, ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Weekday } from '../../types/types';
 import { getWeekdaySpan, LocaleWeekdayInfo, WEEKDAYS } from '../../utils/WeekdayUtils';
 import css from './HoursAndExceptionFields.css';
 import { HoursOfOperationErrors, HoursOfOperationRowState } from './HoursOfOperationFieldTypes';
 import RowType from './RowType';
+
+// HeadlineProps in @folio/stripes-types does not include AriaAttributes, even though
+// Headline spreads unrecognized props onto its underlying DOM element at runtime.
+const Headline = BaseHeadline as React.ComponentType<
+  React.ComponentProps<typeof BaseHeadline> & AriaAttributes & { role?: AriaRole }
+>;
 
 export function rowsToOpenings(
   providedRows: HoursOfOperationRowState[],
@@ -150,11 +156,16 @@ export function getConflictError(error: HoursOfOperationErrors | undefined): Rea
     return undefined;
   }
   return (
-    <div role="alert" aria-live="assertive">
-      <Headline margin="none" className={css.conflictMessage} weight="medium" size="medium">
-        <Icon icon="exclamation-circle" status="error" />
-        <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
-      </Headline>
-    </div>
+    <Headline
+      role="alert"
+      aria-live="assertive"
+      margin="none"
+      className={css.conflictMessage}
+      weight="medium"
+      size="medium"
+    >
+      <Icon icon="exclamation-circle" status="error" />
+      <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
+    </Headline>
   );
 }
