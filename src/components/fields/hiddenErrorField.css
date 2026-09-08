@@ -2,6 +2,7 @@
   width: 100%;
 
   & [role="alert"] div {
+    display: none;
     margin-bottom: 0 !important;
   }
 
