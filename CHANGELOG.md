@@ -1,6 +1,7 @@
 # Change history for ui-calendar
 
 ## IN PROGRESS
+* Improve screen reader announcements for hours-of-operation conflict errors. Refs UICAL-291.
 
 ## [13.0.1](https://github.com/folio-org/ui-calendar/tree/v13.0.1) (2026-06-03) Trillium
 
