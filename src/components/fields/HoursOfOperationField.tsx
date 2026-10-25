@@ -238,8 +238,7 @@ export const HoursOfOperationField: FunctionComponent<HoursOfOperationFieldProps
     isConflicted: false,
   });
 
-  const conflictError = getConflictError(props.error);
-
+  const conflictError = getConflictError(props.error, rowStates);
   return (
     <>
       <MultiColumnList<MCLContentsType, 'isConflicted' | 'rowState'>

@@ -1,22 +1,25 @@
-import { Headline as BaseHeadline, Icon } from '@folio/stripes/components';
-import React, { AriaAttributes, AriaRole, ReactNode } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Weekday } from '../../types/types';
-import { getWeekdaySpan, LocaleWeekdayInfo, WEEKDAYS } from '../../utils/WeekdayUtils';
-import css from './HoursAndExceptionFields.css';
-import { HoursOfOperationErrors, HoursOfOperationRowState } from './HoursOfOperationFieldTypes';
-import RowType from './RowType';
-
-// HeadlineProps in @folio/stripes-types does not include AriaAttributes, even though
-// Headline spreads unrecognized props onto its underlying DOM element at runtime.
-const Headline = BaseHeadline as React.ComponentType<
-  React.ComponentProps<typeof BaseHeadline> & AriaAttributes & { role?: AriaRole }
->;
+import { MessageBanner } from "@folio/stripes/components";
+import React, { ReactNode } from "react";
+import { FormattedList, FormattedMessage } from "react-intl";
+import { Weekday } from "../../types/types";
+import {
+  getWeekdaySpan,
+  LocaleWeekdayInfo,
+  WEEKDAYS,
+} from "../../utils/WeekdayUtils";
+import {
+  HoursOfOperationErrors,
+  HoursOfOperationRowState,
+} from "./HoursOfOperationFieldTypes";
+import RowType from "./RowType";
 
 export function rowsToOpenings(
   providedRows: HoursOfOperationRowState[],
   localeWeekdays: LocaleWeekdayInfo[],
-): Pick<Required<HoursOfOperationRowState>, 'startDay' | 'startTime' | 'endDay' | 'endTime'>[] {
+): Pick<
+  Required<HoursOfOperationRowState>,
+  "startDay" | "startTime" | "endDay" | "endTime"
+>[] {
   const providedOpenings = providedRows
     .filter((row): row is Required<HoursOfOperationRowState> => {
       return (
@@ -126,7 +129,7 @@ export function isRowConflicted(
 }
 
 export function getWeekdayError(
-  key: 'startDay' | 'endDay',
+  key: "startDay" | "endDay",
   error: HoursOfOperationErrors | undefined,
   rowIndex: number,
   submitAttempted: boolean,
@@ -139,7 +142,7 @@ export function getWeekdayError(
 }
 
 export function getTimeError(
-  key: 'startTime' | 'endTime',
+  key: "startTime" | "endTime",
   error: HoursOfOperationErrors | undefined,
   rowIndex: number,
   submitAttempted: boolean,
@@ -151,21 +154,29 @@ export function getTimeError(
   return error.empty?.[key]?.[rowIndex] || error.invalidTimes?.[key][rowIndex];
 }
 
-export function getConflictError(error: HoursOfOperationErrors | undefined): ReactNode {
+export function getConflictError(
+  error: HoursOfOperationErrors | undefined,
+  rows: HoursOfOperationRowState[],
+): ReactNode {
   if (!error?.conflicts?.size) {
     return undefined;
   }
+  const conflictedRowNumbers = rows
+    .map((row, index) =>
+      error.conflicts?.has(row.i) ? String(index + 1) : undefined,
+    )
+    .filter((rowNumber): rowNumber is string => rowNumber !== undefined);
   return (
-    <Headline
-      role="alert"
-      aria-live="assertive"
-      margin="none"
-      className={css.conflictMessage}
-      weight="medium"
-      size="medium"
-    >
-      <Icon icon="exclamation-circle" status="error" />
-      <FormattedMessage id="ui-calendar.calendarForm.error.openingConflictError" />
-    </Headline>
+    <MessageBanner type="error" role="alert" aria-live="assertive">
+      <FormattedMessage
+        id="ui-calendar.calendarForm.error.openingConflictErrorWithRows"
+        values={{
+          num: conflictedRowNumbers.length,
+          rows: (
+            <FormattedList type="conjunction" value={conflictedRowNumbers} />
+          ),
+        }}
+      />
+    </MessageBanner>
   );
 }
