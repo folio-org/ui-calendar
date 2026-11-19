@@ -34,6 +34,7 @@
   "calendarForm.error.timeFormat": "Please enter a time in the {localeTimeFormat} format",
   "calendarForm.error.timeOrder": "End date/time must not be before the start date/time",
   "calendarForm.error.openingConflictError": "Some openings have conflicts with each other",
+  "calendarForm.error.openingConflictErrorWithRows": "Some openings have conflicts with each other. {num, plural, =1 {Row} other {Rows}} {rows}.",
   "calendarForm.error.exceptionConflictError": "Some exceptions have conflicts with each other",
   "calendarForm.error.internalServerError": "Internal server error",
   "calendarForm.error.servicePointConflict": "{num, plural, =1 {Service point} other {Service points}} {list} {num, plural, =1 {has} other {have}} overlaps.",

@@ -1,3 +1,4 @@
+import { HoursOfOperationRowState } from './HoursOfOperationFieldTypes';
 import * as Weekdays from '../../test/data/Weekdays';
 import expectRender from '../../test/util/expectRender';
 import { LocaleWeekdayInfo } from '../../utils/WeekdayUtils';
@@ -506,12 +507,16 @@ describe('Hours of operation utilities work correctly', () => {
     });
   });
 
-  test('conflicts are reported when applicable', () => {
-    expect(getConflictError(undefined)).toBeUndefined();
-    expect(getConflictError({ invalidTimes: { startTime: {}, endTime: {} } })).toBeUndefined();
-    expect(getConflictError({ conflicts: new Set() })).toBeUndefined();
-    expectRender(getConflictError({ conflicts: new Set([1, 2, 3]) })).toContain(
-      'Some openings have conflicts',
+    test('conflicts are reported when applicable', () => {
+    const rows = [{ i: 1 }, { i: 2 }, { i: 3 }, { i: 4 }] as HoursOfOperationRowState[];
+
+    expect(getConflictError(undefined, rows)).toBeUndefined();
+    expect(
+    getConflictError({ invalidTimes: { startTime: {}, endTime: {} } }, rows),
+    ).toBeUndefined();
+    expect(getConflictError({ conflicts: new Set() }, rows)).toBeUndefined();
+    expectRender(getConflictError({ conflicts: new Set([2, 4]) }, rows)).toContain(
+      'Some openings have conflicts with each other. Rows 2 and 4.',
     );
   });
 });
